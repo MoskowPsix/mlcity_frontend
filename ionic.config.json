@@ -1,0 +1,7 @@
+{
+  "name": "citylife-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

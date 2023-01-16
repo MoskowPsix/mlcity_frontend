@@ -1,0 +1,15 @@
+<div class="containet py-4 px-6 rounded flex items-center flex-col mb-2 overflow-auto">
+  <div *ngIf="eventsService.events">
+    <div
+     *ngFor="let event of eventsService.events  let i = index">
+      <div class="border rounded-md my-4 bg-scroll items-center text-center ">
+        {{event.title}}
+        <img [src]="event.image" [alt]="event.title" class="w-1/6 mb-2">
+        {{event.description}}
+        <div class="text-right">
+          лайки комменты  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
