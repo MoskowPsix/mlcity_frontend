@@ -7,7 +7,8 @@
     </div>
   </form>
   <div class="map">
-    <ya-map [center]="[56.813259, 61.322973]" [zoom]="15"  [state]="{
+    <!-- [center]="[56.813259, 61.322973]" -->
+    <ya-map (ready)="onMapReady($event)"  [zoom]="15"   [state]="{
       controls: [
         'zoomControl',
         'fullscreenControl',]

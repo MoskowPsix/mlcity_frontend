@@ -1,5 +1,6 @@
 import { Platform } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
+import { YaReadyEvent } from 'angular8-yandex-maps';
 
 interface Placemark {
   geometry: number[];
@@ -18,16 +19,23 @@ export class HomeComponent implements OnInit {
     gridSize: 32,
     clusterDisableClickZoom: true,
     preset: 'islands#greenClusterIcons',
+    yandexMapDisablePoiInteractivity: true,
   };
+  onMapReady(event: YaReadyEvent<ymaps.Map>): void {
+    const map = event.target;
 
-  // constructor(private platform: Platform) {
-  //   if(this.platform.is('desktop')==true){
-  //     alert("Это компуктер");
-  //     }else{
-  //       alert("Наверное мобильное устройство");
-  //  }
-  
-  // }
+    ymaps.geolocation
+      .get({
+        provider: 'browser',
+        mapStateAutoApply: true,
+      })
+      .then((result) => {
+
+        result.geoObjects.options.set('visible', false);
+        map.geoObjects.add(result.geoObjects);
+      });
+  }
+
   points = [
     [56.831903, 61.411961],
     [56.763338, 61.565466],
@@ -52,6 +60,8 @@ export class HomeComponent implements OnInit {
         },
       });
     });
+    
+    
   }
 
   

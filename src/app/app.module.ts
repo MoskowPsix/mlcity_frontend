@@ -7,7 +7,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppRoutingModule } from './routing/app-routing.module';
 
-import { AngularYandexMapsModule } from 'angular8-yandex-maps';
+import { AngularYandexMapsModule, YaConfig } from 'angular8-yandex-maps';
 
 import { AppComponent } from './app.component';
 import { EventsComponent } from './views/events/events.component';
@@ -21,11 +21,13 @@ import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 
 import { AuthService } from './services/auth.service';
+import { TokenService } from './services/token.service';
+import { environment } from '../environments/environment';
 
-// const mapConfig: YaConfig = {
-//   apikey: environment.apiKeyYandex,
-//   lang: 'ru_RU',
-// };
+const mapConfig: YaConfig = {
+  apikey: environment.apiKeyYandex,
+  lang: 'ru_RU',
+};
 
 @NgModule({
   declarations: [
@@ -41,13 +43,14 @@ import { AuthService } from './services/auth.service';
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule, 
-    AngularYandexMapsModule, 
+    AngularYandexMapsModule.forRoot(mapConfig), 
     HttpClientModule, 
     ReactiveFormsModule
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
-    AuthService
+    AuthService, TokenService,
+    
   ],
   bootstrap: [AppComponent],
 })
