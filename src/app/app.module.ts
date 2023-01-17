@@ -1,24 +1,31 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { EventsComponent } from './view/events/events.component';
-import { CabinetComponent } from './view/cabinet/cabinet.component';
-import { HomeComponent } from './view/home/home.component';
-import { TabsComponent } from './view/tabs/tabs.component';
-import { AngularYandexMapsModule } from 'angular8-yandex-maps';
-import { YaConfig } from 'angular8-yandex-maps/public-api';
-import { environment } from '../environments/environment';
-import { HttpClientModule } from '@angular/common/http';
+import { AppRoutingModule } from './routing/app-routing.module';
 
-const mapConfig: YaConfig = {
-  apikey: environment.apiKeyYandex,
-  lang: 'ru_RU',
-};
+import { AngularYandexMapsModule } from 'angular8-yandex-maps';
+
+import { AppComponent } from './app.component';
+import { EventsComponent } from './views/events/events.component';
+import { CabinetComponent } from './views/cabinet/cabinet.component';
+import { HomeComponent } from './views/home/home.component';
+import { TabsComponent } from './views/tabs/tabs.component';
+// import { YaConfig } from 'angular8-yandex-maps/public-api';
+// import { environment } from '../environments/environment';
+import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './views/login/login.component';
+import { RegisterComponent } from './views/register/register.component';
+
+import { AuthService } from './services/auth.service';
+
+// const mapConfig: YaConfig = {
+//   apikey: environment.apiKeyYandex,
+//   lang: 'ru_RU',
+// };
 
 @NgModule({
   declarations: [
@@ -27,9 +34,21 @@ const mapConfig: YaConfig = {
     CabinetComponent,
     HomeComponent,
     TabsComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AngularYandexMapsModule, HttpClientModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  imports: [
+    BrowserModule, 
+    IonicModule.forRoot(), 
+    AppRoutingModule, 
+    AngularYandexMapsModule, 
+    HttpClientModule, 
+    ReactiveFormsModule
+  ],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
+    AuthService
+  ],
   bootstrap: [AppComponent],
 })
 
