@@ -7,14 +7,12 @@
     </div>
   </form>
   <div class="map">
-    <!-- [center]="[56.813259, 61.322973]" -->
     <ya-map (ready)="onMapReady($event)"  [zoom]="15"   [state]="{
       controls: [
         'zoomControl',
         'fullscreenControl',]
       }" 
     >
-      <!-- <ya-placemark [geometry]="[56.813259, 61.322973]"></ya-placemark> -->
       <ya-placemark
         *ngFor="let placemark of placemarks"
         [geometry]="placemark.geometry"
@@ -25,3 +23,5 @@
     </ya-map>
   </div>
 </div>
+
+

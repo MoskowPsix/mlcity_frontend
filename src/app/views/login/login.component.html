@@ -15,7 +15,7 @@
        formControlName="email"
       />
       <div *ngIf="loginForm.controls['email'].invalid && loginForm.controls['email'].touched" class="validation">
-    >
+    
       <span class="alert alert-danger mt-3 text-red-600" *ngIf="loginForm.controls['email'].hasError('email')">Введите корректный email</span
       >
       <span class="alert alert-danger mt-3 text-red-600" *ngIf="loginForm.controls['email'].hasError('required')">Поле email не может быть пустым</span

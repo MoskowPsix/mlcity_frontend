@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { TokenService } from '../../services/token.service';
@@ -19,9 +20,8 @@ export class LoginComponent implements OnInit {
 
 
   constructor(private authService: AuthService){}
-
    onSubmitLogin(){
-    this.authService.login(this.loginForm.value.email!,this.loginForm.value.password!).subscribe({
+    this.authService.login(this.loginForm.value as User).subscribe({
       next: data => {
         console.log(data)
         // TokenService.getToken()

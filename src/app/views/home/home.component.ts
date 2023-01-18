@@ -1,5 +1,4 @@
-import { Platform } from '@ionic/angular';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { YaReadyEvent } from 'angular8-yandex-maps';
 
 interface Placemark {
@@ -15,12 +14,14 @@ interface Placemark {
   
 })
 export class HomeComponent implements OnInit {
+
   clustererOptions: ymaps.IClustererOptions = {
     gridSize: 32,
     clusterDisableClickZoom: true,
     preset: 'islands#greenClusterIcons',
-    yandexMapDisablePoiInteractivity: true,
   };
+
+  // Определение местоположени через браузер
   onMapReady(event: YaReadyEvent<ymaps.Map>): void {
     const map = event.target;
 
@@ -30,7 +31,6 @@ export class HomeComponent implements OnInit {
         mapStateAutoApply: true,
       })
       .then((result) => {
-
         result.geoObjects.options.set('visible', false);
         map.geoObjects.add(result.geoObjects);
       });
@@ -44,6 +44,7 @@ export class HomeComponent implements OnInit {
     [56.810259, 61.320973],
 
   ];
+
   placemarks: Placemark[] = [];
 
   ngOnInit() {
@@ -60,10 +61,5 @@ export class HomeComponent implements OnInit {
         },
       });
     });
-    
-    
   }
-
-  
-
 }

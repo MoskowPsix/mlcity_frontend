@@ -24,10 +24,10 @@ export class AuthService {
     return this.http.get<any>(`${environment.BASE_URL}:${environment.PORT}/sanctum/csrf-cookie`)
   }
 
-  login(email: string, password: string): Observable<any> {
+  login(user: User): Observable<User> {
     return this.getCRSF().pipe(
       mergeMap(res => {
-        return this.http.post<any>(`${environment.BASE_URL}:${environment.PORT}/api/login`, {email, password})
+        return this.http.post<any>(`${environment.BASE_URL}:${environment.PORT}/api/login`, user)
       })
     )
   }
