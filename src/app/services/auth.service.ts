@@ -23,7 +23,7 @@ export class AuthService {
   private getCRSF():Observable<any> {
     return this.http.get<any>(`${environment.BASE_URL}:${environment.PORT}/sanctum/csrf-cookie`)
   }
-
+//проверка pull request из rus_branch.
   login(user: User): Observable<User> {
     return this.getCRSF().pipe(
       mergeMap(res => {
