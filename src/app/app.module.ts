@@ -21,7 +21,9 @@ import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 
 import { AuthService } from './services/auth.service';
+import { ToastService } from './services/toast.service'; 
 import { TokenService } from './services/token.service';
+
 import { environment } from '../environments/environment';
 
 const mapConfig: YaConfig = {
@@ -49,11 +51,11 @@ const mapConfig: YaConfig = {
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
-    AuthService, TokenService,
-    
+    AuthService, 
+    TokenService,
+    ToastService
   ],
   bootstrap: [AppComponent],
 })
-
 
 export class AppModule {}

@@ -1,16 +1,16 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AppModule } from 'src/app/app.module';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
-import { environment } from 'src/environments/environment';
-import { TokenService } from '../../services/token.service';
+import { ToastService } from 'src/app/services/toast.service';
+// import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  providers: [AuthService]
+  providers: [AuthService, ToastService]
 })
 export class LoginComponent implements OnInit {
   public loginForm = new FormGroup({
@@ -19,8 +19,9 @@ export class LoginComponent implements OnInit {
   });
 
 
-  constructor(private authService: AuthService){}
+  constructor(private authService: AuthService, private toastService: ToastService){}
    onSubmitLogin(){
+    this.toastService.showToast('test toast', 'success')
     this.authService.login(this.loginForm.value as User).subscribe({
       next: data => {
         console.log(data)
@@ -32,9 +33,7 @@ export class LoginComponent implements OnInit {
     });
  }
 
-  ngOnInit() {
-   
-  }
+  ngOnInit() {}
 
 
 }
