@@ -9,7 +9,7 @@ import { User } from '../models/user';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient,) { }
+  constructor(private http: HttpClient) { }
 
   // login(email: string, password: string): Observable<User> {
   //   const url = `${environment.BASE_URL}:${environment.PORT}/api/login`;

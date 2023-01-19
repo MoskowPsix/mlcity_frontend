@@ -38,7 +38,7 @@ export class EventsService {
 
 
   private errorHandler(error: HttpErrorResponse) {
-    this.errorService.handle(error.message)
+    //this.errorService.handle(error.message)
     return throwError(() => error.message)
   }
 }
