@@ -18,10 +18,10 @@
         [geometry]="placemark.geometry"
         [properties]="placemark.properties"
         [options]="placemark.options"
+        (balloonopen)="onPlacemarkBalloonOpen($event, placemark.vkPost, placemark.vkIdPost)"
       >
       </ya-placemark>
     </ya-map>
   </div>
 </div>
-
 

@@ -11,15 +11,6 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  // login(email: string, password: string): Observable<User> {
-  //   const url = `${environment.BASE_URL}:${environment.PORT}/api/login`;
-  //   return this.http.post<User>(url, {email, password});
-  // }
-
-  // signUp(email: string, password: string): Observable<User> {
-  //   const url = `${environment.BASE_URL}:${environment.PORT}/api/register`;
-  //   return this.http.post<User>(url, {email, password});
-  // }
   private getCRSF():Observable<any> {
     return this.http.get<any>(`${environment.BASE_URL}:${environment.PORT}/sanctum/csrf-cookie`)
   }
@@ -31,4 +22,5 @@ export class AuthService {
       })
     )
   }
+  
 }
