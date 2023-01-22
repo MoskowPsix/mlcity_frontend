@@ -1,24 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, mergeMap } from 'rxjs';
+import { Observable, tap, mergeMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  private getCRSF():Observable<any> {
-    return this.http.get<any>(`${environment.BASE_URL}:${environment.PORT}/sanctum/csrf-cookie`)
+  private getCSRF(): Observable<string> {
+    return this.http.get<string>(`${environment.BASE_URL}:${environment.PORT}/sanctum/csrf-cookie`)
+      // .pipe(
+      //   tap(res => {
+      //     console.log(res)
+      //     localStorage.setItem('XSRF-TOKEN', res);
+      //   })
+      // );
   }
 
   login(user: User): Observable<User> {
-    return this.getCRSF().pipe(
+    return this.getCSRF().pipe(
       mergeMap(res => {
-        return this.http.post<any>(`${environment.BASE_URL}:${environment.PORT}/api/login`, user)
+        return this.http.post<User>(`${environment.BASE_URL}:${environment.PORT}/api/login`, user)
       })
     )
   }

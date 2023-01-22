@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription, switchMap } from 'rxjs';
-import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
@@ -21,11 +20,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   subscription_1!: Subscription 
   subscription_2!: Subscription 
   subscriptions: Subscription[] = []
-
-  public loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email,]),
-    password: new FormControl('', [Validators.required, Validators.minLength(3)]),
-  });
+  loginForm!: FormGroup
+  responseData: any
 
   
   constructor(
@@ -39,22 +35,23 @@ export class LoginComponent implements OnInit, OnDestroy {
   ){}
 
   onSubmitLogin(){
-    this.subscription_1 = this.authService.login(this.loginForm.value as User).subscribe({
+    this.loginForm.disable()
+    this.subscription_1 = this.authService.login(this.loginForm.value).subscribe({
       next: data => {
-        console.log(data)
-        this.userService.setUser(data) // НЕРАБОАТЕТ
-        this.tokenService.setToken(data) // НЕРАБОАТЕТ
+        this.responseData = data
+        this.userService.setUser(this.responseData.user) // НЕРАБОАТЕТ
+        this.tokenService.setToken(this.responseData.access_token) // НЕРАБОАТЕТ
         this.toastService.showToast('Вы успешно авторизовались!', 'success')
-        // TokenService.getToken()
+        this.router.navigate(['cabinet']);
       },
       error: err => {
-        console.log(err.error.message);
         this.toastService.showToast(err.error.message, 'warning')
+        this.loginForm.enable()
       }
     });
   }
 
-  redirectToCabinet(user_id: number){
+  redirectToCabinetAfterSocialLogin(user_id: number){
     if (user_id > 0){
       this.userService.setUserById(user_id)
       this.router.navigate(['cabinet']);
@@ -63,6 +60,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     
 
   ngOnInit() {
+    //Создаем поля для формы
+    this.loginForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email,]),
+      password: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    });
+
     //Получаем ид юзера и параметра маршрута
     this.subscription_2 = this.route.paramMap.pipe(
       switchMap(params => params.getAll('user_id'))
@@ -72,7 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.subscription_1)
     this.subscriptions.push(this.subscription_2)
 
-    this.redirectToCabinet(this.user_id)
+    this.redirectToCabinetAfterSocialLogin(this.user_id)
     console.log(this.user_id)
   }
 

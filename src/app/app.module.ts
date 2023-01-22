@@ -16,7 +16,7 @@ import { HomeComponent } from './views/home/home.component';
 import { TabsComponent } from './views/tabs/tabs.component';
 // import { YaConfig } from 'angular8-yandex-maps/public-api';
 // import { environment } from '../environments/environment';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 
@@ -26,6 +26,7 @@ import { TokenService } from './services/token.service';
 import { UserService } from './services/user.service';
 
 import { environment } from '../environments/environment';
+import { XsrfInterceptor } from './xsrf.interceptor';
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -52,10 +53,11 @@ const mapConfig: YaConfig = {
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
+    { provide: HTTP_INTERCEPTORS, useClass: XsrfInterceptor, multi: true },
     AuthService, 
     TokenService,
     ToastService,
-    UserService
+    UserService,
   ],
   bootstrap: [AppComponent],
 })

@@ -8,11 +8,11 @@ export class TokenService {
   constructor() { }
 
   setToken(token: any) {
-    localStorage.setItem('auth_token', token)
+    localStorage.setItem('auth_token', JSON.stringify(token))
   }
 
    getToken() {
-    return localStorage.getItem('auth_token')
+    return JSON.parse(localStorage.getItem('auth_token') || '[]')
   }
 
   // Verify the token

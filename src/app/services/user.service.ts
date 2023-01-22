@@ -16,21 +16,24 @@ export class UserService {
   }
 
   setUserById(id: number) {
-    this.user = this.http.get(`${environment.BASE_URL}:${environment.PORT}/users/${id}`)
-    this.setUserToLocalStorage(this.user)
+    this.http.get(`${environment.BASE_URL}:${environment.PORT}/users/${id}`).subscribe(user => {
+      this.user = user;
+      this.setUserToLocalStorage(this.user);
+    });
   } 
 
   setUser(user: any) {
-    this.user = user
+    this.user = []
     this.setUserToLocalStorage(user)
   } 
+  
 
   setUserToLocalStorage(user: any) {
-    localStorage.setItem('auth_user', user)
+    localStorage.setItem('auth_user', JSON.stringify(user))
   }
 
    getUserFromLocalStorage() {
-    this.user = localStorage.getItem('auth_user')
+    this.user = JSON.parse(localStorage.getItem('auth_user')  || '[]')
   }
 
   // Remove token
@@ -39,3 +42,4 @@ export class UserService {
     this.user = []
   }
 }
+
