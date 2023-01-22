@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -15,12 +15,22 @@ export class UserService {
     return this.user
   }
 
-  setUserById(id: number) {
-    this.http.get(`${environment.BASE_URL}:${environment.PORT}/users/${id}`).subscribe(user => {
-      this.user = user;
-      this.setUserToLocalStorage(this.user);
-    });
+  setUserById(id: number): Observable<{user: any}> {
+    return this.http.get<{user: any}>(`${environment.BASE_URL}:${environment.PORT}/users/${id}`).pipe( 
+      tap(
+        ({user}) => {
+          this.user = user;
+          this.setUserToLocalStorage(this.user);
+        }
+      )
+    );
   } 
+  // setUserById(id: number) {
+  //   this.http.get(`${environment.BASE_URL}:${environment.PORT}/users/${id}`).subscribe(user => {
+  //     this.user = user;
+  //     this.setUserToLocalStorage(this.user);
+  //   });
+  // } 
 
   setUser(user: any) {
     this.user = []
