@@ -18,7 +18,6 @@ import { TabsComponent } from './views/tabs/tabs.component';
 // import { environment } from '../environments/environment';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './views/login/login.component';
-import { RegisterComponent } from './views/register/register.component';
 
 import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service'; 
@@ -43,7 +42,6 @@ const mapConfig: YaConfig = {
     HomeComponent,
     TabsComponent,
     LoginComponent,
-    RegisterComponent,
   ],
   imports: [
     BrowserModule, 
