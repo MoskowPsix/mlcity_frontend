@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, mergeMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { User } from '../models/user';
+import { IUser } from '../models/user';
 
 @Injectable()
 export class AuthService {
@@ -19,10 +19,10 @@ export class AuthService {
       // );
   }
 
-  login(user: User): Observable<User> {
+  login(user: IUser): Observable<IUser> {
     return this.getCSRF().pipe(
       mergeMap(res => {
-        return this.http.post<User>(`${environment.BASE_URL}:${environment.PORT}/api/login`, user)
+        return this.http.post<IUser>(`${environment.BASE_URL}:${environment.PORT}/api/login`, user)
       })
     )
   }
