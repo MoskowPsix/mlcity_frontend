@@ -11,19 +11,9 @@ export class TokenService {
     localStorage.setItem('auth_token', JSON.stringify(token))
   }
 
-   getToken() {
-    return JSON.parse(localStorage.getItem('auth_token') || '[]')
-  }
-
-  // Verify the token
-  isValidToken() {
-    const token = this.getToken()
-    token ? true : false;
-  }
-
-  // User state based on valid token
-  isLoggedIn() {
-    return this.isValidToken()
+  getToken() {
+    //return JSON.parse(localStorage.getItem('auth_token') || 'null')
+    return localStorage.getItem('auth_token')
   }
   
   // Remove token

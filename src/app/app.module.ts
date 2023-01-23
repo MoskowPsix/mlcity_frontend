@@ -28,6 +28,9 @@ import { LoadingService } from './services/loading.service';
 import { environment } from '../environments/environment';
 import { XsrfInterceptor } from './xsrf.interceptor';
 
+import { AuthGuard } from './guards/auth.guard';
+import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
+
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -59,6 +62,8 @@ const mapConfig: YaConfig = {
     TokenService,
     ToastService,
     UserService,
+    AuthGuard,
+    LoggedInAuthGuard
   ],
   bootstrap: [AppComponent],
 })

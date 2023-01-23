@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   user_id!: number 
   subscription_1!: Subscription 
   subscription_2!: Subscription 
+  subscription_3!: Subscription 
   subscriptions: Subscription[] = []
   loginForm!: FormGroup
   responseData: any
@@ -40,28 +41,43 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
     this.subscription_1 = this.authService.login(this.loginForm.value).subscribe({
       next: data => {
-        this.responseData = data
-        this.userService.setUser(this.responseData.user) 
-        this.tokenService.setToken(this.responseData.access_token) 
-        this.loadingService.hideLoading()
-        this.toastService.showToast('Вы успешно авторизовались!', 'success')
-        this.router.navigate(['cabinet']);
+        this.positiveRsponseAfterLogin(data)
       },
       error: err => {
-        this.loadingService.hideLoading()
-        this.toastService.showToast(err.error.message, 'warning')
-        this.loginForm.enable()
+        this.errorRsponseAfterLogin(err)
       }
     });
   }
 
-  redirectToCabinetAfterSocialLogin(user_id: number){
+  loginAfterSocial(user_id: number){
     if (user_id > 0){
-      this.userService.setUserById(user_id)
-      this.router.navigate(['cabinet']);
+      this.loginForm.disable()
+      this.loadingService.showLoading()
+      this.subscription_3 = this.userService.getUserById(user_id).subscribe({
+        next: data => {
+          this.positiveRsponseAfterLogin(data)
+        },
+        error: err => {
+          this.errorRsponseAfterLogin(err)
+        }
+      });
     }
   }
     
+  positiveRsponseAfterLogin(data:any){
+    this.responseData = data
+    this.userService.setUser(this.responseData.user) 
+    this.tokenService.setToken(this.responseData.access_token) 
+    this.loadingService.hideLoading()
+    this.toastService.showToast('Вы успешно авторизовались!', 'success')
+    this.router.navigate(['cabinet']);
+  }
+
+  errorRsponseAfterLogin(err:any){
+    this.loadingService.hideLoading()
+    this.toastService.showToast(err.error.message, 'warning')
+    this.loginForm.enable()
+  }
 
   ngOnInit() {
     //Создаем поля для формы
@@ -71,15 +87,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     //Получаем ид юзера и параметра маршрута
-    this.subscription_2 = this.route.paramMap.pipe(
-      switchMap(params => params.getAll('user_id'))
-    ).subscribe(data => this.user_id = +data)
+    this.subscription_2 = this.route.params.subscribe(params => { 
+      this.user_id = params['user_id']; 
+    }); 
 
     //Добавляем подписки в массив
     this.subscriptions.push(this.subscription_1)
     this.subscriptions.push(this.subscription_2)
+    this.subscriptions.push(this.subscription_3)
 
-    this.redirectToCabinetAfterSocialLogin(this.user_id)
+    this.loginAfterSocial(this.user_id)
   }
 
   ngOnDestroy() {
