@@ -24,9 +24,11 @@ import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service'; 
 import { TokenService } from './services/token.service';
 import { UserService } from './services/user.service';
+import { LoadingService } from './services/loading.service';
 
 import { environment } from '../environments/environment';
 import { XsrfInterceptor } from './xsrf.interceptor';
+
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -55,6 +57,7 @@ const mapConfig: YaConfig = {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
     { provide: HTTP_INTERCEPTORS, useClass: XsrfInterceptor, multi: true },
     AuthService, 
+    LoadingService,
     TokenService,
     ToastService,
     UserService,
