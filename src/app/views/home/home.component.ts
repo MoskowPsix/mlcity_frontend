@@ -103,7 +103,7 @@ export class HomeComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-   this.points.forEach(element => {
+    this.points.forEach(element => {
       // console.log(element)
       this.placemarks.push({
         geometry: element.geometry,
