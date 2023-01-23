@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-cabinet',
@@ -6,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cabinet.component.scss'],
 })
 export class CabinetComponent implements OnInit {
+  user: any
+  
+  constructor(private userService: UserService) { }
 
-  constructor() { }
-
-  ngOnInit() {}
+  ngOnInit() {
+    this.user = this.userService.getUser()
+  }
 
 }
