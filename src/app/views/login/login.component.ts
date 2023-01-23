@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { TokenService } from '../../services/token.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-login',
@@ -26,25 +27,28 @@ export class LoginComponent implements OnInit, OnDestroy {
   
   constructor(
     private authService: AuthService, 
+    private loadingService :LoadingService,
     private toastService: ToastService, 
     private tokenService: TokenService, 
     private userService: UserService,
     private route: ActivatedRoute, 
-    private router: Router,
-
+    private router: Router,  
   ){}
 
   onSubmitLogin(){
     this.loginForm.disable()
+    this.loadingService.showLoading()
     this.subscription_1 = this.authService.login(this.loginForm.value).subscribe({
       next: data => {
         this.responseData = data
-        this.userService.setUser(this.responseData.user) // НЕРАБОАТЕТ
-        this.tokenService.setToken(this.responseData.access_token) // НЕРАБОАТЕТ
+        this.userService.setUser(this.responseData.user) 
+        this.tokenService.setToken(this.responseData.access_token) 
+        this.loadingService.hideLoading()
         this.toastService.showToast('Вы успешно авторизовались!', 'success')
         this.router.navigate(['cabinet']);
       },
       error: err => {
+        this.loadingService.hideLoading()
         this.toastService.showToast(err.error.message, 'warning')
         this.loginForm.enable()
       }
@@ -76,7 +80,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.subscription_2)
 
     this.redirectToCabinetAfterSocialLogin(this.user_id)
-    console.log(this.user_id)
   }
 
   ngOnDestroy() {
