@@ -12,8 +12,8 @@ export class TokenService {
   }
 
   getToken() {
-    //return JSON.parse(localStorage.getItem('auth_token') || 'null')
-    return localStorage.getItem('auth_token')
+    return JSON.parse(localStorage.getItem('auth_token') || 'null')
+    //return localStorage.getItem('auth_token')
   }
   
   // Remove token

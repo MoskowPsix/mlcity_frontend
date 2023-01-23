@@ -24,17 +24,7 @@ export class AuthService {
   isAuthenticated(): boolean {
     let token = this.tokenService.getToken()
     let user = this.userService.getUserFromLocalStorage()
-    console.log('token      ' + token)
-    console.log('user      ' + user)
-    if (token && user) {
-      console.log('isAuthenticated true');
-      return true
-    } else {
-      console.log('isAuthenticated false');
-      return false
-    }
-    // console.log('isAuthenticated =  token' + token && user ? true : false)
-    // return token && user ? true : false;
+    return token && user ? true : false;
   }
 
   login(user: IUser): Observable<IUser> {
