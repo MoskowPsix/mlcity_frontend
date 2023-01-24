@@ -1,6 +1,17 @@
 <div class="containet py-4 px-6 rounded flex items-center flex-col mb-2 overflow-auto">
+  <div class='vk-post owner-id="1" post-id="549734" hash="W9KumhHBb2MD44NeokKOA4PmVETY"'></div>
   <div *ngIf="eventsService.events">
-    <div
+    <!-- <div id="{{test}}"></div> -->
+        <div class="my-4 flex"
+     *ngFor="let event of events  let i = index">
+
+      <!-- <div class="border rounded-md my-4 bg-scroll items-center text-center "> -->
+        <div class="my-4 felx"  id={{event.vkIdPost}}><div id="vk_comments"></div></div>
+        <!-- </div> -->
+      </div>
+    <!-- </div> -->
+    <!-- {{test}} -->
+    <!-- <div
      *ngFor="let event of eventsService.events  let i = index">
       <div class="border rounded-md my-4 bg-scroll items-center text-center ">
         {{event.title}}
@@ -10,6 +21,5 @@
           лайки комменты  
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
-</div>
