@@ -1,11 +1,11 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom" class="h-28 bg-slate-100">
-    <ion-tab-button tab="home" class="bg-slate-100">
+    <ion-tab-button tab="home" class="bg-slate-100" (click)="checkAuthenticated()">
       <ion-icon src="assets/icons/map.svg" class="text-6xl text-slate-300"></ion-icon>
       <ion-label class="text-xl font-bold">Карта</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="events" class="bg-slate-100">
+    <ion-tab-button tab="events" class="bg-slate-100" (click)="checkAuthenticated()">
       <ion-icon src="assets/icons/menu.svg" class="text-6xl text-slate-300"></ion-icon>
       <ion-label class="text-xl font-bold">Мероприятия</ion-label>
     </ion-tab-button>

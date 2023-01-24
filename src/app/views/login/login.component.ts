@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
@@ -101,7 +101,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
      // отписываемся от всех подписок
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe())
+     if (this.subscriptions) {
+      this.subscriptions.forEach((subscription) => {
+        if (subscription){
+          subscription.unsubscribe()
+        }      
+      })
+     }  
   }
 
 }
