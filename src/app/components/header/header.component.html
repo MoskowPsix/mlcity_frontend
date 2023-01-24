@@ -1,0 +1,56 @@
+<nav class="relative bg-white shadow dark:bg-gray-800">
+    <div class="container px-6 py-4 mx-auto">
+        <div class="xl:flex xl:items-center xl:justify-between">
+            <div class="flex items-center justify-between">
+                <div class="text-xl font-semibold text-gray-700">
+                    <div class="flex cursor-pointer" [routerLink]="['home']">
+                        <img src="assets/icons/favicon.png" alt="logo" class="h-10">
+                        <a class="text-2xl font-bold text-gray-800 transition-colors duration-300 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300 pl-2" href="#">CityLife</a>
+                    </div>   
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="flex xl:hidden">
+                    <button  type="button" class="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400">
+                        <!-- ссылаемся на компонент мобильного меню в app.component -->
+                        <ion-menu-toggle>
+                            <ion-icon name="menu" class="w-12 h-12"></ion-icon>
+                        </ion-menu-toggle>
+                    </button>
+                </div>
+            </div>
+
+            
+            <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
+            <div class="absolute hidden inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 xl:mt-0 xl:p-0 lg:top-0 xl:relative xl:bg-transparent xl:w-auto xl:opacity-100 xl:translate-x-0 xl:flex xl:items-center">
+                <div class="flex flex-row mr-4">
+                    <!-- <a *ngFor="let item of menuPublic" [routerLink]="[ item.route ]">{{item.route}}</a> -->
+                    <div  
+                        *ngFor="let item of menuPublic" 
+                        [routerLink]="[ item.route ]"
+                        [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']"
+                        class="flex items-center px-3 py-2 mx-3 mt-2 text-xl text-gray-500 font-bold cursor-pointer transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                        <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>{{item.title}}
+                    </div>
+                    <!-- <a href="#" class="px-3 py-2 mx-3 mt-2 text-xl text-gray-500 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Мероприятия</a>
+                    <a href="#" class="px-3 py-2 mx-3 mt-2 text-xl text-gray-500 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Контакты</a> -->
+                </div>
+
+                <div class="flex items-center mt-4 lg:mt-0">
+                    <button class="hidden mx-4 text-gray-600 transition-colors duration-300 transform lg:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none">
+                        <ion-icon src="assets/icons/ring.svg" class="pt-1 w-8 h-8 text-yellow-300"></ion-icon>
+                    </button>
+
+                    <button type="button" class="flex items-center focus:outline-none">
+                        <div class="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
+                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" class="object-cover w-full h-full" alt="avatar">
+                        </div>
+
+                        <h3 class="mx-2 text-gray-700 dark:text-gray-200">UserName</h3>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

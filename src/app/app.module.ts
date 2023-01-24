@@ -18,6 +18,8 @@ import { TabsComponent } from './views/tabs/tabs.component';
 // import { environment } from '../environments/environment';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './views/login/login.component';
+import { HeaderComponent } from './components/header/header.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service'; 
@@ -30,7 +32,6 @@ import { XsrfInterceptor } from './xsrf.interceptor';
 
 import { AuthGuard } from './guards/auth.guard';
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
-
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -45,6 +46,8 @@ const mapConfig: YaConfig = {
     HomeComponent,
     TabsComponent,
     LoginComponent,
+    HeaderComponent,
+    SidebarComponent,
   ],
   imports: [
     BrowserModule, 

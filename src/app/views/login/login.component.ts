@@ -7,6 +7,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { TokenService } from '../../services/token.service';
 import { LoadingService } from 'src/app/services/loading.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
-  vkontakteAuthkUrl: string = 'http://localhost:8000/api/social-auth/vkontakte'
+  vkontakteAuthUrl: string = environment.vkontakteAuthUrl
   user_id!: number 
   subscription_1!: Subscription 
   subscription_2!: Subscription 
