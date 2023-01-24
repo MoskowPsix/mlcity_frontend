@@ -1,0 +1,42 @@
+[
+    {
+        "title": "Профиль",       
+        "icon": "person",
+        "route": "/cabinet",
+        "children":[
+            {
+                "title": "Избранное",              
+                "icon": "star",
+                "route": "/cabinet/favorites"
+            },
+            {
+                "title": "Уведомления",               
+                "icon": "notifications",
+                "route": "/cabinet/notifications"
+            },
+            {
+                "title": "Настройки",               
+                "icon": "settings",
+                "route": "/cabinet/settings"
+            }
+        ]
+    },
+    {
+        "title": "Мероприятия",       
+        "icon": "accessibility",
+        "route": "/cabinet/events",
+        "children":[
+            {
+                "title": "Все",              
+                "icon": "list",
+                "route": "/cabinet/events/published"
+            },
+            {
+                "title": "Создать",              
+                "icon": "add-circle",
+                "route": "/cabinet/events/add"
+            }
+        ]
+    }
+    
+]

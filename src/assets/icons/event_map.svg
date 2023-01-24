@@ -1,13 +1,13 @@
-<svg width="67" height="67" viewBox="0 0 67 67" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="67" height="67" viewBox="0 0 67 67" fill="currentColor" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="hokettp://www.w3.org/1999/xlink">
 <g filter="url(#filter0_d_1_509)">
-<circle cx="31.5" cy="31.5" r="25.5" fill="#312E49"/>
-<circle cx="31.5" cy="31.5" r="25" stroke="white" stroke-opacity="0.6"/>
+<circle cx="31.5" cy="31.5" r="25.5" fill="currentColor"/>
+<circle cx="31.5" cy="31.5" r="25" stroke="currentColor" stroke-opacity="0.6"/>
 </g>
 <mask id="mask0_1_509" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="17" y="17" width="30" height="30">
-<rect x="17" y="17" width="30" height="30" fill="url(#pattern0)"/>
+<rect x="17" y="17" width="30" height="30" fill="currentColor"/>
 </mask>
 <g mask="url(#mask0_1_509)">
-<rect x="11.5454" y="11.5454" width="41.8182" height="41.8182" fill="#F2F2F7"/>
+<rect x="11.5454" y="11.5454" width="41.8182" height="41.8182" fill="currentColor"/>
 </g>
 <defs>
 <filter id="filter0_d_1_509" x="0" y="0" width="67" height="67" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">

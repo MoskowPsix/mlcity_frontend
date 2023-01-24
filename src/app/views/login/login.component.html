@@ -16,14 +16,8 @@
     </div>
 
     <div class="mt-4 flex justify-center">
-      <a href="{{ vkontakteAuthkUrl }}"><ion-icon class="cursor-pointer text-blue-500 text-8xl" name="logo-vk"></ion-icon></a>
+      <a href="{{ vkontakteAuthUrl }}"><ion-icon class="cursor-pointer text-blue-500 text-8xl" name="logo-vk"></ion-icon></a>
     </div>
-
-    <!-- <div class="relative flex items-center">
-      <div class="flex-grow border-t border-gray-300"></div>
-      <span class="flex-shrink mx-4 text-gray-400">Войти с помощью email:</span>
-      <div class="flex-grow border-t border-gray-300"></div>
-    </div> -->
 
     <ion-accordion-group class="mt-5">
       <ion-accordion value="first">
@@ -58,12 +52,6 @@
                 <span class="alert alert-danger mt-3 text-red-600 pl-2" *ngIf="loginForm.controls['password'].hasError('required')">Поле email не может быть пустым</span>
             </div>
       
-            <!-- <div class="flex flex-col items-end my-3">
-              <p class="mt-1 text-xs font-light text-gray-500">
-                <a class="ml-1 text-base font-medium text-blue-500 cursor-pointer">Забыли пароль?</a>
-                </p>
-            </div> -->
-      
             <button
                 type="submit"
                 [ngClass] ="{'bg-blue-300': loginForm.invalid}"
@@ -76,13 +64,6 @@
         </div>
       </ion-accordion>
     </ion-accordion-group>
-    
-
-    <!-- <div class="flex flex-col items-center mt-5 mb-10">
-      <p class="mt-1 text-xs font-light text-gray-500">
-        Нет аккаунта?<a class="ml-1 font-medium text-blue-500 cursor-pointer">Регистрация</a>
-      </p>
-    </div> -->
 
   </div>
 </div>

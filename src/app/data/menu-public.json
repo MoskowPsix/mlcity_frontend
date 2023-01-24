@@ -1,0 +1,34 @@
+[
+    {
+        "title": "Карта",
+        "icon": "map",
+        "route": "/home"
+    },
+    {
+        "title": "Мероприятия",
+        "icon": "accessibility",
+        "route": "/events"
+    },
+    {
+        "title": "О проекте",
+        "icon": "information-circle",
+        "route": "/about"
+    },
+    {
+        "title": "Контакты",
+        "icon": "call",
+        "route": "/contacts",
+        "children":[
+            {
+                "title": "Обратная связь",
+                "icon": "phone",
+                "route": "/feedback"
+            },
+            {
+                "title": "Чат с тех. поддержкой",
+                "icon": "chatbox-ellipses",
+                "route": "/support"
+            }
+        ]
+    }
+]

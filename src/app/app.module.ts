@@ -18,6 +18,8 @@ import { TabsComponent } from './views/tabs/tabs.component';
 // import { environment } from '../environments/environment';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './views/login/login.component';
+import { HeaderComponent } from './components/header/header.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service'; 
@@ -32,7 +34,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
 import { AddEventComponent } from './views/add-event/add-event.component';
 
-
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
   lang: 'ru_RU',
@@ -46,6 +47,8 @@ const mapConfig: YaConfig = {
     HomeComponent,
     TabsComponent,
     LoginComponent,
+    HeaderComponent,
+    SidebarComponent,
     AddEventComponent,
   ],
   imports: [
