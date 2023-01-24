@@ -30,6 +30,7 @@ import { XsrfInterceptor } from './xsrf.interceptor';
 
 import { AuthGuard } from './guards/auth.guard';
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
+import { AddEventComponent } from './views/add-event/add-event.component';
 
 
 const mapConfig: YaConfig = {
@@ -45,6 +46,7 @@ const mapConfig: YaConfig = {
     HomeComponent,
     TabsComponent,
     LoginComponent,
+    AddEventComponent,
   ],
   imports: [
     BrowserModule, 
@@ -63,7 +65,7 @@ const mapConfig: YaConfig = {
     ToastService,
     UserService,
     AuthGuard,
-    LoggedInAuthGuard
+    LoggedInAuthGuard,
   ],
   bootstrap: [AppComponent],
 })
