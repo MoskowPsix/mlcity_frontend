@@ -1,5 +1,6 @@
 import { EventsComponent } from "../views/events/events.component";
 import { HomeComponent } from "../views/home/home.component";
+import { AddEventComponent } from '../views/add-event/add-event.component';
 import { Routes } from '@angular/router';
 
 export const publicRoutes: Routes = [ 
@@ -10,6 +11,10 @@ export const publicRoutes: Routes = [
     {
       path: 'events',
       component: EventsComponent
+    },
+    {
+      path: 'add_event',
+      component: AddEventComponent
     },
     {
       path: '',
