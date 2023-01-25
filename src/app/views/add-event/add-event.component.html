@@ -6,15 +6,28 @@
       </div>
       <div>
         <label for="">Поиск по адресу</label>
-          <input type="text" id="adress" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="" placeholder="" required>
-      </div>
+        <input type="text" id="search-map" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+        value="{{this.search}}" 
+        placeholder="" 
+        required
+        formControlName="search"
+        >
+        <!-- <button (click)="addPlacemark()"> Поставить метку</button> -->
+        </div>
   </div>
 </form>
 <div class="container">
-  <ya-map
+  
+  <ya-map (ready)="onMapReady($event)" 
     [center]="[57.5262, 38.3061]"
     [zoom]="11"
     (yaclick)="onMapClick($event)"
+    [state]="{
+      controls: [
+        'zoomControl',
+        'fullscreenControl',]
+      }" 
+    >
   >
   <!-- (balloonopen)="onMapBalloonOpen($event)" -->
   </ya-map>

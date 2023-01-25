@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { YaEvent, YaPlacemarkDirective } from 'angular8-yandex-maps';
+import { YaEvent, YaGeocoderService, YaPlacemarkDirective, YaReadyEvent } from 'angular8-yandex-maps';
+import { filter } from 'rxjs';
 
 interface Placemark {
   geometry: number[];
@@ -15,40 +16,65 @@ interface Placemark {
 export class AddEventComponent implements OnInit {
 
   coords!: number[];
+  placemark!: ymaps.Placemark
+  search!:string
+  
+  constructor(private yaGeocoderService: YaGeocoderService) {}
+
 
   onMapClick(e: YaEvent<ymaps.Map>): void {
     const { target, event } = e;
 
     this.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
-    let placemark= new ymaps.Placemark(this.coords)
-    target.geoObjects.removeAll()
-    target.geoObjects.add(placemark)
+    if (this.placemark)
+    {
+      this.placemark.geometry?.setCoordinates(this.coords)
+    }
+    else
+    {
+      this.placemark= new ymaps.Placemark(this.coords)
+      target.geoObjects.add(this.placemark)
+    }
+    // Декодирование координат
+    const geocodeResult = this.yaGeocoderService.geocode(this.coords, {
+      results: 1,
+    });
+    geocodeResult.subscribe((result: any) => {
+      const firstGeoObject = result.geoObjects.get(0);
+      // console.log(firstGeoObject.getAddressLine())
+      this.search=firstGeoObject.getAddressLine()
 
-    // if (!target.balloon.isOpen()) {
-      // const coords = event.get('coords');
-      // target.options.set('present','islands#greenDotIcon')
-      // this.coord=coords
-
-      // target.balloon.open(this.coords, {
-      //   contentBody:
-      //     '<p>Текущие координаты: ' +
-      //     [this.coords[0].toPrecision(6), this.coords[1].toPrecision(6)].join(', ') +
-      //     '</p>',
-      // });
-    // } else {
-    //   target.balloon.close();
-    // }
+    })
   }
-
-  // onMapContextMenu({ target, event }: YaEvent<ymaps.Map>): void {
-  //   target.hint.open(event.get('coords'), 'Someone right-clicked');
-  // }
  
   onMapBalloonOpen({ target }: YaEvent<ymaps.Map>): void {
     target.hint.close();
   }
+// Поиск по улицам
+  onMapReady(event: YaReadyEvent<ymaps.Map>): void {
+    // const map = event.target;
+    let search= new ymaps.SuggestView('search-map');
+  }
 
-  constructor() { }
+  // addPlacemark(): void{
+    
+  //   // Декодирование координат
+  //   const geocodeResult = this.yaGeocoderService.geocode('Ярославская область, Углич, улица Шаркова, 32', {
+  //     results: 1,
+  //   });
+  //   geocodeResult.subscribe((result: any) => {
+  //     const firstGeoObject = result.geoObjects.get(0);
+  //      console.log(firstGeoObject.geometry.getCoordinates())
+  //     // this.search=firstGeoObject.geometry.getCoordinates();
+  //     result.geoObjects.add(firstGeoObject);
+  //   })
+  // }
 
-  ngOnInit() {}
+
+  ngOnInit() {
+
+
+
+    
+  }
 }
