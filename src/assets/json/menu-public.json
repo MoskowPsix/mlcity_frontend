@@ -21,13 +21,13 @@
         "children":[
             {
                 "title": "Обратная связь",
-                "icon": "phone",
-                "route": "/feedback"
+                "icon": "mail",
+                "route": "/contacts/feedback"
             },
             {
                 "title": "Чат с тех. поддержкой",
                 "icon": "chatbox-ellipses",
-                "route": "/support"
+                "route": "/contacts/support"
             }
         ]
     }

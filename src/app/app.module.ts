@@ -21,6 +21,7 @@ import { LoginComponent } from './views/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AddEventComponent } from './views/add-event/add-event.component';
+import { DropdownPopupComponent } from './components/dropdown-popup/dropdown-popup.component';
 
 import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service'; 
@@ -36,6 +37,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
 
 import { ClickOutsideDirective } from './directives/click-outside.directive';
+
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -53,6 +55,7 @@ const mapConfig: YaConfig = {
     HeaderComponent,
     SidebarComponent,
     AddEventComponent,
+    DropdownPopupComponent,
     ClickOutsideDirective,
   ],
   imports: [
