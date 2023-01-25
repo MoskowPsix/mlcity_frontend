@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { YaEvent, YaGeocoderService, YaPlacemarkDirective, YaReadyEvent } from 'angular8-yandex-maps';
-import { filter } from 'rxjs';
-
-interface Placemark {
-  geometry: number[];
-  properties: ymaps.IPlacemarkProperties;
-  options: ymaps.IPlacemarkOptions;
-}
+import { FormControl, FormGroup } from '@angular/forms';
+import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-add-event',
@@ -18,10 +13,12 @@ export class AddEventComponent implements OnInit {
   coords!: number[];
   placemark!: ymaps.Placemark
   search!:string
+  searchForm!: FormGroup
+  map!:YaReadyEvent<ymaps.Map>
   
-  constructor(private yaGeocoderService: YaGeocoderService) {}
+  constructor(private yaGeocoderService: YaGeocoderService, private mapService: MapService, ) {}
 
-
+//При клике ставим метку, если метка есть, то перемещаем ее
   onMapClick(e: YaEvent<ymaps.Map>): void {
     const { target, event } = e;
 
@@ -41,40 +38,53 @@ export class AddEventComponent implements OnInit {
     });
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
-      // console.log(firstGeoObject.getAddressLine())
-      this.search=firstGeoObject.getAddressLine()
+      this.searchForm.value.search=firstGeoObject.getAddressLine()
 
     })
   }
  
-  onMapBalloonOpen({ target }: YaEvent<ymaps.Map>): void {
-    target.hint.close();
-  }
-// Поиск по улицам
-  onMapReady(event: YaReadyEvent<ymaps.Map>): void {
-    // const map = event.target;
-    let search= new ymaps.SuggestView('search-map');
-  }
-
-  // addPlacemark(): void{
-    
-  //   // Декодирование координат
-  //   const geocodeResult = this.yaGeocoderService.geocode('Ярославская область, Углич, улица Шаркова, 32', {
-  //     results: 1,
-  //   });
-  //   geocodeResult.subscribe((result: any) => {
-  //     const firstGeoObject = result.geoObjects.get(0);
-  //      console.log(firstGeoObject.geometry.getCoordinates())
-  //     // this.search=firstGeoObject.geometry.getCoordinates();
-  //     result.geoObjects.add(firstGeoObject);
-  //   })
+  // onMapBalloonOpen({ target }: YaEvent<ymaps.Map>): void {
+  //   target.hint.close();
   // }
 
+// Поиск по улицам
+  onMapReady(e: YaReadyEvent<ymaps.Map>): void {
+    this.map = e;
+    const search= new ymaps.SuggestView('search-map');  
+    this.mapService.geolocationMap(this.map);
+  }
+
+
+//При нажатии кнопки "Показать на карте" создает метку по адресу улицы
+  addPlacemark(): void{
+    
+    this.searchForm.value.search=(<HTMLInputElement>document.getElementById("search-map")).value
+    console.log(this.searchForm.value)
+
+    // Декодирование координат
+    const geocodeResult = this.yaGeocoderService.geocode(this.searchForm.value.search, {
+      results: 1,
+    });
+    geocodeResult.subscribe((result: any) => {
+      const firstGeoObject = result.geoObjects.get(0);
+
+      if (this.placemark)
+      {
+        this.placemark.geometry?.setCoordinates(firstGeoObject.geometry.getCoordinates())
+      }
+      else
+      {
+        this.placemark= new ymaps.Placemark(firstGeoObject.geometry.getCoordinates())
+        this.map.target.geoObjects.add(this.placemark)
+      }
+   
+    }) 
+}
 
   ngOnInit() {
-
-
-
-    
+        //Создаем поля для формы
+        this.searchForm = new FormGroup({
+          search: new FormControl(''),
+        });
   }
 }

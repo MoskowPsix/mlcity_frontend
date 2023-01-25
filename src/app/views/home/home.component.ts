@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { YaEvent, YaReadyEvent } from 'angular8-yandex-maps';
 import { Subscription } from 'rxjs';
+import { MapService } from '../../services/map.service';
 
 interface Placemark {
   geometry: number[];
@@ -95,22 +96,12 @@ export class HomeComponent implements OnInit {
 
   // Определение местоположени через браузер
   onMapReady(event: YaReadyEvent<ymaps.Map>): void {
-    const map = event.target;
-
-    ymaps.geolocation
-      .get({
-        provider: 'browser',
-        mapStateAutoApply: true,
-      })
-      .then((result) => {
-        result.geoObjects.options.set('visible', false);
-        map.geoObjects.add(result.geoObjects);
-      });
+    this.mapService.geolocationMap(event);
   }
 
   placemarks: Placemark[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private mapService:MapService) {}
 
   ngOnInit() {
    this.points.forEach(element => {

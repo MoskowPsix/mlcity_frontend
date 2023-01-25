@@ -24,6 +24,7 @@ import { ToastService } from './services/toast.service';
 import { TokenService } from './services/token.service';
 import { UserService } from './services/user.service';
 import { LoadingService } from './services/loading.service';
+import { MapService } from './services/map.service';
 
 import { environment } from '../environments/environment';
 import { XsrfInterceptor } from './xsrf.interceptor';
@@ -66,6 +67,7 @@ const mapConfig: YaConfig = {
     UserService,
     AuthGuard,
     LoggedInAuthGuard,
+    MapService,
   ],
   bootstrap: [AppComponent],
 })
