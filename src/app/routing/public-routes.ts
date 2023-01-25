@@ -9,6 +9,11 @@ export const publicRoutes: Routes = [
       component: HomeComponent
     },
     {
+      path: '',
+      redirectTo: 'home',
+      pathMatch: 'full'
+    },
+    {
       path: 'events',
       component: EventsComponent
     },
@@ -17,8 +22,22 @@ export const publicRoutes: Routes = [
       component: AddEventComponent
     },
     {
-      path: '',
-      redirectTo: 'home',
-      pathMatch: 'full'
+      path: 'about',
+      component: HomeComponent
     },
+    {
+      path: 'contacts',
+      component: HomeComponent,
+      children:[
+        {
+          path: 'feedback',
+          component: HomeComponent
+        },
+        {
+          path: 'support',
+          component: HomeComponent
+        }
+      ]
+    },
+    
   ];

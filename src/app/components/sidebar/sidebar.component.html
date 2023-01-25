@@ -7,15 +7,49 @@
 
   <div class="flex flex-col justify-between flex-1 mt-6">
       <nav>
-        <div 
-        *ngFor="let item of menuPublic" 
-        class="flex items-center cursor-pointer my-2 px-4 py-2 text-gray-500 rounded-lg  dark:text-gray-200"
-        [routerLink]="[ item.route ]"
-        [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-800']"
-        >
-            <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>
-            <span class="mx-4 font-bold ">{{item.title}}</span>
+
+        <div *ngFor="let item of menuPublic">
+ 
+          <div *ngIf="item.children?.length > 0;  else itemMenu">
+            <ion-accordion-group expand="inset" class="m-0">
+              <ion-accordion  value="first">
+                <ion-item slot="header" color="default" [ngClass]="{ 'bg-gray-100 dark:bg-gray-700': isLChildLinkActive() }">
+                  <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>            
+                  <span class="mx-4 font-bold  text-gray-500">{{ item.title }}</span>
+                </ion-item>
+  
+                <div class="ion-padding" slot="content">
+                  <a 
+                    *ngFor="let child of item.children" 
+                    [routerLink]="[ child.route ]"
+                    [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']"
+                    class="flex items-center  px-3 py-3 ml-8 text-gray-500 font-bold  transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                  >
+                      <ion-icon name="{{ child.icon }}" class="pt-1 w-5 h-5 text-blue-500 pr-2"></ion-icon> 
+                      <span class="mx-1">
+                        {{ child.title }}
+                      </span>
+                  </a>
+                </div>
+  
+              </ion-accordion>
+            </ion-accordion-group>
+          </div>
+          
+      
+          <ng-template #itemMenu>
+            <div 
+              class="flex items-center cursor-pointer my-2 px-4 py-2 text-gray-500 rounded-lg  dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+              [routerLink]="[ item.route ]"
+              [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-800']"
+            >
+                <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>
+                <span class="mx-4 font-bold">{{ item.title }}</span>
+            </div>   
+          </ng-template>                     
+    
         </div>
+        
       </nav>
   </div>
 </div>
