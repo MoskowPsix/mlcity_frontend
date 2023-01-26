@@ -8,6 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { TokenService } from '../../services/token.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { environment } from 'src/environments/environment';
+import { MessagesAuth } from 'src/app/enums/messages-auth';
 
 @Component({
   selector: 'app-login',
@@ -64,13 +65,17 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
     }
   }
+
+  onLoading(){
+    this.loadingService.showLoading()
+  }
     
   positiveRsponseAfterLogin(data:any){
     this.responseData = data
     this.userService.setUser(this.responseData.user) 
     this.tokenService.setToken(this.responseData.access_token) 
     this.loadingService.hideLoading()
-    this.toastService.showToast('Вы успешно авторизовались!', 'success')
+    this.toastService.showToast(MessagesAuth.login, 'success')
     this.router.navigate(['cabinet']);
   }
 

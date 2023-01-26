@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import menuPublicData from '../../../assets/json/menu-public.json'
-import { IMenuPublic } from 'src/app/models/menu-public';
+import { IMenu } from 'src/app/models/menu';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +9,7 @@ import { IMenuPublic } from 'src/app/models/menu-public';
 })
 
 export class HeaderComponent implements OnInit {
-   menuPublic: IMenuPublic[] = []
+   menuPublic: IMenu[] = []
 
   constructor() { }
 

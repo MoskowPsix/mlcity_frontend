@@ -1,4 +1,4 @@
-export interface IMenuPublic {
+export interface IMenu {
   title: String;
   icon: String;
   route: String;

@@ -1,34 +1,33 @@
 <div class="flex flex-col w-full h-screen px-4 py-8 bg-white border-r dark:bg-gray-900 dark:border-gray-700">
 
-  <div class="flex flex-col items-center mt-6 -mx-2">
-      <img class="object-cover w-24 h-24 mx-2 rounded-full" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="avatar">
-      <h4 class="mx-2 mt-2 font-medium text-gray-800 dark:text-gray-200">UserName</h4>
-  </div>
+  <app-menu-auth-sidebar></app-menu-auth-sidebar>
 
-  <div class="flex flex-col justify-between flex-1 mt-6">
+  <!-- <div class="flex flex-col justify-between flex-1"> -->
       <nav>
 
         <div *ngFor="let item of menuPublic">
  
           <div *ngIf="item.children?.length > 0;  else itemMenu">
-            <ion-accordion-group expand="inset" class="m-0">
+            <ion-accordion-group expand="inset">
               <ion-accordion  value="first">
                 <ion-item slot="header" color="default" [ngClass]="{ 'bg-gray-100 dark:bg-gray-700': isLChildLinkActive() }">
                   <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>            
-                  <span class="mx-4 font-bold  text-gray-500">{{ item.title }}</span>
+                  <span class="mx-4 font-bold text-gray-500">{{ item.title }}</span>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                  <a 
-                    *ngFor="let child of item.children" 
-                    [routerLink]="[ child.route ]"
-                    [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']"
-                    class="flex items-center  px-3 py-3 ml-8 text-gray-500 font-bold  transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >
-                      <ion-icon name="{{ child.icon }}" class="pt-1 w-5 h-5 text-blue-500 pr-2"></ion-icon> 
-                      <span class="mx-1">
-                        {{ child.title }}
-                      </span>
-                  </a>
+                  <ion-menu-toggle>
+                    <a 
+                      *ngFor="let child of item.children" 
+                      [routerLink]="[ child.route ]"
+                      [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']"
+                      class="flex items-center  px-3 py-3 ml-8 mt-2 text-gray-500 font-bold  transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        <ion-icon name="{{ child.icon }}" class="pt-1 w-5 h-5 text-blue-500 pr-2"></ion-icon> 
+                        <span class="mx-1">
+                          {{ child.title }}
+                        </span>
+                    </a>
+                  </ion-menu-toggle>
                 </div>
               </ion-accordion>
             </ion-accordion-group>
@@ -36,18 +35,20 @@
           
       
           <ng-template #itemMenu>
-            <div 
-              class="flex items-center cursor-pointer my-2 px-4 py-2 text-gray-500 rounded-lg  dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-              [routerLink]="[ item.route ]"
-              [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-800']"
-            >
-                <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>
-                <span class="mx-4 font-bold">{{ item.title }}</span>
-            </div>   
+            <ion-accordion-group expand="inset">
+              <ion-accordion value="first" toggleIcon="" toggleIconSlot="end">
+                  <ion-item slot="header" color="default" [routerLink]="[ item.route ]" [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']">
+                    <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>            
+                    <ion-menu-toggle>
+                      <span class="mx-4 font-bold text-gray-500">{{ item.title }}</span>
+                    </ion-menu-toggle>
+                  </ion-item>
+              </ion-accordion>
+            </ion-accordion-group>
           </ng-template>                     
     
         </div>
         
       </nav>
-  </div>
+  <!-- </div> -->
 </div>

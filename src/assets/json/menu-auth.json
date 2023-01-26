@@ -37,6 +37,12 @@
                 "route": "/cabinet/events/add"
             }
         ]
+    },
+    {
+        
+        "title": "Выход",       
+        "icon": "log-out",
+        "route": "/logout"
     }
     
 ]
