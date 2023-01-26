@@ -1,4 +1,4 @@
-<nav class="relative bg-white shadow dark:bg-gray-800">
+<nav class="relative bg-white shadow border-b dark:bg-gray-800">
     <div class="container px-6 py-4 mx-auto">
         <div class="xl:flex xl:items-center xl:justify-between">
             <div class="flex items-center justify-between">
@@ -30,7 +30,7 @@
                             [headerLeftIco]="true"
                             [headerLeftIcoName]="'call'"
                             [headertitle]="item.title"
-                            [listItems]="item.children"
+                            [listItems]="[item]"
                             [itemIco]="true"
                         >
                         </app-dropdown-popup>
@@ -49,18 +49,8 @@
                     </div>
                 </div>
 
-                <div class="flex items-center mt-4 lg:mt-0">
-                    <button class="hidden mx-4 text-gray-600 transition-colors duration-300 transform lg:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none">
-                        <ion-icon src="assets/icons/ring.svg" class="pt-1 w-8 h-8 text-yellow-300"></ion-icon>
-                    </button>
-
-                    <button type="button" class="flex items-center focus:outline-none">
-                        <div class="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
-                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" class="object-cover w-full h-full" alt="avatar">
-                        </div>
-
-                        <h3 class="mx-2 text-gray-700 dark:text-gray-200">UserName</h3>
-                    </button>
+                <div class="flex items-center mt-4 lg:mt-0">     
+                    <app-menu-auth></app-menu-auth>
                 </div>
             </div>
         </div>

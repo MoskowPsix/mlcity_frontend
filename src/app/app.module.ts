@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -14,14 +15,13 @@ import { EventsComponent } from './views/events/events.component';
 import { CabinetComponent } from './views/cabinet/cabinet.component';
 import { HomeComponent } from './views/home/home.component';
 import { TabsComponent } from './views/tabs/tabs.component';
-// import { YaConfig } from 'angular8-yandex-maps/public-api';
-// import { environment } from '../environments/environment';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './views/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AddEventComponent } from './views/add-event/add-event.component';
 import { DropdownPopupComponent } from './components/dropdown-popup/dropdown-popup.component';
+import { MenuAuthComponent } from './components/menu-auth/menu-auth.component';
+import { MenuAuthSidebarComponent } from './components/menu-auth-sidebar/menu-auth-sidebar.component';
 
 import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service'; 
@@ -56,6 +56,8 @@ const mapConfig: YaConfig = {
     SidebarComponent,
     AddEventComponent,
     DropdownPopupComponent,
+    MenuAuthComponent,
+    MenuAuthSidebarComponent,
     ClickOutsideDirective,
   ],
   imports: [

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router';
 import menuPublicData from '../../../assets/json/menu-public.json'
-import { IMenuPublic } from 'src/app/models/menu-public'
+import { IMenu } from 'src/app/models/menu'
 
 @Component({
   selector: 'app-sidebar',
@@ -10,7 +10,7 @@ import { IMenuPublic } from 'src/app/models/menu-public'
 })
 
 export class SidebarComponent implements OnInit {
-  menuPublic: IMenuPublic[] = []
+  menuPublic: IMenu[] = []
 
   constructor(private router: Router) { }
   

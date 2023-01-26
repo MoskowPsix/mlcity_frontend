@@ -1,13 +1,13 @@
-<div class="relative inline-block" (clickOutside)="clickedOutside()">
+<div class="relative" (clickOutside)="clickedOutside()">
   <!-- Dropdown toggle button -->
   <button 
     (click)="onToggle()" 
     [ngClass]="isLContactsChildLinkActive() ? headerClassActive : ''"
     [class]="headerClass"
-  >
-      <ion-icon *ngIf="headerLeftIco" [name]="headerLeftIcoName" [class]="headerLeftIcoClass"></ion-icon>
-      {{ headertitle }}
-      <ion-icon *ngIf="headerRightIco" [name]="headerRightIcoName" [class]="headerRightIcoClass"></ion-icon>
+  >   
+    <ion-icon *ngIf="headerLeftIco" [name]="headerLeftIcoName" [class]="headerLeftIcoClass"></ion-icon>
+    {{ headertitle }}
+    <ion-icon *ngIf="headerRightIco" [name]="headerRightIcoName" [class]="headerRightIcoClass"></ion-icon>
   </button>
 <!-- Dropdown menu -->
   <div 
@@ -15,18 +15,60 @@
       [class]="listClass"
   >
     <div>
-      <a 
-        *ngFor="let child of listItems" 
-        [routerLink]="[ child.route ]"
-        [routerLinkActive]="routeActiveClass"
-        [class]="itemClass"
-        (click)="onToggle()"
-      >
-          <ion-icon *ngIf="itemIco" [name]="child.icon" [class]="itemIcoClass"></ion-icon> 
-          <span [class]="itemTitleClass">
-            {{ child.title }}
-          </span>
-      </a>
+      <div *ngFor="let parent of listItems | keyvalue">   
+        <div *ngIf="parent.value.children?.length > 0; else notChil">
+          
+          <div *ngIf="parent.value.title !== headertitle">
+            <span class="px-3 py-3 text-base font-bold text-gray-400 dark:text-gray-300">{{ parent.value.title }}</span>
+            <hr class="border-gray-200 dark:border-gray-700 my-1">
+          </div>
+                
+          <div *ngFor="let child of parent.value.children">
+            <a 
+            [routerLink]="[ child.route ]"
+            [routerLinkActive]="routeActiveClass"
+            [class]="itemClass"
+            (click)="onToggle()"
+            >
+              <ion-icon *ngIf="itemIco" [name]="child.icon" [class]="itemIcoClass"></ion-icon> 
+              <span [class]="itemTitleClass">
+                {{ child.title }}
+              </span>
+            </a>
+          </div>   
+        </div>   
+        
+        <ng-template #notChil>
+          <hr class="border-gray-200 dark:border-gray-700 my-1">
+          <div *ngIf="parent.value.route === '/logout'; else notLogout">
+            <a 
+              [class]="itemClass"
+              (click)="onLogout()"
+            >
+              <ion-icon *ngIf="itemIco" [name]="parent.value.icon" [class]="itemIcoClass"></ion-icon> 
+              <span [class]="itemTitleClass">
+                {{ parent.value.title }}
+              </span>
+            </a>
+          </div>
+
+          <ng-template #notLogout>
+            <a 
+              [routerLink]="[ parent.value.route ]"
+              [routerLinkActive]="routeActiveClass"
+              [class]="itemClass"
+              (click)="onToggle()"
+            >
+              <ion-icon *ngIf="itemIco" [name]="parent.value.icon" [class]="itemIcoClass"></ion-icon> 
+              <span [class]="itemTitleClass">
+                {{ parent.value.title }}
+              </span>
+            </a>
+          </ng-template>
+
+        </ng-template>
+      </div>  
+      
     </div>
   </div>
 </div>
