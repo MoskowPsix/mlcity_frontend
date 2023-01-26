@@ -3,7 +3,7 @@
       <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" class="object-cover w-full h-full" alt="avatar">
   </div> -->
   <div *ngIf="isAuthenticated; else notAuth" class="flex lex-row items-center">
-    <ion-icon src="assets/icons/ring.svg" class="pt-1 w-8 h-8 hidden mx-4 text-gray-600 transition-colors duration-300 transform lg:block dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none cursor-pointer"></ion-icon>
+    <ion-icon src="assets/icons/ring.svg" class="w-8 h-8 hidden mx-4 text-gray-600 transition-colors duration-300 transform lg:block dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none cursor-pointer"></ion-icon>
 
     <ion-icon *ngIf="!user && !user?.avatar" name="person-circle" class="pt-1 w-10 h-10 text-gray-600 dark:text-gray-200"></ion-icon>
 

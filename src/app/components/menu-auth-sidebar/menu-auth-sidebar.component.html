@@ -12,7 +12,7 @@
   <div class="mt-6">
     <div *ngFor="let item of menuAuth" class="mt-2">
       <div *ngIf="item.children?.length > 0;  else itemMenu">
-        <ion-accordion-group expand="inset">
+        <ion-accordion-group expand="inset" class="my-2">
           <ion-accordion  value="first">
             <ion-item slot="header" color="default" [ngClass]="{ 'bg-gray-100 dark:bg-gray-700 dark:text-gray-300': isLChildLinkActive('child.route') }">
               <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>            
@@ -39,14 +39,22 @@
       
 
       <ng-template #itemMenu>
-        <div *ngIf="item.route !== '/logout'"
-          class="flex items-center cursor-pointer px-4 py-2 text-gray-500 rounded-lg  dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-          [routerLink]="[ item.route ]"
-          [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-800']"
-        >
-            <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>
-            <span class="mx-4 font-bold">{{ item.title }}</span>
-        </div>   
+          <ion-accordion-group 
+            *ngIf="item.route !== '/logout'"
+            expand="inset" 
+            class="my-2" 
+            [routerLink]="[ item.route ]"
+            [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-800']"
+          >
+            <ion-accordion value="first" toggleIcon="" toggleIconSlot="end">
+                <ion-item slot="header" color="default" [routerLink]="[ item.route ]" [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']">
+                  <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>            
+                  <ion-menu-toggle>
+                    <span class="mx-4 font-bold text-gray-500">{{ item.title }}</span>
+                  </ion-menu-toggle>
+                </ion-item>
+            </ion-accordion>
+          </ion-accordion-group>      
       </ng-template>                     
 
     </div>
