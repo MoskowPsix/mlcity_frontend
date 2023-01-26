@@ -63,10 +63,12 @@
 </div>
 
 <ng-template #notAuth>
-  <ion-menu-toggle class="w-full">
-    <a  [routerLink]="['login']" class="flex items-center justify-center w-full px-4 py-2 text-xl font-bold tracking-wide text-white transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-      <ion-icon name="log-in" class="text-2xl"></ion-icon>
-      <span class="mx-1">Вход</span>
-    </a>
-  </ion-menu-toggle>
+  <div class="mx-3 my-2 flex items-center">
+    <ion-menu-toggle class="w-full">
+      <a  [routerLink]="['login']" class="flex items-center justify-center px-4 py-2 m-2 text-xl font-bold tracking-wide text-white transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+        <ion-icon name="log-in" class="text-2xl"></ion-icon>
+        <span class="mx-1">Вход</span>
+      </a>
+    </ion-menu-toggle>
+  </div>
 </ng-template>
