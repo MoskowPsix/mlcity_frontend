@@ -27,7 +27,11 @@
                     <div *ngFor="let item of menuPublic">
                         <app-dropdown-popup 
                             *ngIf="item.children?.length > 0;  else itemMenu" 
-                            [item]="item"
+                            [headerLeftIco]="true"
+                            [headerLeftIcoName]="'call'"
+                            [headertitle]="item.title"
+                            [listItems]="item.children"
+                            [itemIco]="true"
                         >
                         </app-dropdown-popup>
                     

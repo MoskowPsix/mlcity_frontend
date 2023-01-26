@@ -17,7 +17,6 @@
                   <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>            
                   <span class="mx-4 font-bold  text-gray-500">{{ item.title }}</span>
                 </ion-item>
-  
                 <div class="ion-padding" slot="content">
                   <a 
                     *ngFor="let child of item.children" 
@@ -31,7 +30,6 @@
                       </span>
                   </a>
                 </div>
-  
               </ion-accordion>
             </ion-accordion-group>
           </div>
