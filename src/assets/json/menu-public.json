@@ -25,7 +25,7 @@
                 "route": "/contacts/feedback"
             },
             {
-                "title": "Чат с тех. поддержкой",
+                "title": "Поддержка",
                 "icon": "chatbox-ellipses",
                 "route": "/contacts/support"
             }
