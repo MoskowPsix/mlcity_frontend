@@ -51,34 +51,34 @@
     </div>
 
     <!-- мобильный футтер -->
-    <div class="grid gap-6 grid-cols-3 justify-items-center p-4 lg:hidden bg-slate-100">
+    <div class="grid gap-6 grid-cols-3 justify-items-center p-2 lg:hidden bg-slate-100">
         <div 
             class="flex flex-col items-center"
             [routerLink]="['home']"  
         >
-            <ion-icon name="map" class="text-4xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
-            <span class="text-2xl text-gray-500 font-bold mt-2" [routerLinkActive]="['text-blue-600']">Карта</span>
+            <ion-icon name="map" class="text-2xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
+            <span class="text-xl text-gray-500 font-bold mt-2" [routerLinkActive]="['text-blue-600']">Карта</span>
         </div>
         <div 
             class="flex flex-col items-center"
             [routerLink]="['events']"  
         >
-            <ion-icon name="newspaper" class="text-4xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
-            <span class="text-2xl text-gray-500 font-bold mt-2"  [routerLinkActive]="['text-blue-600']">События</span>
+            <ion-icon name="newspaper" class="text-2xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
+            <span class="text-xl text-gray-500 font-bold mt-2"  [routerLinkActive]="['text-blue-600']">События</span>
         </div>
         <div *ngIf="isAuthenticated"
             class="flex flex-col items-center"
             [routerLink]="['cabinet']"  
         >
-            <ion-icon name="person" class="text-4xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
-            <span class="text-2xl text-gray-500 font-bold mt-2"  [routerLinkActive]="['text-blue-600']">Кабинет</span>
+            <ion-icon name="person" class="text-2xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
+            <span class="text-xl text-gray-500 font-bold mt-2"  [routerLinkActive]="['text-blue-600']">Кабинет</span>
         </div>
         <div *ngIf="!isAuthenticated"
             class="flex flex-col items-center"
             [routerLink]="['login']"  
         >
-            <ion-icon name="log-in" class="text-4xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
-            <span class="text-2xl text-gray-500 font-bold mt-2"  [routerLinkActive]="['text-blue-600']">Вход</span>
+            <ion-icon name="log-in" class="text-2xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
+            <span class="text-xl text-gray-500 font-bold mt-2"  [routerLinkActive]="['text-blue-600']">Вход</span>
         </div>
     </div>
 
