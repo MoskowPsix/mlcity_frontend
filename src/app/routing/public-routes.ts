@@ -6,11 +6,13 @@ import { AboutComponent } from "../views/about/about.component";
 import { ContactsComponent } from "../views/contacts/contacts.component";
 import { FeedbackComponent } from "../views/feedback/feedback.component";
 import { SupportComponent } from "../views/support/support.component";
+import { CheckAuthCanActiveGuard } from "../guards/check-auth.can-active.guard";
 
 export const publicRoutes: Routes = [ 
     {
       path: 'home',
-      component: HomeComponent
+      component: HomeComponent,
+      canActivate: [CheckAuthCanActiveGuard],
     },
     {
       path: '',
@@ -19,19 +21,23 @@ export const publicRoutes: Routes = [
     },
     {
       path: 'events',
-      component: EventsComponent
+      component: EventsComponent,
+      canActivate: [CheckAuthCanActiveGuard],
     },
     {
       path: 'add_event',
-      component: AddEventComponent
+      component: AddEventComponent,
+      canActivate: [CheckAuthCanActiveGuard],
     },
     {
       path: 'about',
-      component: AboutComponent
+      component: AboutComponent,
+      canActivate: [CheckAuthCanActiveGuard],
     },
     {
       path: 'contacts',
       component: ContactsComponent,
+      canActivate: [CheckAuthCanActiveGuard],
       children:[
         {
           path: 'feedback',
