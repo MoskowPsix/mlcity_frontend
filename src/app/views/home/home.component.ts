@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { YaEvent, YaReadyEvent } from 'angular8-yandex-maps';
-import { Subscription } from 'rxjs';
+import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
+import { Subscription, map } from 'rxjs';
 import { MapService } from '../../services/map.service';
 
 interface Placemark {
@@ -11,6 +11,10 @@ interface Placemark {
   vkPost: string;
   vkIdPost:string;
   
+}
+interface Citys {
+  id: number;
+  name: string;
 }
 
 @Component({
@@ -22,12 +26,158 @@ interface Placemark {
 export class HomeComponent implements OnInit {
 
   loadAPI!: Promise<any>;
+  map!:YaReadyEvent<ymaps.Map>
+  placemark!: ymaps.Placemark
+  evetsArray: string[]=[]
+  sightsArray: string[]=[]
 
   clustererOptions: ymaps.IClustererOptions = {
     gridSize: 32,
     clusterDisableClickZoom: true,
     preset: 'islands#greenClusterIcons',
   };
+
+  citys: any[] = [
+    {
+      id: 1,
+      name: 'Заречный, Свердловская область',
+    },
+    {
+      id: 2,
+      name: 'Асбест',
+    },
+    {
+      id: 3,
+      name: 'Екатеринбург',
+    }
+  ];
+
+  events: any[] = [
+    {
+      id: 1,
+      name: 'Детские',
+    },
+    {
+      id: 2,
+      name: 'Культурно-развлекательные',
+    },
+    {
+      id: 3,
+      name: 'Торгово-выставочные',
+    },
+    {
+      id: 4,
+      name: 'Образовательные',
+    },
+    {
+      id: 5,
+      name: 'Спортивные',
+    },
+    {
+      id: 6,
+      name: 'Благотворительные',
+    },
+    {
+      id: 7,
+      name: 'Общественные',
+    },
+    {
+      id: 8,
+      name: 'Деловые',
+    },
+    {
+      id: 9,
+      name: 'Киноафиша',
+    }
+  ];
+
+  sights: any[] = [
+    {
+      id: 1,
+      name: 'Архитектурные',
+    },
+    {
+      id: 2,
+      name: 'Исторические',
+    },
+    {
+      id: 3,
+      name: 'Музеи',
+    },
+    {
+      id: 4,
+      name: 'Театры',
+    },
+    {
+      id: 5,
+      name: 'Природные парки',
+    },
+    {
+      id: 6,
+      name: 'Святыни',
+    },
+    {
+      id: 7,
+      name: 'Смотровая площадка',
+    },
+    {
+      id: 8,
+      name: 'Спортивные',
+    },
+    {
+      id: 9,
+      name: 'Зоопитомники',
+    },
+    {
+      id: 10,
+      name: 'Индустриальные',
+    },
+    {
+      id: 11,
+      name: 'Развлекательный парк',
+    },
+    {
+      id: 12,
+      name: 'Гостевой маршрут',
+    },
+  ];
+
+    // Определение местоположени через браузер
+    onMapReady(event: YaReadyEvent<ymaps.Map>): void {
+      this.map=event
+      this.mapService.geolocationMap(event);
+    }
+
+  selectionCity(data:any){
+    let newSelection = data.detail.value;
+    // Декодирование координат
+    const geocodeResult = this.yaGeocoderService.geocode(data.detail.value, {
+      results: 1,
+    });
+
+    geocodeResult.subscribe((result: any) => {
+      const firstGeoObject = result.geoObjects.get(0);
+      const coords = firstGeoObject.geometry.getCoordinates();
+      const bounds = firstGeoObject.properties.get('boundedBy');
+      firstGeoObject.properties.set(
+        'iconCaption',
+        firstGeoObject.getAddressLine()
+      );
+      this.map.target.setBounds(bounds, {
+        // checkZoomRange: true,
+      });
+    }) 
+  }
+
+  selectionSights(data:any){
+    this.sightsArray=data.detail.value
+    this.addPlacemarks()
+  }
+
+  selectionEvents(data:any){
+    this.evetsArray=data.detail.value
+    this.addPlacemarks()
+  }
 
   points=[
     {
@@ -36,6 +186,8 @@ export class HomeComponent implements OnInit {
       "vkIdPost":"vk_post_1_45616",
       "preset": "islands#greenDotIcon",
       "iconColor": "#735184",
+      "event":"Детские",
+      "sight":"",
       "image":"https://sun3.userapi.com/sun3-11/s/v1/ig2/QtC5BaL_C8PDOTfazM51SI6b4jhx-EYA8zlbg6f-G5vSsGtXuqMRi7l9fgnYyWhY8HLvcezF6Zw74FPLiVqJkfy8.jpg?size=604x376&quality=95&type=album",
       "properties": {
         "balloonContentHeader":"Заголовок если необходим",
@@ -64,6 +216,8 @@ export class HomeComponent implements OnInit {
       "vkIdPost":"vk_post_-39122624_142873",
       "preset": "islands#greenDotIcon",
       "iconColor": "#735184",
+      "event":"Спортивные",
+      "sight":"",
       "properties": {
         "balloonContentHeader":"Тропические циклоны, торнадо (зарождение, причины устойчивости).",
         "balloonContentBody":'В последние месяцы все более модной становится тема эмиграции из России. По обыкновению, пойду против тренда — публикую 7 причин оставаться в России.<br><div class="page_post_sized_thumbs  clear_fix" style="width: 208px; height: 129px; "><img style="background: #FFF url(/images/progress7.gif) center no-repeat" src="https://sun3.userapi.com/sun3-11/s/v1/if1/HHTFuaEJ0DzNRgGAqyaeep4zpSepS-I1b0EHY2YboqKlmF44oIUJjpaMSFs-cOjoecOsDA.jpg?size=604x539&amp;quality=96&amp;type=album"><br><img style="background: #FFF url(/images/progress7.gif) center no-repeat" src="https://sun3.userapi.com/sun3-8/s/v1/if1/6G1GvFidWlHTGjv2vVD6743YK7zvvKuUQldGgjXHwAxqS22AvHyJt8rjh-FQTaTkl2Zaeg.jpg?size=604x539&amp;quality=96&amp;type=album"></div>',
@@ -81,6 +235,8 @@ export class HomeComponent implements OnInit {
       "vkIdPost":"vk_post_-39122624_142855",
       "preset": "islands#greenDotIcon",
       "iconColor": "#735184",
+      "event":"",
+      "sight":"Спортивные",
       "properties": {
         "balloonContentHeader":"Тропические циклоны, торнадо (зарождение, причины устойчивости).",
         "balloonContentBody":'В последние месяцы все более модной становится тема эмиграции из России. По обыкновению, пойду против тренда — публикую 7 причин оставаться в России.<br><div class="page_post_sized_thumbs  clear_fix" style="width: 208px; height: 129px; "><img style="background: #FFF url(/images/progress7.gif) center no-repeat" src="https://sun3.userapi.com/sun3-11/s/v1/if1/HHTFuaEJ0DzNRgGAqyaeep4zpSepS-I1b0EHY2YboqKlmF44oIUJjpaMSFs-cOjoecOsDA.jpg?size=604x539&amp;quality=96&amp;type=album"><br><img style="background: #FFF url(/images/progress7.gif) center no-repeat" src="https://sun3.userapi.com/sun3-8/s/v1/if1/6G1GvFidWlHTGjv2vVD6743YK7zvvKuUQldGgjXHwAxqS22AvHyJt8rjh-FQTaTkl2Zaeg.jpg?size=604x539&amp;quality=96&amp;type=album"></div>',
@@ -94,35 +250,78 @@ export class HomeComponent implements OnInit {
     },
   ]
 
-  // Определение местоположени через браузер
-  onMapReady(event: YaReadyEvent<ymaps.Map>): void {
-    this.mapService.geolocationMap(event);
-  }
+
 
   placemarks: Placemark[] = [];
 
-  constructor(private http: HttpClient, private mapService:MapService) {}
+  constructor(private http: HttpClient, private mapService:MapService, private yaGeocoderService: YaGeocoderService) {}
 
+
+  addPlacemarks()
+  {
+    if (this.map)
+    {
+      console.log(this.map.target.geoObjects.options.getAll())
+      this.map.target.geoObjects.removeAll()
+    }
+    
+    this.points.forEach(element => {
+
+      this.evetsArray.forEach(event=>{
+        
+        if ((element.event==event) )
+        {
+        // console.log(element)
+        this.placemarks.push({
+          geometry: element.geometry,
+          vkPost:element.vkPost,
+          vkIdPost:element.vkIdPost,
+          properties: {
+           balloonPanelMaxMapArea: 0,
+           balloonContentBody:element.properties.balloonContentBody,
+          //  balloonContentFooter:element.properties.balloonContentFooter,
+          // hintContent: element.properties.hintContent,
+          },
+          options: {
+            preset: element.options.preset, //вид иконок, если необходимо будет менять
+            iconColor: element.options.iconColor, //цвет иконок, если необходимо будет менять
+            openEmptyBalloon: true,
+      },
+        });
+        }
+  
+      })
+
+      this.sightsArray.forEach(sight=>{
+        
+        if ((element.sight==sight) )
+        {
+        // console.log(element)
+        this.placemarks.push({
+          geometry: element.geometry,
+          vkPost:element.vkPost,
+          vkIdPost:element.vkIdPost,
+          properties: {
+           balloonPanelMaxMapArea: 0,
+           balloonContentBody:element.properties.balloonContentBody,
+          //  balloonContentFooter:element.properties.balloonContentFooter,
+          // hintContent: element.properties.hintContent,
+          },
+          options: {
+            preset: element.options.preset, //вид иконок, если необходимо будет менять
+            iconColor: element.options.iconColor, //цвет иконок, если необходимо будет менять
+            openEmptyBalloon: true,
+      },
+        });
+        }
+  
+      })
+  
+  
+    });
+  }
   ngOnInit() {
-   this.points.forEach(element => {
-      // console.log(element)
-      this.placemarks.push({
-        geometry: element.geometry,
-        vkPost:element.vkPost,
-        vkIdPost:element.vkIdPost,
-        properties: {
-         balloonPanelMaxMapArea: 0,
-         balloonContentBody:element.properties.balloonContentBody,
-        //  balloonContentFooter:element.properties.balloonContentFooter,
-        // hintContent: element.properties.hintContent,
-        },
-        options: {
-          preset: element.options.preset, //вид иконок, если необходимо будет менять
-          iconColor: element.options.iconColor, //цвет иконок, если необходимо будет менять
-          openEmptyBalloon: true,
-    },
-      });
-  });
+    this.addPlacemarks()
   }
 
 

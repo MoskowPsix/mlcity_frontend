@@ -1,4 +1,28 @@
 .container {
-    width: 30rem;
-    height: 30rem;
-  }
+  width: 30rem;
+  height: 30rem;
+}
+
+ymaps[class*="-search__suggest"]:after{
+  background-color: black;
+  background: rgb(183, 72, 72);
+  font-size: xx-large;
+}
+
+ymaps[class*="-suggest-item"]:after{
+  background-color: black;
+  background: rgb(183, 72, 72);
+  font-size: xx-large;
+}
+
+ymaps[class*="-search__suggest"]:has{
+  background-color: black;
+  background: rgb(183, 72, 72);
+  font-size: xx-large;
+}
+
+ymaps[class*="-suggest-item"]:has{
+  background-color: black;
+  background: rgb(183, 72, 72);
+  font-size: xx-large;
+}
