@@ -49,6 +49,10 @@ export class HomeComponent implements OnInit {
     {
       id: 3,
       name: 'Екатеринбург',
+    },
+    {
+      id: 3,
+      name: 'Москва',
     }
   ];
 
@@ -304,7 +308,7 @@ export class HomeComponent implements OnInit {
           properties: {
            balloonPanelMaxMapArea: 0,
            balloonContentBody:element.properties.balloonContentBody,
-          //  balloonContentFooter:element.properties.balloonContentFooter,
+           balloonContentFooter:"лайки",
           // hintContent: element.properties.hintContent,
           },
           options: {

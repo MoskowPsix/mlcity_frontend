@@ -35,10 +35,9 @@ import { XsrfInterceptor } from './xsrf.interceptor';
 
 import { AuthGuard } from './guards/auth.guard';
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
+import { CheckAuthCanActiveGuard } from './guards/check-auth.can-active.guard';
 
 import { ClickOutsideDirective } from './directives/click-outside.directive';
-
-
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -79,6 +78,7 @@ const mapConfig: YaConfig = {
     UserService,
     AuthGuard,
     LoggedInAuthGuard,
+    CheckAuthCanActiveGuard,
     MapService,
   ],
   bootstrap: [AppComponent],
