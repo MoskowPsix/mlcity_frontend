@@ -6,7 +6,7 @@
     },
     {
         "title": "Мероприятия",
-        "icon": "accessibility",
+        "icon": "newspaper",
         "route": "/events"
     },
     {

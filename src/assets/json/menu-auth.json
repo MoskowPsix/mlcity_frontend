@@ -1,6 +1,6 @@
 [
     {
-        "title": "Профиль",       
+        "title": "Профиль",
         "icon": "person",
         "route": "/cabinet",
         "children":[
@@ -23,18 +23,18 @@
     },
     {
         "title": "Мероприятия",       
-        "icon": "accessibility",
+        "icon": "newspaper",
         "route": "/cabinet/events",
         "children":[
             {
                 "title": "Все",              
                 "icon": "list",
-                "route": "/cabinet/events/published"
+                "route": "/cabinet/events"
             },
             {
                 "title": "Создать",              
                 "icon": "add-circle",
-                "route": "/cabinet/events/add"
+                "route": "/cabinet/events/create"
             }
         ]
     },
