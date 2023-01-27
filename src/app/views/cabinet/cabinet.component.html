@@ -1,4 +1,12 @@
-<h2>{{ user  | json }}</h2>
-<br>
-<h1>Это уже вк данные</h1>
-<h2>{{ socialAccount  | json }}</h2>
+<div class="container px-6 py-10 mx-auto">
+    <div class="flex items-center mx-4">
+        <div>
+            {{ user  | json }}
+            <h2>Это уже вк данные</h2>
+            {{ socialAccount  | json }}
+        </div>
+        <div>
+            <ion-router-outlet></ion-router-outlet>
+        </div>
+    </div>
+</div>

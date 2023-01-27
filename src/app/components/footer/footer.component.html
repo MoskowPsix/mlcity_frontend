@@ -1,3 +1,85 @@
-<p>
-  footer works!
-</p>
+<footer class="bg-white dark:bg-gray-900">
+    <div class="flex flex-col pt-6 pb-2 px-10 hidden lg:flex">
+        <div class="lg:flex">
+            <div class="w-full -mx-6 lg:w-2/5">
+                <div class="px-6">
+                    <div class="flex cursor-pointer" [routerLink]="['home']">
+                        <img src="assets/icons/favicon.png" alt="logo" class="h-10">
+                        <a class="text-2xl font-bold text-gray-500 transition-colors duration-300 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300 pl-2" href="#">{{ appName }}</a>
+                    </div>   
+
+                    <p class="max-w-sm mt-2 text-gray-500 dark:text-gray-400">Сервис дял поиска мероприятий в твоем городе.</p>
+
+                    <div class="flex mt-6 -mx-2">
+
+                        <a href="#" class="mx-2 text-gray-600 transition-colors duration-300 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400">
+                            <ion-icon name="logo-vk" class="w-5 h-5"></ion-icon>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 lg:mt-0 lg:flex-1">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+                        <div>
+                        <h3 class="flex items-center text-gray-700 font-bold uppercase dark:text-white"><ion-icon name="call" class="w-5 h-5 pr-2"></ion-icon>Контакты</h3>
+                        <a href="#" class="flex items-center mt-2 text-base  text-gray-600 dark:text-gray-400 hover:underline"><ion-icon name="mail" class="w-5 h-5 pr-2"></ion-icon>Обратная связь</a>
+                        <a href="#" class="flex items-center mt-2 text-base  text-gray-600 dark:text-gray-400 hover:underline"><ion-icon name="chatbox-ellipses" class="w-5 h-5 pr-2"></ion-icon>Поддержка</a>
+                        </div>
+
+                        <div>
+                        <h3 class="flex items-center text-gray-700 font-bold uppercase dark:text-white">Другое</h3>
+                        <a href="#" class="flex items-center mt-2 text-base text-gray-600 dark:text-gray-400 hover:underline"><ion-icon name="information-circle" class="w-5 h-5 pr-2"></ion-icon>О проекте</a>
+                        </div>
+
+                        <div>
+                        <h3 class="flex items-center text-gray-700 font-bold uppercase dark:text-white"><ion-icon name="apps" class="w-5 h-5 pr-2"></ion-icon>Приложения</h3>
+                        <!-- <a href="#" class="flex items-center mt-2 text-base text-gray-600 dark:text-gray-400 hover:underline"><ion-icon name="logo-android" class="w-5 h-5 pr-2"></ion-icon>Android</a>
+                        <a href="#" class="flex items-center mt-2 text-base text-gray-600 dark:text-gray-400 hover:underline"><ion-icon name="logo-apple" class="w-5 h-5 pr-2"></ion-icon>IOS</a> -->
+                            <a href="#"><img src="assets/images/getFromGooglePlay.png" alt="logo" class="h-10 mx-4 my-2"></a>
+                            <a href="#"><img src="assets/images/getFromAppStore.png" alt="logo" class="h-10 mx-4 my-2"></a>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="h-px my-2 bg-gray-200 border-none dark:bg-gray-700">
+
+        <div>
+            <p class="text-center text-gray-500 dark:text-gray-400">© {{ appName }} {{ currentYear}}</p>
+        </div>
+    </div>
+
+    <!-- мобильный футтер -->
+    <div class="grid gap-6 grid-cols-3 justify-items-center p-4 lg:hidden bg-slate-100">
+        <div 
+            class="flex flex-col items-center"
+            [routerLink]="['home']"  
+        >
+            <ion-icon name="map" class="text-4xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
+            <span class="text-2xl text-gray-500 font-bold mt-2" [routerLinkActive]="['text-blue-600']">Карта</span>
+        </div>
+        <div 
+            class="flex flex-col items-center"
+            [routerLink]="['events']"  
+        >
+            <ion-icon name="newspaper" class="text-4xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
+            <span class="text-2xl text-gray-500 font-bold mt-2"  [routerLinkActive]="['text-blue-600']">События</span>
+        </div>
+        <div *ngIf="isAuthenticated"
+            class="flex flex-col items-center"
+            [routerLink]="['cabinet']"  
+        >
+            <ion-icon name="person" class="text-4xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
+            <span class="text-2xl text-gray-500 font-bold mt-2"  [routerLinkActive]="['text-blue-600']">Кабинет</span>
+        </div>
+        <div *ngIf="!isAuthenticated"
+            class="flex flex-col items-center"
+            [routerLink]="['login']"  
+        >
+            <ion-icon name="log-in" class="text-4xl text-gray-400" [routerLinkActive]="['text-blue-500']"></ion-icon>
+            <span class="text-2xl text-gray-500 font-bold mt-2"  [routerLinkActive]="['text-blue-600']">Вход</span>
+        </div>
+    </div>
+
+</footer>

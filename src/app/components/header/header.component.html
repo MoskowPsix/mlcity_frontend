@@ -1,11 +1,11 @@
 <nav class="relative bg-white shadow border-b dark:bg-gray-800">
-    <div class="container px-6 py-4 mx-auto">
+    <div class="container px-6 py-2 mx-auto">
         <div class="xl:flex xl:items-center xl:justify-between">
             <div class="flex items-center justify-between">
                 <div class="text-xl font-semibold text-gray-700">
                     <div class="flex cursor-pointer" [routerLink]="['home']">
                         <img src="assets/icons/favicon.png" alt="logo" class="h-10">
-                        <a class="text-2xl font-bold text-gray-800 transition-colors duration-300 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300 pl-2" href="#">CityLife</a>
+                        <a class="text-2xl font-bold text-gray-800 transition-colors duration-300 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300 pl-2">{{ appName }}</a>
                     </div>   
                 </div>
 
@@ -21,9 +21,8 @@
             </div>
 
             
-            <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
             <div class="absolute hidden inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 xl:mt-0 xl:p-0 lg:top-0 xl:relative xl:bg-transparent xl:w-auto xl:opacity-100 xl:translate-x-0 xl:flex xl:items-center">
-                <div class="flex flex-row mr-4">
+                <div class="flex flex-row flex-wrap justify-end mr-4">
                     <div *ngFor="let item of menuPublic">
                         <app-dropdown-popup 
                             *ngIf="item.children?.length > 0;  else itemMenu" 
@@ -39,7 +38,7 @@
                             <div
                                 [routerLink]="[item.route]"
                                 [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']"
-                                class="flex items-center px-3 py-2 mx-3 mt-2 text-xl text-gray-500 font-bold cursor-pointer transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                class="flex items-center px-3 py-2 mx-1 mt-2 text-xl text-gray-500 font-bold cursor-pointer transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                                 #itemMenu 
                             >
                                 <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>{{item.title}}

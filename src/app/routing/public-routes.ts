@@ -2,6 +2,10 @@ import { EventsComponent } from "../views/events/events.component";
 import { HomeComponent } from "../views/home/home.component";
 import { AddEventComponent } from '../views/add-event/add-event.component';
 import { Routes } from '@angular/router';
+import { AboutComponent } from "../views/about/about.component";
+import { ContactsComponent } from "../views/contacts/contacts.component";
+import { FeedbackComponent } from "../views/feedback/feedback.component";
+import { SupportComponent } from "../views/support/support.component";
 
 export const publicRoutes: Routes = [ 
     {
@@ -23,19 +27,19 @@ export const publicRoutes: Routes = [
     },
     {
       path: 'about',
-      component: HomeComponent
+      component: AboutComponent
     },
     {
       path: 'contacts',
-      component: HomeComponent,
+      component: ContactsComponent,
       children:[
         {
           path: 'feedback',
-          component: HomeComponent
+          component: FeedbackComponent
         },
         {
           path: 'support',
-          component: HomeComponent
+          component: SupportComponent
         }
       ]
     },
