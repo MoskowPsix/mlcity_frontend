@@ -22,6 +22,7 @@ import { DropdownPopupComponent } from './components/dropdown-popup/dropdown-pop
 import { MenuAuthComponent } from './components/menu-auth/menu-auth.component';
 import { MenuAuthSidebarComponent } from './components/menu-auth-sidebar/menu-auth-sidebar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { AboutComponent } from './views/about/about.component';
 
 import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service'; 
@@ -36,8 +37,6 @@ import { XsrfInterceptor } from './xsrf.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
 import { CheckAuthCanActiveGuard } from './guards/check-auth.can-active.guard';
-
-import { ClickOutsideDirective } from './directives/click-outside.directive';
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -57,8 +56,8 @@ const mapConfig: YaConfig = {
     DropdownPopupComponent,
     MenuAuthComponent,
     MenuAuthSidebarComponent,
-    ClickOutsideDirective,
-    FooterComponent
+    FooterComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule, 

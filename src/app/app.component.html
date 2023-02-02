@@ -1,26 +1,24 @@
 <ion-app>
-  <ion-split-pane when="(min-width: 4000px)" contentId="main-content">
-    <ion-menu contentId="main-content">
-      <ion-content>
-        <ion-list>
-          <app-sidebar></app-sidebar>
-        </ion-list>
-      </ion-content>
+  <ion-split-pane when="(min-width: 4000px)" content-id="main-content">
+    <ion-menu side="start" content-id="main-content">
+      <app-sidebar></app-sidebar>
     </ion-menu>
-
-    <div class="ion-page" id="main-content">
-      <app-header></app-header>
-      <ion-content>
-        <ion-router-outlet></ion-router-outlet>
-      </ion-content>
     
+    <div class="ion-page" id="main-content">
+      <ion-header>
+        <ion-toolbar>
+          <app-header></app-header>
+        </ion-toolbar>
+      </ion-header>
 
+      <ion-router-outlet></ion-router-outlet>
+    
       <ion-footer>
-        <!-- <ion-toolbar>
-          <ion-title>Footer</ion-title>
-        </ion-toolbar> -->
-        <app-footer></app-footer>
+        <ion-toolbar>
+            <app-footer></app-footer>
+        </ion-toolbar>
       </ion-footer>
+    
     </div>
   </ion-split-pane>
 </ion-app>

@@ -1,0 +1,7 @@
+@media screen and (min-width: 0px) and (max-width: 768px) {
+    ion-footer{ display: flex; }  /* show it on small screens */
+  }
+  
+  @media (min-width: 768px)  {
+   ion-footer{ display: none; }   /* hide it elsewhere */
+  }
