@@ -1,74 +1,75 @@
-<div class="relative" (clickOutside)="clickedOutside()">
-  <!-- Dropdown toggle button -->
-  <button 
-    (click)="onToggle()" 
-    [ngClass]="isLContactsChildLinkActive() ? headerClassActive : ''"
-    [class]="headerClass"
-  >   
-    <ion-icon *ngIf="headerLeftIco" [name]="headerLeftIcoName" [class]="headerLeftIcoClass"></ion-icon>
-    {{ headertitle }}
-    <ion-icon *ngIf="headerRightIco" [name]="headerRightIcoName" [class]="headerRightIcoClass"></ion-icon>
-  </button>
-<!-- Dropdown menu -->
-  <div 
-      *ngIf="isOpened" 
-      [class]="listClass"
-  >
-    <div>
+<ion-button 
+  fill="clear" 
+  color="dark"
+  [ngClass]="isLContactsChildLinkActive() ? 'active' : ''"
+  [id]="id"
+>
+  <ion-icon *ngIf="headerLeftIco" [name]="headerLeftIcoName" slot="start" color="primary"></ion-icon>
+  {{ headertitle }}
+  <ion-icon *ngIf="headerRightIco" [name]="headerRightIcoName" slot="end"></ion-icon>
+</ion-button>
+
+
+<ion-popover trigger="popover-button" [trigger]="id" triggerAction="click" [dismissOnSelect]="true" showBackdrop="false">
+  <ng-template>
+    <ion-list>
       <div *ngFor="let parent of listItems | keyvalue">   
         <div *ngIf="parent.value.children?.length > 0; else notChil">
           
           <div *ngIf="parent.value.title !== headertitle">
-            <span class="px-3 py-3 text-base font-bold text-gray-400 dark:text-gray-300">{{ parent.value.title }}</span>
-            <hr class="border-gray-200 dark:border-gray-700 my-1">
+            <ion-item-divider>
+              <ion-label>
+                {{ parent.value.title }}
+              </ion-label>
+            </ion-item-divider>
           </div>
                 
-          <div *ngFor="let child of parent.value.children">
-            <a 
+          <ion-item 
+            *ngFor="let child of parent.value.children"
             [routerLink]="[ child.route ]"
-            [routerLinkActive]="routeActiveClass"
-            [class]="itemClass"
-            (click)="onToggle()"
-            >
-              <ion-icon *ngIf="itemIco" [name]="child.icon" [class]="itemIcoClass"></ion-icon> 
-              <span [class]="itemTitleClass">
-                {{ child.title }}
-              </span>
-            </a>
-          </div>   
+          >
+            <ion-icon *ngIf="itemIco" [name]="child.icon" slot="start"  color="primary"></ion-icon> 
+            <ion-label>
+              {{ child.title }}
+            </ion-label>
+          </ion-item>
+
         </div>   
         
         <ng-template #notChil>
-          <hr class="border-gray-200 dark:border-gray-700 my-1">
-          <div *ngIf="parent.value.route === '/logout'; else notLogout">
-            <a 
-              [class]="itemClass"
-              (click)="onLogout()"
+            <ion-item-divider>
+              <ion-label>
+                Аккаунт
+              </ion-label>
+            </ion-item-divider>
+            <ion-item 
+              *ngIf="parent.value.route === '/logout'; else notLogout"
+              class="logout"
             >
-              <ion-icon *ngIf="itemIco" [name]="parent.value.icon" [class]="itemIcoClass"></ion-icon> 
-              <span [class]="itemTitleClass">
+              <ion-icon *ngIf="itemIco" [name]="parent.value.icon" slot="start"  color="primary"></ion-icon> 
+              <ion-label>
                 {{ parent.value.title }}
-              </span>
-            </a>
-          </div>
+              </ion-label>
+            </ion-item>
 
           <ng-template #notLogout>
-            <a 
+            <ion-item-divider>
+              <ion-label>
+                Другое
+              </ion-label>
+            </ion-item-divider>
+            <ion-item 
               [routerLink]="[ parent.value.route ]"
-              [routerLinkActive]="routeActiveClass"
-              [class]="itemClass"
-              (click)="onToggle()"
             >
-              <ion-icon *ngIf="itemIco" [name]="parent.value.icon" [class]="itemIcoClass"></ion-icon> 
-              <span [class]="itemTitleClass">
+              <ion-icon *ngIf="itemIco" [name]="parent.value.icon" slot="start"  color="primary"></ion-icon> 
+              <ion-label>
                 {{ parent.value.title }}
-              </span>
-            </a>
+              </ion-label>
+            </ion-item>
           </ng-template>
 
         </ng-template>
       </div>  
-      
-    </div>
-  </div>
-</div>
+    </ion-list>
+  </ng-template>
+</ion-popover>

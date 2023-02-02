@@ -1,74 +1,68 @@
-<div *ngIf="isAuthenticated; else notAuth">
+<ion-grid *ngIf="isAuthenticated; else notAuth">
+  <ion-row  class="ion-justify-content-center ion-margin-top">
+    <!-- <ion-avatar> -->
+      <ion-icon *ngIf="!user && !user?.avatar" name="person-circle" class="avatar"></ion-icon>
+      <img *ngIf="user && user?.avatar" alt="avatar" class="avatar" src="{{ user.avatar }}" />
+    <!-- </ion-avatar>   -->
+  </ion-row>
 
-  <ion-icon *ngIf="!user && !user?.avatar" name="person-circle" class="pt-1 w-10 h-10 text-gray-600 dark:text-gray-200"></ion-icon>
-  <div *ngIf="user && user?.avatar" class="flex flex-col items-center overflow-hidden">
-    <img src="{{ user.avatar }}" class="w-24 h-24 object-cover w-full h-full border-2 border-gray-400 rounded-full" alt="avatar">
-    <div class="mt-4 flex items-center">
-      <span class="mx-2 text-2xl font-bold text-gray-800 dark:text-gray-200">{{user.name}}</span>
-      <ion-icon src="assets/icons/ring.svg" class="w-8 h-8 mx-4 text-gray-600 transition-colors duration-300 transform dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none cursor-pointer"></ion-icon>
+  <ion-row  class="ion-justify-content-center ion-align-items-center">
+    <ion-item lines="none">
+      <ion-label class="user-name">{{user.name}}</ion-label>  
+    </ion-item>
+
+    <ion-icon src="assets/icons/ring.svg" class="ring"></ion-icon>
+  </ion-row>
+
+
+  <div *ngFor="let item of menuAuth" >
+    <div *ngIf="item.children?.length > 0;  else itemMenu">
+      <ion-accordion-group expand="inset">
+        <ion-accordion  value="first">
+          <ion-item slot="header"  [ngClass]="{ 'active': isLChildLinkActive('child.route') }">
+            <ion-icon name="{{ item.icon }}" color="primary" slot="start"></ion-icon>            
+            <ion-label>{{ item.title }}</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-menu-toggle>
+              <ion-item 
+                lines="none"
+                *ngFor="let child of item.children" 
+                [routerLink]="[ child.route ]"
+                [routerLinkActive]="['active']"
+              >
+                <ion-icon name="{{ child.icon }}"  slot="start" color="medium"></ion-icon>            
+                <ion-label>{{ child.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>          
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
     </div>
-  </div>
 
-  <div class="mt-6">
-    <div *ngFor="let item of menuAuth" class="mt-2">
-      <div *ngIf="item.children?.length > 0;  else itemMenu">
-        <ion-accordion-group expand="inset" class="my-2">
-          <ion-accordion  value="first">
-            <ion-item slot="header" color="default" [ngClass]="{ 'bg-gray-100 dark:bg-gray-700 dark:text-gray-300': isLChildLinkActive('child.route') }">
-              <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>            
-              <span class="mx-4 font-bold  text-gray-500">{{ item.title }}</span>
+    <ng-template #itemMenu>
+      <ion-accordion-group 
+        *ngIf="item.route !== '/logout'"
+        expand="inset" 
+        [routerLink]="[ item.route ]"
+        [routerLinkActive]="['active']"
+      >
+        <ion-accordion value="first" toggleIcon="" toggleIconSlot="end">
+          <ion-menu-toggle>
+            <ion-item slot="header" [routerLink]="[ item.route ]" [routerLinkActive]="['active']">             
+              <ion-icon name="{{ item.icon }}"  slot="start" color="primary"></ion-icon>  
+              <ion-label>{{ item.title }}</ion-label>
             </ion-item>
-            <div class="ion-padding" slot="content">
-              <ion-menu-toggle>
-                <a 
-                  *ngFor="let child of item.children" 
-                  [routerLink]="[ child.route ]"
-                  [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']"
-                  class="flex items-center px-3 py-3 ml-8 mt-2 text-gray-500 font-bold  transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                    <ion-icon name="{{ child.icon }}" class="pt-1 w-5 h-5 text-blue-500 pr-2"></ion-icon> 
-                    <span class="mx-1">
-                      {{ child.title }}
-                    </span>
-                </a>
-              </ion-menu-toggle>
-            </div>
-          </ion-accordion>
-        </ion-accordion-group>
-      </div>
-      
+          </ion-menu-toggle>
+        </ion-accordion>
+      </ion-accordion-group>      
+    </ng-template>               
 
-      <ng-template #itemMenu>
-          <ion-accordion-group 
-            *ngIf="item.route !== '/logout'"
-            expand="inset" 
-            class="my-2" 
-            [routerLink]="[ item.route ]"
-            [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-800']"
-          >
-            <ion-accordion value="first" toggleIcon="" toggleIconSlot="end">
-                <ion-item slot="header" color="default" [routerLink]="[ item.route ]" [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']">
-                  <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>            
-                  <ion-menu-toggle>
-                    <span class="mx-4 font-bold text-gray-500">{{ item.title }}</span>
-                  </ion-menu-toggle>
-                </ion-item>
-            </ion-accordion>
-          </ion-accordion-group>      
-      </ng-template>                     
-
-    </div>
   </div>
-  
-</div>
+</ion-grid>
 
 <ng-template #notAuth>
-  <div class="mx-3 my-2 flex items-center">
-    <ion-menu-toggle class="w-full">
-      <a  [routerLink]="['login']" class="flex items-center justify-center px-4 py-2 m-2 text-xl font-bold tracking-wide text-white transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-        <ion-icon name="log-in" class="text-2xl"></ion-icon>
-        <span class="mx-1">Вход</span>
-      </a>
-    </ion-menu-toggle>
-  </div>
+  <ion-menu-toggle>
+    <ion-button expand="block" [routerLink]="['login']"><ion-icon name="log-in" slot="start"></ion-icon>Вход</ion-button>
+  </ion-menu-toggle>
 </ng-template>

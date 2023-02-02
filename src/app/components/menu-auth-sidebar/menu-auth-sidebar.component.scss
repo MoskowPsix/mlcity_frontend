@@ -1,0 +1,41 @@
+ion-button{
+    margin: 2rem 1rem;
+}
+
+ion-grid{
+    padding: 0;
+}
+
+ion-accordion{
+    box-shadow: none;
+
+    ion-label{
+        font-weight: bold;
+    }
+}
+
+.accordion-group-expand-inset {
+    margin: 5px 0;
+}
+
+.ring{
+    cursor: pointer;    
+}
+
+.ring:hover{
+    color:#3880ff;
+}
+
+.user-name{
+    font-weight: bold;
+    color: #6b7280;
+}
+
+.avatar{
+    height: 6rem;
+    border-radius: 99px;
+}
+
+.active{
+    background-color: #f3f4f6;
+}

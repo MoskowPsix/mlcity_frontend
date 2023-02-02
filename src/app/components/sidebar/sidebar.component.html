@@ -1,51 +1,94 @@
-<div class="flex flex-col w-full h-screen px-4 py-8 bg-white border-r dark:bg-gray-900 dark:border-gray-700">
-
+<ion-content>
   <app-menu-auth-sidebar></app-menu-auth-sidebar>
-  
-  <!-- <nav> -->
-    <div *ngFor="let item of menuPublic">
 
-      <div *ngIf="item.children?.length > 0;  else itemMenu">
-        <ion-accordion-group expand="inset" class="my-2">
-          <ion-accordion  value="first">
-            <ion-item slot="header" color="default" [ngClass]="{ 'bg-gray-100 dark:bg-gray-700': isLChildLinkActive() }">
-              <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>            
-              <span class="mx-4 font-bold text-gray-500">{{ item.title }}</span>
-            </ion-item>
-            <div class="ion-padding" slot="content">
-              <ion-menu-toggle>
-                <a 
-                  *ngFor="let child of item.children" 
-                  [routerLink]="[ child.route ]"
-                  [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']"
-                  class="flex items-center  px-3 py-3 ml-8 mt-2 text-gray-500 font-bold  transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                    <ion-icon name="{{ child.icon }}" class="pt-1 w-5 h-5 text-blue-500 pr-2"></ion-icon> 
-                    <span class="mx-1">
-                      {{ child.title }}
-                    </span>
-                </a>
-              </ion-menu-toggle>
-            </div>
-          </ion-accordion>
-        </ion-accordion-group>
-      </div>
-      
+  <div *ngFor="let item of menuPublic">
   
-      <ng-template #itemMenu>
-        <ion-accordion-group expand="inset" class="my-2">
-          <ion-accordion value="first" toggleIcon="" toggleIconSlot="end">
-              <ion-item slot="header" color="default" [routerLink]="[ item.route ]" [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']">
-                <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>            
-                <ion-menu-toggle>
-                  <span class="mx-4 font-bold text-gray-500">{{ item.title }}</span>
-                </ion-menu-toggle>
+    <div *ngIf="item.children?.length > 0;  else itemMenu">
+      <ion-accordion-group expand="inset">
+        <ion-accordion  value="first">
+          <ion-item slot="header" [ngClass]="{ 'active': isLChildLinkActive() }">
+            <ion-icon name="{{ item.icon }}" color="primary" slot="start"></ion-icon>            
+            <ion-label>{{ item.title }}</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-menu-toggle>
+              <ion-item 
+                lines="none"
+                *ngFor="let child of item.children" 
+                [routerLink]="[ child.route ]"
+                [routerLinkActive]="['active']"
+              >
+                  <ion-icon name="{{ child.icon }}" slot="start" color="medium"></ion-icon> 
+                  <ion-label>{{ child.title }}</ion-label>
               </ion-item>
-          </ion-accordion>
-        </ion-accordion-group>
-      </ng-template>                     
-
+            </ion-menu-toggle>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
     </div>
-  <!-- </nav> -->
+    
+  
+    <ng-template #itemMenu>
+      <ion-menu-toggle>
+        <ion-list lines="none">
+          <ion-item [routerLink]="[ item.route ]" [routerLinkActive]="['active']">             
+            <ion-icon name="{{ item.icon }}"  slot="start" color="primary"></ion-icon>  
+            <ion-label>{{ item.title }}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-menu-toggle>
+    </ng-template>                     
+  
+  </div>
+  <ion-menu-toggle>
+    <ion-list lines="none" class="logout">
+      <ion-item (click)="onLogout()">             
+        <ion-icon name="log-out"  slot="start" color="primary"></ion-icon>  
+        <ion-label>Выход</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-menu-toggle>
+</ion-content>
 
-</div>
+
+
+
+
+
+<!-- <ion-content>
+  <ion-menu-toggle auto-hide="false">
+    <ion-list lines="none">
+      <ion-item [routerLink]="'/'">
+        <ion-icon name="home" slot="start"></ion-icon>
+        Home
+      </ion-item>
+      <ion-item routerLink="todos">
+        <ion-icon name="list" slot="start"></ion-icon>
+        <ion-label>
+          Todos
+        </ion-label>
+      </ion-item>
+      <ion-item routerLink="finance">
+        <ion-icon name="cash" slot="start"></ion-icon>
+        <ion-label>
+          Finance
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-menu-toggle> -->
+  <!-- <ion-item lines="none" (click)="isRemainder === 1 ? isRemainder = 0 : isRemainder = 1">
+    <ion-icon name="notifications" slot="start"></ion-icon>
+    Remainder
+    <ion-icon slot="end" [name]="isRemainder? 'arrow-dropdown' : 'arrow-dropright'"></ion-icon>
+  </ion-item>
+
+  <ion-menu-toggle auto-hide="false">
+    <ion-list lines="none">
+      <ion-item menuclose [hidden]="!isRemainder" [routerLink]="['/notifications']"
+        [queryParams]="{ type: 'birthday' }" menuClose class="sub-menu">
+        <ion-icon name="calendar" slot="start"></ion-icon>
+        Birthdays
+      </ion-item>
+    </ion-list>
+  </ion-menu-toggle> -->
+<!-- </ion-content> -->

@@ -1,57 +1,58 @@
-<nav class="relative bg-white shadow border-b dark:bg-gray-800">
-    <div class="container px-6 py-2 mx-auto">
-        <div class="xl:flex xl:items-center xl:justify-between">
-            <div class="flex items-center justify-between">
-                <div class="text-xl font-semibold text-gray-700">
-                    <div class="flex cursor-pointer" [routerLink]="['home']">
-                        <img src="assets/icons/favicon.png" alt="logo" class="h-10">
-                        <a class="text-2xl font-bold text-gray-800 transition-colors duration-300 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300 pl-2">{{ appName }}</a>
-                    </div>   
-                </div>
-
-                <!-- Mobile menu button -->
-                <div class="flex xl:hidden">
-                    <button  type="button" class="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400">
-                        <!-- ссылаемся на компонент мобильного меню в app.component -->
-                        <ion-menu-toggle>
-                            <ion-icon name="menu" class="w-12 h-12"></ion-icon>
-                        </ion-menu-toggle>
-                    </button>
-                </div>
+<ion-header class="header-mobile">
+    <ion-toolbar>
+        <ion-buttons slot="end">
+            <ion-menu-toggle>
+                <ion-button>
+                    <ion-icon slot="icon-only" name="menu"></ion-icon>
+                </ion-button>
+            </ion-menu-toggle>
+        </ion-buttons>
+        <ion-buttons slot="start">
+            <ion-back-button ></ion-back-button>
+        </ion-buttons>   
+        <ion-title>
+            <div class="logo">
+                <img src="assets/icons/favicon.png">
+                <span>{{ appName }}</span>
             </div>
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
 
-            
-            <div class="absolute hidden inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 xl:mt-0 xl:p-0 lg:top-0 xl:relative xl:bg-transparent xl:w-auto xl:opacity-100 xl:translate-x-0 xl:flex xl:items-center">
-                <div class="flex flex-row flex-wrap justify-end mr-4">
-                    <div *ngFor="let item of menuPublic">
-                        <app-dropdown-popup 
-                            *ngIf="item.children?.length > 0;  else itemMenu" 
-                            [headerLeftIco]="true"
-                            [headerLeftIcoName]="'call'"
-                            [headertitle]="item.title"
-                            [listItems]="[item]"
-                            [itemIco]="true"
-                        >
-                        </app-dropdown-popup>
-                    
-                        <ng-template #itemMenu>
-                            <div
-                                [routerLink]="[item.route]"
-                                [routerLinkActive]="['bg-gray-100', 'dark:bg-gray-700']"
-                                class="flex items-center px-3 py-2 mx-1 mt-2 text-xl text-gray-500 font-bold cursor-pointer transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                #itemMenu 
-                            >
-                                <ion-icon name="{{ item.icon }}" class="pt-1 w-8 h-8 text-blue-500 pr-2"></ion-icon>{{item.title}}
-                            </div>
-                            
-                        </ng-template>                     
-                    </div>
-                </div>
 
-                <div class="flex items-center mt-4 lg:mt-0">     
-                    <app-menu-auth></app-menu-auth>
-                </div>
-            </div>
+<ion-row class="header">
+    <ion-col size="2" class="logo">
+        <img src="assets/icons/favicon.png">
+        <span>{{ appName }}</span>
+    </ion-col>
+    <ion-col size="8" class="menu">
+        <div *ngFor="let item of menuPublic">
+            <app-dropdown-popup 
+                *ngIf="item.children?.length > 0;  else itemMenu" 
+                [id]="'publicMenu'"
+                [headerLeftIco]="true"
+                [headerLeftIcoName]="'call'"
+                [headertitle]="item.title"
+                [listItems]="[item]"
+                [itemIco]="true"
+            >
+            </app-dropdown-popup>
+        
+            <ng-template #itemMenu>
+                <ion-button
+                    fill="clear" 
+                    color="dark"
+                    [routerLink]="[item.route]"
+                    [routerLinkActive]="['active']"
+                >
+                    <ion-icon name="{{ item.icon }}" slot="start" color="primary"></ion-icon>{{item.title}}
+                </ion-button>
+                
+            </ng-template>   
         </div>
-    </div>
-</nav>
+    </ion-col>
+
+    <ion-col size="2" class="auth">
+        <app-menu-auth></app-menu-auth>
+    </ion-col>
+</ion-row>
