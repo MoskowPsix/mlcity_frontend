@@ -28,4 +28,12 @@ ion-accordion{
     padding-left: 5px;
     padding-right: 5px;
     cursor: pointer;
+
+    ion-icon{
+        margin-right: 24px;
+    }
+}
+
+.active{
+    --ion-item-background: #f3f4f6;
 }

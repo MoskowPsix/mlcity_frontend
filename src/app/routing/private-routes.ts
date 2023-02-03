@@ -53,6 +53,20 @@ export const privateRoutes: Routes = [
             },
           ]
         },
+        {
+          path: 'sights',
+          component: EventsComponent,
+          children: [
+            {
+              path: 'cabinet/sights/:id',
+              component: EventsComponent,
+            },
+            {
+              path: 'cabinet/sights/create',
+              component: EventsComponent, // тут поставить компонент форма создания достопримечательности
+            },
+          ]
+        },
       ]
     },
   ];
