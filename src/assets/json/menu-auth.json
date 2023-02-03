@@ -22,7 +22,7 @@
         ]
     },
     {
-        "title": "Мероприятия",       
+        "title": "Мои мероприятия",       
         "icon": "newspaper",
         "route": "/cabinet/events",
         "children":[
@@ -35,6 +35,23 @@
                 "title": "Создать",              
                 "icon": "add-circle",
                 "route": "/cabinet/events/create"
+            }
+        ]
+    },
+    {
+        "title": "Мои достопримечательности",       
+        "icon": "prism",
+        "route": "/cabinet/sights",
+        "children":[
+            {
+                "title": "Все",              
+                "icon": "list",
+                "route": "/cabinet/sights"
+            },
+            {
+                "title": "Создать",              
+                "icon": "add-circle",
+                "route": "/cabinet/sights/create"
             }
         ]
     },

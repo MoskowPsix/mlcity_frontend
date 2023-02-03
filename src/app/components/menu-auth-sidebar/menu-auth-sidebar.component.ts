@@ -42,7 +42,7 @@ export class MenuAuthSidebarComponent implements OnInit {
   }
 
   public isLChildLinkActive(route: string): boolean {
-    return this.router.isActive(route, false);
+    return this.router.isActive(route, true);
   }
 
   ngOnInit() {

@@ -12,7 +12,7 @@
 
 <ion-popover trigger="popover-button" [trigger]="id" triggerAction="click" [dismissOnSelect]="true" showBackdrop="false">
   <ng-template>
-    <ion-list>
+    <ion-list lines="none">
       <div *ngFor="let parent of listItems | keyvalue">   
         <div *ngIf="parent.value.children?.length > 0; else notChil">
           
