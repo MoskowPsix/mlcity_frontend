@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
    appName = environment.APP_NAME
 
   constructor() { }
-
+  
   ngOnInit() {
     this.menuPublic = menuPublicData
   }

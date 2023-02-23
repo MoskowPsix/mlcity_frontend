@@ -1,0 +1,18 @@
+<!-- <div [@collapse]="collapsed"> 
+  {{ readMore ? text : text | slice:0:200 }}
+</div> -->
+
+<!-- <div> 
+  {{ text | slice:0:200 }}
+  {{ !readMore ? '...' : '' }}
+  <span *ngIf="readMore" [@collapse]="collapsed">{{ text | slice:200 }}</span>
+</div> -->
+
+{{ readMore ? text : text | slice:0:200 }}
+<span *ngIf="!readMore">...</span>
+
+<div class="ion-text-end">
+  <ion-button (click)="readMore = !readMore; toggle()" fill="clear" size="small"> 
+    {{ (!readMore) ? 'показать весь текст' : 'скрыть текст' }}
+  </ion-button>
+</div>

@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   
   constructor(
     private authService: AuthService, 
-    private loadingService :LoadingService,
+    private loadingService: LoadingService, 
     private toastService: ToastService, 
     private tokenService: TokenService, 
     private userService: UserService,
@@ -43,10 +43,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
     this.subscription_1 = this.authService.login(this.loginForm.value).subscribe({
       next: data => {
-        this.positiveRsponseAfterLogin(data)
+        this.positiveResponseAfterLogin(data)
       },
       error: err => {
-        this.errorRsponseAfterLogin(err)
+        this.errorResponseAfterLogin(err)
       }
     });
   }
@@ -57,10 +57,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.loadingService.showLoading()
       this.subscription_3 = this.userService.getUserById(user_id).subscribe({
         next: data => {
-          this.positiveRsponseAfterLogin(data)
+          this.positiveResponseAfterLogin(data)
         },
         error: err => {
-          this.errorRsponseAfterLogin(err)
+          this.errorResponseAfterLogin(err)
         }
       });
     }
@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
   }
     
-  positiveRsponseAfterLogin(data:any){
+  positiveResponseAfterLogin(data:any){
     this.responseData = data
     this.userService.setUser(this.responseData.user) 
     this.tokenService.setToken(this.responseData.access_token) 
@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.router.navigate(['cabinet']);
   }
 
-  errorRsponseAfterLogin(err:any){
+  errorResponseAfterLogin(err:any){
     this.loadingService.hideLoading()
     this.toastService.showToast(err.error.message, 'warning')
     this.loginForm.enable()

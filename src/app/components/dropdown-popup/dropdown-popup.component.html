@@ -44,6 +44,7 @@
             </ion-item-divider>
             <ion-item 
               *ngIf="parent.value.route === '/logout'; else notLogout"
+              (click)="onLogout()"
               class="logout"
             >
               <ion-icon *ngIf="itemIco" [name]="parent.value.icon" slot="start"  color="primary"></ion-icon> 
