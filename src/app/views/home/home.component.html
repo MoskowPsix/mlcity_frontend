@@ -3,83 +3,85 @@
     
     <!-- </ion-item>
   </ion-list> -->
-
+<ion-content>
   <div class="flex flex-row my-4 px-4">
 
-      <!--<ion-list class="w-60">
-      <ion-item class="w-60"> -->
-        <ion-select 
-        (ionChange)='selectionCity($event)' 
-        interface="popover" 
-        placeholder="выберите город" 
-        class="border w-60 py-4 mx-4 border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
-        >
-          <ion-select-option  class="block px-4 py-2 hover:bg-gray-100 bg-white dark:hover:text-white"
-            *ngFor="let city of citys; let i = index" 
-            [value]="city.name"
-          >
-            {{city.name}}
-          </ion-select-option>
-        </ion-select>
-
-        <ion-select
-        (ionChange)='selectionEvents($event)' 
-        selected-text="Мероприятия"
-        interface="popover" 
-        [multiple]="true"
-        placeholder="выберите мероприятия" 
-        class="border w-60 py-4 mx-4 border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
-        >
-          <ion-select-option  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-          *ngFor="let event of events; let i = index" 
-          [value]="event.name"
-          >
-          {{event.name}}
-        </ion-select-option>
-        </ion-select>
-      <!-- </ion-item>
-    </ion-list> -->
-
-    <!-- <ion-list class="block px-4 py-2">
-      <ion-item class="px-3 py-2 mx-3 mt-2"> -->
-        <ion-select 
-        class="border w-60 py-4  border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
-        (ionChange)='selectionSights($event)' 
-        selected-text="Достопримечательности"
-        interface="popover" 
-        [multiple]="true"
-        placeholder="Достопримечательности" 
-        >
-          <ion-select-option
-          *ngFor="let sight of sights; let i = index" 
-          [value]="sight.name"
-          >
-          {{sight.name}}
-        </ion-select-option>
-        </ion-select>
-      <!-- </ion-item>
-    </ion-list> -->
-  </div>
-
-  <div class="flex items-stretch"></div>
-  <div>
-    <div class="map">
-      <ya-map (ready)="onMapReady($event)"  [zoom]="15"   [state]="{
-        controls: [
-          'zoomControl',
-          'fullscreenControl',]
-        }" 
+    <!--<ion-list class="w-60">
+    <ion-item class="w-60"> -->
+      <ion-select 
+      (ionChange)='selectionCity($event)' 
+      interface="popover" 
+      placeholder="выберите город" 
+      class="border w-60 py-4 mx-4 border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
       >
-        <ya-placemark
-          *ngFor="let placemark of placemarks"
-          [geometry]="placemark.geometry"
-          [properties]="placemark.properties"
-          [options]="placemark.options"
+        <ion-select-option  class="block px-4 py-2 hover:bg-gray-100 bg-white dark:hover:text-white"
+          *ngFor="let city of citys; let i = index" 
+          [value]="city.name"
         >
-        <!-- (balloonopen)="onPlacemarkBalloonOpen($event, placemark.vkPost, placemark.vkIdPost)" -->
-        </ya-placemark>
-      </ya-map>
-    </div>
+          {{city.name}}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-select
+      (ionChange)='selectionEvents($event)' 
+      selected-text="Мероприятия"
+      interface="popover" 
+      [multiple]="true"
+      placeholder="выберите мероприятия" 
+      class="border w-60 py-4 mx-4 border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
+      >
+        <ion-select-option  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+        *ngFor="let event of events; let i = index" 
+        [value]="event.name"
+        >
+        {{event.name}}
+      </ion-select-option>
+      </ion-select>
+    <!-- </ion-item>
+  </ion-list> -->
+
+  <!-- <ion-list class="block px-4 py-2">
+    <ion-item class="px-3 py-2 mx-3 mt-2"> -->
+      <ion-select 
+      class="border w-60 py-4  border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
+      (ionChange)='selectionSights($event)' 
+      selected-text="Достопримечательности"
+      interface="popover" 
+      [multiple]="true"
+      placeholder="Достопримечательности" 
+      >
+        <ion-select-option
+        *ngFor="let sight of sights; let i = index" 
+        [value]="sight.name"
+        >
+        {{sight.name}}
+      </ion-select-option>
+      </ion-select>
+    <!-- </ion-item>
+  </ion-list> -->
+</div>
+
+<div class="flex items-stretch"></div>
+<div>
+  <div class="map">
+    <ya-map (ready)="onMapReady($event)"  [zoom]="15"   [state]="{
+      controls: [
+        'zoomControl',
+        'fullscreenControl',]
+      }" 
+    >
+      <ya-placemark
+        *ngFor="let placemark of placemarks"
+        [geometry]="placemark.geometry"
+        [properties]="placemark.properties"
+        [options]="placemark.options"
+      >
+      <!-- (balloonopen)="onPlacemarkBalloonOpen($event, placemark.vkPost, placemark.vkIdPost)" -->
+      </ya-placemark>
+    </ya-map>
   </div>
+</div>
 
 
+</ion-content>
+ 

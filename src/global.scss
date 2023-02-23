@@ -35,7 +35,14 @@
     --padding-bottom: 0px !important;
 }
 
-
+.alert-radio-label.sc-ion-alert-md {
+    white-space: pre-line !important;
+ }
+ 
+ .alert-radio-label.sc-ion-alert-ios {
+     white-space: pre-line !important;
+ }
+ 
 @media screen and (min-width: 0px) and (max-width: 768px) {
     ion-content{
         --padding-top: 110px !important;

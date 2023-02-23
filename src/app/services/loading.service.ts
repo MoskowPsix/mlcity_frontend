@@ -16,11 +16,16 @@ export class LoadingService {
       message: 'Загрузка данных...',
       spinner: 'circular',
       //duration: 3000,
-    }).then(loading => { loading.present()} ); 
+    }).then(loading => { loading.present()} )
   }
 
   async hideLoading() {
     this.isLoading = false;
-    return await this.loadingController.dismiss();
+    //await this.loadingController.dismiss();
+    setTimeout(() => {
+      return this.loadingController.dismiss().catch(() => {console.log('hideLoading err')})
+  }, 1000);
+    // await this.loadingController.dismiss().catch(() => {console.log('hideLoading err')})
   }
+
 }

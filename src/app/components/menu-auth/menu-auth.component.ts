@@ -31,7 +31,7 @@ export class MenuAuthComponent implements OnInit {
   }
 
   getUser(){
-    this.subscription_2 =  this.userService.user.subscribe((user) => {
+    this.subscription_2 =  this.userService.getUser().subscribe((user) => {
       this.user = user
     })
   }

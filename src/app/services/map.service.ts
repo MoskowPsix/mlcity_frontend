@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
+import { YaReadyEvent } from 'angular8-yandex-maps';
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, mergeMap, BehaviorSubject } from 'rxjs';
+import { Observable, mergeMap, BehaviorSubject, ReplaySubject, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IUser } from '../models/user';
 import { ToastService } from './toast.service';
@@ -13,6 +13,7 @@ import { MessagesAuth } from '../enums/messages-auth';
 export class AuthService {
 
   authenticationState = new BehaviorSubject(false);
+  //authenticationState: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
 
   constructor(
     private http: HttpClient, 
@@ -25,23 +26,31 @@ export class AuthService {
     return this.http.get<string>(`${environment.BASE_URL}:${environment.PORT}/sanctum/csrf-cookie`)
   }
 
-  isAuthenticated() {
+  isAuthenticated(): boolean {
     let token = this.tokenService.getToken()
     let user = this.userService.getUserFromLocalStorage()
-
     if (token && user){
-      return this.authenticationState.next(true)
-      //return true
+      //return this.authenticationState.next(true)
+      this.authenticationState.next(true)
+      return true
     } else {
-      return this.authenticationState.next(false)
-      //return false
+      //return this.authenticationState.next(false)
+      this.authenticationState.next(false)
+      return false
     } 
+    
     // return token && user ? true : false
   }
 
   getAuthState(){
     this.isAuthenticated()
-    return this.authenticationState.value
+    return this.authenticationState.value  
+    // console.log('this.authenticationState '+ this.authenticationState)
+    // return this.authenticationState
+    
+    // return this.authenticationState.subscribe(state => {
+    //   return state
+    // })
   }
 
   login(user: IUser): Observable<IUser> {

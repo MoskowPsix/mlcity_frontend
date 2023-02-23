@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IUser } from '../models/user';
 import { ISocialAccount } from '../models/social-account';
@@ -9,22 +9,62 @@ import { ISocialAccount } from '../models/social-account';
   providedIn: 'root'
 })
 export class UserService {
-  user:  BehaviorSubject<IUser | null> = new BehaviorSubject(this.getUserFromLocalStorage())
-
+  //BehaviorSubject обязательно нужны начальные значения
+  private user:  BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(this.getUserFromLocalStorage())
+  private socialAccount: BehaviorSubject<ISocialAccount | null> = new BehaviorSubject<ISocialAccount | null>(null);
+  private vkGroups: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  private vkGroupPosts: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  //private user:  Subject<IUser | null> = new ReplaySubject<IUser | null>(1)
+  //private socialAccount: Subject<ISocialAccount> = new ReplaySubject<ISocialAccount>(1);
 
   constructor(private http: HttpClient) { }
 
-  getUser() {
-    return this.user.value
+  getUser(): Observable<IUser | null> {
+    return this.user.asObservable()
   }
 
   getUserById(id: number): Observable<IUser> {
     return this.http.get<IUser>(`${environment.BASE_URL}:${environment.PORT}/api/users/${id}`)
   } 
 
-  getSocialAccountByUserId(id: number): Observable<ISocialAccount> {
-    return this.http.get<ISocialAccount>(`${environment.BASE_URL}:${environment.PORT}/api/users/${id}/social-account`)
+  setSocialAccountByUserId(id: number): Observable<void> {
+    return this.http.get<ISocialAccount>(`${environment.BASE_URL}:${environment.PORT}/api/users/${id}/social-account`).pipe(
+      map((account: ISocialAccount) => {
+        return this.socialAccount.next(account) 
+      })
+     )
   } 
+
+  getSocialAccount(): Observable<ISocialAccount | null>{
+    return this.socialAccount.asObservable()
+  }
+
+  //инфо о методе  https://dev.vk.com/method/groups.get
+  //https://api.vk.com/method/groups.get?user_ids=${this.socialAccount.provider_id}&access_token=${this.socialAccount.token}&extended=1&filter=moder
+  //moder — ищем группы где юзер является администратором, редактором или модератором
+  setVkGroups(provider_id: number, token: string): Observable<void>{
+    return this.http.jsonp<any>(`https://api.vk.com/method/groups.get?user_ids=${provider_id}&access_token=${token}&extended=1&filter=moder&v=5.131`, 'callback').pipe(
+      map((groups) => {
+        return this.vkGroups.next(groups) 
+      })
+     )
+  }
+
+  getVkGroups(): Observable<any>{
+    return this.vkGroups.asObservable()
+  }
+
+  setVkPostsByGroupIp(group_id: number, count:number, token: string): Observable<void>{
+    return this.http.jsonp<any>(`https://api.vk.com/method/wall.get?owner_id=-${group_id}&access_token=${token}&count=${count}&filter=all&extended=1&v=5.131`, 'callback').pipe(
+      map((posts) => {
+        return this.vkGroupPosts.next(posts) 
+      })
+     )
+  }
+
+  getVkPostsGroup(): Observable<any>{
+    return this.vkGroupPosts.asObservable()
+  }
 
   setUser(user: IUser) {
     //this.user.value = []

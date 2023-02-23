@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientJsonpModule } from '@angular/common/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -26,6 +27,12 @@ import { AboutComponent } from './views/about/about.component';
 import { NotFoundComponent } from './views/errors/not-found/not-found.component';
 import { ForbiddenComponent } from './views/errors/forbidden/forbidden.component';
 import { ServerErrorComponent } from './views/errors/server-error/server-error.component';
+import { EventShowComponent } from './views/cabinet/events/event-show/event-show.component';
+import { EventCreateComponent } from './views/cabinet/events/event-create/event-create.component';
+import { SightsComponent } from './views/cabinet/sights/sights.component';
+import { SightShowComponent } from './views/cabinet/sights/sight-show/sight-show.component';
+import { SightCreateComponent } from './views/cabinet/sights/sight-create/sight-create.component';
+import { ReadMoreComponent } from './components/read-more/read-more.component';
 
 import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service'; 
@@ -40,6 +47,7 @@ import { XsrfInterceptor } from './xsrf.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
 import { CheckAuthCanActiveGuard } from './guards/check-auth.can-active.guard';
+
 
 
 const mapConfig: YaConfig = {
@@ -64,14 +72,22 @@ const mapConfig: YaConfig = {
     AboutComponent,
     NotFoundComponent,
     ForbiddenComponent,
-    ServerErrorComponent
+    ServerErrorComponent,
+    EventShowComponent,
+    EventCreateComponent,
+    SightsComponent,
+    SightShowComponent,
+    SightCreateComponent,
+    ReadMoreComponent
   ],
   imports: [
     BrowserModule, 
+    BrowserAnimationsModule,
     IonicModule.forRoot(), 
     AppRoutingModule, 
     AngularYandexMapsModule.forRoot(mapConfig), 
     HttpClientModule, 
+    HttpClientJsonpModule,
     ReactiveFormsModule
   ],
   providers: [
