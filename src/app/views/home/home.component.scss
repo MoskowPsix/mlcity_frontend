@@ -1,4 +1,18 @@
 .map {
 	width: 100%;
-	height: 1000px;
-  }
+	height: 85vh;
+}
+
+.filters-modal{
+	--padding-top: 15px !important;
+	--padding-bottom: 15px !important;
+}
+
+@media screen and (min-width: 0px) and (max-width: 768px) {
+	.filters{
+		position: fixed;
+		bottom: 5rem;
+		right: 1.5rem;
+		z-index: 9999;
+	}
+}
