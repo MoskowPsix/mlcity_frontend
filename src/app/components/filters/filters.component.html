@@ -1,0 +1,99 @@
+<ion-row class="ion-justify-content-center">
+  <ion-col class="ion-padding-horizontal">
+
+    <ion-card>
+      <ion-card-content>
+        <ion-item fill="outline">
+          <ion-label position="floating">Город</ion-label>
+          <ion-icon name="text-outline" slot="start" color="primary"></ion-icon>
+          <ion-input type="text" name="city"></ion-input>
+        </ion-item>    
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Выберите период</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+        <ion-label>Начало мероприятия: </ion-label>
+        <ion-datetime-button 
+          datetime="eventStart" 
+          class="ion-margin-top"
+        ></ion-datetime-button>
+      
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime 
+              id="eventStart" 
+              presentation="date"
+              [firstDayOfWeek]="1" 
+              [showDefaultButtons]="true"
+              doneText="Ok"
+              cancelText="Отмена"
+              ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+    
+        <div class="ion-margin-top"><ion-label >Конец мероприятия: </ion-label></div>
+      
+        <ion-datetime-button 
+          datetime="eventEnd" 
+          class="ion-margin-top"
+        ></ion-datetime-button>
+    
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime 
+              id="eventEnd"  
+              presentation="date"
+              [firstDayOfWeek]="1" 
+              [showDefaultButtons]="true"
+              doneText="Ok"
+              cancelText="Отмена" 
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Тип мероприятия</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+        <div class="ion-padding-vertical">
+          <ng-container *ngFor="let type of eventTypes">
+            <ion-item>
+              <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
+              <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
+              <ion-checkbox slot="end" value="{{ type.id }}"></ion-checkbox>
+            </ion-item>
+          </ng-container>  
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Тип достопримечательности</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+        <div class="ion-padding-vertical">
+          <ng-container *ngFor="let type of sightTypes">
+            <ion-item>
+              <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
+              <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
+              <ion-checkbox slot="end" value="{{ type.id }}"></ion-checkbox>
+            </ion-item>
+          </ng-container>  
+        </div>  
+      </ion-card-content>
+    </ion-card>
+
+  </ion-col>
+</ion-row>
+ 

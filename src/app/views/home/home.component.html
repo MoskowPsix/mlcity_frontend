@@ -1,87 +1,46 @@
- <!-- <ion-list class="block px-4 py-2">
-    <ion-item class="px-3 py-2 mx-3 mt-2"> -->
-    
-    <!-- </ion-item>
-  </ion-list> -->
 <ion-content>
-  <div class="flex flex-row my-4 px-4">
+  <ion-row  class="ion-justify-content-center">
+    <ion-col size-lg="4" size-md="8" size-xs="12" class="ion-text-center">
+      <ion-button size="small" [fill]="selectedRadius === 5 ? 'solid' : 'outline'" (click)="setRadius(5)">5 км</ion-button>
+      <ion-button size="small" [fill]="selectedRadius === 10 ? 'solid' : 'outline'" (click)="setRadius(10)">10 км</ion-button>
+      <ion-button size="small" [fill]="selectedRadius === 15 ? 'solid' : 'outline'" (click)="setRadius(15)">15 км</ion-button>
+      <ion-button size="small" [fill]="selectedRadius === 20 ? 'solid' : 'outline'" (click)="setRadius(20)">20 км</ion-button>
+      <ion-button size="small" [fill]="selectedRadius === 25 ? 'solid' : 'outline'" (click)="setRadius(25)">25 км</ion-button>
+      <ion-button size="small" color="light" class="filters"  id="open-filters"><ion-icon name="options"></ion-icon></ion-button>
+    </ion-col>
+  </ion-row>
 
-    <!--<ion-list class="w-60">
-    <ion-item class="w-60"> -->
-      <ion-select 
-      (ionChange)='selectionCity($event)' 
-      interface="popover" 
-      placeholder="выберите город" 
-      class="border w-60 py-4 mx-4 border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
-      >
-        <ion-select-option  class="block px-4 py-2 hover:bg-gray-100 bg-white dark:hover:text-white"
-          *ngFor="let city of citys; let i = index" 
-          [value]="city.name"
-        >
-          {{city.name}}
-        </ion-select-option>
-      </ion-select>
-
-      <ion-select
-      (ionChange)='selectionEvents($event)' 
-      selected-text="Мероприятия"
-      interface="popover" 
-      [multiple]="true"
-      placeholder="выберите мероприятия" 
-      class="border w-60 py-4 mx-4 border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
-      >
-        <ion-select-option  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-        *ngFor="let event of events; let i = index" 
-        [value]="event.name"
-        >
-        {{event.name}}
-      </ion-select-option>
-      </ion-select>
-    <!-- </ion-item>
-  </ion-list> -->
-
-  <!-- <ion-list class="block px-4 py-2">
-    <ion-item class="px-3 py-2 mx-3 mt-2"> -->
-      <ion-select 
-      class="border w-60 py-4  border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
-      (ionChange)='selectionSights($event)' 
-      selected-text="Достопримечательности"
-      interface="popover" 
-      [multiple]="true"
-      placeholder="Достопримечательности" 
-      >
-        <ion-select-option
-        *ngFor="let sight of sights; let i = index" 
-        [value]="sight.name"
-        >
-        {{sight.name}}
-      </ion-select-option>
-      </ion-select>
-    <!-- </ion-item>
-  </ion-list> -->
-</div>
-
-<div class="flex items-stretch"></div>
-<div>
   <div class="map">
-    <ya-map (ready)="onMapReady($event)"  [zoom]="15"   [state]="{
-      controls: [
-        'zoomControl',
-        'fullscreenControl',]
-      }" 
+    <ya-map (ready)="onMapReady($event)"
+      [zoom]="15"  
+      [state]="{
+        controls: [
+          'zoomControl',
+          'fullscreenControl',]
+        }"
+      [options]="{
+        minZoom:minZoom,
+        maxZoom:18
+      }"
     >
-      <ya-placemark
-        *ngFor="let placemark of placemarks"
-        [geometry]="placemark.geometry"
-        [properties]="placemark.properties"
-        [options]="placemark.options"
-      >
-      <!-- (balloonopen)="onPlacemarkBalloonOpen($event, placemark.vkPost, placemark.vkIdPost)" -->
-      </ya-placemark>
     </ya-map>
   </div>
-</div>
 
+  <ion-modal #modal trigger="open-filters" [presentingElement]="presentingElement">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Фильтры</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="modal.dismiss()"><ion-icon name="close"></ion-icon></ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="filters-modal">
+        <app-filters></app-filters>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 
 </ion-content>
- 
+

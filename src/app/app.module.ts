@@ -33,6 +33,7 @@ import { SightsComponent } from './views/cabinet/sights/sights.component';
 import { SightShowComponent } from './views/cabinet/sights/sight-show/sight-show.component';
 import { SightCreateComponent } from './views/cabinet/sights/sight-create/sight-create.component';
 import { ReadMoreComponent } from './components/read-more/read-more.component';
+import { FiltersComponent } from './components/filters/filters.component';
 
 import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service'; 
@@ -47,8 +48,6 @@ import { XsrfInterceptor } from './xsrf.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
 import { CheckAuthCanActiveGuard } from './guards/check-auth.can-active.guard';
-
-
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -78,7 +77,8 @@ const mapConfig: YaConfig = {
     SightsComponent,
     SightShowComponent,
     SightCreateComponent,
-    ReadMoreComponent
+    ReadMoreComponent,
+    FiltersComponent
   ],
   imports: [
     BrowserModule, 

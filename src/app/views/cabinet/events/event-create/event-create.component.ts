@@ -55,11 +55,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   eventTypes: IEventType[] = []
   eventTypeSelected: number | null = null
 
-  coords!: number[];
+  // coords!: number[];
   placemark!: ymaps.Placemark
-  search!:string
+  // search!:string
   map!:YaReadyEvent<ymaps.Map>
-  showMap: boolean = false
  
   createEventForm: FormGroup = new FormGroup({})
 
@@ -144,7 +143,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.step++
       console.log('this.step = '+ this.step)
     }   
-    this.step === 9 ? this.showMap = true :  this.showMap = false
   }
 
   stepPrev(){
@@ -189,21 +187,21 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //При клике ставим метку, если метка есть, то перемещаем ее
   onMapClick(e: YaEvent<ymaps.Map>): void {
     const { target, event } = e;
-
-    this.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
+    this.createEventForm.patchValue({coords: [event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)] })
+    // this.createEventForm.value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
     if (this.placemark){
-      this.placemark.geometry?.setCoordinates(this.coords)
+      this.placemark.geometry?.setCoordinates(this.createEventForm.value.coords)
     } else  {
-      this.placemark= new ymaps.Placemark(this.coords)
+      this.placemark= new ymaps.Placemark(this.createEventForm.value.coords)
       target.geoObjects.add(this.placemark)
     }
     // Декодирование координат
-    const geocodeResult = this.yaGeocoderService.geocode(this.coords, {
+    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.coords, {
       results: 1,
     });
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
-      this.createEventForm.value.coords = firstGeoObject.getAddressLine()
+      this.createEventForm.value.search = firstGeoObject.getAddressLine()
 
     })
   }
@@ -212,30 +210,37 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   onMapReady(e: YaReadyEvent<ymaps.Map>): void {
     this.map = e;
     const search = new ymaps.SuggestView('search-map');  
+    search.events.add('select',()=>{      
+      this.addPlacemark()
+    })
     this.mapService.geolocationMap(this.map);
   }
 
 
-  //При нажатии кнопки "Показать на карте" создает метку по адресу улицы
+  //При выборе из выпадающего списка из поиска создает метку по адресу улицы
   addPlacemark(): void{
-    this.createEventForm.value.coords = (<HTMLInputElement>document.getElementById("search-map")).value
-    console.log(this.createEventForm.value)
-
-    // Декодирование координат
-    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.coords, {
+    this.createEventForm.value.search=(<HTMLInputElement>document.getElementById("search-map")).value
+    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.search, {
       results: 1,
     });
-
     geocodeResult.subscribe((result: any) => {
-      const firstGeoObject = result.geoObjects.get(0);
+      try {
+        const firstGeoObject = result.geoObjects.get(0);
 
-      if (this.placemark){
-        this.placemark.geometry?.setCoordinates(firstGeoObject.geometry.getCoordinates())
-      } else {
-        this.placemark= new ymaps.Placemark(firstGeoObject.geometry.getCoordinates())
-        this.map.target.geoObjects.add(this.placemark)
+        if (this.placemark){
+          this.placemark.geometry?.setCoordinates(firstGeoObject.geometry.getCoordinates())
+        } else {
+          this.placemark= new ymaps.Placemark(firstGeoObject.geometry.getCoordinates())
+          this.map.target.geoObjects.add(this.placemark)
+        }
+        // this.createEventForm.value.coords=this.placemark.geometry?.getCoordinates()
+        this.createEventForm.patchValue({coords: this.placemark.geometry?.getCoordinates()})
+        //центрирование карты по метки и установка зума
+        this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
+        this.map.target.setZoom(17)
+      } catch (error) { 
+        
       }
-   
     }) 
 }
 
@@ -258,7 +263,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('',[Validators.required, Validators.minLength(10)]),
-      coords: new FormControl('',[Validators.required]),
+      search: new FormControl('',[Validators.required]),
+      coords: new FormControl('',[Validators.required]), 
       type:  new FormControl('',[Validators.required]),
       price: new FormControl(''),
       materials: new FormControl(''),

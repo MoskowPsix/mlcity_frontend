@@ -197,7 +197,6 @@
                 required
               >
             </ion-textarea>
-            <!-- [ngModel]="vkGroupPostSelected && vkGroupPostSelected.text ? vkGroupPostSelected.text  : ''" -->
             </ion-item>
             <div *ngIf="createEventForm.controls['description'].invalid && createEventForm.controls['description'].dirty "  class="validation">
               <ion-note *ngIf="!createEventForm.controls['description'].hasError('minLength')" color="danger">поле "Об мероприятии" должно содержать минимум 10 символа</ion-note>
@@ -261,24 +260,17 @@
         <ion-row  [hidden]="step !== 9" class="ion-justify-content-center">
           <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="step === 9" @fade>
             <ion-label>На карте выберите место проведения мероприятия или введите адрес в поле поиска</ion-label>
-          
-            <ion-row class="ion-margin-vertical">
-              <ion-item fill="outline">
-                <ion-label position="floating">Поиск по адресу</ion-label>
-                <ion-icon name="text-outline" slot="start" color="primary"></ion-icon>
-                <ion-input formControlName="coords" id="search-map" type="text" name="coords" value="{{ this.createEventForm.value.coords }}" required></ion-input>
-              </ion-item>
-            </ion-row>
+            Координаты {{ createEventForm.value.coords }}
+            <ion-item fill="outline" class="ion-margin-vertical">
+              <ion-label position="floating">Поиск по адресу</ion-label>
+              <ion-icon name="text-outline" slot="start" color="primary"></ion-icon>
+              <ion-input formControlName="search" id="search-map" type="text" name="search" value="{{this.createEventForm.value.search}}"  required></ion-input>
+            </ion-item>
 
-            <ion-row class="ion-margin-vertical">
-              <button (click)="addPlacemark()"> Поставить метку</button>
-            </ion-row>
-
-            <ion-row>
+            <div  class="map">
               <ya-map (ready)="onMapReady($event)" 
                 [zoom]="11"
                 (yaclick)="onMapClick($event)"
-                *ngIf="showMap"
                 [state]="{
                   controls: [
                     'zoomControl',
@@ -286,7 +278,7 @@
                   }" 
               >
               </ya-map>
-            </ion-row> 
+            </div>
       
            </ion-col>
         </ion-row>
