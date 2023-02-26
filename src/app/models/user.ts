@@ -5,4 +5,5 @@ export interface IUser {
     password?: string
     token?: string
     avatar: string | null
+    roles?: string[]
   }
