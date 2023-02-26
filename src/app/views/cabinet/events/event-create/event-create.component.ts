@@ -37,7 +37,8 @@ import { MapService } from 'src/app/services/map.service';
 export class EventCreateComponent implements OnInit, OnDestroy {
   host: string = environment.BASE_URL
   port: string = environment.PORT
-  user: IUser[] = []
+  // user: IUser[] = []
+  userName: string = ''
   socialAccount: any
   subscriptions: Subscription[] = []
   subscription_1: Subscription = new Subscription()
@@ -48,16 +49,20 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   subscription_6: Subscription = new Subscription()
   step: number = 1
   vkGroups: any
+  vkGroupsNotExists: boolean = false
+  vkGroupsLoaded: boolean = false
   vkGroupSelected: number | null = null
   vkGroupPosts: any
+  vkGroupPostsLoaded: boolean = false
   vkGroupPostsDisabled: boolean = false
   vkGroupPostSelected: any = null
-  eventTypes: IEventType[] = []
-  eventTypeSelected: number | null = null
+  types: IEventType[] = []
+  typesLoaded: boolean = false
+  typeSelected: number | null = null
 
-  // coords!: number[];
+  nextButtonDisable: boolean = false
+
   placemark!: ymaps.Placemark
-  // search!:string
   map!:YaReadyEvent<ymaps.Map>
  
   createEventForm: FormGroup = new FormGroup({})
@@ -68,7 +73,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   getUserWithSocialAccount(){
     this.subscription_1 = this.userService.getUser().pipe(
       switchMap((user: any) => {
-        this.user = user
+        // this.user = user
+        this.userName = user.name
         return this.userService.setSocialAccountByUserId(user.id)
       }),
       tap(() => {
@@ -92,8 +98,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   getVkGroups(){
     this.subscription_3 = this.userService.getVkGroups().subscribe((response) => {
-      this.vkGroups = response.response.items
-      console.log(this.vkGroups)
+      if(response.response.items){
+        this.vkGroups = response.response.items
+      } else {
+        this.vkGroupsNotExists = true
+      }
+      this.vkGroupsLoaded = true //для скелетной анимации
+      // this.vkGroups = response.response.items
+      // response.response.items ? this.vkGroupsLoaded = true :  this.vkGroupsLoaded = false //для скелетной анимации
     })
   }
 
@@ -118,7 +130,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   getVkPostsGroup(){
     this.subscription_5 = this.userService.getVkPostsGroup().subscribe((response) => {
       this.vkGroupPosts = response.response
-      console.log('this.vkGroupPosts = ' + this.vkGroupPosts)
+      response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
   }
 
@@ -130,25 +142,53 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPostSelected = post
       this.createEventForm.patchValue({description: this.vkGroupPostSelected.text });
     }
-    console.log( JSON.stringify(this.vkGroupPostSelected))
   }
 
   onSubmit(){
     console.log('submit')
   }
-
+  
   stepNext(){
-    console.log('click ')
-    if(this.step !== 11){
+    if(this.step !== 12){
       this.step++
-      console.log('this.step = '+ this.step)
+      if (this.step === 5){
+        this.createEventForm.patchValue({ sponsor: this.userName })
+      }
+      this.disabledNextButton()
     }   
   }
 
   stepPrev(){
     if(this.step !== 1){
       this.step--
+      this.disabledNextButton()
     }   
+  }
+
+  disabledNextButton(){  
+    switch (this.step) {
+      case 3:
+       this.createEventForm.controls['name'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
+        break; 
+      case 4:
+        this.createEventForm.hasError('dateInvalid') ? this.nextButtonDisable = true : this.nextButtonDisable = false
+        break; 
+      case 5:
+        this.createEventForm.controls['sponsor'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
+        break; 
+      case 6:
+        this.createEventForm.controls['description'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
+        break;   
+      // case 9:
+      //   console.log(this.createEventForm.controls['coords'].value)
+      //   this.createEventForm.controls['coords'].value.length ? this.nextButtonDisable = true : this.nextButtonDisable = false
+      //   break;   
+      // case 9:
+      //   this.createEventForm.controls['search'].invalid && this.createEventForm.controls['coords'].invalid ? this.nextButtonDisable = true : this.nextButtonDisable = false
+      //   break;   
+      default:
+        break;
+    }
   }
 
   // Валидатор, чтобы определить что дата начала меньше даты окончания
@@ -174,14 +214,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   getTypes(){
     this.subscription_6 = this.eventTypeService.geTypes().subscribe((response) => {
-      this.eventTypes = response.types
-      console.log('this.eventTypes  = ' + this.eventTypes )
+      this.types = response.types
+      response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
     })
   }
   
   selectedType(type_id: any){
-    type_id.detail.value ? this.eventTypeSelected = type_id.detail.value  :  this.eventTypeSelected =  null
-    console.log('this.eventTypeSelected ' + this.eventTypeSelected)
+    type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
   }
 
   //При клике ставим метку, если метка есть, то перемещаем ее
@@ -246,26 +285,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getUserWithSocialAccount()
-    // this.eventTypeService.setTypes()
     this.getTypes()
-    
-    console.log(this.user)
-    setTimeout(()=>
-      console.log(this.socialAccount)
-    ,1000)
-
-    setTimeout(()=>
-      console.log('vkGroups  ' + this.vkGroups)
-    ,1000)
-    
+     
     //Создаем поля для формы
     this.createEventForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('',[Validators.required, Validators.minLength(10)]),
       search: new FormControl('',[Validators.required]),
-      coords: new FormControl('',[Validators.required]), 
-      type:  new FormControl('',[Validators.required]),
+      coords: new FormControl('',[Validators.required, Validators.minLength(2)]), 
+      type:  new FormControl({value: '1', disabled: false},[Validators.required]),
+      status:  new FormControl({value: '1', disabled: false},[Validators.required]),
       price: new FormControl(''),
       materials: new FormControl(''),
       dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),

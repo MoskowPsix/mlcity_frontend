@@ -15,4 +15,8 @@
 		right: 1.5rem;
 		z-index: 9999;
 	}
+
+	ion-modal {
+		--border-radius: 8px!important;
+	  }
 }

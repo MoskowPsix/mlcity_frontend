@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   map!:YaReadyEvent<ymaps.Map>
   placemarks: ymaps.Placemark[]=[]
   CirclePoint!: ymaps.Circle;
+  myGeo!:ymaps.Placemark;
   // placemark: Placemark[] = [];
   minZoom = 8
   clusterer!: ymaps.Clusterer
@@ -162,32 +163,47 @@ export class HomeComponent implements OnInit {
 
   onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
     this.map={target, ymaps};
+    // Определяем местоположение пользователя
+    this.mapService.geolocationMap(this.map) 
     
     // Заполняем массив меток
     this.points.forEach(element => {
       this.placemarks.push(new ymaps.Placemark(element.geometry,element.properties))
     })
 
-    // Определяем текущее положение
-    this.mapService.geolocationMap(this.map)
+    
 
     // Создаем и добавляем круг
     this.CirclePoint=new ymaps.Circle([[11,11],1000*this.currentValue],{},{fillOpacity:0.15, draggable:false})
     target.geoObjects.add(this.CirclePoint)
 
+    //Создаем метку в центре круга, для перетаскивания
+    this.myGeo=new ymaps.Placemark([11,11],{},{preset: 'islands#darkBlueDotIconWithCaption',iconColor: '#0095b6'})
+    target.geoObjects.add(this.myGeo);
+
+    // Вешаем на карту событие начала перетаскивания
+    this.map.target.events.add('actionbegin',  (e) => {
+
+      this.CirclePoint.geometry?.setRadius(10)
+      ymaps.geoQuery(this.placemarks).removeFromMap(this.map.target)
+    });
+
     // Вешаем на карту событие по перетаскиванию круга и отображения меток в круге
     this.map.target.events.add('actiontick',  (e) => {
 
       const { globalPixelCenter, zoom } = e.get('tick');
-      // var current_state = this.map.target.action.getCurrentState();
       const projection = this.map.target.options.get('projection');
       const coords = projection.fromGlobalPixels(globalPixelCenter, zoom);
 
       this.CirclePoint.geometry?.setCoordinates(coords)
-      console.log(this.CirclePoint)
-
-      this.visiblePlacemarks()
+      this.myGeo.geometry?.setCoordinates(coords)
     
+    });
+
+    // Вешаем на карту событие по окончинию перетаскивания
+    this.map.target.events.add('actionend',  (e) => {
+      this.CirclePoint.geometry?.setRadius(this.currentValue*1000)
+      this.visiblePlacemarks()
     });
   }
 

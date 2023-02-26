@@ -19,30 +19,53 @@
         <ion-col size-lg="4" size-md="8" size-xs="12">
           <div class="ion-text-start">
             <h3>Создание мероприятия</h3>
-            <ion-label>Шаг {{ step }} из 11</ion-label>
+            <ion-label>Шаг {{ step }} из 12</ion-label>
           </div>
         </ion-col>
       </ion-row>
 
-      <!-- <div  [ngSwitch]="step"> -->
+
         <!-- шаг 1 -->
         <ion-row [hidden]="step !== 1" class="ion-justify-content-center">
           <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="step === 1" @fade>
             <ion-list>
-              <ion-radio-group (ionChange)="selectedVkGroup($event)" [allowEmptySelection]="true" [value]="vkGroupSelected">
+                <!-- Скелетна анимация -->
                 <ion-list-header>
-                  <ion-label>Выберите группу, из которой следует загрузить посты, в противном случае вы будите направлены на шаг 3</ion-label>
-                </ion-list-header>
-                <ng-container *ngFor="let group of vkGroups">
-                  <ion-item>
-                    <ion-avatar>
-                      <img alt="ava" src="{{ group.photo_50 }}" />
-                    </ion-avatar>
-                    <ion-label class="ion-padding-start">{{ group.name }}</ion-label>
-                    <ion-radio slot="end" value="{{ group.id }}"></ion-radio>
-                  </ion-item>
-                </ng-container>
-              </ion-radio-group>
+                  <ion-label>Выберите группу, из которой следует загрузить посты.</ion-label>
+                </ion-list-header>  
+                <ion-radio-group (ionChange)="selectedVkGroup($event)" [allowEmptySelection]="true" [value]="vkGroupSelected">
+                  <ng-container *ngIf="!vkGroupsLoaded">
+                    <ng-container *ngFor="let key of [1,2,3]">
+                      <ion-item>
+                        <ion-avatar>
+                          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </ion-avatar>
+                        <ion-label class="ion-padding-start">
+                          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </ion-label>
+                      </ion-item>
+                    </ng-container>
+                  </ng-container>
+  
+                  <ng-container *ngIf="vkGroupsLoaded">
+                    <ng-container *ngFor="let group of vkGroups">
+                      <ion-item>
+                        <ion-avatar>
+                          <img alt="ava" src="{{ group.photo_50 }}" />
+                        </ion-avatar>
+                        <ion-label class="ion-padding-start">{{ group.name }}</ion-label>
+                        <ion-radio slot="end" value="{{ group.id }}"></ion-radio>
+                      </ion-item>
+                    </ng-container>
+                  </ng-container>
+                </ion-radio-group>
+
+                <div *ngIf="vkGroupsNotExists">
+                  <ion-row>
+                    <ion-label color="danger" class="ion-padding-vertical">У вас нет групп где вы являетесь Администратором, Модератором или Редактором</ion-label>
+                  </ion-row>
+                </div>
+
             </ion-list>
           </ion-col>
         </ion-row>
@@ -50,48 +73,84 @@
         <!-- шаг 2 -->
         <ion-row  [hidden]="step !== 2" class="ion-justify-content-center" >
           <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="step === 2" @fade>
-            <div *ngIf="vkGroupPosts; else notSelectedGroup">
-              <ion-label>Выберите посты, из которого следует загрузить текст и фото (загружены последние 10 постов)</ion-label>
-              <ng-container *ngFor="let post of vkGroupPosts.items; index as i">
-                <ion-card>
-                  <ng-container *ngFor="let profile of vkGroupPosts.profiles">
+            <ion-label>Выберите посты, из которого следует загрузить текст и фото (загружены последние 10 постов)</ion-label>
+            <div *ngIf="vkGroupPosts; else notSelectedGroup">              
+              <!-- Скелетна анимация -->
+              <ng-container *ngIf="!vkGroupPostsLoaded">
+                <ng-container *ngFor="let key of [1,2]">
+                  <ion-card>
+                    
                     <ion-item class="ion-margin-end">
                       <ion-avatar slot="start">
-                        <img alt="ava" src="{{ profile.photo_50 }}" />
+                        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                       </ion-avatar>
-                      <ion-label>{{ profile.first_name }}</ion-label>
+                      <ion-label>
+                        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                      </ion-label>
                     </ion-item>
-                  </ng-container>
 
-                  <ion-card-content>
-                    <app-read-more text="{{ post.text }}"></app-read-more>
-                  </ion-card-content>
+  
+                    <ion-card-content>
+                      <ion-skeleton-text [animated]="true" style="height: 100px;"></ion-skeleton-text>
+                    </ion-card-content>
+  
+                    <ion-row class="ion-padding-horizontal">
+                      <ng-container  *ngFor="let key of [1,2,3]">
+                        <ion-col size="4" class="ion-align-self-center ion-justify-content-center">
+                          <ion-skeleton-text [animated]="true" style="height: 80px;"></ion-skeleton-text>
+                        </ion-col>             
+                      </ng-container> 
+                    </ion-row>
+                    
+                  </ion-card>
+                 
+                </ng-container>
+              </ng-container>
 
-                  <ion-row *ngIf="post.attachments" class="ion-padding-horizontal">
-                    <ng-container  *ngFor="let attachment of post.attachments">
-                      <ng-container *ngFor="let photo of attachment.photo.sizes">
-                        <ion-col *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
-                          <img alt="ava" src="{{ photo.url }}" /> 
-                       </ion-col>    
-                      </ng-container>           
-                    </ng-container> 
-                  </ion-row>
-                  
-                  <ion-footer>
-                    <div class="ion-text-end">
-                      <ion-button (click)="selectedVkGroupPost(post)" class="ion-margin" [color]="vkGroupPostSelected?.id === post.id ? 'success' : 'medium'">
-                        <ion-icon *ngIf="vkGroupPostSelected?.id === post.id" name="checkmark-outline" slot="start"></ion-icon>
-                        {{ vkGroupPostSelected?.id === post.id ? 'Выбрано' : 'Выбрать'}} 
-                      </ion-button>
-                    </div>  
-                  </ion-footer>
-                </ion-card>
-               
+              <ng-container *ngIf="vkGroupPostsLoaded">
+                <ng-container *ngFor="let post of vkGroupPosts.items; index as i">
+                  <ion-card>
+                    <ng-container *ngFor="let profile of vkGroupPosts.profiles">
+                      <ion-item class="ion-margin-end">
+                        <ion-avatar slot="start">
+                          <img alt="ava" src="{{ profile.photo_50 }}" />
+                        </ion-avatar>
+                        <ion-label>{{ profile.first_name }}</ion-label>
+                      </ion-item>
+                    </ng-container>
+  
+                    <ion-card-content>
+                      <app-read-more text="{{ post.text }}"></app-read-more>
+                    </ion-card-content>
+  
+                    <ion-row *ngIf="post.attachments" class="ion-padding-horizontal">
+                      <ng-container  *ngFor="let attachment of post.attachments">
+                        <ng-container *ngFor="let photo of attachment.photo.sizes">
+                          <ion-col *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
+                            <img alt="ava" src="{{ photo.url }}" /> 
+                         </ion-col>    
+                        </ng-container>           
+                      </ng-container> 
+                    </ion-row>
+                    
+                    <ion-footer>
+                      <div class="ion-text-end">
+                        <ion-button (click)="selectedVkGroupPost(post)" class="ion-margin" [color]="vkGroupPostSelected?.id === post.id ? 'success' : 'medium'">
+                          <ion-icon *ngIf="vkGroupPostSelected?.id === post.id" name="checkmark-outline" slot="start"></ion-icon>
+                          {{ vkGroupPostSelected?.id === post.id ? 'Выбрано' : 'Выбрать'}} 
+                        </ion-button>
+                      </div>  
+                    </ion-footer>
+                  </ion-card>
+                 
+                </ng-container>
               </ng-container>
             </div>
             
             <ng-template #notSelectedGroup>
-              <ion-label color="danger">Вы не выбрали группу, пожалуйста вернитесь назад и выберите группу (шаг 1)</ion-label>
+              <ion-row>
+                <ion-label color="danger" class="ion-padding-vertical">Вы не выбрали группу, пожалуйста вернитесь назад и выберите группу (шаг 1)</ion-label>
+              </ion-row>
             </ng-template>
           </ion-col>
         </ion-row>
@@ -102,7 +161,7 @@
             <ion-item fill="outline">
               <ion-label position="floating">Название мероприятия</ion-label>
               <ion-icon name="text-outline" slot="start" color="primary"></ion-icon>
-              <ion-input formControlName="name" type="text" name="name" required></ion-input>
+              <ion-input formControlName="name" (ionChange)="disabledNextButton()" type="text" name="name" required></ion-input>
             </ion-item>
             <div *ngIf="createEventForm.controls['name'].invalid && createEventForm.controls['name'].dirty"  class="validation">
               <ion-note *ngIf="!createEventForm.controls['name'].hasError('minLength')" color="danger">Название мероприятия должно содержать минимум 3 символа</ion-note>
@@ -135,6 +194,7 @@
                   doneText="Ok"
                   cancelText="Отмена"
                   formControlName="dateStart"
+                  (ionChange)="disabledNextButton()"
                   ></ion-datetime>
               </ng-template>
             </ion-modal>
@@ -157,7 +217,8 @@
                   [showDefaultButtons]="true"
                   doneText="Ok"
                   cancelText="Отмена"
-                  formControlName="dateEnd"  
+                  formControlName="dateEnd"
+                  (ionChange)="disabledNextButton()"  
                 ></ion-datetime>
               </ng-template>
             </ion-modal>
@@ -171,7 +232,7 @@
             <ion-item fill="outline">
               <ion-label position="floating">Организатор мероприятия</ion-label>
               <ion-icon name="text-outline" slot="start" color="primary"></ion-icon>
-              <ion-input formControlName="sponsor" type="text" name="sponsor" required></ion-input>
+              <ion-input formControlName="sponsor" (ionChange)="disabledNextButton()" type="text" name="sponsor" required></ion-input>
             </ion-item>
             <div *ngIf="createEventForm.controls['sponsor'].invalid && createEventForm.controls['sponsor'].dirty"  class="validation">
               <ion-note *ngIf="!createEventForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор мероприятия" должно содержать минимум 3 символа</ion-note>
@@ -194,6 +255,7 @@
                 formControlName="description" 
                 placeholder="Введите инфомармацию об мероприятии.." 
                 [autoGrow]="true" 
+                (ionChange)="disabledNextButton()"
                 required
               >
             </ion-textarea>
@@ -240,17 +302,34 @@
         <ion-row  [hidden]="step !== 8" class="ion-justify-content-center">
           <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="step === 8" @fade>
            <ion-list>
-            <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [allowEmptySelection]="true" [value]="eventTypeSelected" required>
+            <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
               <ion-list-header>
                 <ion-label>Выберите тип мероприятия</ion-label>
               </ion-list-header>
-              <ng-container *ngFor="let type of eventTypes">
-                <ion-item>
-                  <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
-                  <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-                  <ion-radio slot="end" value="{{ type.id }}"></ion-radio>
-                </ion-item>
+
+              <ng-container *ngIf="!typesLoaded">
+                <ng-container *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
+                  <ion-item>
+                    <ion-avatar>
+                      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                    </ion-avatar>
+                    <ion-label class="ion-padding-start">
+                      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                    </ion-label>
+                  </ion-item>
+                </ng-container>
               </ng-container>
+
+              <ng-container *ngIf="typesLoaded">
+                <ng-container *ngFor="let type of types">
+                  <ion-item>
+                    <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
+                    <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
+                    <ion-radio slot="end" value="{{ type.id }}"></ion-radio>
+                  </ion-item>
+                </ng-container>
+              </ng-container>
+             
             </ion-radio-group>
           </ion-list>
           </ion-col>
@@ -264,7 +343,7 @@
             <ion-item fill="outline" class="ion-margin-vertical">
               <ion-label position="floating">Поиск по адресу</ion-label>
               <ion-icon name="text-outline" slot="start" color="primary"></ion-icon>
-              <ion-input formControlName="search" id="search-map" type="text" name="search" value="{{this.createEventForm.value.search}}"  required></ion-input>
+              <ion-input formControlName="search" (ionChange)="disabledNextButton()" id="search-map" type="text" name="search" value="{{this.createEventForm.value.search}}"  required></ion-input>
             </ion-item>
 
             <div  class="map">
@@ -305,6 +384,29 @@
         </ion-row>
       <!-- </div> -->
 
+       <!-- шаг 12 -->
+       <ion-row  [hidden]="step !== 12" class="ion-justify-content-center">
+        <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="step === 12" @fade>
+         <ion-list>
+          <ion-radio-group formControlName="status" required>
+               
+            <ion-item>
+              <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
+              <ion-label>Отправить на модерацию</ion-label>
+              <ion-radio slot="end" value="1"></ion-radio>
+            </ion-item>     
+            
+            <ion-item>
+              <ion-icon name="create" slot="start" color="medium" size="large"></ion-icon>
+              <ion-label>Оставить в черновиках</ion-label>
+              <ion-radio slot="end" value="0"></ion-radio>
+            </ion-item> 
+           
+          </ion-radio-group>
+        </ion-list>
+        </ion-col>
+      </ion-row>
+
 
       <!-- кнопки назад - вперед - готово -->
       <ion-row class="ion-justify-content-center">
@@ -313,44 +415,11 @@
           <ion-button *ngIf="step !== 1"  (click)="stepPrev()" expand="block"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
         </ion-col>
         <ion-col size-lg="2" size-md="4" size-xs="6">
-          <ion-button *ngIf="step !== 11"  (click)="stepNext()" expand="block">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-          <ion-button *ngIf="step === 11"  (click)="onSubmit()" expand="block"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+          <ion-button *ngIf="step !== 12"  (click)="stepNext()" [disabled]="nextButtonDisable" expand="block">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+          <ion-button *ngIf="step === 12"  (click)="onSubmit()" expand="block"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
         </ion-col>     
       </ion-row>
     
     </form>
   </ion-grid>
 </ion-content>
-
- <!-- <ion-item>
-            <ion-select #vkGroupSelect (ionChange)='selectedVkGroup(vkGroupSelect.value)' placeholder="ВК группа" okText="Ok" cancelText="Отмена">
-              <ng-container *ngFor="let group of vkGroups">
-                <ion-select-option text-wrap value="{{ group.id }}" >
-                  <ion-avatar>
-                    <img alt="Silhouette of a person's head" src="{{ group.photo_50 }}" />
-                  </ion-avatar>
-                  {{ group.name }}
-                </ion-select-option>
-              </ng-container>
-           </ion-select> 
-        </ion-item> -->
-          <!-- <ion-item fill="outline">
-            <ion-label position="floating">E-mail</ion-label>
-            <ion-icon name="mail" slot="start" color="primary"></ion-icon>
-            <ion-input formControlName="vk_link" type="email" name="email"></ion-input>
-          </ion-item>
-          
-          <ion-item fill="outline" class="ion-margin-top">
-            <ion-label position="floating">Пароль</ion-label>
-            <ion-icon name="lock-closed" slot="start" color="primary"></ion-icon>
-            <ion-input formControlName="password" type="password" name="password" required></ion-input>
-          </ion-item>
-          <div *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].dirty" class="validation">
-            <ion-note *ngIf="!loginForm.controls['password'].hasError('minLength')" color="danger">Пароль должен содержать минимум 3 символа</ion-note>
-            <ion-note *ngIf="loginForm.controls['password'].hasError('required')" color="danger">Поле "Пароль" не может быть пустым</ion-note>
-          </div>
-
-          <ion-button type="submit" size="large" expand="block" class="ion-margin-top" [disabled] ="loginForm.invalid || loginForm.disabled">
-            <ion-icon name="log-in" slot="start"></ion-icon>
-            Вход
-          </ion-button> -->
