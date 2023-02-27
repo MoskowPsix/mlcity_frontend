@@ -416,7 +416,7 @@
         </ion-col>
         <ion-col size-lg="2" size-md="4" size-xs="6">
           <ion-button *ngIf="step !== 12"  (click)="stepNext()" [disabled]="nextButtonDisable" expand="block">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-          <ion-button *ngIf="step === 12"  (click)="onSubmit()" expand="block"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+          <ion-button *ngIf="step === 12"  (click)="onSubmit()" [disabled] ="createEventForm.invalid || createEventForm.disabled" expand="block"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
         </ion-col>     
       </ion-row>
     
