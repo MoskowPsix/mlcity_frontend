@@ -343,7 +343,7 @@
             <ion-item fill="outline" class="ion-margin-vertical">
               <ion-label position="floating">Поиск по адресу</ion-label>
               <ion-icon name="text-outline" slot="start" color="primary"></ion-icon>
-              <ion-input formControlName="search" (ionChange)="disabledNextButton()" id="search-map" type="text" name="search" value="{{this.createEventForm.value.search}}"  required></ion-input>
+              <ion-input formControlName="search" (ionChange)="clearSearche($event); disabledNextButton()" id="search-map" type="text" name="search" value="{{this.createEventForm.value.search}}"  required></ion-input>
             </ion-item>
 
             <div  class="map">
@@ -419,7 +419,6 @@
           <ion-button *ngIf="step === 12"  (click)="onSubmit()" [disabled] ="createEventForm.invalid || createEventForm.disabled" expand="block"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
         </ion-col>     
       </ion-row>
-    
     </form>
   </ion-grid>
 </ion-content>

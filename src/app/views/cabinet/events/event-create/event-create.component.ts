@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { Subscription, switchMap, tap } from 'rxjs';
-import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { EventTypeService } from 'src/app/services/event-type.service';
-import { IUser } from 'src/app/models/user';
+//import { IUser } from 'src/app/models/user';
 import { IEventType } from 'src/app/models/event-type';
 import { environment } from 'src/environments/environment';
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
@@ -135,7 +135,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   selectedVkGroupPost(post: any){
-    if(!post || this.vkGroupPostSelected?.id === post.id){
+    if(!post || this.vkGroupPostSelected.id === post.id){
       this.vkGroupPostSelected = null
       this.createEventForm.patchValue({description: '' });
     } else {
@@ -179,21 +179,16 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       case 6:
         this.createEventForm.controls['description'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
         break;   
-      // case 9:
-      //   console.log(this.createEventForm.controls['coords'].value)
-      //   this.createEventForm.controls['coords'].value.length ? this.nextButtonDisable = true : this.nextButtonDisable = false
-      //   break;   
-      // case 9:
-      //   this.createEventForm.controls['search'].invalid && this.createEventForm.controls['coords'].invalid ? this.nextButtonDisable = true : this.nextButtonDisable = false
-      //   break;   
+      case 9:
+        !this.createEventForm.controls['coords'].value.length ? this.nextButtonDisable = true : this.nextButtonDisable = false
+        break;   
       default:
         break;
     }
   }
 
   // Валидатор, чтобы определить что дата начала меньше даты окончания
-  dateRangeValidator(control : AbstractControl) : ValidationErrors | null
-  {
+  dateRangeValidator(control : AbstractControl) : ValidationErrors | null {
     if (!control.get('dateStart')?.value || !control.get('dateEnd')?.value)
       return null;
 
@@ -228,12 +223,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     const { target, event } = e;
     this.createEventForm.patchValue({coords: [event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)] })
     // this.createEventForm.value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
-    if (this.placemark){
-      this.placemark.geometry?.setCoordinates(this.createEventForm.value.coords)
-    } else  {
-      this.placemark= new ymaps.Placemark(this.createEventForm.value.coords)
-      target.geoObjects.add(this.placemark)
-    }
+    this.map.target.geoObjects.removeAll()
+    this.placemark= new ymaps.Placemark(this.createEventForm.value.coords)
+    this.map.target.geoObjects.add(this.placemark)
     // Декодирование координат
     const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.coords, {
       results: 1,
@@ -248,11 +240,21 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   // Поиск по улицам
   onMapReady(e: YaReadyEvent<ymaps.Map>): void {
     this.map = e;
+
+    if (this.createEventForm.value.coords){
+      this.map.target.geoObjects.removeAll()
+      this.placemark= new ymaps.Placemark(this.createEventForm.value.coords)
+      this.map.target.geoObjects.add(this.placemark)
+      this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
+      this.map.target.setZoom(17)
+    } else {
+      this.mapService.geolocationMap(this.map);
+    }
+    
     const search = new ymaps.SuggestView('search-map');  
     search.events.add('select',()=>{      
       this.addPlacemark()
     })
-    this.mapService.geolocationMap(this.map);
   }
 
 
@@ -266,22 +268,28 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       try {
         const firstGeoObject = result.geoObjects.get(0);
 
-        if (this.placemark){
-          this.placemark.geometry?.setCoordinates(firstGeoObject.geometry.getCoordinates())
-        } else {
-          this.placemark= new ymaps.Placemark(firstGeoObject.geometry.getCoordinates())
-          this.map.target.geoObjects.add(this.placemark)
-        }
+        this.map.target.geoObjects.removeAll()
+        this.placemark= new ymaps.Placemark(firstGeoObject.geometry.getCoordinates())
+        this.map.target.geoObjects.add(this.placemark)
         // this.createEventForm.value.coords=this.placemark.geometry?.getCoordinates()
         this.createEventForm.patchValue({coords: this.placemark.geometry?.getCoordinates()})
         //центрирование карты по метки и установка зума
         this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
         this.map.target.setZoom(17)
+        this.disabledNextButton()
       } catch (error) { 
         
       }
     }) 
 }
+
+  clearSearche(event:any){
+    if (event.detail.value == 0){
+      this.createEventForm.patchValue({coords: []})
+      this.placemark= new ymaps.Placemark([])
+      this.map.target.geoObjects.removeAll() 
+    }
+  }
 
   ngOnInit() {
     this.getUserWithSocialAccount()
