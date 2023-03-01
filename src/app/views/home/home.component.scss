@@ -18,5 +18,10 @@
 
 	ion-modal {
 		--border-radius: 8px!important;
-	  }
+	}
+
+	ion-button.md.button-small{
+		--padding-start: 0.4em;
+		--padding-end: 0.4em;
+	}
 }

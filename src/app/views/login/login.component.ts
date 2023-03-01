@@ -76,6 +76,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.tokenService.setToken(this.responseData.access_token) 
     this.loadingService.hideLoading()
     this.toastService.showToast(MessagesAuth.login, 'success')
+    this.loginForm.reset()
+    this.loginForm.enable()
     this.router.navigate(['cabinet']);
   }
 
