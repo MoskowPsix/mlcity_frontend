@@ -6,12 +6,13 @@
       <ion-row class="ion-justify-content-center">
         <ion-col size-lg="4" size-md="8" size-xs="12">
           <div class="ion-text-start">
+            {{ createEventForm.value | json }}
             <h3 class="mt-0">Создание мероприятия</h3>
             <ion-label>Шаг {{  stepStart === 3 ?  stepCurrency - 2 : stepCurrency }} из {{ vkGroups ? steps : steps - 2 }}</ion-label>
           </div>
         </ion-col>
       </ion-row>
-
+      
         <!-- шаг 1 -->
       <ion-row [hidden]="stepCurrency !== 1" class="ion-justify-content-center">
         <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
@@ -174,7 +175,7 @@
               </ion-item>
               <ion-ripple-effect></ion-ripple-effect>
             </div>
-            <input formControlName="files" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple required #filesUpload>
+            <input formControlName="files" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
             
             <ion-note *ngIf="createEventForm.controls['files'].hasError('requiredFileType')" color="danger">Допустимые форматы *.png, *.jpeg</ion-note>
 
@@ -183,6 +184,11 @@
               <ng-container *ngFor="let img of imagesPreview">
                 <ion-col size="4" class="ion-align-self-center ion-justify-content-center">
                   <img [src]="img" alt="preview">
+                  <ion-button size="small" color="danger" expand="block" (click)="deleteFile(img)">
+                    <ion-icon name="trash-bin" slot="start"></ion-icon>
+                    Удалить
+                  </ion-button>
+                  <!-- <img [src]="url"><span class="delete-entry" style="cursor: pointer;" (click)="deleteImage(url)">x</span> -->
                 </ion-col>    
               </ng-container>    
             </ion-row>

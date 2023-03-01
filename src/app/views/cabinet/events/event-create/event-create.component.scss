@@ -80,11 +80,13 @@ ion-item.photo-label {
 
     .buttons-dekstop{
         display: block;
+
+        ion-button{
+            height: 4rem;
+        }
     }
 
-    ion-button{
-        height: 4rem;
-    }
+   
 // ion-content{
 //     --padding-top: 4rem;
 //     --padding-bottom: 1rem;
