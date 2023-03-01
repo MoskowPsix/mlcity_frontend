@@ -171,6 +171,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Отпрвка формы
   onSubmit(){
     console.log('submit')
+    this.createFormDataImages()
   }
   
   //Клик по кнопке веперед
@@ -217,7 +218,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   // Валидатор, чтобы определить что дата начала меньше даты окончания
-  dateRangeValidator(control : AbstractControl) : ValidationErrors | null {
+  dateRangeValidator(control : AbstractControl): ValidationErrors | null {
     if (!control.get('dateStart')?.value || !control.get('dateEnd')?.value)
       return null
 
@@ -237,7 +238,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   //Валидатор разрешеных типов расширений
-  requiredFileTypeValidator(types: string[]) {
+  requiredFileTypeValidator(types: string[]): ValidationErrors | null {
     return function (control: FormControl) {
       const file = control.value
       let success = 0
@@ -351,17 +352,36 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.formData.delete('files[]') // очишщаем форм дату
 
     for (var i = 0; i < event.target.files.length; i++) {
-      this.uploadFiles.push(event.target.files[i]);
-      //заполнем превью фоток 
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[i]);
-      reader.onload = () => {
-        this.imagesPreview.push(reader.result as string) 
-      };
+      this.uploadFiles.push(event.target.files[i])
     }
 
-    //формируем дату для отправки на сервер
-    if(event.target.files.length){
+    this.createImagesPreview()
+    
+  }
+
+  //Удалить прею фотки
+  deleteFile(img: string){
+    this.imagesPreview = this.imagesPreview.filter((a) => a !== img);
+  }
+
+  //заполнем превью фоток 
+  createImagesPreview(){
+    if(this.uploadFiles){
+      this.loadingService.showLoading()
+      this.uploadFiles.forEach((file: any) => {
+        let reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+          this.imagesPreview.push(reader.result as string) 
+        }
+      }) 
+      this.loadingService.hideLoading()
+    }
+  }
+
+//формируем дату для отправки на сервер
+  createFormDataImages(){
+    if(this.uploadFiles){
       for (var i = 0; i < this.uploadFiles.length; i++) {
         this.formData.append('files[]', this.uploadFiles[i]);
       }
@@ -378,7 +398,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       coords: new FormControl('',[Validators.required, Validators.minLength(2)]), 
       type:  new FormControl({value: '1', disabled: false},[Validators.required]),
       status:  new FormControl({value: '1', disabled: false},[Validators.required]),
-      files: new FormControl('',[Validators.required, this.requiredFileTypeValidator(['png','jpg','jpeg'])]),
+      files: new FormControl('',this.requiredFileTypeValidator(['png','jpg','jpeg'])),
       price: new FormControl(''),
       materials: new FormControl(''),
       dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
