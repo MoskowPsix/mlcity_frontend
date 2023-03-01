@@ -1,11 +1,92 @@
-.steper-buttons-top{
+.buttons-mobile{
     position: fixed;
-    top: 6rem;
+    background: white;
+    bottom: 3.5rem;
     width: 98.5%;
     z-index: 9999;
+}
+
+.buttons-dekstop{
+    position: fixed;
+    // top: 9rem;
+    bottom: 1rem;
+    width: 100%
 }
 
 .map {
     width: 100%;
     height: 60vh;
-  }
+}
+
+.mt-0{
+    margin-top: 0;
+}
+
+.upload-overlay{
+    height: 100px;
+    border: #949494 2px solid;
+    border-style: dashed;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // margin: 1rem;
+    font-style: italic;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+.custom-parent {
+    color: #3880ff;
+}
+
+ion-item.photo-label {
+    --background: transparent;
+ }
+
+
+ @media screen and (min-width: 0px) and (max-width: 768px) {
+    .buttons-mobile{
+        display: block;
+    }
+
+    .buttons-dekstop{
+        display: none;
+    }
+    ion-content{
+        --padding-bottom: 6rem;   
+    }
+
+//     ion-content.md{
+//         --padding-top: 6rem;
+//     }
+
+//     ion-content.ios{
+//         --padding-top: 5.5rem;
+//     }
+
+//     ion-datetime{
+//        width: auto !important;
+//     }
+   
+}
+
+@media screen and (min-width: 768px)  {
+    .buttons-mobile{
+        display: none;
+    }
+
+    .buttons-dekstop{
+        display: block;
+    }
+
+    ion-button{
+        height: 4rem;
+    }
+// ion-content{
+//     --padding-top: 4rem;
+//     --padding-bottom: 1rem;
+// }
+ }

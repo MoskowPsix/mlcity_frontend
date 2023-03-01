@@ -24,5 +24,6 @@ export class ToastService {
     });
 
     await toast.present();
+    
   }
 }

@@ -48,6 +48,9 @@ import { XsrfInterceptor } from './xsrf.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
 import { CheckAuthCanActiveGuard } from './guards/check-auth.can-active.guard';
+import { EventTypeService } from './services/event-type.service';
+import { EventsService } from './services/events.service';
+import { SightTypeService } from './services/sight-type.service';
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -98,10 +101,13 @@ const mapConfig: YaConfig = {
     TokenService,
     ToastService,
     UserService,
+    MapService,
+    EventTypeService,
+    EventsService,
+    SightTypeService,
     AuthGuard,
     LoggedInAuthGuard,
     CheckAuthCanActiveGuard,
-    MapService,
   ],
   bootstrap: [AppComponent],
 })

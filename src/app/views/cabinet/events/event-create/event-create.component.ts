@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
-import { Subscription, switchMap, tap } from 'rxjs';
+import { Subscription, switchMap, tap, of, finalize, concatMap, delay } from 'rxjs';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { EventTypeService } from 'src/app/services/event-type.service';
@@ -9,6 +9,10 @@ import { IEventType } from 'src/app/models/event-type';
 import { environment } from 'src/environments/environment';
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
 import { MapService } from 'src/app/services/map.service';
+import { LoadingService } from 'src/app/services/loading.service';
+import { ToastService } from 'src/app/services/toast.service';
+import { MessagesLoading } from 'src/app/enums/messages-loading';
+import { MessagesErrors } from 'src/app/enums/messages-errors';
 
 @Component({
   selector: 'app-event-create',
@@ -37,20 +41,18 @@ import { MapService } from 'src/app/services/map.service';
 export class EventCreateComponent implements OnInit, OnDestroy {
   host: string = environment.BASE_URL
   port: string = environment.PORT
-  // user: IUser[] = []
-  userName: string = ''
-  socialAccount: any
+
   subscriptions: Subscription[] = []
   subscription_1: Subscription = new Subscription()
   subscription_2: Subscription = new Subscription()
   subscription_3: Subscription = new Subscription()
   subscription_4: Subscription = new Subscription()
-  subscription_5: Subscription = new Subscription()
-  subscription_6: Subscription = new Subscription()
-  step: number = 1
+  
+  user: any
+  stepStart: number = 1
+  stepCurrency: number = 1
+  steps:number = 12
   vkGroups: any
-  vkGroupsNotExists: boolean = false
-  vkGroupsLoaded: boolean = false
   vkGroupSelected: number | null = null
   vkGroupPosts: any
   vkGroupPostsLoaded: boolean = false
@@ -60,6 +62,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   typesLoaded: boolean = false
   typeSelected: number | null = null
 
+  uploadFiles: string[] = []
+  formData: FormData = new FormData()
+  imagesPreview: string[] = []
+
   nextButtonDisable: boolean = false
 
   placemark!: ymaps.Placemark
@@ -67,48 +73,71 @@ export class EventCreateComponent implements OnInit, OnDestroy {
  
   createEventForm: FormGroup = new FormGroup({})
 
-
-  constructor(private userService: UserService, private eventTypeService: EventTypeService, private mapService: MapService, private yaGeocoderService: YaGeocoderService) { }
-
+  constructor(
+    private loadingService: LoadingService, 
+    private toastService: ToastService, 
+    private userService: UserService, 
+    private eventTypeService: EventTypeService, 
+    private mapService: MapService, 
+    private yaGeocoderService: YaGeocoderService) { }
+   
+  //поулчаем юзера и устанвлвиаем группы и шаги
   getUserWithSocialAccount(){
     this.subscription_1 = this.userService.getUser().pipe(
+      tap(() => {
+        this.loadingService.showLoading(MessagesLoading.vkGroupSearch)
+      }),
       switchMap((user: any) => {
-        // this.user = user
-        this.userName = user.name
-        return this.userService.setSocialAccountByUserId(user.id)
+        this.user = user
+        this.createEventForm.patchValue({ sponsor: user?.name })
+        return of(user)
+      }),
+      switchMap((user: any) => {
+        if(!user?.social_account){
+          this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')   
+        } else {
+          // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
+          return this.userService.getVkGroups(user.social_account.provider_id, user.social_account.token).pipe(
+            switchMap((response: any) => {
+              this.setVkGroups(response?.response.items)
+              return of([])  
+            }),
+          )
+        } 
+        return of([])  
       }),
       tap(() => {
-         this.getSocialAccount()
-      }),
-      switchMap(() => {
-        return this.userService.setVkGroups(this.socialAccount.provider_id, this.socialAccount.token)
+        this.setSteps()  
       }),
       tap(() => {
-         this.getVkGroups()
-      }),
-    )
-    .subscribe()
+        this.loadingService.hideLoading()  
+      })  
+    ).subscribe();
   }
 
-   getSocialAccount(){
-    this.subscription_2 = this.userService.getSocialAccount().subscribe((socialAccount) => {
-      this.socialAccount = socialAccount
-    })
+  //Устнавливаем группы
+  setVkGroups(items: any){
+    if(items){
+      this.vkGroups = items
+    } else {
+      this.vkGroups = []
+      this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')
+    }
   }
 
-  getVkGroups(){
-    this.subscription_3 = this.userService.getVkGroups().subscribe((response) => {
-      if(response.response.items){
-        this.vkGroups = response.response.items
-      } else {
-        this.vkGroupsNotExists = true
-      }
-      this.vkGroupsLoaded = true //для скелетной анимации
-      // this.vkGroups = response.response.items
-      // response.response.items ? this.vkGroupsLoaded = true :  this.vkGroupsLoaded = false //для скелетной анимации
-    })
+  //Устанавливаем шаги
+  setSteps(){
+    if(this.vkGroups){
+      this.stepStart = 1
+      this.stepCurrency = 1
+    } else {
+      this.stepStart = 3
+      this.stepCurrency = 3
+      this.nextButtonDisable = true
+    }
   }
 
+  //Выбираем группу
   selectedVkGroup(group_id: any){
     if (group_id.detail.value) {
       this.vkGroupSelected = group_id.detail.value 
@@ -119,66 +148,66 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){
-    this.subscription_4 = this.userService.setVkPostsByGroupIp(group_id, 10, this.socialAccount.token).pipe(
-      tap(() => {
-        this.getVkPostsGroup()
-     }),
-    ).subscribe()
-  }
-
-  getVkPostsGroup(){
-    this.subscription_5 = this.userService.getVkPostsGroup().subscribe((response) => {
+    this.subscription_3 = this.userService.getVkPostsGroup(group_id, 10, this.user.social_account.token).subscribe((response) => {
       this.vkGroupPosts = response.response
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
   }
 
+  //Выбираем пост
   selectedVkGroupPost(post: any){
-    if(!post || this.vkGroupPostSelected.id === post.id){
+    if(!post || this.vkGroupPostSelected?.id === post.id){
       this.vkGroupPostSelected = null
       this.createEventForm.patchValue({description: '' });
     } else {
       this.vkGroupPostSelected = post
       this.createEventForm.patchValue({description: this.vkGroupPostSelected.text });
     }
+    console.log(this.vkGroupPostSelected)
   }
 
+  //Отпрвка формы
   onSubmit(){
     console.log('submit')
   }
   
+  //Клик по кнопке веперед
   stepNext(){
-    if(this.step !== 12){
-      this.step++
-      if (this.step === 5){
-        this.createEventForm.patchValue({ sponsor: this.userName })
-      }
+    if(this.stepCurrency !== this.steps){
+      this.vkGroupPostSelected && this.stepCurrency === 3 ? this.stepCurrency = this.stepCurrency + 3 : this.stepCurrency++
       this.disabledNextButton()
     }   
   }
 
+  //Клик по нкопке назад
   stepPrev(){
-    if(this.step !== 1){
-      this.step--
+    if(this.stepCurrency !== this.stepStart){
+      this.vkGroupPostSelected && this.stepCurrency === 6 ? this.stepCurrency = this.stepCurrency - 3 : this.stepCurrency--
       this.disabledNextButton()
     }   
   }
 
+  //Проверка шагов и блокировка \ разблокировка кнопок далее \ назад
   disabledNextButton(){  
-    switch (this.step) {
+    switch (this.stepCurrency) {
+      case 1:
+      case 2:
+       this.nextButtonDisable = false
+        break; 
       case 3:
        this.createEventForm.controls['name'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
         break; 
       case 4:
-        this.createEventForm.hasError('dateInvalid') ? this.nextButtonDisable = true : this.nextButtonDisable = false
-        break; 
-      case 5:
-        this.createEventForm.controls['sponsor'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
+        this.createEventForm.controls['description'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
         break; 
       case 6:
-        this.createEventForm.controls['description'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-        break;   
+        this.createEventForm.hasError('dateInvalid') ? this.nextButtonDisable = true : this.nextButtonDisable = false
+        break; 
+      case 7:
+        this.createEventForm.controls['sponsor'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
+        break;      
       case 9:
         !this.createEventForm.controls['coords'].value.length ? this.nextButtonDisable = true : this.nextButtonDisable = false
         break;   
@@ -190,7 +219,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   // Валидатор, чтобы определить что дата начала меньше даты окончания
   dateRangeValidator(control : AbstractControl) : ValidationErrors | null {
     if (!control.get('dateStart')?.value || !control.get('dateEnd')?.value)
-      return null;
+      return null
 
     const from = new Date(control.get("dateStart")?.value)
     const to = new Date(control.get("dateEnd")?.value)
@@ -204,16 +233,39 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       }      
     }
 
-    return null;
+    return null
   }
 
+  //Валидатор разрешеных типов расширений
+  requiredFileTypeValidator(types: string[]) {
+    return function (control: FormControl) {
+      const file = control.value
+      let success = 0
+
+      if (!file)
+        return null
+      types.forEach((type: string) => {
+        if (file) {
+          const extension = file.split('.').pop().toLowerCase()
+          if (type.toLowerCase() === extension.toLowerCase()){
+            success++
+          }  
+        }     
+      })    
+      
+      return success > 0 ? null : { requiredFileType: true } 
+    };
+  }
+
+  //Получаем типы мероприятий
   getTypes(){
-    this.subscription_6 = this.eventTypeService.geTypes().subscribe((response) => {
+    this.subscription_4 = this.eventTypeService.geTypes().subscribe((response) => {
       this.types = response.types
       response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
     })
   }
   
+  //Выбор типа
   selectedType(type_id: any){
     type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
   }
@@ -257,7 +309,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     })
   }
 
-
   //При выборе из выпадающего списка из поиска создает метку по адресу улицы
   addPlacemark(): void{
     this.createEventForm.value.search=(<HTMLInputElement>document.getElementById("search-map")).value
@@ -281,8 +332,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         
       }
     }) 
-}
+  }
 
+  //очистка поиска на карте
   clearSearche(event:any){
     if (event.detail.value == 0){
       this.createEventForm.patchValue({coords: []})
@@ -291,10 +343,32 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Загрузка фото
+  onFileChange(event: any) {
+    console.log(event.target.files)
+    this.imagesPreview = [] // очищаем превьюшки
+    this.uploadFiles = [] // очишщаем массив с фотками
+    this.formData.delete('files[]') // очишщаем форм дату
+
+    for (var i = 0; i < event.target.files.length; i++) {
+      this.uploadFiles.push(event.target.files[i]);
+      //заполнем превью фоток 
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[i]);
+      reader.onload = () => {
+        this.imagesPreview.push(reader.result as string) 
+      };
+    }
+
+    //формируем дату для отправки на сервер
+    if(event.target.files.length){
+      for (var i = 0; i < this.uploadFiles.length; i++) {
+        this.formData.append('files[]', this.uploadFiles[i]);
+      }
+    }
+  }
+
   ngOnInit() {
-    this.getUserWithSocialAccount()
-    this.getTypes()
-     
     //Создаем поля для формы
     this.createEventForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -304,19 +378,21 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       coords: new FormControl('',[Validators.required, Validators.minLength(2)]), 
       type:  new FormControl({value: '1', disabled: false},[Validators.required]),
       status:  new FormControl({value: '1', disabled: false},[Validators.required]),
+      files: new FormControl('',[Validators.required, this.requiredFileTypeValidator(['png','jpg','jpeg'])]),
       price: new FormControl(''),
       materials: new FormControl(''),
       dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
       dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
     },[this.dateRangeValidator]);
+
+    this.getUserWithSocialAccount()
+    this.getTypes()
     
     //Добавляем подписки в массив
     this.subscriptions.push(this.subscription_1)
     this.subscriptions.push(this.subscription_2)
     this.subscriptions.push(this.subscription_3)
     this.subscriptions.push(this.subscription_4)
-    this.subscriptions.push(this.subscription_5)
-    this.subscriptions.push(this.subscription_6)
   }
 
   ngOnDestroy(){
