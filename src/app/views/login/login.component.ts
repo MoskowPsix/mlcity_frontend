@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
@@ -9,6 +9,7 @@ import { TokenService } from '../../services/token.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { environment } from 'src/environments/environment';
 import { MessagesAuth } from 'src/app/enums/messages-auth';
+import { MessagesErrors } from 'src/app/enums/messages-errors';
 
 @Component({
   selector: 'app-login',
@@ -18,12 +19,10 @@ import { MessagesAuth } from 'src/app/enums/messages-auth';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
+  private readonly destroy$ = new Subject<void>()
+
   vkontakteAuthUrl: string = environment.vkontakteAuthUrl
   user_id!: number 
-  subscription_1!: Subscription 
-  subscription_2!: Subscription 
-  subscription_3!: Subscription 
-  subscriptions: Subscription[] = []
   loginForm!: FormGroup
   responseData: any
 
@@ -41,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmitLogin(){
     this.loginForm.disable()
     this.loadingService.showLoading()
-    this.subscription_1 = this.authService.login(this.loginForm.value).subscribe({
+    this.authService.login(this.loginForm.value).pipe(takeUntil(this.destroy$)).subscribe({
       next: data => {
         this.positiveResponseAfterLogin(data)
       },
@@ -55,7 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (user_id > 0){
       this.loginForm.disable()
       this.loadingService.showLoading()
-      this.subscription_3 = this.userService.getUserById(user_id).subscribe({
+      this.userService.getUserById(user_id).pipe(takeUntil(this.destroy$)).subscribe({
         next: data => {
           this.positiveResponseAfterLogin(data)
         },
@@ -83,7 +82,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   errorResponseAfterLogin(err:any){
     this.loadingService.hideLoading()
-    this.toastService.showToast(err.error.message, 'warning')
+    this.toastService.showToast(err.error.message || MessagesErrors.default, 'warning')
     this.loginForm.enable()
   }
 
@@ -95,27 +94,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     //Получаем ид юзера и параметра маршрута
-    this.subscription_2 = this.route.params.subscribe(params => { 
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => { 
       this.user_id = params['user_id']; 
     }); 
 
-    //Добавляем подписки в массив
-    this.subscriptions.push(this.subscription_1)
-    this.subscriptions.push(this.subscription_2)
-    this.subscriptions.push(this.subscription_3)
 
     this.loginAfterSocial(this.user_id)
   }
 
   ngOnDestroy() {
      // отписываемся от всех подписок
-     if (this.subscriptions) {
-      this.subscriptions.forEach((subscription) => {
-        if (subscription){
-          subscription.unsubscribe()
-        }      
-      })
-     }  
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

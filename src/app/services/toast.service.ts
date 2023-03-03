@@ -27,3 +27,23 @@ export class ToastService {
     
   }
 }
+
+//stack toasts
+// toastCtrl(color,msg,duration?) {
+//   const toast = {
+//     message: msg,
+//     color: color,
+//     duration: duration || 3000
+//   };
+//   this.toasts.push(toast)
+//   const timeout = (this.toasts.length - 1) * toast.duration
+//   this.show(timeout);
+// }
+// show(timeout) {
+//   setTimeout(async () => {
+//     const toast = await this.toastController.create(this.toasts[0]);
+//     await toast.present();
+//     this.toasts.splice(0, 1);
+//   }, timeout > 0 ? timeout + 800 : 0);
+
+// }
