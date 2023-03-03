@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
-import { Subscription, switchMap, tap, of, finalize, concatMap, delay } from 'rxjs';
-import { FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Subscription, switchMap, tap, of, Subject, takeUntil } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { EventTypeService } from 'src/app/services/event-type.service';
 //import { IUser } from 'src/app/models/user';
@@ -13,6 +13,8 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { MessagesLoading } from 'src/app/enums/messages-loading';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
+import { dateRangeValidator } from 'src/app/validators/date-range.validators';
+import { fileTypeValidator } from 'src/app/validators/file-type.validators';
 
 @Component({
   selector: 'app-event-create',
@@ -39,14 +41,11 @@ import { MessagesErrors } from 'src/app/enums/messages-errors';
 })
 
 export class EventCreateComponent implements OnInit, OnDestroy {
+
+  private readonly destroy$ = new Subject<void>()
+
   host: string = environment.BASE_URL
   port: string = environment.PORT
-
-  subscriptions: Subscription[] = []
-  subscription_1: Subscription = new Subscription()
-  subscription_2: Subscription = new Subscription()
-  subscription_3: Subscription = new Subscription()
-  subscription_4: Subscription = new Subscription()
   
   user: any
   stepStart: number = 1
@@ -66,7 +65,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   formData: FormData = new FormData()
   imagesPreview: string[] = []
 
-  nextButtonDisable: boolean = false
+  //nextButtonDisable: boolean = false
 
   placemark!: ymaps.Placemark
   map!:YaReadyEvent<ymaps.Map>
@@ -83,7 +82,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
    
   //поулчаем юзера и устанвлвиаем группы и шаги
   getUserWithSocialAccount(){
-    this.subscription_1 = this.userService.getUser().pipe(
+    this.userService.getUser().pipe(
       tap(() => {
         this.loadingService.showLoading(MessagesLoading.vkGroupSearch)
       }),
@@ -111,7 +110,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       }),
       tap(() => {
         this.loadingService.hideLoading()  
-      })  
+      }),
+      takeUntil(this.destroy$)  
     ).subscribe();
   }
 
@@ -133,7 +133,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     } else {
       this.stepStart = 3
       this.stepCurrency = 3
-      this.nextButtonDisable = true
+      //this.nextButtonDisable = true
     }
   }
 
@@ -150,7 +150,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){
-    this.subscription_3 = this.userService.getVkPostsGroup(group_id, 10, this.user.social_account.token).subscribe((response) => {
+    this.userService.getVkPostsGroup(group_id, 10, this.user.social_account.token).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.vkGroupPosts = response.response
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
@@ -168,99 +168,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     console.log(this.vkGroupPostSelected)
   }
 
-  //Отпрвка формы
-  onSubmit(){
-    console.log('submit')
-    this.createFormDataImages()
-  }
-  
-  //Клик по кнопке веперед
-  stepNext(){
-    if(this.stepCurrency !== this.steps){
-      this.vkGroupPostSelected && this.stepCurrency === 3 ? this.stepCurrency = this.stepCurrency + 3 : this.stepCurrency++
-      this.disabledNextButton()
-    }   
-  }
-
-  //Клик по нкопке назад
-  stepPrev(){
-    if(this.stepCurrency !== this.stepStart){
-      this.vkGroupPostSelected && this.stepCurrency === 6 ? this.stepCurrency = this.stepCurrency - 3 : this.stepCurrency--
-      this.disabledNextButton()
-    }   
-  }
-
-  //Проверка шагов и блокировка \ разблокировка кнопок далее \ назад
-  disabledNextButton(){  
-    switch (this.stepCurrency) {
-      case 1:
-      case 2:
-       this.nextButtonDisable = false
-        break; 
-      case 3:
-       this.createEventForm.controls['name'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-        break; 
-      case 4:
-        this.createEventForm.controls['description'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-        break; 
-      case 6:
-        this.createEventForm.hasError('dateInvalid') ? this.nextButtonDisable = true : this.nextButtonDisable = false
-        break; 
-      case 7:
-        this.createEventForm.controls['sponsor'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-        break;      
-      case 9:
-        !this.createEventForm.controls['coords'].value.length ? this.nextButtonDisable = true : this.nextButtonDisable = false
-        break;   
-      default:
-        break;
-    }
-  }
-
-  // Валидатор, чтобы определить что дата начала меньше даты окончания
-  dateRangeValidator(control : AbstractControl): ValidationErrors | null {
-    if (!control.get('dateStart')?.value || !control.get('dateEnd')?.value)
-      return null
-
-    const from = new Date(control.get("dateStart")?.value)
-    const to = new Date(control.get("dateEnd")?.value)
-    let invalid = false
-
-    if (from && to) {
-      invalid = from.getTime() > to.getTime()
-
-      if (invalid){
-        return { dateInvalid: true }
-      }      
-    }
-
-    return null
-  }
-
-  //Валидатор разрешеных типов расширений
-  requiredFileTypeValidator(types: string[]): ValidationErrors | null {
-    return function (control: FormControl) {
-      const file = control.value
-      let success = 0
-
-      if (!file)
-        return null
-      types.forEach((type: string) => {
-        if (file) {
-          const extension = file.split('.').pop().toLowerCase()
-          if (type.toLowerCase() === extension.toLowerCase()){
-            success++
-          }  
-        }     
-      })    
-      
-      return success > 0 ? null : { requiredFileType: true } 
-    };
-  }
-
   //Получаем типы мероприятий
   getTypes(){
-    this.subscription_4 = this.eventTypeService.geTypes().subscribe((response) => {
+    this.eventTypeService.geTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.types = response.types
       response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
     })
@@ -328,7 +238,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         //центрирование карты по метки и установка зума
         this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
         this.map.target.setZoom(17)
-        this.disabledNextButton()
+       // this.disabledNextButton()
       } catch (error) { 
         
       }
@@ -355,8 +265,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.uploadFiles.push(event.target.files[i])
     }
 
-    this.createImagesPreview()
-    
+    this.createImagesPreview()  
   }
 
   //Удалить прею фотки
@@ -366,7 +275,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //заполнем превью фоток 
   createImagesPreview(){
-    if(this.uploadFiles){
+    if(this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')){
       this.loadingService.showLoading()
       this.uploadFiles.forEach((file: any) => {
         let reader = new FileReader()
@@ -381,11 +290,94 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
 //формируем дату для отправки на сервер
   createFormDataImages(){
-    if(this.uploadFiles){
+    if(this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')){
       for (var i = 0; i < this.uploadFiles.length; i++) {
         this.formData.append('files[]', this.uploadFiles[i]);
       }
     }
+  }
+  
+  //Клик по кнопке веперед
+  stepNext(){
+    if(this.stepCurrency !== this.steps){
+      this.vkGroupPostSelected && this.stepCurrency === 3 ? this.stepCurrency = this.stepCurrency + 3 : this.stepCurrency++
+     // this.disabledNextButton()
+    }   
+  }
+
+  //Клик по нкопке назад
+  stepPrev(){
+    if(this.stepCurrency !== this.stepStart){
+      this.vkGroupPostSelected && this.stepCurrency === 6 ? this.stepCurrency = this.stepCurrency - 3 : this.stepCurrency--
+     // this.disabledNextButton()
+    }   
+  }
+
+  //Клик по шагу в баре
+  goToStep(step: number){
+    if(this.stepCurrency !== step){
+      this.stepCurrency = step
+      //this.disabledNextButton()
+      this.stepIsValid()
+    }   
+  }
+
+  //Блокировка шагов в баре
+  stepIsValid(step:number = this.stepStart){
+    console.log(step)
+    switch (step) {
+      case 1:
+      case 2:
+        return true
+      case 3:
+        return this.createEventForm.controls['name'].invalid  ?  false :  true
+      case 4:
+        return this.createEventForm.controls['description'].invalid  ? false :  true 
+      case 6:
+        return this.createEventForm.hasError('dateInvalid') ?  false :  true
+      case 7:
+        return this.createEventForm.controls['sponsor'].invalid  ?  false :  true      
+      case 9:
+        return !this.createEventForm.controls['coords'].value.length ? false :  true  
+      default:
+        return true
+    }
+  }
+
+  //Проверка шагов и блокировка \ разблокировка кнопок далее \ назад
+  // disabledNextButton(){  
+  //   switch (this.stepCurrency) {
+  //     case 1:
+  //     case 2:
+  //     // case 10:
+  //     // case 11:
+  //     // case 12:
+  //      this.nextButtonDisable = false
+  //       break
+  //     case 3:
+  //      this.createEventForm.controls['name'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
+  //       break 
+  //     case 4:
+  //       this.createEventForm.controls['description'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
+  //       break 
+  //     case 6:
+  //       this.createEventForm.hasError('dateInvalid') ? this.nextButtonDisable = true : this.nextButtonDisable = false
+  //       break 
+  //     case 7:
+  //       this.createEventForm.controls['sponsor'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
+  //       break    
+  //     case 9:
+  //       !this.createEventForm.controls['coords'].value.length ? this.nextButtonDisable = true : this.nextButtonDisable = false
+  //       break  
+  //     default:
+  //       break
+  //   }
+  // }
+
+  //Отпрвка формы
+  onSubmit(){
+    console.log('submit')
+    this.createFormDataImages()
   }
 
   ngOnInit() {
@@ -398,32 +390,21 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       coords: new FormControl('',[Validators.required, Validators.minLength(2)]), 
       type:  new FormControl({value: '1', disabled: false},[Validators.required]),
       status:  new FormControl({value: '1', disabled: false},[Validators.required]),
-      files: new FormControl('',this.requiredFileTypeValidator(['png','jpg','jpeg'])),
+      files: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
       price: new FormControl(''),
       materials: new FormControl(''),
       dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
       dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
-    },[this.dateRangeValidator]);
+    },[dateRangeValidator]);
 
     this.getUserWithSocialAccount()
     this.getTypes()
-    
-    //Добавляем подписки в массив
-    this.subscriptions.push(this.subscription_1)
-    this.subscriptions.push(this.subscription_2)
-    this.subscriptions.push(this.subscription_3)
-    this.subscriptions.push(this.subscription_4)
   }
 
   ngOnDestroy(){
     // отписываемся от всех подписок
-    if (this.subscriptions) {
-      this.subscriptions.forEach((subscription) => {
-        if (subscription){
-          subscription.unsubscribe()
-        }      
-      })
-    }  
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

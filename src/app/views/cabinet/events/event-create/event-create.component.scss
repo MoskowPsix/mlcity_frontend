@@ -9,8 +9,8 @@
 .buttons-dekstop{
     position: fixed;
     // top: 9rem;
-    bottom: 1rem;
-    width: 100%
+    top: 6.7em;
+    width: 100%;
 }
 
 .map {
@@ -42,12 +42,32 @@
     color: #3880ff;
 }
 
+.stepper-progress {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 2.4rem;
+    row-gap: 0.2rem;
+}
+
+.stepper-items{
+    cursor: pointer;
+    z-index: 9999;
+
+    ion-button {
+        width: 0.5rem;
+        --border-radius: 50%;
+        --padding-top: 2px;
+        --padding-start: 20px;
+        --padding-end: 20px;
+    }
+}
+
 ion-item.photo-label {
     --background: transparent;
- }
+}
 
 
- @media screen and (min-width: 0px) and (max-width: 768px) {
+@media screen and (min-width: 0px) and (max-width: 992px) {
     .buttons-mobile{
         display: block;
     }
@@ -55,25 +75,14 @@ ion-item.photo-label {
     .buttons-dekstop{
         display: none;
     }
+
     ion-content{
         --padding-bottom: 6rem;   
     }
-
-//     ion-content.md{
-//         --padding-top: 6rem;
-//     }
-
-//     ion-content.ios{
-//         --padding-top: 5.5rem;
-//     }
-
-//     ion-datetime{
-//        width: auto !important;
-//     }
    
 }
 
-@media screen and (min-width: 768px)  {
+@media screen and (min-width: 992px)  {
     .buttons-mobile{
         display: none;
     }
@@ -82,13 +91,17 @@ ion-item.photo-label {
         display: block;
 
         ion-button{
-            height: 4rem;
+            width: 7rem;   
+        }
+
+        .left{
+            display: flex;
+            justify-content: flex-end;
         }
     }
 
-   
-// ion-content{
-//     --padding-top: 4rem;
-//     --padding-bottom: 1rem;
-// }
+    .stepper-progress {
+        justify-content:flex-start;
+    }
+    
  }
