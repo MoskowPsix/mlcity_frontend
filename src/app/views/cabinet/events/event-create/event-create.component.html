@@ -70,7 +70,7 @@
       <ion-row  [hidden]="stepCurrency !== 2" class="ion-justify-content-center" >
         <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 2" @fade>
           <ion-list-header>
-            <ion-label>Выберите посты, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
+            <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
           </ion-list-header>
           <div *ngIf="vkGroupPosts; else notSelectedGroup">              
             <!-- Скелетна анимация -->
@@ -106,10 +106,10 @@
             </ng-container>
 
             <ng-container *ngIf="vkGroupPostsLoaded">
-              <ng-container *ngFor="let post of vkGroupPosts.items; index as i">
+              <ng-container *ngFor="let post of vkGroupPosts.items; let i = index">
                 <ion-card>
-                  <ng-container *ngFor="let profile of vkGroupPosts.profiles">
-                    <ion-item class="ion-margin-end">
+                  <ng-container *ngFor="let profile of vkGroupPosts.profiles; index as i">
+                    <ion-item *ngIf="i === 0" class="ion-margin-end">
                       <ion-avatar slot="start">
                         <img alt="ava" src="{{ profile.photo_50 }}" />
                       </ion-avatar>

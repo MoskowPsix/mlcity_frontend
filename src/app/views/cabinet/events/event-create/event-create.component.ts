@@ -152,6 +152,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   setVkPostsByGroupID(group_id: number){
     this.userService.getVkPostsGroup(group_id, 10, this.user.social_account.token).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.vkGroupPosts = response.response
+      console.log(response.response)
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
   }
@@ -165,7 +166,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPostSelected = post
       this.createEventForm.patchValue({description: this.vkGroupPostSelected.text });
     }
-    console.log(this.vkGroupPostSelected)
   }
 
   //Получаем типы мероприятий
@@ -256,7 +256,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Загрузка фото
   onFileChange(event: any) {
-    console.log(event.target.files)
     this.imagesPreview = [] // очищаем превьюшки
     this.uploadFiles = [] // очишщаем массив с фотками
     this.formData.delete('files[]') // очишщаем форм дату
@@ -324,7 +323,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Блокировка шагов в баре
   stepIsValid(step:number = this.stepStart){
-    console.log(step)
     switch (step) {
       case 1:
       case 2:
