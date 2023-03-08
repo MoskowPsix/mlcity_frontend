@@ -1,14 +1,30 @@
 import { Injectable } from '@angular/core';
 import { YaReadyEvent } from 'angular8-yandex-maps';
+// import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { Capacitor } from '@capacitor/core';
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+import { Geolocation } from '@capacitor/geolocation';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
+  placemark!: ymaps.Placemark
+  coordinate: any
+  address: any
+  geoAddress: any;
 
-  constructor() { }
+  // options: NativeGeocoderOptions = {
+  //   useLocale: true,
+  //   maxResults: 1,
+  //   defaultLocale: 'ru_RU'
+  // }
+  // private nativegeocoder: NativeGeocoder,
+  constructor( private locationAccuracy: LocationAccuracy) { }
 
-  //Определение геопозиции
+  //Определение геопозиции с помощью яндекса (платно)
   geolocationMap(event: YaReadyEvent<ymaps.Map>): void{
     ymaps.geolocation
     .get({
@@ -21,13 +37,131 @@ export class MapService {
     });
   }
 
+   //Определение геопозиции нативными способами платформы
+   async geolocationMapNative(map: YaReadyEvent<ymaps.Map>) {
+    if (!Capacitor.isPluginAvailable('Geolocation')) {
+      console.log('Plugin geolocation not available');
+      return;
+    }
+    
+    if (!Capacitor.isNativePlatform())  {
+      //Запускаем поиск геопозиции в вебе
+      console.log('ипользуется веб версия')
+      this.setCenterMap(map)
+    } else {
+      //Запускаем поиск геопозиции в мобилах
+      console.log('ипользуется мобильная версия')
+      const requestPermission= await this.requestLocationPermission()
+
+      try {
+        const canRequest: boolean = await this.locationAccuracy.canRequest();
+        console.log('canrequest: ', canRequest);
+        if(canRequest) {
+          //Есть разрешение
+          const stat = await this.enableLocation();
+          console.log("стат " + stat)
+          if(stat) {
+            this.setCenterMap(map) 
+          } else {
+            //Если человек отказывается активировать GPS "нет,спасибо"
+          }
+        } else {
+          //Если запрещен доступ GPS
+        }
+      } catch(e) {
+        console.log("Ошибка GPS " + e);
+      }
+    }
+  }
+
+  // Выдача запроса на включение GPS, если оно выключено
+  async enableLocation() {
+    try {
+      const canRequest: boolean = await this.locationAccuracy.canRequest();
+      console.log('canrequest: ', canRequest);
+      if(canRequest) {
+        await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+        console.log('Request successful');
+        return true;
+      } else { return false;}
+    } catch(e) {
+      return false;
+    }
+  }
+
+  //Определяем местоположение и перемещаем карту
+  async setCenterMap(map: YaReadyEvent<ymaps.Map>) {
+    const coordinates = await this.getCurrentLocation();
+    this.placemark= new ymaps.Placemark([coordinates.coords.latitude,coordinates.coords.longitude], {}, {visible: false})
+    map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
+    map.target.setZoom(17)
+  }
+
+  //Получаем координаты
+  getCurrentLocation() {
+    return Geolocation.getCurrentPosition()
+    .then(coordinates => {
+      return coordinates;
+    })
+    .catch(e => {
+      throw(e);
+    });
+  }
+
+  //Проверка разрешений на GPS
+  async requestLocationPermission() {
+    return Geolocation.requestPermissions()
+    .then(status => {
+      return status.location;
+    })
+    .catch(e => {
+      return 'prompt-with-rationale';
+    });
+  }
 
 
 
+  // async NativeGeocoder(coords: number[]) {
 
+  //   this.nativegeocoder.reverseGeocode(coords[0], coords[1], this.options).then((result: NativeGeocoderResult[])=>{
+  //     console.log('result = ', result)
+  //     console.log('result 0 = ', result[0])
 
+  //     this.geoAddress = this.generateAddress(result[0])
+  //     this.address=result[0].administrativeArea + ' ' + result[0].subAdministrativeArea + ' ' + result[0].thoroughfare  + ' ' + result[0].subThoroughfare
+  //     console.log(result[0].administrativeArea)
 
+  //     console.log('geoAdress = ', this.geoAddress)
 
+  //   })
+  // }
 
+  // generateAddress(addressObj: any){
+  //   let obj: any = []
+  //   let uniqueNames: any = []
+  //   let address = ""
 
+  //   for (let key in addressObj) {
+  //     if (key != 'areasOfInterest') {
+  //       obj.push(addressObj[key])
+  //     }
+  //   }
+
+  //   let i = 0
+  //   obj.forEach((value: any) =>{
+  //     if (uniqueNames.indexOf(obj[i]) === -1) {
+  //       uniqueNames.push(obj[i])
+  //     }
+  //     i++;
+  //   })
+
+  //   uniqueNames.reverse()
+  //   for (let val in uniqueNames) {
+  //     if (uniqueNames[val].lenght) {
+  //       address += uniqueNames[val] + ', '
+  //     }
+  //   }
+
+  //   return address.slice(0, -2)
+  // }
 }

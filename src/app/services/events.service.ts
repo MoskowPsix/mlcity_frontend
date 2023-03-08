@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core'
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http'
-import {catchError, delay, Observable, retry, tap, throwError} from 'rxjs'
+import {HttpClient, HttpErrorResponse} from '@angular/common/http'
+import {Observable, tap, throwError} from 'rxjs'
 import {ErrorService} from './error.service'
 import { IEvents } from '../models/events';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,26 +17,28 @@ export class EventsService {
 
   events: IEvents[] = []
 
-  getAll(): Observable<IEvents[]> {
-    return this.http.get<IEvents[]>('https://fakestoreapi.com/products', {
-      params: new HttpParams({
-        fromObject: {limit: 15}
-      })
-    }).pipe(
-      delay(200),
-      retry(2),
-      tap(events => this.events = events),
-      catchError(this.errorHandler.bind(this))
-    )
-  }
+  // getAll(): Observable<IEvents[]> {
+  //   return this.http.get<IEvents[]>('https://fakestoreapi.com/products', {
+  //     params: new HttpParams({
+  //       fromObject: {limit: 15}
+  //     })
+  //   }).pipe(
+  //     delay(200),
+  //     retry(2),
+  //     tap(events => this.events = events),
+  //     catchError(this.errorHandler.bind(this))
+  //   )
+  // }
 
-  create(event: IEvents): Observable<IEvents> {
-    return this.http.post<IEvents>('https://fakestoreapi.com/products', event)
-      .pipe(
-        tap(prod => this.events.push(prod))
-      )
+  create(event: FormData) {
+    return this.http.post<any>(`${environment.BASE_URL}:${environment.PORT}/api/events/create`, event)
+      // .pipe(
+      //   tap(res => {
+      //     console.log(res)
+      //     // this.events.push(event)
+      //   })
+      // )
   }
-
 
   private errorHandler(error: HttpErrorResponse) {
     //this.errorService.handle(error.message)

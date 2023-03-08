@@ -22,10 +22,7 @@ export class AuthService {
     private tokenService: TokenService, 
     private userService: UserService) { }
 
-  private getCSRF(): Observable<string> {
-    return this.http.get<string>(`${environment.BASE_URL}:${environment.PORT}/sanctum/csrf-cookie`)
-  }
-
+ 
   isAuthenticated(): boolean {
     let token = this.tokenService.getToken()
     let user = this.userService.getUserFromLocalStorage()
@@ -51,6 +48,10 @@ export class AuthService {
     // return this.authenticationState.subscribe(state => {
     //   return state
     // })
+  }
+  
+  private getCSRF(): Observable<string> {
+    return this.http.get<string>(`${environment.BASE_URL}:${environment.PORT}/sanctum/csrf-cookie`)
   }
 
   login(user: IUser): Observable<IUser> {
