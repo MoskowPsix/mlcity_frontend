@@ -5,7 +5,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientJsonpModule } from '@angular/common/http';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular';
 
 import { AppRoutingModule } from './routing/app-routing.module';
 
@@ -52,6 +52,10 @@ import { EventTypeService } from './services/event-type.service';
 import { EventsService } from './services/events.service';
 import { SightTypeService } from './services/sight-type.service';
 
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
+
+
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
   lang: 'ru_RU',
@@ -81,7 +85,7 @@ const mapConfig: YaConfig = {
     SightShowComponent,
     SightCreateComponent,
     ReadMoreComponent,
-    FiltersComponent
+    FiltersComponent,
   ],
   imports: [
     BrowserModule, 
@@ -91,7 +95,7 @@ const mapConfig: YaConfig = {
     AngularYandexMapsModule.forRoot(mapConfig), 
     HttpClientModule, 
     HttpClientJsonpModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
@@ -108,6 +112,8 @@ const mapConfig: YaConfig = {
     AuthGuard,
     LoggedInAuthGuard,
     CheckAuthCanActiveGuard,
+    NativeGeocoder,
+    LocationAccuracy
   ],
   bootstrap: [AppComponent],
 })

@@ -15,6 +15,8 @@ import { MessagesLoading } from 'src/app/enums/messages-loading';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { dateRangeValidator } from 'src/app/validators/date-range.validators';
 import { fileTypeValidator } from 'src/app/validators/file-type.validators';
+import { EventsService } from 'src/app/services/events.service';
+import { MessagesEvents } from 'src/app/enums/messages-events';
 
 @Component({
   selector: 'app-event-create',
@@ -73,6 +75,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createEventForm: FormGroup = new FormGroup({})
 
   constructor(
+    private eventsService: EventsService,
     private loadingService: LoadingService, 
     private toastService: ToastService, 
     private userService: UserService, 
@@ -152,7 +155,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   setVkPostsByGroupID(group_id: number){
     this.userService.getVkPostsGroup(group_id, 10, this.user.social_account.token).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.vkGroupPosts = response.response
-      console.log(response.response)
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
   }
@@ -211,7 +213,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
       this.map.target.setZoom(17)
     } else {
-      this.mapService.geolocationMap(this.map);
+      //this.mapService.geolocationMap(this.map);
+      this.mapService.geolocationMapNative(this.map)
     }
     
     const search = new ymaps.SuggestView('search-map');  
@@ -287,13 +290,30 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-//формируем дату для отправки на сервер
-  createFormDataImages(){
+  //формируем дату для отправки на сервер
+  createFormData(){
     if(this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')){
       for (var i = 0; i < this.uploadFiles.length; i++) {
-        this.formData.append('files[]', this.uploadFiles[i]);
+        this.formData.append('files[]', this.uploadFiles[i])
       }
-    }
+    } 
+
+    if(this.vkGroupPostSelected.attachments.length){
+      this.formData.append('files[]', this.vkGroupPostSelected.attachments)
+    } 
+
+    this.formData.append('name', this.createEventForm.controls['name'].value)
+    this.formData.append('sponsor', this.createEventForm.controls['sponsor'].value)
+    this.formData.append('description', this.createEventForm.controls['description'].value)
+    this.formData.append('coords', this.createEventForm.controls['coords'].value)
+    this.formData.append('type', this.createEventForm.controls['type'].value)
+    this.formData.append('status', this.createEventForm.controls['status'].value)
+    this.formData.append('price', this.createEventForm.controls['price'].value)
+    this.formData.append('materials', this.createEventForm.controls['materials'].value)
+    this.formData.append('dateStart', this.createEventForm.controls['dateStart'].value)
+    this.formData.append('dateEnd', this.createEventForm.controls['dateEnd'].value)
+
+    return this.formData
   }
   
   //Клик по кнопке веперед
@@ -373,9 +393,26 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   // }
 
   //Отпрвка формы
+  
   onSubmit(){
-    console.log('submit')
-    this.createFormDataImages()
+    let event = this.createFormData() // собираем формдату
+
+    this.createEventForm.disable()
+    this.loadingService.showLoading()
+    this.eventsService.create(event).pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.loadingService.hideLoading()
+        this.toastService.showToast(MessagesEvents.create, 'success')
+        this.createEventForm.reset()
+        this.createEventForm.enable()
+        this.stepCurrency =  this.stepStart
+      },
+      error: (err) => {
+        this.loadingService.hideLoading()
+        this.toastService.showToast(err.error.message || MessagesErrors.default, 'danger')
+        this.createEventForm.enable()
+      }
+    });
   }
 
   ngOnInit() {

@@ -2,6 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
 import { MapService } from '../../services/map.service';
+// import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { Geolocation } from '@capacitor/geolocation';
+import { Capacitor } from '@capacitor/core';
+import { Platform } from '@ionic/angular';
+
 
 interface Placemark {
   geometry: number[];
@@ -22,11 +27,13 @@ export class HomeComponent implements OnInit {
   CirclePoint!: ymaps.Circle;
   myGeo!:ymaps.Placemark;
   // placemark: Placemark[] = [];
-  minZoom = 8
+  minZoom = 1
   clusterer!: ymaps.Clusterer
   currentValue = 1;
   selectedRadius: number | null = null
   presentingElement: any = null;
+  coordinate: any
+  address: any
 
   private points = [
     {
@@ -144,6 +151,7 @@ export class HomeComponent implements OnInit {
   constructor(private http: HttpClient, private mapService:MapService, private yaGeocoderService: YaGeocoderService,) {}
   
   setRadius(radius: number){ 
+
     if (this.currentValue === radius){
       this.currentValue = 1
       this.CirclePoint.geometry?.setRadius(1000)
@@ -163,15 +171,15 @@ export class HomeComponent implements OnInit {
 
   onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
     this.map={target, ymaps};
+
     // Определяем местоположение пользователя
-    this.mapService.geolocationMap(this.map) 
-    
+    // this.mapService.geolocationMap(this.map) 
+    this.mapService.geolocationMapNative(this.map) 
+
     // Заполняем массив меток
     this.points.forEach(element => {
       this.placemarks.push(new ymaps.Placemark(element.geometry,element.properties))
     })
-
-    
 
     // Создаем и добавляем круг
     this.CirclePoint=new ymaps.Circle([[11,11],1000*this.currentValue],{},{fillOpacity:0.15, draggable:false})
@@ -221,4 +229,5 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.presentingElement = document.querySelector('.ion-page');
   }
+
 }

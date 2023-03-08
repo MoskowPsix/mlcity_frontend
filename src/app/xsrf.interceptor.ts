@@ -4,7 +4,7 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/c
 @Injectable() export class XsrfInterceptor implements HttpInterceptor {
      intercept(req: HttpRequest<any>, next: HttpHandler) {
     
-        const xsrfToken = localStorage.getItem('XSRF-TOKEN'); 
+        const xsrfToken = localStorage.getItem('auth_token'); 
         
         if (xsrfToken){ 
             const cloned = req.clone({ headers: req.headers.set('X-XSRF-TOKEN', xsrfToken) }); 

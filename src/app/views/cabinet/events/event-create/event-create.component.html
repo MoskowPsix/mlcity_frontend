@@ -18,7 +18,7 @@
                   (click)="goToStep(i + 1)" 
                   [color]="stepCurrency === i + 1 ? 'primary' : stepCurrency > i + 1 && stepIsValid(i + 1) ? 'success' : !stepIsValid(i + 1) ? 'danger' : 'light'"  
                   [disabled]="vkGroups && vkGroupPostSelected && (i === 3 || i === 4)"
-                  >
+                >
                 {{ i + 1 }}
               </ion-button>
               </div>
@@ -196,7 +196,7 @@
       <ion-row  [hidden]="stepCurrency !== 5" class="ion-justify-content-center">
         <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 5" @fade>
           <!-- <ion-label position="floating">Добавление фотографий (*.png, *.jpeg)</ion-label> -->
-          <div *ngIf="!vkGroupPostSelected && !vkGroups" class="ion-margin-vertical">
+          <div *ngIf="!vkGroupPostSelected" class="ion-margin-vertical">
             <div class="upload-overlay ion-activatable custom-parent" (click)="filesUpload.click()">  
               <ion-item lines="none" class="photo-label">
                 <ion-icon name="images" slot="start" color="primary"></ion-icon>
@@ -239,11 +239,11 @@
             </ion-col> 
           </ion-row>
 
-          <ion-row *ngIf="vkGroups && !vkGroupPostSelected" class="ion-padding-vertical">
+          <!-- <ion-row *ngIf="vkGroups && !vkGroupPostSelected" class="ion-padding-vertical">
             <ion-col class="ion-align-self-center ion-justify-content-center">
               <ion-label color="medium">Вы не выбрали пост, невозможно подгрузить фотографии</ion-label>
             </ion-col> 
-          </ion-row>
+          </ion-row> -->
         </ion-col>
       </ion-row>
       

@@ -48,16 +48,17 @@ ion-toolbar {
  
 @media screen and (min-width: 0px) and (max-width: 768px) {
     ion-content{
+        --padding-top:  3.5em;
         --padding-bottom: 3.5rem;   
     }
 
-    ion-content.md{
-        --padding-top: 6rem;
-    }
+    // ion-content.md{
+    //     --padding-top: 6rem;
+    // }
 
-    ion-content.ios{
-        --padding-top: 5.5rem;
-    }
+    // ion-content.ios{
+    //     --padding-top: 5.5rem;
+    // }
 
     ion-datetime{
        width: auto !important;
