@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
-import { Subscription, switchMap, tap, of, Subject, takeUntil } from 'rxjs';
+import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { EventTypeService } from 'src/app/services/event-type.service';
 //import { IUser } from 'src/app/models/user';
 import { IEventType } from 'src/app/models/event-type';
+import { IStatus } from 'src/app/models/status';
 import { environment } from 'src/environments/environment';
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
 import { MapService } from 'src/app/services/map.service';
@@ -13,10 +14,15 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { MessagesLoading } from 'src/app/enums/messages-loading';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
+import { Statuses } from 'src/app/enums/statuses';
 import { dateRangeValidator } from 'src/app/validators/date-range.validators';
 import { fileTypeValidator } from 'src/app/validators/file-type.validators';
 import { EventsService } from 'src/app/services/events.service';
 import { MessagesEvents } from 'src/app/enums/messages-events';
+import { Capacitor } from '@capacitor/core';
+import { AuthService } from 'src/app/services/auth.service';
+import { EMPTY } from 'rxjs/internal/observable/empty';
+import { StatusesService } from 'src/app/services/statuses.service';
 
 @Component({
   selector: 'app-event-create',
@@ -62,6 +68,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   types: IEventType[] = []
   typesLoaded: boolean = false
   typeSelected: number | null = null
+  statuses: IStatus[] = []
+  statusesLoaded: boolean = false
+  statusSelected: number | null = null
 
   uploadFiles: string[] = []
   formData: FormData = new FormData()
@@ -75,11 +84,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createEventForm: FormGroup = new FormGroup({})
 
   constructor(
+    private authService: AuthService,
     private eventsService: EventsService,
     private loadingService: LoadingService, 
     private toastService: ToastService, 
     private userService: UserService, 
     private eventTypeService: EventTypeService, 
+    private statusesService: StatusesService, 
     private mapService: MapService, 
     private yaGeocoderService: YaGeocoderService) { }
    
@@ -101,18 +112,30 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
           return this.userService.getVkGroups(user.social_account.provider_id, user.social_account.token).pipe(
             switchMap((response: any) => {
-              this.setVkGroups(response?.response.items)
-              return of([])  
+              response?.response.items ? this.setVkGroups(response?.response.items) : this.setVkGroups([])
+              return of(EMPTY) 
             }),
+            catchError((err) =>{
+              //Выкидываем на логин если с ВК проблемы
+              this.toastService.showToast(err.error?.message || err.error?.error_msg || MessagesErrors.vkTokenError, 'danger')
+              this.loadingService.hideLoading()
+              this.authService.logout()
+              return of(EMPTY) 
+            })
           )
         } 
-        return of([])  
+        return of(EMPTY) 
       }),
       tap(() => {
         this.setSteps()  
       }),
       tap(() => {
         this.loadingService.hideLoading()  
+      }),
+      catchError((err) =>{
+        this.toastService.showToast(err.error?.message || err.error?.error_msg || MessagesErrors.default, 'danger')
+        this.loadingService.hideLoading()
+        return of(EMPTY) 
       }),
       takeUntil(this.destroy$)  
     ).subscribe();
@@ -164,6 +187,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if(!post || this.vkGroupPostSelected?.id === post.id){
       this.vkGroupPostSelected = null
       this.createEventForm.patchValue({description: '' });
+      this.resetUploadInfo()
     } else {
       this.vkGroupPostSelected = post
       this.createEventForm.patchValue({description: this.vkGroupPostSelected.text });
@@ -172,7 +196,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Получаем типы мероприятий
   getTypes(){
-    this.eventTypeService.geTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.eventTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.types = response.types
       response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
     })
@@ -183,65 +207,103 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
   }
 
+  //Получаем статусы и устанавливаем статус по умолчанию
+  getStatuses(){
+    this.statusesService.getStatuses().pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      this.statuses = response.statuses
+      if (response.statuses){
+        response.statuses.forEach((status:IStatus) => {
+          if (status.name === Statuses.moderation){
+            this.statusSelected = status.id
+            this.createEventForm.patchValue({ status: status.id })
+          }
+        })
+        this.statusesLoaded = true //для скелетной анимации
+      } else {
+        this.statusesLoaded = false
+      }  
+    })
+  }
+
+  //Выбор типа
+  selectedStatus(status_id: any){
+    status_id.detail.value ? this.statusSelected = status_id.detail.value  :  this.statusSelected =  null
+  }
+
   //При клике ставим метку, если метка есть, то перемещаем ее
-  onMapClick(e: YaEvent<ymaps.Map>): void {
+  async onMapClick(e: YaEvent<ymaps.Map>) {
     const { target, event } = e;
     this.createEventForm.patchValue({coords: [event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)] })
     // this.createEventForm.value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
     this.map.target.geoObjects.removeAll()
     this.placemark= new ymaps.Placemark(this.createEventForm.value.coords)
     this.map.target.geoObjects.add(this.placemark)
+    if (!Capacitor.isNativePlatform())  {
+      this.ReserveGeocoder()
+    } else {
+      // this.createEventForm.value.address =await this.mapService.ReserveGeocoderNative(this.createEventForm.value.coords).then(res=>{console.log("res "+res)})
+      this.ReserveGeocoder()
+    }
+  }
+ 
+   // Поиск по улицам
+   onMapReady(e: YaReadyEvent<ymaps.Map>) {
+    this.map = e;
+    if (this.createEventForm.value.coords){     
+      this.addPlacemark(this.createEventForm.value.coords)
+    } else {
+      this.mapService.geolocationMapNative(this.map);
+    }
+    
+    const search = new ymaps.SuggestView('search-map');  
+    search.events.add('select',()=>{     
+    if (!Capacitor.isNativePlatform())  {
+      this.ForwardGeocoder()
+    } else {
+      // this.createEventForm.value.address=(<HTMLInputElement>document.getElementById("search-map")).value
+      // let coords = this.mapService.ForwardGeocoderNative(this.createEventForm.value.address)
+      // this.addPlacemark(coords!)
+      this.ForwardGeocoder()
+    }
+    })
+  }
+
+  //При выборе из выпадающего списка из поиска создает метку по адресу улицы
+  addPlacemark(coords: number[]){
+    try {
+      this.map.target.geoObjects.removeAll()
+      this.placemark= new ymaps.Placemark(coords)
+      this.map.target.geoObjects.add(this.placemark)
+      // this.createEventForm.value.coords=this.placemark.geometry?.getCoordinates()
+      this.createEventForm.patchValue({coords: this.placemark.geometry?.getCoordinates()})
+      //центрирование карты по метки и установка зума
+      this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
+      this.map.target.setZoom(17)
+    } catch (error) {
+
+    }
+  }
+
+  ReserveGeocoder(): void{
     // Декодирование координат
     const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.coords, {
       results: 1,
     });
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
-      this.createEventForm.value.search = firstGeoObject.getAddressLine()
-
-    })
-  }
- 
-  // Поиск по улицам
-  onMapReady(e: YaReadyEvent<ymaps.Map>): void {
-    this.map = e;
-
-    if (this.createEventForm.value.coords){
-      this.map.target.geoObjects.removeAll()
-      this.placemark= new ymaps.Placemark(this.createEventForm.value.coords)
-      this.map.target.geoObjects.add(this.placemark)
-      this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
-      this.map.target.setZoom(17)
-    } else {
-      //this.mapService.geolocationMap(this.map);
-      this.mapService.geolocationMapNative(this.map)
-    }
-    
-    const search = new ymaps.SuggestView('search-map');  
-    search.events.add('select',()=>{      
-      this.addPlacemark()
+      this.createEventForm.value.address = firstGeoObject.getAddressLine()
     })
   }
 
-  //При выборе из выпадающего списка из поиска создает метку по адресу улицы
-  addPlacemark(): void{
-    this.createEventForm.value.search=(<HTMLInputElement>document.getElementById("search-map")).value
-    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.search, {
+  ForwardGeocoder(): void{
+    this.createEventForm.value.address=(<HTMLInputElement>document.getElementById("search-map")).value
+    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.address, {
       results: 1,
     });
     geocodeResult.subscribe((result: any) => {
       try {
         const firstGeoObject = result.geoObjects.get(0);
-
-        this.map.target.geoObjects.removeAll()
-        this.placemark= new ymaps.Placemark(firstGeoObject.geometry.getCoordinates())
-        this.map.target.geoObjects.add(this.placemark)
-        // this.createEventForm.value.coords=this.placemark.geometry?.getCoordinates()
-        this.createEventForm.patchValue({coords: this.placemark.geometry?.getCoordinates()})
-        //центрирование карты по метки и установка зума
-        this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
-        this.map.target.setZoom(17)
-       // this.disabledNextButton()
+        this.addPlacemark(firstGeoObject.geometry.getCoordinates())
       } catch (error) { 
         
       }
@@ -259,15 +321,22 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Загрузка фото
   onFileChange(event: any) {
-    this.imagesPreview = [] // очищаем превьюшки
-    this.uploadFiles = [] // очишщаем массив с фотками
-    this.formData.delete('files[]') // очишщаем форм дату
+    this.resetUploadInfo()
 
     for (var i = 0; i < event.target.files.length; i++) {
       this.uploadFiles.push(event.target.files[i])
     }
 
+    this.createEventForm.patchValue({files: ''}) // Если не обнулять будет ошибка
+
     this.createImagesPreview()  
+  }
+
+  resetUploadInfo(){
+    this.imagesPreview = [] // очищаем превьюшки
+    this.uploadFiles = [] // очишщаем массив с фотками
+    this.formData.delete('localFiles[]') // очишщаем файлы
+    this.formData.delete('vkFiles[]') // очишщаем файлы
   }
 
   //Удалить прею фотки
@@ -294,12 +363,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormData(){
     if(this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')){
       for (var i = 0; i < this.uploadFiles.length; i++) {
-        this.formData.append('files[]', this.uploadFiles[i])
+        this.formData.append('localFiles[]', this.uploadFiles[i])
       }
     } 
 
-    if(this.vkGroupPostSelected.attachments.length){
-      this.formData.append('files[]', this.vkGroupPostSelected.attachments)
+    if(this.vkGroupPostSelected?.attachments.length){
+      this.vkGroupPostSelected.attachments.forEach((attachment: any) => {
+        let photo = attachment.photo.sizes.pop() //берем последний размер
+        this.formData.append('vkFiles[]', photo.url)
+      }) 
     } 
 
     this.formData.append('name', this.createEventForm.controls['name'].value)
@@ -356,7 +428,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       case 7:
         return this.createEventForm.controls['sponsor'].invalid  ?  false :  true      
       case 9:
-        return !this.createEventForm.controls['coords'].value.length ? false :  true  
+        //return !this.createEventForm.controls['coords'].value.length ? false :  true  
+        return this.createEventForm.controls['coords'].invalid ? false :  true 
       default:
         return true
     }
@@ -396,23 +469,35 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   
   onSubmit(){
     let event = this.createFormData() // собираем формдату
-
     this.createEventForm.disable()
     this.loadingService.showLoading()
-    this.eventsService.create(event).pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
+    this.eventsService.create(event).pipe(
+      tap((res) => {
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesEvents.create, 'success')
-        this.createEventForm.reset()
+        //this.createEventForm.reset()
+        this.resetUploadInfo()
+        this.vkGroupPostSelected = null
+        this.createEventForm.controls['name'].reset()
+        this.createEventForm.controls['description'].reset()
+        this.createEventForm.controls['address'].reset()
+        this.createEventForm.controls['coords'].reset()
+        this.createEventForm.controls['files'].reset()
+        this.createEventForm.controls['price'].reset()
+        this.createEventForm.controls['materials'].reset()
+        this.createEventForm.controls['dateStart'].reset()
+        this.createEventForm.controls['dateEnd'].reset()
         this.createEventForm.enable()
-        this.stepCurrency =  this.stepStart
-      },
-      error: (err) => {
-        this.loadingService.hideLoading()
+        this.stepCurrency =  this.stepStart 
+      }),
+      catchError((err) =>{
         this.toastService.showToast(err.error.message || MessagesErrors.default, 'danger')
         this.createEventForm.enable()
-      }
-    });
+        this.loadingService.hideLoading()
+        return of(EMPTY) 
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe()
   }
 
   ngOnInit() {
@@ -421,19 +506,20 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('',[Validators.required, Validators.minLength(10)]),
-      search: new FormControl('',[Validators.required]),
+      address: new FormControl('',[Validators.required]),
       coords: new FormControl('',[Validators.required, Validators.minLength(2)]), 
       type:  new FormControl({value: '1', disabled: false},[Validators.required]),
-      status:  new FormControl({value: '1', disabled: false},[Validators.required]),
+      status:  new FormControl({value: this.statusSelected, disabled: false},[Validators.required]),
       files: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
-      price: new FormControl(''),
+      price: new FormControl('',[Validators.maxLength(6)]),
       materials: new FormControl(''),
       dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
       dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
-    },[dateRangeValidator]);
+    },[dateRangeValidator])
 
     this.getUserWithSocialAccount()
     this.getTypes()
+    this.getStatuses()
   }
 
   ngOnDestroy(){

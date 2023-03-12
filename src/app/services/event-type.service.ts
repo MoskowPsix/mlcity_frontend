@@ -9,7 +9,7 @@ export class EventTypeService {
 
   constructor(private http: HttpClient) { }
 
-  geTypes() {
+  getTypes() {
     return this.http.get<any>(`${environment.BASE_URL}:${environment.PORT}/api/event-types`)
   }
 }

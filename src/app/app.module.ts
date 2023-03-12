@@ -43,7 +43,7 @@ import { LoadingService } from './services/loading.service';
 import { MapService } from './services/map.service';
 
 import { environment } from '../environments/environment';
-import { XsrfInterceptor } from './xsrf.interceptor';
+import { AuthTokenInterceptor } from './auth-token.interceptor';
 
 import { AuthGuard } from './guards/auth.guard';
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard';
@@ -52,7 +52,7 @@ import { EventTypeService } from './services/event-type.service';
 import { EventsService } from './services/events.service';
 import { SightTypeService } from './services/sight-type.service';
 
-import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 
 
@@ -99,7 +99,7 @@ const mapConfig: YaConfig = {
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
-    { provide: HTTP_INTERCEPTORS, useClass: XsrfInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
     AuthService, 
     LoadingService,
     TokenService,

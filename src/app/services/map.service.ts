@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { YaReadyEvent } from 'angular8-yandex-maps';
-// import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { NativeGeocoder, NativeGeocoderOptions,  NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { Capacitor } from '@capacitor/core';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 import { Geolocation } from '@capacitor/geolocation';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +14,13 @@ export class MapService {
   address: any
   geoAddress: any;
 
-  // options: NativeGeocoderOptions = {
-  //   useLocale: true,
-  //   maxResults: 1,
-  //   defaultLocale: 'ru_RU'
-  // }
-  // private nativegeocoder: NativeGeocoder,
-  constructor( private locationAccuracy: LocationAccuracy) { }
+  options: NativeGeocoderOptions = {
+    useLocale: true,
+    maxResults: 1,
+    defaultLocale: 'ru_RU'
+  }
+  
+  constructor(private nativegeocoder: NativeGeocoder, private locationAccuracy: LocationAccuracy) { }
 
   //Определение геопозиции с помощью яндекса (платно)
   geolocationMap(event: YaReadyEvent<ymaps.Map>): void{
@@ -118,6 +116,29 @@ export class MapService {
       return 'prompt-with-rationale';
     });
   }
+
+  ForwardGeocoderNative(address: string){
+    this.nativegeocoder.forwardGeocode(address, this.options)
+  .then((result: NativeGeocoderResult[]) => {
+    console.log('координаты ' + result[0].latitude + ' ' + result[0].longitude)
+    return [Number(result[0].latitude), Number(result[0].longitude)]
+  })
+  // .catch((error: any) => console.log(error));
+
+  }
+
+  async ReserveGeocoderNative(coords: number[]){
+   await this.nativegeocoder.reverseGeocode(coords[0], coords[1], this.options)
+  .then((result: NativeGeocoderResult[]) => {
+
+    let address = result[0].administrativeArea + ', ' + result[0].locality + ', ' + result[0].thoroughfare + ', ' + result[0].subThoroughfare
+    console.log('address' + address)
+    return address
+  })
+  .catch((error: any) => console.log(error));
+
+  }
+
 
 
 
