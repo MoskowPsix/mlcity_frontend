@@ -1,17 +1,15 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-
 
 @Injectable({
   providedIn: 'root'
 })
-export class SightTypeService {
+export class StatusesService {
 
   constructor(private http: HttpClient) { }
 
-  getTypes() {
-    return this.http.get<any>(`${environment.BASE_URL}:${environment.PORT}/api/sight-types`)
+  getStatuses() {
+    return this.http.get<any>(`${environment.BASE_URL}:${environment.PORT}/api/statuses`)
   }
-  
 }

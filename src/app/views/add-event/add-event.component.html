@@ -1,25 +1,22 @@
-<form [formGroup]="searchForm" enctype="multipart/form-data">
-  <div class="grid gap-6 mb-6 md:grid-cols-2">
-      <div>
-        <label for="">Текущие координаты</label>
-          <input type="text" id="coords" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{coords}}" placeholder="" required>
-      </div>
-      <div>
-        <label for="">Поиск по адресу</label>
-        <input type="text" name="search" id="search-map" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-        value="{{this.searchForm.value.search}}" 
-        placeholder="" 
-        required
-        formControlName="search"
-        >
-        <button (click)="addPlacemark()"> Поставить метку</button>
-        </div>
-  </div>
-</form>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-radio-group  (ionChange)="selectedType($event)" [value]="typeSelected">
+          <ng-container *ngFor="let type of types">
+            <ion-item>
+              <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
+              <ion-radio slot="end" value="{{ type.id }}"></ion-radio>
+            </ion-item>
+          </ng-container>
+      </ion-radio-group>
+</ion-row>
+<ion-row>
 <div class="container">
+
   
   <ya-map (ready)="onMapReady($event)" 
     [zoom]="11"
+    [center]="[56.81497464978607, 61.32053375244141]"
     (yaclick)="onMapClick($event)"
     [state]="{
       controls: [
@@ -29,3 +26,6 @@
   >
   </ya-map>
 </div>
+</ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { BehaviorSubject } from 'rxjs';
 import { MessagesLoading } from 'src/app/enums/messages-loading';
 
 @Injectable({
@@ -8,33 +7,31 @@ import { MessagesLoading } from 'src/app/enums/messages-loading';
 })
 export class LoadingService {
   
-  private isLoading: boolean = false
-
   constructor(private loadingController: LoadingController) { }
   
   async showLoading(message:string = MessagesLoading.default) {
-    this.isLoading = true
-    return await this.loadingController.create({
+  
+    const loader = await this.loadingController.create({
       message: message,
       spinner: 'circular',
-      //duration: 3000,
-    }).then(loading => { 
-      loading.present().then(() => {
-        if (!this.isLoading) {
-          loading.dismiss()
-        }
-      })
     })
-  
+
+    await loader.present()
   }
 
   async hideLoading() {
-    this.isLoading = false
-    //return await this.loadingController.dismiss();
-    // return await this.loadingController.dismiss();
-    // setTimeout(() => {
-    //   return this.loadingController.dismiss().catch(() => {console.log('hideLoading err')})
-    // }, 500);
+    this.checkAndCloseLoader();
+    // console.log(this.loadingController.getTop())
+    // setTimeout(() => this.checkAndCloseLoader(), 500); 
+  }
+
+  async checkAndCloseLoader() {
+   const loader = await this.loadingController.getTop();
+    if(loader !== undefined) { 
+      await this.loadingController.dismiss();
+    } else {
+      setTimeout(() => this.checkAndCloseLoader(), 1000); 
+    }
   }
 
 }

@@ -23,13 +23,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
   constructor(private eventTypeService: EventTypeService, private sightTypeService: SightTypeService) { }
 
   getEventTypes(){
-    this.subscription_1 = this.eventTypeService.geTypes().subscribe((response) => {
+    this.subscription_1 = this.eventTypeService.getTypes().subscribe((response) => {
       this.eventTypes = response.types
     })
   }
 
   getSightTypes(){
-    this.subscription_2 = this.sightTypeService.geTypes().subscribe((response) => {
+    this.subscription_2 = this.sightTypeService.getTypes().subscribe((response) => {
       this.sightTypes = response.types
     })
   }

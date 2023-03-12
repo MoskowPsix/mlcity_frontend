@@ -8,16 +8,17 @@ export class TokenService {
   constructor() { }
 
   setToken(token: any) {
-    localStorage.setItem('auth_token', JSON.stringify(token))
+    //localStorage.setItem('X-XSRF-TOKEN', JSON.stringify(token))
+    localStorage.setItem('auth-token', token)
   }
 
   getToken() {
-    return JSON.parse(localStorage.getItem('auth_token') || 'null')
-    //return localStorage.getItem('auth_token')
+    //return JSON.parse(localStorage.getItem('X-XSRF-TOKEN') || 'null')
+    return localStorage.getItem('auth-token')
   }
   
   // Remove token
   removeToken() {
-    localStorage.removeItem('auth_token')
+    localStorage.removeItem('auth-token')
   }
 }
