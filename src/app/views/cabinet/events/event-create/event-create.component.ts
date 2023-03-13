@@ -71,7 +71,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   statuses: IStatus[] = []
   statusesLoaded: boolean = false
   statusSelected: number | null = null
-  city:string = ''
+  city:string = 'Заречный'
   uploadFiles: string[] = []
   formData: FormData = new FormData()
   imagesPreview: string[] = []
@@ -386,6 +386,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.formData.append('materials', this.createEventForm.controls['materials'].value)
     this.formData.append('dateStart', this.createEventForm.controls['dateStart'].value)
     this.formData.append('dateEnd', this.createEventForm.controls['dateEnd'].value)
+    this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null)
 
     return this.formData
   }
