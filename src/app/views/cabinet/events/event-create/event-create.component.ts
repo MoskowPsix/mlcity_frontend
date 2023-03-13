@@ -71,7 +71,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   statuses: IStatus[] = []
   statusesLoaded: boolean = false
   statusSelected: number | null = null
-
+  city:string = ''
   uploadFiles: string[] = []
   formData: FormData = new FormData()
   imagesPreview: string[] = []
@@ -378,6 +378,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.formData.append('sponsor', this.createEventForm.controls['sponsor'].value)
     this.formData.append('description', this.createEventForm.controls['description'].value)
     this.formData.append('coords', this.createEventForm.controls['coords'].value)
+    this.formData.append('address', this.createEventForm.controls['address'].value)
+    this.formData.append('city', this.city)
     this.formData.append('type', this.createEventForm.controls['type'].value)
     this.formData.append('status', this.createEventForm.controls['status'].value)
     this.formData.append('price', this.createEventForm.controls['price'].value)
@@ -485,8 +487,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.createEventForm.controls['files'].reset()
         this.createEventForm.controls['price'].reset()
         this.createEventForm.controls['materials'].reset()
-        this.createEventForm.controls['dateStart'].reset()
-        this.createEventForm.controls['dateEnd'].reset()
+        this.city = ''
+        //this.createEventForm.controls['dateStart'].reset()
+        //this.createEventForm.controls['dateEnd'].reset()
         this.createEventForm.enable()
         this.stepCurrency =  this.stepStart 
       }),
