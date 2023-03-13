@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {HttpClient, HttpErrorResponse} from '@angular/common/http'
-import {Observable, tap, throwError} from 'rxjs'
+import {Observable, tap, throwError, delay, retry, catchError} from 'rxjs'
 import {ErrorService} from './error.service'
 import { IEvents } from '../models/events';
 import { environment } from 'src/environments/environment';
@@ -12,8 +12,7 @@ export class EventsService {
   constructor(
     private http: HttpClient,
     private errorService: ErrorService
-  ) {
-  }
+  ) {}
 
   events: IEvents[] = []
 
@@ -29,6 +28,15 @@ export class EventsService {
   //     catchError(this.errorHandler.bind(this))
   //   )
   // }
+
+  getPublish(): Observable<IEvents[]> {
+    return  this.http.get<IEvents[]>(`${environment.BASE_URL}:${environment.PORT}/api/events/publish`).pipe(
+      delay(200),
+      retry(2),
+      tap(events => this.events = events),
+      catchError(this.errorHandler.bind(this))
+    )
+  }
 
   create(event: FormData) {
     return this.http.post<any>(`${environment.BASE_URL}:${environment.PORT}/api/events/create`, event)

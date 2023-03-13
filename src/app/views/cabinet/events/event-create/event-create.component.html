@@ -376,7 +376,7 @@
             <ion-input formControlName="address" (ionChange)="clearSearche($event)" id="search-map" type="text" name="search" value="{{this.createEventForm.value.address}}"  required></ion-input>
           </ion-item>
 
-          <div  class="map">
+          <div class="map">
             <ya-map (ready)="onMapReady($event)" 
               [zoom]="11"
               (yaclick)="onMapClick($event)"
