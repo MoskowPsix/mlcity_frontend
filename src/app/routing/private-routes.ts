@@ -2,9 +2,9 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from '../guards/auth.guard';
 import { CabinetComponent } from "../views/cabinet/cabinet.component";
-import { EventsComponent } from '../views/cabinet/events/events.component';
-import { EventCreateComponent } from '../views/cabinet/events/event-create/event-create.component';
-import { EventShowComponent } from '../views/cabinet/events/event-show/event-show.component';
+import { EventsComponent } from '../views/events/events.component';
+import { EventCreateComponent } from '../views/events/event-create/event-create.component';
+import { EventShowComponent } from '../views/events/event-show/event-show.component';
 import { SightsComponent } from '../views/cabinet/sights/sights.component';
 import { SightCreateComponent } from '../views/cabinet/sights/sight-create/sight-create.component';
 import { SightShowComponent } from '../views/cabinet/sights/sight-show/sight-show.component';

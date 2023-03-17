@@ -1,4 +1,6 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeRu from '@angular/common/locales/ru';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
@@ -27,8 +29,8 @@ import { AboutComponent } from './views/about/about.component';
 import { NotFoundComponent } from './views/errors/not-found/not-found.component';
 import { ForbiddenComponent } from './views/errors/forbidden/forbidden.component';
 import { ServerErrorComponent } from './views/errors/server-error/server-error.component';
-import { EventShowComponent } from './views/cabinet/events/event-show/event-show.component';
-import { EventCreateComponent } from './views/cabinet/events/event-create/event-create.component';
+import { EventShowComponent } from './views/events/event-show/event-show.component';
+import { EventCreateComponent } from './views/events/event-create/event-create.component';
 import { SightsComponent } from './views/cabinet/sights/sights.component';
 import { SightShowComponent } from './views/cabinet/sights/sight-show/sight-show.component';
 import { SightCreateComponent } from './views/cabinet/sights/sight-create/sight-create.component';
@@ -54,12 +56,14 @@ import { SightTypeService } from './services/sight-type.service';
 
 import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
-
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
   lang: 'ru_RU',
 };
+
+registerLocaleData(localeRu, 'ru');
 
 @NgModule({
   declarations: [
@@ -86,6 +90,7 @@ const mapConfig: YaConfig = {
     SightCreateComponent,
     ReadMoreComponent,
     FiltersComponent,
+    TruncatePipe
   ],
   imports: [
     BrowserModule, 
@@ -98,6 +103,7 @@ const mapConfig: YaConfig = {
     ReactiveFormsModule,
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: 'ru' },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
     { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
     AuthService, 

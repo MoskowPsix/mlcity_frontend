@@ -7,6 +7,7 @@ import { ContactsComponent } from "../views/contacts/contacts.component";
 import { FeedbackComponent } from "../views/feedback/feedback.component";
 import { SupportComponent } from "../views/support/support.component";
 import { CheckAuthCanActiveGuard } from "../guards/check-auth.can-active.guard";
+import { EventShowComponent } from "../views/events/event-show/event-show.component";
 
 export const publicRoutes: Routes = [ 
     {
@@ -22,6 +23,11 @@ export const publicRoutes: Routes = [
     {
       path: 'events',
       component: EventsComponent,
+      canActivate: [CheckAuthCanActiveGuard],
+    },
+    {
+      path: 'events/:id',
+      component: EventShowComponent,
       canActivate: [CheckAuthCanActiveGuard],
     },
     {
