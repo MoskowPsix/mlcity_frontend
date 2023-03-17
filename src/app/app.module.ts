@@ -57,6 +57,7 @@ import { SightTypeService } from './services/sight-type.service';
 import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { NoDataComponent } from './components/no-data/no-data.component';
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -90,6 +91,7 @@ registerLocaleData(localeRu, 'ru');
     SightCreateComponent,
     ReadMoreComponent,
     FiltersComponent,
+    NoDataComponent,
     TruncatePipe
   ],
   imports: [
