@@ -2,11 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
 import { MapService } from '../../services/map.service';
-// import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
-import { Geolocation } from '@capacitor/geolocation';
-import { Capacitor } from '@capacitor/core';
-import { Platform } from '@ionic/angular';
-
 
 interface Placemark {
   geometry: number[];
@@ -32,8 +27,7 @@ export class HomeComponent implements OnInit {
   currentValue = 1;
   selectedRadius: number | null = null
   presentingElement: any = null;
-  coordinate: any
-  address: any
+  objectsInsideCircle!: any
 
   private points = [
     {
@@ -145,16 +139,61 @@ export class HomeComponent implements OnInit {
         "preset": "",
         "iconColor": "",
       },
-    }
+    },
+    {
+      "type": 'Point',
+      "geometry": [55.7361312, 37.6777025],
+      "properties": {
+        "balloonContentBody":"Тестовая запись"
+      },
+      "options":{
+        "preset": "",
+        "iconColor": "",
+      },
+    },
+    {
+      "type": 'Point',
+      "geometry": [55.7361312, 37.6777025],
+      "properties": {
+        "balloonContentBody":"Тестовая запись"
+      },
+      "options":{
+        "preset": "",
+        "iconColor": "",
+      },
+    },
+    {
+      "type": 'Point',
+      "geometry": [55.7361312, 37.6777025],
+      "properties": {
+        "balloonContentBody":"Тестовая запись"
+      },
+      "options":{
+        "preset": "",
+        "iconColor": "",
+      },
+    },
+    {
+      "type": 'Point',
+      "geometry": [55.7361312, 37.6777025],
+      "properties": {
+        "balloonContentBody":"Тестовая запись"
+      },
+      "options":{
+        "preset": "",
+        "iconColor": "",
+      },
+    },
   ]
 
-  constructor(private http: HttpClient, private mapService:MapService, private yaGeocoderService: YaGeocoderService,) {}
+  constructor(private mapService:MapService) {}
   
   setRadius(radius: number){ 
 
     if (this.currentValue === radius){
       this.currentValue = 1
       this.CirclePoint.geometry?.setRadius(1000)
+      this.objectsInsideCircle.remove(this.placemarks)
       this.visiblePlacemarks()
       //Zoom по размеру круга
       this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
@@ -162,6 +201,7 @@ export class HomeComponent implements OnInit {
     } else {
       this.currentValue = radius;
       this.CirclePoint.geometry?.setRadius(1000*radius)
+      this.objectsInsideCircle.remove(this.placemarks)
       this.visiblePlacemarks()
       //Zoom по размеру круга
       this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
@@ -172,18 +212,18 @@ export class HomeComponent implements OnInit {
   onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
     this.map={target, ymaps};
 
+    // Создаем и добавляем круг
+    this.CirclePoint=new ymaps.Circle([[11,11],1000*this.currentValue],{},{fillOpacity:0.15, draggable:false})
+    target.geoObjects.add(this.CirclePoint)
+
     // Определяем местоположение пользователя
     // this.mapService.geolocationMap(this.map) 
-    this.mapService.geolocationMapNative(this.map) 
+    this.mapService.geolocationMapNative(this.map, this.CirclePoint) 
 
     // Заполняем массив меток
     this.points.forEach(element => {
       this.placemarks.push(new ymaps.Placemark(element.geometry,element.properties))
     })
-
-    // Создаем и добавляем круг
-    this.CirclePoint=new ymaps.Circle([[11,11],1000*this.currentValue],{},{fillOpacity:0.15, draggable:false})
-    target.geoObjects.add(this.CirclePoint)
 
     //Создаем метку в центре круга, для перетаскивания
     this.myGeo=new ymaps.Placemark([11,11],{},{preset: 'islands#darkBlueDotIconWithCaption',iconColor: '#0095b6'})
@@ -192,8 +232,13 @@ export class HomeComponent implements OnInit {
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin',  (e) => {
 
+      if (this.objectsInsideCircle){
+        this.objectsInsideCircle.remove(this.placemarks)
+      }
+      // console.log(this.objectsInsideCircle)
+    
       this.CirclePoint.geometry?.setRadius(10)
-      ymaps.geoQuery(this.placemarks).removeFromMap(this.map.target)
+      // ymaps.geoQuery(this.placemarks).removeFromMap(this.map.target)
     });
 
     // Вешаем на карту событие по перетаскиванию круга и отображения меток в круге
@@ -215,15 +260,12 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  visiblePlacemarks(){
+ async visiblePlacemarks(){
     //При изменении радиуса проверяем метки для показа/скрытия
-    const objectsInsideCircle = ymaps.geoQuery(this.placemarks).searchInside(this.CirclePoint).addToMap(this.map.target)
-    ymaps.geoQuery(this.placemarks).remove(objectsInsideCircle).removeFromMap(this.map.target)
-    // this.map.target.geoObjects.add(objectsInsideCircle.clusterize())
-
-    // const objectsInsideCircle = ymaps.geoQuery(this.placemarks)
-    // const objectsInside=objectsInsideCircle.searchInside(this.CirclePoint)
-    // this.map.target.geoObjects.add(objectsInside.clusterize()
+      this.objectsInsideCircle = ymaps.geoQuery(this.placemarks).searchInside(this.CirclePoint).clusterize()//.addToMap(this.map.target)//.clusterize()
+      this.map.target.geoObjects.add(this.objectsInsideCircle);
+    //  this.objectsInsideCircle = ymaps.geoQuery(this.placemarks).searchInside(this.CirclePoint).addToMap(this.map.target)
+    // ymaps.geoQuery(this.placemarks).remove(this.objectsInsideCircle).removeFromMap(this.map.target)
   }
 
   ngOnInit(): void {

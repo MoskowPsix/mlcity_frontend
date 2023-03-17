@@ -71,7 +71,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   statuses: IStatus[] = []
   statusesLoaded: boolean = false
   statusSelected: number | null = null
-  city:string = 'Заречный'
+  city:string  = 'Заречный'
   uploadFiles: string[] = []
   formData: FormData = new FormData()
   imagesPreview: string[] = []
@@ -291,6 +291,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     });
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
+      
+      this.city=firstGeoObject.getLocalities(0)[0]
+
       this.createEventForm.value.address = firstGeoObject.getAddressLine()
     })
   }
@@ -301,12 +304,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       results: 1,
     });
     geocodeResult.subscribe((result: any) => {
-      try {
-        const firstGeoObject = result.geoObjects.get(0);
-        this.addPlacemark(firstGeoObject.geometry.getCoordinates())
-      } catch (error) { 
-        
-      }
+
+      const firstGeoObject = result.geoObjects.get(0);
+      this.addPlacemark(firstGeoObject.geometry.getCoordinates())
+
+      this.city=firstGeoObject.getLocalities(0)[0]
+
     }) 
   }
 

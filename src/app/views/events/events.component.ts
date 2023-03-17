@@ -1,68 +1,109 @@
-import { EventsService } from '../../services/events.service';
-import { IEvents } from '../../models/events';
-import { async } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { catchError, delay, EMPTY, of, retry, Subject, takeUntil, tap } from 'rxjs';
+import { MessagesErrors } from 'src/app/enums/messages-errors';
+import { IEvents } from 'src/app/models/events';
+import { AuthService } from 'src/app/services/auth.service';
+import { EventsService } from 'src/app/services/events.service';
+import { LoadingService } from 'src/app/services/loading.service';
+import { ToastService } from 'src/app/services/toast.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss'],
 })
-export class EventsComponent implements OnInit {
+export class EventsComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>()
+  @Input() callFromCabinet: boolean = true
 
-  eventPost!:string
-  loadAPI!: Promise<any>;
-  // events: IEvents[]=[
-  //   {
-  //     "vkPost":"VK.Widgets.Post('vk_post_-39122624_142882', -39122624, 142882, 'BfmvMagoDLy0PVNWg0RDk-G9t1cH');",
-  //     "vkIdPost":"vk_post_-39122624_142882",
-  //   },
-  //   {
-  //     "vkPost":"VK.Widgets.Post('vk_post_1_45616', 1, 45616, '4mR-o2_COU6XjdBDA9Afjr8qcN7J');",
-  //     "vkIdPost":"vk_post_1_45616",
-  //   },
-  //   {
-  //     "vkPost":"VK.Widgets.Post('vk_post_-39122624_142855', -39122624, 142855, 'lFWNGE8x7FoHY5TxFxjdkfGhMjQ9');",
-  //     "vkIdPost":"vk_post_-39122624_142855",
-  //   },
-  // ]
+  userAuth:boolean = false
 
-  constructor(public eventsService: EventsService) { }
+  host: string = environment.BASE_URL
+  port: string = environment.PORT
 
-  ngOnInit() {
-    // this.eventsService.getAll().subscribe(() => {
-    //   // this.loading = false
-    // })
+  events: IEvents[] = []
+  loadingEvents: boolean = false
+  favoriteEventsIds: number[] = []
+  loadedFavoriteEventsIds: number[] = []
 
-// console.log(this.eventsService)
-    // this.events.forEach(async element  => {
-    //   // console.log(element)
-    //     this.loadAPI = new Promise(async (resolve) => {
-    //     console.log('resolving promise...');
-    //     await this.loadScript(element.vkPost);
-    //     // await this.loadScript("VK.init({apiId: 51529720, onlyWidgets: true});");
-    //     // await this.loadScript('VK.Widgets.Comments("vk_comments", {limit: 15, attach: "*"});');
-    //     this.eventPost=element.vkIdPost;
-        
-    // });
-    // })
+  starPage: number = 1
+  nextPage: number = 1
+  totalPages: number = 1
 
+  constructor(
+    private eventsService: EventsService,
+    private toastService: ToastService,
+    private authService: AuthService
+  ) { }
 
-
-    // this.eventsService.getAll().subscribe(() => {
-    // })
+  getEvents(){
+    //this.loadingService.showLoading()
+    this.loadingEvents = false
+    this.eventsService.getLastPublish().pipe(
+      delay(200),
+      retry(3),
+      tap((res:any) => {
+        this.events = res.events.data
+        this.totalPages = res.events.last_page
+        this.loadingEvents = true  
+      }),
+      catchError((err) =>{
+        this.toastService.showToast(MessagesErrors.default, 'danger')
+        return of(EMPTY) 
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe()
   }
 
-//Чтение скриптов
-  // public loadScript(vkPost:string) {
-  //   console.log('preparing to load...')
-  //   let node = document.createElement('script');
-  //   // node.src = "./script.js";
-  //   node.text=vkPost
-  //   node.type = 'text/javascript';
-  //   node.async = true;
-  //   node.charset = 'utf-8';
-  //   document.getElementsByTagName('head')[0].appendChild(node);
-  // }
+  setFavoritesIds(){
+    if (this.userAuth){
+      this.eventsService.setFavoritesIds().pipe(
+        delay(200),
+        retry(3),
+        tap((res:any) => {
+          this.favoriteEventsIds = res.favoriteEventsIds
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe()
+    }  
+  }
+
+  checkFavorites(event_id:number){
+    return this.favoriteEventsIds.includes(event_id)
+  }
+
+  toggleFavorite(event_id:number){
+    this.loadedFavoriteEventsIds.push(event_id) // для отображения спинера
+    this.eventsService.toggleFavorite(event_id).pipe(
+      tap((res:any) => {
+        this.setFavoritesIds()
+        setTimeout(() => {
+          this.loadedFavoriteEventsIds = this.loadedFavoriteEventsIds.filter(id => id != event_id) // убрать спинер
+        }, 500)
+      }),
+      catchError((err) =>{
+        this.toastService.showToast(MessagesErrors.default, 'danger')
+        return of(EMPTY) 
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe()
+  }
+
+  checkLoadingFavorite(event_id:number){
+    return this.loadedFavoriteEventsIds.includes(event_id)
+  }
+
+  ngOnInit() {
+    this.userAuth = this.authService.getAuthState()
+    this.setFavoritesIds()
+    this.getEvents()
+  }
+
+  ngOnDestroy(){
+    // отписываемся от всех подписок
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
 }

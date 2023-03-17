@@ -4,6 +4,8 @@
 //     vkIdPost: string
 // }
 export interface IEvents {
+    id:number
+    name: string
     sponsor: string
     description: string
     address: string
@@ -15,4 +17,7 @@ export interface IEvents {
     materials?: string
     dateStart: Date
     dateEnd: Date
+    date_start: Date
+    date_end: Date
+    vk_post_id?:number
 }

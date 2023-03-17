@@ -36,7 +36,7 @@ export class MapService {
   }
 
    //Определение геопозиции нативными способами платформы
-   async geolocationMapNative(map: YaReadyEvent<ymaps.Map>) {
+   async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
     if (!Capacitor.isPluginAvailable('Geolocation')) {
       console.log('Plugin geolocation not available');
       return;
@@ -45,7 +45,7 @@ export class MapService {
     if (!Capacitor.isNativePlatform())  {
       //Запускаем поиск геопозиции в вебе
       console.log('ипользуется веб версия')
-      this.setCenterMap(map)
+      this.setCenterMap(map, CirclePoint)
     } else {
       //Запускаем поиск геопозиции в мобилах
       console.log('ипользуется мобильная версия')
@@ -59,7 +59,7 @@ export class MapService {
           const stat = await this.enableLocation();
           console.log("стат " + stat)
           if(stat) {
-            this.setCenterMap(map) 
+            this.setCenterMap(map, CirclePoint) 
           } else {
             //Если человек отказывается активировать GPS "нет,спасибо"
           }
@@ -88,11 +88,21 @@ export class MapService {
   }
 
   //Определяем местоположение и перемещаем карту
-  async setCenterMap(map: YaReadyEvent<ymaps.Map>) {
+  async setCenterMap(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
     const coordinates = await this.getCurrentLocation();
     this.placemark= new ymaps.Placemark([coordinates.coords.latitude,coordinates.coords.longitude], {}, {visible: false})
-    map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
-    map.target.setZoom(17)
+
+    if (CirclePoint) {
+      CirclePoint.geometry?.setCoordinates([coordinates.coords.latitude,coordinates.coords.longitude])
+      map.target.setBounds(CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
+
+    } else {
+      map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
+      map.target.setZoom(17)
+    }
+
+
+    return this.placemark
   }
 
   //Получаем координаты
