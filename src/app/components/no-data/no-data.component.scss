@@ -1,0 +1,17 @@
+.error-box{
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center !important;
+
+    ion-icon {
+        font-size: 10rem;
+    }
+
+    p{
+        color: #92949c;
+        font-size: 2rem;
+    }   
+}

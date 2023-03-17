@@ -79,6 +79,10 @@
         </ion-col>
       </ng-container>
 
+      <ng-container *ngIf="loadingEvents && !events.length">
+        <app-no-data/>
+      </ng-container>
+
     </ion-row>
   </ion-grid>  
 </ion-content>
