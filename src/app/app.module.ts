@@ -36,6 +36,8 @@ import { SightShowComponent } from './views/cabinet/sights/sight-show/sight-show
 import { SightCreateComponent } from './views/cabinet/sights/sight-create/sight-create.component';
 import { ReadMoreComponent } from './components/read-more/read-more.component';
 import { FiltersComponent } from './components/filters/filters.component';
+import { NoDataComponent } from './components/no-data/no-data.component';
+import { EventCardComponent } from './components/event-card/event-card.component';
 
 import { AuthService } from './services/auth.service';
 import { ToastService } from './services/toast.service'; 
@@ -57,7 +59,6 @@ import { SightTypeService } from './services/sight-type.service';
 import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 import { TruncatePipe } from './pipes/truncate.pipe';
-import { NoDataComponent } from './components/no-data/no-data.component';
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
@@ -92,6 +93,7 @@ registerLocaleData(localeRu, 'ru');
     ReadMoreComponent,
     FiltersComponent,
     NoDataComponent,
+    EventCardComponent,
     TruncatePipe
   ],
   imports: [

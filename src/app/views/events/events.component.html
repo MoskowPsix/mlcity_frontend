@@ -24,58 +24,7 @@
 
       <ng-container *ngIf="loadingEvents">
         <ion-col *ngFor="let event of events; let i = index" size-lg="4" size-md="8" size-xs="12">
-          <ion-card>
-            <div class="ion-activatable ripple-parent rectangle">
-              <div class="photo-box">
-                <ng-container *ngIf="event.files && event.files.length && event.files[0].local === 1; else notLocal">
-                  <img alt="img" class="photo" src="{{host}}:{{port}}{{ event.files[0].link }}" />
-                </ng-container>
-                <ng-template #notLocal>
-                  <img *ngIf="event.files && event.files.length && event.files[0].local === 0; else notFiles" alt="img" class="photo" src="{{ event.files[0].link }}" />
-                </ng-template>
-                <ng-template #notFiles>
-                  <img alt="default img" class="photo" src="/assets/icons/favicon.png" />
-                </ng-template>
-              </div>
-  
-              <div class="date">
-                <span>НАЧАЛО: {{ event.date_start | date:'d MMMM в HH:mm' }}</span>
-                <span>КОНЕЦ: {{ event.date_end | date:'d MMMM в HH:mm' }}</span>
-              </div>
-  
-              <div *ngIf="event.price" class="price">
-                <span>{{ event.price }} руб.</span>
-              </div>
-  
-              <ion-card-title>{{ event.id }} {{ event.name | truncate:[48,'...'] }}</ion-card-title>
-              
-              <ion-card-header>
-                <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>
-              </ion-card-header>
-              
-              <ion-card-content>
-                {{ event.description | truncate:[200,'...'] }}
-              </ion-card-content>
-              
-              <ion-ripple-effect></ion-ripple-effect>
-            </div>
-       
-            <div class="footer">
-              <ion-icon name="heart-outline" size="large" class="ico"></ion-icon>
-              <ion-icon name="chatbox-outline" size="large" class="ico"></ion-icon>
-              <ng-container *ngIf="this.userAuth">
-                <ng-container *ngIf="!checkLoadingFavorite(event.id)">
-                  <ion-icon  (click)="toggleFavorite(event.id)" [name]="checkFavorites(event.id) ? 'star' : 'star-outline'" [color]="checkFavorites(event.id) ? 'warning' : ''" size="large" class="ico"></ion-icon>
-                </ng-container>
-
-                <ng-container *ngIf="checkLoadingFavorite(event.id)">
-                  <ion-spinner ></ion-spinner>
-                </ng-container>    
-              </ng-container>
-              <ion-icon name="share-social-outline" size="large" class="ico share"></ion-icon>
-            </div>
-
-          </ion-card>
+          <app-event-card [event]="event"></app-event-card>
         </ion-col>
       </ng-container>
 

@@ -3,21 +3,26 @@
 //     vkPost: string
 //     vkIdPost: string
 // }
-export interface IEvents {
+export interface IEvent {
     id:number
     name: string
     sponsor: string
     description: string
     address: string
     coords: number[]
+    favorites_users_exists?:boolean
+    liked_users_exists?:boolean
     type?: number
     status?: number
     files?: any[]
+    types?: any[]
+    likes?: any
     price?: string
     materials?: string
     dateStart: Date
     dateEnd: Date
     date_start: Date
     date_end: Date
+    vk_group_id?:number
     vk_post_id?:number
 }

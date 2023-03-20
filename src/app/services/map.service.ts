@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { YaReadyEvent } from 'angular8-yandex-maps';
+import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
 import { NativeGeocoder, NativeGeocoderOptions,  NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { Capacitor } from '@capacitor/core';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
@@ -20,7 +20,7 @@ export class MapService {
     defaultLocale: 'ru_RU'
   }
   
-  constructor(private nativegeocoder: NativeGeocoder, private locationAccuracy: LocationAccuracy) { }
+  constructor(private nativegeocoder: NativeGeocoder, private locationAccuracy: LocationAccuracy, private yaGeocoderService: YaGeocoderService) { }
 
   //Определение геопозиции с помощью яндекса (платно)
   geolocationMap(event: YaReadyEvent<ymaps.Map>): void{
@@ -91,10 +91,18 @@ export class MapService {
   async setCenterMap(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
     const coordinates = await this.getCurrentLocation();
     this.placemark= new ymaps.Placemark([coordinates.coords.latitude,coordinates.coords.longitude], {}, {visible: false})
+    // console.log(coordinates.coords.latitude,coordinates.coords.longitude)
 
     if (CirclePoint) {
       CirclePoint.geometry?.setCoordinates([coordinates.coords.latitude,coordinates.coords.longitude])
       map.target.setBounds(CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
+
+      if (!Capacitor.isNativePlatform())  {
+        this.ReserveGeocoder([coordinates.coords.latitude,coordinates.coords.longitude])
+      } else {
+        this.ReserveGeocoderNative([coordinates.coords.latitude,coordinates.coords.longitude])
+      }
+
 
     } else {
       map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
@@ -143,12 +151,32 @@ export class MapService {
 
     let address = result[0].administrativeArea + ', ' + result[0].locality + ', ' + result[0].thoroughfare + ', ' + result[0].subThoroughfare
     console.log('address' + address)
+    this.searchCity(result[0].locality)
     return address
   })
   .catch((error: any) => console.log(error));
 
   }
 
+  async ReserveGeocoder(coords: number[]) {
+    // Декодирование координат
+    const geocodeResult = await this.yaGeocoderService.geocode(coords, {
+      results: 1,
+    });
+    geocodeResult.subscribe((result: any) => {
+      const firstGeoObject = result.geoObjects.get(0);
+      this.searchCity(firstGeoObject.getLocalities(0)[0])
+    })
+  }
+
+  searchCity(city: string) {
+
+    if (city === "" ) {
+      localStorage.setItem('city', city)
+    } else if (city != localStorage.getItem('city')) {
+      //Выдаем сообщение, что возможно мы находимся в другом городе
+    }
+  }
 
 
 

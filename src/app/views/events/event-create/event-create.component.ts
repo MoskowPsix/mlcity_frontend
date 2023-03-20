@@ -23,6 +23,7 @@ import { Capacitor } from '@capacitor/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { StatusesService } from 'src/app/services/statuses.service';
+import { VkService } from 'src/app/services/vk.service';
 
 @Component({
   selector: 'app-event-create',
@@ -89,6 +90,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService, 
     private toastService: ToastService, 
     private userService: UserService, 
+    private vkService: VkService, 
     private eventTypeService: EventTypeService, 
     private statusesService: StatusesService, 
     private mapService: MapService, 
@@ -110,7 +112,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')   
         } else {
           // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
-          return this.userService.getVkGroups(user.social_account.provider_id, user.social_account.token).pipe(
+          return this.vkService.getGroups().pipe(
             switchMap((response: any) => {
               response?.response.items ? this.setVkGroups(response?.response.items) : this.setVkGroups([])
               return of(EMPTY) 
@@ -176,7 +178,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){
-    this.userService.getVkPostsGroup(group_id, 10, this.user.social_account.token).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.vkService.getPostsGroup(group_id, 10).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.vkGroupPosts = response.response
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
@@ -390,6 +392,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.formData.append('dateStart', this.createEventForm.controls['dateStart'].value)
     this.formData.append('dateEnd', this.createEventForm.controls['dateEnd'].value)
     this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null)
+    // if (this.vkGroupPostSelected?.likes.count){
+    //   this.formData.append('vkLikesCount', this.vkGroupPostSelected?.likes.count)
+    // }
+    if  (this.vkGroupSelected && this.vkGroupPostSelected?.id){
+      this.formData.append('vkGroupId', this.vkGroupSelected.toString())
+    }
 
     return this.formData
   }
