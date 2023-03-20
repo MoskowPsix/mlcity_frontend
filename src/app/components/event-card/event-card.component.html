@@ -1,0 +1,56 @@
+<ion-card>
+  <div class="ion-activatable ripple-parent rectangle">
+    <div class="photo-box">
+      <ng-container *ngIf="event.files && event.files.length && event.files[0].local === 1; else notLocal">
+        <img alt="img" class="photo" src="{{host}}:{{port}}{{ event.files[0].link }}" />
+      </ng-container>
+      <ng-template #notLocal>
+        <img *ngIf="event.files && event.files.length && event.files[0].local === 0; else notFiles" alt="img" class="photo" src="{{ event.files[0].link }}" />
+      </ng-template>
+      <ng-template #notFiles>
+        <img alt="default img" class="photo" src="/assets/icons/favicon.png" />
+      </ng-template>
+    </div>
+
+    <div class="date">
+      <span>НАЧАЛО: {{ event.date_start | date:'d MMMM в HH:mm' }}</span>
+      <span>КОНЕЦ: {{ event.date_end | date:'d MMMM в HH:mm' }}</span>
+    </div>
+
+    <div *ngIf="event.price" class="price">
+      <span>{{ event.price }} руб.</span>
+    </div>
+
+    <div *ngIf="event.types && event.types.length" class="type">
+      <img alt="img" class="photo" src="{{host}}:{{port}}{{ event.types[0].ico }}" />
+    </div>
+
+    <ion-card-title>{{ event.name | truncate:[48,'...'] }}</ion-card-title>
+    
+    <ion-card-header>
+      <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>
+    </ion-card-header>
+    
+    <ion-card-content>
+      {{ event.description | truncate:[200,'...'] }}
+    </ion-card-content>
+    
+    <ion-ripple-effect></ion-ripple-effect>
+  </div>
+  
+  <div class="footer">
+    <div class="likes">
+      <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''" size="large" class="ico"></ion-icon>
+      <ion-spinner *ngIf="loadingLike"></ion-spinner>
+      <span >{{ startLikesCount }}</span>
+    </div>
+
+    <ion-icon name="chatbox-outline" size="large" class="ico"></ion-icon>
+  
+    <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" size="large" class="ico"></ion-icon>
+    <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
+
+    <ion-icon name="share-social-outline" size="large" class="ico share"></ion-icon>
+  </div>
+
+</ion-card>

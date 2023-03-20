@@ -20,8 +20,11 @@
           'fullscreenControl',]
         }"
       [options]="{
+        yandexMapDisablePoiInteractivity: true,
         minZoom:minZoom,
-        maxZoom:18
+        maxZoom:18,
+        suppressMapOpenBlock: true,
+        suppressObsoleteBrowserNotifier: true
       }"
     >
     </ya-map>

@@ -24,18 +24,6 @@ export class UserService {
     return this.http.get<IUser>(`${environment.BASE_URL}:${environment.PORT}/api/users/${id}`)
   } 
 
-  //инфо о методе  https://dev.vk.com/method/groups.get
-  //https://api.vk.com/method/groups.get?user_ids=${this.socialAccount.provider_id}&access_token=${this.socialAccount.token}&extended=1&filter=moder
-  //moder — ищем группы где юзер является администратором, редактором или модератором
-  getVkGroups(provider_id: number, token: string){
-    return this.http.jsonp<any>(`https://api.vk.com/method/groups.get?user_ids=${provider_id}&access_token=${token}&extended=1&filter=moder&v=5.131`, 'callback')
-  }
-
-
-  getVkPostsGroup(group_id: number, count:number, token: string){
-    return this.http.jsonp<any>(`https://api.vk.com/method/wall.get?owner_id=-${group_id}&access_token=${token}&count=${count}&filter=all&extended=1&v=5.131`, 'callback')
-  }
-
   setUser(user: IUser) {
     //this.user.value = []
     this.user.next(user)
