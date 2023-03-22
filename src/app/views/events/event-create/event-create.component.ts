@@ -235,7 +235,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //При клике ставим метку, если метка есть, то перемещаем ее
   async onMapClick(e: YaEvent<ymaps.Map>) {
     const { target, event } = e;
-    this.createEventForm.patchValue({coords: [event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)] })
+    this.createEventForm.patchValue({coords: [event.get('coords')[0], event.get('coords')[1]] })
     // this.createEventForm.value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
     this.map.target.geoObjects.removeAll()
     this.placemark= new ymaps.Placemark(this.createEventForm.value.coords)

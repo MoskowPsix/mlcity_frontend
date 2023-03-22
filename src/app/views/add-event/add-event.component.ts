@@ -72,12 +72,15 @@ console.log(this.typeSelected)
       if (!this.placemarkStart) {
         this.placemarkStart= new ymaps.Placemark([event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)],{iconContent: "Старт"},{visible: true, preset: 'islands#greenStretchyIcon', draggable: false,})
         this.map.target.geoObjects.add(this.placemarkStart)
-        // console.log("Метка старт не существует")
-      } else if (!this.placemarkStop){
-        // console.log("Метка старт существует, метка стоп нет")
-        this.placemarkStop= new ymaps.Placemark([event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)],{iconContent: "Стоп"},{visible: true, preset: 'islands#redStretchyIcon', draggable: false,})
-        this.map.target.geoObjects.add(this.placemarkStop)
         this.createPolylineRouteMap()
+
+
+      //   // console.log("Метка старт не существует")
+      // } else if (!this.placemarkStop){
+      //   // console.log("Метка старт существует, метка стоп нет")
+      //   this.placemarkStop= new ymaps.Placemark([event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)],{iconContent: "Стоп"},{visible: true, preset: 'islands#redStretchyIcon', draggable: false,})
+      //   this.map.target.geoObjects.add(this.placemarkStop)
+      //   this.createPolylineRouteMap()
       } 
     }
 
@@ -92,11 +95,22 @@ console.log(this.typeSelected)
 
   createPolylineRouteMap(){
 
-    this.Polyline = new ymaps.Polyline([this.placemarkStart.geometry?.getCoordinates()!, this.placemarkStop.geometry?.getCoordinates()!],{},{ draggable: true, strokeColor: '#00000088', strokeWidth: 4,})
-
+    this.Polyline = new ymaps.Polyline([this.placemarkStart.geometry?.getCoordinates()!],{},{draggable: true, strokeColor: '#00000088', strokeWidth: 4,})
     this.map.target.geoObjects.add(this.Polyline)
 
     this.Polyline.editor.startEditing();
+
+    this.Polyline.editor.events.add('drawing', (el) => {
+      console.log(el)
+
+      if (this.Polyline.editor.state.get('drawing') === false) {
+        console.log("стопэ")
+      }
+
+    })
+
+    this.Polyline.editor.state.set('drawing', true)
+
   }
 
 //Настройки пешеходного маршрута

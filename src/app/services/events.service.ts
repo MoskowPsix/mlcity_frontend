@@ -52,10 +52,11 @@ export class EventsService {
    // return this.http.get<IEvents[]>(`${environment.BASE_URL}:${environment.PORT}/api/events/publish/${this.city}/${page}`)
   }
 
-  getPublishByCoords(lat_coords:[], lon_coords:[]) {
+  getPublishByCoords(lat_coords:any, lon_coords:any) {
     const params = {
       latitude: lat_coords,
-      longitude:lon_coords
+      longitude:lon_coords,
+      user_id: this.userId
     } 
     return this.http.post<IEvent[]>(`${environment.BASE_URL}:${environment.PORT}/api/events/publish/coords`, params)
   }

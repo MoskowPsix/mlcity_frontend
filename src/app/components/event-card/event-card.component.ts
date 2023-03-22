@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
 import { catchError, delay, EMPTY, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { MessagesAuth } from 'src/app/enums/messages-auth';
@@ -8,13 +8,17 @@ import { EventsService } from 'src/app/services/events.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { environment } from 'src/environments/environment';
 import { VkService } from 'src/app/services/vk.service';
+import { IonicSlides } from '@ionic/angular';
+
+import {register} from 'swiper/element/bundle';
+import {Swiper} from 'swiper/types';
 
 @Component({
   selector: 'app-event-card',
   templateUrl: './event-card.component.html',
   styleUrls: ['./event-card.component.scss'],
 })
-export class EventCardComponent implements OnInit, OnDestroy {
+export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
 
   constructor(
     private authService: AuthService,
@@ -22,11 +26,17 @@ export class EventCardComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private vkService: VkService
   ) { }
-
+  
   private readonly destroy$ = new Subject<void>()
 
   @Input() callFromCabinet: boolean = true
   @Input() event!: IEvent
+
+  @ViewChild('swiper')
+  swiperRef: ElementRef | undefined;
+  swiper?: Swiper;
+
+  swiperModules = [IonicSlides];
 
   userAuth: boolean = false
 
@@ -149,11 +159,18 @@ export class EventCardComponent implements OnInit, OnDestroy {
     this.startLikesCount = this.event.likes.vk_count + this.event.likes.local_count
     this.favorite = this.event.favorites_users_exists! 
     this.like = this.event.liked_users_exists!
+
     //КИдаем запрос в ВК чтобы обновить лайки и лайкнуть у нас если юзер лайкнул в ВК
     if(this.event.vk_group_id && this.event.vk_post_id){
       this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
       this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
     }
+  }
+
+  ngAfterViewInit(): void {
+    register();
+    this.swiper = this.swiperRef?.nativeElement.swiper
+    setTimeout(() => this.swiper?.autoplay.start(), 1000) // Без этого костыля автоплей работает только в первой карточке
   }
 
   ngOnDestroy(){
