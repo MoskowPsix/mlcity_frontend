@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
+import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap } from 'rxjs';
+import { MessagesErrors } from 'src/app/enums/messages-errors';
+import { EventsService } from 'src/app/services/events.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { MapService } from '../../services/map.service';
 
 interface Placemark {
@@ -15,7 +19,8 @@ interface Placemark {
   
 })
 export class HomeComponent implements OnInit {
-
+  private readonly destroy$ = new Subject<void>()
+  
   map!:YaReadyEvent<ymaps.Map>
   placemarks: ymaps.Placemark[]=[]
   CirclePoint!: ymaps.Circle;
@@ -23,7 +28,7 @@ export class HomeComponent implements OnInit {
 
   myGeo!:ymaps.Placemark;
   // placemark: Placemark[] = [];
-  minZoom = 9
+  minZoom = 1
   clusterer!: ymaps.Clusterer
   currentValue = 1;
   selectedRadius: number | null = null
@@ -32,7 +37,8 @@ export class HomeComponent implements OnInit {
   pixelCenter: any
 
   start: boolean = false
-
+  events: any
+resp:any
   private points = [
     {
       "type": 'Point',
@@ -190,7 +196,7 @@ export class HomeComponent implements OnInit {
     },
   ]
 
-  constructor(private mapService:MapService) {}
+  constructor(private mapService:MapService, private eventsService:EventsService, private toastService: ToastService,) {}
   
   setRadius(radius: number){ 
 
@@ -243,6 +249,11 @@ export class HomeComponent implements OnInit {
 
     target.geoObjects.add(this.myGeo);
 
+    // const subscription_1 = this.eventsService.getPublishByCoords(this.CirclePoint.geometry?.getBounds()![0], this.CirclePoint.geometry?.getBounds()![1]).subscribe((response) => {
+    //   console.log(response)
+    //   this.resp=response
+    // })
+
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin',  (e) => {
 
@@ -286,7 +297,21 @@ export class HomeComponent implements OnInit {
         this.CirclePoint.options.set('fillColor', )
         this.CirclePoint.options.set('fillOpacity', 0.15)
         this.CirclePoint.options.set('strokeWidth', )
+        
+//         this.events = this.eventsService.getPublishByCoords(this.CirclePoint.geometry?.getBounds()![0], this.CirclePoint.geometry?.getBounds()![1])
 
+
+// console.log(this.resp)
+
+        this.getEvents()
+
+        // console.log(this.CirclePoint.geometry?.getCoordinates())
+        console.log(this.CirclePoint.geometry?.getBounds()![0])
+        console.log(this.CirclePoint.geometry?.getBounds()![1])
+
+
+
+        console.log(this.events)
         // this.CirclePointSmall.geometry?.setRadius(this.currentValue*20)
         // this.CirclePointSmall.options.set('fillOpacity', 0.4)
       } else {
@@ -319,6 +344,28 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.presentingElement = document.querySelector('.ion-page');
+
+  }
+
+
+
+  getEvents(){
+    // this.eventsService.getPublishByCoords([this.CirclePoint.geometry?.getBounds()![1].[0].toPrecision(6), this.CirclePoint.geometry?.getBounds()![1].[0].toPrecision(6)], this.CirclePoint.geometry?.getBounds()![0]).pipe(
+    
+    this.eventsService.getPublishByCoords(this.CirclePoint.geometry?.getBounds()![0], this.CirclePoint.geometry?.getBounds()![1]).pipe(
+    //this.eventsService.getPublishByCoords([56.834118, 60.629022], [56.852078, 60.661794]).pipe(
+      delay(200),
+      retry(3),
+      map((respons:any) => {
+        this.events = respons.events.data
+        console.log(respons)
+      }),
+      catchError((err) =>{
+        this.toastService.showToast(MessagesErrors.default, 'danger')
+        return of(EMPTY) 
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe()
   }
 
 }
