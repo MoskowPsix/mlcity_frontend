@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
-import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap } from 'rxjs';
+import { catchError, delay, EMPTY, map, of, retry, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
+import { Statuses } from 'src/app/enums/statuses';
+import { IGetEvents } from 'src/app/models/getEvents';
 import { EventsService } from 'src/app/services/events.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { UserService } from 'src/app/services/user.service';
 import { MapService } from '../../services/map.service';
 
 interface Placemark {
@@ -20,6 +23,7 @@ interface Placemark {
 })
 export class HomeComponent implements OnInit {
   private readonly destroy$ = new Subject<void>()
+  private userId: number = 0
   
   map!:YaReadyEvent<ymaps.Map>
   placemarks: ymaps.Placemark[]=[]
@@ -36,9 +40,11 @@ export class HomeComponent implements OnInit {
   objectsInsideCircle!: any
   pixelCenter: any
 
+  queryParams?: IGetEvents 
+
   start: boolean = false
   events: any
-resp:any
+  resp:any
   private points = [
     {
       "type": 'Point',
@@ -196,7 +202,11 @@ resp:any
     },
   ]
 
-  constructor(private mapService:MapService, private eventsService:EventsService, private toastService: ToastService,) {}
+  constructor(
+    private mapService:MapService, 
+    private eventsService:EventsService, 
+    private toastService: ToastService,
+    private userService: UserService) {}
   
   setRadius(radius: number){ 
 
@@ -303,7 +313,7 @@ resp:any
 
 // console.log(this.resp)
 
-        this.getEvents()
+        this.getUserId() // ПОменял потмоу что сначало надо ид юзера получить, а потом уже ивенты
 
         // console.log(this.CirclePoint.geometry?.getCoordinates())
         console.log(this.CirclePoint.geometry?.getBounds()![0])
@@ -344,15 +354,38 @@ resp:any
 
   ngOnInit(): void {
     this.presentingElement = document.querySelector('.ion-page');
-
   }
 
+  getUserId(){
+    this.userService.getUser().pipe(
+      tap((user) => user && user.id ? this.userId = user.id : this.userId = 0),
+      switchMap(() => {
+         this.getEvents()
+         return of(EMPTY) 
+      }),
+      catchError((err) =>{
+        this.toastService.showToast(MessagesErrors.default, 'danger')
+        return of(EMPTY) 
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe()
+  }
 
 
   getEvents(){
     // this.eventsService.getPublishByCoords([this.CirclePoint.geometry?.getBounds()![1].[0].toPrecision(6), this.CirclePoint.geometry?.getBounds()![1].[0].toPrecision(6)], this.CirclePoint.geometry?.getBounds()![0]).pipe(
-    
-    this.eventsService.getPublishByCoords(this.CirclePoint.geometry?.getBounds()![0], this.CirclePoint.geometry?.getBounds()![1]).pipe(
+    this.queryParams =  {
+      pagination: false,
+      userId: this.userId,
+      favoriteUser: true,
+      likedUser: true,
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      latitude: this.CirclePoint.geometry?.getBounds()![0].join(','),
+      longitude: this.CirclePoint.geometry?.getBounds()![1].join(',')
+    }
+
+    this.eventsService.getEvents(this.queryParams).pipe(
     //this.eventsService.getPublishByCoords([56.834118, 60.629022], [56.852078, 60.661794]).pipe(
       delay(200),
       retry(3),
