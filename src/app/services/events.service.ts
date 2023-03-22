@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core'
-import {HttpClient, HttpErrorResponse} from '@angular/common/http'
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http'
 import {Observable, tap, throwError, delay, retry, catchError} from 'rxjs'
 import {ErrorService} from './error.service'
 import { IEvent } from '../models/events';
@@ -7,58 +7,20 @@ import { environment } from 'src/environments/environment';
 import { Statuses } from '../enums/statuses';
 import { UserService } from './user.service';
 import { IUser } from '../models/user';
+import { IGetEvents } from '../models/getEvents';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventsService {
 
-  //events: IEvents[] = []
-  city: string | null = 'Заречный'
-  private userId: number = 0
-
   constructor(
     private http: HttpClient,
-    private userService: UserService,
     private errorService: ErrorService,
-  ) {
-    this.userService.getUser().pipe(
-      tap((user) => user && user.id ? this.userId = user.id : this.userId = 0)
-    ).subscribe().unsubscribe() 
-  }
+  ) {}
 
-  // getAll(): Observable<IEvents[]> {
-  //   return this.http.get<IEvents[]>('https://fakestoreapi.com/products', {
-  //     params: new HttpParams({
-  //       fromObject: {limit: 15}
-  //     })
-  //   }).pipe(
-  //     delay(200),
-  //     retry(2),
-  //     tap(events => this.events = events),
-  //     catchError(this.errorHandler.bind(this))
-  //   )
-  // }
-
-  getLastPublish(page:number = 1, lat_coords:number[] = [], lon_coords:number[] = []) { //lat_coords и lon_coords массивы вида [56.843600, 95.843600]
-    const params = {
-      city: this.city,
-      page: page,
-      latitude: lat_coords,
-      longitude:lon_coords,
-      user_id: this.userId
-    } 
-    return this.http.post<IEvent[]>(`${environment.BASE_URL}:${environment.PORT}/api/events/publish/last`, params)
-   // return this.http.get<IEvents[]>(`${environment.BASE_URL}:${environment.PORT}/api/events/publish/${this.city}/${page}`)
-  }
-
-  getPublishByCoords(lat_coords:any, lon_coords:any) {
-    const params = {
-      latitude: lat_coords,
-      longitude:lon_coords,
-      user_id: this.userId
-    } 
-    return this.http.post<IEvent[]>(`${environment.BASE_URL}:${environment.PORT}/api/events/publish/coords`, params)
+  getEvents(params: IGetEvents) { //Получаем ивенты по заданным фильтрам (IGetEvents)
+    return this.http.get<IEvent[]>(`${environment.BASE_URL}:${environment.PORT}/api/events`, { params: {...params} } )
   }
 
   toggleFavorite(event_id:number) {
