@@ -103,7 +103,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
         //if (count !== 0){
           this.eventsService.updateEventVkLIkes(this.event.id, count).pipe( // обновляем на беке лайки
             catchError((err) =>{
-              console.log(err)
+              //console.log(err)
               this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
               return of(EMPTY) 
             }),
@@ -117,7 +117,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
           this.startLikesCount = this.event.likes.local_count + count // обновляем лайки в представлении
       }),
       catchError((err) =>{
-        console.log(err)
+        //console.log(err)
         this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
         return of(EMPTY) 
       }),
@@ -135,13 +135,12 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
           if (liked === 1){
             this.eventsService.setEventUserLiked(this.event.id).pipe(
               tap((res) => {
-                console.log(res)
                 if (res.likedUser){
                  this.like = true 
                 }
               }),
               catchError((err) =>{
-                console.log(err)
+                //console.log(err)
                 return of(EMPTY) 
               }),
               takeUntil(this.destroy$)
@@ -150,7 +149,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
           return of(EMPTY) 
         }),
         catchError((err) =>{
-          console.log(err)
+          //console.log(err)
           return of(EMPTY) 
         }),
         takeUntil(this.destroy$)
