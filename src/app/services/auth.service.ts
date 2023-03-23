@@ -51,13 +51,13 @@ export class AuthService {
   }
   
   private getCSRF(): Observable<string> {
-    return this.http.get<string>(`${environment.BASE_URL}:${environment.PORT}/sanctum/csrf-cookie`)
+    return this.http.get<string>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/sanctum/csrf-cookie`)
   }
 
   login(user: IUser): Observable<IUser> {
     return this.getCSRF().pipe(
       mergeMap(res => {
-        return this.http.post<IUser>(`${environment.BASE_URL}:${environment.PORT}/api/login`, user)
+        return this.http.post<IUser>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/login`, user)
       })
     )
   }

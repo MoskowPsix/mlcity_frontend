@@ -10,6 +10,6 @@ export class EventTypeService {
   constructor(private http: HttpClient) { }
 
   getTypes() {
-    return this.http.get<any>(`${environment.BASE_URL}:${environment.PORT}/api/event-types`)
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/event-types`)
   }
 }

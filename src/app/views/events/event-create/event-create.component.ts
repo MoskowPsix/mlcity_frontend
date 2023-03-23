@@ -53,8 +53,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>()
 
-  host: string = environment.BASE_URL
-  port: string = environment.PORT
+  host: string = environment.BACKEND_URL
+  port: string = environment.BACKEND_PORT
   
   user: any
   stepStart: number = 1

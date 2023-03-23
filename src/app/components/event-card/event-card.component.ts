@@ -40,8 +40,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
 
   userAuth: boolean = false
 
-  host: string = environment.BASE_URL
-  port: string = environment.PORT
+  host: string = environment.BACKEND_URL
+  port: string = environment.BACKEND_PORT
 
   favorite: boolean = false
   loadingFavotire: boolean = false

@@ -312,8 +312,8 @@ export class HomeComponent implements OnInit {
 
 
 // console.log(this.resp)
-
-        this.getUserId() // ПОменял потмоу что сначало надо ид юзера получить, а потом уже ивенты
+        this.getEvents()
+        //this.getUserId() // ПОменял потмоу что сначало надо ид юзера получить, а потом уже ивенты
 
         // console.log(this.CirclePoint.geometry?.getCoordinates())
         console.log(this.CirclePoint.geometry?.getBounds()![0])
@@ -375,10 +375,10 @@ export class HomeComponent implements OnInit {
   getEvents(){
     // this.eventsService.getPublishByCoords([this.CirclePoint.geometry?.getBounds()![1].[0].toPrecision(6), this.CirclePoint.geometry?.getBounds()![1].[0].toPrecision(6)], this.CirclePoint.geometry?.getBounds()![0]).pipe(
     this.queryParams =  {
-      pagination: false,
-      userId: this.userId,
-      favoriteUser: true,
-      likedUser: true,
+      //pagination: false,
+      //userId: this.userId,
+      //favoriteUser: true,
+      //likedUser: true,
       statuses: [Statuses.publish].join(','),
       statusLast: true,
       latitude: this.CirclePoint.geometry?.getBounds()![0].join(','),
