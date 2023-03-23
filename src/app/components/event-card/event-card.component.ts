@@ -49,6 +49,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   like: boolean = false
   loadingLike: boolean = false
   startLikesCount: number = 0
+  vkLikesCount: number | null = null
 
 
   toggleFavorite(event_id:number){
@@ -97,20 +98,23 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   getVkEventLikes(vk_group_id:number, vk_post_id:number){
     this.vkService.getPostGroup(vk_group_id, vk_post_id).pipe(
       delay(100),
-      map((res) => res.response[0].likes.count),
+      map((res) => res.response && res.response.length ? res.response[0].likes.count : 0),
       switchMap((count) => {
-        this.eventsService.updateEventVkLIkes(this.event.id, count).pipe( // обновляем на беке лайки
-          catchError((err) =>{
-            console.log(err)
-            this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
-            return of(EMPTY) 
-          }),
-          takeUntil(this.destroy$)
-        ).subscribe() 
+        //if (count !== 0){
+          this.eventsService.updateEventVkLIkes(this.event.id, count).pipe( // обновляем на беке лайки
+            catchError((err) =>{
+              console.log(err)
+              this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
+              return of(EMPTY) 
+            }),
+            takeUntil(this.destroy$)
+          ).subscribe() 
+        //}   
         return of(count) 
       }),
       tap((count) => {    
-        this.startLikesCount = this.event.likes.local_count + count // обновляем лайки в представлении
+        if (this.event.likes !== null) 
+          this.startLikesCount = this.event.likes.local_count + count // обновляем лайки в представлении
       }),
       catchError((err) =>{
         console.log(err)
@@ -156,7 +160,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
 
   ngOnInit() {
     this.userAuth = this.authService.getAuthState()
-    this.startLikesCount = this.event.likes.vk_count + this.event.likes.local_count
+    this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     this.favorite = this.event.favorites_users_exists! 
     this.like = this.event.liked_users_exists!
 
