@@ -8,12 +8,12 @@ export const environment = {
   APP_NAME: 'MyLittleCity',
   BASE_URL: 'http://80.90.190.252',
   PORT: '80',
-  BACKEND_URL: 'http://80.90.190.252',
-  BACKEND_PORT: '3000',
-  // BASE_URL: 'http://localhost',
-  // PORT: '8000',
-  //vkontakteAuthUrl: `http://localhost:8000/api/social-auth/vkontakte`
-  vkontakteAuthUrl: `http://80.90.190.252:3000/api/social-auth/vkontakte`
+  //BACKEND_URL: 'http://80.90.190.252',
+  //BACKEND_PORT: '3000',
+  BACKEND_URL: 'http://localhost',
+  BACKEND_PORT: '8000',
+  vkontakteAuthUrl: `http://localhost:8000/api/social-auth/vkontakte`
+  //vkontakteAuthUrl: `http://80.90.190.252:3000/api/social-auth/vkontakte`
 };
 
 /*
