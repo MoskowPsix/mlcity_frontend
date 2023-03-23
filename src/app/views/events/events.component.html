@@ -36,6 +36,25 @@
         <ng-container *ngIf="!events && loadingEvents">
           <app-no-data/>
         </ng-container>
+        
+        <!-- <div *ngIf="currentPage !== totalPages" class="ion-margin-horizontal"> -->
+        <ng-container *ngIf="!loadingMore">
+          <div *ngIf="currentPage !== totalPages" class="ion-margin-horizontal">
+            <ion-button expand="block" (click)="loadingMoreEvents()" [disabled]="loadingMore">
+              <ion-icon *ngIf="!loadingMore" slot="start" name="reload-outline"></ion-icon>
+              <!-- <ion-spinner *ngIf="loadingMore"></ion-spinner> -->
+              <span>Загрузить еще</span>
+            </ion-button>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="loadingMore">
+          <ion-row class="ion-justify-content-center">
+            <!-- <ion-col size="4" > -->
+              <ion-spinner></ion-spinner>
+            <!-- </ion-col> -->
+          </ion-row>
+        </ng-container>
 
       </ion-col>
     </ion-row>

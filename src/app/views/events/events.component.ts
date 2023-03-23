@@ -20,6 +20,7 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   events: IEvent[] = []
   loadingEvents: boolean = false
+  loadingMore: boolean = false
 
   currentPage: number = 1
   //nextPage: number = 1
@@ -62,16 +63,17 @@ export class EventsComponent implements OnInit, OnDestroy {
       //latitude: [50.84330000000000,70.84330000000000].join(','),
       //longitude:[50.84330000000000,70.84330000000000].join(',')
     }
-    this.loadingEvents = false
+    this.loadingMore ? this.loadingEvents = true : this.loadingEvents = false
     this.eventsService.getEvents(this.queryParams).pipe(
       delay(200),
       retry(3),
       map((respons:any) => {
-        this.events = respons.events.data
+        this.events.push(...respons.events.data)
         this.totalPages = respons.events.last_page
       }),
       tap(() => {
         this.loadingEvents = true  
+        this.loadingMore = false
       }),
       catchError((err) =>{
         this.toastService.showToast(MessagesErrors.default, 'danger')
@@ -79,6 +81,12 @@ export class EventsComponent implements OnInit, OnDestroy {
       }),
       takeUntil(this.destroy$)
     ).subscribe()
+  }
+
+  loadingMoreEvents(){
+    this.loadingMore = true
+    this.currentPage++
+    this.getEvents()
   }
 
   ngOnInit() {
