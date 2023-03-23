@@ -21,7 +21,7 @@ export class UserService {
   }
 
   getUserById(id: number): Observable<IUser> {
-    return this.http.get<IUser>(`${environment.BASE_URL}:${environment.PORT}/api/users/${id}`)
+    return this.http.get<IUser>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${id}`)
   } 
 
   setUser(user: IUser) {

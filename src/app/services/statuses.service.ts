@@ -10,6 +10,6 @@ export class StatusesService {
   constructor(private http: HttpClient) { }
 
   getStatuses() {
-    return this.http.get<any>(`${environment.BASE_URL}:${environment.PORT}/api/statuses`)
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/statuses`)
   }
 }

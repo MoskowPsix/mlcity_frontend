@@ -12,8 +12,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./filters.component.scss'],
 })
 export class FiltersComponent implements OnInit, OnDestroy {
-  host: string = environment.BASE_URL
-  port: string = environment.PORT
+  host: string = environment.BACKEND_URL
+  port: string = environment.BACKEND_PORT
   eventTypes: IEventType[] = []
   sightTypes: ISightType[] = []
   subscriptions: Subscription[] = []

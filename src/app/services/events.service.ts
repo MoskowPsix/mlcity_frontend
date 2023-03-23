@@ -20,21 +20,21 @@ export class EventsService {
   ) {}
 
   getEvents(params: IGetEvents) { //Получаем ивенты по заданным фильтрам (IGetEvents)
-    return this.http.get<IEvent[]>(`${environment.BASE_URL}:${environment.PORT}/api/events`, { params: {...params} } )
+    return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`, { params: {...params} } )
   }
 
   toggleFavorite(event_id:number) {
     const params = {
       event_id:event_id
     } 
-    return this.http.post<any>(`${environment.BASE_URL}:${environment.PORT}/api/users/favorite-event-toggle`, params)
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/favorite-event-toggle`, params)
   }
 
   toggleLike(event_id:number) {
     const params = {
       event_id:event_id
     } 
-    return this.http.post<any>(`${environment.BASE_URL}:${environment.PORT}/api/users/like-event-toggle`, params)
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/like-event-toggle`, params)
   }
 
   updateEventVkLIkes(event_id:number, likes_count:number){
@@ -42,7 +42,7 @@ export class EventsService {
       event_id: event_id,
       likes_count: likes_count
     } 
-    return this.http.post<any>(`${environment.BASE_URL}:${environment.PORT}/api/events/update-vk-likes`, params)
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/update-vk-likes`, params)
   }
 
   //Установить отношение, отмечаем что юзер лайкнул эвент
@@ -51,11 +51,11 @@ export class EventsService {
       event_id: event_id,
       //user_id: this.userId
     } 
-    return this.http.post<any>(`${environment.BASE_URL}:${environment.PORT}/api/events/set-event-user-liked`, params)
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/set-event-user-liked`, params)
   }
 
   create(event: FormData) {
-    return this.http.post<any>(`${environment.BASE_URL}:${environment.PORT}/api/events/create`, event)
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/create`, event)
   }
 
   private errorHandler(error: HttpErrorResponse) {
