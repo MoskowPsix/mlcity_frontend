@@ -101,7 +101,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
       map((res) => res.response && res.response.length ? res.response[0].likes.count : 0),
       switchMap((count) => {
         //if (count !== 0){
-          this.eventsService.updateEventVkLIkes(this.event.id, count).pipe( // обновляем на беке лайки
+          this.eventsService.updateEventVkLIkes(this.event.id, count).pipe( // обновляем на беке  кол-во вк лайков
             catchError((err) =>{
               //console.log(err)
               this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
