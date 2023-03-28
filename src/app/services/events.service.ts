@@ -23,6 +23,10 @@ export class EventsService {
     return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`, { params: {...params} } )
   }
 
+  getEventById(id: number) {
+    return this.http.get<IEvent>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}`)
+  } 
+
   toggleFavorite(event_id:number) {
     const params = {
       event_id:event_id
