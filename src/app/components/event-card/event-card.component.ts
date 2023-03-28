@@ -35,6 +35,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   @ViewChild('swiper')
   swiperRef: ElementRef | undefined;
   swiper?: Swiper;
+  swiperCurrentSlide?: number
+  swiperTotalSlids?: number
 
   swiperModules = [IonicSlides];
 
@@ -50,7 +52,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   loadingLike: boolean = false
   startLikesCount: number = 0
   vkLikesCount: number | null = null
-
 
   toggleFavorite(event_id:number){
     if (!this.userAuth) {
@@ -173,7 +174,16 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   ngAfterViewInit(): void {
     register();
     this.swiper = this.swiperRef?.nativeElement.swiper
-    setTimeout(() => this.swiper?.autoplay.start(), 1000) // Без этого костыля автоплей работает только в первой карточке
+    setTimeout(() => {
+      this.swiperCurrentSlide = this.swiper?.realIndex! + 1
+      this.swiperTotalSlids =  this.swiper?.slides.length 
+      this.swiper?.autoplay.start()
+      ,1000
+    }) // Без этого костыля автоплей работает только в первой карточке
+
+    this.swiper?.on('slideChange', () => {
+      this.swiperCurrentSlide = this.swiper?.realIndex! + 1
+    });
   }
 
   ngOnDestroy(){

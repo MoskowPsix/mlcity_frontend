@@ -15,7 +15,15 @@ ion-card{
             object-fit: cover;
         }
     }
-
+    .slids-pagination{
+        position: absolute;
+        top: 1.9rem;
+        font-size: 1rem;
+        padding: 0.5rem;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.631372549);
+        z-index: 99999;
+    }
     ion-card-title{
         position: absolute;
         display: flex;

@@ -6,8 +6,5 @@ export const environment = {
   PORT: '443',
   BACKEND_URL: 'https://mlcity.ru',
   BACKEND_PORT: '3443',
-  // BASE_URL: 'http://localhost',
-  // PORT: '8000',
-  //vkontakteAuthUrl: `http://localhost:8000/api/social-auth/vkontakte`
   vkontakteAuthUrl: `https://mlcity.ru:3443/api/social-auth/vkontakte`
 };

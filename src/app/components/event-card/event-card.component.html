@@ -1,33 +1,37 @@
 <ion-card>
-  <div class="ion-activatable ripple-parent rectangle">
+  <div class="ion-activatable ripple-parent rectangle" [routerLink]="['/events', event.id]">
     <swiper-container 
       #swiper
       [modules]="swiperModules" 
       autoplay="true"
       autoplay-delay="5000"
       autoplay-disableOnInteraction="false"
-      [pagination]="{type: 'fraction'}"
       [followFinger]="false" 
       [loop]="true" 
       [initialSlide]="0" 
-      class="photo-box"
     > 
 
-    <ng-container *ngIf="event.files && event.files.length; else notFiles">
-      <ng-container *ngFor="let file of event.files">
-        <swiper-slide *ngIf="file.local === 1">
-          <img alt="img" class="photo" src="{{host}}:{{port}}{{ file.link }}" />
-        </swiper-slide>
-        <swiper-slide *ngIf="file.local === 0">
-          <img alt="img" class="photo" src="{{ file.link }}" />
-        </swiper-slide>
+      <ng-container *ngIf="event.files && event.files.length; else notFiles">
+        <ng-container *ngFor="let file of event.files">
+          <swiper-slide *ngIf="file.local === 1">
+            <img alt="img" src="{{host}}:{{port}}{{ file.link }}" />
+          </swiper-slide>
+          <swiper-slide *ngIf="file.local === 0">
+            <img alt="img" src="{{ file.link }}" />
+          </swiper-slide>
+        </ng-container>
       </ng-container>
-    </ng-container>
 
       <ng-template #notFiles>
-        <swiper-slide><img alt="default img" class="photo" src="/assets/icons/favicon.png" /></swiper-slide>
-      </ng-template>  
+        <swiper-slide><img alt="default img" src="/assets/icons/favicon.png" /></swiper-slide>
+      </ng-template>     
     </swiper-container>
+
+    <ng-container *ngIf="swiperTotalSlids !== 0">
+      <div class="slids-pagination">
+        {{ swiperCurrentSlide }} / {{ swiperTotalSlids }}
+      </div>
+    </ng-container>      
 
     <div class="date">
       <span>НАЧАЛО: {{ event.date_start | date:'d MMM в HH:mm' }}</span>
@@ -39,7 +43,7 @@
     </div>
 
     <div *ngIf="event.types && event.types.length" class="type">
-      <img alt="img" class="photo" src="{{host}}:{{port}}{{ event.types[0].ico }}" />
+      <img alt="img" src="{{host}}:{{port}}{{ event.types[0].ico }}" />
     </div>
 
     <ion-card-title>{{ event.name | truncate:[48,'...'] }}</ion-card-title>
