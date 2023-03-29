@@ -13,11 +13,25 @@ import { IGetEvents } from '../models/getEvents';
   providedIn: 'root'
 })
 export class EventsService {
+  // private userId?: Observable<number>
 
   constructor(
     private http: HttpClient,
+    private userService: UserService,
     private errorService: ErrorService,
-  ) {}
+  ) {
+    // this.getAuthUSerID()
+  }
+
+  // getAuthUSerID(){
+  //   this.userService.getUser().pipe(
+  //     //take(1),
+  //     tap((user: any) => {
+  //       if (user)
+  //       this.userId = user.id
+  //     }),
+  //   ).subscribe().unsubscribe();    
+  // }
 
   getEvents(params: IGetEvents) { //Получаем ивенты по заданным фильтрам (IGetEvents)
     return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`, { params: {...params} } )
@@ -34,11 +48,19 @@ export class EventsService {
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/favorite-event-toggle`, params)
   }
 
+  checkFavorite(event_id:number){
+    return this.http.get<boolean>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${event_id}/check-user-favorite`)
+  }
+
   toggleLike(event_id:number) {
     const params = {
       event_id:event_id
     } 
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/like-event-toggle`, params)
+  }
+
+  checkLiked(event_id:number){
+    return this.http.get<boolean>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${event_id}/check-user-liked`)
   }
 
   updateEventVkLIkes(event_id:number, likes_count:number){

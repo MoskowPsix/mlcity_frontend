@@ -2,90 +2,156 @@
 
   <ng-container *ngIf="loadingEvent">
     <ion-row class="ion-justify-content-center">
-      <ion-col size-lg="10" size-md="12" size-xs="12"> 
-        <ion-card>
-          <ion-row class="ion-justify-content-center">
-            <ion-col size-lg="6" size-md="12" size-xs="12"> 
-              <ion-skeleton-text [animated]="true" style="height: 20rem;"></ion-skeleton-text>
-            </ion-col>
-            <ion-col size-lg="6" size-md="12" size-xs="12"> 
-              <ion-skeleton-text [animated]="true" style="height: 20rem;"></ion-skeleton-text>
-            </ion-col>
-          </ion-row>
-          <ion-card-header>
-            <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
-            <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text></ion-card-subtitle>
-          </ion-card-header>
-        
-          <ion-card-content>
-            <ion-skeleton-text *ngFor="let key of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]" [animated]="true"></ion-skeleton-text>
-            <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
-          </ion-card-content>
-        </ion-card>      
+      <ion-col size-lg="8" size-md="12" size-xs="12"> 
+        <ion-row class="ion-justify-content-center">
+          <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
+            <ion-skeleton-text [animated]="true" style="height: 30rem;" />
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center">
+          <ion-col size-md="4" size-xs="12" class="ion-margin">
+              <ion-skeleton-text [animated]="true" />
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center">
+          <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
+            
+            <ion-row class="ion-justify-content-center">
+              <ion-col size-lg="6" size-md="12" size-xs="12">
+                <ion-skeleton-text [animated]="true" style="height: 20rem;" />
+              </ion-col>
+
+              <ion-col size-lg="6" size-md="12" size-xs="12">
+                <ion-skeleton-text  *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]" [animated]="true" />
+                <ion-skeleton-text [animated]="true" style="height: 11rem;" />
+              </ion-col>
+            </ion-row>
+
+          </ion-col>
+        </ion-row>
       </ion-col>
     </ion-row>
   </ng-container>
 
   <ng-container *ngIf="event && !loadingEvent">
     <ion-row class="ion-justify-content-center">
-      <ion-col size-lg="10" size-md="12" size-xs="12">
+      <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
+
+        <swiper-container 
+          #swiper
+          [modules]="swiperModules" 
+          autoplay="true"
+          autoplay-delay="5000"
+          autoplay-disableOnInteraction="false"
+          navigation="false"
+          [pagination]="true"
+          [grabCursor]="true"
+          [zoom]="true"
+          [slidesPerView]="1"
+          [centeredSlides]="true"
+          [followFinger]="false" 
+          [loop]="true" 
+          [initialSlide]="0" 
+        >       
+          <ng-container *ngIf="event.files && event.files.length; else notFiles">
+            <ng-container *ngFor="let file of event.files">
+              <swiper-slide *ngIf="file.local === 1">
+                <img alt="img" src="{{host}}:{{port}}{{ file.link }}" />
+              </swiper-slide>
+              <swiper-slide *ngIf="file.local === 0">
+                <img alt="img" src="{{ file.link }}" />
+              </swiper-slide>
+            </ng-container>
+          </ng-container>
+    
+          <ng-template #notFiles>
+            <swiper-slide><img alt="default img" src="/assets/icons/favicon.png" /></swiper-slide>
+          </ng-template>     
+        </swiper-container>
         <!-- events {{ eventId }} show works!
         {{ event.id }}
         {{ event | json}} -->
-        <ion-card>
-          <div class="ion-activatable ripple-parent rectangle" [routerLink]="['/events', event.id]">
-            <ion-row class="ion-justify-content-center">
-              <ion-col size-lg="7" size-md="12" size-xs="12"> 
-                <ion-skeleton-text [animated]="true" style="height: 20rem;"></ion-skeleton-text>
-              </ion-col>
-              <ion-col size-lg="5" size-md="12" size-xs="12"> 
-                <swiper-container 
-                  #swiper
-                  [modules]="swiperModules" 
-                  autoplay="true"
-                  autoplay-delay="5000"
-                  autoplay-disableOnInteraction="false"
-                  navigation="true"
-                  pagination="true"
-                  centeredSlides="true"
-                  [followFinger]="false" 
-                  [loop]="true" 
-                  [initialSlide]="0" 
-                > 
-          
-                <ng-container *ngIf="event.files && event.files.length; else notFiles">
-                  <ng-container *ngFor="let file of event.files">
-                    <swiper-slide *ngIf="file.local === 1">
-                      <img alt="img" src="{{host}}:{{port}}{{ file.link }}" />
-                    </swiper-slide>
-                    <swiper-slide *ngIf="file.local === 0">
-                      <img alt="img" src="{{ file.link }}" />
-                    </swiper-slide>
-                  </ng-container>
-                </ng-container>
-          
-                <ng-template #notFiles>
-                  <swiper-slide><img alt="default img" src="/assets/icons/favicon.png" /></swiper-slide>
-                </ng-template>     
-              </swiper-container>
-              </ion-col>
-            </ion-row>
-            <ion-card-header>
-              <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
-              <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text></ion-card-subtitle>
-            </ion-card-header>
-          
-            <ion-card-content>
-              <ion-skeleton-text *ngFor="let key of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]" [animated]="true"></ion-skeleton-text>
-              <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
-            </ion-card-content>
-
-            <ion-ripple-effect></ion-ripple-effect>
-          </div>
-
-        </ion-card>      
       </ion-col>
     </ion-row>
+
+    <ion-row class="ion-justify-content-center">
+      <ion-col size-lg="8" size-md="12" size-xs="12">
+        <div class="ion-text-center">
+          <span class="title">{{ event.name }}</span>
+        </div>
+        <div class="social-buttons">
+          <div class="likes">
+            <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''" size="large" class="ico"></ion-icon>
+            <ion-spinner *ngIf="loadingLike"></ion-spinner>
+            <span >{{ startLikesCount }}</span>
+          </div>
+        
+          <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" size="large" class="ico"></ion-icon>
+          <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
+      
+          <ion-icon name="share-social-outline" size="large" class="ico share"></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-justify-content-center">
+      <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
+        <ion-row class="ion-justify-content-center">
+          <ion-col size-lg="6" size-md="12" size-xs="12">
+            <div class="map">
+              <ya-map 
+              (ready)="onMapReady($event)"
+              [zoom]="15"  
+              [center]="[event.latitude, event.longitude]"
+              [state]="{controls: ['zoomControl','fullscreenControl']}"
+              [options]="{
+                yandexMapDisablePoiInteractivity: true,
+                minZoom:1,
+                maxZoom:18,
+                suppressMapOpenBlock: true,
+                suppressObsoleteBrowserNotifier: true
+              }"
+              >
+              </ya-map>
+            </div>        
+          </ion-col>
+
+          <ion-col size-lg="6" size-md="12" size-xs="12" class="left-block">
+            <div>
+              <ion-icon name="person" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Организатор мероприятия: </span><span class="sub-title italic">{{ event.sponsor }}</span>
+            </div>
+            <div>
+              <ion-icon name="map" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Место проведения: </span><span class="sub-title italic">{{ event.address }}</span>
+            </div>
+            <div>
+              <ion-icon name="calendar-number" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Когда: </span><span class="sub-title italic">{{ event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</span>
+            </div>
+            <div>
+              <ion-icon name="location" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Координаты: </span><span class="sub-title italic">({{ event.latitude }}, {{ event.longitude }})</span>
+            </div>
+            <div *ngIf="event.types && event.types.length">
+              <ion-icon name="newspaper" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Тип мероприятия: </span><span class="sub-title italic"><img alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>{{ event.types[0].name }}</span>
+            </div>
+            <div *ngIf="event.price">
+              <ion-icon name="wallet" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Билет: </span><span class="description italic">{{ event.price }} руб.</span>
+            </div>
+            <div>
+              <span class="description italic">{{ event.description }}</span>
+            </div>    
+          </ion-col>
+        </ion-row>
+        
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="event.materials" class="ion-justify-content-center">
+      <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
+        {{ event.materials }}
+      </ion-col>
+    </ion-row>
+
   </ng-container>
 
   <ng-container *ngIf="!event && loadingEvent">

@@ -9,7 +9,8 @@ export interface IEvent {
     sponsor: string
     description: string
     address: string
-    coords: number[]
+    latitude: number
+    longitude: number
     favorites_users_exists?:boolean
     liked_users_exists?:boolean
     type?: number
