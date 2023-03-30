@@ -1,4 +1,4 @@
-import { Component, OnInit,OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit,OnDestroy, AfterViewInit, ViewChild, ElementRef, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, tap, retry, catchError, of, EMPTY} from 'rxjs';
 import { IEvent } from 'src/app/models/events';
@@ -11,7 +11,7 @@ import { MessagesAuth } from 'src/app/enums/messages-auth';
 import { ToastService } from 'src/app/services/toast.service';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { AuthService } from 'src/app/services/auth.service';
-import { Swiper } from 'swiper';
+// import { Swiper } from 'swiper/types';
 
 @Component({
   selector: 'app-event-show',
@@ -21,11 +21,11 @@ import { Swiper } from 'swiper';
 export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>()
 
-  @ViewChild('swiper')
-  swiperRef: ElementRef | undefined;
-  swiper?: Swiper;
-  swiperCurrentSlide?: number
-  swiperTotalSlids?: number
+  // @ViewChildren('swiper') swiperRef: any;
+  
+  // swiper?: Swiper;
+  // swiperCurrentSlide?: number
+  // swiperTotalSlids?: number
 
   swiperModules = [IonicSlides];
 
@@ -153,28 +153,17 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     this.checFavorite()
   }
 
-  ngAfterViewInit(): void {
-    register();
-      
-      this.swiper = this.swiperRef?.nativeElement.swiper
-      this.swiper?.update();
-      console.log(this.swiper)
+  ngAfterViewInit() {
+    register()
     
-    // this.swiper = this.swiperRef?.nativeElement.swiper
-    
-    // setTimeout(() => {
-    //   // this.swiperCurrentSlide = this.swiper?.realIndex! + 1
-    //   // this.swiperTotalSlids =  this.swiper?.slides.length 
-    //   // this.swiper?.autoplay.start()
-    //   // console.log(this.swiper);
-    //   ,1000
-    // }) // Без этого костыля автоплей работает только в первой карточке
-
-    // this.swiper?.on('slideChange', () => {
-    //   this.swiperCurrentSlide = this.swiper?.realIndex! + 1
+    // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
+    //   this.swiper = res.first.nativeElement.swiper
+    //   console.log(res.first.nativeElement.swiper)
     // });
-  }
 
+    // this.swiper?.update()
+    //console.log(this.swiper)
+  }
 
   ngOnDestroy() {
       // отписываемся от всех подписок
