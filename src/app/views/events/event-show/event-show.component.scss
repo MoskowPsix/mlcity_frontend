@@ -4,9 +4,9 @@ swiper-container{
 
 swiper-slide{
     img {
-        border-radius: 1rem;
+        // border-radius: 0.4rem;
         object-fit: cover;
-        width: 90%;
+        width: 100%;
     }
 }
 
@@ -43,24 +43,9 @@ swiper-slide{
     color:#737373;
 }
 
-
 .description{
     line-height: 1.5;
     color:#737373;
-}
-    
-.social-buttons{
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    justify-content: flex-end;
-    margin: 1rem;
-
-    .likes{
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
 }
 
 .ico{
@@ -71,6 +56,28 @@ swiper-slide{
 .ico:hover{
     transform: scale(1.3);
     color:#3880ff99
+}
+
+.social-buttons{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    top: 26.5rem;
+    right: 0.3rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.631372549);
+    color: #fff;
+    font-size: 1.5rem;
+    transition: all 0.2s ease-in-out;
+    z-index: 99999;
+
+    .likes{
+        display: flex;
+        align-items: center;
+        flex-direction: row-reverse;
+        gap: 1rem;
+    }
 }
 
 
@@ -86,6 +93,9 @@ swiper-slide{
     }
     swiper-container{
         height: 15rem;
+    }
+    .social-buttons{
+        top: 0.3rem;
     }
 }
   
