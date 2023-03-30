@@ -72,22 +72,6 @@
             <swiper-slide><img alt="default img" src="/assets/icons/favicon.png" /></swiper-slide>
           </ng-template>     
         </swiper-container>
-
-        <div class="social-buttons">
-          <div class="likes">
-            <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
-            <ion-spinner *ngIf="loadingLike"></ion-spinner>
-            <span >{{ startLikesCount }}</span>
-          </div>
-        
-          <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
-          <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
-      
-          <ion-icon name="share-social-outline" class="ico share"></ion-icon>
-        </div>
-        <!-- events {{ eventId }} show works!
-        {{ event.id }}
-        {{ event | json}} -->
       </ion-col>
     </ion-row>
 
@@ -105,23 +89,35 @@
           <ion-col size-lg="6" size-md="12" size-xs="12">
             <div class="map">
               <ya-map 
-              (ready)="onMapReady($event)"
-              [zoom]="15"  
-              [center]="[event.latitude, event.longitude]"
-              [state]="{controls: ['zoomControl','fullscreenControl']}"
-              [options]="{
-                yandexMapDisablePoiInteractivity: true,
-                minZoom:1,
-                maxZoom:18,
-                suppressMapOpenBlock: true,
-                suppressObsoleteBrowserNotifier: true
-              }"
+                (ready)="onMapReady($event)"
+                [zoom]="15"  
+                [center]="[event.latitude, event.longitude]"
+                [state]="{controls: ['zoomControl','fullscreenControl']}"
+                [options]="{
+                  yandexMapDisablePoiInteractivity: true,
+                  minZoom:1,
+                  maxZoom:18,
+                  suppressMapOpenBlock: true,
+                  suppressObsoleteBrowserNotifier: true
+                }"
               >
               </ya-map>
             </div>        
           </ion-col>
 
           <ion-col size-lg="6" size-md="12" size-xs="12" class="left-block">
+            <div class="social-buttons">
+              <div class="likes">
+                <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
+                <ion-spinner *ngIf="loadingLike"></ion-spinner>
+                <span >{{ startLikesCount }}</span>
+              </div>
+            
+              <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
+              <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
+          
+              <ion-icon name="share-social-outline" class="ico share"></ion-icon>
+            </div>
             <div>
               <ion-icon name="person" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Организатор мероприятия: </span><span class="sub-title italic">{{ event.sponsor }}</span>
             </div>

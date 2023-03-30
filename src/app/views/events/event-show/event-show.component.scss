@@ -59,18 +59,16 @@ swiper-slide{
 }
 
 .social-buttons{
-    position: absolute;
     display: flex;
     align-items: center;
     gap: 1rem;
-    top: 26.5rem;
-    right: 0.3rem;
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.631372549);
-    color: #fff;
-    font-size: 1.5rem;
+    padding: 0.5rem;
+    color: #747474;
+    font-size: 1rem;
     transition: all 0.2s ease-in-out;
     z-index: 99999;
+    justify-content: flex-end;
+    border-bottom: #cfcfcf 1px solid;
 
     .likes{
         display: flex;
@@ -93,9 +91,6 @@ swiper-slide{
     }
     swiper-container{
         height: 15rem;
-    }
-    .social-buttons{
-        top: 0.3rem;
     }
 }
   
