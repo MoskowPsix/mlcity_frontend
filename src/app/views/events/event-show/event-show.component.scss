@@ -1,12 +1,13 @@
-swiper-container{
-    height: 30rem;
-}
+// swiper-container{
+//     height: 30rem;
+// }
 
 swiper-slide{
     img {
         // border-radius: 0.4rem;
-        object-fit: cover;
-        width: 100%;
+        // object-fit: cover;
+        // width: 100%;
+        border-radius: 2%;
     }
 }
 
@@ -86,12 +87,12 @@ swiper-slide{
 }
 
 @media screen and (min-width: 0px) and (max-width: 768px) {
-    .map{
-        height: 15rem;
-    }
-    swiper-container{
-        height: 15rem;
-    }
+    // .map{
+    //     height: 15rem;
+    // }
+    // swiper-container{
+    //     height: 15rem;
+    // }
 }
   
 @media screen and (min-width: 768px)  {
