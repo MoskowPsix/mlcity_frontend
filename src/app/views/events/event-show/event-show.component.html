@@ -1,5 +1,6 @@
 <ion-content>
 
+  <!-- skeleton animation -->
   <ng-container *ngIf="loadingEvent">
     <ion-row class="ion-justify-content-center">
       <ion-col size-lg="8" size-md="12" size-xs="12"> 
@@ -35,6 +36,7 @@
     </ion-row>
   </ng-container>
 
+  <!-- content -->
   <ng-container *ngIf="event && !loadingEvent">
     <ion-row class="ion-justify-content-center">
       <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
@@ -70,6 +72,19 @@
             <swiper-slide><img alt="default img" src="/assets/icons/favicon.png" /></swiper-slide>
           </ng-template>     
         </swiper-container>
+
+        <div class="social-buttons">
+          <div class="likes">
+            <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
+            <ion-spinner *ngIf="loadingLike"></ion-spinner>
+            <span >{{ startLikesCount }}</span>
+          </div>
+        
+          <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
+          <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
+      
+          <ion-icon name="share-social-outline" class="ico share"></ion-icon>
+        </div>
         <!-- events {{ eventId }} show works!
         {{ event.id }}
         {{ event | json}} -->
@@ -77,21 +92,9 @@
     </ion-row>
 
     <ion-row class="ion-justify-content-center">
-      <ion-col size-lg="8" size-md="12" size-xs="12">
+      <ion-col size-lg="8" size-md="12" size-xs="12" class="header">
         <div class="ion-text-center">
           <span class="title">{{ event.name }}</span>
-        </div>
-        <div class="social-buttons">
-          <div class="likes">
-            <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''" size="large" class="ico"></ion-icon>
-            <ion-spinner *ngIf="loadingLike"></ion-spinner>
-            <span >{{ startLikesCount }}</span>
-          </div>
-        
-          <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" size="large" class="ico"></ion-icon>
-          <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
-      
-          <ion-icon name="share-social-outline" size="large" class="ico share"></ion-icon>
         </div>
       </ion-col>
     </ion-row>
@@ -126,10 +129,10 @@
               <ion-icon name="map" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Место проведения: </span><span class="sub-title italic">{{ event.address }}</span>
             </div>
             <div>
-              <ion-icon name="calendar-number" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Когда: </span><span class="sub-title italic">{{ event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</span>
+              <ion-icon name="location" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Координаты: </span><span class="sub-title italic">({{ event.latitude }}, {{ event.longitude }})</span>
             </div>
             <div>
-              <ion-icon name="location" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Координаты: </span><span class="sub-title italic">({{ event.latitude }}, {{ event.longitude }})</span>
+              <ion-icon name="calendar-number" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Когда: </span><span class="sub-title italic">{{ event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</span>
             </div>
             <div *ngIf="event.types && event.types.length">
               <ion-icon name="newspaper" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Тип мероприятия: </span><span class="sub-title italic"><img alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>{{ event.types[0].name }}</span>
@@ -154,7 +157,7 @@
 
   </ng-container>
 
-  <ng-container *ngIf="!event && loadingEvent">
+  <ng-container *ngIf="!event && !loadingEvent">
     <app-no-data/>
   </ng-container>
   
