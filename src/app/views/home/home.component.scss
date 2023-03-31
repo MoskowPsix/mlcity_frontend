@@ -25,3 +25,12 @@
 		--padding-end: 0.4em;
 	}
 }
+
+.icon {
+	position: relative;
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background-image: url('/assets/my_geo.svg');
+	background-repeat: no-repeat;
+}
