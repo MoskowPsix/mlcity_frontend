@@ -11,28 +11,31 @@ import { environment } from 'src/environments/environment';
 })
 export class FooterComponent implements OnInit, OnDestroy {
 
-  constructor(private router: Router, private authService: AuthService,) { }
+  constructor(
+    private router: Router, 
+    //private authService: AuthService,
+  ) { }
 
-  currentYear = new Date().getFullYear();
-  appName = environment.APP_NAME
-  isAuthenticated: boolean = false
-  subscription_1!: Subscription 
+  // currentYear = new Date().getFullYear();
+  // appName = environment.APP_NAME
+  // isAuthenticated: boolean = false
+  // subscription_1!: Subscription 
 
   //Проверяем авторизован ли пользователь
-  checkAuthenticated(){
-    this.subscription_1 = this.authService.authenticationState.subscribe(
-      ((res: boolean) => {
-         this.isAuthenticated = res;
-      })
-    );
-  }
+  // checkAuthenticated(){
+  //   this.subscription_1 = this.authService.authenticationState.subscribe(
+  //     ((res: boolean) => {
+  //        this.isAuthenticated = res;
+  //     })
+  //   );
+  // }
 
   ngOnInit() {
-    this.checkAuthenticated()
+    //this.checkAuthenticated()
   }
 
   ngOnDestroy(){
-    this.subscription_1.unsubscribe()
+    //this.subscription_1.unsubscribe()
   }
 
 }
