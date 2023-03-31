@@ -10,7 +10,11 @@ export const environment = {
   PORT: '8100',
   BACKEND_URL: 'http://localhost',
   BACKEND_PORT: '8000',
-  vkontakteAuthUrl: `http://localhost:8000/api/social-auth/vkontakte`
+  vkontakteAuthUrl: `http://localhost:8000/api/social-auth/vkontakte`,
+  cityName: 'Заречный',
+  cityRegion: 'Свердловская область',
+  cityCoordsLatitude: 56.81497464978607,
+  cityCoordsLongitude: 61.32053375244141
 };
 
 /*

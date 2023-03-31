@@ -1,6 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
-import { catchError, delay, EMPTY, map, of, retry, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import {
+    catchError,
+    delay,
+    EMPTY,
+    map,
+    of,
+    retry,
+    Subject,
+    switchMap,
+    takeUntil,
+    tap,
+    first,
+    interval,
+    timer,
+    exhaustMap,
+    concatMap
+} from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { Statuses } from 'src/app/enums/statuses';
 import { IGetEvents } from 'src/app/models/getEvents';
@@ -8,12 +24,9 @@ import { EventsService } from 'src/app/services/events.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { MapService } from '../../services/map.service';
-
-interface Placemark {
-  geometry: number[];
-  // properties: ymaps.IPlacemarkProperties;
-  // options: ymaps.IPlacemarkOptions;
-}
+import { environment } from '../../../environments/environment';
+import { IEvent } from 'src/app/models/events';
+import { url } from 'inspector';
 
 @Component({
   selector: 'app-home',
@@ -31,8 +44,7 @@ export class HomeComponent implements OnInit {
   // CirclePointSmall!: ymaps.Circle;
 
   myGeo!:ymaps.Placemark;
-  // placemark: Placemark[] = [];
-  minZoom = 1
+  minZoom = 8
   clusterer!: ymaps.Clusterer
   currentValue = 1;
   selectedRadius: number | null = null
@@ -41,166 +53,11 @@ export class HomeComponent implements OnInit {
   pixelCenter: any
 
   queryParams?: IGetEvents 
+  cityCoords!: number[]
 
-  start: boolean = false
-  events: any
-  resp:any
-  private points = [
-    {
-      "type": 'Point',
-      "geometry": [56.80650785742404,61.32236974964705],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [56.80650785742404,61.32236974964705],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [56.80650785742404,61.32236974964705],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [56.80650785742404,61.32236974964705],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [56.80650785742404,61.32236974964705],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [56.87650785742404,61.32236974964705],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [56.82650785742404,61.32236974964705],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [56.80650785742404,61.82236974964705],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-        {
-      "type": 'Point',
-      "geometry": [56.831903, 61.911961],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-        {
-      "type": 'Point',
-      "geometry": [56.831903, 61.411961],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [55.7361312, 37.6777025],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [55.7361312, 37.6777025],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [55.7361312, 37.6777025],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-    {
-      "type": 'Point',
-      "geometry": [55.7361312, 37.6777025],
-      "properties": {
-        "balloonContentBody":"Тестовая запись"
-      },
-      "options":{
-        "preset": "",
-        "iconColor": "",
-      },
-    },
-  ]
+  firstStart: boolean = true
+  
+  // linkPhoto:string=''
 
   constructor(
     private mapService:MapService, 
@@ -213,43 +70,28 @@ export class HomeComponent implements OnInit {
     if (this.currentValue === radius){
       this.currentValue = 1
       this.CirclePoint.geometry?.setRadius(1000)
-      this.objectsInsideCircle.remove(this.placemarks)
-      this.visiblePlacemarks()
       //Zoom по размеру круга
-      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
-      this.selectedRadius = null
     } else {
       this.currentValue = radius;
       this.CirclePoint.geometry?.setRadius(1000*radius)
-      this.objectsInsideCircle.remove(this.placemarks)
-      this.visiblePlacemarks()
       //Zoom по размеру круга
-      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
-      this.selectedRadius = radius
     } 
+    this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
+    this.selectedRadius = radius
     localStorage.setItem('radius', this.currentValue.toString())
   }
 
-  onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
+  async onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): Promise<void> {
     this.map={target, ymaps};
-    // this.map.target.behaviors.disable('scrollZoom')
+
     // Создаем и добавляем круг
     this.CirclePoint=new ymaps.Circle([[11,11],1000*this.currentValue],{},{fillOpacity:0.15, draggable:false})
     target.geoObjects.add(this.CirclePoint)
 
-    // this.CirclePointSmall=new ymaps.Circle([[11,11],15*this.currentValue],{},{strokeWidth: 0, fillColor:'#474A51', fillOpacity:0.4, draggable:false})
-    // target.geoObjects.add(this.CirclePointSmall)
-
     // Определяем местоположение пользователя
-    // this.mapService.geolocationMap(this.map) 
-    this.mapService.geolocationMapNative(this.map, this.CirclePoint) 
+    await this.mapService.geolocationMapNative(this.map, this.CirclePoint) 
 
-    // Заполняем массив меток
-    this.points.forEach(element => {
-      this.placemarks.push(new ymaps.Placemark(element.geometry,element.properties))
-    })
     //Создаем метку в центре круга, для перетаскивания
-    // this.myGeo=new ymaps.Placemark([11,11],{},{preset: 'islands#darkBlueDotIconWithCaption',iconColor: '#0095b6'})
     this.myGeo=new ymaps.Placemark([11,11],{}, {
       iconLayout: 'default#image',
       iconImageHref:'/assets/my_geo.svg',
@@ -258,80 +100,65 @@ export class HomeComponent implements OnInit {
     })
 
     target.geoObjects.add(this.myGeo);
-
-    // const subscription_1 = this.eventsService.getPublishByCoords(this.CirclePoint.geometry?.getBounds()![0], this.CirclePoint.geometry?.getBounds()![1]).subscribe((response) => {
-    //   console.log(response)
-    //   this.resp=response
-    // })
+    
+    console.log(this.firstStart)
+    if (this.firstStart === true) {
+      this.getEvents()
+    }
 
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin',  (e) => {
+      console.log('actionbegin')
 
       if (this.objectsInsideCircle){
+        this.map.target.geoObjects.remove(this.objectsInsideCircle)
+
         this.objectsInsideCircle.remove(this.placemarks)
+      this.placemarks=[]
       }
 
-      if (this.start === true) {
+      if (this.firstStart === false) {
         this.CirclePoint.geometry?.setRadius(this.currentValue*15)
         this.CirclePoint.options.set('fillOpacity', 0.7)
         this.CirclePoint.options.set('fillColor', '#474A51')
         this.CirclePoint.options.set('strokeWidth', 0)
         this.myGeo.options.set('iconImageOffset', [-30, -62])
-
-        // this.CirclePointSmall.options.set('fillOpacity', 0.7)
-        // this.CirclePointSmall.geometry?.setRadius(this.currentValue*10)
-
       }
-      // ymaps.geoQuery(this.placemarks).removeFromMap(this.map.target)
     });
 
     // Вешаем на карту событие по перетаскиванию круга и отображения меток в круге
     this.map.target.events.add('actiontick',  (e) => {
-      // console.log('actiontick')
-      // console.log(e)
+      console.log('actiontick')
+
       const { globalPixelCenter, zoom } = e.get('tick');
       const projection = this.map.target.options.get('projection');
       const coords = projection.fromGlobalPixels(globalPixelCenter, zoom);
 
       this.CirclePoint.geometry?.setCoordinates(coords)
-      // this.CirclePointSmall.geometry?.setCoordinates(coords)
 
       this.myGeo.geometry?.setCoordinates(coords)
+
     });
 
     // Вешаем на карту событие по окончинию перетаскивания
-    this.map.target.events.add('actionend',  (e) => {
-      if (this.start === true) {
+    this.map.target.events.add('actionend',  async (e) => {
+      console.log('actionend')
+
+      if (this.firstStart === false) {
         this.CirclePoint.geometry?.setRadius(this.currentValue*1000)
         this.myGeo.options.set('iconImageOffset', [-30, -55])
         this.CirclePoint.options.set('fillColor', )
         this.CirclePoint.options.set('fillOpacity', 0.15)
         this.CirclePoint.options.set('strokeWidth', )
         
-//         this.events = this.eventsService.getPublishByCoords(this.CirclePoint.geometry?.getBounds()![0], this.CirclePoint.geometry?.getBounds()![1])
-
-
-// console.log(this.resp)
         this.getEvents()
-        //this.getUserId() // ПОменял потмоу что сначало надо ид юзера получить, а потом уже ивенты
-
-        // console.log(this.CirclePoint.geometry?.getCoordinates())
-        console.log(this.CirclePoint.geometry?.getBounds()![0])
-        console.log(this.CirclePoint.geometry?.getBounds()![1])
-
-
-
-        console.log(this.events)
-        // this.CirclePointSmall.geometry?.setRadius(this.currentValue*20)
-        // this.CirclePointSmall.options.set('fillOpacity', 0.4)
-      } else {
-        this.startSearchPoint()
       }
-      this.visiblePlacemarks()
+
     });
   }
 
- async visiblePlacemarks(){
+  visiblePlacemarks(){
+  
     //При изменении радиуса проверяем метки для показа/скрытия
     this.objectsInsideCircle = ymaps.geoQuery(this.placemarks).searchInside(this.CirclePoint).clusterize()//.addToMap(this.map.target)//.clusterize()
     this.map.target.geoObjects.add(this.objectsInsideCircle);
@@ -339,21 +166,11 @@ export class HomeComponent implements OnInit {
     // ymaps.geoQuery(this.placemarks).remove(this.objectsInsideCircle).removeFromMap(this.map.target)
   }
 
-  //При запуске увеличиваем радиус до нахождения первой точки или достижения 50км
-  startSearchPoint() {
-    if (this.start === false) {
-      while (this.points.length === 0 && this.currentValue<50) {
-        this.currentValue=this.currentValue+1
-        this.CirclePoint.geometry?.setRadius( this.currentValue * 1000)
-      }
-      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
-      localStorage.setItem('radius', this.currentValue.toString())
-      this.start=true;
-    }
-  }
-
   ngOnInit(): void {
     this.presentingElement = document.querySelector('.ion-page');
+    // if (localStorage.getItem('radius')) {
+    //   this.currentValue=parseInt(localStorage.getItem('radius')!)
+    // }
   }
 
   getUserId(){
@@ -372,29 +189,85 @@ export class HomeComponent implements OnInit {
   }
 
 
-  getEvents(){
-    // this.eventsService.getPublishByCoords([this.CirclePoint.geometry?.getBounds()![1].[0].toPrecision(6), this.CirclePoint.geometry?.getBounds()![1].[0].toPrecision(6)], this.CirclePoint.geometry?.getBounds()![0]).pipe(
+  getEvents() {
+
     this.queryParams =  {
-      //pagination: false,
-      //userId: this.userId,
-      //favoriteUser: true,
-      //likedUser: true,
       statuses: [Statuses.publish].join(','),
       statusLast: true,
       latitude: this.CirclePoint.geometry?.getBounds()![0].join(','),
       longitude: this.CirclePoint.geometry?.getBounds()![1].join(',')
     }
 
+
     this.eventsService.getEvents(this.queryParams).pipe(
-    //this.eventsService.getPublishByCoords([56.834118, 60.629022], [56.852078, 60.661794]).pipe(
-      delay(200),
-      retry(3),
+      delay(100),
       map((respons:any) => {
-        this.events = respons.events.data
-        console.log(respons)
+
+        if (respons.events)
+        {
+          if (this.objectsInsideCircle){
+            this.map.target.geoObjects.remove(this.objectsInsideCircle)
+    
+            this.objectsInsideCircle.remove(this.placemarks)
+          this.placemarks=[]
+          }
+
+          respons.events.forEach( (point: any) => {
+
+            console.log(point)
+            const filesLink = JSON.parse(JSON.stringify(point.files)).map((file:any) => {
+              return file.link;
+            });
+            
+            let linkPhoto=''
+            filesLink.forEach((file: any) => {
+              if (!file.includes('https://') && !file.includes('https://')) {
+                file=environment.BACKEND_URL + ":" + environment.BACKEND_PORT  + file
+              }
+              linkPhoto+=`<img max-width="200" max-height="200" src="${file}"/>`
+            });
+            // console.log(filesSizes)
+  
+            this.placemarks.push(new ymaps.Placemark([point.latitude, point.longitude],{
+              balloonContentHeader:point.name,
+              balloonContent: linkPhoto + point.description, 
+              balloonLayout: "default#imageWithContent"}, {      
+                  // iconLayout: 'default#image',
+                // iconImageHref: `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/` + point.types[0].ico,
+                // preset: "islands#circleDotIcon",
+                preset: 'islands#redGlyphIcon',            
+                iconGlyph: '/assets/Geo.svg',
+                iconGlyphColor: 'red',
+                contentLayout:'<div class="icon"></div>'
+            
+                // iconImageSize: [60, 60],
+                // iconImageOffset: [-30, -55]
+              }))
+        });
+        }
+
+          if ((!respons.events.length && this.currentValue<50)) {
+
+            this.currentValue=this.currentValue+1
+            this.CirclePoint.geometry?.setRadius( this.currentValue * 1000)
+  
+             this.getEvents()
+             this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
+             
+  
+            console.log(this.currentValue)
+            console.log(respons )
+          } else {
+            this.firstStart=false
+          }
+
+      this.visiblePlacemarks()
+
       }),
+
       catchError((err) =>{
         this.toastService.showToast(MessagesErrors.default, 'danger')
+        this.firstStart=false
         return of(EMPTY) 
       }),
       takeUntil(this.destroy$)

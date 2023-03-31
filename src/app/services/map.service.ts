@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
+import { environment } from '../../environments/environment';
 import { NativeGeocoder, NativeGeocoderOptions,  NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { Capacitor } from '@capacitor/core';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
@@ -20,7 +21,10 @@ export class MapService {
     defaultLocale: 'ru_RU'
   }
   
-  constructor(private nativegeocoder: NativeGeocoder, private locationAccuracy: LocationAccuracy, private yaGeocoderService: YaGeocoderService) { }
+  constructor(
+    private nativegeocoder: NativeGeocoder, 
+    private locationAccuracy: LocationAccuracy, 
+    private yaGeocoderService: YaGeocoderService) { }
 
   //Определение геопозиции с помощью яндекса (платно)
   geolocationMap(event: YaReadyEvent<ymaps.Map>): void{
@@ -37,16 +41,20 @@ export class MapService {
 
    //Определение геопозиции нативными способами платформы
    async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
+
     if (!Capacitor.isPluginAvailable('Geolocation')) {
       console.log('Plugin geolocation not available');
       return;
     }
-    
+
     if (!Capacitor.isNativePlatform())  {
+
       //Запускаем поиск геопозиции в вебе
       console.log('ипользуется веб версия')
-      this.setCenterMap(map, CirclePoint)
+      await this.setCenterMap(map, CirclePoint) 
+
     } else {
+
       //Запускаем поиск геопозиции в мобилах
       console.log('ипользуется мобильная версия')
       const requestPermission= await this.requestLocationPermission()
@@ -56,15 +64,19 @@ export class MapService {
         console.log('canrequest: ', canRequest);
         if(canRequest) {
           //Есть разрешение
-          const stat = await this.enableLocation();
-          console.log("стат " + stat)
-          if(stat) {
-            this.setCenterMap(map, CirclePoint) 
+          const status = await this.enableLocation();
+          console.log("стат " + status)
+          if(status) {
+            await this.setCenterMap(map, CirclePoint) 
           } else {
             //Если человек отказывается активировать GPS "нет,спасибо"
+            let coords= await this.defaultCoords()
+            this.setPlacemark(map, CirclePoint, coords!, false)
           }
         } else {
           //Если запрещен доступ GPS
+          let coords= await this.defaultCoords()
+          this.setPlacemark(map, CirclePoint, coords!, false)
         }
       } catch(e) {
         console.log("Ошибка GPS " + e);
@@ -89,35 +101,44 @@ export class MapService {
 
   //Определяем местоположение и перемещаем карту
   async setCenterMap(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
-    const coordinates = await this.getCurrentLocation();
-    this.placemark= new ymaps.Placemark([coordinates.coords.latitude,coordinates.coords.longitude], {}, {visible: false})
-    // console.log(coordinates.coords.latitude,coordinates.coords.longitude)
+    let coords
+    try {
+       coords = await this.getCurrentLocation();
+       this.setPlacemark(map, CirclePoint, coords!, true)
+
+    } catch (error) {
+       coords= await this.defaultCoords()
+       this.setPlacemark(map, CirclePoint, coords!, false)
+    }
+    return coords
+  }
+
+  setPlacemark(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle, coords?:any, gps?:boolean) {
+    this.placemark= new ymaps.Placemark(coords, {}, {visible: false})
 
     if (CirclePoint) {
-      CirclePoint.geometry?.setCoordinates([coordinates.coords.latitude,coordinates.coords.longitude])
+      CirclePoint.geometry?.setCoordinates(coords)
       map.target.setBounds(CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
 
-      if (!Capacitor.isNativePlatform())  {
-        this.ReserveGeocoder([coordinates.coords.latitude,coordinates.coords.longitude])
-      } else {
-        this.ReserveGeocoderNative([coordinates.coords.latitude,coordinates.coords.longitude])
+      if (gps) {
+        if (!Capacitor.isNativePlatform())  {
+          this.ReserveGeocoder(coords)
+        } else {
+          this.ReserveGeocoderNative(coords)
+        }
       }
-
 
     } else {
       map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
       map.target.setZoom(17)
     }
-
-
-    return this.placemark
   }
 
   //Получаем координаты
   getCurrentLocation() {
     return Geolocation.getCurrentPosition()
     .then(coordinates => {
-      return coordinates;
+      return [coordinates.coords.latitude, coordinates.coords.longitude];
     })
     .catch(e => {
       throw(e);
@@ -170,57 +191,35 @@ export class MapService {
   }
 
   searchCity(city: string) {
+    //!!!!!!!!!!!!!!!Необходимо добавить запись координат и определение города, если город не совпадает, выдавать запрос
+   
+      if (city != localStorage.getItem('cityName')) {
+        console.log("")
+      }
 
-    if (city === "" ) {
-      localStorage.setItem('city', city)
-    } else if (city != localStorage.getItem('city')) {
-      //Выдаем сообщение, что возможно мы находимся в другом городе
+ 
+    ///////////
+  }
+  
+
+  defaultCoords() {
+    let cityCoords
+    if (!localStorage.getItem('cityName'))
+    {
+      localStorage.setItem('cityName',environment.cityName)
+      localStorage.setItem('cityRegion',environment.cityRegion)
+      localStorage.setItem('cityCoordsLatitude',environment.cityCoordsLatitude.toString())
+      localStorage.setItem('cityCoordsLongitude',environment.cityCoordsLongitude.toString())
+
+      // map.target.setCenter([environment.cityCoordsLatitude, environment.cityCoordsLongitude]);
+      cityCoords=[environment.cityCoordsLatitude, environment.cityCoordsLongitude]
+      
+    } else {
+      cityCoords = [parseFloat(localStorage.getItem('cityCoordsLatitude')!), parseFloat(localStorage.getItem('cityCoordsLongitude')!)]
+      // map.target.setCenter([parseFloat(localStorage.getItem('cityCoordsLatitude')!), parseFloat(localStorage.getItem('cityCoordsLongitude')!)])
     }
+    return cityCoords
   }
 
 
-
-  // async NativeGeocoder(coords: number[]) {
-
-  //   this.nativegeocoder.reverseGeocode(coords[0], coords[1], this.options).then((result: NativeGeocoderResult[])=>{
-  //     console.log('result = ', result)
-  //     console.log('result 0 = ', result[0])
-
-  //     this.geoAddress = this.generateAddress(result[0])
-  //     this.address=result[0].administrativeArea + ' ' + result[0].subAdministrativeArea + ' ' + result[0].thoroughfare  + ' ' + result[0].subThoroughfare
-  //     console.log(result[0].administrativeArea)
-
-  //     console.log('geoAdress = ', this.geoAddress)
-
-  //   })
-  // }
-
-  // generateAddress(addressObj: any){
-  //   let obj: any = []
-  //   let uniqueNames: any = []
-  //   let address = ""
-
-  //   for (let key in addressObj) {
-  //     if (key != 'areasOfInterest') {
-  //       obj.push(addressObj[key])
-  //     }
-  //   }
-
-  //   let i = 0
-  //   obj.forEach((value: any) =>{
-  //     if (uniqueNames.indexOf(obj[i]) === -1) {
-  //       uniqueNames.push(obj[i])
-  //     }
-  //     i++;
-  //   })
-
-  //   uniqueNames.reverse()
-  //   for (let val in uniqueNames) {
-  //     if (uniqueNames[val].lenght) {
-  //       address += uniqueNames[val] + ', '
-  //     }
-  //   }
-
-  //   return address.slice(0, -2)
-  // }
 }
