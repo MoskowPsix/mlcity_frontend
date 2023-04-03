@@ -1,14 +1,24 @@
 <ion-content>
-  <ion-row  class="ion-justify-content-center">
-    <ion-col size-lg="4" size-md="8" size-xs="12" class="ion-text-center">
-      <ion-button size="small" [fill]="selectedRadius === 5 ? 'solid' : 'outline'" (click)="setRadius(5)">5 км</ion-button>
-      <ion-button size="small" [fill]="selectedRadius === 10 ? 'solid' : 'outline'" (click)="setRadius(10)">10 км</ion-button>
-      <ion-button size="small" [fill]="selectedRadius === 15 ? 'solid' : 'outline'" (click)="setRadius(15)">15 км</ion-button>
-      <ion-button size="small" [fill]="selectedRadius === 20 ? 'solid' : 'outline'" (click)="setRadius(20)">20 км</ion-button>
-      <ion-button size="small" [fill]="selectedRadius === 25 ? 'solid' : 'outline'" (click)="setRadius(25)">25 км</ion-button>
-      <ion-button size="small" color="light" class="filters"  id="open-filters"><ion-icon name="options"></ion-icon></ion-button>
-    </ion-col>
-  </ion-row>
+  <!-- <ion-row  class="ion-justify-content-center">
+    <ion-col size-lg="4" size-md="8" size-xs="12" class="ion-text-center"> -->
+    <div class="buttons-wrapper">
+      <div class="buttons-radius">
+        <ion-button size="small" [color]="selectedRadius === 5 ? 'secondary' : 'primary'" (click)="setRadius(5)">5 км</ion-button>
+        <ion-button size="small" [color]="selectedRadius === 10 ? 'secondary' : 'primary'" (click)="setRadius(10)">10 км</ion-button>
+        <ion-button size="small" [color]="selectedRadius === 15 ? 'secondary' : 'primary'" (click)="setRadius(15)">15 км</ion-button>
+        <ion-button size="small" [color]="selectedRadius === 20 ? 'secondary' : 'primary'" (click)="setRadius(20)">20 км</ion-button>
+        <ion-button size="small" [color]="selectedRadius === 25 ? 'secondary' : 'primary'" (click)="setRadius(25)">25 км</ion-button>
+      </div>
+      <div  class="filters">
+        <ion-button size="small" color="primary"  id="open-filters">
+          ФИЛЬТРЫ
+          <ion-icon name="options" slot="end"></ion-icon>
+        </ion-button>
+      </div>   
+    </div>
+   
+    <!-- </ion-col>
+  </ion-row> -->
 
   <div class="map">
     <ya-map (ready)="onMapReady($event)"
@@ -30,7 +40,8 @@
     </ya-map>
   </div>
 
-  <ion-modal #modal trigger="open-filters" [presentingElement]="presentingElement">
+  <!-- <ion-modal #modal trigger="open-filters" [presentingElement]="presentingElement"> -->
+  <ion-modal #modal trigger="open-filters">
     <ng-template>
       <ion-header>
         <ion-toolbar>

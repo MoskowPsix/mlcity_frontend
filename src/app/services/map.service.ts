@@ -5,15 +5,29 @@ import { NativeGeocoder, NativeGeocoderOptions,  NativeGeocoderResult } from '@a
 import { Capacitor } from '@capacitor/core';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 import { Geolocation } from '@capacitor/geolocation';
+import { BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
   placemark!: ymaps.Placemark
-  coordinate: any
-  address: any
-  geoAddress: any;
+  //coordinate: any
+  // address: any
+  // geoAddress: any;
+  public city: BehaviorSubject<string> = new BehaviorSubject(this.getCityFromlocalStorage() || 'Заречный')
+  public region: BehaviorSubject<string> = new BehaviorSubject('Свердловская область')
+  public cityLatitude: BehaviorSubject<string> = new BehaviorSubject('56.81497464978607')
+  public cityLongitude: BehaviorSubject<string> = new BehaviorSubject('61.32053375244141')
+  public radius: BehaviorSubject<string> = new BehaviorSubject('1')
+
+  public showChangeCityDialog: BehaviorSubject<boolean> = new BehaviorSubject(false)
+
+  public geolocationCity: BehaviorSubject<string> = new BehaviorSubject('')
+  private geolocationLatitude: number = 0
+  private geolocationLongitude: number = 0
+  private geolocationRegion: string = ''
+
 
   options: NativeGeocoderOptions = {
     useLocale: true,
@@ -39,8 +53,8 @@ export class MapService {
     });
   }
 
-   //Определение геопозиции нативными способами платформы
-   async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
+  //Определение геопозиции нативными способами платформы
+  async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
 
     if (!Capacitor.isPluginAvailable('Geolocation')) {
       console.log('Plugin geolocation not available');
@@ -172,7 +186,8 @@ export class MapService {
 
     let address = result[0].administrativeArea + ', ' + result[0].locality + ', ' + result[0].thoroughfare + ', ' + result[0].subThoroughfare
     console.log('address' + address)
-    this.searchCity(result[0].locality)
+    //this.searchCity(result[0].locality)
+    this.searchCity(result[0].locality, result[0].administrativeArea, coords[0], coords[1])
     return address
   })
   .catch((error: any) => console.log(error));
@@ -186,39 +201,101 @@ export class MapService {
     });
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
-      this.searchCity(firstGeoObject.getLocalities(0)[0])
+      this.searchCity(firstGeoObject.getLocalities(0)[0], firstGeoObject.getAdministrativeAreas(0)[0], coords[0], coords[1])
     })
   }
 
-  searchCity(city: string) {
+  searchCity(city:string, region:string, latitude:number, longitude:number) {
     //!!!!!!!!!!!!!!!Необходимо добавить запись координат и определение города, если город не совпадает, выдавать запрос
-   
-      if (city != localStorage.getItem('cityName')) {
-        console.log("")
-      }
-
- 
+        this.geolocationCity.next(city)
+        this.geolocationRegion = region
+        this.geolocationLatitude = latitude
+        this.geolocationLongitude = longitude
+        
+        //this.setCoordsFromChangeCityDialog()
     ///////////
   }
   
+  //Устанавливаем дефолтные значения после подтверждения диалога на смену города
+  setCoordsFromChangeCityDialog(){
+    this.setCityTolocalStorage(this.geolocationCity.value)
+    this.setRegionTolocalStorage(this.geolocationRegion)
+    this.setCityLatitudeTolocalStorage(this.geolocationLatitude.toString())
+    this.setCityLongitudeTolocalStorage(this.geolocationLongitude.toString())
+  }
+
+  hideChangeCityDialog(){
+    this.showChangeCityDialog.next(false)
+  }
 
   defaultCoords() {
-    let cityCoords
-    if (!localStorage.getItem('cityName'))
-    {
-      localStorage.setItem('cityName',environment.cityName)
-      localStorage.setItem('cityRegion',environment.cityRegion)
-      localStorage.setItem('cityCoordsLatitude',environment.cityCoordsLatitude.toString())
-      localStorage.setItem('cityCoordsLongitude',environment.cityCoordsLongitude.toString())
+    let cityCoords = []
+    console.log('11111111111111111111')
+    if (!this.getCityFromlocalStorage()){
+      this.setCityTolocalStorage()
+      this.setRegionTolocalStorage()
+      this.setCityLatitudeTolocalStorage()
+      this.setCityLongitudeTolocalStorage()
 
-      // map.target.setCenter([environment.cityCoordsLatitude, environment.cityCoordsLongitude]);
-      cityCoords=[environment.cityCoordsLatitude, environment.cityCoordsLongitude]
-      
+      cityCoords.push(parseFloat(this.cityLatitude.value), parseFloat(this.cityLongitude.value))
+      console.log('xxxxxxxxxxxxxxxxxxxx')
     } else {
-      cityCoords = [parseFloat(localStorage.getItem('cityCoordsLatitude')!), parseFloat(localStorage.getItem('cityCoordsLongitude')!)]
+      console.log('wwwwwwwwwwwwwwwwwwwwwwwww')
+      if (this.getCityFromlocalStorage() !== this.geolocationCity.value){
+        this.showChangeCityDialog.next(true)
+      } 
+
+      cityCoords.push(this.geolocationLatitude, this.geolocationLongitude)
+      //cityCoords.push(parseFloat(this.getCityLatitudeFromlocalStorage()), parseFloat(this.getCityLongitudeFromlocalStorage()))
+      //cityCoords = [parseFloat(localStorage.getItem('cityCoordsLatitude')!), parseFloat(localStorage.getItem('cityCoordsLongitude')!)]
       // map.target.setCenter([parseFloat(localStorage.getItem('cityCoordsLatitude')!), parseFloat(localStorage.getItem('cityCoordsLongitude')!)])
     }
     return cityCoords
+  }
+
+  setCityTolocalStorage(city: string = this.city.value){
+    localStorage.setItem('city', city)
+    this.city.next(city)
+  }
+
+  getCityFromlocalStorage(){
+    return localStorage.getItem('city')
+  }
+
+  setRegionTolocalStorage(region:string =  this.region.value){
+    localStorage.setItem('region', region)
+    this.region.next(region)
+  }
+
+  getRegionFromlocalStorage(){
+    return localStorage.getItem('region')
+  }
+
+  setCityLatitudeTolocalStorage(cityLatitude:string = this.cityLatitude.value){
+    localStorage.setItem('cityLatitude', cityLatitude)
+    this.cityLatitude.next(cityLatitude)
+  }
+
+  getCityLatitudeFromlocalStorage(){
+    return localStorage.getItem('cityLatitude')
+  }
+
+  setCityLongitudeTolocalStorage(cityLongitude:string = this.cityLongitude.value){
+    localStorage.setItem('cityLongitude', cityLongitude)
+    this.cityLongitude.next(cityLongitude)
+  }
+
+  getCityLongitudeFromlocalStorage(){
+    return localStorage.getItem('cityLongitude')
+  }
+
+  setRadiusTolocalStorage(radius:string = this.radius.value){
+    localStorage.setItem('radius',radius)
+    this.radius.next(radius)
+  }
+
+  getRadiusFromlocalStorage(){
+    return localStorage.getItem('radius')
   }
 
 

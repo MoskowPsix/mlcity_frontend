@@ -7,8 +7,8 @@ export const environment = {
   BACKEND_URL: 'https://mlcity.ru',
   BACKEND_PORT: '3443',
   vkontakteAuthUrl: `https://mlcity.ru:3443/api/social-auth/vkontakte`,
-  cityName: 'Заречный',
-  cityRegion: 'Свердловская область',
-  cityCoordsLatitude: 56.81497464978607,
-  cityCoordsLongitude: 61.32053375244141
+  // cityName: 'Заречный',
+  // cityRegion: 'Свердловская область',
+  // cityCoordsLatitude: 56.81497464978607,
+  // cityCoordsLongitude: 61.32053375244141
 };

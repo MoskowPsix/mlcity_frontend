@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
   clusterer!: ymaps.Clusterer
   currentValue = 1;
   selectedRadius: number | null = null
-  presentingElement: any = null;
+  //presentingElement: any = null;
   objectsInsideCircle!: any
   pixelCenter: any
 
@@ -167,7 +167,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.presentingElement = document.querySelector('.ion-page');
+    //this.presentingElement = document.querySelector('.ion-page');
     // if (localStorage.getItem('radius')) {
     //   this.currentValue=parseInt(localStorage.getItem('radius')!)
     // }
