@@ -60,6 +60,7 @@ import { SightTypeService } from './services/sight-type.service';
 import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { BackButtonDirective } from './directives/back-button.directive';
 
 
 const mapConfig: YaConfig = {
@@ -98,7 +99,8 @@ registerLocaleData(localeRu, 'ru');
     NoDataComponent,
     EventCardComponent,
     FavoritesComponent,
-    TruncatePipe
+    TruncatePipe,
+    BackButtonDirective
   ],
   imports: [
     BrowserModule, 

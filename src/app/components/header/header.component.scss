@@ -19,37 +19,63 @@ ion-title{
     padding-inline-end: 0;
     text-align: center;
 }
+.flex{
+    display: flex;
+}
+.z-index-9999{
+    z-index: 999999;
+}
 
-// @media(min-width: 768px) {
-@media(min-width: 991px) {
+.city-popover{
+    padding: 0.5rem;
+
+    .title{
+        text-align: center;
+        padding: 0.5rem;
+    }
+
+    .buttons{
+        display: flex;
+        justify-content: space-around;
+    }
+}
+
+ion-popover{
+    --offset-x: 12rem;
+    --offset-y: 3rem;
+}
+
+@media(min-width: 768px) {
+// @media(min-width: 991px) {
     .header-mobile {
       display: none;
     }
   
     .header {
-        display: flex;
-        align-items: center;
-        //   background: #fff;
-        padding: 0 2rem;
 
         .menu{
             display: flex;
-            justify-content: flex-end;
 
             .active{
                 background-color: #f3f4f6;
             }
         }
     }
+    
   }
 
-// @media(max-width: 768px) {
-@media(max-width: 991px) {
+@media(max-width: 768px) {
+// @media(max-width: 991px) {
     .header-mobile {
         display: block;
     }
 
     .header {
         display: none;
+    }
+
+    ion-popover{
+        --offset-x: 1rem;
+        --offset-y: -0.5rem;
     }
 }
