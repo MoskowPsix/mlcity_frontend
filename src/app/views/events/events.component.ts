@@ -6,7 +6,7 @@ import { IEvent } from 'src/app/models/events';
 import { EventsService } from 'src/app/services/events.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
-import { IGetEvents } from '../../models/getEvents';
+import { IGetEventsAndSights } from '../../models/getEventsAndSights';
 
 @Component({
   selector: 'app-events',
@@ -26,7 +26,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   //nextPage: number = 1
   totalPages: number = 1
 
-  queryParams?: IGetEvents 
+  queryParams?: IGetEventsAndSights 
 
   constructor(
     private eventsService: EventsService,
@@ -77,6 +77,7 @@ export class EventsComponent implements OnInit, OnDestroy {
       }),
       catchError((err) =>{
         this.toastService.showToast(MessagesErrors.default, 'danger')
+        this.loadingEvents = false
         return of(EMPTY) 
       }),
       takeUntil(this.destroy$)

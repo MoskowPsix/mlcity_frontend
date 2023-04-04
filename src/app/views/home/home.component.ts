@@ -3,7 +3,7 @@ import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
 import {catchError,delay,EMPTY,map,of,Subject,switchMap,takeUntil,tap} from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { Statuses } from 'src/app/enums/statuses';
-import { IGetEvents } from 'src/app/models/getEvents';
+import { IGetEventsAndSights } from 'src/app/models/getEventsAndSights';
 import { EventsService } from 'src/app/services/events.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
   objectsInsideCircle!: any
   pixelCenter: any
 
-  queryParams?: IGetEvents 
+  queryParams?: IGetEventsAndSights 
   cityCoords!: number[]
 
   firstStart: boolean = true

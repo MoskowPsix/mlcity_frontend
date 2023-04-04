@@ -50,7 +50,8 @@
     </ion-col>
 
     <ion-col class="ion-padding-horizontal">
-        <ion-searchbar placeholder="Поиск" color="light" (click)="isModalSearchEventsOpen(true)"></ion-searchbar>
+        <!-- <ion-searchbar placeholder="Поиск" color="light" (click)="isModalSearchEventsOpen(true)"></ion-searchbar> -->
+        <ion-button fill="outline" expand="block" (click)="isModalSearchEventsOpen(true)"><ion-icon name="search" slot="start"></ion-icon>Поиск</ion-button>
     </ion-col>
 
     <ion-col size="auto" class="menu ion-align-items-center">
@@ -120,7 +121,7 @@
             </ion-toolbar>
         </ion-header>
         <ion-note color="primary" class="ion-padding-horizontal ion-padding-top">Текущий город: {{ city }}, {{ region }}</ion-note>
-        <ion-searchbar animated="true" placeholder="Поиск города" [formControl]="searchCityes" (ionChange)="getCityes($event)" (ionClear)="onClearSearch()" debounce="500"></ion-searchbar>
+        <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchCityes" (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
         <ion-note *ngIf="minLengthCityesListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
         <ion-content>
             <ng-container *ngIf="cityesListLoading">
@@ -149,15 +150,73 @@
     <ng-template>
         <ion-header>
         <ion-toolbar>
-            <ion-title>Поиск событий и мест</ion-title>
+            <ion-title>Поиск мест и событий</ion-title>
             <ion-buttons slot="end">
                 <ion-button (click)="isModalSearchEventsOpen(false)"><ion-icon name="close"></ion-icon></ion-button>
             </ion-buttons>
         </ion-toolbar>
         </ion-header>
-        <ion-searchbar animated="true" placeholder="Поиск событий и мест" [formControl]="searchEvents" (ionChange)="getEvents($event)" (ionClear)="onClearSearch()" debounce="500"></ion-searchbar>
-        <ion-content class="filters-modal">
-            поиск событий и мест
-        </ion-content>
+        <ion-note color="primary" class="ion-padding-horizontal ion-padding-top">Поиск по: {{ city }}, {{ region }}</ion-note>
+        <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchEvents" (ionChange)="getEventsAndSights($event)" (ionClear)="onClearSearch()" debounce="500"></ion-searchbar>
+        <ion-note *ngIf="minLengthEventsListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
+        <ng-container *ngIf="!eventsListLoading && !sightsListLoading && (eventsList.length || sightsList.length)">
+            <div class="ion-margin-horizontal">
+                <ion-segment value="events" color="primary" (ionChange)="onSegmentChanged($event)">
+                    <ion-segment-button value="events">
+                        <ion-label>Мероприятия</ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="sights">
+                        <ion-label>Достопримечательности</ion-label>
+                    </ion-segment-button>
+                </ion-segment>
+            </div>
+        </ng-container>
+        <ion-content class="ion-padding">
+            <ng-container *ngIf="eventsListLoading || sightsListLoading">
+                <ion-list class="ion-padding-end">
+                    <ion-card *ngFor="let key of [1,2,3,4,5]">
+                        <ion-skeleton-text [animated]="true" style="height: 1rem; width: 80%;  margin: 0.5rem;" />
+                        <ion-skeleton-text [animated]="true" style="height: 10em; margin: 0.5rem 0;" />
+                        <ion-skeleton-text [animated]="true" style="height: 1rem; width: 95%; margin: 0.5rem;" />
+                        <ion-skeleton-text [animated]="true" style="height: 1rem; width: 95%; margin: 0.5rem;" />
+                        <ion-skeleton-text [animated]="true" style="height: 1rem; width: 80%; margin: 0.5rem;" />
+                    </ion-card>
+                </ion-list>
+            </ng-container>
+
+            <ng-container *ngIf="!eventsListLoading && !sightsListLoading && !eventsList.length && !sightsList.length">
+                <app-no-data />
+            </ng-container>
+
+            <ng-container *ngIf="!eventsListLoading  && !sightsListLoading && (eventsList.length || sightsList.length)">             
+                <ng-container *ngIf="segment === 'events'">
+                    <ng-container *ngIf="eventsList.length">
+                        <ion-row class="ion-justify-content-start">
+                            <ion-col *ngFor="let event of eventsList; let i = index" size-md="6" size-xs="12">
+                              <app-event-card [event]="event"></app-event-card>
+                            </ion-col>
+                        </ion-row>
+                    </ng-container>
+                    <ng-container *ngIf="!eventsList.length">
+                        <app-no-data />
+                    </ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="segment === 'sights'">
+                    <ng-container *ngIf="sightsList.length">
+                        достопримечательности
+                    </ng-container>
+                    <ng-container *ngIf="!sightsList.length">
+                        <app-no-data />
+                    </ng-container>
+                </ng-container>
+                <!-- <ng-container #noData>
+                    <app-no-data />
+                </ng-container> -->
+            </ng-container>
+
+            
+
+          </ion-content>
     </ng-template>
 </ion-modal>
