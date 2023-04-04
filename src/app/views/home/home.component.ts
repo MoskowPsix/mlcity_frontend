@@ -1,22 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
-import {
-    catchError,
-    delay,
-    EMPTY,
-    map,
-    of,
-    retry,
-    Subject,
-    switchMap,
-    takeUntil,
-    tap,
-    first,
-    interval,
-    timer,
-    exhaustMap,
-    concatMap
-} from 'rxjs';
+import {catchError,delay,EMPTY,map,of,Subject,switchMap,takeUntil,tap} from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { Statuses } from 'src/app/enums/statuses';
 import { IGetEvents } from 'src/app/models/getEvents';
@@ -25,8 +9,6 @@ import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { MapService } from '../../services/map.service';
 import { environment } from '../../../environments/environment';
-import { IEvent } from 'src/app/models/events';
-import { url } from 'inspector';
 
 @Component({
   selector: 'app-home',
@@ -47,7 +29,8 @@ export class HomeComponent implements OnInit {
   minZoom = 8
   clusterer!: ymaps.Clusterer
   currentValue = 1;
-  selectedRadius: number | null = null
+  radius:number = 1
+  //selectedRadius: number | null = null
   //presentingElement: any = null;
   objectsInsideCircle!: any
   pixelCenter: any
@@ -77,8 +60,10 @@ export class HomeComponent implements OnInit {
       //Zoom по размеру круга
     } 
     this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
-    this.selectedRadius = radius
-    localStorage.setItem('radius', this.currentValue.toString())
+    //this.selectedRadius = radius
+    //localStorage.setItem('radius', this.currentValue.toString())
+    this.mapService.setRadiusTolocalStorage(this.currentValue.toString())
+    this.mapService.radius.next(this.currentValue.toString())
   }
 
   async onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): Promise<void> {
@@ -171,6 +156,10 @@ export class HomeComponent implements OnInit {
     // if (localStorage.getItem('radius')) {
     //   this.currentValue=parseInt(localStorage.getItem('radius')!)
     // }
+     //Подписываемся на изменение радиуса
+     this.mapService.radius.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      this.radius = parseInt(value)
+    });
   }
 
   getUserId(){
@@ -232,16 +221,6 @@ export class HomeComponent implements OnInit {
               balloonContentHeader:point.name,
               balloonContent: linkPhoto + point.description, 
               balloonLayout: "default#imageWithContent"}, {      
-                  // iconLayout: 'default#image',
-                // iconImageHref: `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/` + point.types[0].ico,
-                // preset: "islands#circleDotIcon",
-                preset: 'islands#redGlyphIcon',            
-                iconGlyph: '/assets/Geo.svg',
-                iconGlyphColor: 'red',
-                contentLayout:'<div class="icon"></div>'
-            
-                // iconImageSize: [60, 60],
-                // iconImageOffset: [-30, -55]
               }))
         });
         }
@@ -250,7 +229,7 @@ export class HomeComponent implements OnInit {
 
             this.currentValue=this.currentValue+1
             this.CirclePoint.geometry?.setRadius( this.currentValue * 1000)
-  
+            this.mapService.radius.next(this.currentValue.toString())
              this.getEvents()
              this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
              

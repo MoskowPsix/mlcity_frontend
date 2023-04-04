@@ -39,10 +39,24 @@ ion-title{
         justify-content: space-around;
     }
 }
+.search-item{
+    cursor: pointer;
+}
+
+.search-item:hover{
+    --background: #f3f4f6;
+}
 
 ion-popover{
-    --offset-x: 12rem;
-    --offset-y: 3rem;
+    &::part(content){
+        top: 3rem;
+        left: 12rem;
+    }
+}
+
+ion-modal ion-content{
+    --padding-top: 0;
+    --padding-bottom: 0;
 }
 
 @media(min-width: 768px) {
@@ -75,7 +89,9 @@ ion-popover{
     }
 
     ion-popover{
-        --offset-x: 1rem;
-        --offset-y: -0.5rem;
+        &::part(content){
+            left: 1rem;
+        }
     }
+
 }

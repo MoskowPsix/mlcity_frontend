@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take, tap } from 'rxjs';
 import { UserService } from './user.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ import { UserService } from './user.service';
 export class VkService {
   private vk_access_token?: Observable<string>
   private vk_user_id?: Observable<number>
+  private vk_service_key:string = environment.vkontakteServiceKey
 
   constructor(private http: HttpClient, private userService: UserService, ) { 
     this.getAccessToken()
@@ -46,6 +48,10 @@ export class VkService {
 
   isLikedUserVKEvent(group_id: number, post_id:number){
     return this.http.jsonp<any>(`https://api.vk.com/method/likes.isLiked?user_id=${this.vk_user_id}&&owner_id=-${group_id}&&item_id=${post_id}&&type=post&access_token=${this.vk_access_token}&v=5.131`, 'callback')
+  }
+
+  serachCity(query: string, count:number = 100){
+    return this.http.jsonp<any>(`https://api.vk.com/method/database.getCities?access_token=${this.vk_service_key}&country_id=1&q=${query}&need_all=1&count=${count}&v=5.131`, 'callback')
   }
 
 }
