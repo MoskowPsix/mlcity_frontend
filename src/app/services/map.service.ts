@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
-import { environment } from '../../environments/environment';
 import { NativeGeocoder, NativeGeocoderOptions,  NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { Capacitor } from '@capacitor/core';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
@@ -24,9 +23,9 @@ export class MapService {
   public showChangeCityDialog: BehaviorSubject<boolean> = new BehaviorSubject(false)
 
   public geolocationCity: BehaviorSubject<string> = new BehaviorSubject('')
-  private geolocationLatitude: number = 0
-  private geolocationLongitude: number = 0
-  private geolocationRegion: string = ''
+  private geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
+  private geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
+  public geolocationRegion: BehaviorSubject<string> = new BehaviorSubject('')
 
 
   options: NativeGeocoderOptions = {
@@ -170,6 +169,20 @@ export class MapService {
     });
   }
 
+  //поиск координат города или адреса через яндекс
+  ForwardGeocoder(address: string){
+    const geocodeResult = this.yaGeocoderService.geocode(address, {
+      results: 1,
+    });
+    return geocodeResult
+    // return geocodeResult.subscribe((result: any) => {
+    //   return result.geoObjects.get(0)
+    //   // const firstGeoObject = result.geoObjects.get(0)
+    //   // const cityCoords = firstGeoObject.getLocalities(0)[0]
+    // }) 
+  }
+
+  //Нативный поиск координат
   ForwardGeocoderNative(address: string){
     this.nativegeocoder.forwardGeocode(address, this.options)
   .then((result: NativeGeocoderResult[]) => {
@@ -208,9 +221,18 @@ export class MapService {
   searchCity(city:string, region:string, latitude:number, longitude:number) {
     //!!!!!!!!!!!!!!!Необходимо добавить запись координат и определение города, если город не совпадает, выдавать запрос
         this.geolocationCity.next(city)
-        this.geolocationRegion = region
-        this.geolocationLatitude = latitude
-        this.geolocationLongitude = longitude
+        this.geolocationRegion.next(region)
+        this.geolocationLatitude.next(latitude)
+        this.geolocationLongitude.next(longitude)
+
+        if (!this.getCityFromlocalStorage() ){
+          this.setCoordsFromChangeCityDialog()
+          //this.showChangeCityDialog.next(true)
+        } else  if (this.getCityFromlocalStorage() !== this.geolocationCity.value){
+          this.showChangeCityDialog.next(true)
+        } 
+
+  
         
         //this.setCoordsFromChangeCityDialog()
     ///////////
@@ -219,9 +241,9 @@ export class MapService {
   //Устанавливаем дефолтные значения после подтверждения диалога на смену города
   setCoordsFromChangeCityDialog(){
     this.setCityTolocalStorage(this.geolocationCity.value)
-    this.setRegionTolocalStorage(this.geolocationRegion)
-    this.setCityLatitudeTolocalStorage(this.geolocationLatitude.toString())
-    this.setCityLongitudeTolocalStorage(this.geolocationLongitude.toString())
+    this.setRegionTolocalStorage(this.geolocationRegion.value)
+    this.setCityLatitudeTolocalStorage(this.geolocationLatitude.value.toString())
+    this.setCityLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
   }
 
   hideChangeCityDialog(){
@@ -230,7 +252,6 @@ export class MapService {
 
   defaultCoords() {
     let cityCoords = []
-    console.log('11111111111111111111')
     if (!this.getCityFromlocalStorage()){
       this.setCityTolocalStorage()
       this.setRegionTolocalStorage()
@@ -238,12 +259,10 @@ export class MapService {
       this.setCityLongitudeTolocalStorage()
 
       cityCoords.push(parseFloat(this.cityLatitude.value), parseFloat(this.cityLongitude.value))
-      console.log('xxxxxxxxxxxxxxxxxxxx')
     } else {
-      console.log('wwwwwwwwwwwwwwwwwwwwwwwww')
-      if (this.getCityFromlocalStorage() !== this.geolocationCity.value){
-        this.showChangeCityDialog.next(true)
-      } 
+      // if (this.getCityFromlocalStorage() !== this.geolocationCity.value){
+      //   this.showChangeCityDialog.next(true)
+      // } 
 
       cityCoords.push(this.geolocationLatitude, this.geolocationLongitude)
       //cityCoords.push(parseFloat(this.getCityLatitudeFromlocalStorage()), parseFloat(this.getCityLongitudeFromlocalStorage()))
