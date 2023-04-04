@@ -8,8 +8,11 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class NavigationService {
 
-  private history: string[] = [];
-  public showBackButton: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  private history: string[] = []
+  public showBackButton: BehaviorSubject<boolean> = new BehaviorSubject(true)
+
+  public modalSearchCityesOpen: BehaviorSubject<boolean> = new BehaviorSubject(false) //открытие модалки с поиском городов
+  public modalSearchEventsOpen: BehaviorSubject<boolean> = new BehaviorSubject(false) //открытие модалки с поиском событий
  
   constructor(private router: Router, private location: Location) {
     this.router.events.subscribe((event) => {
@@ -27,7 +30,9 @@ export class NavigationService {
       //Добавляем маршрут в историю  
       if (event instanceof NavigationEnd) 
         this.history.push(event.urlAfterRedirects);
-
+      // скпываем модалки при переходе по маршрутам
+      this.modalSearchCityesOpen.next(false) 
+      this.modalSearchEventsOpen.next(false)
     });
   }
  

@@ -1,13 +1,12 @@
-import {Injectable} from '@angular/core'
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http'
-import {Observable, tap, throwError, delay, retry, catchError} from 'rxjs'
-import {ErrorService} from './error.service'
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import { throwError } from 'rxjs'
+import { ErrorService } from './error.service'
 import { IEvent } from '../models/events';
 import { environment } from 'src/environments/environment';
-import { Statuses } from '../enums/statuses';
 import { UserService } from './user.service';
 import { IUser } from '../models/user';
-import { IGetEvents } from '../models/getEvents';
+import { IGetEventsAndSights } from '../models/getEventsAndSights';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +16,8 @@ export class EventsService {
 
   constructor(
     private http: HttpClient,
-    private userService: UserService,
-    private errorService: ErrorService,
+   // private userService: UserService,
+    //private errorService: ErrorService,
   ) {
     // this.getAuthUSerID()
   }
@@ -33,7 +32,7 @@ export class EventsService {
   //   ).subscribe().unsubscribe();    
   // }
 
-  getEvents(params: IGetEvents) { //Получаем ивенты по заданным фильтрам (IGetEvents)
+  getEvents(params: IGetEventsAndSights) { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
     return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`, { params: {...params} } )
   }
 
