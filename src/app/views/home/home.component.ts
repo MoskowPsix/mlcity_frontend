@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
 import {catchError,delay,EMPTY,map,of,Subject,switchMap,takeUntil,tap} from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
@@ -9,6 +9,9 @@ import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { MapService } from '../../services/map.service';
 import { environment } from '../../../environments/environment';
+import { IEvent } from 'src/app/models/events';
+import { DatePipe } from '@angular/common';
+import { TruncatePipe } from 'src/app/pipes/truncate.pipe';
 
 @Component({
   selector: 'app-home',
@@ -16,10 +19,13 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./home.component.scss'],
   
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
   private userId: number = 0
-  
+
+  host: string = environment.BACKEND_URL
+  port: string = environment.BACKEND_PORT
+
   map!:YaReadyEvent<ymaps.Map>
   placemarks: ymaps.Placemark[]=[]
   CirclePoint!: ymaps.Circle;
@@ -40,16 +46,24 @@ export class HomeComponent implements OnInit {
 
   firstStart: boolean = true
   
+  eventsLoading: boolean = false
+
   // linkPhoto:string=''
 
   constructor(
     private mapService:MapService, 
     private eventsService:EventsService, 
     private toastService: ToastService,
-    private userService: UserService) {}
+    private userService: UserService,
+    private cdr: ChangeDetectorRef,
+    private datePipe: DatePipe,
+    private truncatePipe: TruncatePipe
+    ) {}
+
+    test(){}
   
   setRadius(radius: number){ 
-
+    
     if (this.currentValue === radius){
       this.currentValue = 1
       this.CirclePoint.geometry?.setRadius(1000)
@@ -87,14 +101,15 @@ export class HomeComponent implements OnInit {
     target.geoObjects.add(this.myGeo);
     
     console.log(this.firstStart)
-    if (this.firstStart === true) {
+    if (this.firstStart) {
       this.getEvents()
     }
 
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin',  (e) => {
       console.log('actionbegin')
-
+      this.eventsLoading = true
+      this.cdr.detectChanges();
       if (this.objectsInsideCircle){
         this.map.target.geoObjects.remove(this.objectsInsideCircle)
 
@@ -102,7 +117,7 @@ export class HomeComponent implements OnInit {
       this.placemarks=[]
       }
 
-      if (this.firstStart === false) {
+      if (!this.firstStart) {
         this.CirclePoint.geometry?.setRadius(this.currentValue*15)
         this.CirclePoint.options.set('fillOpacity', 0.7)
         this.CirclePoint.options.set('fillColor', '#474A51')
@@ -128,8 +143,8 @@ export class HomeComponent implements OnInit {
     // Вешаем на карту событие по окончинию перетаскивания
     this.map.target.events.add('actionend',  async (e) => {
       console.log('actionend')
-
-      if (this.firstStart === false) {
+      console.log(this.myGeo.geometry?.getCoordinates())
+      if (!this.firstStart) {
         this.CirclePoint.geometry?.setRadius(this.currentValue*1000)
         this.myGeo.options.set('iconImageOffset', [-30, -55])
         this.CirclePoint.options.set('fillColor', )
@@ -152,10 +167,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.presentingElement = document.querySelector('.ion-page');
-    // if (localStorage.getItem('radius')) {
-    //   this.currentValue=parseInt(localStorage.getItem('radius')!)
-    // }
      //Подписываемся на изменение радиуса
      this.mapService.radius.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.radius = parseInt(value)
@@ -183,11 +194,10 @@ export class HomeComponent implements OnInit {
     this.queryParams =  {
       statuses: [Statuses.publish].join(','),
       statusLast: true,
-      latitude: this.CirclePoint.geometry?.getBounds()![0].join(','),
-      longitude: this.CirclePoint.geometry?.getBounds()![1].join(',')
+      latitude: this.CirclePoint.geometry?.getBounds()![0][0] + ',' + this.CirclePoint.geometry?.getBounds()![1][0],
+      longitude: this.CirclePoint.geometry?.getBounds()![0][1] + ',' + this.CirclePoint.geometry?.getBounds()![1][1],
     }
-
-
+    this.eventsLoading = true
     this.eventsService.getEvents(this.queryParams).pipe(
       delay(100),
       map((respons:any) => {
@@ -215,42 +225,126 @@ export class HomeComponent implements OnInit {
               }
               linkPhoto+=`<img max-width="200" max-height="200" src="${file}"/>`
             });
-            // console.log(filesSizes)
-  
+            let price = point.price ? point.price : 'бесплатно'
+            let icoLink = point && point.types && point.types.length ? this.host + ':' + this.port + point.types[0].ico : ''
             this.placemarks.push(new ymaps.Placemark([point.latitude, point.longitude],{
-              balloonContentHeader:point.name,
-              balloonContent: linkPhoto + point.description, 
-              balloonLayout: "default#imageWithContent"}, {      
+              // autoPan:false  ,
+              balloonContentHeader:`<div class="balloon-title">${point.name}</div>`,
+              balloonContentBody: `<div class="balloon-photos">${linkPhoto}</div>
+              <div class="balloon-subtitle"><ion-icon name="person" color="primary" class="ico-small"></ion-icon> Организатор: ${point.sponsor}</div>
+              <div class="balloon-subtitle"><ion-icon name="calendar-number" color="primary" class="ico-small"></ion-icon> Когда: ${this.datePipe.transform(point.date_start, 'd MMM в HH:mm')} - ${this.datePipe.transform(point.date_end, 'd MMM в HH:mm')}</div>
+              <div class="balloon-subtitle"><ion-icon name="newspaper" color="primary" class="ico-small"></ion-icon> Тип мероприятия: ${point.types[0].name}</div>
+              <div *ngIf="point.price" class="balloon-subtitle"><ion-icon name="wallet" color="primary" class="ico-small"></ion-icon> Билет: ${price} руб.</div>
+              <div class="balloon-description">${this.truncatePipe.transform(point.description, [250,'...']) }</div>`, 
+              balloonLayout: "default#imageWithContent"}, {   
+                //balloonAutoPan:false   
+                //panelMaxMapArea:Infinity
+                //iconLayout: 'default#imageWithContent',
+                iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${icoLink}"/></div>`)
               }))
         });
         }
 
-          if ((!respons.events.length && this.currentValue<50)) {
+        if ((!respons.events.length && this.currentValue<50 && this.firstStart)) {
 
-            this.currentValue=this.currentValue+1
-            this.CirclePoint.geometry?.setRadius( this.currentValue * 1000)
-            this.mapService.radius.next(this.currentValue.toString())
-             this.getEvents()
-             this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
-             
-  
-            console.log(this.currentValue)
-            console.log(respons )
-          } else {
-            this.firstStart=false
-          }
+          this.currentValue=this.currentValue+1
+          this.CirclePoint.geometry?.setRadius( this.currentValue * 1000)
+          this.mapService.radius.next(this.currentValue.toString())
+            this.getEvents()
+            this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
+            
 
-      this.visiblePlacemarks()
+          console.log(this.currentValue)
+          console.log(respons )
+        } else {
+          this.firstStart = false
+          console.log('this.firstStart 1233132 ' + this.firstStart)
+        }
 
+        this.visiblePlacemarks()
+        this.mapService.radiusBoundsLats.next(this.CirclePoint.geometry?.getBounds()![0][0] + ',' + this.CirclePoint.geometry?.getBounds()![1][0])
+        this.mapService.radiusBoundsLongs.next(this.CirclePoint.geometry?.getBounds()![0][1] + ',' + this.CirclePoint.geometry?.getBounds()![1][1])
+        this.eventsLoading = false
+        this.cdr.detectChanges();
       }),
-
       catchError((err) =>{
         this.toastService.showToast(MessagesErrors.default, 'danger')
-        this.firstStart=false
+        this.firstStart = false
         return of(EMPTY) 
       }),
       takeUntil(this.destroy$)
     ).subscribe()
   }
 
+
+
+  // getEventsNew() {
+  //   this.queryParams =  {
+  //     statuses: [Statuses.publish].join(','),
+  //     statusLast: true,
+  //     latitude: this.CirclePoint.geometry?.getBounds()![0].join(','),
+  //     longitude: this.CirclePoint.geometry?.getBounds()![1].join(',')
+  //   }
+
+  //   this.eventsService.getEvents(this.queryParams).pipe(
+  //     delay(100),
+  //     map((response:any) => response.events),
+  //     tap(() => {
+  //       if (this.objectsInsideCircle){
+  //         this.map.target.geoObjects.remove(this.objectsInsideCircle)
+  //         this.objectsInsideCircle.remove(this.placemarks)
+  //         this.placemarks=[]
+  //       }
+  //     }),
+  //     tap((events: IEvent[]) => {
+        
+  //       if ((!events.length && this.currentValue < 50)) {
+
+  //         this.currentValue = this.currentValue + 1
+  //         this.CirclePoint.geometry?.setRadius(this.currentValue * 1000)
+  //         this.mapService.radius.next(this.currentValue.toString())
+  //         this.getEventsNew()
+  //         this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true})
+  //         console.log(this.currentValue)
+  //         console.log(events)
+  //       } else {
+  //         this.firstStart = false
+  //       }
+  //     }),
+  //     map((events: IEvent[]) => { 
+  //       events.map(event => {
+        
+  //       let template = ''
+  //       event.files!.map((file: any) => {
+  //         if (file.local === '1') {
+  //           template+= `<img max-width="200" max-height="200" src="${environment.BACKEND_URL + ":" + environment.BACKEND_PORT  + file.link}"/>`
+  //         } else {
+  //           template+= `<img max-width="200" max-height="200" src="${file.link}"/>`
+  //         }
+          
+  //       });
+
+  //       this.placemarks.push(new ymaps.Placemark([event.latitude, event.longitude],{
+  //         balloonContentHeader:event.name,
+  //         balloonContent: template + event.description, 
+  //         balloonLayout: "default#imageWithContent"}, {      
+  //         }))
+  //       })
+  //     }),
+  //     tap(() => this.visiblePlacemarks()),
+  //     catchError((err) =>{
+  //       this.toastService.showToast(MessagesErrors.default, 'danger')
+  //       this.firstStart = false
+  //       return of(EMPTY) 
+  //     }),
+  //     takeUntil(this.destroy$)
+  //   ).subscribe()
+  // }
+
+  ngOnDestroy(){
+    // отписываемся от всех подписок
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
+  
 }

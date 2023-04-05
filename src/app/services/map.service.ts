@@ -19,6 +19,8 @@ export class MapService {
   public cityLatitude: BehaviorSubject<string> = new BehaviorSubject('56.81497464978607')
   public cityLongitude: BehaviorSubject<string> = new BehaviorSubject('61.32053375244141')
   public radius: BehaviorSubject<string> = new BehaviorSubject('1')
+  public radiusBoundsLats: BehaviorSubject<string> = new BehaviorSubject('0,0')
+  public radiusBoundsLongs: BehaviorSubject<string> = new BehaviorSubject('0,0')
 
   public showChangeCityDialog: BehaviorSubject<boolean> = new BehaviorSubject(false)
 
@@ -316,6 +318,5 @@ export class MapService {
   getRadiusFromlocalStorage(){
     return localStorage.getItem('radius')
   }
-
 
 }

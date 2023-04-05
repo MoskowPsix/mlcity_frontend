@@ -16,6 +16,16 @@
         </ion-button>
       </div>   
     </div>
+
+    <div class="events-counter" #eventCounter >
+      Найдено мест / событый:
+      <span *ngIf="!eventsLoading">
+        {{ placemarks.length }}
+      </span>
+      <span *ngIf="eventsLoading">
+          <ion-spinner color="light"></ion-spinner>
+      </span>
+    </div>
    
     <!-- </ion-col>
   </ion-row> -->
