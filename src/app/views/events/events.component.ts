@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { catchError, delay, EMPTY, map, Observable, of, retry, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { catchError, delay, EMPTY, map, of, retry, Subject, switchMap, takeUntil, tap, take, skip, share, concatMap } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { Statuses } from 'src/app/enums/statuses';
 import { IEvent } from 'src/app/models/events';
 import { EventsService } from 'src/app/services/events.service';
+import { MapService } from 'src/app/services/map.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { IGetEventsAndSights } from '../../models/getEventsAndSights';
@@ -18,6 +19,9 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   private userId: number = 0
 
+  city: string = ''
+  region: string = ''
+
   events: IEvent[] = []
   loadingEvents: boolean = false
   loadingMore: boolean = false
@@ -31,16 +35,13 @@ export class EventsComponent implements OnInit, OnDestroy {
   constructor(
     private eventsService: EventsService,
     private toastService: ToastService,
-    private userService: UserService
+    private userService: UserService,
+    private mapService: MapService
   ) { }
   
   getUserId(){
     this.userService.getUser().pipe(
       tap((user) => user && user.id ? this.userId = user.id : this.userId = 0),
-      switchMap(() => {
-         this.getEvents()
-         return of(EMPTY) 
-      }),
       catchError((err) =>{
         this.toastService.showToast(MessagesErrors.default, 'danger')
         return of(EMPTY) 
@@ -59,7 +60,8 @@ export class EventsComponent implements OnInit, OnDestroy {
       likedUser: true,
       statuses: [Statuses.publish].join(','),
       statusLast: true,
-      city: 'Заречный',
+      city: this.city,
+      region: this.region,
       //latitude: [50.84330000000000,70.84330000000000].join(','),
       //longitude:[50.84330000000000,70.84330000000000].join(',')
     }
@@ -91,7 +93,22 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getUserId()
+    //Получаем ид юзера и ивенты
+    this.getUserId() 
+    
+    //Подписываемся на город и регион и вызываем ивенты
+    this.mapService.city.pipe(
+      tap((city) => this.city = city),
+      concatMap(() => this.mapService.region),
+      tap((region) => this.region = region),
+      tap(() => this.events = []),
+      switchMap(() => {
+        //Подписываемся на регион 
+         this.getEvents()
+         return of(EMPTY)
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe()   
   }
 
   ngOnDestroy(){

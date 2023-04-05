@@ -8,6 +8,7 @@ export interface IGetEventsAndSights {
     statuses?: string  // какой статус(ы) выводить (смотри enums - statuses.ts)
     statusLast?: boolean // Выведет только последний статус определнного типа
     city?: string
+    region?: string // ОБласть - нужно передавать чтобы узнать точный город (Заречный есть и в пензе и в екб)
     latitude?: string // широта массив типа [50.84330000000000,70.84330000000000]
     longitude?: string // долгота массив типа [50.84330000000000,70.84330000000000]
     searchText?: string

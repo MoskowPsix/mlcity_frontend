@@ -33,7 +33,7 @@
           </ion-row>
         </ng-container>
 
-        <ng-container *ngIf="!events && loadingEvents">
+        <ng-container *ngIf="!events.length && loadingEvents">
           <app-no-data/>
         </ng-container>
         
