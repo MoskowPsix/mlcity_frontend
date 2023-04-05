@@ -111,7 +111,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   //Устанавливаем город, регион и координаты в локал сторадж и всервис
   onSelectedCity(item:any){  
     this.mapService.setCityTolocalStorage(item.title)
-    this.mapService.setRegionTolocalStorage(item.region)
+    item.region ? this.mapService.setRegionTolocalStorage(item.region) : this.mapService.setRegionTolocalStorage(item.title)
     //Получаем координаты по городу и записываем их
     this.mapService.ForwardGeocoder(item.title + '' + item.region).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.mapService.setCityLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())

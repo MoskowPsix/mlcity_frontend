@@ -21,6 +21,8 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   city: string = ''
   region: string = ''
+  lattitue: string = ''
+  longtitude: string = ''
 
   events: IEvent[] = []
   loadingEvents: boolean = false
@@ -62,8 +64,9 @@ export class EventsComponent implements OnInit, OnDestroy {
       statusLast: true,
       city: this.city,
       region: this.region,
-      //latitude: [50.84330000000000,70.84330000000000].join(','),
-      //longitude:[50.84330000000000,70.84330000000000].join(',')
+      latitude: this.lattitue,
+      longitude: this.longtitude,
+      forEventPage: true
     }
     this.loadingMore ? this.loadingEvents = true : this.loadingEvents = false
     this.eventsService.getEvents(this.queryParams).pipe(
@@ -95,12 +98,16 @@ export class EventsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     //Получаем ид юзера и ивенты
     this.getUserId() 
-    
+
     //Подписываемся на город и регион и вызываем ивенты
     this.mapService.city.pipe(
       tap((city) => this.city = city),
       concatMap(() => this.mapService.region),
       tap((region) => this.region = region),
+      concatMap(() => this.mapService.radiusBoundsLats),
+      tap((latitude) => this.lattitue = latitude),
+      concatMap(() => this.mapService.radiusBoundsLongs),
+      tap((longtitude) => this.longtitude = longtitude),
       tap(() => this.events = []),
       switchMap(() => {
         //Подписываемся на регион 
@@ -108,7 +115,10 @@ export class EventsComponent implements OnInit, OnDestroy {
          return of(EMPTY)
       }),
       takeUntil(this.destroy$)
-    ).subscribe()   
+    ).subscribe(() => {
+      console.log(this.lattitue)
+      console.log(this.longtitude)
+    })   
   }
 
   ngOnDestroy(){

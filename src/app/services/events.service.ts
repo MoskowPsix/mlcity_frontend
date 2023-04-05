@@ -4,8 +4,6 @@ import { throwError } from 'rxjs'
 import { ErrorService } from './error.service'
 import { IEvent } from '../models/events';
 import { environment } from 'src/environments/environment';
-import { UserService } from './user.service';
-import { IUser } from '../models/user';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
 
 @Injectable({

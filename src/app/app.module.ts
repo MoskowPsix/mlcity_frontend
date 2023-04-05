@@ -1,5 +1,5 @@
 import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData, DatePipe  } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -129,7 +129,9 @@ registerLocaleData(localeRu, 'ru');
     LoggedInAuthGuard,
     CheckAuthCanActiveGuard,
     NativeGeocoder,
-    LocationAccuracy
+    LocationAccuracy,
+    DatePipe,
+    TruncatePipe 
   ],
   bootstrap: [AppComponent],
 })

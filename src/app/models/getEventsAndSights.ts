@@ -12,6 +12,7 @@ export interface IGetEventsAndSights {
     latitude?: string // широта массив типа [50.84330000000000,70.84330000000000]
     longitude?: string // долгота массив типа [50.84330000000000,70.84330000000000]
     searchText?: string
+    forEventPage?: boolean // для отправки координат для страницы мероприятия
 }
 
 //Пример
