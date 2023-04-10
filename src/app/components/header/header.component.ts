@@ -217,6 +217,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
     //Подписываемся на город из Геолокации
     this.mapService.geolocationCity.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      //console.log('this.mapService.geolocationCity ',value)
       this.geolocationCity = value
     })
 

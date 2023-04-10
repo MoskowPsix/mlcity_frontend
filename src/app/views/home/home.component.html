@@ -63,7 +63,11 @@
     <ng-template>
       <ion-content>
         <ng-container *ngIf="event">
-          <app-event-card [event]="event"></app-event-card>
+          <ion-row class="ion-justify-content-start">
+            <ion-col size="12">
+              <app-event-card [event]="event"></app-event-card>
+            </ion-col>
+          </ion-row>
         </ng-container>
 
         <ng-container *ngIf="!event">

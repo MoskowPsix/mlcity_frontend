@@ -11,9 +11,7 @@ import { BehaviorSubject} from 'rxjs';
 })
 export class MapService {
   placemark!: ymaps.Placemark
-  //coordinate: any
-  // address: any
-  // geoAddress: any;
+
   public city: BehaviorSubject<string> = new BehaviorSubject(this.getCityFromlocalStorage() || 'Заречный')
   public region: BehaviorSubject<string> = new BehaviorSubject('Свердловская область')
   public cityLatitude: BehaviorSubject<string> = new BehaviorSubject('56.81497464978607')
@@ -177,11 +175,6 @@ export class MapService {
       results: 1,
     });
     return geocodeResult
-    // return geocodeResult.subscribe((result: any) => {
-    //   return result.geoObjects.get(0)
-    //   // const firstGeoObject = result.geoObjects.get(0)
-    //   // const cityCoords = firstGeoObject.getLocalities(0)[0]
-    // }) 
   }
 
   //Нативный поиск координат
@@ -262,14 +255,7 @@ export class MapService {
 
       cityCoords.push(parseFloat(this.cityLatitude.value), parseFloat(this.cityLongitude.value))
     } else {
-      // if (this.getCityFromlocalStorage() !== this.geolocationCity.value){
-      //   this.showChangeCityDialog.next(true)
-      // } 
-
       cityCoords.push(this.geolocationLatitude, this.geolocationLongitude)
-      //cityCoords.push(parseFloat(this.getCityLatitudeFromlocalStorage()), parseFloat(this.getCityLongitudeFromlocalStorage()))
-      //cityCoords = [parseFloat(localStorage.getItem('cityCoordsLatitude')!), parseFloat(localStorage.getItem('cityCoordsLongitude')!)]
-      // map.target.setCenter([parseFloat(localStorage.getItem('cityCoordsLatitude')!), parseFloat(localStorage.getItem('cityCoordsLongitude')!)])
     }
     return cityCoords
   }

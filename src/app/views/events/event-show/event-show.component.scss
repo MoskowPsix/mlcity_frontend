@@ -66,39 +66,6 @@
     }
 }
 
-::ng-deep .marker {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border: 4px solid #008aed;
-    box-shadow: -2px 2px 2px #aaaaaa;
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    background: #fff;
-    margin:-20px 0px 0px 0px;
-}
-
-::ng-deep .marker:after{
-    content: "";
-    border-radius: 50%;
-    height: 40px;
-    width: 40px;
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    animation: pulsate 1s ease-out;
-    animation-iteration-count: infinite;
-    opacity: 0.0;
-    rotate: 90deg;
-    box-shadow: 1px 1px 1px 1px #89849b;
-    animation-delay: 1.1s;
-}
-
-::ng-deep .marker > img {
-    transform: rotate(45deg);
-    padding: 5px 0 0 5px;
-}
-
 @media screen and (min-width: 0px) and (max-width: 991px) {
     .map{
         height: 15rem;
