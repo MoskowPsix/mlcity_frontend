@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
-import {catchError,delay,EMPTY,map,of,Subject,switchMap,takeUntil,tap} from 'rxjs';
+import {catchError, delay, EMPTY, map, of, Subject, switchMap, takeUntil, tap, retry} from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { Statuses } from 'src/app/enums/statuses';
 import { IGetEventsAndSights } from 'src/app/models/getEventsAndSights';
@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
 import { IEvent } from 'src/app/models/events';
 import { DatePipe } from '@angular/common';
 import { TruncatePipe } from 'src/app/pipes/truncate.pipe';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-home',
@@ -48,6 +49,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   
   eventsLoading: boolean = false
 
+  modalEventShowOpen: boolean = false
+  event!: IEvent
+
+
   // linkPhoto:string=''
 
   constructor(
@@ -57,7 +62,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private cdr: ChangeDetectorRef,
     private datePipe: DatePipe,
-    private truncatePipe: TruncatePipe
+    private truncatePipe: TruncatePipe,
+    private navigationServise: NavigationService
     ) {}
 
     test(){}
@@ -102,13 +108,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     
     console.log(this.firstStart)
     if (this.firstStart) {
+      this.eventsLoading = true
+      this.cdr.detectChanges();
       this.getEvents()
     }
 
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin',  (e) => {
       console.log('actionbegin')
-      this.eventsLoading = true
+      // this.eventsLoading = true
       this.cdr.detectChanges();
       if (this.objectsInsideCircle){
         this.map.target.geoObjects.remove(this.objectsInsideCircle)
@@ -118,6 +126,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
 
       if (!this.firstStart) {
+        this.eventsLoading = true
+        this.cdr.detectChanges();
+
+
         this.CirclePoint.geometry?.setRadius(this.currentValue*15)
         this.CirclePoint.options.set('fillOpacity', 0.7)
         this.CirclePoint.options.set('fillColor', '#474A51')
@@ -171,6 +183,12 @@ export class HomeComponent implements OnInit, OnDestroy {
      this.mapService.radius.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.radius = parseInt(value)
     });
+
+     //Подписываемся на состояние модалки показа ивентов и мест
+     this.navigationServise.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      this.modalEventShowOpen = value
+      console.log('this.modalEventShowOpen = ' + this.modalEventShowOpen)
+    })
   }
 
   getUserId(){
@@ -197,13 +215,16 @@ export class HomeComponent implements OnInit, OnDestroy {
       latitude: this.CirclePoint.geometry?.getBounds()![0][0] + ',' + this.CirclePoint.geometry?.getBounds()![1][0],
       longitude: this.CirclePoint.geometry?.getBounds()![0][1] + ',' + this.CirclePoint.geometry?.getBounds()![1][1],
     }
-    this.eventsLoading = true
+    // this.eventsLoading = true
     this.eventsService.getEvents(this.queryParams).pipe(
       delay(100),
       map((respons:any) => {
 
-        if (respons.events)
+        if (respons.events.length > 0)
         {
+          this.eventsLoading = false
+          this.cdr.detectChanges();
+
           if (this.objectsInsideCircle){
             this.map.target.geoObjects.remove(this.objectsInsideCircle)
     
@@ -227,21 +248,32 @@ export class HomeComponent implements OnInit, OnDestroy {
             });
             let price = point.price ? point.price : 'бесплатно'
             let icoLink = point && point.types && point.types.length ? this.host + ':' + this.port + point.types[0].ico : ''
-            this.placemarks.push(new ymaps.Placemark([point.latitude, point.longitude],{
+            let placemark=new ymaps.Placemark([point.latitude, point.longitude],{
               // autoPan:false  ,
-              balloonContentHeader:`<div class="balloon-title">${point.name}</div>`,
-              balloonContentBody: `<div class="balloon-photos">${linkPhoto}</div>
-              <div class="balloon-subtitle"><ion-icon name="person" color="primary" class="ico-small"></ion-icon> Организатор: ${point.sponsor}</div>
-              <div class="balloon-subtitle"><ion-icon name="calendar-number" color="primary" class="ico-small"></ion-icon> Когда: ${this.datePipe.transform(point.date_start, 'd MMM в HH:mm')} - ${this.datePipe.transform(point.date_end, 'd MMM в HH:mm')}</div>
-              <div class="balloon-subtitle"><ion-icon name="newspaper" color="primary" class="ico-small"></ion-icon> Тип мероприятия: ${point.types[0].name}</div>
-              <div *ngIf="point.price" class="balloon-subtitle"><ion-icon name="wallet" color="primary" class="ico-small"></ion-icon> Билет: ${price} руб.</div>
-              <div class="balloon-description">${this.truncatePipe.transform(point.description, [250,'...']) }</div>`, 
-              balloonLayout: "default#imageWithContent"}, {   
-                //balloonAutoPan:false   
+              // balloonContentHeader:`<div class="balloon-title">${point.name}</div>`,
+              // balloonContentBody: `<div class="balloon-photos">${linkPhoto}</div>
+              // <div class="balloon-subtitle"><ion-icon name="person" color="primary" class="ico-small"></ion-icon> Организатор: ${point.sponsor}</div>
+              // <div class="balloon-subtitle"><ion-icon name="calendar-number" color="primary" class="ico-small"></ion-icon> Когда: ${this.datePipe.transform(point.date_start, 'd MMM в HH:mm')} - ${this.datePipe.transform(point.date_end, 'd MMM в HH:mm')}</div>
+              // <div class="balloon-subtitle"><ion-icon name="newspaper" color="primary" class="ico-small"></ion-icon> Тип мероприятия: ${point.types[0].name}</div>
+              // <div *ngIf="point.price" class="balloon-subtitle"><ion-icon name="wallet" color="primary" class="ico-small"></ion-icon> Билет: ${price} руб.</div>
+              // <div class="balloon-description">${this.truncatePipe.transform(point.description, [250,'...']) }</div>`, 
+              // balloonLayout: "default#imageWithContent"
+            }, {   
+                balloonAutoPan:false, 
                 //panelMaxMapArea:Infinity
                 //iconLayout: 'default#imageWithContent',
                 iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${icoLink}"/></div>`)
-              }))
+              })
+
+              //Клик по метке и загрузка ивента в модалку
+              placemark.events.add('click', () => { 
+                this.event = point
+                this.navigationServise.modalEventShowOpen.next(true)
+                this.cdr.detectChanges();
+              })
+
+            this.placemarks.push(placemark)
+
         });
         }
 
@@ -258,26 +290,31 @@ export class HomeComponent implements OnInit, OnDestroy {
           console.log(respons )
         } else {
           this.firstStart = false
-          console.log('this.firstStart 1233132 ' + this.firstStart)
+          this.eventsLoading = false
+          this.cdr.detectChanges();
         }
 
         this.visiblePlacemarks()
         this.mapService.radiusBoundsLats.next(this.CirclePoint.geometry?.getBounds()![0][0] + ',' + this.CirclePoint.geometry?.getBounds()![1][0])
         this.mapService.radiusBoundsLongs.next(this.CirclePoint.geometry?.getBounds()![0][1] + ',' + this.CirclePoint.geometry?.getBounds()![1][1])
-        this.eventsLoading = false
-        this.cdr.detectChanges();
+        // this.eventsLoading = false
+        // this.cdr.detectChanges();
       }),
       catchError((err) =>{
         this.toastService.showToast(MessagesErrors.default, 'danger')
         this.firstStart = false
+        this.eventsLoading = false
+        this.cdr.detectChanges();
         return of(EMPTY) 
       }),
       takeUntil(this.destroy$)
     ).subscribe()
   }
 
-
-
+  modalClose(){
+    this.navigationServise.modalEventShowOpen.next(false)
+  }
+ 
   // getEventsNew() {
   //   this.queryParams =  {
   //     statuses: [Statuses.publish].join(','),

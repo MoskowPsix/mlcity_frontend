@@ -1,6 +1,4 @@
 <ion-content>
-  <!-- <ion-row  class="ion-justify-content-center">
-    <ion-col size-lg="4" size-md="8" size-xs="12" class="ion-text-center"> -->
     <div class="buttons-wrapper">
       <div class="buttons-radius">
         <ion-button size="small" [color]="radius === 5 ? 'secondary' : 'primary'" (click)="setRadius(5)">5 км</ion-button>
@@ -26,19 +24,12 @@
           <ion-spinner color="light"></ion-spinner>
       </span>
     </div>
-   
-    <!-- </ion-col>
-  </ion-row> -->
 
   <div class="map">
     <ya-map (ready)="onMapReady($event)"
       [zoom]="15"  
       [center]="[0,0]"
-      [state]="{
-        controls: [
-          'zoomControl',
-          'fullscreenControl',]
-        }"
+      [state]="{controls: ['zoomControl']}"
       [options]="{
         yandexMapDisablePoiInteractivity: true,
         minZoom:minZoom,
@@ -50,7 +41,7 @@
     </ya-map>
   </div>
 
-  <!-- <ion-modal #modal trigger="open-filters" [presentingElement]="presentingElement"> -->
+  <!-- Модальное окно с фильтрами -->
   <ion-modal #modal trigger="open-filters">
     <ng-template>
       <ion-header>
@@ -63,6 +54,22 @@
       </ion-header>
       <ion-content class="filters-modal">
         <app-filters></app-filters>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Модальное окно просмотр ивента / места при клике метки на карте -->
+  <ion-modal id="modalEventShow" [isOpen]="modalEventShowOpen" (ionModalDidDismiss)="modalClose()" (ionBreakpointDidChange)="modalClose()" [initialBreakpoint]="0.7" [breakpoints]="[0, 0.7]">
+    <ng-template>
+      <ion-content>
+        <ng-container *ngIf="event">
+          <app-event-card [event]="event"></app-event-card>
+        </ng-container>
+
+        <ng-container *ngIf="!event">
+          <app-no-data/>
+        </ng-container>
+        
       </ion-content>
     </ng-template>
   </ion-modal>

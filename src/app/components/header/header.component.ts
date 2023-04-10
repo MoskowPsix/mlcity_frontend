@@ -188,6 +188,11 @@ export class HeaderComponent implements OnInit,OnDestroy {
     this.sightsList = []
   }
 
+  modalClose(){
+    this.navigationServise.modalSearchCityesOpen.next(false)
+    this.navigationServise.modalSearchEventsOpen.next(false)
+  }
+
   ngOnInit() {
 
     //Смотрим состояние кнопки назад
