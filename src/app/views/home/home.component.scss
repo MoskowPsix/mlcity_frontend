@@ -40,33 +40,6 @@ ion-spinner{
 	height: 13px;
 }
 
-@media screen and (min-width: 0px) and (max-width: 768px) {
-	.buttons-wrapper{
-		top: 2.8rem;
-	}
-
-	.filters{
-		position: fixed;
-		bottom: 5rem;
-		right: 1.5rem;
-		z-index: 9999;
-	}
-
-	ion-modal {
-		--border-radius: 8px!important;
-	}
-
-	ion-button.md.button-small{
-		--padding-start: 0.6em;
-		--padding-end: 0.6em;
-	}
-
-	.events-counter{
-		left: 15%;
-    	top: 7rem;
-	}
-}
-
 .icon {
 	position: relative;
 	display: inline-block;
@@ -82,7 +55,7 @@ ion-spinner{
 }
 
 ::ng-deep .balloon-photos{
-	padding: 1rem;
+	padding: 0 1rem 1rem;
 	display: flex;
     position: relative;
     justify-items: stretch;
@@ -139,6 +112,43 @@ ion-spinner{
 ::ng-deep .marker > img {
     transform: rotate(45deg);
     padding: 7px 0 0 7px;
+}
+
+@media screen and (min-width: 0px) and (max-width: 768px) {
+	.buttons-wrapper{
+		top: 2.8rem;
+	}
+
+	.filters{
+		position: fixed;
+		bottom: 5rem;
+		right: 1.5rem;
+		z-index: 9999;
+	}
+
+	ion-modal {
+		--border-radius: 8px!important;
+	}
+
+	ion-button.md.button-small{
+		--padding-start: 0.6em;
+		--padding-end: 0.6em;
+	}
+
+	.events-counter{
+		left: 15%;
+    	top: 7rem;
+	}
+}
+
+@media(min-width: 768px) {
+	ion-modal{
+		&::part(content){
+            position: absolute;
+			bottom: 30%;
+			height: 32rem;
+        }
+	}
 }
 
 @media screen and (min-width: 769px) and (max-width: 1313px) {

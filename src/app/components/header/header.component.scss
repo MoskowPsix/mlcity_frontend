@@ -48,10 +48,13 @@ ion-title{
 }
 
 ion-popover{
+    bottom: 75%;
+    right: 75%;
+
     &::part(content){
         top: 3rem;
         left: 12rem;
-    }
+    } 
 }
 
 ion-modal ion-content{
@@ -89,6 +92,9 @@ ion-modal ion-content{
     }
 
     ion-popover{
+        bottom: 75%;
+        right: 40%;
+
         &::part(content){
             left: 1rem;
         }

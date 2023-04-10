@@ -13,6 +13,7 @@ export class NavigationService {
 
   public modalSearchCityesOpen: BehaviorSubject<boolean> = new BehaviorSubject(false) //открытие модалки с поиском городов
   public modalSearchEventsOpen: BehaviorSubject<boolean> = new BehaviorSubject(false) //открытие модалки с поиском событий
+  public modalEventShowOpen: BehaviorSubject<boolean> = new BehaviorSubject(false) //открытие модалки с ивентов или местом - клик по метке на карте
  
   constructor(private router: Router, private location: Location) {
     this.router.events.subscribe((event) => {
@@ -33,6 +34,7 @@ export class NavigationService {
       // скпываем модалки при переходе по маршрутам
       this.modalSearchCityesOpen.next(false) 
       this.modalSearchEventsOpen.next(false)
+      this.modalEventShowOpen.next(false)
     });
   }
  

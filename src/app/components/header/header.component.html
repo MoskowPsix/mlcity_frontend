@@ -114,7 +114,7 @@
 
 
   <!-- Модальное окно для выбора города -->
-<ion-modal [isOpen]="modalSearchCityesOpen">
+<ion-modal [isOpen]="modalSearchCityesOpen" (ionModalDidDismiss)="modalClose()">
     <ng-template>
         <ion-header>
             <ion-toolbar>
@@ -150,7 +150,7 @@
 </ion-modal>
 
   <!-- Модальное окно для поиска ивентов -->
-  <ion-modal [isOpen]="modalSearchEventsOpen">
+  <ion-modal [isOpen]="modalSearchEventsOpen" (ionModalDidDismiss)="modalClose()">
     <ng-template>
         <ion-header>
         <ion-toolbar>
