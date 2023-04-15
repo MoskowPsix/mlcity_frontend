@@ -15,6 +15,7 @@ import { IGetEventsAndSights } from 'src/app/models/getEventsAndSights';
 import { Statuses } from 'src/app/enums/statuses';
 import { SightsService } from 'src/app/services/sights.service';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
+import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-header',
@@ -63,7 +64,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
     private vkService: VkService,
     private toastService: ToastService,
     private eventsService: EventsService,
-    private sightsService: SightsService
+    private sightsService: SightsService,
+    private filterService: FilterService
     ) { }
 
   //Установить город из диалога, из геопозиции
@@ -110,12 +112,12 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
   //Устанавливаем город, регион и координаты в локал сторадж и всервис
   onSelectedCity(item:any){  
-    this.mapService.setCityTolocalStorage(item.title)
-    item.region ? this.mapService.setRegionTolocalStorage(item.region) : this.mapService.setRegionTolocalStorage(item.title)
+    this.filterService.setCityTolocalStorage(item.title)
+    item.region ? this.filterService.setRegionTolocalStorage(item.region) : this.filterService.setRegionTolocalStorage(item.title)
     //Получаем координаты по городу и записываем их
     this.mapService.ForwardGeocoder(item.title + '' + item.region).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
-      this.mapService.setCityLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
-      this.mapService.setCityLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
+      this.filterService.setCityLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
+      this.filterService.setCityLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
     this.toastService.showToast(MessagesCityes.setCitySuccess, 'success')
   }
@@ -211,7 +213,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     })
 
     //Подписываемся на город
-    this.mapService.city.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    this.filterService.city.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.city = value
     })
 
@@ -222,7 +224,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     })
 
      //Подписываемся на регион 
-     this.mapService.region.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    this.filterService.region.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.region = value
     })
 
@@ -232,7 +234,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     })
 
      //Подписываемся на изменение радиуса
-    this.mapService.radius.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.radius = parseInt(value)
     })
 

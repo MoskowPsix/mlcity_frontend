@@ -1,0 +1,23 @@
+.filters{
+    position: fixed;
+    bottom: 5rem;
+    right: 1.5rem;
+    z-index: 999999;
+}
+@media screen and (min-width: 0px) and (max-width: 768px) {
+	.filters{
+		position: fixed;
+		bottom: 5rem;
+		right: 1.5rem;
+		z-index: 999999;
+	}
+}
+
+@media (min-width: 768px) {
+	.filters{
+		// position: fixed;
+		// bottom: 5rem;
+		// right: 1.5rem;
+		// z-index: 9999;
+	}
+}

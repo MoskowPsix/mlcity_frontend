@@ -131,7 +131,7 @@ registerLocaleData(localeRu, 'ru');
     NativeGeocoder,
     LocationAccuracy,
     DatePipe,
-    TruncatePipe 
+    TruncatePipe,
   ],
   bootstrap: [AppComponent],
 })

@@ -8,6 +8,7 @@ import { MapService } from 'src/app/services/map.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { IGetEventsAndSights } from '../../models/getEventsAndSights';
+import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-events',
@@ -38,7 +39,8 @@ export class EventsComponent implements OnInit, OnDestroy {
     private eventsService: EventsService,
     private toastService: ToastService,
     private userService: UserService,
-    private mapService: MapService
+    private mapService: MapService,
+    private filterService: FilterService
   ) { }
   
   getUserId(){
@@ -100,9 +102,9 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.getUserId() 
 
     //Подписываемся на город и регион и вызываем ивенты
-    this.mapService.city.pipe(
+    this.filterService.city.pipe(
       tap((city) => this.city = city),
-      concatMap(() => this.mapService.region),
+      concatMap(() => this.filterService.region),
       tap((region) => this.region = region),
       concatMap(() => this.mapService.radiusBoundsLats),
       tap((latitude) => this.lattitue = latitude),
@@ -115,10 +117,7 @@ export class EventsComponent implements OnInit, OnDestroy {
          return of(EMPTY)
       }),
       takeUntil(this.destroy$)
-    ).subscribe(() => {
-      console.log(this.lattitue)
-      console.log(this.longtitude)
-    })   
+    ).subscribe()   
   }
 
   ngOnDestroy(){

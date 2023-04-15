@@ -5,6 +5,7 @@ import { Capacitor } from '@capacitor/core';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 import { Geolocation } from '@capacitor/geolocation';
 import { BehaviorSubject} from 'rxjs';
+import { FilterService } from './filter.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,6 @@ import { BehaviorSubject} from 'rxjs';
 export class MapService {
   placemark!: ymaps.Placemark
 
-  public city: BehaviorSubject<string> = new BehaviorSubject(this.getCityFromlocalStorage() || 'Заречный')
-  public region: BehaviorSubject<string> = new BehaviorSubject('Свердловская область')
-  public cityLatitude: BehaviorSubject<string> = new BehaviorSubject('56.81497464978607')
-  public cityLongitude: BehaviorSubject<string> = new BehaviorSubject('61.32053375244141')
-  public radius: BehaviorSubject<string> = new BehaviorSubject('1')
   public radiusBoundsLats: BehaviorSubject<string> = new BehaviorSubject('0,0')
   public radiusBoundsLongs: BehaviorSubject<string> = new BehaviorSubject('0,0')
 
@@ -37,7 +33,9 @@ export class MapService {
   constructor(
     private nativegeocoder: NativeGeocoder, 
     private locationAccuracy: LocationAccuracy, 
-    private yaGeocoderService: YaGeocoderService) { }
+    private yaGeocoderService: YaGeocoderService,
+    private filterService: FilterService
+  ) { }
 
   //Определение геопозиции с помощью яндекса (платно)
   geolocationMap(event: YaReadyEvent<ymaps.Map>): void{
@@ -83,12 +81,12 @@ export class MapService {
             await this.setCenterMap(map, CirclePoint) 
           } else {
             //Если человек отказывается активировать GPS "нет,спасибо"
-            let coords= await this.defaultCoords()
+            let coords = await this.defaultCoords()
             this.setPlacemark(map, CirclePoint, coords!, false)
           }
         } else {
           //Если запрещен доступ GPS
-          let coords= await this.defaultCoords()
+          let coords = await this.defaultCoords()
           this.setPlacemark(map, CirclePoint, coords!, false)
         }
       } catch(e) {
@@ -120,7 +118,7 @@ export class MapService {
        this.setPlacemark(map, CirclePoint, coords!, true)
 
     } catch (error) {
-       coords= await this.defaultCoords()
+       coords = await this.defaultCoords()
        this.setPlacemark(map, CirclePoint, coords!, false)
     }
     return coords
@@ -220,14 +218,12 @@ export class MapService {
         this.geolocationLatitude.next(latitude)
         this.geolocationLongitude.next(longitude)
 
-        if (!this.getCityFromlocalStorage() ){
+        if (!this.filterService.getCityFromlocalStorage() ){
           this.setCoordsFromChangeCityDialog()
           //this.showChangeCityDialog.next(true)
-        } else  if (this.getCityFromlocalStorage() !== this.geolocationCity.value){
+        } else  if (this.filterService.getCityFromlocalStorage() !== this.geolocationCity.value){
           this.showChangeCityDialog.next(true)
         } 
-
-  
         
         //this.setCoordsFromChangeCityDialog()
     ///////////
@@ -235,10 +231,10 @@ export class MapService {
   
   //Устанавливаем дефолтные значения после подтверждения диалога на смену города
   setCoordsFromChangeCityDialog(){
-    this.setCityTolocalStorage(this.geolocationCity.value)
-    this.setRegionTolocalStorage(this.geolocationRegion.value)
-    this.setCityLatitudeTolocalStorage(this.geolocationLatitude.value.toString())
-    this.setCityLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
+    this.filterService.setCityTolocalStorage(this.geolocationCity.value)
+    this.filterService.setRegionTolocalStorage(this.geolocationRegion.value)
+    this.filterService.setCityLatitudeTolocalStorage(this.geolocationLatitude.value.toString())
+    this.filterService.setCityLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
   }
 
   hideChangeCityDialog(){
@@ -247,62 +243,17 @@ export class MapService {
 
   defaultCoords() {
     let cityCoords = []
-    if (!this.getCityFromlocalStorage()){
-      this.setCityTolocalStorage()
-      this.setRegionTolocalStorage()
-      this.setCityLatitudeTolocalStorage()
-      this.setCityLongitudeTolocalStorage()
+    if (!this.filterService.getCityFromlocalStorage()){
+      this.filterService.setCityTolocalStorage()
+      this.filterService.setRegionTolocalStorage()
+      this.filterService.setCityLatitudeTolocalStorage()
+      this.filterService.setCityLongitudeTolocalStorage()
 
-      cityCoords.push(parseFloat(this.cityLatitude.value), parseFloat(this.cityLongitude.value))
+      cityCoords.push(parseFloat(this.filterService.cityLatitude.value), parseFloat(this.filterService.cityLongitude.value))
     } else {
       cityCoords.push(this.geolocationLatitude, this.geolocationLongitude)
     }
     return cityCoords
-  }
-
-  setCityTolocalStorage(city: string = this.city.value){
-    localStorage.setItem('city', city)
-    this.city.next(city)
-  }
-
-  getCityFromlocalStorage(){
-    return localStorage.getItem('city')
-  }
-
-  setRegionTolocalStorage(region:string =  this.region.value){
-    localStorage.setItem('region', region)
-    this.region.next(region)
-  }
-
-  getRegionFromlocalStorage(){
-    return localStorage.getItem('region')
-  }
-
-  setCityLatitudeTolocalStorage(cityLatitude:string = this.cityLatitude.value){
-    localStorage.setItem('cityLatitude', cityLatitude)
-    this.cityLatitude.next(cityLatitude)
-  }
-
-  getCityLatitudeFromlocalStorage(){
-    return localStorage.getItem('cityLatitude')
-  }
-
-  setCityLongitudeTolocalStorage(cityLongitude:string = this.cityLongitude.value){
-    localStorage.setItem('cityLongitude', cityLongitude)
-    this.cityLongitude.next(cityLongitude)
-  }
-
-  getCityLongitudeFromlocalStorage(){
-    return localStorage.getItem('cityLongitude')
-  }
-
-  setRadiusTolocalStorage(radius:string = this.radius.value){
-    localStorage.setItem('radius',radius)
-    this.radius.next(radius)
-  }
-
-  getRadiusFromlocalStorage(){
-    return localStorage.getItem('radius')
   }
 
 }
