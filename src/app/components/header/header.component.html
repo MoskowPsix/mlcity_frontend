@@ -153,12 +153,12 @@
   <ion-modal [isOpen]="modalSearchEventsOpen" (ionModalDidDismiss)="modalClose()">
     <ng-template>
         <ion-header>
-        <ion-toolbar>
-            <ion-title>Поиск мест и событий</ion-title>
-            <ion-buttons slot="end">
-                <ion-button (click)="isModalSearchEventsOpen(false)"><ion-icon name="close"></ion-icon></ion-button>
-            </ion-buttons>
-        </ion-toolbar>
+            <ion-toolbar>
+                <ion-title>Поиск мест и событий</ion-title>
+                <ion-buttons slot="end">
+                    <ion-button (click)="isModalSearchEventsOpen(false)"><ion-icon name="close"></ion-icon></ion-button>
+                </ion-buttons>
+            </ion-toolbar>
         </ion-header>
         <ion-note color="primary" class="ion-padding-horizontal ion-padding-top">Поиск по: {{ city }}, {{ region }}</ion-note>
         <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchEvents" (ionChange)="getEventsAndSights($event)" (ionClear)="onClearSearch()" debounce="500"></ion-searchbar>

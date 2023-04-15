@@ -19,9 +19,11 @@ ion-title{
     padding-inline-end: 0;
     text-align: center;
 }
+
 .flex{
     display: flex;
 }
+
 .z-index-9999{
     z-index: 999999;
 }
@@ -48,7 +50,7 @@ ion-title{
 }
 
 ion-popover{
-    bottom: 75%;
+    bottom: 70%;
     right: 75%;
 
     &::part(content){
