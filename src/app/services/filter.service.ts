@@ -13,6 +13,7 @@ export class FilterService {
   public radius: BehaviorSubject<string> = new BehaviorSubject(this.getRadiusFromlocalStorage() || '1')
   public startDate: BehaviorSubject<string> = new BehaviorSubject(this.getStartDateFromlocalStorage() || '')
   public endDate: BehaviorSubject<string> = new BehaviorSubject(this.getEndDateFromlocalStorage() || '') // Ставим + неделю
+  
   public eventTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>(this.getEventTypesFromlocalStorage()?.split(',').map(Number).filter(Boolean) || []) 
   public sightTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>(this.getSightTypesFromlocalStorage()?.split(',').map(Number).filter(Boolean) || []) 
 
@@ -124,7 +125,7 @@ export class FilterService {
     this.setStartDateTolocalStorage('')
     this.setEndDateTolocalStorage('')
     this.setEventTypesTolocalStorage([])
-    this.setSightTypesTolocalStorage([])
+    //this.setSightTypesTolocalStorage([])
     this.setCountFiltersTolocalStorage(0)
     this.setRadiusTolocalStorage('1')
     localStorage.removeItem('startDateFilter')

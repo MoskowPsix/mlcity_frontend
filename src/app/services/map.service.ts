@@ -251,7 +251,8 @@ export class MapService {
 
       cityCoords.push(parseFloat(this.filterService.cityLatitude.value), parseFloat(this.filterService.cityLongitude.value))
     } else {
-      cityCoords.push(this.geolocationLatitude, this.geolocationLongitude)
+      cityCoords.push(parseFloat(this.filterService.getCityLatitudeFromlocalStorage()!), parseFloat(this.filterService.getCityLongitudeFromlocalStorage()!))
+      //cityCoords.push(this.geolocationLatitude.value, this.geolocationLongitude.value)
     }
     return cityCoords
   }

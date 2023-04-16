@@ -152,10 +152,10 @@
             </ion-item>
             <div class="ion-padding" slot="content">
               <ng-container *ngFor="let type of eventTypes">
-                <ion-item>
+                <ion-item (click)="eventTypesChange(type.id)">
                   <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
                   <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-                  <ion-checkbox slot="end" value="{{ type.id }}" (ionChange)="eventTypesChange(type.id)" [checked]="onCheckedEventType(type.id)"></ion-checkbox>
+                  <ion-checkbox slot="end" value="{{ type.id }}"  [checked]="onCheckedEventType(type.id)"></ion-checkbox>
                 </ion-item>
               </ng-container>  
             </div>
@@ -168,10 +168,10 @@
             </ion-item>
             <div class="ion-padding" slot="content">
               <ng-container *ngFor="let type of sightTypes">
-                <ion-item>
+                <ion-item (click)="sightTypesChange(type.id)">
                   <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
                   <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-                  <ion-checkbox slot="end" value="{{ type.id }}" (ionChange)="sightTypesChange(type.id)" [checked]="onCheckedSightType(type.id)"></ion-checkbox>
+                  <ion-checkbox slot="end" value="{{ type.id }}" [checked]="onCheckedSightType(type.id)"></ion-checkbox>
                 </ion-item>
               </ng-container>  
             </div>
