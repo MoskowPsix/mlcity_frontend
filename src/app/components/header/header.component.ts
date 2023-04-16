@@ -119,7 +119,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
       this.filterService.setCityLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
       this.filterService.setCityLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
-    this.toastService.showToast(MessagesCityes.setCitySuccess, 'success')
+    this.filterService.changeCityFilter.next(true)
+    this.toastService.showToast(MessagesCityes.setCitySuccess, 'success') 
   }
 
   //Получить ивенты
@@ -168,11 +169,6 @@ export class HeaderComponent implements OnInit,OnDestroy {
       this.minLengthEventsListError = true
     }
   }
-
-  //Выбираем ивент и переходим на него
-  // onSelectedEvent(item:any){
-
-  // }
 
   onSegmentChanged(event:any){
     this.segment = event.detail.value
