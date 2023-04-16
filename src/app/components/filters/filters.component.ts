@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject, take, takeUntil } from 'rxjs';
 import { IEventType } from 'src/app/models/event-type';
@@ -47,7 +47,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
     private filterService: FilterService, 
     private vkService: VkService,
     private mapService: MapService,
-    private cdr : ChangeDetectorRef
   ) { }
 
   getEventTypes(){
@@ -71,13 +70,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   startDateChange(event:any){
-    console.log('startDateChange = ', event.detail.value)
     this.filterService.setStartDateTolocalStorage(event.detail.value)
     this.dateFiiltersCounter()
   }
 
   endDateChange(event:any){
-    console.log('endDateChange = ', event.detail.value)
     this.filterService.setEndDateTolocalStorage(event.detail.value)
     this.dateFiiltersCounter()
   }
@@ -89,15 +86,20 @@ export class FiltersComponent implements OnInit, OnDestroy {
       this.filterService.setCountFiltersTolocalStorage(++this.countFilters) 
     } else {
       this.eventTypesFilter = this.eventTypesFilter.filter((id) => id !== typeId)
-      if (this.countFilters !== 0)
+      if (this.countFilters !== 0){
         this.filterService.setCountFiltersTolocalStorage(--this.countFilters) 
+      }  
     }
     this.filterService.setEventTypesTolocalStorage(this.eventTypesFilter) // записваем иассив в сервис
+
   }
 
   //Проверяем выбран ли ивент, чтобы чекнуть чекбокс
   onCheckedEventType(typeId: number){
-    return this.eventTypesFilter?.includes(typeId)
+    if (this.eventTypesFilter && this.eventTypesFilter.length){
+      return this.eventTypesFilter.includes(typeId)
+    }
+    return false
   }
 
   //Добавляем в массив выбраных мест
@@ -115,7 +117,10 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   //Проверяем выбран ли ивент, чтобы чекнуть чекбокс
   onCheckedSightType(typeId: number){
-    return this.sightTypesFilter?.includes(typeId) 
+    if (this.sightTypesFilter && this.sightTypesFilter.length){
+      return this.sightTypesFilter.includes(typeId)
+    }
+    return false
   }
 
   //Если обе даты выбраны ставим тру
@@ -129,7 +134,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
   removeFilter(){
     this.dateFiltersSelected = false
     this.filterService.removeFilters()
-    //this.cdr.detectChanges()
   }
 
   //Показывамем километраж при перетаскивании пина в выборе радиуса
@@ -193,31 +197,26 @@ export class FiltersComponent implements OnInit, OnDestroy {
     //подписываемся на кол-во фильтров
     this.filterService.countFilters.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.countFilters = value
-      console.log('this.countFilters = ', this.countFilters)
     })
 
     //подписываемся на дату начала
     this.filterService.startDate.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.startDate = value
-      console.log('this.startDate = ', this.startDate)
     })
 
     //подписываемся на дату конца
     this.filterService.endDate.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.endDate = value
-      console.log('this.endDate = ', this.endDate)
     })
 
     //подписываемся на типы мероприятияй
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.eventTypesFilter = value
-      console.log('this.eventTypesFilter = ', this.eventTypesFilter)
     })
 
     //подписываемся на типы достопримечательностей
     this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.sightTypesFilter = value
-      console.log('this.sightTypesFilter = ', this.sightTypesFilter)
     }) 
 
      //Подписываемся на изменение радиуса

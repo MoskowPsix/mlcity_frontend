@@ -129,7 +129,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Вешаем на карту событие по окончинию перетаскивания
     this.map.target.events.add('actionend',  async (e) => {
       console.log('actionend')
-      console.log(this.myGeo.geometry?.getCoordinates())
       if (!this.firstStart) {
         this.CirclePoint.geometry?.setRadius(this.radius*1000)
         this.myGeo.options.set('iconImageOffset', [-30, -55])
@@ -159,7 +158,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       map((response:any) => response.events),
       tap(() => {
         this.eventsLoading = false
-          this.cdr.detectChanges();
+          this.cdr.detectChanges()
       }),
       tap(() => {
         if (this.objectsInsideCircle){
@@ -176,7 +175,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         } else {
           this.firstStart = false
           this.eventsLoading = false
-          this.cdr.detectChanges();
+          this.cdr.detectChanges()
         }
       }),
       map((events: IEvent[]) => { 
