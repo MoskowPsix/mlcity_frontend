@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   cityCoords!: number[]
 
   firstStart: boolean = true
+  isFilterChanged: boolean = false
   
   eventsLoading: boolean = false
 
@@ -73,8 +74,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     target.geoObjects.add(this.CirclePoint)
 
     // Определяем местоположение пользователя
-    await this.mapService.geolocationMapNative(this.map, this.CirclePoint) 
-
+    this.mapService.positionFilter(this.map, this.CirclePoint)
+    
     //Создаем метку в центре круга, для перетаскивания
     this.myGeo=new ymaps.Placemark([11,11],{}, {
       iconLayout: 'default#image',
@@ -225,10 +226,18 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true});
     });
 
-     //Подписываемся на состояние модалки показа ивентов и мест
-     this.navigationServise.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    //Подписываемся на состояние модалки показа ивентов и мест
+    this.navigationServise.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.modalEventShowOpen = value
     })
+    
+     //Подписываемся на изменение фильтра
+     this.filterService.changeCityFilter.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      if (value === true){
+        this.mapService.positionFilter(this.map, this.CirclePoint)
+      }
+    })
+
   }
 
   ngOnDestroy(){

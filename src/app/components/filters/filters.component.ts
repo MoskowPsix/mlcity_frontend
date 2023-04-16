@@ -91,7 +91,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
       }  
     }
     this.filterService.setEventTypesTolocalStorage(this.eventTypesFilter) // записваем иассив в сервис
-
   }
 
   //Проверяем выбран ли ивент, чтобы чекнуть чекбокс
@@ -169,6 +168,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       this.filterService.setCityLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
       this.filterService.setCityLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
+    this.filterService.changeCityFilter.next(true)
   }
 
    //Очистить поле поиса в поиске города

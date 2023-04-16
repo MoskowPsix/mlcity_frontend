@@ -19,6 +19,8 @@ export class FilterService {
 
   public countFilters: BehaviorSubject<number> = new BehaviorSubject<number>(parseInt(this.getCountFiltersFromlocalStorage() || '0')) 
   public saveFilters: BehaviorSubject<number> = new BehaviorSubject<number>(parseInt(this.getSaveFiltersFromlocalStorage() || '1')) 
+  public changeFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
+  public changeCityFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
 
   constructor() {}
 
@@ -125,7 +127,7 @@ export class FilterService {
     this.setStartDateTolocalStorage('')
     this.setEndDateTolocalStorage('')
     this.setEventTypesTolocalStorage([])
-    //this.setSightTypesTolocalStorage([])
+    this.setSightTypesTolocalStorage([])
     this.setCountFiltersTolocalStorage(0)
     this.setRadiusTolocalStorage('1')
     localStorage.removeItem('startDateFilter')

@@ -257,4 +257,17 @@ export class MapService {
     return cityCoords
   }
 
+  // Определяем местоположение пользователя
+  async positionFilter(map: any, circlePoint: any){
+    if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter) {
+      setTimeout(() => {
+        circlePoint.geometry?.setCoordinates([this.filterService.cityLatitude.value, this.filterService.cityLongitude.value])
+        map.target.setBounds(circlePoint.geometry?.getBounds()!, {checkZoomRange: true})
+      }, 200);
+    } else {
+      await this.geolocationMapNative(map, circlePoint) 
+    }
+    this.filterService.changeCityFilter.next(false)
+  }
+
 }
