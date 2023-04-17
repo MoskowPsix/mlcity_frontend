@@ -221,7 +221,7 @@ export class MapService {
         if (!this.filterService.getCityFromlocalStorage() ){
           this.setCoordsFromChangeCityDialog()
           //this.showChangeCityDialog.next(true)
-        } else  if (this.filterService.getCityFromlocalStorage() !== this.geolocationCity.value){
+        } else  if (this.geolocationCity.value && this.filterService.getCityFromlocalStorage() !== this.geolocationCity.value){
           this.showChangeCityDialog.next(true)
         } 
         
@@ -258,12 +258,10 @@ export class MapService {
   }
 
   // Определяем местоположение пользователя
-  async positionFilter(map: any, circlePoint: any){
-    if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter) {
-      setTimeout(() => {
-        circlePoint.geometry?.setCoordinates([this.filterService.cityLatitude.value, this.filterService.cityLongitude.value])
+  async positionFilter(map: any, circlePoint: ymaps.Circle){
+    if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter.value) {
+        await circlePoint.geometry?.setCoordinates([parseFloat(this.filterService.cityLatitude.value), parseFloat(this.filterService.cityLongitude.value)])
         map.target.setBounds(circlePoint.geometry?.getBounds()!, {checkZoomRange: true})
-      }, 200) //  таймаут потому что не успевают записаться координаты в локалсторадж
     } else {
       await this.geolocationMapNative(map, circlePoint) 
     }

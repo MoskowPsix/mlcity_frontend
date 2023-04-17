@@ -13,6 +13,10 @@ export interface IGetEventsAndSights {
     longitude?: string // долгота массив типа [50.84330000000000,70.84330000000000]
     searchText?: string
     forEventPage?: boolean // для отправки координат для страницы мероприятия
+    dateStart?: string // дата начала события / места - отправляется совместно с dateEnd
+    dateEnd?: string // дата окончания события / места - отправляется совместно с dateStart
+    eventTypes?: string // массив типвов событий 
+    sightTypes?: string // массив типвов мест
 }
 
 //Пример

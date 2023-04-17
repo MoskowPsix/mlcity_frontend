@@ -4,6 +4,7 @@
     <ion-badge color="secondary" class="mx-5px">{{ dateFiltersSelected ? countFilters + 1 : countFilters }}</ion-badge>
   </ng-container>
   <ion-icon name="options" slot="end"></ion-icon>
+  <ion-icon *ngIf="saveFilters === 1" name="toggle" color="warning" class="mx-5px"></ion-icon>
 </ion-button>
 
   <!-- Модальное окно с фильтрами -->
@@ -21,162 +22,171 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="filters-modal">
-        <div class="info-filters">
-          <div class="selected-filters">
-            Выбрано: <ion-badge color="primary" class="mx-5px">{{ dateFiltersSelected ? countFilters + 1 : countFilters }}</ion-badge>
+        <!-- Скелетная загрузка -->
+        <ng-container *ngIf="eventTypesLoding || sightTypesLoding">
+          <p *ngFor="let key of [1,2,3,4,5]" class="ion-padding-horizontal">
+            <ion-skeleton-text [animated]="true" style="height: 2rem;" />
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="!eventTypesLoding && !sightTypesLoding">
+          <div class="info-filters">
+            <div class="selected-filters">
+              Выбрано: <ion-badge color="primary" class="mx-5px">{{ dateFiltersSelected ? countFilters + 1 : countFilters }}</ion-badge>
+            </div>
+            <div class="save-filters">
+              <ion-label>Сохранить фильтры</ion-label>
+              <ion-toggle slot="end" (ionChange)="toggleSaveFilter()" [checked]="saveFilters === 1"></ion-toggle>
+            </div>
+      
           </div>
-          <div class="save-filters">
-            <ion-label>Сохранить фильтры</ion-label>
-            <ion-toggle slot="end" (ionChange)="toggleSaveFilter()" [checked]="saveFilters === 1"></ion-toggle>
-          </div>
-    
-        </div>
-        
           
-        <ion-accordion-group expand="inset" [value]="['range']">
-          <ion-accordion value="range">
-            <ion-item slot="header" color="light">
-              <ion-icon name="calendar" slot="start" color="primary"></ion-icon>
-              <ion-label class="filter-title">
-                Период
-                <br>
-                <ng-container *ngIf="startDate && endDate">
-                  <span class="date-note">{{ startDate | date:'dd.MM.yyyy' }} - {{ endDate | date:'dd.MM.yyyy' }}</span>
-                </ng-container>
-                <ng-container *ngIf="!startDate || !endDate">
-                  <span class="date-note">За все время</span>
-                </ng-container>
-              </ion-label>
-            </ion-item>
-            <div class="ion-padding" slot="content">
-              <ion-segment value="start" color="primary" (ionChange)="onSegmentChanged($event)">
-                <ion-segment-button value="start">
-                  <ion-label class="segment-title">
-                    <ion-icon name="calendar-clear" color="primary"></ion-icon>
-                    Начало
-                    <br>
-                    <ng-container *ngIf="startDate">
-                      <span class="date-note">{{ startDate | date:'dd.MM.yyyy' }}</span>
-                    </ng-container>
-                  </ion-label>
-                </ion-segment-button>
-                <ion-segment-button value="end">
-                  <ion-label class="segment-title">
-                    <ion-icon name="calendar-number" color="primary"></ion-icon>
-                    Конец
-                    <br>
-                    <ng-container *ngIf="endDate">
-                      <span class="date-note">{{ endDate | date:'dd.MM.yyyy' }}</span>
-                    </ng-container>
-                  </ion-label>
-                </ion-segment-button>
-              </ion-segment>
-
-              <div [hidden]="segment !== 'start'" class="segment-calendar">
-                <ion-row class="ion-justify-content-center ion-padding-top">
-                  <ion-datetime id="eventsStart" presentation="date" locale="ru-RU" [firstDayOfWeek]="1" color="primary" (ionChange)="startDateChange($event)"></ion-datetime>
-                </ion-row>             
-              </div>
-
-              <div [hidden]="segment !== 'end'" class="segment-calendar">
-                <ion-row class="ion-justify-content-center ion-padding-top">
-                  <ion-datetime id="eventsEnd" presentation="date" locale="ru-RU" [firstDayOfWeek]="1" color="primary" (ionChange)="endDateChange($event)"></ion-datetime>
-                </ion-row>
-              </div>
-            </div>
-          </ion-accordion>
-
-          <ion-accordion value="city">
-            <ion-item slot="header" color="light">
-              <ion-icon name="business" slot="start" color="primary"></ion-icon>
-              <ion-label class="filter-title">
-                Город / поселок / село
-                <br>
-              <ion-note>{{ city }}, {{ region }}</ion-note>
-              </ion-label>
-              
-            </ion-item>
-            <div class="ion-padding" slot="content">
-              <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchCityes" (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
-              <ion-note *ngIf="minLengthCityesListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
-                <ng-container *ngIf="cityesListLoading">
-                    <ion-list class="ion-padding-end">
-                        <ion-item *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
-                            <ion-skeleton-text [animated]="true" style="height: 1rem;" />
-                        </ion-item>
-                    </ion-list>
-                </ng-container>
-                <ng-container *ngIf="!cityesListLoading && !cityesList.length">
-                    <app-no-data />
-                </ng-container>
-                <ion-list>
-                  <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" class="search-item">
-                    <ion-label>
-                        {{ item.title }}, {{ item.region }}
+            
+          <ion-accordion-group expand="inset" [value]="['range']">
+            <ion-accordion value="range">
+              <ion-item slot="header" color="light">
+                <ion-icon name="calendar" slot="start" color="primary"></ion-icon>
+                <ion-label class="filter-title">
+                  Период
+                  <br>
+                  <ng-container *ngIf="startDate && endDate">
+                    <span class="date-note">{{ startDate | date:'dd.MM.yyyy' }} - {{ endDate | date:'dd.MM.yyyy' }}</span>
+                  </ng-container>
+                  <ng-container *ngIf="!startDate || !endDate">
+                    <span class="date-note">За все время</span>
+                  </ng-container>
+                </ion-label>
+              </ion-item>
+              <div class="ion-padding" slot="content">
+                <ion-segment value="start" color="primary" (ionChange)="onSegmentChanged($event)">
+                  <ion-segment-button value="start">
+                    <ion-label class="segment-title">
+                      <ion-icon name="calendar-clear" color="primary"></ion-icon>
+                      Начало
+                      <br>
+                      <ng-container *ngIf="startDate">
+                        <span class="date-note">{{ startDate | date:'dd.MM.yyyy' }}</span>
+                      </ng-container>
                     </ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button value="end">
+                    <ion-label class="segment-title">
+                      <ion-icon name="calendar-number" color="primary"></ion-icon>
+                      Конец
+                      <br>
+                      <ng-container *ngIf="endDate">
+                        <span class="date-note">{{ endDate | date:'dd.MM.yyyy' }}</span>
+                      </ng-container>
+                    </ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+  
+                <div [hidden]="segment !== 'start'" class="segment-calendar">
+                  <ion-row class="ion-justify-content-center ion-padding-top">
+                    <ion-datetime id="eventsStart" presentation="date" locale="ru-RU" [firstDayOfWeek]="1" color="primary" (ionChange)="startDateChange($event)"></ion-datetime>
+                  </ion-row>             
+                </div>
+  
+                <div [hidden]="segment !== 'end'" class="segment-calendar">
+                  <ion-row class="ion-justify-content-center ion-padding-top">
+                    <ion-datetime id="eventsEnd" presentation="date" locale="ru-RU" [firstDayOfWeek]="1" color="primary" (ionChange)="endDateChange($event)"></ion-datetime>
+                  </ion-row>
+                </div>
+              </div>
+            </ion-accordion>
+  
+            <ion-accordion value="city">
+              <ion-item slot="header" color="light">
+                <ion-icon name="business" slot="start" color="primary"></ion-icon>
+                <ion-label class="filter-title">
+                  Город / поселок / село
+                  <br>
+                <ion-note>{{ city }}, {{ region }}</ion-note>
+                </ion-label>
+                
+              </ion-item>
+              <div class="ion-padding" slot="content">
+                <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchCityes" (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
+                <ion-note *ngIf="minLengthCityesListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
+                  <ng-container *ngIf="cityesListLoading">
+                      <ion-list class="ion-padding-end">
+                          <ion-item *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
+                              <ion-skeleton-text [animated]="true" style="height: 1rem;" />
+                          </ion-item>
+                      </ion-list>
+                  </ng-container>
+                  <ng-container *ngIf="!cityesListLoading && !cityesList.length">
+                      <app-no-data />
+                  </ng-container>
+                  <ion-list>
+                    <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" class="search-item">
+                      <ion-label>
+                          {{ item.title }}, {{ item.region }}
+                      </ion-label>
+                    </ion-item>
+                  </ion-list>
+              </div>
+            </ion-accordion>
+  
+            <ion-accordion value="radius">
+              <ion-item slot="header" color="light">
+                <ion-icon name="radio-button-on" slot="start" color="primary"></ion-icon>
+                <ion-label class="filter-title">
+                  Область отображения
+                  <br>
+                <ion-note>{{ radius }} км.</ion-note>
+                </ion-label>
+                
+              </ion-item>
+              <div class="ion-padding" slot="content">
+               <ion-note>Радиус от вашей текущей геопозиции, в котором будут отображены места и события</ion-note>
+               <ion-range 
+                [ticks]="true" 
+                [snaps]="true" 
+                [min]="1" 
+                [max]="25" 
+                [pin]="true" 
+                [value]="radius"
+                [pinFormatter]="pinRadiusFormatter"
+                (ionKnobMoveEnd)="radiusChange($event)"
+               ></ion-range>
+               <ion-label>Текущий радиус: {{ radius }}</ion-label>
+              </div>
+            </ion-accordion>
+  
+            <ion-accordion value="eTypes">
+              <ion-item slot="header" color="light">
+                <ion-icon name="balloon" slot="start" color="primary"></ion-icon>
+                <ion-label class="filter-title">События<ion-badge color="primary" class="mx-5px">{{ eventTypesFilter ? eventTypesFilter.length  : 0}}</ion-badge></ion-label>
+              </ion-item>
+              <div class="ion-padding" slot="content">
+                <ng-container *ngFor="let type of eventTypes">
+                  <ion-item (click)="eventTypesChange(type.id)">
+                    <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
+                    <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
+                    <ion-checkbox slot="end" value="{{ type.id }}"  [checked]="onCheckedEventType(type.id)"></ion-checkbox>
                   </ion-item>
-                </ion-list>
-            </div>
-          </ion-accordion>
-
-          <ion-accordion value="radius">
-            <ion-item slot="header" color="light">
-              <ion-icon name="radio-button-on" slot="start" color="primary"></ion-icon>
-              <ion-label class="filter-title">
-                Область отображения
-                <br>
-              <ion-note>{{ radius }} км.</ion-note>
-              </ion-label>
-              
-            </ion-item>
-            <div class="ion-padding" slot="content">
-             <ion-note>Радиус от вашей текущей геопозиции, в котором будут отображены места и события</ion-note>
-             <ion-range 
-              [ticks]="true" 
-              [snaps]="true" 
-              [min]="1" 
-              [max]="25" 
-              [pin]="true" 
-              [value]="radius"
-              [pinFormatter]="pinRadiusFormatter"
-              (ionKnobMoveEnd)="radiusChange($event)"
-             ></ion-range>
-             <ion-label>Текущий радиус: {{ radius }}</ion-label>
-            </div>
-          </ion-accordion>
-
-          <ion-accordion value="eTypes">
-            <ion-item slot="header" color="light">
-              <ion-icon name="balloon" slot="start" color="primary"></ion-icon>
-              <ion-label class="filter-title">События<ion-badge color="primary" class="mx-5px">{{ eventTypesFilter ? eventTypesFilter.length  : 0}}</ion-badge></ion-label>
-            </ion-item>
-            <div class="ion-padding" slot="content">
-              <ng-container *ngFor="let type of eventTypes">
-                <ion-item (click)="eventTypesChange(type.id)">
-                  <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
-                  <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-                  <ion-checkbox slot="end" value="{{ type.id }}"  [checked]="onCheckedEventType(type.id)"></ion-checkbox>
-                </ion-item>
-              </ng-container>  
-            </div>
-          </ion-accordion>
-
-          <ion-accordion value="sTypes">
-            <ion-item slot="header" color="light">
-              <ion-icon name="prism" slot="start" color="primary"></ion-icon>
-              <ion-label class="filter-title">Места<ion-badge color="primary" class="mx-5px">{{ sightTypesFilter ? sightTypesFilter.length : 0}}</ion-badge></ion-label>
-            </ion-item>
-            <div class="ion-padding" slot="content">
-              <ng-container *ngFor="let type of sightTypes">
-                <ion-item (click)="sightTypesChange(type.id)">
-                  <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
-                  <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-                  <ion-checkbox slot="end" value="{{ type.id }}" [checked]="onCheckedSightType(type.id)"></ion-checkbox>
-                </ion-item>
-              </ng-container>  
-            </div>
-          </ion-accordion>
-        </ion-accordion-group>      
+                </ng-container>  
+              </div>
+            </ion-accordion>
+  
+            <ion-accordion value="sTypes">
+              <ion-item slot="header" color="light">
+                <ion-icon name="prism" slot="start" color="primary"></ion-icon>
+                <ion-label class="filter-title">Места<ion-badge color="primary" class="mx-5px">{{ sightTypesFilter ? sightTypesFilter.length : 0}}</ion-badge></ion-label>
+              </ion-item>
+              <div class="ion-padding" slot="content">
+                <ng-container *ngFor="let type of sightTypes">
+                  <ion-item (click)="sightTypesChange(type.id)">
+                    <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
+                    <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
+                    <ion-checkbox slot="end" value="{{ type.id }}" [checked]="onCheckedSightType(type.id)"></ion-checkbox>
+                  </ion-item>
+                </ng-container>  
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>      
+        </ng-container>   
       </ion-content>
     </ng-template>
   </ion-modal>
