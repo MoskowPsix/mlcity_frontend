@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   pixelCenter: any
 
   queryParams?: IGetEventsAndSights 
-  cityCoords!: number[]
+  //cityCoords!: number[]
 
   firstStart: boolean = true
   isFilterChanged: boolean = false
@@ -56,8 +56,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private filterService: FilterService
     ) {}
   
-  setRadius(radius: number){ 
-    
+  setRadius(radius: number){  
     if (radius === 1){
       this.CirclePoint.geometry?.setRadius(1000)
     } else {
@@ -67,17 +66,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): Promise<void> {
-    this.map={target, ymaps}
+    this.map = {target, ymaps}
 
     // Создаем и добавляем круг
-    this.CirclePoint=new ymaps.Circle([[11,11],1000*this.radius],{},{fillOpacity:0.15, draggable:false})
+    this.CirclePoint = new ymaps.Circle([[11,11],1000*this.radius],{},{fillOpacity:0.15, draggable:false})
     target.geoObjects.add(this.CirclePoint)
 
     // Определяем местоположение пользователя
     this.mapService.positionFilter(this.map, this.CirclePoint)
     
     //Создаем метку в центре круга, для перетаскивания
-    this.myGeo=new ymaps.Placemark([11,11],{}, {
+    this.myGeo = new ymaps.Placemark([11,11],{}, {
       iconLayout: 'default#image',
       iconImageHref:'/assets/my_geo.svg',
       iconImageSize: [60, 60],
@@ -159,7 +158,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.eventsService.getEvents(this.queryParams).pipe(
       delay(100),
       map((response:any) => {
-        console.log(response.events)
         return response.events; 
         
       }),
@@ -239,8 +237,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.cdr.detectChanges()
     })
     
-     //Подписываемся на изменение фильтра и если было изменение горда, то перекинуть на выбранынй город
-     this.filterService.changeCityFilter.pipe(takeUntil(this.destroy$)).subscribe(value => {
+     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранынй город
+    this.filterService.changeCityFilter.pipe(takeUntil(this.destroy$)).subscribe(value => {
       if (value === true){
         this.mapService.positionFilter(this.map, this.CirclePoint)
       }

@@ -22,7 +22,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
   port: string = environment.BACKEND_PORT
   eventTypes: IEventType[] = []
   sightTypes: ISightType[] = []
- 
+  eventTypesLoding: boolean = false
+  sightTypesLoding: boolean = false
+
   segment:string = 'start'
 
   minLengthCityesListError:boolean = false
@@ -50,14 +52,18 @@ export class FiltersComponent implements OnInit, OnDestroy {
   ) { }
 
   getEventTypes(){
+    this.eventTypesLoding = true
     this.eventTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.eventTypes = response.types
+      this.eventTypesLoding = false
     })
   }
 
   getSightTypes(){
+    this.sightTypesLoding = true
     this.sightTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.sightTypes = response.types
+      this.sightTypesLoding = false
     })
   }
 

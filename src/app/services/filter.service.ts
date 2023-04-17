@@ -24,6 +24,10 @@ export class FilterService {
 
   constructor() {}
 
+  queryBuilder(callFromMapPape: false){
+
+  }
+
   setCityTolocalStorage(city: string = this.city.value){
     localStorage.setItem('city', city)
     this.city.next(city)
