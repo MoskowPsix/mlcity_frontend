@@ -1,17 +1,17 @@
-import { Component, Input, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef} from '@angular/core';
-import { catchError, delay, EMPTY, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { MessagesErrors } from 'src/app/enums/messages-errors';
-import { MessagesAuth } from 'src/app/enums/messages-auth';
-import { IEvent } from 'src/app/models/events';
-import { AuthService } from 'src/app/services/auth.service';
-import { EventsService } from 'src/app/services/events.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { environment } from 'src/environments/environment';
-import { VkService } from 'src/app/services/vk.service';
-import { IonicSlides } from '@ionic/angular';
+import { Component, Input, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core'
+import { catchError, delay, EMPTY, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs'
+import { MessagesErrors } from 'src/app/enums/messages-errors'
+import { MessagesAuth } from 'src/app/enums/messages-auth'
+import { IEvent } from 'src/app/models/events'
+import { AuthService } from 'src/app/services/auth.service'
+import { EventsService } from 'src/app/services/events.service'
+import { ToastService } from 'src/app/services/toast.service'
+import { environment } from 'src/environments/environment'
+import { VkService } from 'src/app/services/vk.service'
+import { IonicSlides } from '@ionic/angular'
 
-import {register} from 'swiper/element/bundle';
-import {Swiper} from 'swiper/types';
+import {register} from 'swiper/element/bundle'
+import {Swiper} from 'swiper/types'
 
 @Component({
   selector: 'app-event-card',
@@ -24,7 +24,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     private authService: AuthService,
     private eventsService: EventsService,
     private toastService: ToastService,
-    private vkService: VkService
+    private vkService: VkService,
   ) { }
   
   private readonly destroy$ = new Subject<void>()
@@ -33,12 +33,12 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   @Input() event!: IEvent
 
   @ViewChild('swiper')
-  swiperRef: ElementRef | undefined;
-  swiper?: Swiper;
+  swiperRef: ElementRef | undefined
+  swiper?: Swiper
   swiperCurrentSlide?: number
   swiperTotalSlids?: number
 
-  swiperModules = [IonicSlides];
+  swiperModules = [IonicSlides]
 
   userAuth: boolean = false
 
@@ -172,7 +172,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   ngAfterViewInit(): void {
-    register();
+    register()
     this.swiper = this.swiperRef?.nativeElement.swiper
     setTimeout(() => {
       this.swiperCurrentSlide = this.swiper?.realIndex! + 1
@@ -183,13 +183,13 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
 
     this.swiper?.on('slideChange', () => {
       this.swiperCurrentSlide = this.swiper?.realIndex! + 1
-    });
+    })
   }
 
   ngOnDestroy(){
     // отписываемся от всех подписок
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
 }

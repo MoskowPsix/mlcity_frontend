@@ -30,9 +30,18 @@
 //     --padding-top: 110px !important;
 //     --padding-bottom: 65px !important;
 // }
+.pb-1-5rem{
+    padding-bottom: 1.5rem;
+}
+
+.pb-2rem{
+    padding-bottom: 2rem;
+}
+
 ion-content {
     // overwrite inline styles
     --offset-bottom: auto!important;
+    // --offset-bottom: 85%!important;
     --overflow: hidden;
     overflow: auto;
     &::-webkit-scrollbar {

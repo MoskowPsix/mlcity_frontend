@@ -35,7 +35,7 @@ export class NavigationService {
       this.modalSearchCityesOpen.next(false) 
       this.modalSearchEventsOpen.next(false)
       this.modalEventShowOpen.next(false)
-    });
+    })
   }
  
   back(): void {

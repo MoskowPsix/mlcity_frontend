@@ -263,7 +263,7 @@ export class MapService {
       setTimeout(() => {
         circlePoint.geometry?.setCoordinates([this.filterService.cityLatitude.value, this.filterService.cityLongitude.value])
         map.target.setBounds(circlePoint.geometry?.getBounds()!, {checkZoomRange: true})
-      }, 200);
+      }, 200) //  таймаут потому что не успевают записаться координаты в локалсторадж
     } else {
       await this.geolocationMapNative(map, circlePoint) 
     }

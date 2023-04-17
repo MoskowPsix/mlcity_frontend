@@ -1,4 +1,4 @@
-import { Component, OnInit,OnDestroy, AfterViewInit, ViewChild, ElementRef, ViewChildren } from '@angular/core';
+import { Component, OnInit,OnDestroy, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, tap, retry, catchError, of, EMPTY} from 'rxjs';
 import { IEvent } from 'src/app/models/events';
@@ -20,12 +20,6 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>()
-
-  // @ViewChildren('swiper') swiperRef: any;
-  
-  // swiper?: Swiper;
-  // swiperCurrentSlide?: number
-  // swiperTotalSlids?: number
 
   swiperModules = [IonicSlides];
 
@@ -49,7 +43,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private route: ActivatedRoute, 
     private eventsService: EventsService,
     private toastService: ToastService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   
