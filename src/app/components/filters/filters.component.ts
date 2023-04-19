@@ -150,7 +150,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   removeFilter(){
     this.dateFiltersSelected = false
     this.filterService.removeFilters()
-    if (!this.navigationService.appFirstLoading)
+    if (!this.navigationService.appFirstLoading.value)
       this.filterService.changeFilter.next(true)
   }
 
