@@ -38,7 +38,7 @@ export class NavigationService {
       this.modalSearchEventsOpen.next(false)
       this.modalEventShowOpen.next(false)
       this.modalFiltersOpen.next(false)
-      this.appFirstLoading.next(false)
+      //this.appFirstLoading.next(false)
     })
   }
  

@@ -16,6 +16,8 @@ export class QueryBuilderService {
   
   public paginationPublicEventsCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
   public paginationPublicEventsTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  public paginationPublicSightsCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  public paginationPublicSightsTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
 
   constructor(private mapService: MapService, private filterService: FilterService, private userService: UserService) { }
 
@@ -25,11 +27,9 @@ export class QueryBuilderService {
     ).subscribe().unsubscribe()
   }
 
-  //собираем запрос, при вызове указать с какой страницы вызов
+  //собираем запрос для ивентов, при вызове указать с какой страницы вызов
   buidEventsQuery(page:string = 'map'): IGetEventsAndSights{
     let queryParams: IGetEventsAndSights = {}
-    let isFilterSaved: number = this.filterService.saveFilters.value // смотрим сохраненены ли фильтры
-
     let eventTypes = this.filterService.eventTypes.value
     let dateStart = this.filterService.startDate.value
     let dateEnd = this.filterService.endDate.value
@@ -41,31 +41,20 @@ export class QueryBuilderService {
     switch (page) {
       //Главная страница - карта /home
       case 'map':
-        if (isFilterSaved === 1){ // если установлен фильтр    
-          queryParams =  {
-            statuses: [Statuses.publish].join(','),
-            statusLast: true,
-            latitudeBounds: latitudeBounds,
-            longitudeBounds: longitudeBounds,
-            eventTypes: eventTypes.join(','),
-            dateStart: dateStart,
-            dateEnd: dateEnd
-          }
-        } else {
-          queryParams =  {
-            statuses: [Statuses.publish].join(','),
-            statusLast: true,
-            latitudeBounds: latitudeBounds,
-            longitudeBounds: longitudeBounds,
-          }
+        queryParams =  {
+          statuses: [Statuses.publish].join(','),
+          statusLast: true,
+          latitudeBounds: latitudeBounds,
+          longitudeBounds: longitudeBounds,
+          eventTypes: eventTypes.join(','),
+          dateStart: dateStart,
+          dateEnd: dateEnd
         }
-      
         break;
 
-     //Публичная страница мероприятий /events
-     case 'eventsPublic':
-      this.getUserID()
-      if (isFilterSaved === 1){ // если установлен фильтр    
+       //Публичная страница мероприятий /events  - вкладка по городу
+      case 'eventsPublicForCityTab':
+        this.getUserID()
         queryParams =  {
           pagination: true,
           page: this.paginationPublicEventsCurrentPage.value,
@@ -76,14 +65,82 @@ export class QueryBuilderService {
           statusLast: true,
           city: city,
           region: region,
+          eventTypes: eventTypes.join(','),
+          dateStart: dateStart,
+          dateEnd: dateEnd
+        }  
+        break;
+
+      //Публичная страница мероприятий /events  - вкладка по городу
+      case 'eventsPublicForGeolocationTab':
+        this.getUserID()
+        queryParams =  {
+          pagination: true,
+          page: this.paginationPublicEventsCurrentPage.value,
+          userId: this.userID,
+          favoriteUser: true,
+          likedUser: true,
+          statuses: [Statuses.publish].join(','),
+          statusLast: true,
+          city: city,
           latitudeBounds: latitudeBounds,
           longitudeBounds: longitudeBounds,
           forEventPage: true,
           eventTypes: eventTypes.join(','),
           dateStart: dateStart,
           dateEnd: dateEnd
+        }  
+        break; 
+      default:
+        queryParams = {city: this.filterService.city.value, region: this.filterService.region.value}
+        break;
+    }
+
+    return queryParams
+  }
+
+  //собираем запрос для мест, при вызове указать с какой страницы вызов
+  buidSightsQuery(page:string = 'map'): IGetEventsAndSights{
+    let queryParams: IGetEventsAndSights = {}
+    let sightTypes = this.filterService.sightTypes.value
+    let latitudeBounds = this.mapService.radiusBoundsLats.value
+    let longitudeBounds = this.mapService.radiusBoundsLongs.value
+    let city = this.filterService.city.value
+    let region = this.filterService.region.value
+
+    switch (page) {
+      //Главная страница - карта /home
+      case 'map':
+        queryParams =  {
+          statuses: [Statuses.publish].join(','),
+          statusLast: true,
+          latitudeBounds: latitudeBounds,
+          longitudeBounds: longitudeBounds,
+          sightTypes: sightTypes.join(','),
         }
-      } else {
+        break;
+
+       //Публичная страница мероприятий /events  - вкладка по городу
+      case 'sightsPublicForCityTab':
+        this.getUserID()
+        queryParams =  {
+          pagination: true,
+          page: this.paginationPublicSightsCurrentPage.value,
+          userId: this.userID,
+          favoriteUser: true,
+          likedUser: true,
+          statuses: [Statuses.publish].join(','),
+          statusLast: true,
+          city: city,
+          region: region,
+          sightTypes: sightTypes.join(','),
+
+        }  
+        break;
+
+      //Публичная страница мероприятий /events  - вкладка по городу
+      case 'eventsPublicForGeolocationTab':
+        this.getUserID()
         queryParams =  {
           pagination: true,
           page: this.paginationPublicEventsCurrentPage.value,
@@ -93,15 +150,12 @@ export class QueryBuilderService {
           statuses: [Statuses.publish].join(','),
           statusLast: true,
           city: city,
-          region: region,
           latitudeBounds: latitudeBounds,
           longitudeBounds: longitudeBounds,
-          forEventPage: true
-        }
-      }
-    
-      break;
-
+          forEventPage: true,
+          sightTypes: sightTypes.join(','),
+        }  
+        break; 
       default:
         queryParams = {city: this.filterService.city.value, region: this.filterService.region.value}
         break;

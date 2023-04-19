@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, skip } from 'rxjs';
+import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, skip, switchMap } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { IEvent } from 'src/app/models/events';
 import { EventsService } from 'src/app/services/events.service';
@@ -36,7 +36,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   getEvents(){
     this.loadingMore ? this.loadingEvents = true : this.loadingEvents = false
 
-    this.eventsService.getEvents(this.queryBuilderService.buidEventsQuery('eventsPublic')).pipe(
+    this.eventsService.getEvents(this.queryBuilderService.buidEventsQuery('eventsPublicForCityTab')).pipe(
       delay(200),
       retry(3),
       map((respons:any) => {
@@ -65,21 +65,17 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    //Получаем ид юзера и ивенты
-    //this.getUserId() 
-
     this.events = []
     this.getEvents()
 
     //Подписываемся на изменение фильтра 
     //Пропускаем 1 skip(1) потому что, при запуске очищаются фильтры и прилетает true
-     this.filterService.changeFilter.pipe(skip(1),takeUntil(this.destroy$)).subscribe(value => {
+    this.filterService.changeFilter.pipe(skip(1),takeUntil(this.destroy$)).subscribe((value) => {
       if (value === true){
         this.events = []
         this.getEvents()
       }
-
-      this.navigationService.appFirstLoading.next(false)
+      this.navigationService.appFirstLoading.next(false)// чтобы удалялся фильтр,
     })
 
     //Подписываемся на город и регион и вызываем ивенты
@@ -93,7 +89,6 @@ export class EventsComponent implements OnInit, OnDestroy {
     //   tap((longitudeBounds) => this.longitudeBounds = longitudeBounds),
     //   tap(() => this.events = []),
     //   switchMap(() => {
-    //     //Подписываемся на регион 
     //      this.getEvents()
     //      return of(EMPTY)
     //   }),

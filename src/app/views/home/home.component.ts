@@ -78,7 +78,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     target.geoObjects.add(this.myGeo)
     
-    if (this.navigationService.appFirstLoading) {
+    if (this.navigationService.appFirstLoading.value) {
       this.eventsLoading = true
       this.cdr.detectChanges()
       this.getEvents()
@@ -93,7 +93,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.placemarks=[]
       }
 
-      if (!this.navigationService.appFirstLoading) {
+      if (!this.navigationService.appFirstLoading.value) {
         this.eventsLoading = true
         this.CirclePoint.geometry?.setRadius(this.radius*15)
         this.CirclePoint.options.set('fillOpacity', 0.7)
@@ -117,12 +117,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     // Вешаем на карту событие по окончинию перетаскивания
     this.map.target.events.add('actionend',  async (e) => {
-      if (!this.navigationService.appFirstLoading) {
+      if (!this.navigationService.appFirstLoading.value) {
         this.CirclePoint.geometry?.setRadius(this.radius*1000)
         this.myGeo.options.set('iconImageOffset', [-30, -55])
         this.CirclePoint.options.set('fillColor', )
         this.CirclePoint.options.set('fillOpacity', 0.15)
-        this.CirclePoint.options.set('strokeWidth', )       
+        this.CirclePoint.options.set('strokeWidth', )    
         this.getEvents()
       }
     })
@@ -143,7 +143,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   getEvents() {
     // Устанавливаем границы радиуса - юзать именно тут иначего приходятпрошлые координаты
     this.setBoundsCoordsToMapService()
-
     this.eventsService.getEvents(this.queryBuilderService.buidEventsQuery()).pipe(
       delay(100),
       map((response:any) => response.events),
@@ -156,7 +155,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       }),
       tap((events: IEvent[]) => {
-        if ((!events.length && this.radius < 25 && this.navigationService.appFirstLoading)) {
+        if ((!events.length && this.radius < 25 && this.navigationService.appFirstLoading.value)) {
           this.filterService.setRadiusTolocalStorage((++this.radius).toString())
           this.CirclePoint.geometry?.setRadius(this.radius * 1000)
           this.getEvents()
