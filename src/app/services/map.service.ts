@@ -54,29 +54,29 @@ export class MapService {
   async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
 
     if (!Capacitor.isPluginAvailable('Geolocation')) {
-      console.log('Plugin geolocation not available');
+      //console.log('Plugin geolocation not available');
       return;
     }
 
     if (!Capacitor.isNativePlatform())  {
 
       //Запускаем поиск геопозиции в вебе
-      console.log('ипользуется веб версия')
+      //console.log('ипользуется веб версия')
       await this.setCenterMap(map, CirclePoint) 
 
     } else {
 
       //Запускаем поиск геопозиции в мобилах
-      console.log('ипользуется мобильная версия')
+      //console.log('ипользуется мобильная версия')
       const requestPermission= await this.requestLocationPermission()
 
       try {
         const canRequest: boolean = await this.locationAccuracy.canRequest();
-        console.log('canrequest: ', canRequest);
+        //console.log('canrequest: ', canRequest);
         if(canRequest) {
           //Есть разрешение
           const status = await this.enableLocation();
-          console.log("стат " + status)
+          //console.log("стат " + status)
           if(status) {
             await this.setCenterMap(map, CirclePoint) 
           } else {
@@ -90,7 +90,7 @@ export class MapService {
           this.setPlacemark(map, CirclePoint, coords!, false)
         }
       } catch(e) {
-        console.log("Ошибка GPS " + e);
+        //console.log("Ошибка GPS " + e);
       }
     }
   }
@@ -99,10 +99,10 @@ export class MapService {
   async enableLocation() {
     try {
       const canRequest: boolean = await this.locationAccuracy.canRequest();
-      console.log('canrequest: ', canRequest);
+      //console.log('canrequest: ', canRequest);
       if(canRequest) {
         await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
-        console.log('Request successful');
+        //console.log('Request successful');
         return true;
       } else { return false;}
     } catch(e) {
@@ -179,7 +179,7 @@ export class MapService {
   ForwardGeocoderNative(address: string){
     this.nativegeocoder.forwardGeocode(address, this.options)
   .then((result: NativeGeocoderResult[]) => {
-    console.log('координаты ' + result[0].latitude + ' ' + result[0].longitude)
+    //console.log('координаты ' + result[0].latitude + ' ' + result[0].longitude)
     return [Number(result[0].latitude), Number(result[0].longitude)]
   })
   // .catch((error: any) => console.log(error));
@@ -191,7 +191,7 @@ export class MapService {
   .then((result: NativeGeocoderResult[]) => {
 
     let address = result[0].administrativeArea + ', ' + result[0].locality + ', ' + result[0].thoroughfare + ', ' + result[0].subThoroughfare
-    console.log('address' + address)
+    //console.log('address' + address)
     //this.searchCity(result[0].locality)
     this.searchCity(result[0].locality, result[0].administrativeArea, coords[0], coords[1])
     return address

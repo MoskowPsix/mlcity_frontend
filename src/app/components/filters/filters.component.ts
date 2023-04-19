@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { IEventType } from 'src/app/models/event-type';
 import { ISightType } from 'src/app/models/sight-type';
 import { EventTypeService } from 'src/app/services/event-type.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { MapService } from 'src/app/services/map.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { SightTypeService } from 'src/app/services/sight-type.service';
 import { VkService } from 'src/app/services/vk.service';
 import { environment } from 'src/environments/environment';
@@ -17,6 +18,8 @@ import { environment } from 'src/environments/environment';
 })
 export class FiltersComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
+
+  modalFiltersOpen:boolean = false
 
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
@@ -49,6 +52,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     private filterService: FilterService, 
     private vkService: VkService,
     private mapService: MapService,
+    private navigationService: NavigationService
   ) { }
 
   getEventTypes(){
@@ -97,6 +101,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       }  
     }
     this.filterService.setEventTypesTolocalStorage(this.eventTypesFilter) // записваем иассив в сервис
+    this.filterService.changeFilter.next(true)
   }
 
   //Проверяем выбран ли ивент, чтобы чекнуть чекбокс
@@ -118,6 +123,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
         this.filterService.setCountFiltersTolocalStorage(--this.countFilters) 
     }
     this.filterService.setSightTypesTolocalStorage(this.sightTypesFilter) // записваем иассив в сервис
+    this.filterService.changeFilter.next(true)
   }
 
   //Проверяем выбран ли ивент, чтобы чекнуть чекбокс
@@ -132,23 +138,31 @@ export class FiltersComponent implements OnInit, OnDestroy {
   dateFiiltersCounter(){
     if (this.startDate && this.endDate && !this.dateFiltersSelected){
       this.dateFiltersSelected = true
-    }     
+    }
+
+    if (this.startDate && this.endDate){ // если выбраны обе даты, то кидает изменение фильтра
+      this.filterService.changeFilter.next(true)   
+    }
+     
   }
 
   //Удаляем фильтры
   removeFilter(){
     this.dateFiltersSelected = false
     this.filterService.removeFilters()
+    if (!this.navigationService.appFirstLoading)
+      this.filterService.changeFilter.next(true)
   }
 
   //Показывамем километраж при перетаскивании пина в выборе радиуса
   pinRadiusFormatter(value: number) {
     return `${value} км.`;
-  }
+   }
 
   //Меняем радиус
   radiusChange(event:any){
     this.filterService.setRadiusTolocalStorage(event.detail.value)
+    this.filterService.changeFilter.next(true)
   }
 
    //Получаем города из вк
@@ -174,7 +188,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       this.filterService.setCityLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
       this.filterService.setCityLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
-    this.filterService.changeCityFilter.next(true)
+    this.filterService.changeFilter.next(true)
   }
 
    //Очистить поле поиса в поиске города
@@ -184,12 +198,28 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.cityesList = []
   }
 
+  //Открытие модалки с фильтрами
+  isModalFilterOpen(isOpen: boolean){
+    this.onClearSearch()
+    this.searchCityes.patchValue('')
+    this.navigationService.modalFiltersOpen.next(isOpen)
+  }
+
+  modalClose(){
+    this.navigationService.modalFiltersOpen.next(false)
+  }
+
   ngOnInit() {
     this.getEventTypes()
     this.getSightTypes()
 
     //Сбрасываем фильтры даты
     this.filterService.removeDateFilters()
+
+    //Подписываемся на состояние модалки фильтров
+    this.navigationService.modalFiltersOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      this.modalFiltersOpen = value
+    })
 
     //подписываемся на сохранение фильтров
     this.filterService.saveFilters.pipe(takeUntil(this.destroy$)).subscribe((value) => {

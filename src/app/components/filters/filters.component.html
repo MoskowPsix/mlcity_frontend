@@ -1,4 +1,4 @@
-<ion-button size="small" color="primary"  id="open-filters">
+<ion-button size="small" color="primary"  id="open-filters" (click)="isModalFilterOpen(true)">
   ФИЛЬТРЫ
   <ng-container *ngIf="countFilters !== 0 || dateFiltersSelected">
     <ion-badge color="secondary" class="mx-5px">{{ dateFiltersSelected ? countFilters + 1 : countFilters }}</ion-badge>
@@ -8,7 +8,8 @@
 </ion-button>
 
   <!-- Модальное окно с фильтрами -->
-  <ion-modal #modal trigger="open-filters">
+  <!-- <ion-modal #modal trigger="open-filters"> -->
+  <ion-modal [isOpen]="modalFiltersOpen" (ionModalDidDismiss)="modalClose()">
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -17,7 +18,8 @@
           </ion-buttons>
           <ion-title>Фильтры</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="modal.dismiss()"><ion-icon name="close"></ion-icon></ion-button>
+            <!-- <ion-button (click)="modal.dismiss()"><ion-icon name="close"></ion-icon></ion-button> -->
+            <ion-button (click)="isModalFilterOpen(false)"><ion-icon name="close"></ion-icon></ion-button>         
           </ion-buttons>
         </ion-toolbar>
       </ion-header>

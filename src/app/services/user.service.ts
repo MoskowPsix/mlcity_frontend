@@ -10,9 +10,7 @@ import { ISocialAccount } from '../models/social-account';
 })
 export class UserService {
 
-  private user:  BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(this.getUserFromLocalStorage())
-  //private vkGroups: BehaviorSubject<any> = new BehaviorSubject<any>([]);
-  // vkGroupPosts: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  public user:  BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(this.getUserFromLocalStorage())
 
   constructor(private http: HttpClient) { }
 
@@ -36,16 +34,13 @@ export class UserService {
   }
 
    getUserFromLocalStorage() {
-   // return this.user.next(JSON.parse(localStorage.getItem('auth_user')  || 'null'))
     return JSON.parse(localStorage.getItem('auth_user')  || 'null')
-    //return this.user = localStorage.getItem('auth_user')
   }
 
   // Remove token
   removeUserFromLocalStorage() {
     localStorage.removeItem('auth_user')
     this.user.next(null)
-    //this.user = []
   }
 }
 
