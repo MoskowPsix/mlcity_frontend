@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil, catchError, of, EMPTY } from 'rxjs';
 import menuPublicData from '../../../assets/json/menu-public.json'
 import { IMenu } from 'src/app/models/menu';
 import { environment } from 'src/environments/environment';
-import { Capacitor } from '@capacitor/core';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MapService } from 'src/app/services/map.service';
 import { FormControl } from '@angular/forms';
@@ -59,7 +58,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   queryParams?: IGetEventsAndSights 
 
   constructor(
-    private navigationServise: NavigationService, 
+    private navigationService: NavigationService, 
     private mapService: MapService, 
     private vkService: VkService,
     private toastService: ToastService,
@@ -84,16 +83,14 @@ export class HeaderComponent implements OnInit,OnDestroy {
   isModalSearchCityesOpen(isOpen: boolean){
     this.onClearSearch()
     this.searchCityes.patchValue('')
-    //this.modalSearchCityesOpen = isOpen
-    this.navigationServise.modalSearchCityesOpen.next(isOpen)
+    this.navigationService.modalSearchCityesOpen.next(isOpen)
   }
 
   //Открытие модалки для поиска ивентов и достопримечательностей
   isModalSearchEventsOpen(isOpen: boolean){
     this.onClearSearch()
     this.searchEvents.patchValue('')
-    //this.modalSearchEventsOpen = isOpen
-    this.navigationServise.modalSearchEventsOpen.next(isOpen)
+    this.navigationService.modalSearchEventsOpen.next(isOpen)
   }
 
   //Получаем города из вк
@@ -119,7 +116,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
       this.filterService.setCityLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
       this.filterService.setCityLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
-    this.filterService.changeCityFilter.next(true)
+    this.filterService.changeFilter.next(true)
+    this.modalClose()
     this.toastService.showToast(MessagesCityes.setCitySuccess, 'success') 
   }
 
@@ -138,8 +136,6 @@ export class HeaderComponent implements OnInit,OnDestroy {
         statusLast: true,
         city: this.city,
         searchText: event.target.value
-        //latitude: [50.84330000000000,70.84330000000000].join(','),
-        //longitude:[50.84330000000000,70.84330000000000].join(',')
       }
 
       this.eventsService.getEvents(this.queryParams).pipe(
@@ -187,24 +183,24 @@ export class HeaderComponent implements OnInit,OnDestroy {
   }
 
   modalClose(){
-    this.navigationServise.modalSearchCityesOpen.next(false)
-    this.navigationServise.modalSearchEventsOpen.next(false)
+    this.navigationService.modalSearchCityesOpen.next(false)
+    this.navigationService.modalSearchEventsOpen.next(false)
   }
 
   ngOnInit() {
 
     //Смотрим состояние кнопки назад
-    this.navigationServise.showBackButton.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    this.navigationService.showBackButton.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.showBackButton = value
     })
 
      //Подписываемся на состояние модалки поиска города
-     this.navigationServise.modalSearchCityesOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
+     this.navigationService.modalSearchCityesOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.modalSearchCityesOpen = value
     })
 
      //Подписываемся на состояние модалки поиска ивентов и мест
-     this.navigationServise.modalSearchEventsOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
+     this.navigationService.modalSearchEventsOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.modalSearchEventsOpen = value
     })
 

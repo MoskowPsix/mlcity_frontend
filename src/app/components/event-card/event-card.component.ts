@@ -25,6 +25,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     private eventsService: EventsService,
     private toastService: ToastService,
     private vkService: VkService,
+    private cdr: ChangeDetectorRef
   ) { }
   
   private readonly destroy$ = new Subject<void>()
@@ -184,6 +185,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     this.swiper?.on('slideChange', () => {
       this.swiperCurrentSlide = this.swiper?.realIndex! + 1
     })
+    this.cdr.detectChanges()
   }
 
   ngOnDestroy(){

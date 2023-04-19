@@ -24,9 +24,9 @@ export class FilterService {
 
   constructor() {}
 
-  queryBuilder(callFromMapPape: false){
+  // queryBuilder(callFromMapPape: false){
 
-  }
+  // }
 
   setCityTolocalStorage(city: string = this.city.value){
     localStorage.setItem('city', city)

@@ -1,14 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { catchError, delay, EMPTY, map, of, retry, Subject, switchMap, takeUntil, tap, take, skip, share, concatMap } from 'rxjs';
+import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, skip } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
-import { Statuses } from 'src/app/enums/statuses';
 import { IEvent } from 'src/app/models/events';
 import { EventsService } from 'src/app/services/events.service';
-import { MapService } from 'src/app/services/map.service';
 import { ToastService } from 'src/app/services/toast.service';
-import { UserService } from 'src/app/services/user.service';
-import { IGetEventsAndSights } from '../../models/getEventsAndSights';
 import { FilterService } from 'src/app/services/filter.service';
+import { QueryBuilderService } from 'src/app/services/query-builder.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-events',
@@ -18,65 +16,33 @@ import { FilterService } from 'src/app/services/filter.service';
 export class EventsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
 
-  private userId: number = 0
-
-  city: string = ''
-  region: string = ''
-  lattitue: string = ''
-  longtitude: string = ''
-
   events: IEvent[] = []
   loadingEvents: boolean = false
   loadingMore: boolean = false
 
   currentPage: number = 1
-  //nextPage: number = 1
   totalPages: number = 1
-
-  queryParams?: IGetEventsAndSights 
 
   constructor(
     private eventsService: EventsService,
     private toastService: ToastService,
-    private userService: UserService,
-    private mapService: MapService,
-    private filterService: FilterService
+ 
+    private filterService: FilterService,
+    private queryBuilderService: QueryBuilderService,
+    private navigationService: NavigationService
   ) { }
   
-  getUserId(){
-    this.userService.getUser().pipe(
-      tap((user) => user && user.id ? this.userId = user.id : this.userId = 0),
-      catchError((err) =>{
-        this.toastService.showToast(MessagesErrors.default, 'danger')
-        return of(EMPTY) 
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe()
-  }
  
-
   getEvents(){
-    this.queryParams =  {
-      pagination: true,
-      page: this.currentPage,
-      userId: this.userId,
-      favoriteUser: true,
-      likedUser: true,
-      statuses: [Statuses.publish].join(','),
-      statusLast: true,
-      city: this.city,
-      region: this.region,
-      latitude: this.lattitue,
-      longitude: this.longtitude,
-      forEventPage: true
-    }
     this.loadingMore ? this.loadingEvents = true : this.loadingEvents = false
-    this.eventsService.getEvents(this.queryParams).pipe(
+
+    this.eventsService.getEvents(this.queryBuilderService.buidEventsQuery('eventsPublic')).pipe(
       delay(200),
       retry(3),
       map((respons:any) => {
         this.events.push(...respons.events.data)
         this.totalPages = respons.events.last_page
+        this.queryBuilderService.paginationPublicEventsTotalPages.next(respons.events.last_page)
       }),
       tap(() => {
         this.loadingEvents = true  
@@ -94,30 +60,46 @@ export class EventsComponent implements OnInit, OnDestroy {
   loadingMoreEvents(){
     this.loadingMore = true
     this.currentPage++
+    this.queryBuilderService.paginationPublicEventsCurrentPage.next(this.currentPage)
     this.getEvents()
   }
 
   ngOnInit() {
     //Получаем ид юзера и ивенты
-    this.getUserId() 
+    //this.getUserId() 
+
+    this.events = []
+    this.getEvents()
+
+    //Подписываемся на изменение фильтра 
+    //Пропускаем 1 skip(1) потому что, при запуске очищаются фильтры и прилетает true
+     this.filterService.changeFilter.pipe(skip(1),takeUntil(this.destroy$)).subscribe(value => {
+      if (value === true){
+        this.events = []
+        this.getEvents()
+      }
+
+      this.navigationService.appFirstLoading.next(false)
+    })
 
     //Подписываемся на город и регион и вызываем ивенты
-    this.filterService.city.pipe(
-      tap((city) => this.city = city),
-      concatMap(() => this.filterService.region),
-      tap((region) => this.region = region),
-      concatMap(() => this.mapService.radiusBoundsLats),
-      tap((latitude) => this.lattitue = latitude),
-      concatMap(() => this.mapService.radiusBoundsLongs),
-      tap((longtitude) => this.longtitude = longtitude),
-      tap(() => this.events = []),
-      switchMap(() => {
-        //Подписываемся на регион 
-         this.getEvents()
-         return of(EMPTY)
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe()   
+    // this.filterService.city.pipe(
+    //   tap((city) => this.city = city),
+    //   concatMap(() => this.filterService.region),
+    //   tap((region) => this.region = region),
+    //   concatMap(() => this.mapService.radiusBoundsLats),
+    //   tap((latitudeBounds) => this.latitudeBounds = latitudeBounds),
+    //   concatMap(() => this.mapService.radiusBoundsLongs),
+    //   tap((longitudeBounds) => this.longitudeBounds = longitudeBounds),
+    //   tap(() => this.events = []),
+    //   switchMap(() => {
+    //     //Подписываемся на регион 
+    //      this.getEvents()
+    //      return of(EMPTY)
+    //   }),
+    //   takeUntil(this.destroy$)
+    // ).subscribe()   
+
   }
 
   ngOnDestroy(){
