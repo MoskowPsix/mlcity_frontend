@@ -36,7 +36,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   getEvents(){
     this.loadingMore ? this.loadingEvents = true : this.loadingEvents = false
 
-    this.eventsService.getEvents(this.queryBuilderService.buidEventsQuery('eventsPublicForCityTab')).pipe(
+    this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsPublicForCityTab')).pipe(
       delay(200),
       retry(3),
       map((respons:any) => {

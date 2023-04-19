@@ -12,12 +12,25 @@ import { Statuses } from '../enums/statuses';
 export class QueryBuilderService {
 
   isFilterSaved: number = 0
+  
+  queryParams: IGetEventsAndSights = {}
+
   userID: number = 0
+  eventTypes?: string
+  sightTypes?: string
+  dateStart?: string
+  dateEnd?: string
+  latitudeBounds?: string
+  longitudeBounds?: string
+  city?: string
+  region?: string
+
   
   public paginationPublicEventsCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
   public paginationPublicEventsTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
   public paginationPublicSightsCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
   public paginationPublicSightsTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+
 
   constructor(private mapService: MapService, private filterService: FilterService, private userService: UserService) { }
 
@@ -27,141 +40,136 @@ export class QueryBuilderService {
     ).subscribe().unsubscribe()
   }
 
-  //собираем запрос для ивентов, при вызове указать с какой страницы вызов
-  buidEventsQuery(page:string = 'map'): IGetEventsAndSights{
-    let queryParams: IGetEventsAndSights = {}
-    let eventTypes = this.filterService.eventTypes.value
-    let dateStart = this.filterService.startDate.value
-    let dateEnd = this.filterService.endDate.value
-    let latitudeBounds = this.mapService.radiusBoundsLats.value
-    let longitudeBounds = this.mapService.radiusBoundsLongs.value
-    let city = this.filterService.city.value
-    let region = this.filterService.region.value
-
-    switch (page) {
-      //Главная страница - карта /home
-      case 'map':
-        queryParams =  {
-          statuses: [Statuses.publish].join(','),
-          statusLast: true,
-          latitudeBounds: latitudeBounds,
-          longitudeBounds: longitudeBounds,
-          eventTypes: eventTypes.join(','),
-          dateStart: dateStart,
-          dateEnd: dateEnd
-        }
-        break;
-
-       //Публичная страница мероприятий /events  - вкладка по городу
-      case 'eventsPublicForCityTab':
-        this.getUserID()
-        queryParams =  {
-          pagination: true,
-          page: this.paginationPublicEventsCurrentPage.value,
-          userId: this.userID,
-          favoriteUser: true,
-          likedUser: true,
-          statuses: [Statuses.publish].join(','),
-          statusLast: true,
-          city: city,
-          region: region,
-          eventTypes: eventTypes.join(','),
-          dateStart: dateStart,
-          dateEnd: dateEnd
-        }  
-        break;
-
-      //Публичная страница мероприятий /events  - вкладка по городу
-      case 'eventsPublicForGeolocationTab':
-        this.getUserID()
-        queryParams =  {
-          pagination: true,
-          page: this.paginationPublicEventsCurrentPage.value,
-          userId: this.userID,
-          favoriteUser: true,
-          likedUser: true,
-          statuses: [Statuses.publish].join(','),
-          statusLast: true,
-          city: city,
-          latitudeBounds: latitudeBounds,
-          longitudeBounds: longitudeBounds,
-          forEventPage: true,
-          eventTypes: eventTypes.join(','),
-          dateStart: dateStart,
-          dateEnd: dateEnd
-        }  
-        break; 
-      default:
-        queryParams = {city: this.filterService.city.value, region: this.filterService.region.value}
-        break;
-    }
-
-    return queryParams
+  updateParams(){
+    this.eventTypes = this.filterService.eventTypes.value.toString(),
+    this.sightTypes = this.filterService.sightTypes.value.toString(),
+    this.dateStart = this.filterService.startDate.value,
+    this.dateEnd = this.filterService.endDate.value,
+    this.latitudeBounds = this.mapService.radiusBoundsLats.value,
+    this.longitudeBounds = this.mapService.radiusBoundsLongs.value,
+    this.city = this.filterService.city.value,
+    this.region = this.filterService.region.value,
+    this.getUserID()
   }
 
-  //собираем запрос для мест, при вызове указать с какой страницы вызов
-  buidSightsQuery(page:string = 'map'): IGetEventsAndSights{
-    let queryParams: IGetEventsAndSights = {}
-    let sightTypes = this.filterService.sightTypes.value
-    let latitudeBounds = this.mapService.radiusBoundsLats.value
-    let longitudeBounds = this.mapService.radiusBoundsLongs.value
-    let city = this.filterService.city.value
-    let region = this.filterService.region.value
-
+  //Определяем и собираем запрос
+  queryBuilder(page:string = 'eventsForMap'){
+    this.updateParams()
     switch (page) {
-      //Главная страница - карта /home
-      case 'map':
-        queryParams =  {
-          statuses: [Statuses.publish].join(','),
-          statusLast: true,
-          latitudeBounds: latitudeBounds,
-          longitudeBounds: longitudeBounds,
-          sightTypes: sightTypes.join(','),
-        }
+      case 'eventsForMap':   //Главная страница - карта /home
+        this.buildQueryEventsForMap()
         break;
-
-       //Публичная страница мероприятий /events  - вкладка по городу
-      case 'sightsPublicForCityTab':
-        this.getUserID()
-        queryParams =  {
-          pagination: true,
-          page: this.paginationPublicSightsCurrentPage.value,
-          userId: this.userID,
-          favoriteUser: true,
-          likedUser: true,
-          statuses: [Statuses.publish].join(','),
-          statusLast: true,
-          city: city,
-          region: region,
-          sightTypes: sightTypes.join(','),
-
-        }  
+      case 'eventsPublicForCityTab':  //Публичная страница мероприятий /events - вкладка по события городу
+        this.buildQueryEventsPublicForCityTab()
         break;
-
-      //Публичная страница мероприятий /events  - вкладка по городу
-      case 'eventsPublicForGeolocationTab':
-        this.getUserID()
-        queryParams =  {
-          pagination: true,
-          page: this.paginationPublicEventsCurrentPage.value,
-          userId: this.userID,
-          favoriteUser: true,
-          likedUser: true,
-          statuses: [Statuses.publish].join(','),
-          statusLast: true,
-          city: city,
-          latitudeBounds: latitudeBounds,
-          longitudeBounds: longitudeBounds,
-          forEventPage: true,
-          sightTypes: sightTypes.join(','),
-        }  
-        break; 
+      case 'eventsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка события рядом
+        this.buildQueryEventsPublicForGeolocationTab()
+        break;
+      case 'sightsForMap': //Главная страница - карта /home
+        this.buildQuerySightsForMap()
+        break;
+      case 'sightsPublicForCityTab': //Публичная страница мероприятий /events - вкладка места по городу
+        this.buildQuerySightsPublicForCityTab()
+        break;
+      case 'sightsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка места рядом
+        this.buildQuerySightsPublicForGeolocationTab()
+        break;
       default:
-        queryParams = {city: this.filterService.city.value, region: this.filterService.region.value}
+        this.queryParams = {city: this.filterService.city.value, region: this.filterService.region.value}
         break;
     }
+    return this.queryParams
+  }
 
-    return queryParams
+  buildQueryEventsForMap(){
+    this.queryParams =  {
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      latitudeBounds: this.latitudeBounds,
+      longitudeBounds: this.longitudeBounds,
+      eventTypes: this.eventTypes,
+      dateStart: this.dateStart,
+      dateEnd: this.dateEnd
+    }
+  }
+  
+  buildQueryEventsPublicForCityTab(){
+    this.queryParams =  {
+      pagination: true,
+      page: this.paginationPublicEventsCurrentPage.value,
+      userId: this.userID,
+      favoriteUser: true,
+      likedUser: true,
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      city: this.city,
+      region: this.region,
+      eventTypes: this.eventTypes,
+      dateStart: this.dateStart,
+      dateEnd: this.dateEnd
+    }  
+  }
+
+  buildQueryEventsPublicForGeolocationTab(){
+    this.queryParams =  {
+      pagination: true,
+      page: this.paginationPublicEventsCurrentPage.value,
+      userId: this.userID,
+      favoriteUser: true,
+      likedUser: true,
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      city: this.city,
+      latitudeBounds: this.latitudeBounds,
+      longitudeBounds: this.longitudeBounds,
+      forEventPage: true,
+      eventTypes: this.eventTypes,
+      dateStart: this.dateStart,
+      dateEnd: this.dateEnd
+    }  
+  }
+
+  buildQuerySightsForMap(){
+    this.queryParams =  {
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      latitudeBounds: this.latitudeBounds,
+      longitudeBounds: this.longitudeBounds,
+      sightTypes: this.sightTypes,
+    }
+  }
+
+  buildQuerySightsPublicForCityTab(){
+    this.queryParams =  {
+      pagination: true,
+      page: this.paginationPublicSightsCurrentPage.value,
+      userId: this.userID,
+      favoriteUser: true,
+      likedUser: true,
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      city: this.city,
+      region: this.region,
+      sightTypes: this.sightTypes,
+
+    }  
+  }
+
+  buildQuerySightsPublicForGeolocationTab(){
+    this.queryParams =  {
+      pagination: true,
+      page: this.paginationPublicEventsCurrentPage.value,
+      userId: this.userID,
+      favoriteUser: true,
+      likedUser: true,
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      city: this.city,
+      latitudeBounds: this.latitudeBounds,
+      longitudeBounds: this.longitudeBounds,
+      forEventPage: true,
+      sightTypes: this.sightTypes,
+    }  
   }
 
 }

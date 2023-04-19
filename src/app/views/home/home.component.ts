@@ -143,7 +143,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getEvents() {
     // Устанавливаем границы радиуса - юзать именно тут иначего приходятпрошлые координаты
     this.setBoundsCoordsToMapService()
-    this.eventsService.getEvents(this.queryBuilderService.buidEventsQuery()).pipe(
+    this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(
       delay(100),
       map((response:any) => response.events),
       tap(() => this.eventsLoading = true),
