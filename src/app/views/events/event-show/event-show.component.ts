@@ -1,7 +1,7 @@
-import { Component, OnInit,OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit,OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, tap, retry, catchError, of, EMPTY} from 'rxjs';
-import { IEvent } from 'src/app/models/events';
+import { IEvent } from 'src/app/models/event';
 import { EventsService } from 'src/app/services/events.service';
 import { IonicSlides } from '@ionic/angular';
 import {register} from 'swiper/element/bundle';
@@ -44,6 +44,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private eventsService: EventsService,
     private toastService: ToastService,
     private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   
@@ -149,7 +150,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     register()
-    
+    this.cdr.detectChanges()
     // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
     //   this.swiper = res.first.nativeElement.swiper
     //   console.log(res.first.nativeElement.swiper)

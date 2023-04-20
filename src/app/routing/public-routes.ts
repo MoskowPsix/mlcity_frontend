@@ -37,6 +37,22 @@ export const publicRoutes: Routes = [
       canActivate: [CheckAuthCanActiveGuard],
     },
     {
+      path: 'sights',
+      component: EventsComponent, // Поменять на компонет места
+      canActivate: [CheckAuthCanActiveGuard],
+    },
+    {
+      path: 'sights/:id',
+      pathMatch: 'full',
+      component: EventShowComponent, // Поменять на компонет места
+      canActivate: [CheckAuthCanActiveGuard],
+    },
+    {
+      path: 'add_sight',
+      component: AddEventComponent, // Поменять на компонет места
+      canActivate: [CheckAuthCanActiveGuard],
+    },
+    {
       path: 'about',
       component: AboutComponent,
       canActivate: [CheckAuthCanActiveGuard],

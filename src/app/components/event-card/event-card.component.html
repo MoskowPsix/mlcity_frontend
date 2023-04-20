@@ -1,5 +1,6 @@
 <ion-card>
-  <div class="ion-activatable ripple-parent rectangle" [routerLink]="['/events', event.id]">
+  <!-- ['/sights', event.id] - было лень переделывать поэтому тут event.id подразумевает ид места, так как компонент универсальный и можно передать место -->
+  <div class="ion-activatable ripple-parent rectangle" [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
     <swiper-container 
       #swiper
       [modules]="swiperModules" 
@@ -27,19 +28,20 @@
       </ng-template>     
     </swiper-container>
 
-    <ng-container *ngIf="swiperTotalSlids !== 0">
+    <ng-container *ngIf="swiperTotalSlids && swiperTotalSlids > 1">
       <div class="slids-pagination">
         {{ swiperCurrentSlide }} / {{ swiperTotalSlids }}
       </div>
     </ng-container>      
 
-    <div class="date">
+    <div class="date" *ngIf="event.date_start && event.date_end">
       <span>НАЧАЛО: {{ event.date_start | date:'d MMM в HH:mm' }}</span>
       <span>КОНЕЦ: {{ event.date_end | date:'d MMM в HH:mm' }}</span>
     </div>
 
-    <div *ngIf="event.price" class="price">
-      <span>{{ event.price }} руб.</span>
+    <div class="price">
+      <span *ngIf="event.price">{{ event.price }} руб.</span>
+      <span *ngIf="!event.price">Бесплатно</span>
     </div>
 
     <div *ngIf="event.types && event.types.length" class="type">

@@ -13,11 +13,18 @@
     </div>
 
     <div class="events-counter" #eventCounter >
-      Найдено мест / событый:
-      <span *ngIf="!eventsLoading">
-        {{ placemarks.length }}
+      <span class="px-5px">Найдено событий</span>
+      <span *ngIf="!eventsLoading" class="px-5px counter">
+        {{ events.length }}
       </span>
       <span *ngIf="eventsLoading">
+          <ion-spinner color="light"></ion-spinner>
+      </span>
+      <span class="px-5px">мест</span>
+      <span *ngIf="!sightsLoading" class="counter">
+        {{ sights.length }}
+      </span>
+      <span *ngIf="sightsLoading">
           <ion-spinner color="light"></ion-spinner>
       </span>
     </div>
@@ -42,15 +49,15 @@
   <ion-modal id="modalEventShow" [isOpen]="modalEventShowOpen" (ionModalDidDismiss)="modalClose()" (ionBreakpointDidChange)="modalClose()" [initialBreakpoint]="0.7" [breakpoints]="[0, 0.7]">
     <ng-template>
       <ion-content>
-        <ng-container *ngIf="event">
+        <ng-container *ngIf="modalContent">
           <ion-row class="ion-justify-content-start">
             <ion-col size="12">
-              <app-event-card [event]="event"></app-event-card>
+              <app-event-card [event]="modalContent"></app-event-card>
             </ion-col>
           </ion-row>
         </ng-container>
 
-        <ng-container *ngIf="!event">
+        <ng-container *ngIf="!modalContent">
           <app-no-data/>
         </ng-container>
         
