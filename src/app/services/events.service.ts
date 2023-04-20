@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { throwError } from 'rxjs'
 import { ErrorService } from './error.service'
-import { IEvent } from '../models/events';
+import { IEvent } from '../models/event';
 import { environment } from 'src/environments/environment';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
 

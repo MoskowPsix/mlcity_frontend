@@ -2,7 +2,6 @@ import { Component, Input, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementR
 import { catchError, delay, EMPTY, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { MessagesAuth } from 'src/app/enums/messages-auth'
-import { IEvent } from 'src/app/models/events'
 import { AuthService } from 'src/app/services/auth.service'
 import { EventsService } from 'src/app/services/events.service'
 import { ToastService } from 'src/app/services/toast.service'
@@ -31,7 +30,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   private readonly destroy$ = new Subject<void>()
 
   @Input() callFromCabinet: boolean = true
-  @Input() event!: IEvent
+  @Input() event!: any
+  @Input() isSight: boolean = false
 
   @ViewChild('swiper')
   swiperRef: ElementRef | undefined

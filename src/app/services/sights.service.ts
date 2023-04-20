@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { IEvent } from '../models/events';
+import { IEvent } from '../models/event';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
 
 @Injectable({

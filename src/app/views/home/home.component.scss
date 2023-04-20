@@ -30,6 +30,14 @@
 	}
 }
 
+.px-5px{
+	padding-right: 5px;
+}
+
+.counter{
+	color: #fbff09;
+}
+
 ion-spinner{
 	width: 13px;
 	height: 13px;
@@ -111,6 +119,7 @@ ion-spinner{
 			// bottom: 40%;
 			height: 32rem;
 			bottom: 15%;
+			bottom: 10rem;
     		left: 0;
 			padding: 1rem;
 			background: transparent;

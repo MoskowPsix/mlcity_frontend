@@ -137,7 +137,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
   //Если обе даты выбраны ставим тру
   dateFiiltersCounter(){
     if (this.startDate && this.endDate && !this.dateFiltersSelected){
-      this.dateFiltersSelected = true
+      //this.dateFiltersSelected = true
+      this.filterService.dateFiltersSelected.next(true)
     }
 
     if (this.startDate && this.endDate){ // если выбраны обе даты, то кидает изменение фильтра
@@ -147,8 +148,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   //Удаляем фильтры
-  removeFilter(){
-    this.dateFiltersSelected = false
+  removeFilter(){ 
+    //this.dateFiltersSelected = false // чтобы сбросить счетчик даты
+    this.filterService.changeFilter.next(false) 
     this.filterService.removeFilters()
     if (!this.navigationService.appFirstLoading.value)
       this.filterService.changeFilter.next(true)
@@ -214,7 +216,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.getSightTypes()
 
     //Сбрасываем фильтры даты
-    this.filterService.removeDateFilters()
+    //this.filterService.removeDateFilters()
 
     //Подписываемся на состояние модалки фильтров
     this.navigationService.modalFiltersOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
@@ -226,9 +228,14 @@ export class FiltersComponent implements OnInit, OnDestroy {
       this.saveFilters = value
     })
 
-    //Сбрасываем фильтры, если у юзера было установлено не сохранять фильтры
-    if (this.saveFilters === 0)
-        this.removeFilter()
+    //подписываемся флаг выбора даты
+    this.filterService.dateFiltersSelected.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.dateFiltersSelected = value
+    })
+
+    //Сбрасываем фильтры, если у юзера было установлено не сохранять фильтры - перенес в app.ts
+    // if (this.saveFilters === 0)
+    //     this.removeFilter()
 
     //подписываемся на кол-во фильтров
     this.filterService.countFilters.pipe(takeUntil(this.destroy$)).subscribe((value) => {

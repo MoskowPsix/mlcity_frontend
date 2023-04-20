@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FilterService } from './services/filter.service';
 
 @Component({
   selector: 'app-root',
@@ -6,16 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {
-    // public isDesktop() {
-    //   let platforms = this.plt.platforms();
-    //   if(platforms[0] == "core" || platforms[0] == "mobileweb") {
-    //       return true;
-    //   } else {
-    //       return false;
-    //   }
-    // }
-
+  constructor(private filterService: FilterService) {
+    //сбрасываем фильтры даты при каждом запуске прилолжения
+    this.filterService.removeDateFilters()
+    //Сбрасываем фильтры, если у юзера было установлено не сохранять фильтры
+    if (this.filterService.saveFilters.value === 0)
+      this.filterService.removeFilters()
   }
+
+
 }
 

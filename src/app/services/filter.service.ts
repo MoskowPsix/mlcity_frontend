@@ -13,6 +13,8 @@ export class FilterService {
   public radius: BehaviorSubject<string> = new BehaviorSubject(this.getRadiusFromlocalStorage() || '1')
   public startDate: BehaviorSubject<string> = new BehaviorSubject(this.getStartDateFromlocalStorage() || '')
   public endDate: BehaviorSubject<string> = new BehaviorSubject(this.getEndDateFromlocalStorage() || '') // Ставим + неделю
+
+  public dateFiltersSelected:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
   
   public eventTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>(this.getEventTypesFromlocalStorage()?.split(',').map(Number).filter(Boolean) || []) 
   public sightTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>(this.getSightTypesFromlocalStorage()?.split(',').map(Number).filter(Boolean) || []) 
@@ -23,10 +25,6 @@ export class FilterService {
   public changeCityFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
 
   constructor() {}
-
-  // queryBuilder(callFromMapPape: false){
-
-  // }
 
   setCityTolocalStorage(city: string = this.city.value){
     localStorage.setItem('city', city)
@@ -128,17 +126,18 @@ export class FilterService {
   }
 
   removeFilters() {
+    // localStorage.removeItem('startDateFilter')
+    // localStorage.removeItem('endDateFilter')
+    // localStorage.removeItem('eventTypesFilter')
+    // localStorage.removeItem('sightTypesFIlter')
+    // localStorage.removeItem('countFilters')
     this.setStartDateTolocalStorage('')
     this.setEndDateTolocalStorage('')
     this.setEventTypesTolocalStorage([])
     this.setSightTypesTolocalStorage([])
     this.setCountFiltersTolocalStorage(0)
     this.setRadiusTolocalStorage('1')
-    localStorage.removeItem('startDateFilter')
-    localStorage.removeItem('endDateFilter')
-    localStorage.removeItem('eventTypesFilter')
-    localStorage.removeItem('sightTypesFIlter')
-    localStorage.removeItem('countFilters')
+    this.dateFiltersSelected.next(false)
   }
 
   removeDateFilters(){

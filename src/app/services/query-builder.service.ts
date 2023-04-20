@@ -24,12 +24,18 @@ export class QueryBuilderService {
   longitudeBounds?: string
   city?: string
   region?: string
-
   
-  public paginationPublicEventsCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
-  public paginationPublicEventsTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
-  public paginationPublicSightsCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
-  public paginationPublicSightsTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  public paginationPublicEventsCityCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  //public paginationPublicEventsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
+
+  public paginationPublicEventsGeolocationCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  //public paginationPublicEventsGeolocationTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
+
+  public paginationPublicSightsCityCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  //public paginationPublicSightsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+
+  public paginationPublicSightsGeolocationCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  //public paginationPublicSightsGeolocatioTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
 
 
   constructor(private mapService: MapService, private filterService: FilterService, private userService: UserService) { }
@@ -75,10 +81,14 @@ export class QueryBuilderService {
         this.buildQuerySightsPublicForGeolocationTab()
         break;
       default:
-        this.queryParams = {city: this.filterService.city.value, region: this.filterService.region.value}
+        this.buildQueryDefault()
         break;
     }
     return this.queryParams
+  }
+
+  buildQueryDefault(){
+    this.queryParams = {city: this.filterService.city.value, region: this.filterService.region.value}
   }
 
   buildQueryEventsForMap(){
@@ -96,7 +106,7 @@ export class QueryBuilderService {
   buildQueryEventsPublicForCityTab(){
     this.queryParams =  {
       pagination: true,
-      page: this.paginationPublicEventsCurrentPage.value,
+      page: this.paginationPublicEventsCityCurrentPage.value,
       userId: this.userID,
       favoriteUser: true,
       likedUser: true,
@@ -113,7 +123,7 @@ export class QueryBuilderService {
   buildQueryEventsPublicForGeolocationTab(){
     this.queryParams =  {
       pagination: true,
-      page: this.paginationPublicEventsCurrentPage.value,
+      page: this.paginationPublicEventsGeolocationCurrentPage.value,
       userId: this.userID,
       favoriteUser: true,
       likedUser: true,
@@ -142,7 +152,7 @@ export class QueryBuilderService {
   buildQuerySightsPublicForCityTab(){
     this.queryParams =  {
       pagination: true,
-      page: this.paginationPublicSightsCurrentPage.value,
+      page: this.paginationPublicSightsCityCurrentPage.value,
       userId: this.userID,
       favoriteUser: true,
       likedUser: true,
@@ -158,7 +168,7 @@ export class QueryBuilderService {
   buildQuerySightsPublicForGeolocationTab(){
     this.queryParams =  {
       pagination: true,
-      page: this.paginationPublicEventsCurrentPage.value,
+      page: this.paginationPublicSightsGeolocationCurrentPage.value,
       userId: this.userID,
       favoriteUser: true,
       likedUser: true,
