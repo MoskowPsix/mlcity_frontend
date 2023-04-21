@@ -89,6 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     
     if (this.navigationService.appFirstLoading.value) {
       this.eventsLoading = true
+      this.sightsLoading = true
       this.cdr.detectChanges()
       //this.getEvents()
       this.getEventsAndSights()
@@ -105,6 +106,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       if (!this.navigationService.appFirstLoading.value) {
         this.eventsLoading = true
+        this.sightsLoading = true
         this.CirclePoint.geometry?.setRadius(this.radius*15)
         this.CirclePoint.options.set('fillOpacity', 0.7)
         this.CirclePoint.options.set('fillColor', '#474A51')
@@ -156,7 +158,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.setBoundsCoordsToMapService() // я хз почему, но эта штука только тут работает
       this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
         this.events = response.events
-        this.eventsLoading = false
+        //this.eventsLoading = false
         this.cdr.detectChanges()
         observer.next(EMPTY)
         observer.complete()
@@ -169,7 +171,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sightsLoading = true
       this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
         this.sights = response.sights
-        this.sightsLoading = false
+        //this.sightsLoading = false
         this.cdr.detectChanges()
         observer.next(EMPTY)
         observer.complete()
@@ -184,13 +186,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.placemarks=[]
     }
     //добавить в if - && this.navigationService.appFirstLoading.value - если не требуется увеличивать радиус после первого запуска
-    if (!this.events.length && !this.sights.length && this.radius < 25 ) {
+    if (!this.events.length && !this.sights.length && this.radius < 25 && this.navigationService.appFirstLoading.value) {
       this.filterService.setRadiusTolocalStorage((++this.radius).toString())
       this.CirclePoint.geometry?.setRadius(this.radius * 1000)
       this.getEventsAndSights()
     } else {
       this.navigationService.appFirstLoading.next(false)
       this.eventsLoading = false
+      this.sightsLoading = false
     }
 
     this.setPlacemarks(this.events)
