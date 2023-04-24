@@ -44,6 +44,23 @@ export class FilterService {
     return localStorage.getItem('region')
   }
 
+
+
+
+
+  // setCircleCenterTolocalStorage(circleCenter:string = this.circleCenter.value){
+  //   localStorage.setItem('circleCenter', circleCenter)
+  //   this.circleCenter.next(circleCenter)
+  // }
+
+  // getCircleCenterFromlocalStorage(){
+  //   return localStorage.getItem('circleCenter')
+  // }
+
+
+
+
+
   setCityLatitudeTolocalStorage(cityLatitude:string = this.cityLatitude.value){
     localStorage.setItem('cityLatitude', cityLatitude)
     this.cityLatitude.next(cityLatitude)

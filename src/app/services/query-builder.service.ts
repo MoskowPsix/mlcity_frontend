@@ -11,8 +11,6 @@ import { Statuses } from '../enums/statuses';
 })
 export class QueryBuilderService {
 
-  isFilterSaved: number = 0
-  
   queryParams: IGetEventsAndSights = {}
 
   userID: number = 0
@@ -20,10 +18,11 @@ export class QueryBuilderService {
   sightTypes?: string
   dateStart?: string
   dateEnd?: string
-  latitudeBounds?: string
-  longitudeBounds?: string
+  latitude?: number
+  longitude?: number
   city?: string
   region?: string
+  radius?: number
   
   public paginationPublicEventsCityCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
   //public paginationPublicEventsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
@@ -51,10 +50,11 @@ export class QueryBuilderService {
     this.sightTypes = this.filterService.sightTypes.value.toString(),
     this.dateStart = this.filterService.startDate.value,
     this.dateEnd = this.filterService.endDate.value,
-    this.latitudeBounds = this.mapService.radiusBoundsLats.value,
-    this.longitudeBounds = this.mapService.radiusBoundsLongs.value,
+    this.latitude = this.mapService.circleCenterLatitude.value,
+    this.longitude = this.mapService.circleCenterLongitude.value,
     this.city = this.filterService.city.value,
     this.region = this.filterService.region.value,
+    this.radius = parseInt(this.filterService.radius.value)
     this.getUserID()
   }
 
@@ -95,11 +95,12 @@ export class QueryBuilderService {
     this.queryParams =  {
       statuses: [Statuses.publish].join(','),
       statusLast: true,
-      latitudeBounds: this.latitudeBounds,
-      longitudeBounds: this.longitudeBounds,
+      latitude: this.latitude,
+      longitude: this.longitude,
       eventTypes: this.eventTypes,
       dateStart: this.dateStart,
-      dateEnd: this.dateEnd
+      dateEnd: this.dateEnd,
+      radius: this.radius,
     }
   }
   
@@ -130,8 +131,8 @@ export class QueryBuilderService {
       statuses: [Statuses.publish].join(','),
       statusLast: true,
       city: this.city,
-      latitudeBounds: this.latitudeBounds,
-      longitudeBounds: this.longitudeBounds,
+      latitude: this.latitude,
+      longitude: this.longitude,
       forEventPage: true,
       eventTypes: this.eventTypes,
       dateStart: this.dateStart,
@@ -143,8 +144,8 @@ export class QueryBuilderService {
     this.queryParams =  {
       statuses: [Statuses.publish].join(','),
       statusLast: true,
-      latitudeBounds: this.latitudeBounds,
-      longitudeBounds: this.longitudeBounds,
+      latitude: this.latitude,
+      longitude: this.longitude,
       sightTypes: this.sightTypes,
     }
   }
@@ -175,8 +176,8 @@ export class QueryBuilderService {
       statuses: [Statuses.publish].join(','),
       statusLast: true,
       city: this.city,
-      latitudeBounds: this.latitudeBounds,
-      longitudeBounds: this.longitudeBounds,
+      latitude: this.latitude,
+      longitude: this.longitude,
       forEventPage: true,
       sightTypes: this.sightTypes,
     }  

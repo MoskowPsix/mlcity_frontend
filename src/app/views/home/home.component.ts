@@ -141,8 +141,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   
   setBoundsCoordsToMapService(){
-    this.mapService.radiusBoundsLats.next(this.CirclePoint.geometry?.getBounds()![0][0] + ',' + this.CirclePoint.geometry?.getBounds()![1][0])
-    this.mapService.radiusBoundsLongs.next(this.CirclePoint.geometry?.getBounds()![0][1] + ',' + this.CirclePoint.geometry?.getBounds()![1][1])
+    // this.mapService.radiusBoundsLats.next(this.CirclePoint.geometry?.getBounds()![0][0] + ',' + this.CirclePoint.geometry?.getBounds()![1][0])
+    // this.mapService.radiusBoundsLongs.next(this.CirclePoint.geometry?.getBounds()![0][1] + ',' + this.CirclePoint.geometry?.getBounds()![1][1])
+    console.log(this.myGeo.geometry?.getCoordinates()!)
+    this.mapService.circleCenterLatitude.next(this.CirclePoint.geometry?.getCoordinates()![0]!)
+    this.mapService.circleCenterLongitude.next(this.CirclePoint.geometry?.getCoordinates()![1]!)
   }
 
   visiblePlacemarks(){
@@ -200,7 +203,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.setPlacemarks(this.sights)
 
     this.visiblePlacemarks()
-    this.setBoundsCoordsToMapService()
+    //this.setBoundsCoordsToMapService()
     this.cdr.detectChanges()
   }
 

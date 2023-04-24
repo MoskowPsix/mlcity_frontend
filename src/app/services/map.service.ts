@@ -13,15 +13,19 @@ import { FilterService } from './filter.service';
 export class MapService {
   placemark!: ymaps.Placemark
 
-  public radiusBoundsLats: BehaviorSubject<string> = new BehaviorSubject('0,0')
-  public radiusBoundsLongs: BehaviorSubject<string> = new BehaviorSubject('0,0')
+  // public radiusBoundsLats: BehaviorSubject<string> = new BehaviorSubject('0,0')
+  // public radiusBoundsLongs: BehaviorSubject<string> = new BehaviorSubject('0,0')
+
+  public circleCenterLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
+  public circleCenterLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
 
   public showChangeCityDialog: BehaviorSubject<boolean> = new BehaviorSubject(false)
 
   public geolocationCity: BehaviorSubject<string> = new BehaviorSubject('')
-  private geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
-  private geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
+  public geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
+  public geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationRegion: BehaviorSubject<string> = new BehaviorSubject('')
+  
 
 
   options: NativeGeocoderOptions = {
@@ -212,21 +216,17 @@ export class MapService {
   }
 
   searchCity(city:string, region:string, latitude:number, longitude:number) {
-    //!!!!!!!!!!!!!!!Необходимо добавить запись координат и определение города, если город не совпадает, выдавать запрос
-        this.geolocationCity.next(city)
-        this.geolocationRegion.next(region)
-        this.geolocationLatitude.next(latitude)
-        this.geolocationLongitude.next(longitude)
+    this.geolocationCity.next(city)
+    this.geolocationRegion.next(region)
+    this.geolocationLatitude.next(latitude)
+    this.geolocationLongitude.next(longitude)
 
-        if (!this.filterService.getCityFromlocalStorage() ){
-          this.setCoordsFromChangeCityDialog()
-          //this.showChangeCityDialog.next(true)
-        } else  if (this.geolocationCity.value && this.filterService.getCityFromlocalStorage() !== this.geolocationCity.value){
-          this.showChangeCityDialog.next(true)
-        } 
-        
-        //this.setCoordsFromChangeCityDialog()
-    ///////////
+    if (!this.filterService.getCityFromlocalStorage() ){
+      this.setCoordsFromChangeCityDialog()
+      //this.showChangeCityDialog.next(true)
+    } else  if (this.geolocationCity.value && this.filterService.getCityFromlocalStorage() !== this.geolocationCity.value){
+      this.showChangeCityDialog.next(true)
+    } 
   }
   
   //Устанавливаем дефолтные значения после подтверждения диалога на смену города
@@ -252,7 +252,6 @@ export class MapService {
       cityCoords.push(parseFloat(this.filterService.cityLatitude.value), parseFloat(this.filterService.cityLongitude.value))
     } else {
       cityCoords.push(parseFloat(this.filterService.getCityLatitudeFromlocalStorage()!), parseFloat(this.filterService.getCityLongitudeFromlocalStorage()!))
-      //cityCoords.push(this.geolocationLatitude.value, this.geolocationLongitude.value)
     }
     return cityCoords
   }
