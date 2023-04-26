@@ -36,7 +36,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   searchCityes: FormControl =  new FormControl('')
   
   dateFiltersSelected:boolean = false
-  saveFilters?: number = 1
+  //saveFilters?: number = 1
   countFilters: number = 0
   startDate?: string
   endDate?: string
@@ -45,6 +45,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
   radius: number = 1  
   city:string = ''
   region: string = ''
+  nowDate: string = new Date().toISOString()
+  minDate: string = new Date().toISOString()
+  maxDate?: string
 
   constructor(
     private eventTypeService: EventTypeService, 
@@ -71,9 +74,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
     })
   }
 
-  toggleSaveFilter(){
-    this.saveFilters === 1 ? this.filterService.setSaveFiltersTolocalStorage(0) : this.filterService.setSaveFiltersTolocalStorage(1)
-  }
+  // toggleSaveFilter(){
+  //   this.saveFilters === 1 ? this.filterService.setSaveFiltersTolocalStorage(0) : this.filterService.setSaveFiltersTolocalStorage(1)
+  // }
 
   onSegmentChanged(event:any){
     this.segment = event.detail.value
@@ -82,11 +85,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
   startDateChange(event:any){
     this.filterService.setStartDateTolocalStorage(event.detail.value)
     this.dateFiiltersCounter()
+    this.minDate = new Date(event.detail.value).toISOString()
   }
 
   endDateChange(event:any){
     this.filterService.setEndDateTolocalStorage(event.detail.value)
     this.dateFiiltersCounter()
+    this.maxDate = new Date(event.detail.value).toISOString()
   }
 
   //Добавляем в массив выбраных ивентов
@@ -150,6 +155,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   //Удаляем фильтры
   removeFilter(){ 
     //this.dateFiltersSelected = false // чтобы сбросить счетчик даты
+    this.minDate = new Date().toISOString()
     this.filterService.changeFilter.next(false) 
     this.filterService.removeFilters()
     if (!this.navigationService.appFirstLoading.value)
@@ -191,6 +197,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       this.filterService.setCityLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
     this.filterService.changeFilter.next(true)
+    this.filterService.changeCityFilter.next(true)
   }
 
    //Очистить поле поиса в поиске города
@@ -224,9 +231,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
     })
 
     //подписываемся на сохранение фильтров
-    this.filterService.saveFilters.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      this.saveFilters = value
-    })
+    // this.filterService.saveFilters.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    //   this.saveFilters = value
+    // })
 
     //подписываемся флаг выбора даты
     this.filterService.dateFiltersSelected.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -245,6 +252,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     //подписываемся на дату начала
     this.filterService.startDate.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.startDate = value
+      console.log(this.startDate)
     })
 
     //подписываемся на дату конца

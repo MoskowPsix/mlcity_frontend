@@ -6,6 +6,7 @@ import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx
 import { Geolocation } from '@capacitor/geolocation';
 import { BehaviorSubject} from 'rxjs';
 import { FilterService } from './filter.service';
+import { NavigationService } from './navigation.service'
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +14,16 @@ import { FilterService } from './filter.service';
 export class MapService {
   placemark!: ymaps.Placemark
 
-  public radiusBoundsLats: BehaviorSubject<string> = new BehaviorSubject('0,0')
-  public radiusBoundsLongs: BehaviorSubject<string> = new BehaviorSubject('0,0')
+  public circleCenterLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
+  public circleCenterLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
 
   public showChangeCityDialog: BehaviorSubject<boolean> = new BehaviorSubject(false)
 
   public geolocationCity: BehaviorSubject<string> = new BehaviorSubject('')
-  private geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
-  private geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
+  public geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
+  public geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationRegion: BehaviorSubject<string> = new BehaviorSubject('')
+  
 
 
   options: NativeGeocoderOptions = {
@@ -34,7 +36,8 @@ export class MapService {
     private nativegeocoder: NativeGeocoder, 
     private locationAccuracy: LocationAccuracy, 
     private yaGeocoderService: YaGeocoderService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private navigationService: NavigationService
   ) { }
 
   //Определение геопозиции с помощью яндекса (платно)
@@ -212,21 +215,17 @@ export class MapService {
   }
 
   searchCity(city:string, region:string, latitude:number, longitude:number) {
-    //!!!!!!!!!!!!!!!Необходимо добавить запись координат и определение города, если город не совпадает, выдавать запрос
-        this.geolocationCity.next(city)
-        this.geolocationRegion.next(region)
-        this.geolocationLatitude.next(latitude)
-        this.geolocationLongitude.next(longitude)
+    this.geolocationCity.next(city)
+    this.geolocationRegion.next(region)
+    this.geolocationLatitude.next(latitude)
+    this.geolocationLongitude.next(longitude)
 
-        if (!this.filterService.getCityFromlocalStorage() ){
-          this.setCoordsFromChangeCityDialog()
-          //this.showChangeCityDialog.next(true)
-        } else  if (this.geolocationCity.value && this.filterService.getCityFromlocalStorage() !== this.geolocationCity.value){
-          this.showChangeCityDialog.next(true)
-        } 
-        
-        //this.setCoordsFromChangeCityDialog()
-    ///////////
+    if (!this.filterService.getCityFromlocalStorage() ){
+      this.setCoordsFromChangeCityDialog()
+      //this.showChangeCityDialog.next(true)
+    } else  if (this.geolocationCity.value && this.filterService.getCityFromlocalStorage() !== this.geolocationCity.value){
+      this.showChangeCityDialog.next(true)
+    } 
   }
   
   //Устанавливаем дефолтные значения после подтверждения диалога на смену города
@@ -252,19 +251,28 @@ export class MapService {
       cityCoords.push(parseFloat(this.filterService.cityLatitude.value), parseFloat(this.filterService.cityLongitude.value))
     } else {
       cityCoords.push(parseFloat(this.filterService.getCityLatitudeFromlocalStorage()!), parseFloat(this.filterService.getCityLongitudeFromlocalStorage()!))
-      //cityCoords.push(this.geolocationLatitude.value, this.geolocationLongitude.value)
     }
     return cityCoords
   }
 
   // Определяем местоположение пользователя
   async positionFilter(map: any, circlePoint: ymaps.Circle){
-    if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter.value) {
+    //if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter.value) {
+    //Если первый запуск приложения то устанавливаем геопозицию   
+    if (this.navigationService.appFirstLoading.value){
+      await this.geolocationMapNative(map, circlePoint)
+    }  
+
+    //Если не первый запуск и менялся фильтр города то перекидываем на город
+    if (this.filterService.changeCityFilter.value && !this.navigationService.appFirstLoading.value) {
         await circlePoint.geometry?.setCoordinates([parseFloat(this.filterService.cityLatitude.value), parseFloat(this.filterService.cityLongitude.value)])
         map.target.setBounds(circlePoint.geometry?.getBounds()!, {checkZoomRange: true})
-    } else {
-      await this.geolocationMapNative(map, circlePoint) 
-    }
+    } 
+
+    //ветка если юзать this.filterService.saveFilters.value === 1
+    // else {
+    //   await this.geolocationMapNative(map, circlePoint) 
+    // }
     this.filterService.changeCityFilter.next(false)
   }
 

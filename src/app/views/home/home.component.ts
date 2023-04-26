@@ -141,8 +141,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   
   setBoundsCoordsToMapService(){
-    this.mapService.radiusBoundsLats.next(this.CirclePoint.geometry?.getBounds()![0][0] + ',' + this.CirclePoint.geometry?.getBounds()![1][0])
-    this.mapService.radiusBoundsLongs.next(this.CirclePoint.geometry?.getBounds()![0][1] + ',' + this.CirclePoint.geometry?.getBounds()![1][1])
+    this.mapService.circleCenterLatitude.next(this.CirclePoint.geometry?.getCoordinates()![0]!)
+    this.mapService.circleCenterLongitude.next(this.CirclePoint.geometry?.getCoordinates()![1]!)
   }
 
   visiblePlacemarks(){
@@ -265,10 +265,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
     
      //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранынй город. 
-     //Пропускаем 1 skip(1) потому что, при запуске очищаются фильтры и прилетает true
-    this.filterService.changeFilter.pipe(skip(1),debounceTime(1000),takeUntil(this.destroy$)).subscribe(value => {
+    this.filterService.changeFilter.pipe(debounceTime(1000),takeUntil(this.destroy$)).subscribe(value => {
       if (value === true){
         this.mapService.positionFilter(this.map, this.CirclePoint)
+        this.getEventsAndSights()
       }
     })
   }

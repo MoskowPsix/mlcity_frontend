@@ -6,13 +6,17 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class FilterService {
 
+  private nowDate: Date = new Date()
+
   public city: BehaviorSubject<string> = new BehaviorSubject(this.getCityFromlocalStorage() || 'Заречный')
   public region: BehaviorSubject<string> = new BehaviorSubject(this.getRegionFromlocalStorage() || 'Свердловская область')
   public cityLatitude: BehaviorSubject<string> = new BehaviorSubject(this.getCityLatitudeFromlocalStorage() || '56.81497464978607')
   public cityLongitude: BehaviorSubject<string> = new BehaviorSubject(this.getCityLongitudeFromlocalStorage() || '61.32053375244141')
   public radius: BehaviorSubject<string> = new BehaviorSubject(this.getRadiusFromlocalStorage() || '1')
-  public startDate: BehaviorSubject<string> = new BehaviorSubject(this.getStartDateFromlocalStorage() || '')
-  public endDate: BehaviorSubject<string> = new BehaviorSubject(this.getEndDateFromlocalStorage() || '') // Ставим + неделю
+  // public startDate: BehaviorSubject<string> = new BehaviorSubject(this.getStartDateFromlocalStorage() || '')
+  // public endDate: BehaviorSubject<string> = new BehaviorSubject(this.getEndDateFromlocalStorage() || '') // Ставим + неделю
+  public startDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDate.toISOString())
+  public endDate: BehaviorSubject<string> = new BehaviorSubject(new Date(this.nowDate.setMonth(this.nowDate.getMonth()+2)).toISOString()) // Ставим + 2 месяцев
 
   public dateFiltersSelected:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
   
@@ -20,7 +24,7 @@ export class FilterService {
   public sightTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>(this.getSightTypesFromlocalStorage()?.split(',').map(Number).filter(Boolean) || []) 
 
   public countFilters: BehaviorSubject<number> = new BehaviorSubject<number>(parseInt(this.getCountFiltersFromlocalStorage() || '0')) 
-  public saveFilters: BehaviorSubject<number> = new BehaviorSubject<number>(parseInt(this.getSaveFiltersFromlocalStorage() || '1')) 
+  //public saveFilters: BehaviorSubject<number> = new BehaviorSubject<number>(parseInt(this.getSaveFiltersFromlocalStorage() || '1')) 
   public changeFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
   public changeCityFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
 
@@ -43,6 +47,23 @@ export class FilterService {
   getRegionFromlocalStorage(){
     return localStorage.getItem('region')
   }
+
+
+
+
+
+  // setCircleCenterTolocalStorage(circleCenter:string = this.circleCenter.value){
+  //   localStorage.setItem('circleCenter', circleCenter)
+  //   this.circleCenter.next(circleCenter)
+  // }
+
+  // getCircleCenterFromlocalStorage(){
+  //   return localStorage.getItem('circleCenter')
+  // }
+
+
+
+
 
   setCityLatitudeTolocalStorage(cityLatitude:string = this.cityLatitude.value){
     localStorage.setItem('cityLatitude', cityLatitude)
@@ -72,22 +93,22 @@ export class FilterService {
   }
 
   setStartDateTolocalStorage(startDate:string = this.startDate.value){
-    localStorage.setItem('startDateFilter',startDate)
+    //localStorage.setItem('startDateFilter',startDate)
     this.startDate.next(startDate)
   }
 
-  getStartDateFromlocalStorage(){
-    return localStorage.getItem('startDateFilter')
-  }
+  // getStartDateFromlocalStorage(){
+  //   return localStorage.getItem('startDateFilter')
+  // }
 
   setEndDateTolocalStorage(endDate:string = this.endDate.value){
-    localStorage.setItem('endDateFilter',endDate)
+    //localStorage.setItem('endDateFilter',endDate)
     this.endDate.next(endDate)
   }
 
-  getEndDateFromlocalStorage(){
-    return localStorage.getItem('endDateFilter')
-  }
+  // getEndDateFromlocalStorage(){
+  //   return localStorage.getItem('endDateFilter')
+  // }
 
   setEventTypesTolocalStorage(eventTypes:number[] = this.eventTypes.value){
     localStorage.setItem('eventTypesFilter',eventTypes.toString())
@@ -116,14 +137,14 @@ export class FilterService {
     return localStorage.getItem('countFilters')
   }
 
-  setSaveFiltersTolocalStorage(saveFilters:number = this.saveFilters.value){
-    localStorage.setItem('saveFilters',saveFilters.toString())
-    this.saveFilters.next(saveFilters)
-  }
+  // setSaveFiltersTolocalStorage(saveFilters:number = this.saveFilters.value){
+  //   localStorage.setItem('saveFilters',saveFilters.toString())
+  //   this.saveFilters.next(saveFilters)
+  // }
 
-  getSaveFiltersFromlocalStorage(){
-    return localStorage.getItem('saveFilters')
-  }
+  // getSaveFiltersFromlocalStorage(){
+  //   return localStorage.getItem('saveFilters')
+  // }
 
   removeFilters() {
     // localStorage.removeItem('startDateFilter')
@@ -140,10 +161,10 @@ export class FilterService {
     this.dateFiltersSelected.next(false)
   }
 
-  removeDateFilters(){
-    this.setStartDateTolocalStorage('')
-    this.setEndDateTolocalStorage('')
-    localStorage.removeItem('startDateFilter')
-    localStorage.removeItem('endDateFilter')
-  }
+  // removeDateFilters(){
+  //   this.setStartDateTolocalStorage('')
+  //   this.setEndDateTolocalStorage('')
+  //   localStorage.removeItem('startDateFilter')
+  //   localStorage.removeItem('endDateFilter')
+  // }
 }

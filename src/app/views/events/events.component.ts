@@ -195,8 +195,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.getSightsGeolocation()
 
     //Подписываемся на изменение фильтра 
-    //Пропускаем 1 skip(1) потому что, при запуске очищаются фильтры и прилетает true
-    this.filterService.changeFilter.pipe(skip(1),debounceTime(1000),takeUntil(this.destroy$)).subscribe((value) => {
+    this.filterService.changeFilter.pipe(debounceTime(1000),takeUntil(this.destroy$)).subscribe((value) => {
       if (value === true){
         this.eventsCity = []
         this.eventsGeolocation = []
