@@ -85,26 +85,7 @@
   
       <ion-row class="ion-justify-content-center">
         <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
-          <ion-row class="ion-justify-content-center">
-            <ion-col size-lg="6" size-md="12" size-xs="12">
-              <div class="map">
-                <ya-map 
-                  (ready)="onMapReady($event)"
-                  [zoom]="15"  
-                  [center]="[event.latitude, event.longitude]"
-                  [state]="{controls: ['zoomControl','fullscreenControl']}"
-                  [options]="{
-                    yandexMapDisablePoiInteractivity: true,
-                    minZoom:1,
-                    maxZoom:18,
-                    suppressMapOpenBlock: true,
-                    suppressObsoleteBrowserNotifier: true
-                  }"
-                >
-                </ya-map>
-              </div>        
-            </ion-col>
-  
+          <ion-row class="ion-justify-content-center">         
             <ion-col size-lg="6" size-md="12" size-xs="12" class="left-block">
               <div class="social-buttons">
                 <div class="likes">
@@ -139,6 +120,25 @@
               <div>
                 <span class="description italic">{{ event.description }}</span>
               </div>    
+            </ion-col>
+
+            <ion-col size-lg="6" size-md="12" size-xs="12">
+              <div class="map">
+                <ya-map 
+                  (ready)="onMapReady($event)"
+                  [zoom]="15"  
+                  [center]="[event.latitude, event.longitude]"
+                  [state]="{controls: ['zoomControl','fullscreenControl']}"
+                  [options]="{
+                    yandexMapDisablePoiInteractivity: true,
+                    minZoom:1,
+                    maxZoom:18,
+                    suppressMapOpenBlock: true,
+                    suppressObsoleteBrowserNotifier: true
+                  }"
+                >
+                </ya-map>
+              </div>        
             </ion-col>
           </ion-row>
           

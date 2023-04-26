@@ -160,7 +160,6 @@ export class FilterService {
     this.setRadiusTolocalStorage('1')
     this.dateFiltersSelected.next(false)
   }
-
   // removeDateFilters(){
   //   this.setStartDateTolocalStorage('')
   //   this.setEndDateTolocalStorage('')

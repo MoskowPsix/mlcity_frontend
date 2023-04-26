@@ -46,14 +46,17 @@
   </div>
 
   <!-- Модальное окно просмотр ивента / места при клике метки на карте -->
-  <ion-modal id="modalEventShow" [isOpen]="modalEventShowOpen" (ionModalDidDismiss)="modalClose()" (ionBreakpointDidChange)="modalClose()" [initialBreakpoint]="0.7" [breakpoints]="[0, 0.7]">
+  <ion-modal id="modalEventShow" [isOpen]="modalEventShowOpen" (ionModalDidDismiss)="modalClose()" (ionBreakpointDidChange)="modalClose()" [initialBreakpoint]="0.9" [breakpoints]="[0, 0.9]">
     <ng-template>
       <ion-content>
         <ng-container *ngIf="modalContent">
           <ion-row class="ion-justify-content-start">
-            <ion-col size="12">
-              <app-event-card [event]="modalContent"></app-event-card>
+            <ion-col *ngFor="let item of modalContent; let i = index" size="12">
+              <app-event-card [event]="item" [isSight]="item.type === 'sights' ? true : false"></app-event-card>
             </ion-col>
+            <!-- <ion-col size="12">
+              <app-event-card [event]="modalContent"></app-event-card>
+            </ion-col> -->
           </ion-row>
         </ng-container>
 

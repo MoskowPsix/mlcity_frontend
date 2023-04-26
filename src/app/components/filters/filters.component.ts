@@ -252,7 +252,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
     //подписываемся на дату начала
     this.filterService.startDate.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.startDate = value
-      console.log(this.startDate)
     })
 
     //подписываемся на дату конца
