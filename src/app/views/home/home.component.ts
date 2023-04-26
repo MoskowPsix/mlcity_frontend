@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core'
 import { YaReadyEvent } from 'angular8-yandex-maps'
-import {catchError, delay, EMPTY, map, of, Subject, takeUntil, tap, skip, forkJoin, Observable, debounceTime} from 'rxjs'
+import {catchError, EMPTY, of, Subject, takeUntil, forkJoin, Observable, debounceTime} from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { EventsService } from 'src/app/services/events.service'
 import { ToastService } from 'src/app/services/toast.service'
@@ -43,9 +43,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightsLoading: boolean = false
 
   modalEventShowOpen: boolean = false
-  //event!: IEvent // возможно удалить
-  modalContent?: any
+  modalContent: any[] = []
   activePlacemark?: any 
+  activeClaster?: any 
   activeIcoLink: string = ''
   events: IEvent[] =[]
   sights: ISight[] = []
@@ -145,11 +145,32 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.mapService.circleCenterLongitude.next(this.CirclePoint.geometry?.getCoordinates()![1]!)
   }
 
-  visiblePlacemarks(){
+  setPlacemarksAndClusters(){
     //При изменении радиуса проверяем метки для показа/скрытия
-    this.objectsInsideCircle = ymaps.geoQuery(this.placemarks).searchInside(this.CirclePoint).clusterize()//.addToMap(this.map.target)//.clusterize()
+    this.objectsInsideCircle = ymaps.geoQuery(this.placemarks).searchInside(this.CirclePoint).clusterize({hasBalloon:false, clusterBalloonPanelMaxMapArea: 0, clusterOpenBalloonOnClick:true})
     this.map.target.geoObjects.add(this.objectsInsideCircle)
-    this.cdr.detectChanges()
+
+    
+    this.objectsInsideCircle.events.add('click', (e:any)=>{    
+    this.modalContent = []  
+      
+      if (!e.get('target')._clusterBounds) {
+
+        if (e.get('target').properties.get('geoObjects') !== undefined){
+          e.get('target').properties.get('geoObjects').forEach((element: any) => {
+            this.modalContent.push(element.options._options.balloonContent)
+            this.activeClaster = e.get('target')
+            e.get('target').options.set('preset', 'islands#invertedPinkClusterIcons')
+          });
+        } else {
+          this.modalContent.push(e.get('target').options._options.balloonContent)  
+          this.activePlacemark = e.get('target')
+          this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico
+          e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`))
+        }
+        this.navigationService.modalEventShowOpen.next(true)
+      }  
+    })
   }
 
   getEvents(): Observable<any>{
@@ -196,31 +217,33 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sightsLoading = false
     }
 
-    this.setPlacemarks(this.events)
-    this.setPlacemarks(this.sights)
+    this.setPlacemarks(this.events, 'events')
+    this.setPlacemarks(this.sights, 'sights')
 
-    this.visiblePlacemarks()
+    this.setPlacemarksAndClusters()
     this.setBoundsCoordsToMapService()
     this.cdr.detectChanges()
   }
 
-  setPlacemarks(collection: any){
+  setPlacemarks(collection: any, type: string){
     collection.map((item: any) => {
+      item["type"] = type;
       let icoLink = item && item.types && item.types.length ? this.host + ':' + this.port + item.types[0].ico : ''
       let placemark = new ymaps.Placemark([item.latitude, item.longitude],{
       }, {   
-          balloonAutoPan:false, 
+          balloonContent: item,
+          balloonAutoPan: false, 
           iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${icoLink}"/></div>`)
         })
 
         //Клик по метке и загрузка ивента в модалку
-        placemark.events.add('click', () => { 
-          placemark.options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${icoLink}"/></div>`))
-          this.modalContent = item// <------------ тут надо что-то придумать чтобы и ивенты и места показывались, не путались ид. а также с кластаризацией
-          this.navigationService.modalEventShowOpen.next(true)
-          this.activePlacemark = placemark
-          this.activeIcoLink = icoLink
-        })
+        // placemark.events.add('click', () => { 
+        //   placemark.options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${icoLink}"/></div>`))
+        //   this.modalContent = item// <------------ тут надо что-то придумать чтобы и ивенты и места показывались, не путались ид. а также с кластаризацией
+        //   this.navigationService.modalEventShowOpen.next(true)
+        //   this.activePlacemark = placemark
+        //   this.activeIcoLink = icoLink
+        // })
 
       this.placemarks.push(placemark)
     })
@@ -261,6 +284,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (!value && this.activePlacemark){ // убираем активный класс у кастомного маркера при закрытие модалки
         this.activePlacemark.options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${this.activeIcoLink}"/></div>`)) 
       }
+      if (!value && this.activeClaster){ // убираем активный класс у кластера при закрытие модалки
+        this.activeClaster.options.set('preset', '')
+      }
       this.cdr.detectChanges()
     })
     
@@ -268,6 +294,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.changeFilter.pipe(debounceTime(1000),takeUntil(this.destroy$)).subscribe(value => {
       if (value === true){
         this.mapService.positionFilter(this.map, this.CirclePoint)
+        this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {checkZoomRange:true})
         this.getEventsAndSights()
       }
     })

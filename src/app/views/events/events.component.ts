@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, skip, debounceTime } from 'rxjs';
+import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { IEvent } from 'src/app/models/event';
 import { EventsService } from 'src/app/services/events.service';

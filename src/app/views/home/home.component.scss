@@ -110,20 +110,27 @@ ion-spinner{
 		left: 15%;
     	top: 7rem;
 	}
+
+	#modalEventShow {
+		ion-row{
+			margin-bottom: 6.5rem;
+		}
+	}
 }
 
 @media(min-width: 768px) {
 	#modalEventShow {
 		&::part(content){
-            position: absolute;
-			// bottom: 40%;
-			height: 32rem;
-			bottom: 15%;
-			bottom: 10rem;
-    		left: 0;
-			padding: 1rem;
-			background: transparent;
-    		box-shadow: none;
+            // position: absolute;
+			// height: 32rem;
+			// bottom: 10%;
+    		// left: 0;
+			// padding: 1rem;
+			// background: transparent;
+    		// box-shadow: none;
+			height: 100%;
+			bottom: 10%;
+			left: 0;
         }
 	}
 }
