@@ -117,6 +117,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
       this.filterService.setCityLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
     this.filterService.changeFilter.next(true)
+    this.filterService.changeCityFilter.next(true)
     this.modalClose()
     this.toastService.showToast(MessagesCityes.setCitySuccess, 'success') 
   }

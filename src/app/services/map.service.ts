@@ -6,15 +6,13 @@ import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx
 import { Geolocation } from '@capacitor/geolocation';
 import { BehaviorSubject} from 'rxjs';
 import { FilterService } from './filter.service';
+import { NavigationService } from './navigation.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
   placemark!: ymaps.Placemark
-
-  // public radiusBoundsLats: BehaviorSubject<string> = new BehaviorSubject('0,0')
-  // public radiusBoundsLongs: BehaviorSubject<string> = new BehaviorSubject('0,0')
 
   public circleCenterLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public circleCenterLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
@@ -38,7 +36,8 @@ export class MapService {
     private nativegeocoder: NativeGeocoder, 
     private locationAccuracy: LocationAccuracy, 
     private yaGeocoderService: YaGeocoderService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private navigationService: NavigationService
   ) { }
 
   //Определение геопозиции с помощью яндекса (платно)
@@ -258,12 +257,22 @@ export class MapService {
 
   // Определяем местоположение пользователя
   async positionFilter(map: any, circlePoint: ymaps.Circle){
-    if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter.value) {
+    //if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter.value) {
+    //Если первый запуск приложения то устанавливаем геопозицию   
+    if (this.navigationService.appFirstLoading.value){
+      await this.geolocationMapNative(map, circlePoint)
+    }  
+
+    //Если не первый запуск и менялся фильтр города то перекидываем на город
+    if (this.filterService.changeCityFilter.value && !this.navigationService.appFirstLoading.value) {
         await circlePoint.geometry?.setCoordinates([parseFloat(this.filterService.cityLatitude.value), parseFloat(this.filterService.cityLongitude.value)])
         map.target.setBounds(circlePoint.geometry?.getBounds()!, {checkZoomRange: true})
-    } else {
-      await this.geolocationMapNative(map, circlePoint) 
-    }
+    } 
+
+    //ветка если юзать this.filterService.saveFilters.value === 1
+    // else {
+    //   await this.geolocationMapNative(map, circlePoint) 
+    // }
     this.filterService.changeCityFilter.next(false)
   }
 

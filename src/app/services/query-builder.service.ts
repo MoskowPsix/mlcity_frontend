@@ -133,6 +133,7 @@ export class QueryBuilderService {
       city: this.city,
       latitude: this.latitude,
       longitude: this.longitude,
+      radius: this.radius,
       forEventPage: true,
       eventTypes: this.eventTypes,
       dateStart: this.dateStart,
@@ -146,6 +147,7 @@ export class QueryBuilderService {
       statusLast: true,
       latitude: this.latitude,
       longitude: this.longitude,
+      radius: this.radius,
       sightTypes: this.sightTypes,
     }
   }
@@ -178,6 +180,7 @@ export class QueryBuilderService {
       city: this.city,
       latitude: this.latitude,
       longitude: this.longitude,
+      radius: this.radius,
       forEventPage: true,
       sightTypes: this.sightTypes,
     }  

@@ -9,10 +9,11 @@ import { FilterService } from './services/filter.service';
 export class AppComponent {
   constructor(private filterService: FilterService) {
     //сбрасываем фильтры даты при каждом запуске прилолжения
-    this.filterService.removeDateFilters()
+    //this.filterService.removeDateFilters()
+
     //Сбрасываем фильтры, если у юзера было установлено не сохранять фильтры
-    if (this.filterService.saveFilters.value === 0)
-      this.filterService.removeFilters()
+    // if (this.filterService.saveFilters.value === 0)
+    //   this.filterService.removeFilters()
   }
 
 
