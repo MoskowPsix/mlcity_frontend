@@ -8,6 +8,7 @@ import { FeedbackComponent } from "../views/feedback/feedback.component";
 import { SupportComponent } from "../views/support/support.component";
 import { CheckAuthCanActiveGuard } from "../guards/check-auth.can-active.guard";
 import { EventShowComponent } from "../views/events/event-show/event-show.component";
+import { SightShowComponent } from "../views/sights/sight-show/sight-show.component";
 
 export const publicRoutes: Routes = [ 
     {
@@ -44,7 +45,7 @@ export const publicRoutes: Routes = [
     {
       path: 'sights/:id',
       pathMatch: 'full',
-      component: EventShowComponent, // Поменять на компонет места
+      component: SightShowComponent, // Поменять на компонет места
       canActivate: [CheckAuthCanActiveGuard],
     },
     {

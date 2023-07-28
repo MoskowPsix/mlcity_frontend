@@ -3,9 +3,9 @@ import { trigger, style, animate, transition } from '@angular/animations';
 import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
-import { EventTypeService } from 'src/app/services/event-type.service';
+import { SightTypeService } from 'src/app/services/sight-type.service';
 //import { IUser } from 'src/app/models/user';
-import { IEventType } from 'src/app/models/event-type';
+import { ISightType } from 'src/app/models/sight-type';
 import { IStatus } from 'src/app/models/status';
 import { environment } from 'src/environments/environment';
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
@@ -17,8 +17,8 @@ import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { Statuses } from 'src/app/enums/statuses';
 import { dateRangeValidator } from 'src/app/validators/date-range.validators';
 import { fileTypeValidator } from 'src/app/validators/file-type.validators';
-import { EventsService } from 'src/app/services/events.service';
-import { MessagesEvents } from 'src/app/enums/messages-events';
+import { SightsService } from 'src/app/services/sights.service';
+import { MessagesSights } from 'src/app/enums/messages-sights';
 import { Capacitor } from '@capacitor/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { EMPTY } from 'rxjs/internal/observable/empty';
@@ -26,9 +26,9 @@ import { StatusesService } from 'src/app/services/statuses.service';
 import { VkService } from 'src/app/services/vk.service';
 
 @Component({
-  selector: 'app-event-create',
-  templateUrl: './event-create.component.html',
-  styleUrls: ['./event-create.component.scss'],
+  selector: 'app-sight-create',
+  templateUrl: './sight-create.component.html',
+  styleUrls: ['./sight-create.component.scss'],
   animations: [
     trigger('fade', [
         transition(':enter', [
@@ -49,7 +49,7 @@ import { VkService } from 'src/app/services/vk.service';
   ]
 })
 
-export class EventCreateComponent implements OnInit, OnDestroy {
+export class SightCreateComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>()
 
@@ -67,7 +67,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   vkGroupPostsLoaded: boolean = false
   vkGroupPostsDisabled: boolean = false
   vkGroupPostSelected: any = null
-  types: IEventType[] = []
+  types: ISightType[] = []
   typesLoaded: boolean = false
   typeSelected: number | null = null
   statuses: IStatus[] = []
@@ -83,16 +83,16 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   placemark!: ymaps.Placemark
   map!:YaReadyEvent<ymaps.Map>
  
-  createEventForm: FormGroup = new FormGroup({})
+  createSightForm: FormGroup = new FormGroup({})
 
   constructor(
     private authService: AuthService,
-    private eventsService: EventsService,
+    private sightsService: SightsService,
     private loadingService: LoadingService, 
     private toastService: ToastService, 
     private userService: UserService, 
     private vkService: VkService, 
-    private eventTypeService: EventTypeService, 
+    private sightTypeService: SightTypeService, 
     private statusesService: StatusesService, 
     private mapService: MapService, 
     private yaGeocoderService: YaGeocoderService) { }
@@ -105,7 +105,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       }),
       switchMap((user: any) => {
         this.user = user
-        this.createEventForm.patchValue({ sponsor: user?.name })
+        this.createSightForm.patchValue({ sponsor: user?.name })
         return of(user)
       }),
       switchMap((user: any) => {
@@ -189,17 +189,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   selectedVkGroupPost(post: any){
     if(!post || this.vkGroupPostSelected?.id === post.id){
       this.vkGroupPostSelected = null
-      this.createEventForm.patchValue({description: '' });
+      this.createSightForm.patchValue({description: '' });
       this.resetUploadInfo()
     } else {
       this.vkGroupPostSelected = post
-      this.createEventForm.patchValue({description: this.vkGroupPostSelected.text });
+      this.createSightForm.patchValue({description: this.vkGroupPostSelected.text });
     }
   }
 
   //Получаем типы мероприятий
   getTypes(){
-    this.eventTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.sightTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.types = response.types
       response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
     })
@@ -218,7 +218,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         response.statuses.forEach((status:IStatus) => {
           if (status.name === Statuses.moderation){
             this.statusSelected = status.id
-            this.createEventForm.patchValue({ status: status.id })
+            this.createSightForm.patchValue({ status: status.id })
           }
         })
         this.statusesLoaded = true //для скелетной анимации
@@ -236,10 +236,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //При клике ставим метку, если метка есть, то перемещаем ее
   async onMapClick(e: YaEvent<ymaps.Map>) {
     const { target, event } = e;
-    this.createEventForm.patchValue({coords: [event.get('coords')[0], event.get('coords')[1]] })
+    this.createSightForm.patchValue({coords: [event.get('coords')[0], event.get('coords')[1]] })
     // this.createEventForm.value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
     this.map.target.geoObjects.removeAll()
-    this.placemark= new ymaps.Placemark(this.createEventForm.value.coords)
+    this.placemark= new ymaps.Placemark(this.createSightForm.value.coords)
     this.map.target.geoObjects.add(this.placemark)
     if (!Capacitor.isNativePlatform())  {
       this.ReserveGeocoder()
@@ -252,8 +252,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
    // Поиск по улицам
    onMapReady(e: YaReadyEvent<ymaps.Map>) {
     this.map = e;
-    if (this.createEventForm.value.coords){     
-      this.addPlacemark(this.createEventForm.value.coords)
+    if (this.createSightForm.value.coords){     
+      this.addPlacemark(this.createSightForm.value.coords)
     } else {
       this.mapService.geolocationMapNative(this.map);
     }
@@ -278,7 +278,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.placemark= new ymaps.Placemark(coords)
       this.map.target.geoObjects.add(this.placemark)
       // this.createEventForm.value.coords=this.placemark.geometry?.getCoordinates()
-      this.createEventForm.patchValue({coords: this.placemark.geometry?.getCoordinates()})
+      this.createSightForm.patchValue({coords: this.placemark.geometry?.getCoordinates()})
       //центрирование карты по метки и установка зума
       this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
       this.map.target.setZoom(17)
@@ -289,7 +289,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   ReserveGeocoder(): void{
     // Декодирование координат
-    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.coords, {
+    const geocodeResult = this.yaGeocoderService.geocode(this.createSightForm.value.coords, {
       results: 1,
     });
     geocodeResult.subscribe((result: any) => {
@@ -297,13 +297,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       
       this.city=firstGeoObject.getLocalities(0)[0]
 
-      this.createEventForm.value.address = firstGeoObject.getAddressLine()
+      this.createSightForm.value.address = firstGeoObject.getAddressLine()
     })
   }
 
   ForwardGeocoder(): void{
-    this.createEventForm.value.address=(<HTMLInputElement>document.getElementById("search-map")).value
-    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.address, {
+    this.createSightForm.value.address=(<HTMLInputElement>document.getElementById("search-map")).value
+    const geocodeResult = this.yaGeocoderService.geocode(this.createSightForm.value.address, {
       results: 1,
     });
     geocodeResult.subscribe((result: any) => {
@@ -317,23 +317,23 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   //очистка поиска на карте
-  clearSearche(event:any){
-    if (event.detail.value == 0){
-      this.createEventForm.patchValue({coords: []})
+  clearSearche(sight:any){
+    if (sight.detail.value == 0){
+      this.createSightForm.patchValue({coords: []})
       this.placemark= new ymaps.Placemark([])
       this.map.target.geoObjects.removeAll() 
     }
   }
 
   //Загрузка фото
-  onFileChange(event: any) {
+  onFileChange(sight: any) {
     this.resetUploadInfo()
 
-    for (var i = 0; i < event.target.files.length; i++) {
-      this.uploadFiles.push(event.target.files[i])
+    for (var i = 0; i < sight.target.files.length; i++) {
+      this.uploadFiles.push(sight.target.files[i])
     }
 
-    this.createEventForm.patchValue({files: ''}) // Если не обнулять будет ошибка
+    this.createSightForm.patchValue({files: ''}) // Если не обнулять будет ошибка
 
     this.createImagesPreview()  
   }
@@ -352,7 +352,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //заполнем превью фоток 
   createImagesPreview(){
-    if(this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')){
+    if(this.uploadFiles && !this.createSightForm.controls['files'].hasError('requiredFileType')){
       this.loadingService.showLoading()
       this.uploadFiles.forEach((file: any) => {
         let reader = new FileReader()
@@ -367,7 +367,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //формируем дату для отправки на сервер
   createFormData(){
-    if(this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')){
+    if(this.uploadFiles && !this.createSightForm.controls['files'].hasError('requiredFileType')){
       for (var i = 0; i < this.uploadFiles.length; i++) {
         this.formData.append('localFiles[]', this.uploadFiles[i])
       }
@@ -380,18 +380,18 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       }) 
     } 
 
-    this.formData.append('name', this.createEventForm.controls['name'].value)
-    this.formData.append('sponsor', this.createEventForm.controls['sponsor'].value)
-    this.formData.append('description', this.createEventForm.controls['description'].value)
-    this.formData.append('coords', this.createEventForm.controls['coords'].value)
-    this.formData.append('address', this.createEventForm.controls['address'].value)
+    this.formData.append('name', this.createSightForm.controls['name'].value)
+    this.formData.append('sponsor', this.createSightForm.controls['sponsor'].value)
+    this.formData.append('description', this.createSightForm.controls['description'].value)
+    this.formData.append('coords', this.createSightForm.controls['coords'].value)
+    this.formData.append('address', this.createSightForm.controls['address'].value)
     this.formData.append('city', this.city)
-    this.formData.append('type', this.createEventForm.controls['type'].value)
-    this.formData.append('status', this.createEventForm.controls['status'].value)
-    this.formData.append('price', this.createEventForm.controls['price'].value)
-    this.formData.append('materials', this.createEventForm.controls['materials'].value)
-    this.formData.append('dateStart', this.createEventForm.controls['dateStart'].value)
-    this.formData.append('dateEnd', this.createEventForm.controls['dateEnd'].value)
+    this.formData.append('type', this.createSightForm.controls['type'].value)
+    this.formData.append('status', this.createSightForm.controls['status'].value)
+    this.formData.append('price', this.createSightForm.controls['price'].value)
+    this.formData.append('materials', this.createSightForm.controls['materials'].value)
+    this.formData.append('dateStart', this.createSightForm.controls['dateStart'].value)
+    this.formData.append('dateEnd', this.createSightForm.controls['dateEnd'].value)
     this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null)
     // if (this.vkGroupPostSelected?.likes.count){
     //   this.formData.append('vkLikesCount', this.vkGroupPostSelected?.likes.count)
@@ -435,16 +435,16 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       case 2:
         return true
       case 3:
-        return this.createEventForm.controls['name'].invalid  ?  false :  true
+        return this.createSightForm.controls['name'].invalid  ?  false :  true
       case 4:
-        return this.createEventForm.controls['description'].invalid  ? false :  true 
+        return this.createSightForm.controls['description'].invalid  ? false :  true 
       case 6:
-        return this.createEventForm.hasError('dateInvalid') ?  false :  true
+        return this.createSightForm.hasError('dateInvalid') ?  false :  true
       case 7:
-        return this.createEventForm.controls['sponsor'].invalid  ?  false :  true      
+        return this.createSightForm.controls['sponsor'].invalid  ?  false :  true      
       case 9:
         //return !this.createEventForm.controls['coords'].value.length ? false :  true  
-        return this.createEventForm.controls['coords'].invalid ? false :  true 
+        return this.createSightForm.controls['coords'].invalid ? false :  true 
       default:
         return true
     }
@@ -483,32 +483,32 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Отпрвка формы
   
   onSubmit(){
-    let event = this.createFormData() // собираем формдату
-    this.createEventForm.disable()
+    let sight = this.createFormData() // собираем формдату
+    this.createSightForm.disable()
     this.loadingService.showLoading()
-    this.eventsService.create(event).pipe(
+    this.sightsService.create(sight).pipe(
       tap((res) => {
         this.loadingService.hideLoading()
-        this.toastService.showToast(MessagesEvents.create, 'success')
+        this.toastService.showToast(MessagesSights.create, 'success')
         //this.createEventForm.reset()
         this.resetUploadInfo()
         this.vkGroupPostSelected = null
-        this.createEventForm.controls['name'].reset()
-        this.createEventForm.controls['description'].reset()
-        this.createEventForm.controls['address'].reset()
-        this.createEventForm.controls['coords'].reset()
-        this.createEventForm.controls['files'].reset()
-        this.createEventForm.controls['price'].reset()
-        this.createEventForm.controls['materials'].reset()
+        this.createSightForm.controls['name'].reset()
+        this.createSightForm.controls['description'].reset()
+        this.createSightForm.controls['address'].reset()
+        this.createSightForm.controls['coords'].reset()
+        this.createSightForm.controls['files'].reset()
+        this.createSightForm.controls['price'].reset()
+        this.createSightForm.controls['materials'].reset()
         this.city = ''
         //this.createEventForm.controls['dateStart'].reset()
         //this.createEventForm.controls['dateEnd'].reset()
-        this.createEventForm.enable()
+        this.createSightForm.enable()
         this.stepCurrency =  this.stepStart 
       }),
       catchError((err) =>{
         this.toastService.showToast(err.error.message || MessagesErrors.default, 'danger')
-        this.createEventForm.enable()
+        this.createSightForm.enable()
         this.loadingService.hideLoading()
         return of(EMPTY) 
       }),
@@ -518,7 +518,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     //Создаем поля для формы
-    this.createEventForm = new FormGroup({
+    this.createSightForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('',[Validators.required, Validators.minLength(10)]),
