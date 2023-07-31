@@ -121,8 +121,8 @@
   
               <ion-col size-lg="6" size-md="12" size-xs="12">
                 <div class="map">
-                  <!-- <ya-map 
-                    (ready)="onMapReady($sight)"
+                  <ya-map 
+                    (ready)="onMapReady($event)"
                     [zoom]="15"  
                     [center]="[sight.latitude, sight.longitude]"
                     [state]="{controls: ['zoomControl','fullscreenControl']}"
@@ -134,7 +134,7 @@
                       suppressObsoleteBrowserNotifier: true
                     }"
                   >
-                  </ya-map> -->
+                  </ya-map>
                 </div>        
               </ion-col>
             </ion-row>

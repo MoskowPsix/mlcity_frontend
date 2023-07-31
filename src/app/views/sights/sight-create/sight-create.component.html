@@ -87,7 +87,7 @@
         <ion-row  [hidden]="stepCurrency !== 2" class="ion-justify-content-center" >
           <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 2" @fade>
             <ion-list-header>
-              <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
+              <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание достопримечательности и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
             </ion-list-header>
             <div *ngIf="vkGroupPosts; else notSelectedGroup">              
               <!-- Скелетна анимация -->
@@ -176,7 +176,7 @@
         <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
           <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 3" @fade>
             <ion-item fill="outline">
-              <ion-label position="floating">Название мероприятия</ion-label>
+              <ion-label position="floating">Название достопримечательности</ion-label>
               <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
               <ion-input formControlName="name" type="text" name="name" required></ion-input>
             </ion-item>
@@ -197,7 +197,7 @@
               <ion-label position="floating">Об достопримечательности</ion-label>
               <ion-textarea 
                 formControlName="description" 
-                placeholder="Введите инфомармацию об мероприятии.." 
+                placeholder="Введите информацию о достопримечательности..." 
                 [autoGrow]="true" 
                 required
               >
@@ -314,8 +314,8 @@
         </ion-row> -->
         
         <!-- шаг 7 -->
-        <ion-row  [hidden]="stepCurrency !== 7" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 7" @fade>
+        <ion-row  [hidden]="stepCurrency !== 6" class="ion-justify-content-center">
+          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 6" @fade>
             <ion-item fill="outline">
               <ion-label position="floating">Организатор достопримечательности</ion-label>
               <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
@@ -329,8 +329,8 @@
         
         
         <!-- шаг 8 -->
-        <ion-row  [hidden]="stepCurrency !== 8" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 8" @fade>
+        <ion-row  [hidden]="stepCurrency !== 7" class="ion-justify-content-center">
+          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 7" @fade>
             <ion-list>
             <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
               <ion-list-header>
@@ -366,8 +366,8 @@
         </ion-row>
         
         <!-- шаг 9 -->
-        <ion-row  [hidden]="stepCurrency !== 9" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 9" @fade>
+        <ion-row  [hidden]="stepCurrency !== 8" class="ion-justify-content-center">
+          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 8" @fade>
             <ion-list-header>
               <ion-label>На карте выберите место достопримечательности или введите адрес в поле поиска</ion-label>
             </ion-list-header>
@@ -396,8 +396,8 @@
         </ion-row>
         
         <!-- шаг 10 -->
-        <ion-row  [hidden]="stepCurrency !== 10" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 10" @fade>
+        <ion-row  [hidden]="stepCurrency !== 9" class="ion-justify-content-center">
+          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 9" @fade>
             <ion-item fill="outline">
               <ion-label position="floating">Стоимость билета</ion-label>
               <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
@@ -407,8 +407,8 @@
         </ion-row>
         
         <!-- шаг 11 -->
-        <ion-row  [hidden]="stepCurrency !== 11" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 11" @fade>
+        <ion-row  [hidden]="stepCurrency !== 10" class="ion-justify-content-center">
+          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 10" @fade>
             <ion-item>
               <ion-label position="floating" class="position-label-inside">Доп. материалы</ion-label>
               <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
@@ -417,8 +417,8 @@
         </ion-row>
   
         <!-- шаг 12 -->
-        <ion-row  [hidden]="stepCurrency !== 12" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 12" @fade>
+        <ion-row  [hidden]="stepCurrency !== 11" class="ion-justify-content-center">
+          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 11" @fade>
             <ion-list>
               <ion-radio-group formControlName="status" (ionChange)="selectedStatus($event)" [value]="statusSelected" required>
                 <ng-container *ngIf="!statusesLoaded">

@@ -59,7 +59,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   user: any
   stepStart: number = 1
   stepCurrency: number = 1
-  steps:number = 12
+  steps:number = 11
   vkGroups: any
   //Создать переменную для постов со страницы
   vkGroupSelected: number | null = null
@@ -97,7 +97,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     private mapService: MapService, 
     private yaGeocoderService: YaGeocoderService) { }
    
-  //поулчаем юзера и устанвлвиаем группы и шаги
+  // Получаем юзера и устанавливаем группы и шаги
   getUserWithSocialAccount(){
     this.userService.getUser().pipe(
       tap(() => {
@@ -144,7 +144,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  //Устнавливаем группы
+  // Устанавливаем группы
   setVkGroups(items: any){
     if(items){
       this.vkGroups = items
@@ -350,7 +350,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.imagesPreview = this.imagesPreview.filter((a) => a !== img);
   }
 
-  //заполнем превью фоток 
+  // Заполняем превью фоток 
   createImagesPreview(){
     if(this.uploadFiles && !this.createSightForm.controls['files'].hasError('requiredFileType')){
       this.loadingService.showLoading()
