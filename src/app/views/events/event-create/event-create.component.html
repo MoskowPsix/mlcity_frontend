@@ -66,15 +66,23 @@
               <ion-list-header>
                 <ion-label>Выберите группу, из которой следует загрузить посты</ion-label>
               </ion-list-header>  
-
               <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event)" [allowEmptySelection]="true" [value]="vkGroupSelected">
-                  <ng-container *ngFor="let group of vkGroups">
+                <ng-container>
+                  <ion-item>
+                    <ion-avatar>
+                      <img alt="ava" src="/assets/icons/favicon.png" />
+                    </ion-avatar>
+                    <ion-label class="ion-padding-start">Моя страница</ion-label>
+                    <ion-radio slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
+                  </ion-item>
+                </ng-container>
+                <ng-container *ngFor="let group of vkGroups">
                     <ion-item>
                       <ion-avatar>
                         <img alt="ava" src="{{ group.photo_50 }}" />
                       </ion-avatar>
                       <ion-label class="ion-padding-start">{{ group.name }}</ion-label>
-                      <ion-radio slot="end" value="{{ group.id }}"></ion-radio>
+                      <ion-radio slot="end" value="-{{ group.id }}"></ion-radio>
                     </ion-item>
                 </ng-container>
               </ion-radio-group>

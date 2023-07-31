@@ -39,7 +39,12 @@ export class VkService {
 
 
   getPostsGroup(group_id: number, count:number){
-    return this.http.jsonp<any>(`https://api.vk.com/method/wall.get?owner_id=-${group_id}&access_token=${this.vk_access_token}&count=${count}&filter=all&extended=1&v=5.131`, 'callback')
+    return this.http.jsonp<any>(`https://api.vk.com/method/wall.get?owner_id=${group_id}&access_token=${this.vk_access_token}&count=${count}&filter=all&extended=1&v=5.131`, 'callback')
+  }
+
+  getPostsMyPage(count:number){
+    
+    return this.http.jsonp<any>(`https://api.vk.com/method/wall.get?owner_id=${this.vk_user_id}&access_token=${this.vk_access_token}&count=${count}&filter=all&extended=1&v=5.131`, 'callback')
   }
 
   getPostGroup(group_id: number, post_id:number){
