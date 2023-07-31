@@ -132,7 +132,7 @@
 
             <ng-container *ngIf="vkGroupPostsLoaded">
               <ng-container *ngFor="let post of vkGroupPosts.items; let i = index">
-                <ion-card>
+                <ion-card *ngIf="post.reposts.count === 0">
                   <ng-container *ngFor="let profile of vkGroupPosts.profiles; index as i">
                     <ion-item *ngIf="i === 0" class="ion-margin-end">
                       <ion-avatar slot="start">
@@ -142,17 +142,46 @@
                     </ion-item>
                   </ng-container>
 
-                  <ion-card-content>
+                  <ion-card-content *ngIf="post.text">
                     <app-read-more text="{{ post.text }}"></app-read-more>
+                    <!-- <app-read-more text="{{ post.id }}"></app-read-more> -->
                   </ion-card-content>
 
                   <ion-row *ngIf="post.attachments" class="ion-padding-horizontal">
                     <ng-container  *ngFor="let attachment of post.attachments">
-                      <ng-container *ngFor="let photo of attachment.photo.sizes">
-                        <ion-col *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
-                          <img alt="ava" src="{{ photo.url }}" /> 
-                        </ion-col>    
-                      </ng-container>           
+                      <!-- Фото во вложении -->
+                      <ng-container *ngIf="attachment.photo">
+                        <ng-container *ngFor="let photo of attachment.photo.sizes">
+                          <ion-col *ngIf="photo.type === 'm'"  size="4" class="ion-align-self-center ion-justify-content-center">
+                            <img alt="ava" src="{{ photo.url }}" /> 
+                          </ion-col>    
+                        </ng-container> 
+                      </ng-container> 
+
+                      <!-- Видео во вложении -->
+                      <!-- <ng-container *ngIf="attachment.video">
+                        <ng-container>
+                          <ion-col class="ion-align-self-center ion-justify-content-center">
+                            <a href="{{ attachment.link.url }}" text="{{ attachment.link.url }}"></a>
+                            <p>Описание ссылки:</p>
+                            <img alt="ava" src="{{ attachment.video.image[0].url }}" />
+                            <iframe src="http://vk.com/video_ext.php?oid={{attachment.video.owner_id}}&id={{attachment.video.id}}&hash={{attachment.video.access_key}}" width="{{attachment.video.width}}" height="{{attachment.video.height}}" frameborder="0"></iframe>
+                            <app-read-more text="getVideo(attachment.video.owner_id, attachment.video.id)"></app-read-more>
+                          </ion-col>    
+                        </ng-container> 
+                      </ng-container> -->
+
+                      <!-- Ссылки во вложении -->
+                      <ng-container *ngIf="attachment.link">
+                        <ng-container>
+                          <ion-col class="ion-align-self-center ion-justify-content-center">
+                            <a href="{{ attachment.link.url }}" text="{{ attachment.link.url }}"></a>
+                            <p>Описание ссылки:</p>
+                            <app-read-more text="{{ attachment.link.description }}"></app-read-more>
+                          </ion-col>    
+                        </ng-container> 
+                      </ng-container>
+
                     </ng-container> 
                   </ion-row>
                   
