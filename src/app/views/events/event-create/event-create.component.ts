@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Sanitizer } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -24,6 +24,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { StatusesService } from 'src/app/services/statuses.service';
 import { VkService } from 'src/app/services/vk.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-event-create',
@@ -52,6 +53,7 @@ import { VkService } from 'src/app/services/vk.service';
 export class EventCreateComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>()
+
 
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
@@ -95,6 +97,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private eventTypeService: EventTypeService, 
     private statusesService: StatusesService, 
     private mapService: MapService, 
+    private sanitizer:DomSanitizer,
     private yaGeocoderService: YaGeocoderService) { }
    
   //поулчаем юзера и устанвлвиаем группы и шаги
@@ -144,6 +147,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
+  getUrlVideo(owner_id: number, video_id: number)
+  {
+    return this.sanitizer.bypassSecurityTrustResourceUrl('https://vk.com/video_ext.php?oid='+ owner_id +'&id=' + video_id + '&hd=2')
+  }
   //Устанавливаем группы
   setVkGroups(items: any){
     if(items){
@@ -179,8 +186,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){
-    this.vkService.getPostsGroup(group_id, 10).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.vkService.getPostsGroup(group_id, 30).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.vkGroupPosts = response.response
+      console.log(this.vkGroupPosts)
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
   }

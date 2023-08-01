@@ -132,7 +132,7 @@
 
             <ng-container *ngIf="vkGroupPostsLoaded">
               <ng-container *ngFor="let post of vkGroupPosts.items; let i = index">
-                <ion-card *ngIf="post.reposts.count === 0">
+                <ion-card *ngIf="!post.copy_history">
                   <ng-container *ngFor="let profile of vkGroupPosts.profiles; index as i">
                     <ion-item *ngIf="i === 0" class="ion-margin-end">
                       <ion-avatar slot="start">
@@ -147,10 +147,10 @@
                     <!-- <app-read-more text="{{ post.id }}"></app-read-more> -->
                   </ion-card-content>
 
-                  <ion-row *ngIf="post.attachments" class="ion-padding-horizontal">
+                  <ion-row *ngIf="post.attachments" class="ion-padding-horizontal ion-align-self-center">
                     <ng-container  *ngFor="let attachment of post.attachments">
                       <!-- Фото во вложении -->
-                      <ng-container *ngIf="attachment.photo">
+                      <ng-container *ngIf="attachment.photo" class="ion-justify-content-center">
                         <ng-container *ngFor="let photo of attachment.photo.sizes">
                           <ion-col *ngIf="photo.type === 'm'"  size="4" class="ion-align-self-center ion-justify-content-center">
                             <img alt="ava" src="{{ photo.url }}" /> 
@@ -159,21 +159,18 @@
                       </ng-container> 
 
                       <!-- Видео во вложении -->
-                      <!-- <ng-container *ngIf="attachment.video">
-                        <ng-container>
-                          <ion-col class="ion-align-self-center ion-justify-content-center">
-                            <a href="{{ attachment.link.url }}" text="{{ attachment.link.url }}"></a>
-                            <p>Описание ссылки:</p>
-                            <img alt="ava" src="{{ attachment.video.image[0].url }}" />
-                            <iframe src="http://vk.com/video_ext.php?oid={{attachment.video.owner_id}}&id={{attachment.video.id}}&hash={{attachment.video.access_key}}" width="{{attachment.video.width}}" height="{{attachment.video.height}}" frameborder="0"></iframe>
-                            <app-read-more text="getVideo(attachment.video.owner_id, attachment.video.id)"></app-read-more>
+                      <ng-container *ngIf="attachment.video" class="">
+                        <ion-col class="video_col">
+                              <h1>{{ attachment.video.title }}</h1>
+                              <iframe class="video_content" [src]="getUrlVideo(attachment.video.owner_id, attachment.video.id)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+                              <p>Описание видео: </p>
+                              <app-read-more *ngIf="attachment.video.description" text="{{ attachment.video.description }}"></app-read-more>
                           </ion-col>    
-                        </ng-container> 
-                      </ng-container> -->
+                      </ng-container>
 
                       <!-- Ссылки во вложении -->
                       <ng-container *ngIf="attachment.link">
-                        <ng-container>
+                        <ng-container class="">
                           <ion-col class="ion-align-self-center ion-justify-content-center">
                             <a href="{{ attachment.link.url }}" text="{{ attachment.link.url }}"></a>
                             <p>Описание ссылки:</p>
@@ -181,7 +178,6 @@
                           </ion-col>    
                         </ng-container> 
                       </ng-container>
-
                     </ng-container> 
                   </ion-row>
                   
@@ -234,7 +230,7 @@
             <ion-label position="floating">Об мероприятии</ion-label>
             <ion-textarea 
               formControlName="description" 
-              placeholder="Введите инфомармацию об мероприятии.." 
+              placeholder="Введите информацию об мероприятии.." 
               [autoGrow]="true" 
               required
             >
@@ -288,7 +284,7 @@
 
           <ion-row *ngIf="vkGroups && vkGroupPostSelected && !vkGroupPostSelected.attachments.length" class="ion-padding-vertical">
             <ion-col class="ion-align-self-center ion-justify-content-center">
-              <ion-label color="medium">В выбранном посте нету фотографиий</ion-label>
+              <ion-label color="medium">В выбранном посте нету фотографий</ion-label>
             </ion-col> 
           </ion-row>
 
@@ -491,7 +487,7 @@
         </ion-col>
       </ion-row>
 
-       <!-- Декстопный блок кнопок -->
+       <!-- Десктопный блок кнопок -->
       <div class="buttons-dekstop">
         <ion-row class="ion-justify-content-around">
           <ion-col size-lg="2" size-md="4" class="left">
