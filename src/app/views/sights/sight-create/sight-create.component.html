@@ -17,7 +17,7 @@
                     shape="round" 
                     (click)="goToStep(i + 1)" 
                     [color]="stepCurrency === i + 1 ? 'primary' : !stepIsValid(i + 1) ? 'danger' : 'light'"  
-                    [disabled]="vkGroupPostSelected && (i === 3 || i === 4)"
+                    [disabled]="vkGroupPostSelected && (i === 4)"
                   >
                   {{ i + 1 }}
                 </ion-button>
