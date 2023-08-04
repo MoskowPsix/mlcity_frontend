@@ -63,6 +63,32 @@
     }
 }
 
+.card-container-content {
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5%;
+    padding-right: 5%;
+    align-self: center;
+}
+
+.video_col {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    
+}
+// .video_title {
+//     front
+// }
+.video_content {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 100%;
+}
+
 ion-item.photo-label {
     --background: transparent;
 }

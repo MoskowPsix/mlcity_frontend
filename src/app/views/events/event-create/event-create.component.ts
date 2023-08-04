@@ -188,7 +188,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   setVkPostsByGroupID(group_id: number){
     this.vkService.getPostsGroup(group_id, 30).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.vkGroupPosts = response.response
-      console.log(this.vkGroupPosts)
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
   }

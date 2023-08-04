@@ -24,6 +24,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { StatusesService } from 'src/app/services/statuses.service';
 import { VkService } from 'src/app/services/vk.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-sight-create',
@@ -94,7 +95,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     private vkService: VkService, 
     private sightTypeService: SightTypeService, 
     private statusesService: StatusesService, 
-    private mapService: MapService, 
+    private mapService: MapService,
+    private sanitizer:DomSanitizer, 
     private yaGeocoderService: YaGeocoderService) { }
    
   // Получаем юзера и устанавливаем группы и шаги
@@ -183,6 +185,11 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPosts = response.response
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
+  }
+
+  getUrlVideo(owner_id: number, video_id: number)
+  {
+    return this.sanitizer.bypassSecurityTrustResourceUrl('https://vk.com/video_ext.php?oid='+ owner_id +'&id=' + video_id + '&hd=2')
   }
 
   //Выбираем пост

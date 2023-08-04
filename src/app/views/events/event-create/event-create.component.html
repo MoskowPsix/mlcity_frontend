@@ -133,7 +133,7 @@
             <ng-container *ngIf="vkGroupPostsLoaded">
               <ng-container *ngFor="let post of vkGroupPosts.items; let i = index">
                 <ion-card *ngIf="!post.copy_history">
-                  <ng-container *ngFor="let profile of vkGroupPosts.profiles; index as i">
+                  <ng-container *ngFor="let profile of vkGroupPosts.profiles; index as i" class="card-profile">
                     <ion-item *ngIf="i === 0" class="ion-margin-end">
                       <ion-avatar slot="start">
                         <img alt="ava" src="{{ profile.photo_50 }}" />
@@ -144,24 +144,23 @@
 
                   <ion-card-content *ngIf="post.text">
                     <app-read-more text="{{ post.text }}"></app-read-more>
-                    <!-- <app-read-more text="{{ post.id }}"></app-read-more> -->
                   </ion-card-content>
 
-                  <ion-row *ngIf="post.attachments" class="ion-padding-horizontal ion-align-self-center">
+                  <ion-row *ngIf="post.attachments" class="card-container-content">
                     <ng-container  *ngFor="let attachment of post.attachments">
                       <!-- Фото во вложении -->
-                      <ng-container *ngIf="attachment.photo" class="ion-justify-content-center">
+                      <ng-container *ngIf="attachment.photo" >
                         <ng-container *ngFor="let photo of attachment.photo.sizes">
-                          <ion-col *ngIf="photo.type === 'm'"  size="4" class="ion-align-self-center ion-justify-content-center">
-                            <img alt="ava" src="{{ photo.url }}" /> 
-                          </ion-col>    
+                          <ion-col *ngIf="photo.type === 'm'"  size="4" class="ion-align-self-center ion-justify-content-space-evenly">
+                            <a href="{{ photo.url }}"><img alt="ava" src="{{ photo.url }}" *ngIf="photo.type === 'm'"/> </a>
+                          </ion-col>
                         </ng-container> 
                       </ng-container> 
 
                       <!-- Видео во вложении -->
-                      <ng-container *ngIf="attachment.video" class="">
+                      <ng-container *ngIf="attachment.video" >
                         <ion-col class="video_col">
-                              <h1>{{ attachment.video.title }}</h1>
+                              <span class="video-title">{{ attachment.video.title }}</span>
                               <iframe class="video_content" [src]="getUrlVideo(attachment.video.owner_id, attachment.video.id)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
                               <p>Описание видео: </p>
                               <app-read-more *ngIf="attachment.video.description" text="{{ attachment.video.description }}"></app-read-more>
@@ -170,7 +169,7 @@
 
                       <!-- Ссылки во вложении -->
                       <ng-container *ngIf="attachment.link">
-                        <ng-container class="">
+                        <ng-container >
                           <ion-col class="ion-align-self-center ion-justify-content-center">
                             <a href="{{ attachment.link.url }}" text="{{ attachment.link.url }}"></a>
                             <p>Описание ссылки:</p>
