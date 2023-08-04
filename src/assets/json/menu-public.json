@@ -10,9 +10,9 @@
         "route": "/events"
     },
     {
-        "title": "О проекте",
-        "icon": "information-circle",
-        "route": "/about"
+        "title": "Места",
+        "icon": "balloon",
+        "route": "/sights"
     },
     {
         "title": "Контакты",
@@ -28,6 +28,11 @@
                 "title": "Поддержка",
                 "icon": "chatbox-ellipses",
                 "route": "/contacts/support"
+            },
+            {
+                "title": "О проекте",
+                "icon": "information-circle",
+                "route": "/about"
             }
         ]
     }
