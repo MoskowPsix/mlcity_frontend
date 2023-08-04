@@ -387,8 +387,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
     if(this.vkGroupPostSelected?.attachments.length){
       this.vkGroupPostSelected.attachments.forEach((attachment: any) => {
-        let photo = attachment.photo.sizes.pop() //берем последний размер
-        this.formData.append('vkFiles[]', photo.url)
+        if (attachment.photo) {
+          let photo = attachment.photo.sizes.pop() //берем последний размер
+          this.formData.append('vkFiles[]', photo.url)
+        }
       }) 
     } 
 

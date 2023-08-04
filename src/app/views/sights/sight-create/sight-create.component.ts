@@ -382,8 +382,10 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
     if(this.vkGroupPostSelected?.attachments.length){
       this.vkGroupPostSelected.attachments.forEach((attachment: any) => {
-        let photo = attachment.photo.sizes.pop() //берем последний размер
-        this.formData.append('vkFiles[]', photo.url)
+        if (attachment.photo) {
+          let photo = attachment.photo.sizes.pop() //берем последний размер
+          this.formData.append('vkFiles[]', photo.url)
+        }
       }) 
     } 
 
@@ -508,8 +510,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         this.createSightForm.controls['price'].reset()
         this.createSightForm.controls['materials'].reset()
         this.city = ''
-        //this.createEventForm.controls['dateStart'].reset()
-        //this.createEventForm.controls['dateEnd'].reset()
         this.createSightForm.enable()
         this.stepCurrency =  this.stepStart 
       }),
