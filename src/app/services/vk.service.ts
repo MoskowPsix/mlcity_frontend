@@ -33,10 +33,10 @@ export class VkService {
     //инфо о методе  https://dev.vk.com/method/groups.get
   //https://api.vk.com/method/groups.get?user_ids=${this.socialAccount.provider_id}&access_token=${this.socialAccount.token}&extended=1&filter=moder
   //moder — ищем группы где юзер является администратором, редактором или модератором
-  getVideo(owner_id: number,video_id: number ) {
-    return this.http.jsonp<any>(`https://api.vk.com/method/video.get?owner_id=${owner_id}&access_token=${video_id}&v=5.131`, 'callback')
+  getGroupeIdUrl(url: string, count:number = 10) {
+    let screen_name: string = url.substring(url.lastIndexOf('/') + 1)
+    return this.http.jsonp<any>(`https://api.vk.com/method/groups.getById?group_id=${screen_name}&access_token=${this.vk_access_token}&v=5.131`, 'callback')
   }
-
   getGroups(){
     return this.http.jsonp<any>(`https://api.vk.com/method/groups.get?user_ids=${this.vk_user_id}&access_token=${this.vk_access_token}&extended=1&filter=moder&v=5.131`, 'callback')
   }
@@ -46,7 +46,6 @@ export class VkService {
   }
 
   getPostsMyPage(count:number){
-    
     return this.http.jsonp<any>(`https://api.vk.com/method/wall.get?owner_id=${this.vk_user_id}&access_token=${this.vk_access_token}&count=${count}&filter=all&extended=1&v=5.131`, 'callback')
   }
 

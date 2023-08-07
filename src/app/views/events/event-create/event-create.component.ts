@@ -57,7 +57,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
-  
+
+  inputValue: string = ""
   user: any
   stepStart: number = 1
   stepCurrency: number = 1
@@ -98,7 +99,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private statusesService: StatusesService, 
     private mapService: MapService, 
     private sanitizer:DomSanitizer,
-    private yaGeocoderService: YaGeocoderService) { }
+    private yaGeocoderService: YaGeocoderService) {}
    
   //поулчаем юзера и устанвлвиаем группы и шаги
   getUserWithSocialAccount(){
@@ -190,6 +191,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPosts = response.response
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
+  }
+  // Грузим посты по URL сообщества
+  async setVkPostsByGroupURL() {
+    await this.vkService.getGroupeIdUrl(this.inputValue).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      let group_id: number
+      group_id = response.response[0].id - response.response[0].id - response.response[0].id
+      this.setVkPostsByGroupID(group_id)
+    })
+  }
+  onFocusPlace(event: any){
+    this.inputValue = event.detail.value;
   }
 
   // getVideo(owner_id: number, video_id: number) {
