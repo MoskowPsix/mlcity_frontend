@@ -87,6 +87,15 @@
                       </ion-item>
                   </ng-container>
                 </ion-radio-group>
+                <!-- Грузим чужие посты из вк, временное решение -->
+                <ng-container>
+                  <ion-item>
+                    <ion-label class="ion-padding-start">
+                      <ion-input label="Url input" type="text" placeholder="URL группы" (ionChange)="onFocusPlace($event)"></ion-input>
+                    </ion-label>
+                      <ion-button (click)="setVkPostsByGroupURL(); stepNext()">Загрузить URL</ion-button>
+                  </ion-item>
+                </ng-container>
   
             </ion-list>
           </ion-col>
