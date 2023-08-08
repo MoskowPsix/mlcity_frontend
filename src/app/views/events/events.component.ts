@@ -7,7 +7,6 @@ import { ToastService } from 'src/app/services/toast.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { NavigationService } from 'src/app/services/navigation.service';
-import { SightsService } from 'src/app/services/sights.service';
 
 @Component({
   selector: 'app-events',
@@ -22,34 +21,22 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   eventsCity: IEvent[] = []
   eventsGeolocation: IEvent[] = []
-  sightsCity: IEvent[] = []
-  sightsGeolocation: IEvent[] = []
 
   loadingEventsCity: boolean = false
   loadingEventsGeolocation: boolean = false
-  loadingSightsCity: boolean = false
-  loadingSightsGeolocation: boolean = false
 
   loadingMoreEventsCity: boolean = false
   loadingMoreEventsGeolocation: boolean = false
-  loadingMoreSightsCity: boolean = false
-  loadingMoreSightsGeolocation: boolean = false
 
   currentPageEventsCity: number = 1
   currentPageEventsGeolocation: number = 1
-  currentPageSightsCity: number = 1
-  currentPageSightsGeolocation: number = 1
 
   totalPagesEventsCity: number = 1
   totalPagesEventsGeolocation: number = 1
-  totalPagesSightsCity: number = 1
-  totalPagesSightsGeolocation: number = 1
 
   constructor(
     private eventsService: EventsService,
-    private sightsService: SightsService,
     private toastService: ToastService,
- 
     private filterService: FilterService,
     private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService
@@ -104,54 +91,6 @@ export class EventsComponent implements OnInit, OnDestroy {
     ).subscribe()
   }
 
-  getSightsCity(){
-    this.loadingMoreSightsCity ? this.loadingSightsCity = true : this.loadingSightsCity = false
-
-    this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsPublicForCityTab')).pipe(
-      delay(100),
-      retry(3),
-      map((respons:any) => {
-        this.sightsCity.push(...respons.sights.data)
-        this.totalPagesSightsCity = respons.sights.last_page
-        //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
-      }),
-      tap(() => {
-        this.loadingSightsCity = true  
-        this.loadingMoreSightsCity = false
-      }),
-      catchError((err) =>{
-        this.toastService.showToast(MessagesErrors.default, 'danger')
-        this.loadingSightsCity = false
-        return of(EMPTY) 
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe()
-  }
-
-  getSightsGeolocation(){
-    this.loadingMoreSightsGeolocation ? this.loadingSightsGeolocation = true : this.loadingSightsGeolocation = false
-
-    this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsPublicForGeolocationTab')).pipe(
-      delay(100),
-      retry(3),
-      map((respons:any) => {
-        this.sightsGeolocation.push(...respons.sights.data)
-        this.totalPagesSightsGeolocation = respons.sights.last_page
-        //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
-      }),
-      tap(() => {
-        this.loadingSightsGeolocation = true  
-        this.loadingMoreSightsGeolocation = false
-      }),
-      catchError((err) =>{
-        this.toastService.showToast(MessagesErrors.default, 'danger')
-        this.loadingSightsGeolocation = false
-        return of(EMPTY) 
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe()
-  }
-
   eventsCityLoadingMore(){
     this.loadingMoreEventsCity = true
     this.currentPageEventsCity++
@@ -166,20 +105,6 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.getEventsGeolocation()
   }
 
-  sightsCityLoadingMore(){
-    this.loadingMoreSightsCity = true
-    this.currentPageSightsCity++
-    this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(this.currentPageSightsCity)
-    this.getSightsCity()
-  }
-
-  sightsGeolocationLoadingMore(){
-    this.loadingMoreSightsGeolocation = true
-    this.currentPageSightsGeolocation++
-    this.queryBuilderService.paginationPublicSightsGeolocationCurrentPage.next(this.currentPageSightsGeolocation)
-    this.getSightsGeolocation()
-  }
-
   onSegmentChanged(event: any){
     this.segment = event.detail.value
   }
@@ -187,24 +112,16 @@ export class EventsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.eventsCity = []
     this.eventsGeolocation = []
-    this.sightsCity = []
-    this.sightsGeolocation = []
     this.getEventsCity()
     this.getEventsGeolocation()
-    this.getSightsCity()
-    this.getSightsGeolocation()
 
     //Подписываемся на изменение фильтра 
     this.filterService.changeFilter.pipe(debounceTime(1000),takeUntil(this.destroy$)).subscribe((value) => {
       if (value === true){
         this.eventsCity = []
         this.eventsGeolocation = []
-        this.sightsCity = []
-        this.sightsGeolocation = []
         this.getEventsCity()
         this.getEventsGeolocation()
-        this.getSightsCity()
-        this.getSightsGeolocation()
       }
       this.navigationService.appFirstLoading.next(false)// чтобы удалялся фильтр,
     })

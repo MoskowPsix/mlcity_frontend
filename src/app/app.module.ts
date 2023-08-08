@@ -32,7 +32,7 @@ import { ServerErrorComponent } from './views/errors/server-error/server-error.c
 import { EventShowComponent } from './views/events/event-show/event-show.component';
 import { SightShowComponent } from './views/sights/sight-show/sight-show.component';
 import { EventCreateComponent } from './views/events/event-create/event-create.component';
-import { SightsComponent } from './views/cabinet/sights/sights.component';
+import { SightsComponent } from './views/sights/sights.component';
 import { SightCreateComponent } from './views/sights/sight-create/sight-create.component';
 //import { SightShowComponent } from './views/cabinet/sights/sight-show/sight-show.component';
 //import { SightCreateComponent } from './views/cabinet/sights/sight-create/sight-create.component';

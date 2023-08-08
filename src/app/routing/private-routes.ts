@@ -5,7 +5,7 @@ import { CabinetComponent } from "../views/cabinet/cabinet.component";
 import { EventsComponent } from '../views/events/events.component';
 import { EventCreateComponent } from '../views/events/event-create/event-create.component';
 import { EventShowComponent } from '../views/events/event-show/event-show.component';
-import { SightsComponent } from '../views/cabinet/sights/sights.component';
+import { SightsComponent } from '../views/sights/sights.component';
 import { SightCreateComponent } from '../views/sights/sight-create/sight-create.component';
 import { SightShowComponent } from '../views/sights/sight-show/sight-show.component';
 import { FavoritesComponent } from '../views/cabinet/favorites/favorites.component';

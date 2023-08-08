@@ -1,3 +1,4 @@
+import { SightsComponent } from "../views/sights/sights.component";
 import { EventsComponent } from "../views/events/events.component";
 import { HomeComponent } from "../views/home/home.component";
 import { AddEventComponent } from '../views/add-event/add-event.component';
@@ -39,7 +40,7 @@ export const publicRoutes: Routes = [
     },
     {
       path: 'sights',
-      component: EventsComponent, // Поменять на компонет места
+      component: SightsComponent, // Поменять на компонет места
       canActivate: [CheckAuthCanActiveGuard],
     },
     {
