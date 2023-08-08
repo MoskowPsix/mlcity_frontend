@@ -52,10 +52,7 @@
             <ng-container *ngIf="loadingSightsCity">
               <ion-row class="ion-justify-content-start">
                 <ion-col *ngFor="let sight of sightsCity; let i = index" size-xl="4" size-lg="6" size-md="6" size-xs="12">
-                  .app-event-card {
-                    margin-left: 30%;
-                      margin-right: 30%;
-                  }<app-sight-card [sight]="sight"></app-sight-card>
+                  <app-sight-card [sight]="sight"></app-sight-card>
                 </ion-col>
               </ion-row>
             </ng-container>
