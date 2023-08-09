@@ -52,7 +52,7 @@
             <ng-container *ngIf="loadingSightsCity">
               <ion-row class="ion-justify-content-start">
                 <ion-col *ngFor="let sight of sightsCity; let i = index" size-xl="4" size-lg="6" size-md="6" size-xs="12">
-                  <app-sight-card [sight]="sight"></app-sight-card>
+                  <div class="app-event-card"><app-sight-card [sight]="sight"></app-sight-card></div>
                 </ion-col>
               </ion-row>
             </ng-container>
@@ -103,7 +103,7 @@
             <ng-container *ngIf="loadingSightsGeolocation">
               <ion-row class="ion-justify-content-start">
                 <ion-col *ngFor="let sight of sightsGeolocation; let i = index" size-xl="4" size-lg="6" size-md="6" size-xs="12">
-                  <app-sight-card [sight]="sight"></app-sight-card>
+                  <div class="app-event-card"><app-sight-card [sight]="sight"></app-sight-card></div>
                 </ion-col>
               </ion-row>
             </ng-container>

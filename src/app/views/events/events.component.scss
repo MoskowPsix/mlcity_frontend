@@ -1,7 +1,5 @@
 .filters{
-    position: fixed;
-    bottom: 5rem;
-    right: 1.5rem;
+    position: relative;
     z-index: 999999;
 }
 
@@ -21,10 +19,6 @@
 ion-segment-button{
 	--border-width: 0;
 } 
-.app-event-card {
-	margin-left: 30%;
-    margin-right: 30%;
-}
 
 .note{
 	color: #9c9ea5;
@@ -53,6 +47,10 @@ ion-segment-button{
     	grid-template-columns: 1fr 1fr;
 		gap: 0.5rem;
 	}
+	.app-event-card {
+		//margin-left: 2%;
+		//margin-right: 2%;
+	}
 }
 
 @media (min-width: 768px) {
@@ -61,6 +59,10 @@ ion-segment-button{
 		// bottom: 5rem;
 		// right: 1.5rem;
 		// z-index: 9999;
+	}
+	.app-event-card {
+		//margin-left: 30%;
+		//margin-right: 30%;
 	}
 
 	.segments{
@@ -71,5 +73,9 @@ ion-segment-button{
 @media screen and (min-width: 769px) and (max-width: 1313px) {
 	.segments{
 		margin-top: 60px;
+	}
+	.app-event-card {
+		//margin-left: 35%;
+		//margin-right: 35%;
 	}
 }

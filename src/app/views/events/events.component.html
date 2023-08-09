@@ -1,7 +1,7 @@
 <ion-content>
-  <div class="filters">
+  <!-- <div class="filters">
     <app-filters></app-filters>
-  </div>   
+  </div>   -->
   <ion-grid class="mb-6-5rem">
     <ion-row class="ion-justify-content-center">
       <ion-col size-lg="8" size-md="12" size-xs="12">
@@ -47,13 +47,19 @@
                 </ion-card>      
               </ion-col>
             </ion-row>
-          </ng-container>
-  
+          </ng-container> 
           <ng-container *ngIf="loadingEventsCity">
             <ion-col class="ion-align-content-start">
-              <ion-col *ngFor="let event of eventsCity; let i = index" size-xl="4" size-lg="6" size-md="6" size-xs="12">
-                <div class="app-event-card"><app-event-card [event]="event"></app-event-card></div>
-              </ion-col>
+                <ion-row>
+                <ion-col size-xl="4" size-lg="4" size-md="4">
+                  <div class="ion-align-item-center">
+                    <app-filters></app-filters>
+                  </div>
+                </ion-col> 
+                <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card">
+                  <app-event-card *ngFor="let event of eventsCity; let i = index" [event]="event"></app-event-card>
+                </ion-col>
+                </ion-row>
             </ion-col>
           </ng-container>
   
