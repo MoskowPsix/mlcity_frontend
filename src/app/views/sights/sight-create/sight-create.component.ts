@@ -465,7 +465,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         return this.createSightForm.hasError('dateInvalid') ?  false :  true
       case 7:
         return this.createSightForm.controls['sponsor'].invalid  ?  false :  true      
-      case 9:
+      case 8:
         //return !this.createEventForm.controls['coords'].value.length ? false :  true  
         return this.createSightForm.controls['coords'].invalid ? false :  true 
       default:

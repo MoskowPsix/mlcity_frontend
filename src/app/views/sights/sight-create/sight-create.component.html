@@ -17,7 +17,7 @@
                     shape="round" 
                     (click)="goToStep(i + 1)" 
                     [color]="stepCurrency === i + 1 ? 'primary' : !stepIsValid(i + 1) ? 'danger' : 'light'"  
-                    [disabled]="vkGroupPostSelected && (i === 4)"
+                    [disabled]="vkGroupPostSelected && (i === 15)"
                   >
                   {{ i + 1 }}
                 </ion-button>
@@ -255,7 +255,7 @@
         <ion-row  [hidden]="stepCurrency !== 5" class="ion-justify-content-center">
           <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 5" @fade>
             <!-- <ion-label position="floating">Добавление фотографий (*.png, *.jpeg)</ion-label> -->
-            <div *ngIf="!vkGroupPostSelected" class="ion-margin-vertical">
+            <div  class="ion-margin-vertical">
               <div class="upload-overlay ion-activatable custom-parent" (click)="filesUpload.click()">  
                 <ion-item lines="none" class="photo-label">
                   <ion-icon name="images" slot="start" color="primary"></ion-icon>
