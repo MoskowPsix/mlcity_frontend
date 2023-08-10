@@ -34,10 +34,9 @@ import { SightShowComponent } from './views/sights/sight-show/sight-show.compone
 import { EventCreateComponent } from './views/events/event-create/event-create.component';
 import { SightsComponent } from './views/sights/sights.component';
 import { SightCreateComponent } from './views/sights/sight-create/sight-create.component';
-//import { SightShowComponent } from './views/cabinet/sights/sight-show/sight-show.component';
-//import { SightCreateComponent } from './views/cabinet/sights/sight-create/sight-create.component';
 import { ReadMoreComponent } from './components/read-more/read-more.component';
 import { FiltersComponent } from './components/filters/filters.component';
+import {FiltersNotButtonComponent} from './components/filters_not_button/filters_not_button.component'
 import { NoDataComponent } from './components/no-data/no-data.component';
 import { EventCardComponent } from './components/event-card/event-card.component';
 import { FavoritesComponent } from './views/cabinet/favorites/favorites.component';
@@ -98,6 +97,7 @@ registerLocaleData(localeRu, 'ru');
     SightCreateComponent,
     ReadMoreComponent,
     FiltersComponent,
+    FiltersNotButtonComponent,
     NoDataComponent,
     EventCardComponent,
     FavoritesComponent,

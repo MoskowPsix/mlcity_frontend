@@ -12,9 +12,9 @@ import { VkService } from 'src/app/services/vk.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-filters',
-  templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.scss'],
+  selector: 'app-filters-not-button',
+  templateUrl: './filters_not_button.component.html',
+  styleUrls: ['./filters_not_button.component.scss'],
 })
 export class FiltersNotButtonComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
@@ -59,18 +59,18 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
   ) { }
 
   getEventTypes(){
-    this.eventTypesLoding = true
+    //this.eventTypesLoding = true
     this.eventTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.eventTypes = response.types
-      this.eventTypesLoding = false
+    //  this.eventTypesLoding = false
     })
   }
 
   getSightTypes(){
-    this.sightTypesLoding = true
+    //this.sightTypesLoding = true
     this.sightTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.sightTypes = response.types
-      this.sightTypesLoding = false
+    //  this.sightTypesLoding = false
     })
   }
 

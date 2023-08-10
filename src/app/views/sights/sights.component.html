@@ -1,7 +1,4 @@
-<ion-content>
-  <div class="filters">
-    <app-filters></app-filters>
-  </div>   
+<ion-content> 
   <ion-grid class="mb-6-5rem">
     <ion-row class="ion-justify-content-center">
       <ion-col size-lg="8" size-md="12" size-xs="12">
@@ -51,14 +48,18 @@
     
             <ng-container *ngIf="loadingSightsCity">
               <ion-row class="ion-justify-content-start">
-                <ion-col *ngFor="let sight of sightsCity; let i = index" size-xl="4" size-lg="6" size-md="6" size-xs="12">
-                  <div class="app-event-card"><app-sight-card [sight]="sight"></app-sight-card></div>
+                <ion-col size-xl="4" size-lg="4" size-md="4">
+                  <div class="ion-align-item-center">
+                    <app-filters-not-button></app-filters-not-button>
+                  </div>
+                </ion-col> 
+                <ion-col size-xl="4" size-lg="6" size-md="6" size-xs="12">
+                  <div *ngFor="let sight of sightsCity; let i = index" class="app-event-card"><app-sight-card [sight]="sight"></app-sight-card></div>
+                  <ng-container *ngIf="!sightsCity.length && loadingSightsCity">
+                    <app-no-data/>
+                  </ng-container>
                 </ion-col>
               </ion-row>
-            </ng-container>
-    
-            <ng-container *ngIf="!sightsCity.length && loadingSightsCity">
-              <app-no-data/>
             </ng-container>
             
             <ng-container *ngIf="!loadingMoreSightsCity">
@@ -102,14 +103,18 @@
     
             <ng-container *ngIf="loadingSightsGeolocation">
               <ion-row class="ion-justify-content-start">
-                <ion-col *ngFor="let sight of sightsGeolocation; let i = index" size-xl="4" size-lg="6" size-md="6" size-xs="12">
-                  <div class="app-event-card"><app-sight-card [sight]="sight"></app-sight-card></div>
+                  <ion-col size-xl="4" size-lg="4" size-md="4">
+                    <div class="ion-align-item-center">
+                      <app-filters-not-button></app-filters-not-button>
+                    </div>
+                  </ion-col> 
+                <ion-col size-xl="4" size-lg="6" size-md="6" size-xs="12">
+                  <div *ngFor="let sight of sightsGeolocation; let i = index" class="app-event-card"><app-sight-card [sight]="sight"></app-sight-card></div>
+                  <ng-container *ngIf="!sightsGeolocation.length && loadingSightsGeolocation">
+                    <app-no-data/>
+                  </ng-container>
                 </ion-col>
               </ion-row>
-            </ng-container>
-    
-            <ng-container *ngIf="!sightsGeolocation.length && loadingSightsGeolocation">
-              <app-no-data/>
             </ng-container>
             
             <ng-container *ngIf="!loadingMoreSightsGeolocation">

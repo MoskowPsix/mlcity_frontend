@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { FiltersNotButtonComponent } from './filters_not_button';
+import { FiltersNotButtonComponent } from './filters_not_button.component';
 
 describe('FiltersNotButtonComponent', () => {
   let component: FiltersNotButtonComponent;

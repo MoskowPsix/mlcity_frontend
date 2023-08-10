@@ -1,16 +1,3 @@
-<ion-button size="small" color="primary"  id="open-filters" (click)="isModalFilterOpen(true)">
-    ФИЛЬТРЫ
-    <ng-container *ngIf="countFilters !== 0 || dateFiltersSelected">
-      <ion-badge color="secondary" class="mx-5px">{{ dateFiltersSelected ? countFilters + 1 : countFilters }}</ion-badge>
-    </ng-container>
-    <ion-icon name="options" slot="end"></ion-icon>
-    <!-- <ion-icon *ngIf="saveFilters === 1" name="toggle" color="warning" class="mx-5px"></ion-icon> -->
-  </ion-button>
-  
-    <!-- Модальное окно с фильтрами -->
-    <!-- <ion-modal #modal trigger="open-filters"> -->
-    <ion-modal [isOpen]="modalFiltersOpen" (ionModalDidDismiss)="modalClose()">
-      <ng-template>
         <ion-header>
           <ion-toolbar>
             <ion-buttons slot="start">
@@ -18,12 +5,10 @@
             </ion-buttons>
             <ion-title>Фильтры</ion-title>
             <ion-buttons slot="end">
-              <!-- <ion-button (click)="modal.dismiss()"><ion-icon name="close"></ion-icon></ion-button> -->
-              <ion-button (click)="isModalFilterOpen(false)"><ion-icon name="close"></ion-icon></ion-button>         
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-        <ion-content class="filters-modal">
+        <ng-container class="filters-modal">
           <!-- Скелетная загрузка -->
           <ng-container *ngIf="eventTypesLoding || sightTypesLoding">
             <p *ngFor="let key of [1,2,3,4,5]" class="ion-padding-horizontal">
@@ -189,6 +174,4 @@
               </ion-accordion>
             </ion-accordion-group>      
           </ng-container>   
-        </ion-content>
-      </ng-template>
-    </ion-modal>
+        </ng-container>
