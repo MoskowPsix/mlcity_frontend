@@ -8,7 +8,7 @@
   <span *ngIf="readMore" [@collapse]="collapsed">{{ text | slice:200 }}</span>
 </div> -->
 
-{{ readMore ? text : text | slice:0:200 }}
+<pre wrap="soft | hard" class="text">{{ readMore ? text : text | slice:0:200 }}</pre>
 <span *ngIf="!readMore">...</span>
 
 <div class="ion-text-end">

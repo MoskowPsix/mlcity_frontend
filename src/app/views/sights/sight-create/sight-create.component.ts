@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -25,6 +25,7 @@ import { EMPTY } from 'rxjs/internal/observable/empty';
 import { StatusesService } from 'src/app/services/statuses.service';
 import { VkService } from 'src/app/services/vk.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import {register} from 'swiper/element/bundle';
 
 @Component({
   selector: 'app-sight-create',
@@ -88,6 +89,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   createSightForm: FormGroup = new FormGroup({})
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private sightsService: SightsService,
     private loadingService: LoadingService, 
@@ -183,6 +185,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){
     this.vkService.getPostsGroup(group_id, 10).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      console.log(response)
       this.vkGroupPosts = response.response
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
@@ -563,6 +566,18 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     // отписываемся от всех подписок
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  ngAfterViewInit() {
+    register()
+    this.cdr.detectChanges()
+    // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
+    //   this.swiper = res.first.nativeElement.swiper
+    //   console.log(res.first.nativeElement.swiper)
+    // });
+
+    // this.swiper?.update()
+    //console.log(this.swiper)
   }
 
 }
