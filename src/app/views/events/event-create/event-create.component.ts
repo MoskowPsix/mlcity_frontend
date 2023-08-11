@@ -1,10 +1,9 @@
-import { Component, OnInit, OnDestroy, Sanitizer } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { EventTypeService } from 'src/app/services/event-type.service';
-//import { IUser } from 'src/app/models/user';
 import { IEventType } from 'src/app/models/event-type';
 import { IStatus } from 'src/app/models/status';
 import { environment } from 'src/environments/environment';
@@ -25,6 +24,7 @@ import { EMPTY } from 'rxjs/internal/observable/empty';
 import { StatusesService } from 'src/app/services/statuses.service';
 import { VkService } from 'src/app/services/vk.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import {register} from 'swiper/element/bundle';
 
 @Component({
   selector: 'app-event-create',
@@ -89,6 +89,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createEventForm: FormGroup = new FormGroup({})
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private eventsService: EventsService,
     private loadingService: LoadingService, 
@@ -568,6 +569,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     // отписываемся от всех подписок
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  ngAfterViewInit() {
+    register()
+    this.cdr.detectChanges()
+    // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
+    //   this.swiper = res.first.nativeElement.swiper
+    //   console.log(res.first.nativeElement.swiper)
+    // });
+
+    // this.swiper?.update()
+    //console.log(this.swiper)
   }
 
 }

@@ -393,7 +393,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   createFormData(){
     if(this.uploadFiles && !this.createSightForm.controls['files'].hasError('requiredFileType')){
       for (var i = 0; i < this.uploadFiles.length; i++) {
-        this.formData.append('localFiles[]', this.uploadFiles[i])
+        this.formData.append('localFilesImg[]', this.uploadFiles[i])
       }
     } 
 
@@ -401,7 +401,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPostSelected.attachments.forEach((attachment: any) => {
         if (attachment.photo) {
           let photo = attachment.photo.sizes.pop() //берем последний размер
-          this.formData.append('vkFiles[]', photo.url)
+          this.formData.append('vkFilesImg[]', photo.url)
         }
       }) 
     } 
@@ -550,7 +550,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       coords: new FormControl('',[Validators.required, Validators.minLength(2)]), 
       type:  new FormControl({value: '1', disabled: false},[Validators.required]),
       status:  new FormControl({value: this.statusSelected, disabled: false},[Validators.required]),
-      files: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
+      files_img: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
       price: new FormControl('',[Validators.maxLength(6)]),
       materials: new FormControl(''),
       dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
