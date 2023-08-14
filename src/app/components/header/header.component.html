@@ -39,10 +39,12 @@
 
 <!-- Декстопное меню -->
 <ion-row class="header ion-justify-content-end ion-align-items-center ion-margin-horizontal">
-    <ion-col size="auto" class="logo">
-        <img src="assets/icons/favicon.png">
-        <span>{{ appName }}</span>
-    </ion-col>
+    <ion-router-link color="dark" href="#">
+        <ion-col href="#" size="auto" class="logo">
+            <img  src="assets/icons/favicon.png">
+            <span >{{ appName }}</span>
+        </ion-col>
+    </ion-router-link>
     
     <ion-col size="auto" class="ion-padding-horizontal ion-align-self-center">
         <ion-button fill="clear" size="small" color="dark" (click)="isModalSearchCityesOpen(true)">
