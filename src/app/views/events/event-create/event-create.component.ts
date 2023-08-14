@@ -355,7 +355,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.resetUploadInfo()
 
     for (var i = 0; i < event.target.files.length; i++) {
+      // let arr: any
+      // arr['file'] = event.target.files[i]
+      // arr['type'] = 'image'
       this.uploadFiles.push(event.target.files[i])
+      console.log(this.uploadFiles)
     }
 
     this.createEventForm.patchValue({files: ''}) // Если не обнулять будет ошибка
@@ -382,6 +386,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.uploadFiles.forEach((file: any) => {
         let reader = new FileReader()
         reader.readAsDataURL(file)
+        //console.log(file)
         reader.onload = () => {
           this.imagesPreview.push(reader.result as string) 
         }
@@ -394,7 +399,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormData(){
     if(this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')){
       for (var i = 0; i < this.uploadFiles.length; i++) {
-        this.formData.append('localFiles[]', this.uploadFiles[i])
+        this.formData.append('localFilesImg[]', this.uploadFiles[i])
       }
     } 
 
@@ -402,7 +407,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPostSelected.attachments.forEach((attachment: any) => {
         if (attachment.photo) {
           let photo = attachment.photo.sizes.pop() //берем последний размер
-          this.formData.append('vkFiles[]', photo.url)
+          this.formData.append('vkFilesImg[]', photo.url)
+        }
+        if (attachment.video) {
+          this.formData.append('vkFilesVideo[]', 'https://vk.com/video_ext.php?oid='+ attachment.video.owner_id +'&id=' + attachment.video.id + '&hd=2')
+        }
+        if (attachment.link) {
+          this.formData.append('vkFilesLink[]', attachment.link.url)
         }
       }) 
     } 

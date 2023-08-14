@@ -11,6 +11,7 @@ import { MessagesAuth } from 'src/app/enums/messages-auth';
 import { ToastService } from 'src/app/services/toast.service';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { AuthService } from 'src/app/services/auth.service';
+import { DomSanitizer } from '@angular/platform-browser';
 // import { Swiper } from 'swiper/types';
 
 @Component({
@@ -44,7 +45,8 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private eventsService: EventsService,
     private toastService: ToastService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private sanitizer:DomSanitizer,
   ) {}
 
   
@@ -57,7 +59,13 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       if(event)
         this.event = event
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
+        console.log(event)
     }); 
+  }
+
+  getUrlFrame(url:string)
+  {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
   checkLiked(){

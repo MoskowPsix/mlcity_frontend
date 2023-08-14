@@ -403,6 +403,12 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           let photo = attachment.photo.sizes.pop() //берем последний размер
           this.formData.append('vkFilesImg[]', photo.url)
         }
+        if (attachment.video) {
+          this.formData.append('vkFilesVideo[]', 'https://vk.com/video_ext.php?oid='+ attachment.video.owner_id +'&id=' + attachment.video.id + '&hd=2')
+        }
+        if (attachment.link) {
+          this.formData.append('vkFilesLink[]', attachment.link.url)
+        }
       }) 
     } 
 

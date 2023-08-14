@@ -8,6 +8,7 @@ import { ToastService } from 'src/app/services/toast.service'
 import { environment } from 'src/environments/environment'
 import { VkService } from 'src/app/services/vk.service'
 import { IonicSlides } from '@ionic/angular'
+import { DomSanitizer } from '@angular/platform-browser'
 
 import {register} from 'swiper/element/bundle'
 import {Swiper} from 'swiper/types'
@@ -24,7 +25,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     private eventsService: EventsService,
     private toastService: ToastService,
     private vkService: VkService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private sanitizer:DomSanitizer
   ) { }
   
   private readonly destroy$ = new Subject<void>()
@@ -71,6 +73,11 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
         takeUntil(this.destroy$)
       ).subscribe()
     }  
+  }
+
+  getUrlFrame(url:string)
+  {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
   toggleLike(event_id:number){

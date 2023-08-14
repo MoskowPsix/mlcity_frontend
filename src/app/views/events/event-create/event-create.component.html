@@ -17,7 +17,7 @@
                   shape="round" 
                   (click)="goToStep(i + 1)" 
                   [color]="stepCurrency === i + 1 ? 'primary' : !stepIsValid(i + 1) ? 'danger' : 'light'"  
-                  [disabled]="vkGroupPostSelected && ( i === 4)"
+                  [disabled]="vkGroupPostSelected && ( i === 99)"
                 >
                 {{ i + 1 }}
               </ion-button>
@@ -189,7 +189,7 @@
                       <ng-container *ngIf="attachment.video" >
                         <ion-col class="video_col">
                               <span class="video-title">{{ attachment.video.title }}</span>
-                              <iframe class="video_content" [src]="getUrlVideo(attachment.video.owner_id, attachment.video.id)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+                              <iframe class="video_content" [src]="getUrlVideo(attachment.video.owner_id, attachment.video.id)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen width="100%" height="100%"></iframe>
                               <p>Описание видео: </p>
                               <app-read-more *ngIf="attachment.video.description" text="{{ attachment.video.description }}"></app-read-more>
                           </ion-col>    
