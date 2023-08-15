@@ -185,7 +185,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){
     this.vkService.getPostsGroup(group_id, 10).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      console.log(response)
       this.vkGroupPosts = response.response
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
     })
@@ -356,7 +355,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     for (var i = 0; i < sight.target.files.length; i++) {
       this.uploadFiles.push(sight.target.files[i])
     }
-
     this.createSightForm.patchValue({files: ''}) // Если не обнулять будет ошибка
 
     this.createImagesPreview()  
@@ -365,8 +363,10 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   resetUploadInfo(){
     this.imagesPreview = [] // очищаем превьюшки
     this.uploadFiles = [] // очишщаем массив с фотками
-    this.formData.delete('localFiles[]') // очишщаем файлы
-    this.formData.delete('vkFiles[]') // очишщаем файлы
+    this.formData.delete('localFilesImg[]') // очишщаем файлы
+    this.formData.delete('vkFilesVideo[]') // очишщаем файлы
+    this.formData.delete('vkFilesImg[]') // очишщаем файлы
+    this.formData.delete('vkFilesLink[]') // очишщаем файлы
   }
 
   //Удалить прею фотки
@@ -376,7 +376,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   // Заполняем превью фоток 
   createImagesPreview(){
-    if(this.uploadFiles && !this.createSightForm.controls['files'].hasError('requiredFileType')){
+    if(this.uploadFiles && !this.createSightForm.controls['files_img'].hasError('requiredFileType')){
       this.loadingService.showLoading()
       this.uploadFiles.forEach((file: any) => {
         let reader = new FileReader()
@@ -391,7 +391,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   //формируем дату для отправки на сервер
   createFormData(){
-    if(this.uploadFiles && !this.createSightForm.controls['files'].hasError('requiredFileType')){
+    if(this.uploadFiles && !this.createSightForm.controls['files_img'].hasError('requiredFileType')){
       for (var i = 0; i < this.uploadFiles.length; i++) {
         this.formData.append('localFilesImg[]', this.uploadFiles[i])
       }

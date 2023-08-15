@@ -355,11 +355,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.resetUploadInfo()
 
     for (var i = 0; i < event.target.files.length; i++) {
-      // let arr: any
-      // arr['file'] = event.target.files[i]
-      // arr['type'] = 'image'
       this.uploadFiles.push(event.target.files[i])
-      console.log(this.uploadFiles)
     }
 
     this.createEventForm.patchValue({files: ''}) // Если не обнулять будет ошибка
@@ -370,8 +366,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   resetUploadInfo(){
     this.imagesPreview = [] // очищаем превьюшки
     this.uploadFiles = [] // очишщаем массив с фотками
-    this.formData.delete('localFiles[]') // очишщаем файлы
-    this.formData.delete('vkFiles[]') // очишщаем файлы
+    this.formData.delete('localFilesImg[]') // очишщаем файлы
+    this.formData.delete('vkFilesVideo[]') // очишщаем файлы
+    this.formData.delete('vkFilesImg[]') // очишщаем файлы
+    this.formData.delete('vkFilesLink[]') // очишщаем файлы
   }
 
   //Удалить прею фотки
@@ -379,14 +377,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.imagesPreview = this.imagesPreview.filter((a) => a !== img);
   }
 
-  //заполнем превью фоток 
+  // Заполняем превью фоток 
   createImagesPreview(){
     if(this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')){
       this.loadingService.showLoading()
       this.uploadFiles.forEach((file: any) => {
         let reader = new FileReader()
         reader.readAsDataURL(file)
-        //console.log(file)
         reader.onload = () => {
           this.imagesPreview.push(reader.result as string) 
         }

@@ -264,9 +264,6 @@
               >
             </ion-textarea>
             </ion-item>
-            <!-- <div *ngIf="createEventForm.controls['description'].invalid && createEventForm.controls['description'].dirty "  class="validation">
-              <ion-note *ngIf="!createEventForm.controls['description'].hasError('minLength')" color="danger">поле "Об мероприятии" должно содержать минимум 10 символа</ion-note>
-            </div> -->
           </ion-col>
         </ion-row>
               
@@ -282,9 +279,9 @@
                 </ion-item>
                 <ion-ripple-effect></ion-ripple-effect>
               </div>
-              <input formControlName="files" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
+              <input formControlName="files_img" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
               
-              <ion-note *ngIf="createSightForm.controls['files'].hasError('requiredFileType')" color="danger">Допустимые форматы *.png, *.jpeg</ion-note>
+              <ion-note *ngIf="createSightForm.controls['files_img'].hasError('requiredFileType')" color="danger">Допустимые форматы *.png, *.jpeg</ion-note>
   
               <!-- Image Preview -->
               <ion-row  *ngIf="imagesPreview">
