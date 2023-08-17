@@ -46,8 +46,16 @@
   </div>
 
   <!-- Модальное окно просмотр ивента / места при клике метки на карте -->
-  <ion-modal id="modalEventShow" [isOpen]="modalEventShowOpen" (ionModalDidDismiss)="modalClose()" (ionBreakpointDidChange)="modalClose()" [initialBreakpoint]="0.9" [breakpoints]="[0, 0.9]">
+  <ion-modal id="modalEventShow" [isOpen]="modalEventShowOpen" (ionModalDidDismiss)="modalClose()" (ionBreakpointDidChange)="modalClose()" [initialBreakpoint]="0.9" [breakpoints]="[0, 0.9]" >
+    <div class="bg"></div>
     <ng-template>
+      <!-- <ion-header color="black">
+        <ion-toolbar>
+          <ion-buttons slot="end">
+            <ion-button (click)="modalClose()">Закрыть</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header> -->
       <ion-content>
         <ng-container *ngIf="modalContent">
           <ion-row class="ion-justify-content-start">

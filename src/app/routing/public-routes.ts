@@ -1,6 +1,6 @@
 import { SightsComponent } from "../views/sights/sights.component";
 import { EventsComponent } from "../views/events/events.component";
-import { HomeComponent } from "../views/home/home.component";
+import { HomeComponent } from '../views/home/HomeComponent';
 import { AddEventComponent } from '../views/add-event/add-event.component';
 import { Routes } from '@angular/router';
 import { AboutComponent } from "../views/about/about.component";

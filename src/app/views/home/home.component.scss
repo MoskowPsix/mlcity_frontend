@@ -128,10 +128,16 @@ ion-spinner{
 			// padding: 1rem;
 			// background: transparent;
     		// box-shadow: none;
-			height: 100%;
+			--background: rgba(255, 255, 255, 0.4);
+			backdrop-filter: blur(5px);
+			height: 87%;
 			bottom: 10%;
 			left: 0;
         }
+		ion-toolbar {
+			--background: rgba(255, 255, 255, 0);
+			 backdrop-filter: blur(5px);
+		}
 	}
 }
 

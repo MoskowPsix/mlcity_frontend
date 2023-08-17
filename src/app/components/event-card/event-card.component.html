@@ -1,7 +1,8 @@
 <ion-card>
   <!-- ['/sights', event.id] - было лень переделывать поэтому тут event.id подразумевает ид места, так как компонент универсальный и можно передать место -->
-  <div class="ion-activatable ripple-parent rectangle" [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
+  <div class=" ripple-parent rectangle" >
     <swiper-container 
+      [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]"
       #swiper
       [modules]="swiperModules" 
       autoplay="true"
@@ -15,10 +16,12 @@
       <ng-container *ngIf="event.files && event.files.length; else notFiles">
         <ng-container *ngFor="let file of event.files">
           <swiper-slide *ngIf="file.local === 1 && file.file_types[0].name === 'image'">
+            <ion-img style="background-image: url('{{host}}:{{port}}{{ file.link }}');"/>
             <img alt="img" src="{{host}}:{{port}}{{ file.link }}" />
           </swiper-slide>
           <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
-            <img alt="img" src="{{ file.link }}" />
+              <ion-img  style="background-image: url('{{ file.link }}');"/>
+              <img alt="img" src="{{ file.link }}" style="z-index: 10;"/>
           </swiper-slide>
           <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
             <iframe [src]="getUrlFrame(file.link + '&autoplay=1&mute=1')" allow="encrypted-media; fullscreen; picture-in-picture;" autoplay width="100%" height="100%" frameborder="0"></iframe>
@@ -53,13 +56,22 @@
 
     <ion-card-title>{{ event.name | truncate:[48,'...'] }}</ion-card-title>
     
-    <ion-card-header>
+    <ion-card-header [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
       <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>
     </ion-card-header>
     
     <ion-card-content>
-      {{ event.description | truncate:[200,'...'] }}
+      <app-read-more text="{{ event.description }}"></app-read-more>
     </ion-card-content>
+
+    <!-- Ссылки которые пока просто ссылки без превью. -->
+    <!-- <ng-container *ngIf="event.files && event.files.length; else notFiles">
+      <ng-container *ngFor="let file of event.files">
+        <ion-card *ngIf="file.local === 0 && file.file_types[0].name === 'link'">
+          <ion-item button detail="true" href="{{ file.url }}" ></ion-item>
+        </ion-card>
+      </ng-container>
+    </ng-container> -->
     
     <ion-ripple-effect></ion-ripple-effect>
   </div>

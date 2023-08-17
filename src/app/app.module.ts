@@ -16,7 +16,7 @@ import { AngularYandexMapsModule, YaConfig } from 'angular8-yandex-maps';
 import { AppComponent } from './app.component';
 import { EventsComponent } from './views/events/events.component';
 import { CabinetComponent } from './views/cabinet/cabinet.component';
-import { HomeComponent } from './views/home/home.component';
+import { HomeComponent } from './views/home/HomeComponent';
 import { LoginComponent } from './views/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
