@@ -247,58 +247,58 @@ export class HomeComponent implements OnInit, OnDestroy {
       console.log('now ' + Math.ceil(new Date().getTime() / 1000))
       console.log(item.id)
       console.log('deff ' + time_deff)
-      if ( 0 > time_deff ) {
+      if ( 0 > time_deff ) { // Сейчас
         placemark = new ymaps.Placemark(
         [item.latitude, item.longitude],
         {}, {
           balloonContent: item,
           balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #29ff65;" class="marker"><img src="${icoLink}"/></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #e3cacd; border-color: #ed6b7a;" class="marker"><img src="${icoLink}"/></div>`)
         });
         this.placemarks.push(placemark);
-      } else if (86400 > time_deff && time_deff > 0) {
+      } else if (86400 > time_deff && time_deff > 0) { // Сегодня
           placemark = new ymaps.Placemark(
           [item.latitude, item.longitude],
           {}, {
             balloonContent: item,
             balloonAutoPan: false,
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #ff3636;" class="marker"><img src="${icoLink}"/></div>`)
+            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #e3d6ca; border-color: #e0aa77;" class="marker"><img src="${icoLink}"/></div>`)
           });
           this.placemarks.push(placemark);    
-      } else if (604800 > time_deff && time_deff > 86400) {
+      } else if (604800 > time_deff && time_deff > 86400) { // Через неделю
         placemark = new ymaps.Placemark(
         [item.latitude, item.longitude],
         {}, {
           balloonContent: item,
           balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #f7c634;" class="marker"><img src="${icoLink}"/></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #ded9b1; border-color: #dbd172;" class="marker"><img src="${icoLink}"/></div>`)
         });
         this.placemarks.push(placemark);
-      } else if (2629743 > time_deff && time_deff > 604800) {
+      } else if (2629743 > time_deff && time_deff > 604800) { // Через месяц
         placemark = new ymaps.Placemark(
         [item.latitude, item.longitude],
         {}, {
           balloonContent: item,
           balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #545454;" class="marker"><img src="${icoLink}"/></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #d9d9d9; border-color: #a1a1a1;" class="marker"><img src="${icoLink}"/></div>`)
         });
         this.placemarks.push(placemark);
-      } else if (31556926 > time_deff && time_deff > 2629743) {
+      } else if (31556926 > time_deff && time_deff > 2629743) { // Через год
         placemark = new ymaps.Placemark(
         [item.latitude, item.longitude],
         {}, {
           balloonContent: item,
           balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #ffffff;" class="marker"><img src="${icoLink}"/></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #ffffff; border-color: #ffffff;" class="marker"><img src="${icoLink}"/></div>`)
         });
         this.placemarks.push(placemark);
-      } else if (!item.date_start && !item.date_end) {
+      } else if (!item.date_start && !item.date_end) { // Достопримечательности
         placemark = new ymaps.Placemark(
           [item.latitude, item.longitude],
           {}, {
             balloonContent: item,
             balloonAutoPan: false,
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${icoLink}"/></div>`)
+            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #b6d6e0; border-color: #65c0db;" class="marker"><img src="${icoLink}"/></div>`)
           });
           this.placemarks.push(placemark);
       }
@@ -369,10 +369,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.navigationService.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.modalEventShowOpen = value;
       if (!value && this.activePlacemark) { // убираем активный класс у кастомного маркера при закрытие модалки
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         this.activePlacemark.options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${this.activeIcoLink}"/></div>`));
+        this.setMapData();
       }
       if (!value && this.activeClaster) { // убираем активный класс у кластера при закрытие модалки
         this.activeClaster.options.set('preset', '');
+        this.setMapData();
       }
       this.cdr.detectChanges();
     });
