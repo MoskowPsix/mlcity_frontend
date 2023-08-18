@@ -243,10 +243,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       item["type"] = type;
       let icoLink = item && item.types && item.types.length ? this.host + ':' + this.port + item.types[0].ico : '';
       let placemark
-      console.log('start ' + Math.ceil(new Date(item.date_start).getTime() / 1000))
-      console.log('now ' + Math.ceil(new Date().getTime() / 1000))
-      console.log(item.id)
-      console.log('deff ' + time_deff)
       if ( 0 > time_deff ) { // Сейчас
         placemark = new ymaps.Placemark(
         [item.latitude, item.longitude],
