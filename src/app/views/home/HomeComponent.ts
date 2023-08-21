@@ -248,8 +248,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         [item.latitude, item.longitude],
         {}, {
           balloonContent: item,
-          balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #e3cacd; border-color: #ed6b7a;" class="marker"><img src="${icoLink}"/></div>`)
+          //balloonAutoPan: false,
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style=" border-color: rgba(129, 235, 164, 1);" class="marker now"><img src="${icoLink}"/></div>`)
         });
         this.placemarks.push(placemark);
       } else if (86400 > time_deff && time_deff > 0) { // Сегодня
@@ -258,7 +258,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           {}, {
             balloonContent: item,
             balloonAutoPan: false,
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #e3d6ca; border-color: #e0aa77;" class="marker"><img src="${icoLink}"/></div>`)
+            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: 0040ff;" class="marker"><img src="${icoLink}"/></div>`)
           });
           this.placemarks.push(placemark);    
       } else if (604800 > time_deff && time_deff > 86400) { // Через неделю
@@ -267,7 +267,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         {}, {
           balloonContent: item,
           balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #ded9b1; border-color: #dbd172;" class="marker"><img src="${icoLink}"/></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #3366ff;" class="marker"><img src="${icoLink}"/></div>`)
         });
         this.placemarks.push(placemark);
       } else if (2629743 > time_deff && time_deff > 604800) { // Через месяц
@@ -276,7 +276,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         {}, {
           balloonContent: item,
           balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #d9d9d9; border-color: #a1a1a1;" class="marker"><img src="${icoLink}"/></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #668cff;" class="marker"><img src="${icoLink}"/></div>`)
         });
         this.placemarks.push(placemark);
       } else if (31556926 > time_deff && time_deff > 2629743) { // Через год
@@ -285,7 +285,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         {}, {
           balloonContent: item,
           balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #ffffff; border-color: #ffffff;" class="marker"><img src="${icoLink}"/></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #ffffff;" class="marker"><img src="${icoLink}"/></div>`)
         });
         this.placemarks.push(placemark);
       } else if (!item.date_start && !item.date_end) { // Достопримечательности
@@ -294,7 +294,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           {}, {
             balloonContent: item,
             balloonAutoPan: false,
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="background-color: #b6d6e0; border-color: #65c0db;" class="marker"><img src="${icoLink}"/></div>`)
+            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #993333;" class="marker"><img src="${icoLink}"/></div>`)
           });
           this.placemarks.push(placemark);
       }
