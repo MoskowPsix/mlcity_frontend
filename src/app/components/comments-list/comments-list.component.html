@@ -1,0 +1,44 @@
+<ion-card>
+<ion-list>
+    <ion-list-header color="primary">
+        <ion-label *ngIf="prev_comment && prev_comment.length">
+            <h2>Комментарии</h2>
+        </ion-label>
+        <ion-label *ngIf="!prev_comment.length">
+            <h2>Комментариев нет</h2>
+        </ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="let comment of prev_comment">  
+
+        <ion-avatar slot="start">
+            <img alt="Silhouette of mountains" src="{{comment.user.avatar}}" />
+        </ion-avatar>
+        <ion-label > 
+            <h2>{{comment.user.name}}</h2>
+            <p>{{ comment.text }}</p>
+        </ion-label>
+    </ion-item>
+
+    <ion-item  color="white" *ngIf="bottom_load_all_comments" >
+        <ion-button (click)="show_all_comments()" *ngIf="!load_all_comments" slot="end">
+            Загрузить все комментарии
+        </ion-button>
+        <ion-button (click)="ngOnInit()" *ngIf="load_all_comments === true" slot="end">
+            Скрыть комментарии
+        </ion-button>
+    </ion-item>
+
+    <ion-item>
+            <ion-avatar slot="start">
+                <img alt="" src="https://mykaleidoscope.ru/x/uploads/posts/2022-09/1663190599_22-mykaleidoscope-ru-p-veselie-avi-pinterest-23.jpg" />
+            </ion-avatar>
+
+            <ion-textarea  label="Outline textarea" labelPlacement="floating" fill="outline" placeholder="Оставить комментарий"></ion-textarea>
+
+            <ion-label>
+                <ion-button slot="end">Отправить</ion-button>
+            </ion-label>
+    </ion-item>
+</ion-list>
+</ion-card>

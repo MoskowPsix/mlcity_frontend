@@ -59,7 +59,6 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       if(event)
         this.event = event
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
-        console.log(event)
     }); 
   }
 

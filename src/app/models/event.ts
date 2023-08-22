@@ -26,4 +26,5 @@ export interface IEvent {
     date_end: Date
     vk_group_id?:number
     vk_post_id?:number
+    comments?:any
 }
