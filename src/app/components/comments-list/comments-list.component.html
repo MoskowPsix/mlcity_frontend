@@ -21,7 +21,7 @@
     </ion-item>
 
     <ion-item *ngIf="bottom_load_all_comments" lines="none">
-        <ion-button color="tertiary" (click)="show_all_comments()" *ngIf="!load_all_comments" slot="end">
+        <ion-button  (click)="show_all_comments()" *ngIf="!load_all_comments" slot="end">
             Загрузить все комментарии
         </ion-button>
         <ion-button (click)="ngOnInit()" *ngIf="load_all_comments === true" slot="end">
