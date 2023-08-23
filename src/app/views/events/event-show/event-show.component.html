@@ -92,6 +92,10 @@
             <ion-col size-lg="6" size-md="12" size-xs="12" class="left-block">
               <div class="social-buttons">
                 <div class="likes">
+                  <ion-icon name="chatbox-outline" class="ico"></ion-icon>
+                  <span >{{ event.comments.length }}</span>
+                </div>
+                <div class="likes">
                   <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
                   <ion-spinner *ngIf="loadingLike"></ion-spinner>
                   <span >{{ startLikesCount }}</span>

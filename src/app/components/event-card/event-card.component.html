@@ -82,8 +82,10 @@
       <ion-spinner *ngIf="loadingLike"></ion-spinner>
       <span >{{ startLikesCount }}</span>
     </div>
-
-    <ion-icon name="chatbox-outline" size="large" class="ico"></ion-icon>
+    <div class="likes">
+      <ion-icon name="chatbox-outline" size="large" class="ico"></ion-icon>
+      <span >{{ event.comments.length }}</span>
+    </div>
   
     <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" size="large" class="ico"></ion-icon>
     <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
