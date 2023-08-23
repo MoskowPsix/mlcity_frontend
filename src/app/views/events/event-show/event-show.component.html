@@ -144,6 +144,7 @@
               </div>        
             </ion-col>
           </ion-row>
+          <ion-card><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
           
         </ion-col>
       </ion-row>
@@ -152,8 +153,8 @@
         <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
           {{ event.materials }}
         </ion-col>
+        
       </ion-row>
-      <app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list>
   
     </ng-container>
   

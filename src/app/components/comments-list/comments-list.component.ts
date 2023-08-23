@@ -63,8 +63,6 @@ import { UserService } from 'src/app/services/user.service';
     addComment() {
       if (this.createCommentForm.controls['new_comment'].value) {
         if (this.isSight) {
-          //console.log(this.createCommentForm.controls['new_comment'].value)
-          //console.log(this.event_id)
           this.commentsService.addCommentsSight(this.createCommentForm.controls['new_comment'].value, this.event_id).pipe(  
             catchError((err) =>{
               this.createCommentForm.controls['new_comment'].reset()
@@ -127,7 +125,7 @@ import { UserService } from 'src/app/services/user.service';
         this.load_all_comments = false
       } else if (this.comments.length) {
         this.show_all_comments()
-        this.bottom_load_all_comments = true
+        this.bottom_load_all_comments = false
       } else {
         this.bottom_load_all_comments = false
       }
