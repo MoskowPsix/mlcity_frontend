@@ -55,6 +55,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   loadingLike: boolean = false
   startLikesCount: number = 0
   vkLikesCount: number | null = null
+  windowComment: boolean = false
 
   toggleFavorite(event_id:number){
     if (!this.userAuth) {
@@ -164,6 +165,14 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
         takeUntil(this.destroy$)
       ).subscribe()
     }   
+  }
+
+  showComment() {
+    if (this.windowComment) {
+      this.windowComment = false
+    } else {
+      this.windowComment = true
+    }
   }
 
   ngOnInit() {

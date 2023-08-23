@@ -1,10 +1,10 @@
 <ion-card>
 <ion-list>
     <ion-list-header color="primary">
-        <ion-label *ngIf="prev_comment && prev_comment.length">
+        <ion-label *ngIf="bottom_load_all_comments">
             <h2>Комментарии</h2>
         </ion-label>
-        <ion-label *ngIf="!prev_comment.length">
+        <ion-label *ngIf="!bottom_load_all_comments">
             <h2>Комментариев нет</h2>
         </ion-label>
     </ion-list-header>
@@ -29,16 +29,17 @@
         </ion-button>
     </ion-item>
 
-    <ion-item>
-            <ion-avatar slot="start">
-                <img alt="" src="https://mykaleidoscope.ru/x/uploads/posts/2022-09/1663190599_22-mykaleidoscope-ru-p-veselie-avi-pinterest-23.jpg" />
-            </ion-avatar>
-
-            <ion-textarea  label="Outline textarea" labelPlacement="floating" fill="outline" placeholder="Оставить комментарий"></ion-textarea>
-
-            <ion-label>
-                <ion-button slot="end">Отправить</ion-button>
-            </ion-label>
-    </ion-item>
+    <form [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth"> 
+        <ion-item>
+                <ion-avatar slot="start">
+                    <img alt="ava" src="{{user_avatar}}" />
+                </ion-avatar>
+                    <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="outline" placeholder="Оставить комментарий"></ion-textarea>
+                    <ion-item-option color="white">
+                        <ion-button slot="end" (click)="addComment()">Отправить</ion-button>
+                    </ion-item-option>
+                
+        </ion-item>
+    </form>
 </ion-list>
 </ion-card>

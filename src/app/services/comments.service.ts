@@ -1,36 +1,30 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { UserService } from './user.service';
 
 @Injectable({
     providedIn: 'root'
   })
   export class CommentsService {
+    private user_id?: Observable<number>
 
-    // constructor(private http: HttpClient, private userService: UserService, ) { 
-    //     this.getAccessToken()
-    //   }
-    
-    //   getAccessToken(){
-    //     this.userService.getUser().pipe(
-    //       //take(1),
-    //       tap((user: any) => {
-    //         if (user) {
-    //           this.vk_access_token = user.social_account.token
-    //           this.vk_user_id = user.social_account.provider_id
-    //         } else {
-    //           this.getAccessToken()
-    //         }
-    //       })
-    //     ).subscribe().unsubscribe();    
-    //   }
+    constructor(private http: HttpClient) { }
 
-    addCommentsEvent(text: string, event_id: number, isSight: boolean = false) {
-        if (isSight) {
-            return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/create?sightID${event_id}&user_id=&text=text`)
-        } else {
-
-        }
+    addCommentsEvent(text: string, event_id: number) {
+      const params = {
+        text: text,
+        eventID: event_id
+      }
+      return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/create`, params)
     }
+    addCommentsSight(text: string, sight_id: number) {
+      const params = {
+        text: text,
+        sightID: sight_id
+      }
+      console.log(this.user_id, 'sight')
+      return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/create`, params)
+}
   }

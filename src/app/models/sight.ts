@@ -22,4 +22,5 @@ export interface ISight {
     materials?: string
     vk_group_id?:number
     vk_post_id?:number
+    comments?: any
 }

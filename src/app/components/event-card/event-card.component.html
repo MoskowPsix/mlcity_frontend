@@ -83,12 +83,14 @@
       <span >{{ startLikesCount }}</span>
     </div>
 
-    <ion-icon name="chatbox-outline" size="large" class="ico"></ion-icon>
+    <ion-icon name="chatbox-outline" size="large" class="ico" (click)="showComment()"></ion-icon>
   
     <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" size="large" class="ico"></ion-icon>
     <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
 
     <ion-icon name="share-social-outline" size="large" class="ico share"></ion-icon>
   </div>
+
+  <app-comments-list [comments]="event.comments" [isSight]="isSight" [event_id]="event.id" *ngIf="windowComment"></app-comments-list>
 
 </ion-card>

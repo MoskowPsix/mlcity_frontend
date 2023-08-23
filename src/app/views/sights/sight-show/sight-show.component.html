@@ -147,6 +147,7 @@
             {{ sight.materials }}
           </ion-col>
         </ion-row>
+        <app-comments-list [comments]="sight.comments" [isSight]="true" [event_id]="sight.id"></app-comments-list>
     
       </ng-container>
     
