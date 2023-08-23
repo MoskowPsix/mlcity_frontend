@@ -60,6 +60,14 @@ import { UserService } from 'src/app/services/user.service';
       this.load_all_comments = true
     }
 
+    date(date_cr: any, date_upd: any) {
+      if (date_cr === date_upd) {
+        return new Date(date_cr).toLocaleString()
+      } else {
+        return 'Изменено ' + new Date(date_upd).toLocaleString()
+      }
+    }
+
     addComment() {
       if (this.createCommentForm.controls['new_comment'].value) {
         if (this.isSight) {
