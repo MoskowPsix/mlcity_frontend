@@ -34,12 +34,15 @@ import { UserService } from 'src/app/services/user.service';
     @Input() isSight: boolean = false
     @Input() comments!: any
     @Input() event_id!: number
+    @Input() input_panel: boolean = true
+
 
     prev_comment: any
-    bottom_load_all_comments: boolean = false
+    bottom_load_all_comments: boolean = true
     load_all_comments: boolean = false
     user_avatar: string = ''
     user_auth: boolean = false
+    comment_id!: any
 
     getUser(){
       this.userService.getUser().pipe(
@@ -68,6 +71,73 @@ import { UserService } from 'src/app/services/user.service';
       }
     }
 
+    addCommentAnswer() {
+      if (this.createCommentForm.controls['new_comment'].value) {
+        if (this.isSight) {
+          this.commentsService.addCommentsSight(this.createCommentForm.controls['new_comment'].value, this.event_id, this.comment_id).pipe(  
+            catchError((err) =>{
+              this.createCommentForm.controls['new_comment'].reset()
+              this.toastService.showToast(MessagesErrors.CommentError, 'danger')
+              return of(EMPTY) 
+            }),
+            takeUntil(this.destroy$)
+          ).subscribe((response: any) =>{
+            this.createCommentForm.controls['new_comment'].reset()
+            this.commentsService.getCommentId(this.comment_id).pipe( ////
+              catchError((err) =>{
+                this.createCommentForm.controls['new_comment'].reset()
+                this.toastService.showToast(MessagesErrors.default, 'danger')
+                return of(EMPTY) 
+              }),
+              takeUntil(this.destroy$)
+            ).subscribe((response: any) =>{
+              this.createCommentForm.controls['new_comment'].reset()
+            console.log(this.prev_comment)
+            let count: number = 0
+            this.prev_comment.forEach((element: { id: any; }) => {
+              console.log(count)
+              if (element.id === response.comment.comment_id){
+                this.prev_comment[count].comments.push(response.comment)
+                console.log('ok', this.prev_comment[count])
+              } else {
+                console.log(element)
+              }
+              count = count + 1
+            });
+            })
+            this.toastService.showToast(MessagesComment.comment_ok, 'success')
+          })
+        } else {
+          this.commentsService.addCommentsEvent(this.createCommentForm.controls['new_comment'].value, this.event_id, this.comment_id).pipe(  
+            catchError((err) =>{
+              this.createCommentForm.controls['new_comment'].reset()
+              this.toastService.showToast(MessagesErrors.CommentError, 'danger')
+              return of(EMPTY) 
+            }),
+            takeUntil(this.destroy$)
+          ).subscribe((response: any) =>{
+            this.createCommentForm.controls['new_comment'].reset()
+            console.log(this.prev_comment)
+            let count: number = 0
+            this.prev_comment.forEach((element: { id: any; }) => {
+              console.log(count)
+              if (element.id === response.comment.comment_id){
+                this.prev_comment[count].comments.push(response.comment)
+                console.log('ok', this.prev_comment[count])
+              } else {
+                console.log(element)
+              }
+              count = count + 1
+            });
+
+            this.toastService.showToast(MessagesComment.comment_ok, 'success')
+          })
+        }
+      } else {
+        this.toastService.showToast(MessagesErrors.CommentsNoValue, 'danger')
+      }
+    }
+
     addComment() {
       if (this.createCommentForm.controls['new_comment'].value) {
         if (this.isSight) {
@@ -79,21 +149,24 @@ import { UserService } from 'src/app/services/user.service';
             }),
             takeUntil(this.destroy$)
           ).subscribe((response: any) =>{
-            this.createCommentForm.controls['new_comment'].reset()
-            this.sightsService.getSightById(this.event_id).pipe(
-              catchError((err) =>{
-                this.createCommentForm.controls['new_comment'].reset()
-                this.toastService.showToast(MessagesErrors.default, 'danger')
-                return of(EMPTY) 
-              }),
-              takeUntil(this.destroy$)
-            ).subscribe((response: any) =>{
-              this.comments = response.comments
-              this.show_all_comments()
+              this.createCommentForm.controls['new_comment'].reset()
+              this.sightsService.getSightById(this.event_id).pipe( ////
+                catchError((err) =>{
+                  this.createCommentForm.controls['new_comment'].reset()
+                  this.toastService.showToast(MessagesErrors.default, 'danger')
+                  return of(EMPTY) 
+                }),
+                takeUntil(this.destroy$)
+              ).subscribe((response: any) =>{
+                //this.prev_comment.comments = response;
+                this.comments = response.comments
+                //this.load_all_comments = true
+                this.show_all_comments()
+                //this.ngOnInit()
             })
             this.toastService.showToast(MessagesComment.comment_ok, 'success')
-          })
-        } else {
+            })
+        } else if (!this.isSight) {
           this.commentsService.addCommentsEvent(this.createCommentForm.controls['new_comment'].value, this.event_id).pipe(  
             catchError((err) =>{
               this.createCommentForm.controls['new_comment'].reset()
@@ -102,36 +175,45 @@ import { UserService } from 'src/app/services/user.service';
             }),
             takeUntil(this.destroy$)
           ).subscribe((response: any) =>{
-            console.log(response)
-            this.createCommentForm.controls['new_comment'].reset()
-            this.eventService.getEventById(this.event_id).pipe(
-              catchError((err) =>{
-                this.createCommentForm.controls['new_comment'].reset()
-                this.toastService.showToast(MessagesErrors.default, 'danger')
-                return of(EMPTY) 
-              }),
-              takeUntil(this.destroy$)
-            ).subscribe((response: any) =>{
-              this.comments = response.comments
-              this.show_all_comments()
+              this.createCommentForm.controls['new_comment'].reset()
+              this.eventService.getEventById(this.event_id).pipe( ////
+                catchError((err) =>{
+                  this.createCommentForm.controls['new_comment'].reset()
+                  this.toastService.showToast(MessagesErrors.default, 'danger')
+                  return of(EMPTY) 
+                }),
+                takeUntil(this.destroy$)
+              ).subscribe((response: any) =>{
+                console.log(response);
+                //this.prev_comment.comments = response;
+                this.comments = response.comments
+                //this.load_all_comments = true
+                console.log(response.comments)
+                this.show_all_comments()
+                //this.ngOnInit()
             })
             this.toastService.showToast(MessagesComment.comment_ok, 'success')
-          })
+            })
         }
       } else {
-        this.toastService.showToast(MessagesErrors.CommentsNoValue, 'danger')
+          this.toastService.showToast(MessagesErrors.CommentsNoValue, 'danger')
       }
     }
 
+    showAnswer(comment_id: number) {
+      this.comment_id = comment_id
+    }
+
     ngOnInit() {
+      //console.log(this.comments)
       this.createCommentForm = new FormGroup({
         new_comment: new FormControl('',[Validators.required]),
       })
-      if (this.comments.length > 3) {
+      if (this.comments.length > 3 ) {
         this.prev_comment = [this.comments[0], this.comments[1], this.comments[2]]
         this.bottom_load_all_comments = true
         this.load_all_comments = false
-      } else if (this.comments.length) {
+      } else if (this.comments.length ) {
         this.show_all_comments()
         this.bottom_load_all_comments = false
       } else {

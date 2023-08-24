@@ -12,19 +12,24 @@ import { UserService } from './user.service';
 
     constructor(private http: HttpClient) { }
 
-    addCommentsEvent(text: string, event_id: number) {
+    addCommentsEvent(text: string, event_id: number, comment_id: any = ' ') {
       const params = {
         text: text,
-        eventID: event_id
+        eventID: event_id,
+        commentID: comment_id
       }
       return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/create`, params)
     }
-    addCommentsSight(text: string, sight_id: number) {
+    addCommentsSight(text: string, sight_id: number, comment_id: any = ' ') {
       const params = {
         text: text,
-        sightID: sight_id
+        sightID: sight_id,
+        commentID: comment_id
       }
       console.log(this.user_id, 'sight')
       return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/create`, params)
-}
+    }
+    getCommentId(id: number) {
+      return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/${id}`)
+    }
   }

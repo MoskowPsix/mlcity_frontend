@@ -1,60 +1,62 @@
-
 <ion-list>
-    <!-- <ion-list-header color="primary">
-        <ion-label *ngIf="bottom_load_all_comments">
-            <h2>Комментарии</h2>
-        </ion-label>
-        <ion-label *ngIf="!bottom_load_all_comments">
-            <h2>Комментариев нет</h2>
-        </ion-label>
-    </ion-list-header> -->
-
-    <ion-item *ngFor="let comment of prev_comment" lines="none">  
-
-        <ion-avatar slot="start">
-            <img alt="Silhouette of mountains" src="{{comment.user.avatar}}" />
-        </ion-avatar>
-        <ion-label > 
-            <h2>{{comment.user.name}}</h2>
-            <ion-note color="dark">{{ comment.text }}</ion-note><br>
-            <ion-note>{{ date(comment.created_at, comment.updated_at) }}</ion-note>
-        </ion-label>
-        <!-- -->
-        <ion-label slot="end">
-        <ion-icon color="none" id="{{comment.id}}{{event_id}}"></ion-icon>
-            <ion-popover trigger="{{comment.id}}{{event_id}}" triggerAction="click">
-            <ng-template>
-                <ion-content class="ion-padding">
-                    <p>Update</p>
-                    <p>Delete</p>
-                </ion-content>
-            </ng-template>
-            </ion-popover> 
-        </ion-label>  
-
-            <!--  -->
-       
-    </ion-item>
+    <ng-container *ngFor="let comment of prev_comment;">
+        <ion-item >  
+            <ion-avatar slot="start">
+                <img alt="Silhouette of mountains" src="{{comment.user.avatar}}" />
+            </ion-avatar>
+            <ion-label > 
+                <h2>{{comment.user.name}}</h2>
+                <ion-note color="dark">{{ comment.text }}</ion-note><br>
+                <ion-note>{{ date(comment.created_at, comment.updated_at) }} <a (click)="showAnswer(comment.id)">Ответить</a></ion-note>
+            </ion-label>
+            <!-- -->
+            <!-- <ion-label slot="end">
+            <ion-icon color="none" id="{{comment.id}}{{event_id}}"></ion-icon>
+                <ion-popover trigger="{{comment.id}}{{event_id}}" triggerAction="click">
+                <ng-template>
+                    <ion-content class="ion-padding">
+                        <p>Update</p>
+                        <p>Delete</p>
+                    </ion-content>
+                </ng-template>
+                </ion-popover> 
+            </ion-label>  -->
+                <!--  -->
+        </ion-item>
+        <div class="comment-list" *ngIf="comment.comments.length !== 0">
+            <app-comments-list [comments]="comment.comments" [isSight]="isSight" [event_id]="event_id" [input_panel]="false"></app-comments-list>
+        </div>
+        <form [hidden]="comment_id !== comment.id" [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth"> 
+            <ion-item color="light">
+                    <ion-avatar slot="start">
+                        <img alt="ava" src="{{user_avatar}}" />
+                    </ion-avatar>
+                        <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="solid" placeholder="Оставить комментарий"></ion-textarea>
+                        <ion-item-option color="white">
+                            <ion-button slot="end" (click)="addCommentAnswer()">Отправить</ion-button>
+                        </ion-item-option>   
+            </ion-item>
+        </form>
+    </ng-container>
 
     <ion-item *ngIf="bottom_load_all_comments" lines="none">
-        <ion-button  (click)="show_all_comments()" *ngIf="!load_all_comments" slot="end">
+        <ion-button  (click)="show_all_comments()" *ngIf="!load_all_comments" slot="start">
             Загрузить все комментарии
         </ion-button>
-        <ion-button (click)="ngOnInit()" *ngIf="load_all_comments === true" slot="end">
+        <ion-button (click)="ngOnInit()" *ngIf="load_all_comments === true" slot="start">
             Скрыть комментарии
         </ion-button>
     </ion-item>
 
-    <form [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth"> 
-        <ion-item>
+    <form [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth && input_panel"> 
+        <ion-item color="light">
                 <ion-avatar slot="start">
                     <img alt="ava" src="{{user_avatar}}" />
                 </ion-avatar>
                     <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="outline" placeholder="Оставить комментарий"></ion-textarea>
                     <ion-item-option color="white">
                         <ion-button slot="end" (click)="addComment()">Отправить</ion-button>
-                    </ion-item-option>
-                
+                    </ion-item-option>   
         </ion-item>
     </form>
 </ion-list>
