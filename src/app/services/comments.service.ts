@@ -32,4 +32,13 @@ import { UserService } from './user.service';
     getCommentId(id: number) {
       return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/${id}`)
     }
+    updateCommentId(id: number, text: any) {
+      const params = {
+        text: text
+      }
+      return this.http.put<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/${id}/update`, params)
+    }
+    deleteCommentId(id: number) {
+      return this.http.delete<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/${id}/delete`)
+    }
   }

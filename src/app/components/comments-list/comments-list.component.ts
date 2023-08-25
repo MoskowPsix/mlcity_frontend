@@ -43,6 +43,7 @@ import { UserService } from 'src/app/services/user.service';
     user_avatar: string = ''
     user_auth: boolean = false
     comment_id!: any
+    user_id!: number 
 
     getUser(){
       this.userService.getUser().pipe(
@@ -50,6 +51,7 @@ import { UserService } from 'src/app/services/user.service';
         tap((user: any) => {
           if (user) {
             this.user_avatar = user.avatar
+            this.user_id = user.id
             this.user_auth = true
           } else {
             this.user_auth = false
@@ -92,15 +94,10 @@ import { UserService } from 'src/app/services/user.service';
               takeUntil(this.destroy$)
             ).subscribe((response: any) =>{
               this.createCommentForm.controls['new_comment'].reset()
-            console.log(this.prev_comment)
             let count: number = 0
             this.prev_comment.forEach((element: { id: any; }) => {
-              console.log(count)
               if (element.id === response.comment.comment_id){
                 this.prev_comment[count].comments.push(response.comment)
-                console.log('ok', this.prev_comment[count])
-              } else {
-                console.log(element)
               }
               count = count + 1
             });
@@ -117,15 +114,10 @@ import { UserService } from 'src/app/services/user.service';
             takeUntil(this.destroy$)
           ).subscribe((response: any) =>{
             this.createCommentForm.controls['new_comment'].reset()
-            console.log(this.prev_comment)
             let count: number = 0
             this.prev_comment.forEach((element: { id: any; }) => {
-              console.log(count)
               if (element.id === response.comment.comment_id){
                 this.prev_comment[count].comments.push(response.comment)
-                console.log('ok', this.prev_comment[count])
-              } else {
-                console.log(element)
               }
               count = count + 1
             });
@@ -136,6 +128,49 @@ import { UserService } from 'src/app/services/user.service';
       } else {
         this.toastService.showToast(MessagesErrors.CommentsNoValue, 'danger')
       }
+    }
+
+
+    updateComment(id: number) {
+      this.commentsService.updateCommentId(id, this.createCommentForm.controls['update_comment'].value).pipe(  
+        catchError((err) =>{
+          console.log(err)
+          this.toastService.showToast(MessagesErrors.CommentError, 'danger')
+          this.createCommentForm.controls['update_comment'].reset()
+          return of(EMPTY) 
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe((response: any) =>{
+        this.createCommentForm.controls['update_comment'].reset()
+          let count: number = 0
+          this.prev_comment.forEach((element: { id: any; }) => {
+            if (element.id === id){
+              this.prev_comment[count] = response.comment
+            }
+            count = count + 1
+          })
+        this.toastService.showToast(MessagesComment.comment_ok, 'success')
+      })
+    }
+
+    deleteComment(id: number) {
+      this.commentsService.deleteCommentId(id).pipe(  
+        catchError((err) =>{
+          console.log(err)
+          this.toastService.showToast(MessagesErrors.CommentError, 'danger')
+          return of(EMPTY) 
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe((response: any) =>{
+          let count: number = 0
+          this.prev_comment.forEach((element: { id: any; }) => {
+            if (element.id === id){
+              this.prev_comment[count].text = 'Коментарий удалён.'
+            }
+            count = count + 1
+          })
+        this.toastService.showToast(MessagesComment.comment_ok, 'success')
+      })
     }
 
     addComment() {
@@ -200,6 +235,10 @@ import { UserService } from 'src/app/services/user.service';
       }
     }
 
+    setUpdateCommentForm(text: any) {
+      this.createCommentForm.patchValue({update_comment: text});
+    }
+
     showAnswer(comment_id: number) {
       this.comment_id = comment_id
     }
@@ -208,6 +247,7 @@ import { UserService } from 'src/app/services/user.service';
       //console.log(this.comments)
       this.createCommentForm = new FormGroup({
         new_comment: new FormControl('',[Validators.required]),
+        update_comment: new FormControl('',[Validators.required])
       })
       if (this.comments.length > 3 ) {
         this.prev_comment = [this.comments[0], this.comments[1], this.comments[2]]

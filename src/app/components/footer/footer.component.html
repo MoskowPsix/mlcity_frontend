@@ -20,6 +20,15 @@
 
     <div 
         class="item"
+        [routerLink]="['sights']"
+        [routerLinkActive]="['item-active']"  
+    >
+        <ion-icon name="prism" class="icon" [routerLinkActive]="['active']"></ion-icon>
+        <span class="title" [routerLinkActive]="['active']">Места</span>
+    </div>
+
+    <div 
+        class="item"
         [routerLink]="['cabinet/favorites']"
         [routerLinkActive]="['item-active']" 
         [routerLinkActiveOptions]="{exact: true}" 

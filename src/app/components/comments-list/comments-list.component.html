@@ -1,51 +1,128 @@
 <ion-list>
     <ng-container *ngFor="let comment of prev_comment;">
-        <ion-item >  
-            <ion-avatar slot="start">
-                <img alt="Silhouette of mountains" src="{{comment.user.avatar}}" />
-            </ion-avatar>
-            <ion-label > 
-                <h2>{{comment.user.name}}</h2>
-                <ion-note color="dark">{{ comment.text }}</ion-note><br>
-                <ion-note>{{ date(comment.created_at, comment.updated_at) }} <a (click)="showAnswer(comment.id)">Ответить</a></ion-note>
-            </ion-label>
+        <ion-list>
+            <ion-item lines="light">  
+                <ion-avatar slot="start">
+                    <img alt="Silhouette of mountains" src="{{comment.user.avatar}}" />
+                </ion-avatar>
+                <ion-label > 
+                    <h2>{{comment.user.name}}</h2>
+                    <ion-note color="dark">{{ comment.text }}</ion-note><br>
+                    <ion-note>{{ date(comment.created_at, comment.updated_at) }} <ion-button fill="clear" (click)="showAnswer(comment.id)">Ответить</ion-button ></ion-note>
+                </ion-label>
             <!-- -->
-            <!-- <ion-label slot="end">
-            <ion-icon color="none" id="{{comment.id}}{{event_id}}"></ion-icon>
-                <ion-popover trigger="{{comment.id}}{{event_id}}" triggerAction="click">
-                <ng-template>
-                    <ion-content class="ion-padding">
-                        <p>Update</p>
-                        <p>Delete</p>
-                    </ion-content>
-                </ng-template>
-                </ion-popover> 
-            </ion-label>  -->
+            <ion-label slot="end">
+                <ion-icon name="ellipsis-horizontal-outline" color="dark" id="{{comment.id}}{{event_id}}" *ngIf="user_auth"></ion-icon>
+                    <ion-popover #popover trigger="{{comment.id}}{{event_id}}" triggerAction="click" *ngIf="user_auth">
+                    <ng-template>
+                        <ion-content class="ion-padding">
+                            <ion-button id="update-{{comment.id}}{{event_id}}" fill="clear" *ngIf="user_id === comment.user_id" (click)="setUpdateCommentForm(comment.text)">Изменить</ion-button>
+                            <ion-button id="delete-{{comment.id}}{{event_id}}" fill="clear" *ngIf="user_id === comment.user_id">Удалить</ion-button>
+                            <ion-button id="report{{comment.id}}{{event_id}}" fill="clear" *ngIf="user_id !== comment.user_id">Пожаловатся</ion-button>
+
+                            <ion-modal #modalUpd trigger="update-{{comment.id}}{{event_id}}" class="comment-modal">
+                                <ng-template>
+                                    <div class="wrapper">
+                                        <ion-header>
+                                            <ion-toolbar>
+                                                <ion-title>Изменить комментарий</ion-title>
+                                                <ion-button slot="end" fill="none" (click)="modalUpd.dismiss()">
+                                                    <ion-icon name="close-outline" color="dark"></ion-icon>
+                                                </ion-button>
+                                            </ion-toolbar>
+                                        </ion-header>
+                                
+                                        <ion-list lines="none">
+                                            <ion-item detail="false">
+                                                <ion-avatar slot="start">
+                                                    <img alt="Silhouette of mountains" src="{{comment.user.avatar}}" />
+                                                </ion-avatar>
+                                                <ion-list > 
+                                                    <h2>{{comment.user.name}}</h2>
+                                                    <form [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth && input_panel">
+                                                        <ion-textarea formControlName="update_comment" [autoGrow]="true" readonly="false" required></ion-textarea><br>
+                                                    </form>
+                                                    <ion-note>{{ date(comment.created_at, comment.updated_at) }}</ion-note>
+                                                </ion-list>
+                                            </ion-item>
+                                            <ion-item>
+                                                <ion-button type="button" color="danger" slot="end" (click)="modalUpd.dismiss(); updateComment(comment.id); popover.dismiss()">
+                                                    <!--  -->
+                                                    <ion-label><h3>Изменить</h3></ion-label>
+                                                </ion-button>
+                                            </ion-item>
+                                        </ion-list>
+                                    </div>
+                                </ng-template>
+                            </ion-modal>
+
+                            <ion-modal id="delete-{{comment.id}}{{event_id}}" #modalDel trigger="delete-{{comment.id}}{{event_id}}" class="comment-modal">
+                                <ng-template>
+                                    <div class="wrapper">
+                                        <ion-header>
+                                            <ion-toolbar>
+                                                <ion-title>Удалить комментарий?</ion-title>
+                                                <ion-button slot="end" fill="none" (click)="modalDel.dismiss()">
+                                                    <ion-icon name="close-outline" color="dark"></ion-icon>
+                                                </ion-button>
+                                            </ion-toolbar>
+                                        </ion-header>
+                                    
+                                            <ion-list lines="none">
+                                            <ion-item detail="false">
+                                                <ion-avatar slot="start">
+                                                    <img alt="Silhouette of mountains" src="{{comment.user.avatar}}" />
+                                                </ion-avatar>
+                                                <ion-list > 
+                                                    <h2>{{comment.user.name}}</h2>
+                                                        <ion-textarea [autoGrow]="true" readonly="true" value="{{ comment.text }}"></ion-textarea><br>
+                                                    <ion-note>{{ date(comment.created_at, comment.updated_at) }}</ion-note>
+                                                </ion-list>
+                                            </ion-item>
+                                            <ion-item>
+                                                <ion-button type="button" color="danger" slot="end" (click)="modalDel.dismiss(); deleteComment(comment.id); popover.dismiss()">
+                                                    <ion-label><h3>Удалить</h3></ion-label>
+                                                </ion-button>
+                                            </ion-item>
+                                            </ion-list>
+                                    </div>
+                                    </ng-template>
+                            </ion-modal>
+
+                        </ion-content>
+                    </ng-template>
+                    </ion-popover> 
+            </ion-label> 
                 <!--  -->
-        </ion-item>
-        <div class="comment-list" *ngIf="comment.comments.length !== 0">
-            <app-comments-list [comments]="comment.comments" [isSight]="isSight" [event_id]="event_id" [input_panel]="false"></app-comments-list>
-        </div>
-        <form [hidden]="comment_id !== comment.id" [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth"> 
-            <ion-item color="light">
-                    <ion-avatar slot="start">
-                        <img alt="ava" src="{{user_avatar}}" />
-                    </ion-avatar>
-                        <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="solid" placeholder="Оставить комментарий"></ion-textarea>
-                        <ion-item-option color="white">
-                            <ion-button slot="end" (click)="addCommentAnswer()">Отправить</ion-button>
-                        </ion-item-option>   
-            </ion-item>
-        </form>
+                </ion-item>
+                <ion-list class="comment-list" lines="none">
+                <ion-item *ngIf="comment.comments.length !== 0">
+                    <app-comments-list [comments]="comment.comments" [isSight]="isSight" [event_id]="event_id" [input_panel]="false"></app-comments-list>
+                </ion-item>
+                    <form [hidden]="comment_id !== comment.id" [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth"> 
+                        <ion-item color="light">
+                            <ion-avatar slot="start">
+                                <img alt="ava" src="{{user_avatar}}" />
+                            </ion-avatar>
+                            <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="solid" placeholder="Оставить комментарий"></ion-textarea>
+                            <ion-item-option color="white">
+                                <ion-button slot="end" (click)="addCommentAnswer()">Отправить</ion-button>
+                                </ion-item-option>   
+                        </ion-item>
+                    </form>
+                </ion-list>
+        </ion-list>
     </ng-container>
 
     <ion-item *ngIf="bottom_load_all_comments" lines="none">
-        <ion-button  (click)="show_all_comments()" *ngIf="!load_all_comments" slot="start">
-            Загрузить все комментарии
-        </ion-button>
-        <ion-button (click)="ngOnInit()" *ngIf="load_all_comments === true" slot="start">
-            Скрыть комментарии
-        </ion-button>
+        <ion-chip color="primary" (click)="show_all_comments()" *ngIf="!load_all_comments" >
+            <ion-icon name="arrow-down-outline"></ion-icon>
+            <p>Загрузить все комментарии</p>
+        </ion-chip>
+        <ion-chip color="primary" (click)="ngOnInit()" *ngIf="load_all_comments === true" >
+            <ion-icon name="arrow-up-outline"></ion-icon>
+            <p>Скрыть комментарии</p>
+        </ion-chip>
     </ion-item>
 
     <form [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth && input_panel"> 

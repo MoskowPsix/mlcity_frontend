@@ -1,8 +1,15 @@
 .comment-list {
-    margin-left: 5%;
-     border-left: 1px;
-      border-left-style: groove;
+    margin-left: 12%;
+    // border-left: 1px;
+    //  border-left-style: groove;
 }
 // ion-textarea {
 //     --background: rgb(207, 207, 207);
 // }
+.comment-modal {
+    
+    //--min-width: 250px;
+    --height: fit-content;
+    --border-radius: 6px;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+}
