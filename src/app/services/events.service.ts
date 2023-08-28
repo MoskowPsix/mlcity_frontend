@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
-import { throwError } from 'rxjs'
+import { tap, throwError } from 'rxjs'
 import { ErrorService } from './error.service'
 import { IEvent } from '../models/event';
 import { environment } from 'src/environments/environment';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,21 +15,26 @@ export class EventsService {
 
   constructor(
     private http: HttpClient,
-   // private userService: UserService,
+    private userService: UserService,
     //private errorService: ErrorService,
   ) {
-    // this.getAuthUSerID()
+    this.getUserId()
   }
 
-  // getAuthUSerID(){
-  //   this.userService.getUser().pipe(
-  //     //take(1),
-  //     tap((user: any) => {
-  //       if (user)
-  //       this.userId = user.id
-  //     }),
-  //   ).subscribe().unsubscribe();    
-  // }
+  private user_id: number = 0
+
+  getUserId(){
+    this.userService.getUser().pipe(
+      //take(1),
+      tap((user: any) => {
+        if (user) {
+          this.user_id = user.id
+        } else {
+          this.getUserId()
+        }
+      })
+    ).subscribe().unsubscribe();    
+  }
 
   getEvents(params: IGetEventsAndSights) { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
     return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`, { params: {...params} } )
@@ -37,6 +43,10 @@ export class EventsService {
   getEventById(id: number) {
     return this.http.get<IEvent>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}`)
   } 
+
+  getEventsFavorites() { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
+    return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-events`)
+  }
 
   toggleFavorite(event_id:number) {
     const params = {

@@ -1,16 +1,32 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core';
-import { throwError } from 'rxjs'
+import { tap, throwError } from 'rxjs'
 import { environment } from 'src/environments/environment';
 import { ISight } from '../models/sight';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SightsService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private userService: UserService) { this.getUserId() }
+
+  private user_id: number = 0
+
+  getUserId(){
+    this.userService.getUser().pipe(
+      //take(1),
+      tap((user: any) => {
+        if (user) {
+          this.user_id = user.id
+        } else {
+          this.getUserId()
+        }
+      })
+    ).subscribe().unsubscribe();    
+  }
 
   getSights(params: IGetEventsAndSights) { //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)
     return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights`, { params: {...params} } )
@@ -18,7 +34,12 @@ export class SightsService {
 
   getSightById(id: number) {
     return this.http.get<ISight>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${id}`)
-  } 
+  }
+  
+  getSightsFavorites() { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
+    return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-sights`)
+  }
+
 
   checkLiked(sight_id:number){
     return this.http.get<boolean>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${sight_id}/check-user-liked`)
