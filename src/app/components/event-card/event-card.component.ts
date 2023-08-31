@@ -205,6 +205,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     this.cdr.detectChanges()
   }
 
+  toggleComment() {
+    this.comments ?  this.comments = false : this.comments = true
+  }
+
   ngOnDestroy(){
     // отписываемся от всех подписок
     this.destroy$.next()

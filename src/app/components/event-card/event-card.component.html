@@ -60,7 +60,7 @@
       <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>
     </ion-card-header>
     
-    <ion-card-content>
+    <ion-card-content lines="none">
       <app-read-more text="{{ event.description }}"></app-read-more>
     </ion-card-content>
 
@@ -73,26 +73,34 @@
       </ng-container>
     </ng-container> -->
     
-    <ion-ripple-effect></ion-ripple-effect>
+    
   </div>
   
-  <div class="footer">
-    <div class="likes">
-      <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''" size="large" class="ico"></ion-icon>
-      <ion-spinner *ngIf="loadingLike"></ion-spinner>
-      <span >{{ startLikesCount }}</span>
-    </div>
-    <div class="likes">
-      <ion-icon name="chatbox-outline" size="large" class="ico"></ion-icon>
-      <span >{{ event.comments.length }}</span>
-    </div>
-  
-    <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" size="large" class="ico"></ion-icon>
-    <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
-
-    <ion-icon name="share-social-outline" size="large" class="ico share"></ion-icon>
+  <ion-item class="footer" lines="none">
+    <ion-row slot="start">
+      <ion-chip (click)="toggleLike(event.id)" [color]="like ? 'danger' : ''" >
+        <ion-icon *ngIf="!loadingLike" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'danger' : ''" class="ico"></ion-icon>
+        <ion-spinner name="crescent" *ngIf="loadingLike" class="load_spinner"></ion-spinner>
+        <ion-label *ngIf="startLikesCount !== 0 && startLikesCount">{{ startLikesCount }}</ion-label>
+      </ion-chip>
+      <ion-chip (click)="toggleComment()">
+        <ion-icon name="chatbox-outline" class="ico"></ion-icon>
+        <ion-label *ngIf="event.comments.length !== 0 && event.comments.length">{{ event.comments.length }}</ion-label>
+      </ion-chip>
+      <ion-chip [color]="favorite ? 'warning' : ''" (click)="toggleFavorite(event.id)">
+        <ion-icon *ngIf="!loadingFavotire" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''"  class="ico"></ion-icon>
+        <ion-spinner name="crescent" *ngIf="loadingFavotire" class="load_spinner"></ion-spinner>
+        <!-- <ion-label>666</ion-label> -->
+        <!-- <ion-icon name="share-social-outline" class="ico share"></ion-icon> -->
+      </ion-chip>
+    </ion-row>
+    <!-- <ion-chip [disabled]="true" color="dark" slot="end">
+      <ion-label>666</ion-label>
+      <ion-icon name="eye-outline"></ion-icon>
+    </ion-chip> -->
+  </ion-item>
+  <div class="comments" *ngIf="comments">
+    <app-comments-list [comments]="event.comments" [isSight]="isSight" [event_id]="event.id"></app-comments-list>
   </div>
-
-  <app-comments-list [comments]="event.comments" [isSight]="isSight" [event_id]="event.id" *ngIf="comments"></app-comments-list>
 
 </ion-card>

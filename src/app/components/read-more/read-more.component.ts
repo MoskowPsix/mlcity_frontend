@@ -25,7 +25,9 @@ export class ReadMoreComponent implements OnInit {
 
   readMore: boolean = false
   collapsed = false
+  showToggle: boolean = false
   @Input() text:string = ''
+  @Input() long:number  = 200
   
 
   constructor() { }
@@ -34,6 +36,12 @@ export class ReadMoreComponent implements OnInit {
     this.collapsed = !this.collapsed
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.text.length > this.long) {
+      this.showToggle = true
+    } else {
+      this.showToggle = false
+    }
+  }
 
 }
