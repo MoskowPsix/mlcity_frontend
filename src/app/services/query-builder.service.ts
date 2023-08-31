@@ -30,11 +30,15 @@ export class QueryBuilderService {
   public paginationPublicEventsGeolocationCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
   //public paginationPublicEventsGeolocationTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
+  public paginationPublicEventsFavoritesCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+
   public paginationPublicSightsCityCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
   //public paginationPublicSightsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
 
   public paginationPublicSightsGeolocationCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
   //public paginationPublicSightsGeolocatioTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  
+  public paginationPublicSightsFavoritesCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
 
 
   constructor(private mapService: MapService, private filterService: FilterService, private userService: UserService) { }
@@ -65,11 +69,17 @@ export class QueryBuilderService {
       case 'eventsForMap':   //Главная страница - карта /home
         this.buildQueryEventsForMap()
         break;
+      case 'eventsFavorites':   //Страница избранного -  /cabinet/favorites
+        this.buildQueryEventsFavorites()
+        break;
       case 'eventsPublicForCityTab':  //Публичная страница мероприятий /events - вкладка по события городу
         this.buildQueryEventsPublicForCityTab()
         break;
       case 'eventsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка события рядом
         this.buildQueryEventsPublicForGeolocationTab()
+        break;
+      case 'sightsFavorites':   //Страница избранного -  /cabinet/favorites
+        this.buildQuerySightsFavorites()
         break;
       case 'sightsForMap': //Главная страница - карта /home
         this.buildQuerySightsForMap()
@@ -79,7 +89,7 @@ export class QueryBuilderService {
         break;
       case 'sightsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка места рядом
         this.buildQuerySightsPublicForGeolocationTab()
-        break;
+        break; 
       default:
         this.buildQueryDefault()
         break;
@@ -91,6 +101,14 @@ export class QueryBuilderService {
     this.queryParams = {city: this.filterService.city.value, region: this.filterService.region.value}
   }
 
+  buildQueryEventsFavorites() {
+    this.queryParams =  {
+      page: this.paginationPublicEventsFavoritesCurrentPage.value,
+      userId: this.userID,
+      likedUser: true,
+      favoriteUser: true
+    }  
+  }
   buildQueryEventsForMap(){
     this.queryParams =  {
       statuses: [Statuses.publish].join(','),
@@ -138,6 +156,14 @@ export class QueryBuilderService {
       eventTypes: this.eventTypes,
       dateStart: this.dateStart,
       dateEnd: this.dateEnd
+    }  
+  }
+
+  buildQuerySightsFavorites() {
+    this.queryParams =  {
+      page: this.paginationPublicSightsFavoritesCurrentPage.value,
+      likedUser: true,
+      favoriteUser: true
     }  
   }
 

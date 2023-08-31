@@ -6,6 +6,7 @@ import { IEvent } from '../models/event';
 import { environment } from 'src/environments/environment';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
 import { UserService } from './user.service';
+import { QueryBuilderService } from './query-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class EventsService {
   constructor(
     private http: HttpClient,
     private userService: UserService,
+    private queryBuilderService: QueryBuilderService,
     //private errorService: ErrorService,
   ) {
     this.getUserId()
@@ -44,8 +46,8 @@ export class EventsService {
     return this.http.get<IEvent>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}`)
   } 
 
-  getEventsFavorites() { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
-    return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-events`)
+  getEventsFavorites(params: any) { 
+    return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-events`, { params: {...params} })
   }
 
   toggleFavorite(event_id:number) {

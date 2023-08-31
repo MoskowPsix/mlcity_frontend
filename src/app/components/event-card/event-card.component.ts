@@ -34,6 +34,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   @Input() callFromCabinet: boolean = true
   @Input() event!: any
   @Input() isSight: boolean = false
+  @Input() comments: boolean = true
 
   @ViewChild('swiper')
   swiperRef: ElementRef | undefined

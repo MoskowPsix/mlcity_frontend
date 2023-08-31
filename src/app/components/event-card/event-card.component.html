@@ -93,6 +93,6 @@
     <ion-icon name="share-social-outline" size="large" class="ico share"></ion-icon>
   </div>
 
-  <app-comments-list [comments]="event.comments" [isSight]="isSight" [event_id]="event.id" ></app-comments-list>
+  <app-comments-list [comments]="event.comments" [isSight]="isSight" [event_id]="event.id" *ngIf="comments"></app-comments-list>
 
 </ion-card>

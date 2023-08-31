@@ -36,8 +36,8 @@ export class SightsService {
     return this.http.get<ISight>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${id}`)
   }
   
-  getSightsFavorites() { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
-    return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-sights`)
+  getSightsFavorites(params: any) { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
+    return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-sights`, { params: {...params} })
   }
 
 
