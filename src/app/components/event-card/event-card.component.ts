@@ -19,14 +19,13 @@ import {Swiper} from 'swiper/types'
   styleUrls: ['./event-card.component.scss'],
 })
 export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
-
   constructor(
     private authService: AuthService,
     private eventsService: EventsService,
     private toastService: ToastService,
     private vkService: VkService,
     private cdr: ChangeDetectorRef,
-    private sanitizer:DomSanitizer
+    private sanitizer:DomSanitizer,
   ) { }
   
   private readonly destroy$ = new Subject<void>()
@@ -37,6 +36,11 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   @Input() comments: boolean = true
 
   @ViewChild('swiper')
+  elementRef?: ElementRef
+  viewElement: boolean = false
+  viewElementTimeStart: number = 0
+  viewElementTimeEnd: number = 0
+
   swiperRef: ElementRef | undefined
   swiper?: Swiper
   swiperCurrentSlide?: number
@@ -181,6 +185,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     this.favorite = this.event.favorites_users_exists! 
     this.like = this.event.liked_users_exists!
+    window.addEventListener('scroll', this.scrollEvent, true);
 
     //КИдаем запрос в ВК чтобы обновить лайки и лайкнуть у нас если юзер лайкнул в ВК
     if(this.event.vk_group_id && this.event.vk_post_id){
@@ -204,13 +209,36 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     })
     this.cdr.detectChanges()
   }
+  
+  scrollEvent = (event: any): void => {
+    const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
+    if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {
+      if (!this.viewElementTimeStart){
+        this.viewElementTimeStart = new Date().getTime()
+      } 
+    } else if ((this.viewElementTimeStart && !this.viewElement) || ((this.viewElementTimeStart && !this.viewElement) && (boundingClientRect.width === 0 && boundingClientRect.width === 0))) {
+      this.viewElementTimeEnd = new Date().getTime()
+      let time: any
+      time = (new Date().getTime() - this.viewElementTimeStart)/1000
+      if (time > 3.141) {
+        console.log(time, this.event.id)
+        this.viewElement = true
+      }
+      this.viewElementTimeStart = 0
+      this.viewElementTimeEnd = 0
+    }
+    //console.log(boundingClientRect)
+  }
 
   toggleComment() {
     this.comments ?  this.comments = false : this.comments = true
   }
-
+  takeUntilDestroyed() {
+    console.log(this.event.name)
+  }
   ngOnDestroy(){
     // отписываемся от всех подписок
+    //console.log(this.event.id)
     this.destroy$.next()
     this.destroy$.complete()
   }
