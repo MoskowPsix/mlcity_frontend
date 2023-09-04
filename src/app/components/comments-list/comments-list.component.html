@@ -108,10 +108,12 @@
                                 <ion-img *ngIf="user_avatar" src="{{user_avatar}}" />
                                 <ion-img *ngIf="!user_avatar" color="light" src="/svg/person-circle-outline.svg"/>
                             </ion-avatar>
-                            <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="solid" placeholder="Оставить комментарий"></ion-textarea>
+                            <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="solid" placeholder="Ответить {{ comment.user.name }}"></ion-textarea>
                             <ion-item-option color="white">
-                                <ion-button slot="end" (click)="addCommentAnswer()">Отправить</ion-button>
-                                </ion-item-option>   
+                                <ion-chip color="primary" slot="end">
+                                    <ion-icon  name="paper-plane-outline" (click)="addCommentAnswer()" class="ico"></ion-icon>
+                                </ion-chip>
+                            </ion-item-option>   
                         </ion-item>
                     </form>
                 </ion-list>
@@ -135,9 +137,11 @@
                     <ion-img *ngIf="user_avatar" src="{{user_avatar}}" />
                     <ion-img *ngIf="!user_avatar" color="light" src="/svg/person-circle-outline.svg"/>
                 </ion-avatar>
-                    <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="outline" placeholder="Оставить комментарий"></ion-textarea>
+                    <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="outline" placeholder="Комментарий..."></ion-textarea>
                     <ion-item-option color="white">
-                        <ion-button slot="end" (click)="addComment()">Отправить</ion-button>
+                        <ion-chip color="primary" slot="end">
+                            <ion-icon  color="primary" name="paper-plane-outline"  (click)="addComment()" class="ico"></ion-icon>
+                        </ion-chip>
                     </ion-item-option>   
         </ion-item>
     </form>
