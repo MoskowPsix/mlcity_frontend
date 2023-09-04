@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core'
-import { catchError, delay, EMPTY, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs'
+import { catchError, delay, EMPTY, map, of, retry, Subject, switchMap, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { MessagesAuth } from 'src/app/enums/messages-auth'
 import { AuthService } from 'src/app/services/auth.service'
@@ -12,6 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser'
 
 import {register} from 'swiper/element/bundle'
 import {Swiper} from 'swiper/types'
+import { SightsService } from 'src/app/services/sights.service'
 
 @Component({
   selector: 'app-event-card',
@@ -22,6 +23,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   constructor(
     private authService: AuthService,
     private eventsService: EventsService,
+    private sightsService: SightsService,
     private toastService: ToastService,
     private vkService: VkService,
     private cdr: ChangeDetectorRef,
@@ -221,7 +223,29 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
       let time: any
       time = (new Date().getTime() - this.viewElementTimeStart)/1000
       if (time > 3.141) {
-        console.log(time, this.event.id)
+        if (this.isSight) {
+          this.sightsService.addView(this.event.id, time).pipe(
+            delay(100),
+            retry(3),
+            catchError((err) =>{
+              // console.log(err)
+              return of(EMPTY) 
+            }),
+            takeUntil(this.destroy$)
+          ).subscribe((response:any) => {
+            // console.log(response)
+           })
+        } else {
+          this.eventsService.addView(this.event.id, time).pipe(
+            delay(100),
+            retry(3),
+            catchError((err) =>{
+              return of(EMPTY) 
+            }),
+            takeUntil(this.destroy$)
+          ).subscribe((response:any) => {
+           })
+        }
         this.viewElement = true
       }
       this.viewElementTimeStart = 0

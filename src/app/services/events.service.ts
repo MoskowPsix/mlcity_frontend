@@ -93,6 +93,14 @@ export class EventsService {
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/create`, event)
   }
 
+  addView(id: number, time: number) {
+    const params = {
+      event_id: id,
+      time: time,
+    }
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/view`, params)
+  }
+
   private errorHandler(error: HttpErrorResponse) {
     //this.errorService.handle(error.message)
     return throwError(() => error.message)

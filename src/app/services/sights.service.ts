@@ -83,6 +83,14 @@ export class SightsService {
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/create`, sight)
   }
 
+  addView(id: number, time: number) {
+    const params = {
+      sight_id: id,
+      time: time,
+    }
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/view`, params)
+  }
+
   private errorHandler(error: HttpErrorResponse) {
     return throwError(() => error.message)
   }

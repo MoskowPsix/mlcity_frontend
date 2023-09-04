@@ -81,23 +81,23 @@
       <ion-chip (click)="toggleLike(event.id)" [color]="like ? 'danger' : ''" >
         <ion-icon *ngIf="!loadingLike" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'danger' : ''" class="ico"></ion-icon>
         <ion-spinner name="crescent" *ngIf="loadingLike" class="load_spinner"></ion-spinner>
-        <ion-label *ngIf="startLikesCount !== 0 && startLikesCount">{{ startLikesCount }}</ion-label>
+        <ion-label *ngIf="event.liked_users_count !== 0 && event.liked_users_count">{{ event.liked_users_count }}</ion-label>
       </ion-chip>
       <ion-chip (click)="toggleComment()">
         <ion-icon name="chatbox-outline" class="ico"></ion-icon>
-        <ion-label *ngIf="event.comments.length !== 0 && event.comments.length">{{ event.comments.length }}</ion-label>
+        <ion-label *ngIf="event.comments_count !== 0 && event.comments_count">{{ event.comments_count }}</ion-label>
       </ion-chip>
       <ion-chip [color]="favorite ? 'warning' : ''" (click)="toggleFavorite(event.id)">
         <ion-icon *ngIf="!loadingFavotire" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''"  class="ico"></ion-icon>
         <ion-spinner name="crescent" *ngIf="loadingFavotire" class="load_spinner"></ion-spinner>
-        <!-- <ion-label>666</ion-label> -->
+        <ion-label *ngIf="event.favorites_users_count !== 0 && event.favorites_users_count">{{ event.favorites_users_count }}</ion-label>
         <!-- <ion-icon name="share-social-outline" class="ico share"></ion-icon> -->
       </ion-chip>
     </ion-row>
-    <!-- <ion-chip [disabled]="true" color="dark" slot="end">
-      <ion-label>666</ion-label>
+    <ion-chip [disabled]="true" color="dark" slot="end">
+      <ion-label>{{event.views_users_count}}</ion-label>
       <ion-icon name="eye-outline"></ion-icon>
-    </ion-chip> -->
+    </ion-chip>
   </ion-item>
   <div class="comments" *ngIf="comments">
     <app-comments-list [comments]="event.comments" [isSight]="isSight" [event_id]="event.id"></app-comments-list>
