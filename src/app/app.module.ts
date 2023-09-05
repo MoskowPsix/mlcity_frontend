@@ -36,7 +36,8 @@ import { SightsComponent } from './views/sights/sights.component';
 import { SightCreateComponent } from './views/sights/sight-create/sight-create.component';
 import { ReadMoreComponent } from './components/read-more/read-more.component';
 import { FiltersComponent } from './components/filters/filters.component';
-import {FiltersNotButtonComponent} from './components/filters_not_button/filters_not_button.component'
+import { FiltersNotButtonComponent } from './components/filters_not_button/filters_not_button.component'
+import { CalendulaComponent } from './components/calendula/calendula.component'
 import { NoDataComponent } from './components/no-data/no-data.component';
 import { EventCardComponent } from './components/event-card/event-card.component';
 import { FavoritesComponent } from './views/cabinet/favorites/favorites.component';
@@ -99,6 +100,7 @@ registerLocaleData(localeRu, 'ru');
     ReadMoreComponent,
     FiltersComponent,
     FiltersNotButtonComponent,
+    CalendulaComponent,
     NoDataComponent,
     EventCardComponent,
     CommentsListComponent,

@@ -68,8 +68,10 @@
                 </ion-label>
               </ion-segment-button>
             </ion-segment>
+            <app-calendula/>
 
-            <div [hidden]="segment !== 'start'" class="segment-calendar">
+
+            <!-- <div [hidden]="segment !== 'start'" class="segment-calendar">
               <ion-row class="ion-justify-content-center ion-padding-top">
                 <ion-datetime id="eventsStart" presentation="date" locale="ru-RU" [min]="nowDate" (click)="datepickerEnd.reset(minDate)" [firstDayOfWeek]="1" color="primary" (ionChange)="startDateChange($event)"></ion-datetime>
               </ion-row>             
@@ -79,7 +81,7 @@
               <ion-row class="ion-justify-content-center ion-padding-top">
                 <ion-datetime #datepickerEnd id="eventsEnd" presentation="date" locale="ru-RU" [min]="minDate" [firstDayOfWeek]="1" color="primary" (ionChange)="endDateChange($event)"></ion-datetime>
               </ion-row>
-            </div>
+            </div> -->
           </div>
         </ion-accordion>
 

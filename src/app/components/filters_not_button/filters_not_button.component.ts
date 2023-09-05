@@ -27,6 +27,8 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
   sightTypes: ISightType[] = []
   eventTypesLoding: boolean = false
   sightTypesLoding: boolean = false
+  date_full: number [] =[]
+  now_date: any
 
   segment:string = 'start'
 
@@ -221,6 +223,19 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getEventTypes()
     this.getSightTypes()
+    // this.now_date = new Date().getTime()
+    // let data: any
+    // let count: number
+    // for (count = 0; count <= 20; count++) {
+    //   this.now_date = this.now_date + 86400000
+    //   let now_month: any = new Date(this.now_date).getMonth()
+    //   if (!this.date_full[now_month]) {
+    //     this.date_full.push(...now_month)
+    //   }
+    //   //this.date_full.push(...now_month)
+    //   //this.date_full.push({month: now_month, date: new Date(this.now_date)})
+    // }
+    // console.log(this.date_full)
 
     //Сбрасываем фильтры даты
     //this.filterService.removeDateFilters()

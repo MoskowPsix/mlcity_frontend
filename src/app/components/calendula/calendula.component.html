@@ -1,0 +1,33 @@
+
+<ion-card>
+  <!-- <div *ngFor="let month of date_full"> -->
+    <div class="home-container"#widgetsContent>
+      <div class="home-caendcont">
+        <button class="scroll_left">
+          <ion-icon size="large" name="chevron-back-outline" class="ico_left" (click)="scrollLeft()"></ion-icon>
+        </button>
+        <div class="home-month" *ngFor="let month of date_full"  [hidden]="month.data.length === 0">
+          <span class="home-mothname">{{month.name}}</span>
+          <div class="home-monthdata">
+            <button class="home-day" *ngFor="let day of month.data" id="{{day.full_date}}" [class.active]="day.full_date === dateStart || day.full_date === dateEnd" (click)="setDate(day.full_date)">
+              <span class="home-text">{{day.number}}</span>
+              <span *ngIf="day.day_week === 0" class="home-text01">ПН</span>
+              <span *ngIf="day.day_week === 1" class="home-text01">ВТ</span>
+              <span *ngIf="day.day_week === 2" class="home-text01">СР</span>
+              <span *ngIf="day.day_week === 3" class="home-text01">ЧТ</span>
+              <span *ngIf="day.day_week === 4" class="home-text01">ПТ</span>
+              <span *ngIf="day.day_week === 5" class="home-text01" style="color:crimson">СБ</span>
+              <span *ngIf="day.day_week === 6" class="home-text01" style="color:crimson">ВС</span>
+            </button>
+          </div>
+        </div>
+        <button class="scroll_right">
+          <ion-icon size="large" name="chevron-forward-outline" class="ico_right" (click)="scrollRight()"></ion-icon>
+        </button>
+      </div>
+    </div>
+  <!-- </div> -->
+</ion-card>
+
+
+
