@@ -48,8 +48,9 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
   city:string = ''
   region: string = ''
   nowDate: string = new Date().toISOString()
-  minDate: string = new Date().toISOString()
-  maxDate?: string
+  minDate: string = ''
+  maxDate: string = ''
+  date: any 
 
   constructor(
     private eventTypeService: EventTypeService, 
@@ -82,18 +83,6 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
 
   onSegmentChanged(event:any){
     this.segment = event.detail.value
-  }
-
-  startDateChange(event:any){
-    this.filterService.setStartDateTolocalStorage(event.detail.value)
-    this.dateFiiltersCounter()
-    this.minDate = new Date(event.detail.value).toISOString()
-  }
-
-  endDateChange(event:any){
-    this.filterService.setEndDateTolocalStorage(event.detail.value)
-    this.dateFiiltersCounter()
-    this.maxDate = new Date(event.detail.value).toISOString()
   }
 
   //Добавляем в массив выбраных ивентов
@@ -139,19 +128,6 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
       return this.sightTypesFilter.includes(typeId)
     }
     return false
-  }
-
-  //Если обе даты выбраны ставим тру
-  dateFiiltersCounter(){
-    if (this.startDate && this.endDate && !this.dateFiltersSelected){
-      //this.dateFiltersSelected = true
-      this.filterService.dateFiltersSelected.next(true)
-    }
-
-    if (this.startDate && this.endDate){ // если выбраны обе даты, то кидает изменение фильтра
-      this.filterService.changeFilter.next(true)   
-    }
-     
   }
 
   //Удаляем фильтры
@@ -223,19 +199,6 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getEventTypes()
     this.getSightTypes()
-    // this.now_date = new Date().getTime()
-    // let data: any
-    // let count: number
-    // for (count = 0; count <= 20; count++) {
-    //   this.now_date = this.now_date + 86400000
-    //   let now_month: any = new Date(this.now_date).getMonth()
-    //   if (!this.date_full[now_month]) {
-    //     this.date_full.push(...now_month)
-    //   }
-    //   //this.date_full.push(...now_month)
-    //   //this.date_full.push({month: now_month, date: new Date(this.now_date)})
-    // }
-    // console.log(this.date_full)
 
     //Сбрасываем фильтры даты
     //this.filterService.removeDateFilters()

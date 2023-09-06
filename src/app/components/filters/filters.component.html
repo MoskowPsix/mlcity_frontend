@@ -45,57 +45,11 @@
           
             
           <ion-accordion-group expand="inset" [value]="['range']">
-            <ion-accordion value="range">
-              <ion-item slot="header" color="light">
-                <ion-icon name="calendar" slot="start" color="primary"></ion-icon>
-                <ion-label class="filter-title">
-                  Период
-                  <br>
-                  <ng-container *ngIf="startDate && endDate">
-                    <ion-note>{{ startDate | date:'dd.MM.yyyy' }} - {{ endDate | date:'dd.MM.yyyy' }}</ion-note>
-                  </ng-container>
-                  <ng-container *ngIf="!startDate || !endDate">
-                    <ion-note>За все время</ion-note>
-                  </ng-container>
-                </ion-label>
-              </ion-item>
-              <div class="ion-padding" slot="content">
-                <ion-segment value="start" mode="ios" color="primary" (ionChange)="onSegmentChanged($event)">
-                  <ion-segment-button value="start">
-                    <ion-label class="segment-title">
-                      <ion-icon name="calendar-clear" color="primary"></ion-icon>
-                      Начало
-                      <br>
-                      <ng-container *ngIf="startDate">
-                        <span class="date-note">{{ startDate | date:'dd.MM.yyyy' }}</span>
-                      </ng-container>
-                    </ion-label>
-                  </ion-segment-button>
-                  <ion-segment-button value="end">
-                    <ion-label class="segment-title">
-                      <ion-icon name="calendar-number" color="primary"></ion-icon>
-                      Конец
-                      <br>
-                      <ng-container *ngIf="endDate">
-                        <span class="date-note">{{ endDate | date:'dd.MM.yyyy' }}</span>
-                      </ng-container>
-                    </ion-label>
-                  </ion-segment-button>
-                </ion-segment>
-  
-                <div [hidden]="segment !== 'start'" class="segment-calendar">
-                  <ion-row class="ion-justify-content-center ion-padding-top">
-                    <ion-datetime id="eventsStart" presentation="date" locale="ru-RU" [min]="nowDate" (click)="datepickerEnd.reset(minDate)" [firstDayOfWeek]="1" color="primary" (ionChange)="startDateChange($event)"></ion-datetime>
-                  </ion-row>             
-                </div>
-  
-                <div [hidden]="segment !== 'end'" class="segment-calendar">
-                  <ion-row class="ion-justify-content-center ion-padding-top">
-                    <ion-datetime #datepickerEnd id="eventsEnd" presentation="date" locale="ru-RU" [min]="minDate" [firstDayOfWeek]="1" color="primary" (ionChange)="endDateChange($event)"></ion-datetime>
-                  </ion-row>
-                </div>
-              </div>
-            </ion-accordion>
+            <ion-list>
+              <!-- <div class="ion-padding" slot="content"> -->
+              <app-calendula/>
+              <!-- </div> -->
+            </ion-list>
   
             <ion-accordion value="city">
               <ion-item slot="header" color="light">

@@ -20,10 +20,34 @@
         </ion-segment>
       </ion-col>
     </ion-row>
+    <ion-list>
+      <!-- <div class="ion-padding" slot="content"> -->
+      <app-calendula/>
+      <!-- </div> -->
+    </ion-list>
 
     <ion-row class="ion-justify-content-center">
       <ion-col size-lg="10" size-md="12" size-xs="12">
         <div [hidden]="segment !== 'eventsCitySegment'" class="segment-box">
+
+          <ng-container >
+            <ion-col class="ion-align-content-start">
+                <ion-row>
+                <ion-col size-xl="4" size-lg="4" size-md="4">
+                  <div class="ion-align-item-center">
+                    <app-filters-not-button></app-filters-not-button>
+                  </div>
+                </ion-col> 
+                <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card">
+                  <app-event-card *ngFor="let event of eventsCity; let i = index" [event]="event"></app-event-card>
+                  <ng-container *ngIf="!eventsCity.length && loadingEventsCity">
+                    <app-no-data/>
+                  </ng-container>
+                </ion-col>
+                </ion-row>
+            </ion-col>
+          </ng-container>
+          
           <ng-container *ngIf="!loadingEventsCity">
             <ion-row class="ion-justify-content-center">
               <ion-col size-lg="4" size-md="6" size-xs="12">
@@ -45,23 +69,6 @@
               </ion-col>
             </ion-row>
           </ng-container> 
-          <ng-container *ngIf="loadingEventsCity">
-            <ion-col class="ion-align-content-start">
-                <ion-row>
-                <ion-col size-xl="4" size-lg="4" size-md="4">
-                  <div class="ion-align-item-center">
-                    <app-filters-not-button></app-filters-not-button>
-                  </div>
-                </ion-col> 
-                <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card">
-                  <app-event-card *ngFor="let event of eventsCity; let i = index" [event]="event"></app-event-card>
-                  <ng-container *ngIf="!eventsCity.length && loadingEventsCity">
-                    <app-no-data/>
-                  </ng-container>
-                </ion-col>
-                </ion-row>
-            </ion-col>
-          </ng-container>
           
           <ng-container *ngIf="!loadingMoreEventsCity">
             <div *ngIf="currentPageEventsCity !== totalPagesEventsCity" class="ion-margin-horizontal">

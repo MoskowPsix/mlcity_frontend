@@ -16,7 +16,7 @@ export class FilterService {
   // public startDate: BehaviorSubject<string> = new BehaviorSubject(this.getStartDateFromlocalStorage() || '')
   // public endDate: BehaviorSubject<string> = new BehaviorSubject(this.getEndDateFromlocalStorage() || '') // Ставим + неделю
   public startDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDate.toISOString())
-  public endDate: BehaviorSubject<string> = new BehaviorSubject(new Date(this.nowDate.setMonth(this.nowDate.getMonth()+2)).toISOString()) // Ставим + 2 месяцев
+  public endDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDate.toISOString()) // Ставим + 2 месяцев
 
   public dateFiltersSelected:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
   
