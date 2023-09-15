@@ -22,7 +22,7 @@
 
             <ion-col class="ion-align-self-start">
                 <ion-button fill="clear" size="small" color="dark" (click)="isModalSearchCityesOpen(true)">
-                    {{ city| truncate:[20,'']}}...
+                    <!-- {{ city| truncate:[20,'']}}... -->
                     <ion-icon name="location" color="primary"></ion-icon>
                     <ion-label>+{{ radius }}км</ion-label>
                     <ion-icon slot="end" name="chevron-down"></ion-icon>
@@ -141,9 +141,9 @@
                 <app-no-data />
             </ng-container>
             <ion-list>
-              <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" class="search-item">
+              <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" [hidden]="item.location_parent.name === 'РФ'" class="search-item">
                 <ion-label>
-                    {{ item.title }}, {{ item.region }}
+                    {{ item.name }}<p>{{ item.location_parent.name }}</p>
                 </ion-label>
               </ion-item>
             </ion-list>
@@ -162,7 +162,7 @@
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
-        <ion-note color="primary" class="ion-padding-horizontal ion-padding-top">Поиск по: {{ city }}, {{ region }}</ion-note>
+        <!-- <ion-note color="primary" class="ion-padding-horizontal ion-padding-top">Поиск по: {{ city }}, {{ region }}</ion-note> -->
         <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchEvents" (ionChange)="getEventsAndSights($event)" (ionClear)="onClearSearch()" debounce="500"></ion-searchbar>
         <ion-note *ngIf="minLengthEventsListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
         <ng-container *ngIf="!eventsListLoading && !sightsListLoading && (eventsList.length || sightsList.length)">

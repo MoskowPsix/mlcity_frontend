@@ -7,6 +7,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { NavigationService } from 'src/app/services/navigation.service';
+import { LocationService } from 'src/app/services/location.service';
 
 @Component({
   selector: 'app-events',
@@ -39,7 +40,8 @@ export class EventsComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private filterService: FilterService,
     private queryBuilderService: QueryBuilderService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private locationService: LocationService
   ) { }
   
  
@@ -127,8 +129,10 @@ export class EventsComponent implements OnInit, OnDestroy {
     })
 
     //Подписываемся на город
-    this.filterService.city.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      this.city = value
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.city = response.locations[0].name
+      })
     })
 
   }

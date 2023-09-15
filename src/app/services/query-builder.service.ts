@@ -20,8 +20,7 @@ export class QueryBuilderService {
   dateEnd?: string
   latitude?: number
   longitude?: number
-  city?: string
-  region?: string
+  locationId?: number
   radius?: number
   
   public paginationPublicEventsCityCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
@@ -56,8 +55,7 @@ export class QueryBuilderService {
     this.dateEnd = this.filterService.endDate.value,
     this.latitude = this.mapService.circleCenterLatitude.value,
     this.longitude = this.mapService.circleCenterLongitude.value,
-    this.city = this.filterService.city.value,
-    this.region = this.filterService.region.value,
+    this.locationId = this.filterService.locationId.value,
     this.radius = parseInt(this.filterService.radius.value)
     this.getUserID()
   }
@@ -98,7 +96,9 @@ export class QueryBuilderService {
   }
 
   buildQueryDefault(){
-    this.queryParams = {city: this.filterService.city.value, region: this.filterService.region.value}
+    this.queryParams = {
+      locationId: this.filterService.locationId.value
+    }
   }
 
   buildQueryEventsFavorites() {
@@ -131,8 +131,7 @@ export class QueryBuilderService {
       likedUser: true,
       statuses: [Statuses.publish].join(','),
       statusLast: true,
-      city: this.city,
-      region: this.region,
+      locationId: this.locationId,
       eventTypes: this.eventTypes,
       dateStart: this.dateStart,
       dateEnd: this.dateEnd
@@ -148,11 +147,11 @@ export class QueryBuilderService {
       likedUser: true,
       statuses: [Statuses.publish].join(','),
       statusLast: true,
-      city: this.city,
+      locationId: this.locationId,
       latitude: this.latitude,
       longitude: this.longitude,
       radius: this.radius,
-      forEventPage: true,
+      //forEventPage: true,
       eventTypes: this.eventTypes,
       dateStart: this.dateStart,
       dateEnd: this.dateEnd
@@ -187,8 +186,7 @@ export class QueryBuilderService {
       likedUser: true,
       statuses: [Statuses.publish].join(','),
       statusLast: true,
-      city: this.city,
-      region: this.region,
+      locationId: this.locationId,
       sightTypes: this.sightTypes,
 
     }  
@@ -203,11 +201,11 @@ export class QueryBuilderService {
       likedUser: true,
       statuses: [Statuses.publish].join(','),
       statusLast: true,
-      city: this.city,
+      locationId: this.locationId,
       latitude: this.latitude,
       longitude: this.longitude,
       radius: this.radius,
-      forEventPage: true,
+      //forEventPage: true,
       sightTypes: this.sightTypes,
     }  
   }

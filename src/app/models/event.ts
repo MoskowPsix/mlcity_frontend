@@ -9,6 +9,7 @@ export interface IEvent {
     sponsor: string
     description: string
     address: string
+    location: any[]
     latitude: number
     longitude: number
     favorites_users_exists?:boolean

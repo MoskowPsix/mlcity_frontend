@@ -7,11 +7,11 @@ import { BehaviorSubject } from 'rxjs';
 export class FilterService {
 
   private nowDate: Date = new Date()
-
-  public city: BehaviorSubject<string> = new BehaviorSubject(this.getCityFromlocalStorage() || 'Заречный')
-  public region: BehaviorSubject<string> = new BehaviorSubject(this.getRegionFromlocalStorage() || 'Свердловская область')
-  public cityLatitude: BehaviorSubject<string> = new BehaviorSubject(this.getCityLatitudeFromlocalStorage() || '56.81497464978607')
-  public cityLongitude: BehaviorSubject<string> = new BehaviorSubject(this.getCityLongitudeFromlocalStorage() || '61.32053375244141')
+  // public city: BehaviorSubject<any> = new BehaviorSubject(this.setCityTolocalStorage())
+  // public region: BehaviorSubject<any> = new BehaviorSubject(this.setRegionTolocalStorage())
+  public locationId: BehaviorSubject<any> = new BehaviorSubject(this.getLocationFromlocalStorage() || 0)
+  public locationLatitude: BehaviorSubject<string> = new BehaviorSubject(this.getLocationLatitudeFromlocalStorage() || '56.81497464978607')
+  public locationLongitude: BehaviorSubject<string> = new BehaviorSubject(this.getLocationLongitudeFromlocalStorage() || '61.32053375244141')
   public radius: BehaviorSubject<string> = new BehaviorSubject(this.getRadiusFromlocalStorage() || '1')
   // public startDate: BehaviorSubject<string> = new BehaviorSubject(this.getStartDateFromlocalStorage() || '')
   // public endDate: BehaviorSubject<string> = new BehaviorSubject(this.getEndDateFromlocalStorage() || '') // Ставим + неделю
@@ -30,27 +30,24 @@ export class FilterService {
 
   constructor() {}
 
-  setCityTolocalStorage(city: string = this.city.value){
-    localStorage.setItem('city', city)
-    this.city.next(city)
+  // setCityTolocalStorage(city: string = this.city.value ){
+  //   localStorage.setItem('city', city)
+  //   this.locationId.next(city)
+  // }
+
+  // setRegionTolocalStorage(region: string = this.region.value){
+  //   localStorage.setItem('region', region)
+  //   this.locationId.next(region)
+  // }
+
+  setLocationTolocalStorage(locationId: any = this.locationId.value){
+    localStorage.setItem('locationId', locationId)
+    this.locationId.next(locationId)
   }
 
-  getCityFromlocalStorage(){
-    return localStorage.getItem('city')
+  getLocationFromlocalStorage(){
+    return localStorage.getItem('locationId')
   }
-
-  setRegionTolocalStorage(region:string =  this.region.value){
-    localStorage.setItem('region', region)
-    this.region.next(region)
-  }
-
-  getRegionFromlocalStorage(){
-    return localStorage.getItem('region')
-  }
-
-
-
-
 
   // setCircleCenterTolocalStorage(circleCenter:string = this.circleCenter.value){
   //   localStorage.setItem('circleCenter', circleCenter)
@@ -65,22 +62,22 @@ export class FilterService {
 
 
 
-  setCityLatitudeTolocalStorage(cityLatitude:string = this.cityLatitude.value){
-    localStorage.setItem('cityLatitude', cityLatitude)
-    this.cityLatitude.next(cityLatitude)
+  setLocationLatitudeTolocalStorage(locationLatitude:string = this.locationLatitude.value){
+    localStorage.setItem('locationLatitude', locationLatitude)
+    this.locationLatitude.next(locationLatitude)
   }
 
-  getCityLatitudeFromlocalStorage(){
-    return localStorage.getItem('cityLatitude')
+  getLocationLatitudeFromlocalStorage(){
+    return localStorage.getItem('locationLatitude')
   }
 
-  setCityLongitudeTolocalStorage(cityLongitude:string = this.cityLongitude.value){
-    localStorage.setItem('cityLongitude', cityLongitude)
-    this.cityLongitude.next(cityLongitude)
+  setlocationLongitudeTolocalStorage(locationLongitude:string = this.locationLongitude.value){
+    localStorage.setItem('locationLongitude', locationLongitude)
+    this.locationLongitude.next(locationLongitude)
   }
 
-  getCityLongitudeFromlocalStorage(){
-    return localStorage.getItem('cityLongitude')
+  getLocationLongitudeFromlocalStorage(){
+    return localStorage.getItem('locationLongitude')
   }
 
   setRadiusTolocalStorage(radius:string = this.radius.value){

@@ -7,8 +7,8 @@ export interface IGetEventsAndSights {
     likedUser?: boolean // если надо узнать лайкал ли юзер ивент. Отправляется совместоно с userId
     statuses?: string  // какой статус(ы) выводить (смотри enums - statuses.ts)
     statusLast?: boolean // Выведет только последний статус определнного типа
-    city?: string
-    region?: string // ОБласть - нужно передавать чтобы узнать точный город (Заречный есть и в пензе и в екб)
+    locationId?: number // ID региона, района или города
+    location?: any[]
     latitude?: number // широта геопозиции
     longitude?: number // долгота геопозиции
     searchText?: string

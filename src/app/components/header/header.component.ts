@@ -15,6 +15,7 @@ import { Statuses } from 'src/app/enums/statuses';
 import { SightsService } from 'src/app/services/sights.service';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { FilterService } from 'src/app/services/filter.service';
+import { LocationService } from 'src/app/services/location.service';
 
 @Component({
   selector: 'app-header',
@@ -34,11 +35,12 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
   showBackButton: boolean = true
 
-  city:string = ''
+  locationId:number = 0
   geolocationCity:string = ''
   showChangeCityDialog:boolean = false
   radius:number = 1
   region:string = ''
+  city:string = ''
   geolocationRegion:string = ''
 
   minLengthCityesListError:boolean = false
@@ -64,11 +66,14 @@ export class HeaderComponent implements OnInit,OnDestroy {
     private toastService: ToastService,
     private eventsService: EventsService,
     private sightsService: SightsService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private locationService: LocationService,
     ) { }
 
   //Установить город из диалога, из геопозиции
   setCityFromDialog(){
+    this.city = this.geolocationCity
+    this.region = this.geolocationRegion
     this.mapService.setCoordsFromChangeCityDialog()
     this.mapService.hideChangeCityDialog()
     this.toastService.showToast(MessagesCityes.setCitySuccess, 'success')
@@ -93,13 +98,13 @@ export class HeaderComponent implements OnInit,OnDestroy {
     this.navigationService.modalSearchEventsOpen.next(isOpen)
   }
 
-  //Получаем города из вк
+  //Получаем города 
   getCityes(event: any){
     if (event.target.value.length >= 3){
       this.cityesListLoading = true
       this.minLengthCityesListError = false
-      this.vkService.serachCity(event.target.value).pipe(takeUntil(this.destroy$)).subscribe(response => {
-        this.cityesList = response.response.items
+      this.locationService.getLocationsName(event.target.value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.cityesList = response.locations
         this.cityesListLoading = false
       })
     } else {
@@ -109,12 +114,15 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
   //Устанавливаем город, регион и координаты в локал сторадж и всервис
   onSelectedCity(item:any){  
-    this.filterService.setCityTolocalStorage(item.title)
-    item.region ? this.filterService.setRegionTolocalStorage(item.region) : this.filterService.setRegionTolocalStorage(item.title)
+    this.city = item.name
+    this.region = item.location_parent.name
+    this.filterService.setLocationTolocalStorage(item.id)
+    // this.filterService.setLocationLatitudeTolocalStorage(item.name)
+    // this.filterService.setRegionTolocalStorage(item.location_parent.name)
     //Получаем координаты по городу и записываем их
-    this.mapService.ForwardGeocoder(item.title + '' + item.region).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
-      this.filterService.setCityLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
-      this.filterService.setCityLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
+    this.mapService.ForwardGeocoder(item.name + '' + item.location_parent.name).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
+      this.filterService.setLocationLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
+      this.filterService.setlocationLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
     this.filterService.changeFilter.next(true)
     this.filterService.changeCityFilter.next(true)
@@ -135,7 +143,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
         likedUser: true,
         statuses: [Statuses.publish].join(','),
         statusLast: true,
-        city: this.city,
+        locationId: this.locationId,
         searchText: event.target.value
       }
 
@@ -206,19 +214,14 @@ export class HeaderComponent implements OnInit,OnDestroy {
     })
 
     //Подписываемся на город
-    this.filterService.city.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.city = value
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      this.locationId = value
     })
 
     //Подписываемся на город из Геолокации
     this.mapService.geolocationCity.pipe(takeUntil(this.destroy$)).subscribe(value => {
       //console.log('this.mapService.geolocationCity ',value)
       this.geolocationCity = value
-    })
-
-     //Подписываемся на регион 
-    this.filterService.region.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.region = value
     })
 
      //Подписываемся на регион из Геолокации

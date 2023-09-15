@@ -5,6 +5,7 @@ import { IEventType } from 'src/app/models/event-type';
 import { ISightType } from 'src/app/models/sight-type';
 import { EventTypeService } from 'src/app/services/event-type.service';
 import { FilterService } from 'src/app/services/filter.service';
+import { LocationService } from 'src/app/services/location.service';
 import { MapService } from 'src/app/services/map.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { SightTypeService } from 'src/app/services/sight-type.service';
@@ -45,7 +46,8 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
   eventTypesFilter?: number[] 
   sightTypesFilter?: number[]
   radius: number = 1  
-  city:string = ''
+  locationId:number = 0
+  city: string = ''
   region: string = ''
   nowDate: string = new Date().toISOString()
   minDate: string = ''
@@ -58,7 +60,9 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
     private filterService: FilterService, 
     private vkService: VkService,
     private mapService: MapService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private locationService: LocationService
+
   ) { }
 
   getEventTypes(){
@@ -156,8 +160,8 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
     if (event.target.value.length >= 3){
       this.cityesListLoading = true
       this.minLengthCityesListError = false
-      this.vkService.serachCity(event.target.value).pipe(takeUntil(this.destroy$)).subscribe(response => {
-        this.cityesList = response.response.items
+      this.locationService.getLocationsName(event.target.value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.cityesList = response.locations
         this.cityesListLoading = false
       })
     } else {
@@ -166,18 +170,18 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
   }
 
   //Устанавливаем город, регион и координаты в локал сторадж и всервис
-  onSelectedCity(item:any){  
-    this.filterService.setCityTolocalStorage(item.title)
-    item.region ? this.filterService.setRegionTolocalStorage(item.region) : this.filterService.setRegionTolocalStorage(item.title)
+  onSelectedCity(item:any){
+    this.city = item.name
+    this.region = item.location_parent.name
+    this.filterService.setLocationTolocalStorage(item.id)
     //Получаем координаты по городу и записываем их
-    this.mapService.ForwardGeocoder(item.title + '' + item.region).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
-      this.filterService.setCityLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
-      this.filterService.setCityLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
+    this.mapService.ForwardGeocoder(item.name + '' + item.location_parent.name).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
+      this.filterService.setLocationLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
+      this.filterService.setlocationLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
     this.filterService.changeFilter.next(true)
     this.filterService.changeCityFilter.next(true)
   }
-
    //Очистить поле поиса в поиске города
    onClearSearch(){
     this.minLengthCityesListError = false
@@ -253,14 +257,11 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
     })
 
     //Подписываемся на город
-    this.filterService.city.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.city = value
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      this.locationId = value
     })
 
     //Подписываемся на регион 
-    this.filterService.region.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.region = value
-    })
     
   }
 

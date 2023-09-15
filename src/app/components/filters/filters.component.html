@@ -57,7 +57,7 @@
                 <ion-label class="filter-title">
                   Город / поселок / село
                   <br>
-                <ion-note>{{ city }}, {{ region }}</ion-note>
+                <ion-note *ngIf="city">{{ city }}, {{ region }}</ion-note>
                 </ion-label>
                 
               </ion-item>
@@ -75,9 +75,9 @@
                       <app-no-data />
                   </ng-container>
                   <ion-list>
-                    <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" class="search-item">
+                    <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" class="search-item" [hidden]="item.location_parent.name === 'РФ'">
                       <ion-label>
-                          {{ item.title }}, {{ item.region }}
+                          {{ item.name }}<p>{{ item.location_parent.name }}</p>
                       </ion-label>
                     </ion-item>
                   </ion-list>

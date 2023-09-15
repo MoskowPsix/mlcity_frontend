@@ -4,14 +4,16 @@ import { NativeGeocoder, NativeGeocoderOptions,  NativeGeocoderResult } from '@a
 import { Capacitor } from '@capacitor/core';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 import { Geolocation } from '@capacitor/geolocation';
-import { BehaviorSubject} from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil} from 'rxjs';
 import { FilterService } from './filter.service';
 import { NavigationService } from './navigation.service'
+import { LocationService } from './location.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
+  private readonly destroy$ = new Subject<void>()
   placemark!: ymaps.Placemark
 
   public circleCenterLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
@@ -37,7 +39,8 @@ export class MapService {
     private locationAccuracy: LocationAccuracy, 
     private yaGeocoderService: YaGeocoderService,
     private filterService: FilterService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private locationService: LocationService,
   ) { }
 
   //Определение геопозиции с помощью яндекса (платно)
@@ -220,20 +223,24 @@ export class MapService {
     this.geolocationLatitude.next(latitude)
     this.geolocationLongitude.next(longitude)
 
-    if (!this.filterService.getCityFromlocalStorage() ){
+    if (!this.filterService.getLocationFromlocalStorage() ){
       this.setCoordsFromChangeCityDialog()
       //this.showChangeCityDialog.next(true)
-    } else  if (this.geolocationCity.value && this.filterService.getCityFromlocalStorage() !== this.geolocationCity.value){
+    } else  if (this.geolocationCity.value && this.filterService.getLocationFromlocalStorage() !== this.geolocationCity.value){
       this.showChangeCityDialog.next(true)
     } 
   }
   
   //Устанавливаем дефолтные значения после подтверждения диалога на смену города
   setCoordsFromChangeCityDialog(){
-    this.filterService.setCityTolocalStorage(this.geolocationCity.value)
-    this.filterService.setRegionTolocalStorage(this.geolocationRegion.value)
-    this.filterService.setCityLatitudeTolocalStorage(this.geolocationLatitude.value.toString())
-    this.filterService.setCityLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
+    // Запрашиваем ид
+    this.locationService.getLocationsWithRegion(this.geolocationCity.value, this.geolocationRegion.value).pipe().subscribe((response: any) => {
+      this.filterService.setLocationTolocalStorage(response.locations.id)
+    })
+    //this.filterService.setLocationTolocalStorage(this.geolocationCity.value)
+    //this.filterService.setLocationTolocalStorage(this.geolocationRegion.value)
+    this.filterService.setLocationLatitudeTolocalStorage(this.geolocationLatitude.value.toString())
+    this.filterService.setlocationLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
   }
 
   hideChangeCityDialog(){
@@ -242,15 +249,14 @@ export class MapService {
 
   defaultCoords() {
     let cityCoords = []
-    if (!this.filterService.getCityFromlocalStorage()){
-      this.filterService.setCityTolocalStorage()
-      this.filterService.setRegionTolocalStorage()
-      this.filterService.setCityLatitudeTolocalStorage()
-      this.filterService.setCityLongitudeTolocalStorage()
+    if (!this.filterService.getLocationFromlocalStorage()){
+      this.filterService.setLocationTolocalStorage()
+      this.filterService.setLocationLatitudeTolocalStorage()
+      this.filterService.setlocationLongitudeTolocalStorage()
 
-      cityCoords.push(parseFloat(this.filterService.cityLatitude.value), parseFloat(this.filterService.cityLongitude.value))
+      cityCoords.push(parseFloat(this.filterService.locationLatitude.value), parseFloat(this.filterService.locationLongitude.value))
     } else {
-      cityCoords.push(parseFloat(this.filterService.getCityLatitudeFromlocalStorage()!), parseFloat(this.filterService.getCityLongitudeFromlocalStorage()!))
+      cityCoords.push(parseFloat(this.filterService.getLocationLatitudeFromlocalStorage()!), parseFloat(this.filterService.getLocationLongitudeFromlocalStorage()!))
     }
     return cityCoords
   }
@@ -265,7 +271,7 @@ export class MapService {
 
     //Если не первый запуск и менялся фильтр города то перекидываем на город
     if (this.filterService.changeCityFilter.value && !this.navigationService.appFirstLoading.value) {
-        await circlePoint.geometry?.setCoordinates([parseFloat(this.filterService.cityLatitude.value), parseFloat(this.filterService.cityLongitude.value)])
+        await circlePoint.geometry?.setCoordinates([parseFloat(this.filterService.locationLatitude.value), parseFloat(this.filterService.locationLongitude.value)])
         map.target.setBounds(circlePoint.geometry?.getBounds()!, {checkZoomRange: true})
     } 
 

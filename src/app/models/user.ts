@@ -6,5 +6,7 @@ export interface IUser {
     token?: string
     avatar: string | null
     roles?: string[]
+    location?: any
+    locationId?: number
     social_account?: {}
   }
