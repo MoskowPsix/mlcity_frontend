@@ -12,6 +12,8 @@ import { FilterService } from 'src/app/services/filter.service';
 import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { ISight } from 'src/app/models/sight';
 import { SightsService } from 'src/app/services/sights.service';
+import { PlaceService } from 'src/app/services/place.service';
+import { IPlace } from 'src/app/models/place';
 
 
 
@@ -58,6 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   activeIcoLink: string = '';
   events: IEvent[] = [];
   sights: ISight[] = [];
+  places: IPlace[] = []
 
   constructor(
     private mapService: MapService,
@@ -67,7 +70,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private navigationService: NavigationService,
     private filterService: FilterService,
-    private queryBuilderService: QueryBuilderService
+    private queryBuilderService: QueryBuilderService,
+    private placeService: PlaceService,
   ) { }
 
   // при клике по кнопке радиуча (5 10 15 20 25)
@@ -172,27 +176,44 @@ export class HomeComponent implements OnInit, OnDestroy {
             e.get('target').options.set('preset', 'islands#invertedPinkClusterIcons');
           });
         } else {
-          this.modalContent.push(e.get('target').options._options.balloonContent);
-          this.activePlacemark = e.get('target');
-          this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico;
-          e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`));
+          //console.log(e.get('target').options._options.balloonContent)
+          if (e.get('target').options._options.balloonContent.event.id) {
+            this.eventsService.getEventById(e.get('target').options._options.balloonContent.event.id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+              this.modalContent.push(response)
+              this.activePlacemark = e.get('target');
+              e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src=""/></div>`));
+            });
+          } else {}
+            this.modalContent.push(e.get('target').options._options.balloonContent);
+            this.activePlacemark = e.get('target');
+            this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico;
+            e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`));
+          }
         }
         this.navigationService.modalEventShowOpen.next(true);
       }
-    });
+    );
   }
 
   getEvents(): Observable<any> {
     return new Observable((observer) => {
-      this.eventsLoading = true;
-      this.setBoundsCoordsToMapService(); // я хз почему, но эта штука только тут работает
-      this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        this.events = response.events;
-        //this.eventsLoading = false
-        this.cdr.detectChanges();
-        observer.next(EMPTY);
-        observer.complete();
-      });
+    this.eventsLoading = true;
+    this.placeService.getPlaces().pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+      this.places = response.places
+      this.cdr.detectChanges();
+      observer.next(EMPTY);
+      observer.complete();
+    });
+    // return new Observable((observer) => {
+    //   this.eventsLoading = true;
+    //   this.setBoundsCoordsToMapService(); // я хз почему, но эта штука только тут работает
+    //   this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+    //     this.events = response.events;
+    //     //this.eventsLoading = false
+    //     this.cdr.detectChanges();
+    //     observer.next(EMPTY);
+    //     observer.complete();
+    //   });
     });
   }
 
@@ -226,8 +247,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sightsLoading = false;
     }
 
-    this.setPlacemarks(this.events, 'events');
+    //this.setPlacemarks(this.events, 'events');
     this.setPlacemarks(this.sights, 'sights');
+    this.setPlacemarks(this.places, 'event');
 
     this.setPlacemarksAndClusters();
     this.setBoundsCoordsToMapService();
@@ -236,12 +258,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   setPlacemarks(collection: any, type: string) {
     collection.map((item: any) => {
+      //console.log(item)
       let time_event = Math.ceil(new Date(item.date_start).getTime() / 1000)
       let time_now = Math.ceil(new Date().getTime() / 1000);
       let time_deff = time_event - time_now
 
       item["type"] = type;
-      let icoLink = item && item.types && item.types.length ? this.host + ':' + this.port + item.types[0].ico : '';
+      //let icoLink = item && item.types && item.types.length ? this.host + ':' + this.port + item.types[0].ico : '';
+      let icoLink = 0;
       let placemark
       if ( 0 > time_deff ) { // Сейчас
         placemark = new ymaps.Placemark(
