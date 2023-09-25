@@ -158,7 +158,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.mapService.circleCenterLongitude.next((this.CirclePoint.geometry?.getCoordinates()![1])!);
   }
 
-  setPlacemarksAndClusters() {
+  async setPlacemarksAndClusters() {
     //При изменении радиуса проверяем метки для показа/скрытия
     this.objectsInsideCircle = ymaps.geoQuery(this.placemarks).searchInside(this.CirclePoint).clusterize({ hasBalloon: false, clusterBalloonPanelMaxMapArea: 0, clusterOpenBalloonOnClick: true });
     this.map.target.geoObjects.add(this.objectsInsideCircle);
@@ -171,19 +171,28 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         if (e.get('target').properties.get('geoObjects') !== undefined) {
           e.get('target').properties.get('geoObjects').forEach((element: any) => {
-            this.modalContent.push(element.options._options.balloonContent);
+            if (element.options._options.balloonContent.type === 'event') {
+            this.modalContent.push(element.options._options.balloonContent.event);
             this.activeClaster = e.get('target');
             e.get('target').options.set('preset', 'islands#invertedPinkClusterIcons');
+            } else {
+              this.modalContent.push(element.options._options.balloonContent);
+              this.activeClaster = e.get('target');
+              e.get('target').options.set('preset', 'islands#invertedPinkClusterIcons');
+            }
           });
         } else {
-          //console.log(e.get('target').options._options.balloonContent)
-          if (e.get('target').options._options.balloonContent.event.id) {
-            this.eventsService.getEventById(e.get('target').options._options.balloonContent.event.id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-              this.modalContent.push(response)
-              this.activePlacemark = e.get('target');
-              e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src=""/></div>`));
-            });
-          } else {}
+          if (e.get('target').options._options.balloonContent.type === 'event') {
+            this.modalContent.push(e.get('target').options._options.balloonContent.event);
+            //console.log()
+            // this.eventsService.getEventById(e.get('target').options._options.balloonContent.event.id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+            //   this.modalContent.push(response)
+            //   console.log(this.modalContent)
+            // });
+            this.activePlacemark = e.get('target');
+            //this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico;
+            e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`));
+          } else {
             this.modalContent.push(e.get('target').options._options.balloonContent);
             this.activePlacemark = e.get('target');
             this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico;
@@ -192,28 +201,32 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
         this.navigationService.modalEventShowOpen.next(true);
       }
-    );
+  });
   }
 
   getEvents(): Observable<any> {
     return new Observable((observer) => {
+      this.eventsLoading = true;
+      this.setBoundsCoordsToMapService(); // я хз почему, но эта штука только тут работает
+      this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.events = response.events;
+        //this.eventsLoading = false
+        this.cdr.detectChanges();
+        observer.next(EMPTY);
+        observer.complete();
+      });
+    });
+  }
+
+  getPlaces(): Observable<any> {
+    return new Observable((observer) => {
     this.eventsLoading = true;
-    this.placeService.getPlaces().pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+    this.placeService.getPlaces(this.queryBuilderService.queryBuilder('placesForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
       this.places = response.places
       this.cdr.detectChanges();
       observer.next(EMPTY);
       observer.complete();
     });
-    // return new Observable((observer) => {
-    //   this.eventsLoading = true;
-    //   this.setBoundsCoordsToMapService(); // я хз почему, но эта штука только тут работает
-    //   this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-    //     this.events = response.events;
-    //     //this.eventsLoading = false
-    //     this.cdr.detectChanges();
-    //     observer.next(EMPTY);
-    //     observer.complete();
-    //   });
     });
   }
 
@@ -265,63 +278,82 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       item["type"] = type;
       //let icoLink = item && item.types && item.types.length ? this.host + ':' + this.port + item.types[0].ico : '';
-      let icoLink = 0;
+       let icoLink = 0;
       let placemark
-      if ( 0 > time_deff ) { // Сейчас
-        placemark = new ymaps.Placemark(
-        [item.latitude, item.longitude],
-        {}, {
-          balloonContent: item,
-          //balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style=" border-color: rgba(129, 235, 164, 1);" class="marker now"><img src="${icoLink}"/></div>`)
-        });
-        this.placemarks.push(placemark);
-      } else if (86400 > time_deff && time_deff > 0) { // Сегодня
-          placemark = new ymaps.Placemark(
-          [item.latitude, item.longitude],
-          {}, {
-            balloonContent: item,
-            balloonAutoPan: false,
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: 0040ff;" class="marker"><img src="${icoLink}"/></div>`)
-          });
-          this.placemarks.push(placemark);    
-      } else if (604800 > time_deff && time_deff > 86400) { // Через неделю
+      if(item.type === 'event'){
         placemark = new ymaps.Placemark(
         [item.latitude, item.longitude],
         {}, {
           balloonContent: item,
           balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #3366ff;" class="marker"><img src="${icoLink}"/></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"><img src="${icoLink}"/></div>`)
         });
         this.placemarks.push(placemark);
-      } else if (2629743 > time_deff && time_deff > 604800) { // Через месяц
-        placemark = new ymaps.Placemark(
-        [item.latitude, item.longitude],
-        {}, {
-          balloonContent: item,
-          balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #668cff;" class="marker"><img src="${icoLink}"/></div>`)
-        });
-        this.placemarks.push(placemark);
-      } else if (31556926 > time_deff && time_deff > 2629743) { // Через год
-        placemark = new ymaps.Placemark(
-        [item.latitude, item.longitude],
-        {}, {
-          balloonContent: item,
-          balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #ffffff;" class="marker"><img src="${icoLink}"/></div>`)
-        });
-        this.placemarks.push(placemark);
-      } else if (!item.date_start && !item.date_end) { // Достопримечательности
+      } else {
         placemark = new ymaps.Placemark(
           [item.latitude, item.longitude],
           {}, {
             balloonContent: item,
             balloonAutoPan: false,
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #993333;" class="marker"><img src="${icoLink}"/></div>`)
+            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
           });
           this.placemarks.push(placemark);
       }
+      // if ( 0 > time_deff ) { // Сейчас
+      //   placemark = new ymaps.Placemark(
+      //   [item.latitude, item.longitude],
+      //   {}, {
+      //     balloonContent: item,
+      //     //balloonAutoPan: false,
+      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style=" border-color: rgba(129, 235, 164, 1);" class="marker now"><img src="${icoLink}"/></div>`)
+      //   });
+      //   this.placemarks.push(placemark);
+      // } else if (86400 > time_deff && time_deff > 0) { // Сегодня
+      //     placemark = new ymaps.Placemark(
+      //     [item.latitude, item.longitude],
+      //     {}, {
+      //       balloonContent: item,
+      //       balloonAutoPan: false,
+      //       iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: 0040ff;" class="marker"><img src="${icoLink}"/></div>`)
+      //     });
+      //     this.placemarks.push(placemark);    
+      // } else if (604800 > time_deff && time_deff > 86400) { // Через неделю
+      //   placemark = new ymaps.Placemark(
+      //   [item.latitude, item.longitude],
+      //   {}, {
+      //     balloonContent: item,
+      //     balloonAutoPan: false,
+      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #3366ff;" class="marker"><img src="${icoLink}"/></div>`)
+      //   });
+      //   this.placemarks.push(placemark);
+      // } else if (2629743 > time_deff && time_deff > 604800) { // Через месяц
+      //   placemark = new ymaps.Placemark(
+      //   [item.latitude, item.longitude],
+      //   {}, {
+      //     balloonContent: item,
+      //     balloonAutoPan: false,
+      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #668cff;" class="marker"><img src="${icoLink}"/></div>`)
+      //   });
+      //   this.placemarks.push(placemark);
+      // } else if (31556926 > time_deff && time_deff > 2629743) { // Через год
+      //   placemark = new ymaps.Placemark(
+      //   [item.latitude, item.longitude],
+      //   {}, {
+      //     balloonContent: item,
+      //     balloonAutoPan: false,
+      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #ffffff;" class="marker"><img src="${icoLink}"/></div>`)
+      //   });
+      //   this.placemarks.push(placemark);
+      // } else if (!item.date_start && !item.date_end) { // Достопримечательности
+      //   placemark = new ymaps.Placemark(
+      //     [item.latitude, item.longitude],
+      //     {}, {
+      //       balloonContent: item,
+      //       balloonAutoPan: false,
+      //       iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #993333;" class="marker"><img src="${icoLink}"/></div>`)
+      //     });
+      //     this.placemarks.push(placemark);
+      // }
       //console.log(item.date_start)
 
         //Клик по метке и загрузка ивента в модалку
@@ -357,7 +389,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   //   );
   // }
   getEventsAndSights() {
-    const sources = [this.getEvents(), this.getSights()];
+    const sources = [this.getPlaces(), this.getSights()];
     forkJoin(sources).pipe(
       catchError((err) => {
         this.toastService.showToast(MessagesErrors.default, 'danger');
@@ -389,7 +421,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.navigationService.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.modalEventShowOpen = value;
       if (!value && this.activePlacemark) { // убираем активный класс у кастомного маркера при закрытие модалки
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         this.activePlacemark.options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${this.activeIcoLink}"/></div>`));
         this.setMapData();
       }
