@@ -23,34 +23,43 @@
   }
   .scroll_left {
     display: flex;
+    border-radius: 32px;
     align-items: center;
     position: absolute;
-    height: 6rem;
+    margin-bottom: 20px;
+    height: 70px;
+
     width: 5%;
     margin-right: 0%;
-    background: rgb(255,255,255);
-    background: linear-gradient(90deg, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%, rgba(255,255,255,1) 100%);
+    background: none;
+    // background: linear-gradient(90deg, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%, rgba(255,255,255,1) 100%);
   }
   .scroll_right {
     display: flex;
     align-items: center;
+    border-radius: 32px;
+    margin-bottom: 20px;
     position: absolute;
-    height: 6rem;
-    width: 5%;
-    left: auto;
-    right: 0;
-    background: rgb(255,255,255);
+    height: 70px;
+    width: 4%;
+    
+    margin-left: 95%;
+    
     background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
   }
 
 
   .home-container {
     width: 100%;
+    padding-top: 1rem;
+    background-color: white;
+    border-radius:12px;
+    border: 0.5px solid #c6c6c7;
     margin-left: auto;
     margin-right: auto;
     margin-top: auto;
     margin-bottom: auto;
-    min-height: 5rem;
+    height: 100px;
     display: flex;
     overflow-y: hidden;
     overflow-x: hidden;
@@ -61,7 +70,7 @@
   .home-caendcont {
     white-space: nowrap;
     width: 100%;
-    height: auto;
+    height: 3rem;
     margin: auto;
     display: flex;
     align-items: center;
@@ -75,6 +84,7 @@
 }
   .home-month {
     margin-left: 3rem;
+    margin-bottom: 3%;
     padding-left: 8px;
     //border-color: rgba(186, 186, 186, 0.1);
     //border-left: 1px solid; 
@@ -86,8 +96,8 @@
   }
   .home-mothname {
     font-size: 15px;
-    font-family: Noto Sans;
-    color: rgba(92, 90, 90, 0.4);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: rgba(75, 73, 73, 0.4);
     font-weight: 600;
   }
   .home-monthdata {
@@ -98,11 +108,13 @@
   }
   .home-day {
     flex: 0 0 auto;
-    width:56px;
-    height: 88px;
+    width:40px;
+    height: 56px;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
+    // margin-bottom: 10px;
+    // padding: 0px;
     background-color: rgba(92, 92, 92, 0);
   }
   .home-day.active {
@@ -112,7 +124,10 @@
   .home-day.active-right {
     border-top-right-radius: 24px;
     border-bottom-right-radius: 24px;
+    
+
     background-color: rgba(92, 92, 92, 0.05);
+    
   }
 
   .home-day.active-left {
@@ -123,7 +138,7 @@
 
 
   .home-day-content {
-    padding: 24px;
+    padding: 8px;
     flex: 0 0 auto;
     width: 100%;
     height: 100%;
@@ -134,11 +149,14 @@
 
   .home-day-content.active {
     border-radius: 32px;
+    height:100%;
+    width:100%;
+    // padding-top: 30px;
     background-color: rgba(92, 92, 92, 0.15);
   }
   .home-text {
     color: rgb(57, 56, 56);
-    font-size: 25px;
+    font-size: 1.2rem;
     align-self: center;
     font-style: normal;
     font-weight: 600;
@@ -149,3 +167,17 @@
     align-self: center;
     text-transform: lowercase;
   }
+
+  @media screen and (min-width: 0px) and (max-width: 768px) {
+    .scroll_right {
+      width: 13%;
+      background: none;
+      margin-left: 86%;
+    }
+
+    .scroll_left {
+      width: 16%;
+    }
+    
+  }
+    
