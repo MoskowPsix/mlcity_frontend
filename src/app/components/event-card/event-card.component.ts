@@ -68,18 +68,33 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
-      this.loadingFavotire = true // для отображения спинера
-      this.eventsService.toggleFavorite(event_id).pipe(
-        tap(() => {
-          this.favorite = !this.favorite
-          this.loadingFavotire = false
-        }),
-        catchError((err) =>{
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY) 
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe()
+      if (!this.isSight) {
+        this.loadingFavotire = true // для отображения спинера
+        this.eventsService.toggleFavorite(event_id).pipe(
+          tap(() => {
+            this.favorite = !this.favorite
+            this.loadingFavotire = false
+          }),
+          catchError((err) =>{
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY) 
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe()
+      } else {
+        this.loadingFavotire = true // для отображения спинера
+        this.sightsService.toggleFavorite(event_id).pipe(
+          tap(() => {
+            this.favorite = !this.favorite
+            this.loadingFavotire = false
+          }),
+          catchError((err) =>{
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY) 
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe()
+      }
     }  
   }
 
