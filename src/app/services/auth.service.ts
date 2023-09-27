@@ -8,6 +8,7 @@ import { ToastService } from './toast.service';
 import { TokenService } from './token.service';
 import { UserService } from './user.service';
 import { MessagesAuth } from '../enums/messages-auth';
+import { PasswordReset } from '../models/password-reset';
 
 @Injectable()
 export class AuthService {
@@ -68,6 +69,12 @@ export class AuthService {
     this.authenticationState.next(false)
     this.router.navigate(['login'])
     this.toastService.showToast(MessagesAuth.logout, 'secondary')
+  }
+
+  resetPassword(data:PasswordReset){
+    console.log(data)
+
+    return this.http.put<PasswordReset>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/reset_password`,data)
   }
   
 }

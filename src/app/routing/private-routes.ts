@@ -11,6 +11,8 @@ import { SightShowComponent } from '../views/sights/sight-show/sight-show.compon
 import { FavoritesComponent } from '../views/cabinet/favorites/favorites.component';
 import { NotificationsComponent } from '../views/cabinet/notifications/notifications.component';
 import { SettingsComponent } from '../views/cabinet/settings/settings.component';
+import { SettingsProfileComponent } from '../views/cabinet/settings/settings-profile/settings-profile.component';
+import { SettingsPrivacyComponent } from '../views/cabinet/settings/settings-privacy/settings-privacy.component';
 
 export const privateRoutes: Routes = [ 
     {
@@ -32,24 +34,36 @@ export const privateRoutes: Routes = [
     {
       path: 'cabinet/settings',
       component: SettingsComponent,
+      // children: [
+      //   {
+      //     path:'cabinet/settings/profile',
+      //     component: SettingsProfileComponent,
+      //     outlet:'profile'
+      //   },
+      //   {
+      //     path:'privacy',
+      //     component: SettingsPrivacyComponent,
+      //     outlet:'privacy'
+      //   }
+      // ],
       canActivate: [AuthGuard],
       // children: [
     },
-    {
-      path: 'cabinet/settings/profile',
-      component: SettingsComponent ,//Компонент юзер
-      canActivate: [AuthGuard],
-    },
-    {
-      path: 'cabinet/settings/notifications',
-      component: SettingsComponent, //Компонент уведомления
-      canActivate: [AuthGuard],
-    },
-    {
-      path: 'cabinet/settings/favorites',
-      component: SettingsComponent, //Компонент избранное
-      canActivate: [AuthGuard],
-    },
+    // {
+    //   path: 'cabinet/settings/profile',
+    //   component: SettingsProfileComponent ,//Компонент юзер
+    //   canActivate: [AuthGuard],
+    // },
+    // {
+    //   path: 'cabinet/settings/notifications',
+    //   component: SettingsComponent, //Компонент уведомления
+    //   canActivate: [AuthGuard],
+    // },
+    // {
+    //   path: 'cabinet/settings/favorites',
+    //   component: SettingsComponent, //Компонент избранное
+    //   canActivate: [AuthGuard],
+    // },
     //   ]
     // },
     {
