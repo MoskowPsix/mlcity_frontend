@@ -131,7 +131,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     //Подписываемся на город
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        this.city = response.locations[0].name
+        this.city = response.location.name
       })
     })
 

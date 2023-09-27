@@ -204,19 +204,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   });
   }
 
-  getEvents(): Observable<any> {
-    return new Observable((observer) => {
-      this.eventsLoading = true;
-      this.setBoundsCoordsToMapService(); // я хз почему, но эта штука только тут работает
-      this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        this.events = response.events;
-        //this.eventsLoading = false
-        this.cdr.detectChanges();
-        observer.next(EMPTY);
-        observer.complete();
-      });
-    });
-  }
+  // getEvents(): Observable<any> {
+  //   return new Observable((observer) => {
+  //     this.eventsLoading = true;
+  //     this.setBoundsCoordsToMapService(); // я хз почему, но эта штука только тут работает
+  //     this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+  //       this.events = response.events;
+  //       //this.eventsLoading = false
+  //       this.cdr.detectChanges();
+  //       observer.next(EMPTY);
+  //       observer.complete();
+  //     });
+  //   });
+  // }
 
   getPlaces(): Observable<any> {
     return new Observable((observer) => {
