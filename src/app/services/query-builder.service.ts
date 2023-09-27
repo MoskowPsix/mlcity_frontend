@@ -64,6 +64,9 @@ export class QueryBuilderService {
   queryBuilder(page:string = 'eventsForMap'){
     this.updateParams()
     switch (page) {
+      case 'placesForMap':   //Главная страница - карта /home
+      this.buildQueryPlacesForMap()
+      break;
       case 'eventsForMap':   //Главная страница - карта /home
         this.buildQueryEventsForMap()
         break;
@@ -108,6 +111,18 @@ export class QueryBuilderService {
       likedUser: true,
       favoriteUser: true
     }  
+  }
+  buildQueryPlacesForMap() {
+    this.queryParams =  {
+      //statuses: [Statuses.publish].join(','),
+      //statusLast: true,
+      latitude: this.latitude,
+      longitude: this.longitude,
+      //eventTypes: this.eventTypes,
+      //dateStart: this.dateStart,
+      //dateEnd: this.dateEnd,
+      radius: this.radius,
+    }
   }
   buildQueryEventsForMap(){
     this.queryParams =  {

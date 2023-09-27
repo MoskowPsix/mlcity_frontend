@@ -26,6 +26,9 @@ import { StatusesService } from 'src/app/services/statuses.service';
 import { VkService } from 'src/app/services/vk.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import {register} from 'swiper/element/bundle';
+import { LocationService } from 'src/app/services/location.service';
+import { Location } from 'src/app/models/location';
+import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-sight-create',
@@ -62,7 +65,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   user: any
   stepStart: number = 1
   stepCurrency: number = 1
-  steps:number = 11
+  steps:number = 12
   vkGroups: any
   //Создать переменную для постов со страницы
   vkGroupSelected: number | null = null
@@ -77,9 +80,17 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   statusesLoaded: boolean = false
   statusSelected: number | null = null
   city:string  = 'Заречный'
+  region:string ='Свердловская область'
+  location?: Location[] = []
+  locationId!:number
   uploadFiles: string[] = []
   formData: FormData = new FormData()
   imagesPreview: string[] = []
+
+  minLengthCityesListError:boolean = false
+  cityesList: any[] = [];
+  cityesListLoading:boolean = false
+  searchCityes: FormControl =  new FormControl('')
 
   //nextButtonDisable: boolean = false
 
@@ -89,6 +100,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   createSightForm: FormGroup = new FormGroup({})
 
   constructor(
+    private filterService: FilterService, 
+    private locationSevices: LocationService,
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private sightsService: SightsService,
@@ -231,6 +244,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Выбор типа
   selectedType(type_id: any){
     type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
+    console.log(this.createSightForm)
   }
 
   //Получаем статусы и устанавливаем статус по умолчанию
@@ -254,6 +268,39 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Выбор типа
   selectedStatus(status_id: any){
     status_id.detail.value ? this.statusSelected = status_id.detail.value  :  this.statusSelected =  null
+  }
+  getNowCityes() {
+    this.cityesListLoading = true
+    this.locationSevices.getLocationsIds(this.locationId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+      this.location = response.location
+      this.city = response.location.name
+      this.region = response.location.location_parent.name
+      this.cityesListLoading = false
+    })
+  }
+  getCityes(event: any){
+    if (event.target.value.length >= 3){
+      this.cityesListLoading = true
+      this.minLengthCityesListError = false
+      this.locationSevices.getLocationsName(event.target.value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.cityesList = response.locations
+        this.cityesListLoading = false
+      })
+    } else {
+      this.minLengthCityesListError = true
+    }
+  }
+  setCityes(item:any){
+    //console.log(item)
+    this.location = item
+    this.city = item.name
+    this.region = item.location_parent.name
+    this.createSightForm.patchValue({locationId: item.id})
+  }
+  onClearSearch(){
+    this.minLengthCityesListError = false
+    this.cityesListLoading = false
+    this.cityesList = []
   }
 
   //При клике ставим метку, если метка есть, то перемещаем ее
@@ -318,9 +365,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
       
-      this.city=firstGeoObject.getLocalities(0)[0]
-
-      this.createSightForm.value.address = firstGeoObject.getAddressLine()
+      //this.city=firstGeoObject.getLocalities(0)[0]
+      this.createSightForm.patchValue({address: firstGeoObject.getAddressLine()})
+      //this.createSightForm.value.address = firstGeoObject.getAddressLine()
     })
   }
 
@@ -415,15 +462,15 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.formData.append('name', this.createSightForm.controls['name'].value)
     this.formData.append('sponsor', this.createSightForm.controls['sponsor'].value)
     this.formData.append('description', this.createSightForm.controls['description'].value)
+    this.formData.append('workTime', this.createSightForm.controls['workTime'].value)
     this.formData.append('coords', this.createSightForm.controls['coords'].value)
     this.formData.append('address', this.createSightForm.controls['address'].value)
-    this.formData.append('city', this.city)
+    //this.formData.append('city', this.city)
+    this.formData.append('locationId', this.createSightForm.controls['locationId'].value)
     this.formData.append('type', this.createSightForm.controls['type'].value)
     this.formData.append('status', this.createSightForm.controls['status'].value)
     this.formData.append('price', this.createSightForm.controls['price'].value)
     this.formData.append('materials', this.createSightForm.controls['materials'].value)
-    this.formData.append('dateStart', this.createSightForm.controls['dateStart'].value)
-    this.formData.append('dateEnd', this.createSightForm.controls['dateEnd'].value)
     this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null)
     // if (this.vkGroupPostSelected?.likes.count){
     //   this.formData.append('vkLikesCount', this.vkGroupPostSelected?.likes.count)
@@ -470,47 +517,17 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         return this.createSightForm.controls['name'].invalid  ?  false :  true
       case 4:
         return this.createSightForm.controls['description'].invalid  ? false :  true 
-      case 6:
-        return this.createSightForm.hasError('dateInvalid') ?  false :  true
-      case 7:
-        return this.createSightForm.controls['sponsor'].invalid  ?  false :  true      
+      // case 7:
+      //   return this.createSightForm.hasError('dateInvalid') ?  false :  true
       case 8:
-        //return !this.createEventForm.controls['coords'].value.length ? false :  true  
-        return this.createSightForm.controls['coords'].invalid ? false :  true 
+        return this.createSightForm.controls['sponsor'].invalid  ?  false :  true
+      case 9:
+        //freturn !this.createEventForm.controls['coords'].value.length ? false :  true  
+        return this.createSightForm.controls['coords'].invalid ? false :  true
       default:
         return true
     }
   }
-
-  //Проверка шагов и блокировка \ разблокировка кнопок далее \ назад
-  // disabledNextButton(){  
-  //   switch (this.stepCurrency) {
-  //     case 1:
-  //     case 2:
-  //     // case 10:
-  //     // case 11:
-  //     // case 12:
-  //      this.nextButtonDisable = false
-  //       break
-  //     case 3:
-  //      this.createEventForm.controls['name'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break 
-  //     case 4:
-  //       this.createEventForm.controls['description'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break 
-  //     case 6:
-  //       this.createEventForm.hasError('dateInvalid') ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break 
-  //     case 7:
-  //       this.createEventForm.controls['sponsor'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break    
-  //     case 9:
-  //       !this.createEventForm.controls['coords'].value.length ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break  
-  //     default:
-  //       break
-  //   }
-  // }
 
   //Отпрвка формы
   
@@ -520,6 +537,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
     this.sightsService.create(sight).pipe(
       tap((res) => {
+        console.log(res)
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesSights.create, 'success')
         //this.createEventForm.reset()
@@ -527,17 +545,21 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         this.vkGroupPostSelected = null
         this.createSightForm.controls['name'].reset()
         this.createSightForm.controls['description'].reset()
+        this.createSightForm.controls['workTime'].reset()
         this.createSightForm.controls['address'].reset()
         this.createSightForm.controls['coords'].reset()
-        this.createSightForm.controls['files'].reset()
+        if(this.createSightForm.value.files){
+          this.createSightForm.controls['files'].reset()
+        }
         this.createSightForm.controls['price'].reset()
         this.createSightForm.controls['materials'].reset()
-        this.city = ''
+        this.createSightForm.controls['locationId'].reset()
         this.createSightForm.enable()
         this.stepCurrency =  this.stepStart 
       }),
       catchError((err) =>{
-        this.toastService.showToast(err.error.message || MessagesErrors.default, 'danger')
+        console.log(err)
+        this.toastService.showToast(err.message || MessagesErrors.default, 'danger')
         this.createSightForm.enable()
         this.loadingService.hideLoading()
         return of(EMPTY) 
@@ -552,20 +574,25 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('',[Validators.required, Validators.minLength(10)]),
+      workTime: new FormControl(''),
       address: new FormControl('',[Validators.required]),
-      coords: new FormControl('',[Validators.required, Validators.minLength(2)]), 
+      locationId: new FormControl('',[Validators.required]),
+      coords: new FormControl('',[Validators.required, Validators.minLength(2)]),
       type:  new FormControl({value: '1', disabled: false},[Validators.required]),
       status:  new FormControl({value: this.statusSelected, disabled: false},[Validators.required]),
       files_img: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
       price: new FormControl('',[Validators.maxLength(6)]),
       materials: new FormControl(''),
-      dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
-      dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
     },[dateRangeValidator])
-
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      this.locationId = value
+      this.createSightForm.patchValue({locationId: value})
+    })
     this.getUserWithSocialAccount()
     this.getTypes()
     this.getStatuses()
+    this.getNowCityes();
+    //this.getLocations()
   }
 
   ngOnDestroy(){
