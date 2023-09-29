@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { EventTypeService } from 'src/app/services/event-type.service';
 import { IEventType } from 'src/app/models/event-type';
@@ -25,6 +25,8 @@ import { StatusesService } from 'src/app/services/statuses.service';
 import { VkService } from 'src/app/services/vk.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import {register} from 'swiper/element/bundle';
+import { FilterService } from 'src/app/services/filter.service';
+import { LocationService } from 'src/app/services/location.service';
 
 @Component({
   selector: 'app-event-create',
@@ -81,14 +83,25 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   formData: FormData = new FormData()
   imagesPreview: string[] = []
 
+  placeArrayForm: any[] = []
+  seancesArrayForm: any[] = []
+  locations: any[] = []
+  cityesListLoading = false
+  minLengthCityesListError = false
+  cityesList: any[] = []
+  sightsListLoading = false
+  sightsList: any[] = []
+
   //nextButtonDisable: boolean = false
 
   placemark!: ymaps.Placemark
-  map!:YaReadyEvent<ymaps.Map>
- 
+  // map!:YaReadyEvent<ymaps.Map>
+  maps: any[] = [] 
   createEventForm: FormGroup = new FormGroup({})
 
   constructor(
+    private locationServices: LocationService,
+    private filterService: FilterService, 
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private eventsService: EventsService,
@@ -257,96 +270,98 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   selectedStatus(status_id: any){
     status_id.detail.value ? this.statusSelected = status_id.detail.value  :  this.statusSelected =  null
   }
-
   //При клике ставим метку, если метка есть, то перемещаем ее
-  async onMapClick(e: YaEvent<ymaps.Map>) {
+  onMapClick(e: YaEvent<ymaps.Map>, num: number) {
     const { target, event } = e;
-    this.createEventForm.patchValue({coords: [event.get('coords')[0], event.get('coords')[1]] })
-    // this.createEventForm.value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
-    this.map.target.geoObjects.removeAll()
-    this.placemark= new ymaps.Placemark(this.createEventForm.value.coords)
-    this.map.target.geoObjects.add(this.placemark)
+    this.createEventForm.value.places[num].patchValue({coords: [event.get('coords')[0], event.get('coords')[1]] })
+    // this.createEventForm.value.places[num].value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
+    this.maps[num].target.geoObjects.removeAll()
+    this.placemark = new ymaps.Placemark(this.createEventForm.value.places[num].value.coords)
+    this.maps[num].target.geoObjects.add(this.placemark)
     if (!Capacitor.isNativePlatform())  {
-      this.ReserveGeocoder()
+      this.ReserveGeocoder(num)
     } else {
       // this.createEventForm.value.address =await this.mapService.ReserveGeocoderNative(this.createEventForm.value.coords).then(res=>{console.log("res "+res)})
-      this.ReserveGeocoder()
+      this.ReserveGeocoder(num)
     }
   }
  
    // Поиск по улицам
-   onMapReady(e: YaReadyEvent<ymaps.Map>) {
-    this.map = e;
-    if (this.createEventForm.value.coords){     
-      this.addPlacemark(this.createEventForm.value.coords)
+   onMapReady(e: YaReadyEvent<ymaps.Map>, num: number) {
+    this.maps[num] = e;
+    if (this.createEventForm.value.places[num].value.coords){     
+      this.addPlacemark(this.createEventForm.value.places[num].value.coords, num)
     } else {
-      this.mapService.geolocationMapNative(this.map);
+      this.mapService.geolocationMapNative(this.maps[num]);
     }
-    
-    const search = new ymaps.SuggestView('search-map');  
-    search.events.add('select',()=>{     
-    if (!Capacitor.isNativePlatform())  {
-      this.ForwardGeocoder()
-    } else {
-      // this.createEventForm.value.address=(<HTMLInputElement>document.getElementById("search-map")).value
-      // let coords = this.mapService.ForwardGeocoderNative(this.createEventForm.value.address)
-      // this.addPlacemark(coords!)
-      this.ForwardGeocoder()
-    }
+    const search = new ymaps.SuggestView('search-map-'+num); 
+    search.events.add('select',()=>{ 
+      this.ForwardGeocoder(num) 
+      if (!Capacitor.isNativePlatform())  {
+        console.log('ok if capocator true')
+        this.ForwardGeocoder(num)
+      } else {
+        console.log('ok if capocator false')
+        // this.createEventForm.value.places[num].value.address=(<HTMLInputElement>document.getElementById("search-map"+num)).value
+        // let coords = this.mapService.ForwardGeocoderNative(this.createEventForm.value.places[num].value.address)
+        // this.addPlacemark(coords!)
+        this.ForwardGeocoder(num)
+      }
     })
+    console.log(search.events)
   }
 
   //При выборе из выпадающего списка из поиска создает метку по адресу улицы
-  addPlacemark(coords: number[]){
+  addPlacemark(coords: number[], num:number){
+    console.log(coords)
     try {
-      this.map.target.geoObjects.removeAll()
+      this.maps[num].target.geoObjects.removeAll()
       this.placemark= new ymaps.Placemark(coords)
-      this.map.target.geoObjects.add(this.placemark)
+      this.maps[num].target.geoObjects.add(this.placemark)
       // this.createEventForm.value.coords=this.placemark.geometry?.getCoordinates()
       this.createEventForm.patchValue({coords: this.placemark.geometry?.getCoordinates()})
       //центрирование карты по метки и установка зума
-      this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
-      this.map.target.setZoom(17)
+      this.maps[num].target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
+      this.maps[num].target.setZoom(17)
     } catch (error) {
-
+      console.log(error)
     }
   }
 
-  ReserveGeocoder(): void{
+  ReserveGeocoder(num:number): void{
     // Декодирование координат
-    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.coords, {
+    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.places[num].value.coords, {
       results: 1,
     });
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
       
-      this.city=firstGeoObject.getLocalities(0)[0]
-
-      this.createEventForm.value.address = firstGeoObject.getAddressLine()
+      //this.city=firstGeoObject.getLocalities(0)[0]
+      this.createEventForm.value.places[num].patchValue({address: firstGeoObject.getAddressLine()})
+      //this.createEventForm.value.address = firstGeoObject.getAddressLine()
     })
   }
 
-  ForwardGeocoder(): void{
-    this.createEventForm.value.address=(<HTMLInputElement>document.getElementById("search-map")).value
-    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.address, {
+  ForwardGeocoder(num: number): void{
+    this.createEventForm.value.places[num].patchValue({address: (<HTMLInputElement>document.getElementById('search-map-'+num)).value})
+    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.places[num].value.address, {
       results: 1,
     });
     geocodeResult.subscribe((result: any) => {
-
       const firstGeoObject = result.geoObjects.get(0);
-      this.addPlacemark(firstGeoObject.geometry.getCoordinates())
+      this.addPlacemark(firstGeoObject.geometry.getCoordinates(), num)
 
-      this.city=firstGeoObject.getLocalities(0)[0]
+      //this.city=firstGeoObject.getLocalities(0)[0]
 
     }) 
   }
 
   //очистка поиска на карте
-  clearSearche(event:any){
+  clearSearche(event:any, num:number){
     if (event.detail.value == 0){
       this.createEventForm.patchValue({coords: []})
       this.placemark= new ymaps.Placemark([])
-      this.map.target.geoObjects.removeAll() 
+      this.maps[num].target.geoObjects.removeAll() 
     }
   }
 
@@ -466,20 +481,20 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Блокировка шагов в баре
   stepIsValid(step:number = this.stepStart){
     switch (step) {
-      case 1:
-      case 2:
-        return true
-      case 3:
-        return this.createEventForm.controls['name'].invalid  ?  false :  true
-      case 4:
-        return this.createEventForm.controls['description'].invalid  ? false :  true 
-      case 6:
-        return this.createEventForm.hasError('dateInvalid') ?  false :  true
-      case 7:
-        return this.createEventForm.controls['sponsor'].invalid  ?  false :  true      
-      case 9:
-        //return !this.createEventForm.controls['coords'].value.length ? false :  true  
-        return this.createEventForm.controls['coords'].invalid ? false :  true 
+      // case 1:
+      // case 2:
+      //   return true
+      // case 3:
+      //   return this.createEventForm.controls['name'].invalid  ?  false :  true
+      // case 4:
+      //   return this.createEventForm.controls['description'].invalid  ? false :  true 
+      // case 6:
+      //   return this.createEventForm.hasError('dateInvalid') ?  false :  true
+      // case 7:
+      //   return this.createEventForm.controls['sponsor'].invalid  ?  false :  true      
+      // case 9:
+      //   //return !this.createEventForm.controls['coords'].value.length ? false :  true  
+      //   return this.createEventForm.controls['coords'].invalid ? false :  true 
       default:
         return true
     }
@@ -551,26 +566,104 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     ).subscribe()
   }
 
+  addPlaceForm(num: number) {
+    let locId: any
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {locId = value})
+    this.locationServices.getLocationsIds(locId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+      this.placeArrayForm.push({num: num, city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', seances: [{num_s: 0}] })
+    })
+    if (num !== 0) {
+      // this.createEventForm.value.places[num].patchValue({address: 'City'}) // вставка значений
+      this.createEventForm.controls['places'].value.push( 
+        new FormGroup({
+          sight_id: new FormControl('', [Validators.minLength(1)]),
+          locationId: new FormControl(locId, [Validators.minLength(1)]),
+          coords:  new FormControl('',[Validators.required, Validators.minLength(2)]), 
+          address: new FormControl('',[Validators.required]),
+          seances: new FormControl([new FormGroup({
+            dataStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
+            dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
+          })], [Validators.required]),
+        })
+      )
+    }
+    console.log(this.createEventForm)
+  }
+
+  addSeances(num:number,num_s: number) {
+    num_s = num_s + 1
+    this.placeArrayForm[num].seances.push({ num_s: num_s})
+    this.createEventForm.controls['places'].value[num].controls.seances.value.push(new FormGroup({
+      dataStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
+      dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
+    }))
+    console.log(this.placeArrayForm)
+  }
+
+  getCityes(event: any){
+    if (event.target.value.length >= 3){
+      this.cityesListLoading = true
+      this.minLengthCityesListError = false
+      this.locationServices.getLocationsName(event.target.value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.cityesList = response.locations
+        this.cityesListLoading = false
+      })
+    } else {
+      this.minLengthCityesListError = true
+    }
+  }
+  onClearSearch(){
+    this.minLengthCityesListError = false
+    this.cityesListLoading = false
+    this.cityesList = []
+  }
+  setCityes(item:any, num:number){
+    //console.log(item)
+    // this.location = item
+    this.placeArrayForm[num].city = item.name
+    this.placeArrayForm[num].region = item.location_parent.name
+    //console.log(item)
+    this.createEventForm.value.places[num].patchValue({locationId: item.id})
+    this.onClearSearch()
+  }
+
   ngOnInit() {
+    let locationId: any;
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      locationId = value
+    })
     //Создаем поля для формы
     this.createEventForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('',[Validators.required, Validators.minLength(10)]),
-      address: new FormControl('',[Validators.required]),
-      coords: new FormControl('',[Validators.required, Validators.minLength(2)]), 
+      places:new FormControl([new FormGroup({
+        sight_id: new FormControl('', [Validators.minLength(1)]),
+        locationId: new FormControl(locationId, [Validators.minLength(1)]),
+        coords:  new FormControl('',[Validators.required, Validators.minLength(2)]), 
+        address: new FormControl('',[Validators.required]),
+        seances: new FormControl([new FormGroup({
+          dataStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
+          dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
+        })], [Validators.required]),
+      })], [Validators.required]),
       type:  new FormControl({value: '1', disabled: false},[Validators.required]),
       status:  new FormControl({value: this.statusSelected, disabled: false},[Validators.required]),
       files: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
-      price: new FormControl('',[Validators.maxLength(6)]),
-      materials: new FormControl(''),
+      price: new FormControl([{
+        cors_rub: new FormControl(''),
+        description: new FormControl([Validators.required, Validators.minLength(5)]),
+      }]),
+      materials: new FormControl('', [Validators.minLength(1)]),
       dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
       dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
     },[dateRangeValidator])
 
+    this.addPlaceForm(0)
     this.getUserWithSocialAccount()
     this.getTypes()
     this.getStatuses()
+    console.log(this.createEventForm)
   }
 
   ngOnDestroy(){

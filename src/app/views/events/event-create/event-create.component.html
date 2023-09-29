@@ -428,13 +428,150 @@
       </ion-row>
       
       <!-- шаг 9 -->
-      <ion-row  [hidden]="stepCurrency !== 9" class="ion-justify-content-center">
-        <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 9" @fade>
+      <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center">
+        <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
           <ion-list-header>
             <ion-label>На карте выберите место проведения мероприятия или введите адрес в поле поиска</ion-label>
           </ion-list-header>
+            <ion-row class="place-list">
+              <ng-container *ngFor="let array of placeArrayForm">
+                <ion-card [formGroup]="createEventForm.controls['places'].value[array.num]">
+                  <ion-card-header>
+                    <ion-item>
+                      <ion-item lines="none">
+                        <ion-icon size="large" name="earth-outline" color="primary"></ion-icon>
+                      </ion-item>
+                      <ion-item lines="none">
+                        <ion-label>
+                          <h1>Место проведения {{ array.num + 1 }}</h1>
+                        </ion-label>
+                      </ion-item>
+                    </ion-item>
+                  </ion-card-header>
+                  <ion-card-content>
+                  <ion-list>
+                      <!-- Город мероприятия -->
+                      <ion-col>
+                        <p>Выбран:</p><span>{{array.city}} </span>,<span> {{array.region}}</span>
+                      <div class="ion-padding" >
+                        <ion-searchbar animated="true" placeholder="Введите город..." (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
+                        <ion-note *ngIf="minLengthCityesListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
+                          <ng-container *ngIf="cityesListLoading">
+                              <ion-list class="ion-padding-end">
+                                  <ion-item *ngFor="let key of [1,2,3]">
+                                      <ion-skeleton-text [animated]="true" style="height: 0.5rem;" />
+                                  </ion-item>
+                              </ion-list>
+                          </ng-container>
+                          <ion-item lines="none" *ngIf="!cityesListLoading && !cityesList.length">
+                              <!-- <app-no-data /> -->
+                              <ion-lable><h3>Город не найден...</h3></ion-lable>
+                          </ion-item>
+                          <ion-list>
+                            <ion-item *ngFor="let item of cityesList; let i = index" (click)="setCityes(item, array.num)" class="search-item" [hidden]="item.location_parent.name === 'РФ'">
+                              <ion-label>
+                                  <h2>{{ item.name }}</h2>
+                                  <p>{{ item.location_parent.name }}</p>
+                              </ion-label>
+                            </ion-item>
+                          </ion-list>
+                      </div>
+                      </ion-col>
+
+                    <!-- Поиск не работает, сломан -->
+                    <ion-item class="input-address" lines="none">
+                      <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
+                      <ion-input formControlName="address" (ionChange)="clearSearche($event, array.num)" placeholder="Адрес мероприятия..." id="{{'search-map-'+array.num}}" type="text" name="search" required></ion-input>
+                    </ion-item>
+                    
+                    <ion-item >
+                      <div class="{{'map '+array.num}}">
+                        <ya-map (ready)="onMapReady($event, array.num)" 
+                          [zoom]="11"
+                          (yaclick)="onMapClick($event, array.num)"
+                          [center]="[56.81497464978607, 61.32053375244141]"
+                          [state]="{
+                            controls: [
+                              'zoomControl',
+                              'fullscreenControl',]
+                            }" 
+                        >
+                        </ya-map>
+                      </div>
+                    </ion-item>
+                    
+                    <ion-item *ngFor="let sean of array.seances" lines="none">
+                    <!-- Создание сеансов -->
+                      <ion-col [formGroup]="createEventForm.controls['places'].value[array.num].value.seances[sean.num_s]" class="list-seances">
+                        <h2>Сеанс {{sean.num_s+1}}</h2>
+                          <div *ngIf="createEventForm.hasError('dateInvalid')">
+                            <ion-note color="danger">Дата начала не может быть позднее даты конца, а дата конца не может быть раньше даты начала</ion-note>
+                          </div>
+                          <ion-list-header><ion-label>Начало сеанса: </ion-label></ion-list-header>
+                          <ion-datetime-button 
+                            datetime="{{'eventStart'+array.num+''+sean.num_s}}" 
+                            class="ion-margin-vertical"
+                          ></ion-datetime-button>
+                
+                          <ion-modal [keepContentsMounted]="true">
+                            <ng-template>
+                              <ion-datetime 
+                                id="{{'eventStart'+array.num+''+sean.num_s}}" 
+                                [firstDayOfWeek]="1" 
+                                [showDefaultButtons]="true"
+                                doneText="Ok"
+                                cancelText="Отмена"
+                                locale="ru-RU"
+                                formControlName="dateStart"
+                                ></ion-datetime>
+                            </ng-template>
+                          </ion-modal>
+                
+                          <ion-list-header><ion-label>Конец сеанса: </ion-label></ion-list-header>
+                
+                          <ion-datetime-button 
+                            datetime="{{'eventEnd'+array.num+''+sean.num_s}}" 
+                            class="ion-margin-vertical"
+                          ></ion-datetime-button>
+                
+                          <ion-modal [keepContentsMounted]="true">
+                            <ng-template>
+                              <ion-datetime 
+                                id="{{'eventEnd'+array.num+''+sean.num_s}}" 
+                                [firstDayOfWeek]="1" 
+                                [showDefaultButtons]="true"
+                                doneText="Ok"
+                                cancelText="Отмена"
+                                locale="ru-RU"
+                                formControlName="dateEnd"
+                              ></ion-datetime>
+                            </ng-template>
+                          </ion-modal>
+                      </ion-col>
+                    </ion-item>
+                    <ion-chip color="primary" class="ion-justify-item-center" (click)="addSeances(array.num, array.seances.num_s)">
+                      <ion-label>Добавить сеанс</ion-label>
+                      <ion-icon name="add-outline"></ion-icon>
+                    </ion-chip>
+                    <ion-item>
+                      <!-- Достопримечательность в котором проходит мероприятие -->
+                    </ion-item>
+                  </ion-list>
+                  </ion-card-content>
+
+                  <ion-card-footer>
+
+                  </ion-card-footer>
+                </ion-card>
+              </ng-container>
+            <ion-chip color="primary" class="ion-justify-item-center" (click)="addPlaceForm(placeArrayForm.length)">
+              <ion-label>Добавить место проведения</ion-label>
+              <ion-icon name="add-outline"></ion-icon>
+            </ion-chip>
+          </ion-row>
+            
           
-          <ion-item fill="outline" class="ion-margin-vertical">
+          <!-- <ion-item fill="outline" class="ion-margin-vertical">
             <ion-label position="floating">Поиск по адресу</ion-label>
             <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
             <ion-input formControlName="address" (ionChange)="clearSearche($event)" id="search-map" type="text" name="search" value="{{this.createEventForm.value.address}}"  required></ion-input>
@@ -452,7 +589,7 @@
                 }" 
             >
             </ya-map>
-          </div>
+          </div> -->
     
           </ion-col>
       </ion-row>

@@ -347,7 +347,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.map.target.geoObjects.removeAll()
       this.placemark= new ymaps.Placemark(coords)
       this.map.target.geoObjects.add(this.placemark)
-      // this.createEventForm.value.coords=this.placemark.geometry?.getCoordinates()
+      this.createSightForm.value.coords=this.placemark.geometry?.getCoordinates()
       this.createSightForm.patchValue({coords: this.placemark.geometry?.getCoordinates()})
       //центрирование карты по метки и установка зума
       this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
@@ -381,7 +381,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       const firstGeoObject = result.geoObjects.get(0);
       this.addPlacemark(firstGeoObject.geometry.getCoordinates())
 
-      this.city=firstGeoObject.getLocalities(0)[0]
+      // this.city=firstGeoObject.getLocalities(0)[0]
 
     }) 
   }
@@ -537,7 +537,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
     this.sightsService.create(sight).pipe(
       tap((res) => {
-        console.log(res)
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesSights.create, 'success')
         //this.createEventForm.reset()
