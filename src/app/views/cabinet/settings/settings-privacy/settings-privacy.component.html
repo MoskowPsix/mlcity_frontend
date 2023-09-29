@@ -1,0 +1,49 @@
+<ng-container>
+  <div class="content-container">
+    <form class="form" [formGroup]="passwordResetForm" (ngSubmit)="onSubmit()">
+      <ion-row class="ion-justify-content-center">
+          <h1 class="header">Изменения пароля</h1>
+        
+        
+        
+      </ion-row>
+      
+      <ion-col>
+        <div class="form-content">
+
+        
+        <ion-row>
+          <ion-item lines="none">
+            <ion-label position="stacked" class="label">Текущий пароль:</ion-label>
+            <ion-input type="password" class="form-input ion-padding-horizontal" labelPlacement="stacked" formControlName="old_password"></ion-input>
+          </ion-item>
+        </ion-row>
+
+        <ion-row>
+          <div class="password-confirm-container">
+          <ion-item lines="none">
+            <ion-label position="stacked" class="label">Новый пароль пароль:</ion-label>
+            <ion-input type="password" class="form-input ion-padding-horizontal" placeholder="•••••••••••" labelPlacement="stacked" formControlName="new_password"></ion-input>
+          </ion-item>
+  
+          <ion-item lines="none">
+            <ion-label position="stacked" class="label">Подтвердите пароль:</ion-label>
+            <ion-input type="password" class="form-input ion-padding-horizontal" placeholder="•••••••••••" labelPlacement="stacked" formControlName="retry_password"></ion-input>
+          </ion-item>
+          </div>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center" slot="end">
+          <ion-button class="form-button" type="submit" [disabled]="!passwordResetForm.status">Сохранить</ion-button>
+        </ion-row>
+        
+        <div>
+
+        </div>
+        
+        </div>
+      </ion-col>
+    </form>
+  </div>
+</ng-container>
+

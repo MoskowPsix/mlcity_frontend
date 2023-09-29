@@ -64,6 +64,11 @@ import { NativeGeocoder } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { BackButtonDirective } from './directives/back-button.directive';
+import { SettingsComponent } from './views/cabinet/settings/settings.component';
+import { SettingsProfileComponent } from './views/cabinet/settings/settings-profile/settings-profile.component';
+import { SettingsPrivacyComponent } from './views/cabinet/settings/settings-privacy/settings-privacy.component';
+import { SettingsFavoriteComponent } from './views/cabinet/settings/settings-favorite/settings-favorite.component';
+import { SettingsNotificationComponent } from './views/cabinet/settings/settings-notification/settings-notification.component';
 
 
 const mapConfig: YaConfig = {
@@ -106,7 +111,12 @@ registerLocaleData(localeRu, 'ru');
     CommentsListComponent,
     FavoritesComponent,
     TruncatePipe,
-    BackButtonDirective
+    BackButtonDirective,
+    SettingsComponent,
+    SettingsProfileComponent,
+    SettingsPrivacyComponent,
+    SettingsFavoriteComponent,
+    SettingsNotificationComponent,
   ],
   imports: [
     BrowserModule, 
