@@ -27,6 +27,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import {register} from 'swiper/element/bundle';
 import { FilterService } from 'src/app/services/filter.service';
 import { LocationService } from 'src/app/services/location.service';
+import { SightsService } from 'src/app/services/sights.service';
 
 @Component({
   selector: 'app-event-create',
@@ -92,6 +93,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   sightsListLoading = false
   sightsList: any[] = []
 
+  priceArrayForm: any[] = []
+
   //nextButtonDisable: boolean = false
 
   placemark!: ymaps.Placemark
@@ -100,6 +103,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createEventForm: FormGroup = new FormGroup({})
 
   constructor(
+    private sightServices: SightsService,
     private locationServices: LocationService,
     private filterService: FilterService, 
     private cdr: ChangeDetectorRef,
@@ -308,7 +312,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.ForwardGeocoder(num)
       }
     })
-    console.log(search.events)
   }
 
   //При выборе из выпадающего списка из поиска создает метку по адресу улицы
@@ -433,15 +436,33 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.formData.append('name', this.createEventForm.controls['name'].value)
     this.formData.append('sponsor', this.createEventForm.controls['sponsor'].value)
     this.formData.append('description', this.createEventForm.controls['description'].value)
-    this.formData.append('coords', this.createEventForm.controls['coords'].value)
-    this.formData.append('address', this.createEventForm.controls['address'].value)
-    this.formData.append('city', this.city)
+    // this.formData.append('coords', this.createEventForm.controls['coords'].value)
+    // this.formData.append('address', this.createEventForm.controls['address'].value)
+    // this.formData.append('city', this.city)
     this.formData.append('type', this.createEventForm.controls['type'].value)
     this.formData.append('status', this.createEventForm.controls['status'].value)
-    this.formData.append('price', this.createEventForm.controls['price'].value)
+
+    this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
+      this.formData.append(`prices[${i}][cost_rub]`, item.controls.cors_rub.value)
+      this.formData.append(`prices[${i}][descriptions]`, item.controls.description.value)
+    });
+
     this.formData.append('materials', this.createEventForm.controls['materials'].value)
     this.formData.append('dateStart', this.createEventForm.controls['dateStart'].value)
     this.formData.append('dateEnd', this.createEventForm.controls['dateEnd'].value)
+    this.formData.append('places[]', this.createEventForm.controls['places'].value)
+
+    this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
+      this.formData.append(`places[${i}][address]`, item.controls.address.value)
+      this.formData.append(`places[${i}][coords]`, item.controls.coords.value)
+      this.formData.append(`places[${i}][locationId]`, item.controls.locationId.value)
+      this.formData.append(`places[${i}][sightId]`, item.controls.sight_id.value)
+      item.controls.seances.value.forEach((item_sean: any, i_sean: number) => {
+        this.formData.append(`places[${i}][seances][${i_sean}][dateStart]`, item_sean.controls.dateStart.value)
+        this.formData.append(`places[${i}][seances][${i_sean}][dateEnd]`, item_sean.controls.dateEnd.value)
+      })
+    });
+
     this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null)
     // if (this.vkGroupPostSelected?.likes.count){
     //   this.formData.append('vkLikesCount', this.vkGroupPostSelected?.likes.count)
@@ -449,7 +470,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if  (this.vkGroupSelected && this.vkGroupPostSelected?.id){
       this.formData.append('vkGroupId', this.vkGroupSelected.toString())
     }
-
+    console.log(this.formData.getAll('prices'))
     return this.formData
   }
   
@@ -481,20 +502,20 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Блокировка шагов в баре
   stepIsValid(step:number = this.stepStart){
     switch (step) {
-      // case 1:
-      // case 2:
-      //   return true
-      // case 3:
-      //   return this.createEventForm.controls['name'].invalid  ?  false :  true
-      // case 4:
-      //   return this.createEventForm.controls['description'].invalid  ? false :  true 
-      // case 6:
-      //   return this.createEventForm.hasError('dateInvalid') ?  false :  true
-      // case 7:
-      //   return this.createEventForm.controls['sponsor'].invalid  ?  false :  true      
-      // case 9:
-      //   //return !this.createEventForm.controls['coords'].value.length ? false :  true  
-      //   return this.createEventForm.controls['coords'].invalid ? false :  true 
+      case 1:
+      case 2:
+        return true
+      case 3:
+        return this.createEventForm.controls['name'].invalid  ?  false :  true
+      case 4:
+        return this.createEventForm.controls['description'].invalid  ? false :  true 
+      case 6:
+        return this.createEventForm.hasError('dateInvalid') ?  false :  true
+      case 7:
+        return this.createEventForm.controls['sponsor'].invalid  ?  false :  true      
+      case 9:
+        //return !this.createEventForm.controls['coords'].value.length ? false :  true  
+        return this.createEventForm.controls['places'].invalid ? false :  true 
       default:
         return true
     }
@@ -538,21 +559,21 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
     this.eventsService.create(event).pipe(
       tap((res) => {
+        console.log(res)
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesEvents.create, 'success')
-        //this.createEventForm.reset()
+        this.createEventForm.reset()
         this.resetUploadInfo()
         this.vkGroupPostSelected = null
         this.createEventForm.controls['name'].reset()
         this.createEventForm.controls['description'].reset()
-        this.createEventForm.controls['address'].reset()
-        this.createEventForm.controls['coords'].reset()
+        // this.createEventForm.controls['address'].reset()
+        // this.createEventForm.controls['coords'].reset()
         this.createEventForm.controls['files'].reset()
         this.createEventForm.controls['price'].reset()
         this.createEventForm.controls['materials'].reset()
-        this.city = ''
-        //this.createEventForm.controls['dateStart'].reset()
-        //this.createEventForm.controls['dateEnd'].reset()
+        this.createEventForm.controls['places'].reset()
+        //this.city = ''
         this.createEventForm.enable()
         this.stepCurrency =  this.stepStart 
       }),
@@ -563,16 +584,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         return of(EMPTY) 
       }),
       takeUntil(this.destroy$)
-    ).subscribe()
+    ).subscribe( res=> { console.log(res)})
   }
 
-  addPlaceForm(num: number) {
+  addPlaceForm() {
     let locId: any
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {locId = value})
     this.locationServices.getLocationsIds(locId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-      this.placeArrayForm.push({num: num, city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', seances: [{num_s: 0}] })
+      this.placeArrayForm.push({city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', seances: [{num_s: 0}] })
     })
-    if (num !== 0) {
       // this.createEventForm.value.places[num].patchValue({address: 'City'}) // вставка значений
       this.createEventForm.controls['places'].value.push( 
         new FormGroup({
@@ -581,23 +601,43 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           coords:  new FormControl('',[Validators.required, Validators.minLength(2)]), 
           address: new FormControl('',[Validators.required]),
           seances: new FormControl([new FormGroup({
-            dataStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
+            dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
             dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
           })], [Validators.required]),
         })
       )
-    }
     console.log(this.createEventForm)
   }
+  addPrice() {
+    this.priceArrayForm.push({price: ''})
+    this.createEventForm.controls['price'].value.push(
+      new FormGroup({
+        cors_rub: new FormControl('', [Validators.required]),
+        description: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      })
+    )
+    console.log(this.createEventForm)
+  }
+  deletePrice(num: number) {
+    this.createEventForm.controls['price'].value.splice(num, 1)
+  }
 
-  addSeances(num:number,num_s: number) {
-    num_s = num_s + 1
-    this.placeArrayForm[num].seances.push({ num_s: num_s})
+  deletePlaceForm(num: number) {
+    this.placeArrayForm.splice(num, 1)
+    this.createEventForm.controls['places'].value.splice(num, 1)
+  }
+
+  deleteSeanceForm(num: number, num_s: number) {
+    this.placeArrayForm[num].seances.splice(num_s, 1)
+    this.createEventForm.controls['places'].value[num].value.seances.splice(num_s, 1)
+  }
+
+  addSeances(num:number) {
+    this.placeArrayForm[num].seances.push({  })
     this.createEventForm.controls['places'].value[num].controls.seances.value.push(new FormGroup({
-      dataStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
+      dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
       dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
     }))
-    console.log(this.placeArrayForm)
   }
 
   getCityes(event: any){
@@ -616,6 +656,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.minLengthCityesListError = false
     this.cityesListLoading = false
     this.cityesList = []
+    this.sightsListLoading = false
+    this.sightsList = []
   }
   setCityes(item:any, num:number){
     //console.log(item)
@@ -624,6 +666,24 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.placeArrayForm[num].region = item.location_parent.name
     //console.log(item)
     this.createEventForm.value.places[num].patchValue({locationId: item.id})
+    this.onClearSearch()
+  }
+
+  getSight(event: any, num: number) {
+    if (event.target.value.length >= 3){
+      this.sightsListLoading = true
+      this.sightServices.getSights({searchText: event.target.value, locationId: this.createEventForm.value.places[num].value.locationId}).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        console.log(response)
+        this.sightsList = response.sights
+        this.sightsListLoading = false
+      })
+    }
+  }
+
+  setSight(item:any, num: number) {
+    this.placeArrayForm[num].sight_name = item.name
+    this.createEventForm.value.places[num].patchValue({sight_id: item.id, coords: [item.latitude, item.longitude], address: item.address })
+    this.addPlacemark([item.latitude, item.longitude], num)
     this.onClearSearch()
   }
 
@@ -637,33 +697,22 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('',[Validators.required, Validators.minLength(10)]),
-      places:new FormControl([new FormGroup({
-        sight_id: new FormControl('', [Validators.minLength(1)]),
-        locationId: new FormControl(locationId, [Validators.minLength(1)]),
-        coords:  new FormControl('',[Validators.required, Validators.minLength(2)]), 
-        address: new FormControl('',[Validators.required]),
-        seances: new FormControl([new FormGroup({
-          dataStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
-          dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
-        })], [Validators.required]),
-      })], [Validators.required]),
+      places:new FormControl([], [Validators.required]),
       type:  new FormControl({value: '1', disabled: false},[Validators.required]),
       status:  new FormControl({value: this.statusSelected, disabled: false},[Validators.required]),
       files: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
-      price: new FormControl([{
-        cors_rub: new FormControl(''),
-        description: new FormControl([Validators.required, Validators.minLength(5)]),
-      }]),
+      price: new FormControl([],[Validators.required]),
       materials: new FormControl('', [Validators.minLength(1)]),
       dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
       dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
     },[dateRangeValidator])
 
-    this.addPlaceForm(0)
+    this.addPlaceForm()
     this.getUserWithSocialAccount()
     this.getTypes()
     this.getStatuses()
-    console.log(this.createEventForm)
+    this.addPrice()
+    // console.log(this.createEventForm)
   }
 
   ngOnDestroy(){
