@@ -441,10 +441,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  onInit() {
+
+  }
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next();
     this.destroy$.complete();
+    this.setMapData()
   }
 
 }

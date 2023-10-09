@@ -18,7 +18,7 @@ import { UserService } from './user.service';
         eventID: event_id,
         commentID: comment_id
       }
-      return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/create`, params)
+      return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment`, params)
     }
     addCommentsSight(text: string, sight_id: number, comment_id: any = ' ') {
       const params = {
@@ -27,7 +27,7 @@ import { UserService } from './user.service';
         commentID: comment_id
       }
       console.log(this.user_id, 'sight')
-      return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/create`, params)
+      return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment`, params)
     }
     getCommentId(id: number) {
       return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/${id}`)
@@ -36,9 +36,9 @@ import { UserService } from './user.service';
       const params = {
         text: text
       }
-      return this.http.put<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/${id}/update`, params)
+      return this.http.put<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/${id}`, params)
     }
     deleteCommentId(id: number) {
-      return this.http.delete<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/${id}/delete`)
+      return this.http.delete<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/${id}`)
     }
   }
