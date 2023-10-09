@@ -2,6 +2,9 @@
 // export interface IEvents {
 //     vkPost: string
 //     vkIdPost: string
+
+import { IPlace } from "./place"
+
 // }
 export interface IEvent {
     id:number
@@ -19,6 +22,7 @@ export interface IEvent {
     files?: any[]
     types?: any[]
     likes?: any
+    places_full: IPlace[]
     price?: string
     materials?: string
     dateStart: Date

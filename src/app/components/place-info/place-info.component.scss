@@ -1,0 +1,73 @@
+.map{
+    height: 500px;
+    width: 100%;
+}
+
+.seances{
+    background-color: white;
+    border-radius: 8px;
+    min-height: 20rem;
+    margin: 25px;
+    
+}
+.seance-time-container{
+    display: flex;
+    align-items: center;
+}
+
+.day-color{
+    color: red;
+}
+
+.vertical-text {
+    
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    margin-right: 0;
+    letter-spacing:1.2px;
+    font-weight: 500;
+    
+   
+  }
+.hours{
+    padding-top: 12px;
+    margin-left: 35px;
+    font-size: 2rem;
+}
+
+.seance-time-day{
+    padding-top: 70%;
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    }
+
+.seance-time-month{
+    line-height: 1.14;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 600;
+}
+
+.seances-time-container{
+    height: 500px;
+    border-radius: 8px;
+    background-color: rgba(211, 207, 207, 0.219);
+}
+
+@media screen and (min-width: 0px) and (max-width: 768px) {
+    .seances-container{
+        display: block;
+    }
+
+    .seances-time-container{
+        background-color: rgba(211, 207, 207, 0.219);
+    }
+
+    .seances{
+        background-color: white;
+    }
+
+    h4{
+        font-size: 18px;
+    }
+}

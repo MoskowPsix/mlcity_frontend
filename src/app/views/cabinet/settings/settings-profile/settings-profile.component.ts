@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { time } from 'console';
 import { env } from 'process';
 import { EMPTY, Subject, Subscription, catchError, takeUntil, of, tap } from 'rxjs';
 import { ToastService } from 'src/app/services/toast.service';
@@ -20,7 +21,9 @@ export class SettingsProfileComponent  implements OnInit {
   resetForm: FormGroup = new FormGroup({})
   formData: FormData = new FormData()
   avatar: string = ''
+  avatarLoad: boolean = false
   avatar_url!: string
+  previewPhotoUrl!: string
   
 
   constructor(
@@ -30,9 +33,13 @@ export class SettingsProfileComponent  implements OnInit {
 
 
   getUser(){
+    
     this.subscription_2 =  this.userService.getUser().subscribe((user: any) => {
+      
       this.user = user;
       this.avatar_url = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}${this.user.avatar}`
+      this.avatarLoad = true
+      
     })
   }
 
@@ -62,6 +69,7 @@ export class SettingsProfileComponent  implements OnInit {
         if (response.status=='success'){
           this.userService.setUser(response.user)
           this.getUser()
+          this.previewPhotoUrl = ''
           console.log(response)
           this.toastService.showToast('Данные обновлены!','success')
         }
@@ -73,8 +81,19 @@ export class SettingsProfileComponent  implements OnInit {
     const file: File = event.target.files[0]
     if (file){
       this.formData.append('avatar', file, file.name)
+      this.previewPhoto(file)
+      console.log(this.previewPhotoUrl)
     //   console.log(this.resetForm)
     }
+  }
+
+  previewPhoto(file: File){
+    console.log(file)
+    const reader: FileReader = new FileReader();
+    reader.onload = () => {
+      this.previewPhotoUrl = reader.result as string;
+    }
+    reader.readAsDataURL(file);
   }
 
   ngOnInit() {

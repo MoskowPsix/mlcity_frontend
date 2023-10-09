@@ -1,14 +1,20 @@
 <ng-container>
   <div class="form-container">
-
+    <ion-card>
   
     <form class="form" [formGroup]="resetForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
       <ion-col>
         <ion-list>
         <ion-row class="ion-justify-content-center">
-          <img [src]="avatar_url" class="image_avatar">
+          <ion-skeleton-text animated *ngIf="!avatarLoad"></ion-skeleton-text>
+          <img [src]="avatar_url" class="image_avatar" [hidden]="!avatarLoad">
 
+        </ion-row>
 
+        <ion-row class="ion-justify-content-center">
+          <div *ngIf="previewPhotoUrl" class="preview-image-container">
+            <img [src]="previewPhotoUrl" class="preview-image">
+          </div>
         </ion-row>
 
         <ion-row class="ion-justify-content-center" style="margin-top:1rem;">
@@ -30,11 +36,12 @@
           </ion-item>
         </ion-row>
         <ion-row class="ion-justify-content-center" slot="end">
-          <ion-button class="form-button" type="submit">Сохранить</ion-button>
+            <ion-button class="form-button" type="submit">Сохранить</ion-button>
         </ion-row>
         </ion-list>
       </ion-col>
         
     </form>
+  </ion-card>
   </div>
 </ng-container>
