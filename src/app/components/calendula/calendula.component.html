@@ -1,10 +1,10 @@
 
-    <div class="home-container"#widgetsContent>
-      <div class="home-caendcont">
+    <div class="home-container">
+      <div class="home-caendcont" #widgetsContent>
         <button class="scroll_left">
-          <ion-icon size="large" name="chevron-back-outline" class="ico_left" (click)="scrollLeft()"></ion-icon>
+          <ion-icon size="large" name="chevron-back-outline" class="ico_left" (click)="scrollLeft()" ></ion-icon>
         </button>
-        <div class="home-month" *ngFor="let month of date_full"  [hidden]="month.data.length === 0">
+        <div class="home-month" *ngFor="let month of date_full"  [hidden]="month.data.length === 0" id="target" >
           <span class="home-mothname">{{month.name}}</span>
           <div class="home-monthdata">
             <button class="home-day" *ngFor="let day of month.data" id="{{day.min}}" [class.active]="day.min / 100 > dateStart / 100 && dateEnd > day.min" [class.active-left]="day.min === dateStart" [class.active-right]="dateEnd === day.min" (click)="setDate(day.min)">
