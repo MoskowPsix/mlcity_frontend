@@ -1,0 +1,23 @@
+<ng-container *ngIf="!typesLoaded">
+  <ng-container *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
+    <ion-item>
+      <ion-avatar>
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label class="ion-padding-start">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-label>
+    </ion-item>
+  </ng-container>
+</ng-container>
+
+<ion-accordion-group *ngIf="typesLoaded">
+  <ion-accordion *ngFor="let type of types">
+    <ion-item>
+      <!-- <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/> -->
+      <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
+      <ion-radio slot="end" value="{{ type.id }}"></ion-radio>
+      <!-- <app-sight-type [types]="types"></app-sight-type> -->
+    </ion-item>
+  </ion-accordion>
+</ion-accordion-group>

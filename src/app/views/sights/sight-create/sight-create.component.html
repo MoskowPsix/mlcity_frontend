@@ -368,15 +368,15 @@
         
         
         <!-- шаг 8 -->
-        <ion-row  [hidden]="stepCurrency !== 8" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 8" @fade>
+        <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center">
+          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
             <ion-list>
             <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
               <ion-list-header>
                 <ion-label>Выберите тип достопримечательности</ion-label>
               </ion-list-header>
   
-              <ng-container *ngIf="!typesLoaded">
+              <!-- <ng-container *ngIf="!typesLoaded">
                 <ng-container *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
                   <ion-item>
                     <ion-avatar>
@@ -387,17 +387,18 @@
                     </ion-label>
                   </ion-item>
                 </ng-container>
-              </ng-container>
+              </ng-container> -->
   
-              <ng-container *ngIf="typesLoaded">
-                <ng-container *ngFor="let type of types">
+              <!-- <ng-container *ngIf="typesLoaded"> -->
+                <!-- <ng-container *ngFor="let type of types">
                   <ion-item>
                     <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
                     <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
                     <ion-radio slot="end" value="{{ type.id }}"></ion-radio>
                   </ion-item>
-                </ng-container>
-              </ng-container>
+                </ng-container> -->
+                <app-sight-type ></app-sight-type>
+              <!-- </ng-container> -->
               
             </ion-radio-group>
           </ion-list>

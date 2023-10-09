@@ -69,6 +69,7 @@ import { SettingsProfileComponent } from './views/cabinet/settings/settings-prof
 import { SettingsPrivacyComponent } from './views/cabinet/settings/settings-privacy/settings-privacy.component';
 import { SettingsFavoriteComponent } from './views/cabinet/settings/settings-favorite/settings-favorite.component';
 import { SettingsNotificationComponent } from './views/cabinet/settings/settings-notification/settings-notification.component';
+import { SightTypeComponent } from './components/sight-type/sight-type.component';
 
 
 const mapConfig: YaConfig = {
@@ -102,6 +103,7 @@ registerLocaleData(localeRu, 'ru');
     SightsComponent,
     SightShowComponent,
     SightCreateComponent,
+    SightTypeComponent,
     ReadMoreComponent,
     FiltersComponent,
     FiltersNotButtonComponent,

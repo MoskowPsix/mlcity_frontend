@@ -237,7 +237,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   getTypes(){
     this.sightTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.types = response.types
-      response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
+      //response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
     })
   }
   
