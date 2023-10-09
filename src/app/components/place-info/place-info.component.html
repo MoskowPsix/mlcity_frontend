@@ -1,5 +1,6 @@
 <ion-row class="seances-container">
   <ion-col sizeLg="7"> 
+    <h3>{{ place.address }}</h3>
             <div class="map">
               <ya-map 
                   (ready)="onMapReady($event)"
@@ -17,9 +18,10 @@
             </div>
   </ion-col>
   
-  <ion-col class=" ion-justify-content-center">
+  <ion-col class="ion-justify-content-center">
+    <h3 style="text-align: center;">Сеансы</h3>
     <div class="seances-time-container">
-      <h3 style="text-align: center;">Сеансы</h3><br>
+      
 
       
       <div class="seances">
@@ -39,10 +41,10 @@
       </ion-col>
     </ion-row> -->
 
-    <div style="display: flex; align-items: center">
-      <div>
-      <div *ngFor="let seance of place.seances" style="display: flex;">
-        <ion-col>
+    <div class="seance-time-container ion-justify-content-center">
+      <div class="seance-time-c1">
+      <div *ngFor="let seance of place.seances" style="display: flex;" class="seance-time-c2">
+        <ion-col style="max-width:80px">
         <div style="display: flex;">
           
           <div class="vertical-text" [ngClass]="{'day-color': (dayWeek(seance.dateStart) === 6) || (dayWeek(seance.dateStart) === 0) }">
@@ -57,8 +59,8 @@
         </div>
       </ion-col>
 
-        <div style="align-items:center; margin-top: auto; margin-bottom:auto">
-          <div style="margin-top: auto; margin-bottom:auto">{{seance.dateStart|date:'H:mm'}} - {{seance.dateEnd|date:'H:mm'}}</div>
+        <div class="seance-time-hour-container">
+          <div>{{seance.dateStart|date:'H:mm'}} - {{seance.dateEnd|date:'H:mm'}}</div>
         </div>
       </div>
     </div>

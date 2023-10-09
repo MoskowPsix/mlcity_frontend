@@ -6,10 +6,14 @@
 
 .event-container{
     background-color: white; 
-    border-radius: 20px; 
+    border-radius: 16px; 
     margin: 90px
 }
 
+.seance{
+    background-color: rgba(211, 207, 207, 0.219);
+    border-radius: 6px;
+}
 
 .map{
     height: 100%;
@@ -34,7 +38,6 @@
 }
 
 .events-map-container{
-    background-color: rgba(211, 207, 207, 0.219);
     display: block;
 }
 

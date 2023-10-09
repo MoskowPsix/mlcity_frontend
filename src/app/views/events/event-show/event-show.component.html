@@ -151,15 +151,16 @@
             </ion-col> -->
           </ion-row>
           <ion-row class="events-map-container">
-            <ion-accordion-group>
-            <ion-accordion *ngFor="let place of places">
-              <ion-item slot="header">
+            <ion-accordion-group [multiple]="true">
+            <ion-accordion *ngFor="let place of places" class="seance">
+              <ion-item slot="header" color="rgba(211, 207, 207, 0.45)">
                 <ion-label>{{ place.location.name }}, {{ place.location.location_parent.name }}</ion-label>
               </ion-item>
               <div slot="content" class="ion-padding">
                 <app-place-info [place]="place"></app-place-info>
               </div>
             </ion-accordion>
+            
             </ion-accordion-group>
 
             
