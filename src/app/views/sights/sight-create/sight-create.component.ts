@@ -244,7 +244,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Выбор типа
   selectedType(type_id: any){
     type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
-    console.log(this.createSightForm)
   }
 
   //Получаем статусы и устанавливаем статус по умолчанию
