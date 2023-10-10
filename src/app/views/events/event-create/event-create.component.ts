@@ -302,10 +302,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     search.events.add('select',()=>{ 
       this.ForwardGeocoder(num) 
       if (!Capacitor.isNativePlatform())  {
-        console.log('ok if capocator true')
         this.ForwardGeocoder(num)
       } else {
-        console.log('ok if capocator false')
         // this.createEventForm.value.places[num].value.address=(<HTMLInputElement>document.getElementById("search-map"+num)).value
         // let coords = this.mapService.ForwardGeocoderNative(this.createEventForm.value.places[num].value.address)
         // this.addPlacemark(coords!)
@@ -316,7 +314,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //При выборе из выпадающего списка из поиска создает метку по адресу улицы
   addPlacemark(coords: number[], num:number){
-    console.log(coords)
     try {
       this.maps[num].target.geoObjects.removeAll()
       this.placemark= new ymaps.Placemark(coords)
@@ -470,7 +467,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if  (this.vkGroupSelected && this.vkGroupPostSelected?.id){
       this.formData.append('vkGroupId', this.vkGroupSelected.toString())
     }
-    console.log(this.formData.getAll('prices'))
     return this.formData
   }
   
@@ -559,7 +555,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
     this.eventsService.create(event).pipe(
       tap((res) => {
-        console.log(res)
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesEvents.create, 'success')
         this.createEventForm.reset()
@@ -584,7 +579,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         return of(EMPTY) 
       }),
       takeUntil(this.destroy$)
-    ).subscribe( res=> { console.log(res)})
+    ).subscribe()
   }
 
   addPlaceForm() {
@@ -606,7 +601,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           })], [Validators.required]),
         })
       )
-    console.log(this.createEventForm)
   }
   addPrice() {
     this.priceArrayForm.push({price: ''})
@@ -616,7 +610,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         description: new FormControl('', [Validators.required, Validators.minLength(5)]),
       })
     )
-    console.log(this.createEventForm)
   }
   deletePrice(num: number) {
     this.createEventForm.controls['price'].value.splice(num, 1)
@@ -673,7 +666,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (event.target.value.length >= 3){
       this.sightsListLoading = true
       this.sightServices.getSights({searchText: event.target.value, locationId: this.createEventForm.value.places[num].value.locationId}).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        console.log(response)
         this.sightsList = response.sights
         this.sightsListLoading = false
       })
