@@ -29,10 +29,10 @@ export class CalendulaComponent  implements OnInit {
    dateEnd: number = 0
 
   scrollLeft(){
-    this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft - 300), behavior: 'smooth' });
+    this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft - 500), behavior: 'smooth' });
   }
   scrollRight(){
-    this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft + 300), behavior: 'smooth' });
+    this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft + 500), behavior: 'smooth' });
   }
 
   setDate(date: any) {
@@ -44,7 +44,6 @@ export class CalendulaComponent  implements OnInit {
 
       this.date.dateStart = new Date(date*100000).toISOString()
       this.date.dateEnd = new Date(date*100000).toISOString()
-      console.log(this.dateStart, this.dateEnd)
       this.filterService.setStartDateTolocalStorage(new Date(date*100000).toISOString())
       this.filterService.setEndDateTolocalStorage(new Date(date*100000).toISOString())
       this.filterService.changeFilter.next(true)   
@@ -55,14 +54,12 @@ export class CalendulaComponent  implements OnInit {
 
       this.date.dateStart = new Date(date*100000).toISOString()
       this.date.dateEnd = new Date(date*100000).toISOString()
-      console.log(this.date)
       this.filterService.setStartDateTolocalStorage(new Date(date*100000).toISOString())
       this.filterService.setEndDateTolocalStorage(new Date(date*100000).toISOString())
       this.filterService.changeFilter.next(true) 
     } else if (this.dateEnd === this.dateStart){
       this.dateEnd = date
       this.date.dateEnd = new Date(date*100000).toISOString()
-      console.log(this.date)
       this.filterService.setEndDateTolocalStorage(new Date(date*100000).toISOString())
       this.filterService.changeFilter.next(true) 
     } else {
@@ -72,7 +69,6 @@ export class CalendulaComponent  implements OnInit {
 
       this.date.dateStart = new Date(date*100000).toISOString()
       this.date.dateEnd = new Date(date*100000).toISOString()
-      console.log(this.date)
       this.filterService.setStartDateTolocalStorage(new Date(date*100000).toISOString())
       this.filterService.setEndDateTolocalStorage(new Date(date*100000).toISOString())
       this.filterService.changeFilter.next(true) 
@@ -85,7 +81,6 @@ export class CalendulaComponent  implements OnInit {
     this.dateStart ? !this.filterService.startDate.value : this.dateStart = Math.ceil(new Date().getTime() / 100000)
     this.dateEnd ? this.filterService.endDate.value: this.dateEnd = Math.ceil(new Date(this.filterService.endDate.value).getTime() / 100000) 
     this.dateEnd ? !this.filterService.endDate.value: this.dateEnd = this.dateStart = Math.ceil(new Date(this.filterService.startDate.value).getTime() / 100000)
-    console.log(new Date(this.dateStart*100000), new Date(this.dateEnd*100000))
 
     let now_date: any = new Date().getTime()
     let data: any

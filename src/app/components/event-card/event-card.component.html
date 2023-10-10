@@ -45,9 +45,12 @@
       <span>КОНЕЦ: {{ event.date_end | date:'d MMM в HH:mm' }}</span>
     </div>
 
-    <div class="price">
-      <span *ngIf="event.price">{{ event.price }} руб.</span>
-      <span *ngIf="!event.price">Бесплатно</span>
+    <div class="price" *ngIf="event.price">
+      <span *ngIf="event.price.length > 1">от {{ getMinPrice(event.price) }} руб. до {{ getMaxPrice(event.price) }} руб.</span>
+      <span *ngIf="event.price.length === 1">{{ event.price[0].cost_rub }} руб.</span>
+    </div>
+    <div class="price" *ngIf="!event.price">
+      <span>Бесплатно</span>
     </div>
 
     <div *ngIf="event.types && event.types.length" class="type">

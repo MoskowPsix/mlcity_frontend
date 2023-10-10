@@ -58,7 +58,6 @@ export class MapService {
 
   //Определение геопозиции нативными способами платформы
   async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
-
     if (!Capacitor.isPluginAvailable('Geolocation')) {
       //console.log('Plugin geolocation not available');
       return;
@@ -274,11 +273,11 @@ export class MapService {
         await circlePoint.geometry?.setCoordinates([parseFloat(this.filterService.locationLatitude.value), parseFloat(this.filterService.locationLongitude.value)])
         map.target.setBounds(circlePoint.geometry?.getBounds()!, {checkZoomRange: true})
     } 
-
     //ветка если юзать this.filterService.saveFilters.value === 1
-    // else {
-    //   await this.geolocationMapNative(map, circlePoint) 
-    // }
+    else {
+      await circlePoint.geometry?.setCoordinates(this.defaultCoords())
+      map.target.setBounds(circlePoint.geometry?.getBounds()!, {checkZoomRange: true})
+    }
     this.filterService.changeCityFilter.next(false)
   }
 

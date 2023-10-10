@@ -70,6 +70,7 @@ import { SettingsPrivacyComponent } from './views/cabinet/settings/settings-priv
 import { SettingsFavoriteComponent } from './views/cabinet/settings/settings-favorite/settings-favorite.component';
 import { SettingsNotificationComponent } from './views/cabinet/settings/settings-notification/settings-notification.component';
 import { PlaceInfoComponent } from './components/place-info/place-info.component';
+import { SightTypeComponent } from './components/sight-type/sight-type.component';
 
 
 
@@ -104,6 +105,7 @@ registerLocaleData(localeRu, 'ru');
     SightsComponent,
     SightShowComponent,
     SightCreateComponent,
+    SightTypeComponent,
     ReadMoreComponent,
     FiltersComponent,
     FiltersNotButtonComponent,
