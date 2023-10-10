@@ -436,7 +436,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город. 
-    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe(value => {
+    this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(value => {
       if (value === true) {
         this.mapService.positionFilter(this.map, this.CirclePoint);
         this.map.target.setBounds((this.CirclePoint.geometry?.getBounds())!, { checkZoomRange: true });
