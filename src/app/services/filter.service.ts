@@ -9,9 +9,9 @@ export class FilterService {
   private nowDate: Date = new Date()
   // public city: BehaviorSubject<any> = new BehaviorSubject(this.setCityTolocalStorage())
   // public region: BehaviorSubject<any> = new BehaviorSubject(this.setRegionTolocalStorage())
-  public locationId: BehaviorSubject<any> = new BehaviorSubject(this.getLocationFromlocalStorage())
-  public locationLatitude: BehaviorSubject<any> = new BehaviorSubject(this.getLocationLatitudeFromlocalStorage() )
-  public locationLongitude: BehaviorSubject<any> = new BehaviorSubject(this.getLocationLongitudeFromlocalStorage() )
+  public locationId: BehaviorSubject<any> = new BehaviorSubject(this.getLocationFromlocalStorage() || 0)
+  public locationLatitude: BehaviorSubject<string> = new BehaviorSubject(this.getLocationLatitudeFromlocalStorage() || '56.81497464978607')
+  public locationLongitude: BehaviorSubject<string> = new BehaviorSubject(this.getLocationLongitudeFromlocalStorage() || '61.32053375244141')
   public radius: BehaviorSubject<string> = new BehaviorSubject(this.getRadiusFromlocalStorage() || '1')
   // public startDate: BehaviorSubject<string> = new BehaviorSubject(this.getStartDateFromlocalStorage() || '')
   // public endDate: BehaviorSubject<string> = new BehaviorSubject(this.getEndDateFromlocalStorage() || '') // Ставим + неделю
@@ -65,6 +65,9 @@ export class FilterService {
   setLocationLatitudeTolocalStorage(locationLatitude:string = this.locationLatitude.value){
     localStorage.setItem('locationLatitude', locationLatitude)
     this.locationLatitude.next(locationLatitude)
+    // if (localStorage.getItem('locationLongitude')) {
+    //   this.changeCityFilter.next(true)
+    // }
   }
 
   getLocationLatitudeFromlocalStorage(){
@@ -74,6 +77,9 @@ export class FilterService {
   setlocationLongitudeTolocalStorage(locationLongitude:string = this.locationLongitude.value){
     localStorage.setItem('locationLongitude', locationLongitude)
     this.locationLongitude.next(locationLongitude)
+    // if (localStorage.getItem('locationLatitude')) {
+    //   this.changeCityFilter.next(true)
+    // }
   }
 
   getLocationLongitudeFromlocalStorage(){

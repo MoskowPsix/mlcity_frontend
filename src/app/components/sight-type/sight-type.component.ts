@@ -16,7 +16,7 @@ export class SightTypeComponent  implements OnInit {
     private sightTypeService: SightTypeService,
     private eventTypeService: EventTypeService,
   ) { }
-  @Input() types!: any[]
+  @Input() types: any[] = []
   @Input() isSight: boolean = false
 
   // types: any[] = []

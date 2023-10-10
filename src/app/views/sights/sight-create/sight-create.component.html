@@ -368,8 +368,8 @@
         
         
         <!-- шаг 8 -->
-        <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
+        <ion-row  [hidden]="stepCurrency !== 8" class="ion-justify-content-center">
+          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 8" @fade>
             <ion-list>
             <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
               <ion-list-header>
