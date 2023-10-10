@@ -58,7 +58,6 @@ export class MapService {
 
   //Определение геопозиции нативными способами платформы
   async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
-
     if (!Capacitor.isPluginAvailable('Geolocation')) {
       //console.log('Plugin geolocation not available');
       return;
@@ -265,9 +264,9 @@ export class MapService {
   async positionFilter(map: any, circlePoint: ymaps.Circle){
     //if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter.value) {
     //Если первый запуск приложения то устанавливаем геопозицию   
-    if (this.navigationService.appFirstLoading.value){
-      await this.geolocationMapNative(map, circlePoint)
-    }  
+    // if (this.navigationService.appFirstLoading.value){
+    //   await this.geolocationMapNative(map, circlePoint)
+    // }  
 
     //Если не первый запуск и менялся фильтр города то перекидываем на город
     if (this.filterService.changeCityFilter.value && !this.navigationService.appFirstLoading.value) {
@@ -276,9 +275,9 @@ export class MapService {
     } 
 
     //ветка если юзать this.filterService.saveFilters.value === 1
-    // else {
-    //   await this.geolocationMapNative(map, circlePoint) 
-    // }
+    else {
+      await this.geolocationMapNative(map, circlePoint) 
+    }
     this.filterService.changeCityFilter.next(false)
   }
 

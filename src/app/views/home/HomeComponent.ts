@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { YaReadyEvent } from 'angular8-yandex-maps';
-import { catchError, EMPTY, of, Subject, takeUntil, forkJoin, Observable, debounceTime } from 'rxjs';
+import { catchError, EMPTY, of, Subject, takeUntil, forkJoin, Observable, debounceTime, debounce, timer } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { EventsService } from 'src/app/services/events.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -85,10 +85,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     // Создаем и добавляем круг
     this.CirclePoint = new ymaps.Circle([[11, 11], 1000 * this.radius], {}, { fillOpacity: 0.15, draggable: false });
-    target.geoObjects.add(this.CirclePoint);
+    await target.geoObjects.add(this.CirclePoint);
 
     // Определяем местоположение пользователя
-    this.mapService.positionFilter(this.map, this.CirclePoint);
+    await this.mapService.positionFilter(this.map, this.CirclePoint);
 
     //Создаем метку в центре круга, для перетаскивания
     this.myGeo = new ymaps.Placemark([11, 11], {}, {
@@ -105,7 +105,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sightsLoading = true;
       this.cdr.detectChanges();
       //this.getEvents()
-      this.getEventsAndSights();
+      await this.getEventsAndSights();
     }
 
     // Вешаем на карту событие начала перетаскивания
@@ -151,6 +151,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.getEventsAndSights();
       }
     });
+    // if (!this.map) {
+    //   this.onMapReady({target, ymaps});
+    // }
   }
 
   setBoundsCoordsToMapService() {
@@ -418,7 +421,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     //Подписываемся на состояние модалки показа ивентов и мест
-    this.navigationService.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
+    this.navigationService.modalEventShowOpen.pipe(debounce(() => timer(1000)),takeUntil(this.destroy$)).subscribe(value => {
       this.modalEventShowOpen = value;
       if (!value && this.activePlacemark) { // убираем активный класс у кастомного маркера при закрытие модалки
         this.activePlacemark.options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${this.activeIcoLink}"/></div>`));
@@ -429,9 +432,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.setMapData();
       }
       this.cdr.detectChanges();
+      // setTimeout(() => this.ngOnInit(), 3000);
     });
 
-    //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранынй город. 
+    //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город. 
     this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe(value => {
       if (value === true) {
         this.mapService.positionFilter(this.map, this.CirclePoint);
@@ -440,15 +444,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  onInit() {
-
-  }
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next();
     this.destroy$.complete();
-    this.setMapData()
   }
 
 }
