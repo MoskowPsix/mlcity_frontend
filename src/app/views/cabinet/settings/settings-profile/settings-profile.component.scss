@@ -1,13 +1,37 @@
+ion-card{
+    border-radius: 0.8rem;
+    border: 0.5px solid #c6c6c7;
+}
+ion-skeleton-text{
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+}
 .form{
    
     background-color: white;
     width: 500px;
-    height: 600px;
+    min-height: 600px;
     border-radius: 16px;
 
-    
+.preview-image-container{
+    margin-top: 30px;
+    padding: 12px;
+    display: flex;
+    background-color: rgba(211, 207, 207, 0.37);
+    border-radius: 0.8rem;
+    width: 60%;
 }
-
+.preview-image{
+    width: 80px;
+    border-radius: 15%;
+}
+}
+.image_avatar{
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+}
 .form-input{
     border-radius: 4px;
     background-color:  rgba(211, 207, 207, 0.418);
@@ -17,6 +41,7 @@
 
 .form-container{
     padding: 3rem;
+    vertical-align: middle;
     
 }
 
@@ -31,7 +56,7 @@
    
         background-color: white;
         width: 345px;
-        height: 450px;
+        min-height: 325px;
         border-radius: 16px;
     
         

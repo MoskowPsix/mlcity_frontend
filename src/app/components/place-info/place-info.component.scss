@@ -1,0 +1,105 @@
+.map{
+    height: 500px;
+    width: 100%;
+}
+
+.seances{
+    background-color: white;
+    border-radius: 8px;
+    min-height: 20rem;
+    margin: 10px;   
+    
+}
+
+
+
+.seance-time-c1{
+    max-height: 430px;
+    width: 100%;
+    
+}
+.seance-time-c2{
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.336);
+    align-items: center;
+    padding-left: 20px;
+}
+.seance-time-container{
+    display: flex;
+    max-height: 430px;
+    overflow-y: auto;
+   
+    align-items: center;
+    
+}
+
+.seance-time-content{
+    border-bottom: solid 1px black;
+    
+}
+
+.seance-time-hour-container{
+    align-items:center;
+    margin-top: auto;
+    font-size: 21px;
+    
+    
+    margin-bottom:auto;
+    margin-left: 5px;
+    padding-top: 25px;
+}
+.day-color{
+    color: red;
+}
+
+.vertical-text {
+    
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    margin-right: 0;
+    letter-spacing:1.2px;
+    font-weight: 500;
+    
+   
+  }
+.hours{
+    padding-top: 12px;
+    margin-left: 35px;
+    font-size: 2rem;
+}
+
+.seance-time-day{
+    padding-top: 70%;
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    }
+
+
+.seance-time-month{
+    line-height: 1.14;
+    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    color: rgba(75, 73, 73, 0.4);
+    font-weight: 600;
+    opacity: 85%;
+}
+
+.seances-time-container{
+    height: 500px;
+    border-radius: 8px;
+    
+    
+}
+
+@media screen and (min-width: 0px) and (max-width: 768px) {
+    .seances-container{
+        display: block;
+    }
+
+    .seances{
+        background-color: white;
+    }
+
+    h4{
+        font-size: 18px;
+    }
+}

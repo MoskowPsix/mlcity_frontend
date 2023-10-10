@@ -1,4 +1,4 @@
-import { Component, OnInit,OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit,OnDestroy, AfterViewInit, ChangeDetectorRef, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, tap, retry, catchError, of, EMPTY} from 'rxjs';
 import { IEvent } from 'src/app/models/event';
@@ -12,6 +12,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { AuthService } from 'src/app/services/auth.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { IPlace } from 'src/app/models/place';
 // import { Swiper } from 'swiper/types';
 
 @Component({
@@ -31,6 +32,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   eventId?: number
   event?: IEvent
+  places?: any
   loadingEvent: boolean = true
 
   favorite: boolean = false
@@ -58,6 +60,8 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe((event:any )=> { 
       if(event)
         this.event = event
+      this.places = event.places_full
+      console.log(this.places)
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     }); 
   }
