@@ -43,6 +43,7 @@ export class FilterService {
   setLocationTolocalStorage(locationId: any = this.locationId.value){
     localStorage.setItem('locationId', locationId)
     this.locationId.next(locationId)
+    console.log('locat')
   }
 
   getLocationFromlocalStorage(){
@@ -58,16 +59,9 @@ export class FilterService {
   //   return localStorage.getItem('circleCenter')
   // }
 
-
-
-
-
   setLocationLatitudeTolocalStorage(locationLatitude:string = this.locationLatitude.value){
     localStorage.setItem('locationLatitude', locationLatitude)
     this.locationLatitude.next(locationLatitude)
-    // if (localStorage.getItem('locationLongitude')) {
-    //   this.changeCityFilter.next(true)
-    // }
   }
 
   getLocationLatitudeFromlocalStorage(){
@@ -77,9 +71,6 @@ export class FilterService {
   setlocationLongitudeTolocalStorage(locationLongitude:string = this.locationLongitude.value){
     localStorage.setItem('locationLongitude', locationLongitude)
     this.locationLongitude.next(locationLongitude)
-    // if (localStorage.getItem('locationLatitude')) {
-    //   this.changeCityFilter.next(true)
-    // }
   }
 
   getLocationLongitudeFromlocalStorage(){
