@@ -10,6 +10,7 @@ import { IPlace } from 'src/app/models/place';
 export class PlaceInfoComponent  implements OnInit {
 
   @Input() place!: IPlace
+  place_date: any
 
   constructor() { }
 
@@ -18,7 +19,7 @@ export class PlaceInfoComponent  implements OnInit {
     //Создаем метку 
     target.geoObjects.add(
       new ymaps.Placemark([this.place?.latitude,this.place?.longitude],{}, {
-        iconLayout: 'default#imageWithContent',
+        iconLayout: 'default#image',
 
       })
     )
