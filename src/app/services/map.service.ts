@@ -264,7 +264,6 @@ export class MapService {
   async positionFilter(map: any, circlePoint: ymaps.Circle){
     //if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter.value) {
     //Если первый запуск приложения то устанавливаем геопозицию   
-    console.log(this.filterService.changeCityFilter.value)
     if (this.navigationService.appFirstLoading.value){
       await this.geolocationMapNative(map, circlePoint)
     }  

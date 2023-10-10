@@ -43,7 +43,6 @@ export class FilterService {
   setLocationTolocalStorage(locationId: any = this.locationId.value){
     localStorage.setItem('locationId', locationId)
     this.locationId.next(locationId)
-    console.log('locat')
   }
 
   getLocationFromlocalStorage(){
