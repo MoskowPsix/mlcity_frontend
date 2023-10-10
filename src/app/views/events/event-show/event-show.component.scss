@@ -4,6 +4,25 @@
     margin: -4px 4px;
 }
 
+.event-container{
+    background-color: white; 
+    border-radius: 16px; 
+    margin: 90px
+}
+
+.seance{
+    background-color: rgba(211, 207, 207, 0.219);
+    border-radius: 6px;
+}
+
+.address{
+    
+    color: rgba(75, 73, 73, 0.4);
+    opacity: 85%;
+    font-size: small;
+
+
+}
 .map{
     height: 100%;
 }
@@ -26,6 +45,29 @@
     font-weight: 500;
 }
 
+.events-map-container{
+    display: block;
+}
+
+.event-location-arrow{
+    vertical-align: middle;
+}
+
+.events-location{
+    align-items: center;
+    display: flex;
+}
+
+.events-location:hover{
+    cursor: pointer;
+    background-color: rgba(211, 207, 207, 0.219);
+}
+
+.header-info-container{
+    display: flex;
+    align-items: center;
+}
+
 .sub-title{
     line-height: 1.5;
     color:#737373;
@@ -35,7 +77,9 @@
     line-height: 1.5;
     color:#737373;
 }
-
+ion-accordion-group{
+    --backgroud-color: black;
+}
 .ico{
     cursor: pointer;
     transition: all .2s ease-in-out;  
@@ -66,6 +110,7 @@
     }
 }
 
+
 @media screen and (min-width: 0px) and (max-width: 991px) {
     .map{
         height: 15rem;
@@ -73,7 +118,11 @@
 }
 
 @media screen and (min-width: 0px) and (max-width: 768px) {
-
+    .event-container{
+        background-color: white; 
+        border-radius: 0; 
+        margin: 0;
+    }
 }
   
 @media screen and (min-width: 768px)  {

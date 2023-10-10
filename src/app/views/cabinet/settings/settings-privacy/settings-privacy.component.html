@@ -1,5 +1,6 @@
 <ng-container>
   <div class="content-container">
+    <ion-card>
     <form class="form" [formGroup]="passwordResetForm" (ngSubmit)="onSubmit()">
       <ion-row class="ion-justify-content-center">
           <h1 class="header">Изменения пароля</h1>
@@ -44,6 +45,7 @@
         </div>
       </ion-col>
     </form>
+  </ion-card>
   </div>
 </ng-container>
 

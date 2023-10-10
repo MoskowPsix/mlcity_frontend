@@ -1,16 +1,20 @@
 <ng-container>
   <div class="form-container">
-
+    <ion-card>
   
-    <form class="form">
+    <form class="form" [formGroup]="resetForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
       <ion-col>
         <ion-list>
         <ion-row class="ion-justify-content-center">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="" style="width: 100px;">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
+          <ion-skeleton-text animated *ngIf="!avatarLoad"></ion-skeleton-text>
+          <img [src]="avatar_url" class="image_avatar" [hidden]="!avatarLoad">
 
+        </ion-row>
 
+        <ion-row class="ion-justify-content-center">
+          <div *ngIf="previewPhotoUrl" class="preview-image-container">
+            <img [src]="previewPhotoUrl" class="preview-image">
+          </div>
         </ion-row>
 
         <ion-row class="ion-justify-content-center" style="margin-top:1rem;">
@@ -19,7 +23,7 @@
               <ion-icon lazy="true" slot="start" name="image"></ion-icon>
               <ion-label slot="end">Изменить</ion-label>
             </ion-button>
-              <input class="ion-hide" #f type="file">
+              <input class="ion-hide" #f type="file" (change)="onFileSelected($event)"   accept="image/png, image/jpeg">
 
          </ion-item>
         </ion-row>
@@ -27,16 +31,17 @@
         <ion-row  class="ion-justify-content-center" style="margin-top:3rem;">
           <ion-item lines="none">
             <ion-label position="stacked" style=" font-size: 1.3rem; margin-bottom: 6px">Имя:</ion-label>
-            <ion-input [value]="user.name" class="form-input ion-padding-horizontal" labelPlacement="stacked"></ion-input>
+            <ion-input class="form-input ion-padding-horizontal" labelPlacement="stacked" formControlName="new_name"></ion-input>
             
           </ion-item>
         </ion-row>
         <ion-row class="ion-justify-content-center" slot="end">
-          <ion-button class="form-button" type="submit">Сохранить</ion-button>
+            <ion-button class="form-button" type="submit">Сохранить</ion-button>
         </ion-row>
         </ion-list>
       </ion-col>
         
     </form>
+  </ion-card>
   </div>
 </ng-container>

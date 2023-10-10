@@ -1,6 +1,6 @@
 <ion-content>
   <!-- skeleton animation -->
-  <div class="pb-2rem">
+  <div class="pb-2rem" class="event-container">
     <ng-container *ngIf="loadingEvent">
       <ion-row class="ion-justify-content-center">
         <ion-col size-lg="8" size-md="12" size-xs="12"> 
@@ -87,9 +87,9 @@
       </ion-row>
   
       <ion-row class="ion-justify-content-center">
-        <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
+        <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
           <ion-row class="ion-justify-content-center">         
-            <ion-col size-lg="6" size-md="12" size-xs="12" class="left-block">
+            <ion-col size-lg="12" size-md="12" size-xs="12" class="left-block">
               <div class="social-buttons">
                 <div class="likes">
                   <ion-icon name="chatbox-outline" class="ico"></ion-icon>
@@ -129,7 +129,9 @@
               </div>    
             </ion-col>
 
-            <ion-col size-lg="6" size-md="12" size-xs="12">
+            
+
+            <!-- <ion-col size-lg="6" size-md="12" size-xs="12">
               <div class="map">
                 <ya-map 
                   (ready)="onMapReady($event)"
@@ -146,9 +148,40 @@
                 >
                 </ya-map>
               </div>        
-            </ion-col>
+            </ion-col> -->
           </ion-row>
+          <ion-row class="events-map-container">
+            <ion-accordion-group [multiple]="true">
+            <ion-accordion *ngFor="let place of places" class="seance">
+              <ion-item slot="header" color="rgba(211, 207, 207, 0.45)">
+
+                <ion-label *ngIf="!(place.location.location_parent.name=='РФ'); else otherAddress">
+                  {{ place.location.name }}, {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
+
+                </ion-label>
+
+                <ng-template #otherAddress>
+                <ion-label>
+                  {{ place.location.name }} <br> <p class="address">{{ place.address }}</p>
+                </ion-label>
+                </ng-template>
+                
+                
+              </ion-item>
+              <div slot="content" class="ion-padding">
+                <app-place-info [place]="place"></app-place-info>
+              </div>
+            </ion-accordion>
+            
+            </ion-accordion-group>
+
+            
+            
+          </ion-row>
+          
           <ion-card><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
+
+          
           
         </ion-col>
       </ion-row>

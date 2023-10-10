@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IUser } from '../models/user';
+import { config } from 'process';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,14 @@ export class UserService {
   removeUserFromLocalStorage() {
     localStorage.removeItem('auth_user')
     this.user.next(null)
+  }
+
+  changeName(data: FormData): Observable<any>{
+    console.log(data.get('avatar'))
+    console.log(data.get('new_name'))
+    // return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/profile/users`,{'new_name':data.get('new_name'), 'avatar':data.get('avatar')})
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/profile/users`,data)
+
   }
 }
 
