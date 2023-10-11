@@ -23,7 +23,7 @@ export interface IEvent {
     types?: any[]
     likes?: any
     places_full: IPlace[]
-    price?: string
+    price?: any
     materials?: string
     dateStart: Date
     dateEnd: Date

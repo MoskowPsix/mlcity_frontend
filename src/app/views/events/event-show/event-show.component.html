@@ -122,7 +122,13 @@
                 <ion-icon name="newspaper" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Тип мероприятия: </span><span class="sub-title italic"><img alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>{{ event.types[0].name }}</span>
               </div>
               <div *ngIf="event.price">
-                <ion-icon name="wallet" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Билет: </span><span class="description italic">{{ event.price }} руб.</span>
+                <ion-icon name="wallet" color="primary" class="ico-small"></ion-icon>
+                <span class="font-weight-bold sub-title">Билет: </span>
+
+                <span class="description italic" *ngIf="event.price[0].cost_rub=='0' else DontFree">Бесплатно</span>
+                <ng-template #DontFree>
+                  <span class="description italic">от {{event.price[0].cost_rub}} до {{ event.price[1].cost_rub }}</span>
+                </ng-template>
               </div>
               <div>
                 <span class="description italic">{{ event.description }}</span>
