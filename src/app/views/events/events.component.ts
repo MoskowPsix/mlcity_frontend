@@ -20,6 +20,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   city: string = ''
   segment:string = 'eventsCitySegment'
 
+  date: any
+
   eventsCity: IEvent[] = []
   eventsGeolocation: IEvent[] = []
 
@@ -44,6 +46,11 @@ export class EventsComponent implements OnInit, OnDestroy {
     private locationService: LocationService
   ) { }
   
+  setDate(event: any) {
+    this.filterService.setStartDateTolocalStorage(event.dateStart)
+    this.filterService.setEndDateTolocalStorage(event.dateEnd)
+    this.filterService.changeFilter.next(true)   
+  }
  
   getEventsCity(){
     this.loadingMoreEventsCity ? this.loadingEventsCity = true : this.loadingEventsCity = false

@@ -189,13 +189,25 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     }   
   }
 
-  // showComment() {
-  //   if (this.windowComment) {
-  //     this.windowComment = false
-  //   } else {
-  //     this.windowComment = true
-  //   }
-  // }
+  getMinPrice(prices: any[]) {
+    let price: number = prices[0].cost_rub
+    prices.forEach((element: any) => {
+      if (element.cost_rub <= price) {
+        price = element.cost_rub        
+      }
+    });
+    return price
+  }
+
+  getMaxPrice(prices: any[]) {
+    let price: number = prices[0].cost_rub
+    prices.forEach((element: any) => {
+      if (element.cost_rub >= price) {
+        price = element.cost_rub        
+      }
+    });
+    return price
+  }
 
   ngOnInit() {
     this.userAuth = this.authService.getAuthState()
@@ -226,7 +238,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     })
     this.cdr.detectChanges()
   }
-  
+
   scrollEvent = (event: any): void => {
     const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
     if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {

@@ -169,7 +169,7 @@ import { UserService } from 'src/app/services/user.service';
             }
             count = count + 1
           })
-        this.toastService.showToast(MessagesComment.comment_ok, 'success')
+        this.toastService.showToast('Комментарий удалён', 'success')
       })
     }
 
@@ -219,11 +219,9 @@ import { UserService } from 'src/app/services/user.service';
                 }),
                 takeUntil(this.destroy$)
               ).subscribe((response: any) =>{
-                console.log(response);
                 //this.prev_comment.comments = response;
                 this.comments = response.comments
                 //this.load_all_comments = true
-                console.log(response.comments)
                 this.show_all_comments()
                 //this.ngOnInit()
             })

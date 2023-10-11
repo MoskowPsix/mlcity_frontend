@@ -62,6 +62,12 @@ export class FiltersComponent implements OnInit, OnDestroy {
     private locationService: LocationService
   ) { }
 
+  setDate(event: any) {
+    this.filterService.setStartDateTolocalStorage(event.dateStart)
+    this.filterService.setEndDateTolocalStorage(event.dateEnd)
+    this.filterService.changeFilter.next(true)   
+  }
+
   getEventTypes(){
     this.eventTypesLoding = true
     this.eventTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {

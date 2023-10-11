@@ -1,0 +1,41 @@
+
+<ng-container *ngIf="!typesLoaded">
+  <ng-container *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
+    <ion-item>
+      <ion-avatar>
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label class="ion-padding-start">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-label>
+    </ion-item>
+  </ng-container>
+</ng-container>
+
+<ion-accordion-group *ngIf="typesLoaded && isSight" >
+  <ion-accordion *ngFor="let type of types" toggleIcon="{{type.stypes.length ? 'chevron-down-outline' : 'none'}}">
+    <ion-item slot="header">
+      <!-- Пока нет иконок для типо, они отключены -->
+      <!-- <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/> -->
+      <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
+      <ion-radio *ngIf="!type.stypes.length" slot="end" value="{{ type.id }}"></ion-radio>
+    </ion-item>
+    <div class="ion-padding" slot="content" *ngIf="type.stypes || type.etypes">
+      <app-sight-type [types]="type.stypes" [isSight]="isSight"></app-sight-type>
+    </div>
+  </ion-accordion>
+</ion-accordion-group>
+
+<ion-accordion-group *ngIf="typesLoaded && !isSight">
+  <ion-accordion *ngFor="let type of types" toggleIcon="{{type.etypes.length ? 'chevron-down-outline' : 'none'}}">
+    <ion-item slot="header">
+      <!-- Пока нет иконок для типо, они отключены -->
+      <!-- <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/> -->
+      <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
+      <ion-radio *ngIf="!type.etypes.length" slot="end" value="{{ type.id }}"></ion-radio>
+    </ion-item>
+    <div class="ion-padding" slot="content" *ngIf="type.stypes || type.etypes">
+      <app-sight-type [types]="type.etypes" [isSight]="isSight"></app-sight-type>
+    </div>
+  </ion-accordion>
+</ion-accordion-group>

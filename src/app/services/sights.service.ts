@@ -88,7 +88,7 @@ export class SightsService {
       sight_id: id,
       time: time,
     }
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/view`, params)
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/view`, params)
   }
 
   private errorHandler(error: HttpErrorResponse) {

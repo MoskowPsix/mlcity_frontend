@@ -58,10 +58,6 @@ export class FilterService {
   //   return localStorage.getItem('circleCenter')
   // }
 
-
-
-
-
   setLocationLatitudeTolocalStorage(locationLatitude:string = this.locationLatitude.value){
     localStorage.setItem('locationLatitude', locationLatitude)
     this.locationLatitude.next(locationLatitude)
