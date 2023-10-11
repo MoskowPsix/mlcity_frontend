@@ -432,7 +432,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.setMapData();
       }
       this.cdr.detectChanges();
-      // setTimeout(() => this.ngOnInit(), 3000);
     });
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город. 

@@ -47,7 +47,7 @@
           <ion-accordion-group expand="inset" [value]="['range']">
             <ion-list>
               <!-- <div class="ion-padding" slot="content"> -->
-              <app-calendula/>
+              <app-calendula (dateOutput)="setDate($event)"/>
               <!-- </div> -->
             </ion-list>
   
