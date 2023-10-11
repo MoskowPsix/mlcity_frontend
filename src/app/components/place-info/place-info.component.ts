@@ -11,6 +11,8 @@ export class PlaceInfoComponent  implements OnInit {
 
   @Input() place!: IPlace
   place_date: any
+  date: any = {dateStart: new Date().toISOString(), dateEnd: new Date().toISOString()}
+
 
   constructor() { }
 
@@ -29,9 +31,28 @@ export class PlaceInfoComponent  implements OnInit {
     
     return new Date(date).getDay()
   }
+
+  changeDateRange(event: any){
+    console.log(event)
+    this.date.dateStart = event.dateStart
+    this.date.dateEnd = event.dateEnd
+
+  }
+
+  normalizeDate(){
+    let cur_date: Date = new Date();
+    let test = this.place_date.filter((d: any)=> new Date(d.dateStart).getTime()>=cur_date.getTime())
+
+    console.log(cur_date.getTime()>= new Date(this.place_date[300].dateStart).getTime())
+    console.log(test)
+
+
+  }
   
   ngOnInit() {
-    console.log(this.place)
+    this.place_date =  this.place.seances
+    this.normalizeDate()
+    console.log(this.place_date)
   }
 
 }

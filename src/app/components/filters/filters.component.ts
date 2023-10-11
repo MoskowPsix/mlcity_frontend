@@ -51,6 +51,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   nowDate: string = new Date().toISOString()
   minDate: string = new Date().toISOString()
   maxDate?: string
+  date: any
 
   constructor(
     private eventTypeService: EventTypeService, 
@@ -230,6 +231,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value}
     this.getEventTypes()
     this.getSightTypes()
 

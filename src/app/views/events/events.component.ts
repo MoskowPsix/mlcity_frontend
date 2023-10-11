@@ -119,6 +119,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value}
+    //console.log(this.date)
     this.eventsCity = []
     this.eventsGeolocation = []
     this.getEventsCity()

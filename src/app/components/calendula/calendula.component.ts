@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
@@ -8,8 +8,9 @@ import { FilterService } from 'src/app/services/filter.service';
 })
 export class CalendulaComponent  implements OnInit {
   constructor( private filterService: FilterService, ) { }
+  @Input() scroll!: number 
   @Output() dateOutput = new EventEmitter();
-  date: any = {dateStart: '', dateEnd: ''}
+  @Input() date!: {dateStart: string, dateEnd: string}
   @ViewChild('widgetsContent') widgetsContent!: ElementRef;
   date_full: any = [
     {name: 'Январь', data: []}, 
@@ -32,10 +33,10 @@ export class CalendulaComponent  implements OnInit {
     this.dateOutput.emit(this.date)
   }
   scrollLeft(){
-    this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft - 500), behavior: 'smooth' });
+    this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft - this.scroll), behavior: 'smooth' });
   }
   scrollRight(){
-    this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft + 500), behavior: 'smooth' });
+    this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft + this.scroll), behavior: 'smooth' });
   }
 
   setDate(date: any) {
@@ -80,11 +81,13 @@ export class CalendulaComponent  implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.date)
+    if(!this.scroll) {
+      this.scroll = 500
+    } 
     // Подгрузить дату из стора(как понял)
-    this.dateStart ? this.filterService.startDate.value : this.dateStart = Math.ceil(new Date(this.filterService.startDate.value).getTime() / 100000)
-    this.dateStart ? !this.filterService.startDate.value : this.dateStart = Math.ceil(new Date().getTime() / 100000)
-    this.dateEnd ? this.filterService.endDate.value: this.dateEnd = Math.ceil(new Date(this.filterService.endDate.value).getTime() / 100000) 
-    this.dateEnd ? !this.filterService.endDate.value: this.dateEnd = this.dateStart = Math.ceil(new Date(this.filterService.startDate.value).getTime() / 100000)
+    this.dateStart  = Math.ceil(new Date(this.date.dateStart).getTime() / 100000)
+    this.dateEnd = Math.ceil(new Date(this.date.dateEnd).getTime() / 100000) 
 
     let now_date: any = new Date().getTime()
     let data: any

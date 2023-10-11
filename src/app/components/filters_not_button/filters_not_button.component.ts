@@ -262,7 +262,8 @@ export class FiltersNotButtonComponent implements OnInit, OnDestroy {
     })
 
     //Подписываемся на регион 
-    
+
+    this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value} 
   }
 
   ngOnDestroy(){
