@@ -28,6 +28,10 @@ export class FilterService {
   public changeFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
   public changeCityFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
 
+  public eventsCount: BehaviorSubject<number> = new BehaviorSubject<number>(0)
+  public sightsCount: BehaviorSubject<number> = new BehaviorSubject<number>(0)
+  public favoritesCount: BehaviorSubject<number> = new BehaviorSubject<number>(0)
+
   constructor() {}
 
   // setCityTolocalStorage(city: string = this.city.value ){
@@ -39,6 +43,23 @@ export class FilterService {
   //   localStorage.setItem('region', region)
   //   this.locationId.next(region)
   // }
+
+  setEventsCount(count: any) {
+    this.eventsCount.next(count)
+  }
+  setSightsCount(count: any) {
+    this.sightsCount.next(count)
+  }
+  setFavoritesCount(count: any) {
+    this.favoritesCount.next(count)
+  }
+
+  getEventsCount() {
+    return this.eventsCount.value
+  }
+  getSightsCount() {
+    return this.sightsCount.value
+  }
 
   setLocationTolocalStorage(locationId: any = this.locationId.value){
     localStorage.setItem('locationId', locationId)

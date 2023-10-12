@@ -207,19 +207,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   });
   }
 
-  // getEvents(): Observable<any> {
-  //   return new Observable((observer) => {
-  //     this.eventsLoading = true;
-  //     this.setBoundsCoordsToMapService(); // я хз почему, но эта штука только тут работает
-  //     this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-  //       this.events = response.events;
-  //       //this.eventsLoading = false
-  //       this.cdr.detectChanges();
-  //       observer.next(EMPTY);
-  //       observer.complete();
-  //     });
-  //   });
-  // }
+  getEvents(): Observable<any> {
+    return new Observable((observer) => {
+      // this.setBoundsCoordsToMapService(); // я хз почему, но эта штука только тут работает
+      this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.filterService.setEventsCount(response.events.length)
+        observer.next(EMPTY);
+        observer.complete();
+      })
+    })
+  }
 
   getPlaces(): Observable<any> {
     return new Observable((observer) => {
@@ -238,6 +235,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sightsLoading = true;
       this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
         this.sights = response.sights;
+        this.filterService.setSightsCount(response.sights.length)
         //this.sightsLoading = false
         this.cdr.detectChanges();
         observer.next(EMPTY);
@@ -289,7 +287,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         {}, {
           balloonContent: item,
           balloonAutoPan: false,
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"><img src="${icoLink}"/></div>`)
+          // С иконкой
+          // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"><img src="${icoLink}"/></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"></div>`)
         });
         this.placemarks.push(placemark);
       } else {
@@ -298,7 +298,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           {}, {
             balloonContent: item,
             balloonAutoPan: false,
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
+            // С иконкой
+            // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
+            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"></div>`)
           });
           this.placemarks.push(placemark);
       }
@@ -392,7 +394,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   //   );
   // }
   getEventsAndSights() {
-    const sources = [this.getPlaces(), this.getSights()];
+    const sources = [this.getPlaces(), this.getSights(), this.getEvents()];
     forkJoin(sources).pipe(
       catchError((err) => {
         this.toastService.showToast(MessagesErrors.default, 'danger');
@@ -421,7 +423,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     //Подписываемся на состояние модалки показа ивентов и мест
-    this.navigationService.modalEventShowOpen.pipe(debounce(() => timer(1000)),takeUntil(this.destroy$)).subscribe(value => {
+    this.navigationService.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.modalEventShowOpen = value;
       if (!value && this.activePlacemark) { // убираем активный класс у кастомного маркера при закрытие модалки
         this.activePlacemark.options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${this.activeIcoLink}"/></div>`));

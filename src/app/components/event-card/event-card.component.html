@@ -53,9 +53,9 @@
       <span>Бесплатно</span>
     </div>
 
-    <div *ngIf="event.types && event.types.length" class="type">
+    <!-- <div *ngIf="event.types && event.types.length" class="type">
       <img alt="img" src="{{host}}:{{port}}{{ event.types[0].ico }}" />
-    </div>
+    </div> -->
 
     <ion-card-title>{{ event.name | truncate:[48,'...'] }}</ion-card-title>
     

@@ -80,7 +80,10 @@
                     [routerLink]="[item.route]"
                     [routerLinkActive]="['active']"
                 >
-                    <ion-icon name="{{ item.icon }}" slot="start" color="primary"></ion-icon>{{item.title}}
+                    <ion-icon name="{{ item.icon }}" slot="start" color="primary"></ion-icon>
+                    <ion-label slot="start">{{item.title}}</ion-label>
+                    <ion-badge *ngIf="item.title === 'События'" slot="end" >{{ getEventService() }}</ion-badge>
+                    <ion-badge *ngIf="item.title === 'Места'" slot="end" >{{ getSightService() }}</ion-badge>
                 </ion-button>
                 
             </ng-template>     
