@@ -81,7 +81,7 @@ export class CalendulaComponent  implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.date)
+    
     if(!this.scroll) {
       this.scroll = 500
     } 
@@ -145,6 +145,7 @@ export class CalendulaComponent  implements OnInit {
           break;
       }
       now_date = now_date + 86400000
+      this.onDateOutput()
     }
   }
 

@@ -62,8 +62,19 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
         this.event = event
       this.places = event.places_full
       
+      
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     }); 
+  }
+
+  getMinPrice(prices: any[]) {
+    let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub)
+    return sort_prices[0].cost_rub
+  }
+
+  getMaxPrice(prices: any[]) {
+    let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub)
+    return sort_prices[sort_prices.length - 1].cost_rub
   }
 
   getUrlFrame(url:string)
@@ -157,6 +168,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getEvent()
     this.checkLiked()
     this.checFavorite()
+    
   }
 
   ngAfterViewInit() {

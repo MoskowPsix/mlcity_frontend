@@ -127,7 +127,7 @@
 
                 <span class="description italic" *ngIf="event.price[0].cost_rub=='0' else DontFree">Бесплатно</span>
                 <ng-template #DontFree>
-                  <span class="description italic">от {{event.price[0].cost_rub}} до {{ event.price[1].cost_rub }}</span>
+                  <span class="description italic">от {{ getMinPrice(event.price)}} до {{ getMaxPrice(event.price) }}</span>
                 </ng-template>
               </div>
               <div>

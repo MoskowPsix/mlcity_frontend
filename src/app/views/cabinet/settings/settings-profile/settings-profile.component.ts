@@ -82,13 +82,13 @@ export class SettingsProfileComponent  implements OnInit {
     if (file){
       this.formData.append('avatar', file, file.name)
       this.previewPhoto(file)
-      console.log(this.previewPhotoUrl)
+
     //   console.log(this.resetForm)
     }
   }
 
   previewPhoto(file: File){
-    console.log(file)
+
     const reader: FileReader = new FileReader();
     reader.onload = () => {
       this.previewPhotoUrl = reader.result as string;

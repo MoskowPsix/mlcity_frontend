@@ -16,6 +16,10 @@ export class PlaceInfoComponent  implements OnInit {
 
   constructor() { }
 
+  getUnixTime(time: string) {
+    return Math.ceil(new Date(time).getTime() / 86400000)
+  }
+
   onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
     
     //Создаем метку 
@@ -33,7 +37,6 @@ export class PlaceInfoComponent  implements OnInit {
   }
 
   changeDateRange(event: any){
-    console.log(event)
     this.date.dateStart = event.dateStart
     this.date.dateEnd = event.dateEnd
 
@@ -43,16 +46,18 @@ export class PlaceInfoComponent  implements OnInit {
     let cur_date: Date = new Date();
     let test = this.place_date.filter((d: any)=> new Date(d.dateStart).getTime()>=cur_date.getTime())
 
-    console.log(cur_date.getTime()>= new Date(this.place_date[300].dateStart).getTime())
-    console.log(test)
-
+    this.changeDateRange({dateStart: new Date(test[0].dateStart).toISOString(), dateEnd: new Date(test[0].dateStart).toISOString()})
+    // this.date.dateStart = new Date(test[0].dateStart)
+    // this.date.dateEnd = new Date(test[0].dateEnd)
+    // console.log(test)
 
   }
   
   ngOnInit() {
     this.place_date =  this.place.seances
-    this.normalizeDate()
-    console.log(this.place_date)
+    // this.normalizeDate()
+    // console.log(this.place_date)
+    // console.log(1<=5 && 5<=10)
   }
 
 }

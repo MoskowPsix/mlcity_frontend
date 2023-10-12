@@ -49,10 +49,10 @@
 
     <div class="seance-time-container ion-justify-content-center">
       <div class="seance-time-c1">
-      <div *ngFor="let seance of place.seances" [hidden]="date.dateStart < seance.dateStart || date.dateEnd > seance.dateEnd" style="display: flex;" class="seance-time-c2">
+      <div *ngFor="let seance of place_date" [hidden]="!(getUnixTime(date.dateStart) <= getUnixTime(seance.dateStart) && getUnixTime(seance.dateStart) <= getUnixTime(date.dateEnd))" style="display: flex;" class="seance-time-c2">
         <ion-col style="max-width:90px">
         <div style="display: flex;">
-          
+          <!-- !(date.dateStart <= seance.dateStart && seance.dateStart <= date.dateEnd) || !(seance.dateStart >= date.dateStart)  -->
           <div class="vertical-text" [ngClass]="{'day-color': (dayWeek(seance.dateStart) === 6) || (dayWeek(seance.dateStart) === 0) }">
             {{ seance.dateStart|date:'EE' }}
           </div>
