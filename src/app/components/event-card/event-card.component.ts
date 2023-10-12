@@ -190,23 +190,13 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   getMinPrice(prices: any[]) {
-    let price: number = prices[0].cost_rub
-    prices.forEach((element: any) => {
-      if (element.cost_rub <= price) {
-        price = element.cost_rub        
-      }
-    });
-    return price
+    let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub)
+    return sort_prices[0].cost_rub
   }
 
   getMaxPrice(prices: any[]) {
-    let price: number = prices[0].cost_rub
-    prices.forEach((element: any) => {
-      if (element.cost_rub >= price) {
-        price = element.cost_rub        
-      }
-    });
-    return price
+    let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub)
+    return sort_prices[sort_prices.length - 1].cost_rub
   }
 
   ngOnInit() {

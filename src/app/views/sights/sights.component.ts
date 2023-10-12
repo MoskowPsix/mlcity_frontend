@@ -53,6 +53,7 @@ export class SightsComponent implements OnInit, OnDestroy {
       retry(3),
       map((respons:any) => {
         this.sightsCity.push(...respons.sights.data)
+        this.filterService.setSightsCount(respons.sights.total)
         this.totalPagesSightsCity = respons.sights.last_page
         //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
       }),

@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
-import { environment } from 'src/environments/environment';
+import { EMPTY, Observable } from 'rxjs';
+import { FilterService } from 'src/app/services/filter.service';
+
 
 @Component({
   selector: 'app-footer',
@@ -11,10 +11,26 @@ import { environment } from 'src/environments/environment';
 })
 export class FooterComponent implements OnInit, OnDestroy {
 
+  eventCount: any
+  sightCount: any
+
   constructor(
     private router: Router, 
+    private filterService: FilterService,
     //private authService: AuthService,
-  ) { }
+  ) {}
+
+  getEventService() {
+    return this.filterService.eventsCount.value
+  }
+
+  getSightService() {
+    return  this.filterService.sightsCount.value
+    }
+
+  getFavoritesService() {
+    return this.filterService.favoritesCount.value
+  }
 
   // currentYear = new Date().getFullYear();
   // appName = environment.APP_NAME

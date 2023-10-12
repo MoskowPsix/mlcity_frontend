@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { tap, throwError } from 'rxjs'
-import { ErrorService } from './error.service'
 import { IEvent } from '../models/event';
 import { environment } from 'src/environments/environment';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
 import { UserService } from './user.service';
-import { QueryBuilderService } from './query-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +15,6 @@ export class EventsService {
   constructor(
     private http: HttpClient,
     private userService: UserService,
-    private queryBuilderService: QueryBuilderService,
-    //private errorService: ErrorService,
   ) {
     this.getUserId()
   }

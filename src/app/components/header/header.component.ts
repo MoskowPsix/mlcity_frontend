@@ -16,6 +16,7 @@ import { SightsService } from 'src/app/services/sights.service';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { FilterService } from 'src/app/services/filter.service';
 import { LocationService } from 'src/app/services/location.service';
+import { QueryBuilderService } from 'src/app/services/query-builder.service';
 
 @Component({
   selector: 'app-header',
@@ -60,6 +61,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   queryParams?: IGetEventsAndSights 
 
   constructor(
+    private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService, 
     private mapService: MapService, 
     private vkService: VkService,
@@ -69,6 +71,14 @@ export class HeaderComponent implements OnInit,OnDestroy {
     private filterService: FilterService,
     private locationService: LocationService,
     ) { }
+
+    getEventService() {
+      return  this.filterService.eventsCount.value
+    }
+
+    getSightService() {
+      return  this.filterService.sightsCount.value
+    }
 
   //Установить город из диалога, из геопозиции
   setCityFromDialog(){
@@ -173,6 +183,43 @@ export class HeaderComponent implements OnInit,OnDestroy {
     } else {
       this.minLengthEventsListError = true
     }
+    this.getEventsAndSightsAndFavorites()
+  }
+
+  getEventsAndSightsAndFavorites(){  
+      this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsPublicForCityTab')).pipe(
+        catchError((err) =>{
+          return of(EMPTY) 
+        }),
+        takeUntil(this.destroy$)
+        ).subscribe((response:any) => {
+        this.filterService.setEventsCount(response.events.total)
+      })
+
+      this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsPublicForCityTab')).pipe(
+        catchError((err) =>{
+          return of(EMPTY) 
+        }),
+        takeUntil(this.destroy$)
+        ).subscribe((response:any) => {
+        this.filterService.setSightsCount(response.sights.total)
+      })
+      this.eventsService.getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites')).pipe(
+        catchError((err) =>{
+          return of(EMPTY) 
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe((response:any) => {
+        this.filterService.setFavoritesCount(response.result.total)
+      })
+      this.sightsService.getSightsFavorites(this.queryBuilderService.queryBuilder('sightsFavorites')).pipe(  
+        catchError((err) =>{
+          return of(EMPTY) 
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe((response: any) =>{
+        this.filterService.setFavoritesCount(this.filterService.favoritesCount.value + response.result.total)
+      })
   }
 
   onSegmentChanged(event:any){
@@ -243,6 +290,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     this.menuPublic = menuPublicData
 
     //Capacitor.isNativePlatform() ? console.log('ипользуется мобильная версия') : console.log('ипользуется веб версия')
+    this.getEventsAndSightsAndFavorites()
   }
 
   ngOnDestroy(){

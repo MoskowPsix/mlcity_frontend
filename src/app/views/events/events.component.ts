@@ -60,6 +60,7 @@ export class EventsComponent implements OnInit, OnDestroy {
       retry(3),
       map((respons:any) => {
         this.eventsCity.push(...respons.events.data)
+        this.filterService.setEventsCount(respons.events.total)
         this.totalPagesEventsCity = respons.events.last_page
         //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
       }),
