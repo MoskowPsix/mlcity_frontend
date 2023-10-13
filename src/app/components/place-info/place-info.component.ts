@@ -55,7 +55,7 @@ export class PlaceInfoComponent  implements OnInit {
   
   ngOnInit() {
     this.place_date =  this.place.seances
-    // this.normalizeDate()
+    this.normalizeDate()
     // console.log(this.place_date)
     // console.log(1<=5 && 5<=10)
   }
