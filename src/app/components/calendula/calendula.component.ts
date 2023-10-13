@@ -83,7 +83,11 @@ export class CalendulaComponent  implements OnInit {
       // this.filterService.setEndDateTolocalStorage(new Date(date*100000).toISOString())
       // this.filterService.changeFilter.next(true) 
     }
+    this.fixCenterElement(date)
+    this.onDateOutput()
+  }
 
+  fixCenterElement(date: any) {
     var elem = this.widgetsContent.nativeElement!.offsetWidth
     let left = document.getElementById(date)!.offsetLeft
     let right = elem - document.getElementById(date)!.offsetLeft
@@ -93,7 +97,6 @@ export class CalendulaComponent  implements OnInit {
     } else if (right > left) {
       this.widgetsContent.nativeElement.scrollTo({right:right - elem/2, behavior: 'smooth'})
     }
-    this.onDateOutput()
   }
 
   ngOnInit() {
@@ -161,8 +164,8 @@ export class CalendulaComponent  implements OnInit {
           break;
       }
       now_date = now_date + 86400000
-      this.onDateOutput()
-      setTimeout(() => {this.setDate(new Date(this.getDateYMD(this.dateStart)).getTime())}, 3000);
+      //this.onDateOutput()
+      setTimeout(() => {this.fixCenterElement(new Date(this.getDateYMD(this.dateStart)).getTime())}, 3000);
     }
   }
 
