@@ -33,7 +33,7 @@
         <div class="seances">
           <div class="seance-time-container ion-justify-content-center">
             <div class="seance-time-c1">
-              <div *ngFor="let seance of place_date" [hidden]="!(getUnixTime(date.dateStart) <= getUnixTime(seance.dateStart) && getUnixTime(seance.dateStart) <= getUnixTime(date.dateEnd))" style="display: flex;" class="seance-time-c2">
+              <div *ngFor="let seance of place_date" [hidden]="!(getUnixTime(date.dateStart)+1 <= getUnixTime(seance.dateStart) && getUnixTime(seance.dateStart)-1 <= getUnixTime(date.dateEnd))" style="display: flex;" class="seance-time-c2">
                 <ion-col style="max-width:90px">
                 <div style="display: flex;">
                   <div class="vertical-text" [ngClass]="{'day-color': (dayWeek(seance.dateStart) === 6) || (dayWeek(seance.dateStart) === 0) }">
