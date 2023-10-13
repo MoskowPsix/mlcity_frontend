@@ -98,6 +98,7 @@ export class SettingsProfileComponent  implements OnInit {
 
   ngOnInit() {
     this.getUser()
+    
     this.resetForm = new FormGroup({
       new_name: new FormControl(this.user.name,[Validators.minLength(1)]),
     })
