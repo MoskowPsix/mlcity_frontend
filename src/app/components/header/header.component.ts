@@ -193,7 +193,10 @@ export class HeaderComponent implements OnInit,OnDestroy {
         }),
         takeUntil(this.destroy$)
         ).subscribe((response:any) => {
-        this.filterService.setEventsCount(response.events.total)
+          if(response){
+            this.filterService.setEventsCount(response.events.total)
+          }
+        
       })
 
       this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsPublicForCityTab')).pipe(
@@ -202,7 +205,10 @@ export class HeaderComponent implements OnInit,OnDestroy {
         }),
         takeUntil(this.destroy$)
         ).subscribe((response:any) => {
-        this.filterService.setSightsCount(response.sights.total)
+          if(response){
+            this.filterService.setSightsCount(response.sights.total)
+          }
+        
       })
       this.eventsService.getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites')).pipe(
         catchError((err) =>{
@@ -210,7 +216,10 @@ export class HeaderComponent implements OnInit,OnDestroy {
         }),
         takeUntil(this.destroy$)
       ).subscribe((response:any) => {
-        this.filterService.setFavoritesCount(response.result.total)
+        if(response){
+          this.filterService.setFavoritesCount(response.result.total)
+        }
+        
       })
       this.sightsService.getSightsFavorites(this.queryBuilderService.queryBuilder('sightsFavorites')).pipe(  
         catchError((err) =>{
@@ -218,7 +227,10 @@ export class HeaderComponent implements OnInit,OnDestroy {
         }),
         takeUntil(this.destroy$)
       ).subscribe((response: any) =>{
-        this.filterService.setFavoritesCount(this.filterService.favoritesCount.value + response.result.total)
+        if(response){
+          this.filterService.setFavoritesCount(this.filterService.favoritesCount.value + response.result.total)
+        }
+        
       })
   }
 

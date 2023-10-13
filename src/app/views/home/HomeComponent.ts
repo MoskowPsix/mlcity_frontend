@@ -254,7 +254,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (!this.events.length && !this.sights.length && this.radius < 25 && this.navigationService.appFirstLoading.value) {
       this.filterService.setRadiusTolocalStorage((++this.radius).toString());
       this.CirclePoint.geometry?.setRadius(this.radius * 1000);
-      // this.getEventsAndSights();
+      this.getEventsAndSights();
     } else {
       this.navigationService.appFirstLoading.next(false);
       this.eventsLoading = false;
