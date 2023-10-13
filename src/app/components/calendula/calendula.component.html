@@ -4,11 +4,11 @@
         <button class="scroll_left">
           <ion-icon size="large" name="chevron-back-outline" class="ico_left" (click)="scrollLeft()" ></ion-icon>
         </button>
-        <div class="home-month" *ngFor="let month of date_full"  [hidden]="month.data.length === 0" id="target" >
+        <div class="home-month" *ngFor="let month of date_full"  [hidden]="month.data.length === 0" >
           <span class="home-mothname">{{month.name}}</span>
           <div class="home-monthdata">
-            <button class="home-day" *ngFor="let day of month.data" id="{{day.min}}" [class.active]="day.min / 100 > dateStart / 100 && dateEnd > day.min" [class.active-left]="day.min === dateStart" [class.active-right]="dateEnd === day.min" (click)="setDate(day.min)">
-              <div class="home-day-content" [class.active]="day.min === dateStart || day.min === dateEnd">
+            <button class="home-day" *ngFor="let day of month.data" [class.active]="day.min / 100 > dateStart / 100 && dateEnd > day.min" [class.active-left]="getDateYMD(day.min) === getDateYMD(dateStart)" [class.active-right]="getDateYMD(dateEnd) === getDateYMD(day.min)" (click)='setDate(day.min)' [attr.id]="day.min">
+              <div class="home-day-content" [class.active]="getDateYMD(day.min) === getDateYMD(dateStart) || getDateYMD(day.min) === getDateYMD(dateEnd)">
                 <span class="home-text">{{day.number}}</span>
                 <span *ngIf="day.day_week === 0" class="home-text01">ПН</span>
                 <span *ngIf="day.day_week === 1" class="home-text01">ВТ</span>

@@ -1,78 +1,61 @@
 <ion-row class="seances-container">
   <ion-col sizeLg="7"> 
-
-            <div class="map">
-              <ya-map 
-                  (ready)="onMapReady($event)"
-                  [zoom]="15"  
-                  [center]="[place.latitude, place.longitude]"
-                  [state]="{controls: ['zoomControl','fullscreenControl']}"
-                  [options]="{
-                    yandexMapDisablePoiInteractivity: true,
-                    minZoom:1,
-                    maxZoom:18,
-                    suppressMapOpenBlock: true,
-                    suppressObsoleteBrowserNotifier: true
-                  }">
-              </ya-map>
-            </div>
+    <div class="map">
+      <ya-map 
+          (ready)="onMapReady($event)"
+          [zoom]="15"  
+          [center]="[place.latitude, place.longitude]"
+          [state]="{controls: ['zoomControl','fullscreenControl']}"
+          [options]="{
+            yandexMapDisablePoiInteractivity: true,
+            minZoom:1,
+            maxZoom:18,
+            suppressMapOpenBlock: true,
+            suppressObsoleteBrowserNotifier: true
+          }">
+      </ya-map>
+    </div>
   </ion-col>
   
   <ion-col class="ion-justify-content-center" sizeLg="5">
-    <h3 style="text-align: center;">Сеансы</h3>
+    <ion-list>
+      <ion-label>
+        <h1 style="text-align: center;">Сеансы</h1>
+      </ion-label>
 
-    <div>
-      <app-calendula (dateOutput)="changeDateRange($event)" [scroll]="200" [date]="date"></app-calendula>
-    </div>
-    
-    
-    <div class="seances-time-container">
+      <ng-container>
+        <app-calendula (dateOutput)="changeDateRange($event)" [scroll]="200" [date]="date"></app-calendula>
+      </ng-container>
       
-
       
-      <div class="seances">
-        <!-- <ion-row>
-      <ion-col sizeLg="6" class="ion-justify-content-center" style="text-align: center;">
-        <h4>Начало</h4>
-        <p *ngFor="let seance of place.seances" class="seance-time">
-          {{ seance.dateStart | date:"dd.MM.yyyy ' ' hh:mm" }}
-        </p>
-      </ion-col>
+      <div class="seances-time-container">
+        
+        <div class="seances">
+          <div class="seance-time-container ion-justify-content-center">
+            <div class="seance-time-c1">
+              <div *ngFor="let seance of place_date" [hidden]="!(getUnixTime(date.dateStart) <= getUnixTime(seance.dateStart) && getUnixTime(seance.dateStart) <= getUnixTime(date.dateEnd))" style="display: flex;" class="seance-time-c2">
+                <ion-col style="max-width:90px">
+                <div style="display: flex;">
+                  <div class="vertical-text" [ngClass]="{'day-color': (dayWeek(seance.dateStart) === 6) || (dayWeek(seance.dateStart) === 0) }">
+                    {{ seance.dateStart|date:'EE' }}
+                  </div>
+                  <div>
+                    <p class="seance-time-day" >{{ seance.dateStart|date:'d' }}</p>
+                  </div>
+                </div>
+                <div class="seance-time-month">
+                  {{ seance.dateStart|date:'MMMM' }}
+                </div>
+                </ion-col>
 
-      <ion-col sizeLg="6" class="ion-justify-content-center" style="text-align: center;">
-        <h4>Конец</h4>
-        <p *ngFor="let seance of place.seances" class="seance-time">
-          {{ seance.dateEnd | date: "dd.MM.yyyy ' ' H:mm" }}
-        </p>
-      </ion-col>
-    </ion-row> -->
-
-    <div class="seance-time-container ion-justify-content-center">
-      <div class="seance-time-c1">
-      <div *ngFor="let seance of place_date" [hidden]="!(getUnixTime(date.dateStart) <= getUnixTime(seance.dateStart) && getUnixTime(seance.dateStart) <= getUnixTime(date.dateEnd))" style="display: flex;" class="seance-time-c2">
-        <ion-col style="max-width:90px">
-        <div style="display: flex;">
-          <!-- !(date.dateStart <= seance.dateStart && seance.dateStart <= date.dateEnd) || !(seance.dateStart >= date.dateStart)  -->
-          <div class="vertical-text" [ngClass]="{'day-color': (dayWeek(seance.dateStart) === 6) || (dayWeek(seance.dateStart) === 0) }">
-            {{ seance.dateStart|date:'EE' }}
-          </div>
-          <div>
-            <p class="seance-time-day" >{{ seance.dateStart|date:'d' }}</p>
+                <div class="seance-time-hour-container">
+                  <div>{{seance.dateStart|date:'H:mm'}} - {{seance.dateEnd|date:'H:mm'}}</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="seance-time-month">
-          {{ seance.dateStart|date:'MMMM' }}
-        </div>
-      </ion-col>
-
-        <div class="seance-time-hour-container">
-          <div>{{seance.dateStart|date:'H:mm'}} - {{seance.dateEnd|date:'H:mm'}}</div>
-        </div>
-      </div>
     </div>
-      
-    </div>
-      </div>
-    </div>
+    </ion-list>
   </ion-col>
 </ion-row>
