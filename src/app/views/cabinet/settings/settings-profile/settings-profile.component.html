@@ -7,15 +7,15 @@
         <ion-list>
         <ion-row class="ion-justify-content-center">
           <ion-skeleton-text animated *ngIf="!avatarLoad"></ion-skeleton-text>
-          <img [src]="avatar_url" class="image_avatar" [hidden]="!avatarLoad">
+          <img [src]="avatar_url" class="image_avatar" [hidden]="!avatarLoad" *ngIf="!previewPhotoUrl else prevPhoto">
+
+          <ng-template #prevPhoto>
+            <img [src]="previewPhotoUrl" class="image_avatar">
+          </ng-template>
 
         </ion-row>
 
-        <ion-row class="ion-justify-content-center">
-          <div *ngIf="previewPhotoUrl" class="preview-image-container">
-            <img [src]="previewPhotoUrl" class="preview-image">
-          </div>
-        </ion-row>
+       
 
         <ion-row class="ion-justify-content-center" style="margin-top:1rem;">
           <ion-item lines="none">
