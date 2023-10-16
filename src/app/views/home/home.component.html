@@ -1,11 +1,11 @@
 <ion-content>
     <div class="buttons-wrapper">
       <div class="buttons-radius">
+        <ion-button size="small" [color]="radius === 1 ? 'secondary' : 'primary'" (click)="setRadius(1)" title="Радиус">1 км</ion-button>
+        <ion-button size="small" [color]="radius === 3 ? 'secondary' : 'primary'" (click)="setRadius(3)" title="Радиус">3 км</ion-button>
         <ion-button size="small" [color]="radius === 5 ? 'secondary' : 'primary'" (click)="setRadius(5)" title="Радиус">5 км</ion-button>
         <ion-button size="small" [color]="radius === 10 ? 'secondary' : 'primary'" (click)="setRadius(10)" title="Радиус">10 км</ion-button>
-        <ion-button size="small" [color]="radius === 15 ? 'secondary' : 'primary'" (click)="setRadius(15)" title="Радиус">15 км</ion-button>
-        <ion-button size="small" [color]="radius === 20 ? 'secondary' : 'primary'" (click)="setRadius(20)" title="Радиус">20 км</ion-button>
-        <ion-button size="small" [color]="radius === 25 ? 'secondary' : 'primary'" (click)="setRadius(25)" title="Радиус">25 км</ion-button>
+
       </div>
       <div class="filters">
         <app-filters></app-filters>
