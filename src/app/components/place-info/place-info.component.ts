@@ -20,13 +20,12 @@ export class PlaceInfoComponent  implements OnInit {
     return Math.ceil(new Date(time).getTime() / 86400000)
   }
 
-  onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
-    
+  onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>) {
     //Создаем метку 
     target.geoObjects.add(
-      new ymaps.Placemark([this.place?.latitude,this.place?.longitude],{}, {
-        iconLayout: 'default#image',
-
+      new ymaps.Placemark([this.place?.latitude, this.place?.longitude],{}, {
+        iconLayout: 'default#imageWithContent',
+        iconContentLayout: ymaps.templateLayoutFactory.createClass(`'<div class="marker"></div>'`)
       })
     )
   }
@@ -44,9 +43,15 @@ export class PlaceInfoComponent  implements OnInit {
 
   normalizeDate(){
     let cur_date: Date = new Date();
-    let test = this.place_date.filter((d: any)=> new Date(d.dateStart).getTime()>=cur_date.getTime())
 
+    if (this.place_date.length > 1) {
+    let test = this.place_date.filter((d: any) => {
+      new Date(d.dateStart).getTime()>=cur_date.getTime()
+    })
     this.changeDateRange({dateStart: new Date(test[0].dateStart).toISOString(), dateEnd: new Date(test[0].dateStart).toISOString()})
+  } else {
+    this.changeDateRange({dateStart: new Date(this.place_date[0].dateStart).toISOString(), dateEnd: new Date(this.place_date[0].dateStart).toISOString()})
+  }
     // this.date.dateStart = new Date(test[0].dateStart)
     // this.date.dateEnd = new Date(test[0].dateEnd)
     // console.log(test)

@@ -22,11 +22,9 @@ export interface IEvent {
     files?: any[]
     types?: any[]
     likes?: any
-    places_full: IPlace[]
+    places_full: any[]
     price?: any
     materials?: string
-    dateStart: Date
-    dateEnd: Date
     date_start: Date
     date_end: Date
     vk_group_id?:number

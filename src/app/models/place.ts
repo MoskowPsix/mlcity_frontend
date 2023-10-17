@@ -7,5 +7,5 @@ export interface IPlace {
     longitude: number
     address: string
     event: any[]
-    seances: any
+    seances: any[]
 }

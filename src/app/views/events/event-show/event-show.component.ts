@@ -6,7 +6,6 @@ import { EventsService } from 'src/app/services/events.service';
 import { IonicSlides } from '@ionic/angular';
 import {register} from 'swiper/element/bundle';
 import { environment } from 'src/environments/environment';
-import { YaReadyEvent } from 'angular8-yandex-maps';
 import { MessagesAuth } from 'src/app/enums/messages-auth';
 import { ToastService } from 'src/app/services/toast.service';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
@@ -57,11 +56,11 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       retry(3),
       tap(() => this.loadingEvent = false),
       takeUntil(this.destroy$)
-    ).subscribe((event:any )=> { 
+    ).subscribe((event:IEvent )=> { 
       if(event)
         this.event = event
-      this.places = event.places_full
-      
+        console.log(this.event)
+        // this.places = event.places_full      
       
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     }); 
@@ -102,17 +101,17 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       }); 
   }
 
-  onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
-    let icoLink = this.event && this.event.types && this.event.types.length ? this.host + ':' + this.port + this.event.types[0].ico : ''
+  // onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
+  //   let icoLink = this.event && this.event.types && this.event.types.length ? this.host + ':' + this.port + this.event.types[0].ico : ''
 
-    //Создаем метку 
-    target.geoObjects.add(
-      new ymaps.Placemark([this.event?.latitude,this.event?.longitude],{}, {
-        iconLayout: 'default#imageWithContent',
-        iconContentLayout: ymaps.templateLayoutFactory.createClass(`'<div class="marker"><img src="${icoLink}"/></div>'`)
-      })
-    )
-  }
+  //   //Создаем метку 
+  //   target.geoObjects.add(
+  //     new ymaps.Placemark([this.event?.latitude,this.event?.longitude],{}, {
+  //       iconLayout: 'default#imageWithContent',
+  //       iconContentLayout: ymaps.templateLayoutFactory.createClass(`'<div class="marker"><img src="${icoLink}"/></div>'`)
+  //     })
+  //   )
+  // }
 
   toggleFavorite(event_id:number){
     if (!this.userAuth) {
@@ -180,7 +179,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     // });
 
     // this.swiper?.update()
-    //console.log(this.swiper)
+    // console.log(this.swiper)
   }
 
   ngOnDestroy() {
