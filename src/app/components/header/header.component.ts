@@ -193,7 +193,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
         }),
         takeUntil(this.destroy$)
         ).subscribe((response:any) => {
-          if(response){
+          if(response.events.total){
             this.filterService.setEventsCount(response.events.total)
           }
         
@@ -205,33 +205,37 @@ export class HeaderComponent implements OnInit,OnDestroy {
         }),
         takeUntil(this.destroy$)
         ).subscribe((response:any) => {
-          if(response){
-            this.filterService.setSightsCount(response.sights.total)
+          if(response.sights.total){
+              this.filterService.setSightsCount(response.sights.total)
           }
         
       })
-      this.eventsService.getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites')).pipe(
-        catchError((err) =>{
-          return of(EMPTY) 
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe((response:any) => {
-        if(response){
-          this.filterService.setFavoritesCount(response.result.total)
-        }
-        
-      })
-      this.sightsService.getSightsFavorites(this.queryBuilderService.queryBuilder('sightsFavorites')).pipe(  
-        catchError((err) =>{
-          return of(EMPTY) 
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe((response: any) =>{
-        if(response){
-          this.filterService.setFavoritesCount(this.filterService.favoritesCount.value + response.result.total)
-        }
-        
-      })
+      if (this.queryBuilderService.userID) {
+        this.eventsService.getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites')).pipe(
+          catchError((err) =>{
+            return of(EMPTY) 
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe((response:any) => {
+          if(response.result.total){
+            console.log(response)
+            this.filterService.setFavoritesCount(response.result.total)
+          }
+          
+        })
+      
+        this.sightsService.getSightsFavorites(this.queryBuilderService.queryBuilder('sightsFavorites')).pipe(  
+          catchError((err) =>{
+            return of(EMPTY) 
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe((response: any) =>{
+          if(response){
+            this.filterService.setFavoritesCount(this.filterService.favoritesCount.value + response.result.total)
+          }
+          
+        })
+    }
   }
 
   onSegmentChanged(event:any){

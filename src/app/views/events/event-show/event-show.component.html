@@ -125,10 +125,10 @@
                 <ion-icon name="wallet" color="primary" class="ico-small"></ion-icon>
                 <span class="font-weight-bold sub-title">Билет: </span>
 
-                <span class="description italic" *ngIf="event.price[0].cost_rub=='0' else DontFree">Бесплатно</span>
+                <!-- <span class="description italic" *ngIf="event.price[0].cost_rub=='0' else DontFree">Бесплатно</span>
                 <ng-template #DontFree>
                   <span class="description italic">от {{ getMinPrice(event.price)}} до {{ getMaxPrice(event.price) }}</span>
-                </ng-template>
+                </ng-template> -->
               </div>
               <div>
                 <span class="description italic">{{ event.description }}</span>
@@ -158,7 +158,7 @@
           </ion-row>
           <ion-row class="events-map-container">
             <ion-accordion-group [multiple]="true">
-            <ion-accordion *ngFor="let place of places" class="seance">
+            <ion-accordion *ngFor="let place of event.places_full" class="seance">
               <ion-item slot="header" color="rgba(211, 207, 207, 0.45)">
 
                 <ion-label *ngIf="!(place.location.location_parent.name=='РФ'); else otherAddress">

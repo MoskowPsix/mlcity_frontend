@@ -229,7 +229,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     this.cdr.detectChanges()
   }
 
-  scrollEvent = (event: any): void => {
+  scrollEvent = (): void => {
     const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
     if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {
       if (!this.viewElementTimeStart){
@@ -245,13 +245,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
             delay(100),
             retry(3),
             catchError((err) =>{
-              // console.log(err)
               return of(EMPTY) 
             }),
             takeUntil(this.destroy$)
-          ).subscribe((response:any) => {
-            // console.log(response)
-           })
+          ).subscribe()
         } else {
           this.eventsService.addView(this.event.id, time).pipe(
             delay(100),
@@ -260,8 +257,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
               return of(EMPTY) 
             }),
             takeUntil(this.destroy$)
-          ).subscribe((response:any) => {
-           })
+          ).subscribe()
         }
         this.viewElement = true
       }

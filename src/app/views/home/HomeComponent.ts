@@ -78,8 +78,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // при клике по кнопке радиуча (5 10 15 20 25)
   setRadius(radius: number) {
-    this.CirclePoint.geometry?.setRadius(1000 * radius);
-    this.filterService.setRadiusTolocalStorage(radius.toString());
+    this.CirclePoint.geometry?.setRadius(1000 * radius)
+    this.filterService.setRadiusTolocalStorage(radius.toString())
   }
 
   async onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>): Promise<void> {
@@ -87,10 +87,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     // Создаем и добавляем круг
     this.CirclePoint = new ymaps.Circle([[11, 11], 1000 * this.radius], {}, { fillOpacity: 0.15, draggable: false });
-    await target.geoObjects.add(this.CirclePoint);
+    target.geoObjects.add(this.CirclePoint);
 
     // Определяем местоположение пользователя
-    await this.mapService.positionFilter(this.map, this.CirclePoint);
+    this.mapService.positionFilter(this.map, this.CirclePoint);
 
     //Создаем метку в центре круга, для перетаскивания
     this.myGeo = new ymaps.Placemark([11, 11], {}, {
@@ -107,7 +107,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sightsLoading = true;
       this.cdr.detectChanges();
       //this.getEvents()
-      await this.getEventsAndSights();
+      this.getEventsAndSights();
     }
 
     // Вешаем на карту событие начала перетаскивания
@@ -209,22 +209,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   });
   }
 
-  getEvents(): Observable<any> {
-    return new Observable((observer) => {
-      // this.setBoundsCoordsToMapService(); // я хз почему, но эта штука только тут работает
-      this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        this.filterService.setEventsCount(response.events.length)
-        observer.next(EMPTY);
-        observer.complete();
-      })
-    })
-  }
-
   getPlaces(): Observable<any> {
     return new Observable((observer) => {
     this.eventsLoading = true;
     this.placeService.getPlaces(this.queryBuilderService.queryBuilder('placesForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
       this.places = response.places
+      console.log(this.queryBuilderService.latitude, this.queryBuilderService.longitude)
+      // console.log(this.filterService.locationLatitude.value, this.filterService.locationLongitude.value)
+      let events: any[] = []
+      if (response.places.length) {
+        response.places.forEach((place:any) => {
+          events.push(place.event.id)
+        })
+        let events_collect = new Set(events);
+        this.filterService.setEventsCount(events_collect.size)
+      }
       this.cdr.detectChanges();
       observer.next(EMPTY);
       observer.complete();
@@ -253,7 +252,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.placemarks = [];
     }
     //добавить в if - && this.navigationService.appFirstLoading.value - если не требуется увеличивать радиус после первого запуска
-    if (!this.events.length && !this.sights.length && this.radius < 25 && this.navigationService.appFirstLoading.value) {
+    if (!this.places.length && !this.sights.length && this.radius < 25 && this.navigationService.appFirstLoading.value) {
       this.filterService.setRadiusTolocalStorage((++this.radius).toString());
       this.CirclePoint.geometry?.setRadius(this.radius * 1000);
       this.getEventsAndSights();
@@ -396,20 +395,24 @@ export class HomeComponent implements OnInit, OnDestroy {
   //   );
   // }
   getEventsAndSights() {
-    const sources = [this.getPlaces(), this.getSights(), this.getEvents()];
-    forkJoin(sources).pipe(
-      catchError((err) => {
-        this.toastService.showToast(MessagesErrors.default, 'danger');
-        this.navigationService.appFirstLoading.next(false);
-        this.eventsLoading = false;
-        this.sightsLoading = false;
-        this.cdr.detectChanges();
-        return of(EMPTY);
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.setMapData();
-    });
+    // if (this.queryBuilderService.latitude && this.queryBuilderService.longitude) {
+      const sources = [this.getPlaces(), this.getSights()];
+      forkJoin(sources).pipe(
+        catchError((err) => {
+          this.toastService.showToast(MessagesErrors.default, 'danger');
+          this.navigationService.appFirstLoading.next(false);
+          this.eventsLoading = false;
+          this.sightsLoading = false;
+          this.cdr.detectChanges();
+          return of(EMPTY);
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe(() => {
+        this.setMapData();
+      });
+    // } else {
+    //   this.getEventsAndSights()
+    // }
   }
 
   modalClose() {
@@ -464,6 +467,15 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.getEventsAndSights();
       }
     });
+
+    this.filterService.locationLongitude.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      this.mapService.circleCenterLongitude.next(value);
+    });
+
+    this.filterService.locationLatitude.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
+      this.mapService.circleCenterLatitude.next(value);
+    });
+    
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
