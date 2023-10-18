@@ -130,6 +130,21 @@
             </ion-toolbar>
         </ion-header>
         <ion-note color="primary" class="ion-padding-horizontal ion-padding-top">Текущий город: {{ city }}, {{ region }}</ion-note>
+
+        <div class="ion-padding-bottom" slot="content">
+            <ion-range 
+             [ticks]="true" 
+             [snaps]="true" 
+             [min]="1" 
+             [max]="25" 
+             [pin]="true" 
+             [value]="radius"
+             [pinFormatter]="pinRadiusFormatter"
+             (ionKnobMoveEnd)="radiusChange($event)"
+            ></ion-range>
+            <ion-label class="ion-padding-horizontal">Радиус поиска: {{ radius }} км.</ion-label>
+        </div>
+
         <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchCityes" (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
         <ion-note *ngIf="minLengthCityesListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
         <ion-content>

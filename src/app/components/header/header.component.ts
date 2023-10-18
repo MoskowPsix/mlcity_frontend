@@ -255,6 +255,16 @@ export class HeaderComponent implements OnInit,OnDestroy {
     this.navigationService.modalSearchEventsOpen.next(false)
   }
 
+  pinRadiusFormatter(value: number) {
+    return `${value} км.`;
+   }
+
+  //Меняем радиус
+  radiusChange(event:any){
+    this.filterService.setRadiusTolocalStorage(event.detail.value)
+    
+  }
+
   ngOnInit() {
 
     //Смотрим состояние кнопки назад

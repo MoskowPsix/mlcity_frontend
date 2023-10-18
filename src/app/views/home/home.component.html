@@ -1,33 +1,25 @@
 <ion-content>
     <div class="buttons-wrapper">
-      <div class="buttons-radius">
-        <ion-button size="small" [color]="radius === 1 ? 'secondary' : 'primary'" (click)="setRadius(1)" title="Радиус">1 км</ion-button>
-        <ion-button size="small" [color]="radius === 3 ? 'secondary' : 'primary'" (click)="setRadius(3)" title="Радиус">3 км</ion-button>
-        <ion-button size="small" [color]="radius === 5 ? 'secondary' : 'primary'" (click)="setRadius(5)" title="Радиус">5 км</ion-button>
-        <ion-button size="small" [color]="radius === 10 ? 'secondary' : 'primary'" (click)="setRadius(10)" title="Радиус">10 км</ion-button>
-
-      </div>
       <div class="filters">
         <app-filters></app-filters>
       </div>   
     </div>
-
-    <div class="events-counter" #eventCounter >
-      <span class="px-5px">Найдено событий</span>
-      <span *ngIf="!eventsLoading" class="px-5px counter">
-        {{ places.length }}
-      </span>
-      <span *ngIf="eventsLoading">
-          <ion-spinner color="light"></ion-spinner>
-      </span>
-      <span class="px-5px">мест</span>
-      <span *ngIf="!sightsLoading" class="counter">
-        {{ sights.length }}
-      </span>
-      <span *ngIf="sightsLoading">
-          <ion-spinner color="light"></ion-spinner>
-      </span>
+    
+    <div class="container-swither">
+      
+      <div class="swither" (click)="onSegmentChanged(event, 1)" #event>
+        <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon>
+      </div>
+      <div class="swither-bg" #buttonActive></div>
+      <div class="swither" (click)="onSegmentChanged(sight, 2)" #sight>
+        <ion-icon name="prism" class="swither-icon" color="primary"></ion-icon>
+      </div>
+      <div class="swither" (click)="onSegmentChanged(new, 3)" #new>
+        <ion-icon name="flame" class="swither-icon" color="primary"></ion-icon>
+      </div>
     </div>
+
+  
 
   <div class="map">
     <ya-map (ready)="onMapReady($event)"

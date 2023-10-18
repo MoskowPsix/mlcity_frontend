@@ -16,6 +16,7 @@ export class PlaceInfoComponent  implements OnInit {
 
   constructor() { }
 
+  
   getUnixTime(time: string) {
     return Math.ceil(new Date(time).getTime() / 86400000)
   }
@@ -31,6 +32,7 @@ export class PlaceInfoComponent  implements OnInit {
     )
   }
 
+  // определение какой это день в неделе
   dayWeek(date: any){
     
     return new Date(date).getDay()
@@ -41,7 +43,7 @@ export class PlaceInfoComponent  implements OnInit {
     this.date.dateEnd = event.dateEnd
 
   }
-
+  //Отбрасываем дату которая меньше нашей
   normalizeDate(){
     let cur_date: Date = new Date();
     let test = this.place_date.filter((d: any)=> new Date(d.dateStart).getTime()>=cur_date.getTime())

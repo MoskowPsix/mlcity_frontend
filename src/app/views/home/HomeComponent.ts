@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { YaReadyEvent } from 'angular8-yandex-maps';
 import { catchError, EMPTY, of, Subject, takeUntil, forkJoin, Observable, debounceTime, debounce, timer } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
@@ -24,6 +24,8 @@ import { IPlace } from 'src/app/models/place';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
+
+  @ViewChild('buttonActive') buttonActive!: ElementRef;
 
   host: string = environment.BACKEND_URL;
   port: string = environment.BACKEND_PORT;
@@ -412,6 +414,24 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   modalClose() {
     this.navigationService.modalEventShowOpen.next(false);
+  }
+
+  onSegmentChanged(event: any, p: number){
+    console.log(event.getBoundingClientRect())
+
+    if(p==1)
+    {
+      this.buttonActive.nativeElement.style.transform = "translateY(0px)"
+    }
+    else if(p==2)
+    {
+      this.buttonActive.nativeElement.style.transform = "translateY(46px)";
+    }
+    else if(p==3)
+    {
+      this.buttonActive.nativeElement.style.transform = "translateY(92px)"
+    }
+    
   }
 
   ngOnInit(): void {
