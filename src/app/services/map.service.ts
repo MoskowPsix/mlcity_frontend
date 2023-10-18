@@ -236,8 +236,8 @@ export class MapService {
     this.locationService.getLocationsWithRegion(this.geolocationCity.value, this.geolocationRegion.value).pipe().subscribe((response: any) => {
       this.filterService.setLocationTolocalStorage(response.locations.id)
     })
-    //this.filterService.setLocationTolocalStorage(this.geolocationCity.value)
-    //this.filterService.setLocationTolocalStorage(this.geolocationRegion.value)
+    this.filterService.setLocationTolocalStorage(this.geolocationCity.value)
+    this.filterService.setLocationTolocalStorage(this.geolocationRegion.value)
     this.filterService.setLocationLatitudeTolocalStorage(this.geolocationLatitude.value.toString())
     this.filterService.setlocationLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
   }

@@ -207,22 +207,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   });
   }
 
-  getEvents(): Observable<any> {
-    return new Observable((observer) => {
-      // this.setBoundsCoordsToMapService(); // я хз почему, но эта штука только тут работает
-      this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        // this.filterService.setEventsCount(response.events.length)
-        observer.next(EMPTY);
-        observer.complete();
-      })
-    })
-  }
-
   getPlaces(): Observable<any> {
     return new Observable((observer) => {
     this.eventsLoading = true;
     this.placeService.getPlaces(this.queryBuilderService.queryBuilder('placesForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
       this.places = response.places
+      console.log(this.queryBuilderService.latitude, this.queryBuilderService.longitude)
+      // console.log(this.filterService.locationLatitude.value, this.filterService.locationLongitude.value)
+      let events: any[] = []
+      if (response.places.length) {
+        response.places.forEach((place:any) => {
+          events.push(place.event.id)
+        })
+        let events_collect = new Set(events);
+        this.filterService.setEventsCount(events_collect.size)
+      }
       this.cdr.detectChanges();
       observer.next(EMPTY);
       observer.complete();
@@ -235,7 +234,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sightsLoading = true;
       this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
         this.sights = response.sights;
-        // this.filterService.setSightsCount(response.sights.length)
+        this.filterService.setSightsCount(response.sights.length)
         //this.sightsLoading = false
         this.cdr.detectChanges();
         observer.next(EMPTY);
@@ -394,20 +393,24 @@ export class HomeComponent implements OnInit, OnDestroy {
   //   );
   // }
   getEventsAndSights() {
-    const sources = [this.getPlaces(), this.getSights(), this.getEvents()];
-    forkJoin(sources).pipe(
-      catchError((err) => {
-        this.toastService.showToast(MessagesErrors.default, 'danger');
-        this.navigationService.appFirstLoading.next(false);
-        this.eventsLoading = false;
-        this.sightsLoading = false;
-        this.cdr.detectChanges();
-        return of(EMPTY);
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.setMapData();
-    });
+    // if (this.queryBuilderService.latitude && this.queryBuilderService.longitude) {
+      const sources = [this.getPlaces(), this.getSights()];
+      forkJoin(sources).pipe(
+        catchError((err) => {
+          this.toastService.showToast(MessagesErrors.default, 'danger');
+          this.navigationService.appFirstLoading.next(false);
+          this.eventsLoading = false;
+          this.sightsLoading = false;
+          this.cdr.detectChanges();
+          return of(EMPTY);
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe(() => {
+        this.setMapData();
+      });
+    // } else {
+    //   this.getEventsAndSights()
+    // }
   }
 
   modalClose() {
@@ -448,6 +451,15 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.getEventsAndSights();
       }
     });
+
+    this.filterService.locationLongitude.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      this.mapService.circleCenterLongitude.next(value);
+    });
+
+    this.filterService.locationLatitude.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
+      this.mapService.circleCenterLatitude.next(value);
+    });
+    
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
