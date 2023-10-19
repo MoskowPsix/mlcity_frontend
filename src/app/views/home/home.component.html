@@ -6,7 +6,6 @@
     </div>
     
     <div class="container-swither">
-      
       <div class="swither" (click)="onSegmentChanged(event, 1)" #event>
         <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon>
       </div>
@@ -20,8 +19,9 @@
     </div>
 
   
-
   <div class="map">
+    <!-- <app-sight-type-carusel></app-sight-type-carusel> -->
+    <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading"></ion-progress-bar>
     <ya-map (ready)="onMapReady($event)"
       [zoom]="15"  
       [center]="[0,0]"

@@ -137,9 +137,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       const projection = this.map.target.options.get('projection');
       const coords = projection.fromGlobalPixels(globalPixelCenter, zoom);
 
-      this.CirclePoint.geometry?.setCoordinates(coords);
-      this.myGeo.geometry?.setCoordinates(coords);
-
+      this.CirclePoint.geometry!.setCoordinates(coords);
+      this.myGeo.geometry!.setCoordinates(coords);
+      this.mapService.circleCenterLongitude.next(coords[1]);
+      this.mapService.circleCenterLatitude.next(coords[0]);
     });
 
     // Вешаем на карту событие по окончинию перетаскивания
@@ -214,7 +215,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.eventsLoading = true;
     this.placeService.getPlaces(this.queryBuilderService.queryBuilder('placesForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
       this.places = response.places
-      console.log(this.queryBuilderService.latitude, this.queryBuilderService.longitude)
       // console.log(this.filterService.locationLatitude.value, this.filterService.locationLongitude.value)
       let events: any[] = []
       if (response.places.length) {
@@ -420,8 +420,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onSegmentChanged(event: any, p: number){
-    console.log(event.getBoundingClientRect())
-
     if(p==1)
     {
       this.buttonActive.nativeElement.style.transform = "translateY(0px)"
