@@ -14,6 +14,7 @@ import { ISight } from 'src/app/models/sight';
 import { SightsService } from 'src/app/services/sights.service';
 import { PlaceService } from 'src/app/services/place.service';
 import { IPlace } from 'src/app/models/place';
+import { types } from 'util';
 
 
 
@@ -54,6 +55,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   eventsLoading: boolean = false;
   sightsLoading: boolean = false;
+  stateType: string = "events"
 
   modalEventShowOpen: boolean = false;
   modalContent: any[] = [];
@@ -248,6 +250,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   setMapData() {
     if (this.objectsInsideCircle) {
       this.map.target.geoObjects.remove(this.objectsInsideCircle);
+      
       this.objectsInsideCircle.remove(this.placemarks);
       this.placemarks = [];
     }
@@ -263,8 +266,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     //this.setPlacemarks(this.events, 'events');
-    this.setPlacemarks(this.sights, 'sights');
-    this.setPlacemarks(this.places, 'event');
+    
+    
+    if(this.stateType=="events"){
+      this.setPlacemarks(this.places, 'event');
+    }
+    else if(this.stateType=='sights'){
+
+      this.setPlacemarks(this.sights, 'sights');
+    }
+    else if(this.stateType=="all"){
+      this.setPlacemarks(this.places, 'event');
+      this.setPlacemarks(this.sights, 'sights');
+    }
+    
 
     this.setPlacemarksAndClusters();
     this.setBoundsCoordsToMapService();
@@ -273,7 +288,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   setPlacemarks(collection: any, type: string) {
     collection.map((item: any) => {
-      //console.log(item)
+      
       let time_event = Math.ceil(new Date(item.date_start).getTime() / 1000)
       let time_now = Math.ceil(new Date().getTime() / 1000);
       let time_deff = time_event - time_now
@@ -304,6 +319,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"></div>`)
           });
           this.placemarks.push(placemark);
+         
       }
       // if ( 0 > time_deff ) { // Сейчас
       //   placemark = new ymaps.Placemark(
@@ -396,7 +412,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   // }
   getEventsAndSights() {
     // if (this.queryBuilderService.latitude && this.queryBuilderService.longitude) {
-      const sources = [this.getPlaces(), this.getSights()];
+      const sources: any[] = []
+      if (this.stateType=="events"){
+        sources.push(this.getPlaces())
+      }
+      else if(this.stateType=="sights"){
+        sources.push(this.getSights())
+      }
+      else if(this.stateType=="all"){
+        sources.push(this.getPlaces())
+        sources.push(this.getSights())
+      }
+
+      
       forkJoin(sources).pipe(
         catchError((err) => {
           this.toastService.showToast(MessagesErrors.default, 'danger');
@@ -408,7 +436,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$)
       ).subscribe(() => {
+        
         this.setMapData();
+        
       });
     // } else {
     //   this.getEventsAndSights()
@@ -475,6 +505,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.locationLatitude.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.mapService.circleCenterLatitude.next(value);
     });
+
+    
     
   }
   ngOnDestroy() {
