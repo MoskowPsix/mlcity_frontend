@@ -37,8 +37,9 @@
     </div>
 
   
-
   <div class="map">
+    <!-- <app-sight-type-carusel></app-sight-type-carusel> -->
+    <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading"></ion-progress-bar>
     <ya-map (ready)="onMapReady($event)"
       [zoom]="15"  
       [center]="[0,0]"
