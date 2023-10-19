@@ -1,9 +1,16 @@
 <ion-content>
     <div class="buttons-wrapper">
+      
       <div class="filters">
         <!-- <app-filters></app-filters> -->
+        
       </div>   
     </div>
+
+    <div class="calendula-container" #calendula [ngStyle]="{'top':headerHeight.offsetHeight + 'px'}">
+      <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
+    </div>
+    
 
     
     
@@ -13,7 +20,7 @@
         <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon>
       </div>
       <div class="swither-bg" #buttonActive></div>
-      <div class="swither" (click)="onSegmentChanged(sight, 2)" (click)="stateType='sights'" (click)="getEventsAndSights()" #sight>
+      <div class="swither test" (click)="onSegmentChanged(sight, 2)" (click)="stateType='sights'" (click)="getEventsAndSights()" #sight>
         <ion-icon name="prism" class="swither-icon" color="primary"></ion-icon>
       </div>
       <div class="swither" (click)="onSegmentChanged(new, 3)" #new>
