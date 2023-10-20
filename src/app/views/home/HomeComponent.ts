@@ -84,6 +84,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.setRadiusTolocalStorage(radius.toString())
   }
 
+  sightTypesChange(typeId: number){
+    this.filterService.setSightTypesTolocalStorage([typeId])
+    this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+    this.filterService.setlocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
+    this.filterService.changeFilter.next(true)
+  }
+
   async onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>): Promise<void> {
     this.map = { target, ymaps };
 
