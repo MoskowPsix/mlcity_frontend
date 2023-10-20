@@ -72,6 +72,8 @@ import { SettingsFavoriteComponent } from './views/cabinet/settings/settings-fav
 import { SettingsNotificationComponent } from './views/cabinet/settings/settings-notification/settings-notification.component';
 import { PlaceInfoComponent } from './components/place-info/place-info.component';
 import { SightTypeComponent } from './components/sight-type/sight-type.component';
+import { SafeUrlPipe } from './views/events/event-create/event-create.pipe';
+import { SafeUrlPipe2 } from './components/event-card/event-card.pipe';
 
 
 
@@ -124,6 +126,8 @@ registerLocaleData(localeRu, 'ru');
     SettingsNotificationComponent,
     PlaceInfoComponent,
     SightTypeCaruselComponent,
+    SafeUrlPipe,
+    SafeUrlPipe2
     
   ],
   imports: [

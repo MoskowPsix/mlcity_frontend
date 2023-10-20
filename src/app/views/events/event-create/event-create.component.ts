@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgModule } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
 import { FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
@@ -28,6 +28,11 @@ import {register} from 'swiper/element/bundle';
 import { FilterService } from 'src/app/services/filter.service';
 import { LocationService } from 'src/app/services/location.service';
 import { SightsService } from 'src/app/services/sights.service';
+import { SafeUrlPipe } from './event-create.pipe';
+
+
+
+
 
 @Component({
   selector: 'app-event-create',
@@ -52,6 +57,8 @@ import { SightsService } from 'src/app/services/sights.service';
 
   ]
 })
+
+
 
 export class EventCreateComponent implements OnInit, OnDestroy {
 

@@ -119,8 +119,8 @@ export class QueryBuilderService {
       latitude: this.latitude,
       longitude: this.longitude,
       //eventTypes: this.eventTypes,
-      //dateStart: this.dateStart,
-      //dateEnd: this.dateEnd,
+      dateStart: this.dateStart,
+      dateEnd: this.dateEnd,
       radius: this.radius,
     }
   }
