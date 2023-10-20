@@ -48,7 +48,15 @@
 }
 .content-swither{
 
-}	
+}
+
+.calendula-container{
+	position: absolute;
+	width: 100%;
+	top: -40px;
+	transition: 0.5s ease-in-out;
+	z-index: 4;
+}
 .swither{
 	padding: 6px;
 	border-radius:24px;
@@ -60,6 +68,8 @@
 	background-color: rgba(181, 182, 187, 0.15);
 	border-radius:24px;
 }
+
+
 .swither-icon{
 	width: 30px;
 	height: 30px;
@@ -176,6 +186,12 @@ ion-spinner{
 		top: 2.8rem;
 	}
 
+	.calendula-container{
+		margin-top: 56px;
+	}
+
+	
+
 	.filters{
 		position: fixed;
 		bottom: 5rem;
@@ -224,6 +240,7 @@ ion-spinner{
 			--background: rgba(255, 255, 255, 0);
 			 backdrop-filter: blur(5px);
 		}
+		
 	}
 }
 
@@ -242,4 +259,5 @@ ion-spinner{
 	.events-counter{
 		top: 8rem;
 	}
+	
 }

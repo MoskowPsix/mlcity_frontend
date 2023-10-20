@@ -27,6 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   @ViewChild('buttonActive') buttonActive!: ElementRef;
+  @ViewChild('calendula') calendula!: ElementRef
 
   host: string = environment.BACKEND_URL;
   port: string = environment.BACKEND_PORT;
@@ -47,6 +48,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   minZoom = 8;
   clusterer!: ymaps.Clusterer;
   radius: number = 1;
+  date: any = {dateStart: new Date().toISOString(), dateEnd: new Date().toISOString()}
+  headerHeight: any = document.getElementById('header')
+  headerHeightM: any = document.getElementById('header-m')
+  
 
   objectsInsideCircle!: any;
   pixelCenter: any;
@@ -459,17 +464,30 @@ export class HomeComponent implements OnInit, OnDestroy {
   onSegmentChanged(event: any, p: number){
     if(p==1)
     {
+      console.log(this.headerHeightM.nativeElement)
       this.buttonActive.nativeElement.style.transform = "translateY(0px)"
+      this.calendula.nativeElement.style.top = this.headerHeight.offsetHeight + "px"
     }
     else if(p==2)
     {
       this.buttonActive.nativeElement.style.transform = "translateY(46px)";
+      this.calendula.nativeElement.style.top = "-100px"
     }
     else if(p==3)
     {
       this.buttonActive.nativeElement.style.transform = "translateY(92px)"
     }
     
+  }
+  changeDateRange(event: any){
+    this.date.dateStart = event.dateStart
+    this.date.dateEnd = event.dateEnd
+
+  }
+  setDate(event: any) {
+    this.filterService.setStartDateTolocalStorage(event.dateStart)
+    this.filterService.setEndDateTolocalStorage(event.dateEnd)
+    this.filterService.changeFilter.next(true)   
   }
 
   ngOnInit(): void {
