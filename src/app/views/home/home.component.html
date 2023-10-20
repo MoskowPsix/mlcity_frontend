@@ -9,6 +9,7 @@
 
     <div class="calendula-container" #calendula [ngStyle]="{'top':headerHeight.offsetHeight + 'px'}">
       <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
+      <!-- <app-sight-type-carusel (typeOutput)="sightTypesChange($event)"></app-sight-type-carusel> -->
     </div>
     
 
@@ -30,8 +31,8 @@
 
   
   <div class="map">
-    <!-- <app-sight-type-carusel></app-sight-type-carusel> -->
     <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading"></ion-progress-bar>
+    <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'"></app-sight-type-carusel>
     <ya-map (ready)="onMapReady($event)"
       [zoom]="15"  
       [center]="[0,0]"

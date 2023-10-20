@@ -1,28 +1,7 @@
 <ion-row class="content">
     <ion-icon name="chevron-back-outline" class="ico_left" (click)="scrollLeft()" ></ion-icon>
-    <div class="container">
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-        <p class="item">CONTENT</p>
-    </div>
+    <div class="container" #wigetScroll>
+        <p class="item" *ngFor="let type of types" [class.active]="type.id === type_id" (click)="getTypeId(type.id)" >{{type.name}}</p>
+      </div>
     <ion-icon name="chevron-forward-outline" class="ico_right" (click)="scrollRight()"></ion-icon>
 </ion-row>

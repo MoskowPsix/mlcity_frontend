@@ -89,6 +89,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.setRadiusTolocalStorage(radius.toString())
   }
 
+  sightTypesChange(typeId: number){
+    this.filterService.setSightTypesTolocalStorage([typeId])
+    this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+    this.filterService.setlocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
+    this.filterService.changeFilter.next(true)
+  }
+
   async onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>): Promise<void> {
     this.map = { target, ymaps };
 
@@ -424,10 +431,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       else if(this.stateType=="sights"){
         sources.push(this.getSights())
       }
-      else if(this.stateType=="all"){
-        sources.push(this.getPlaces())
-        sources.push(this.getSights())
-      }
+    
 
       
       forkJoin(sources).pipe(
@@ -478,9 +482,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
   setDate(event: any) {
-    this.filterService.setStartDateTolocalStorage(event.dateStart)
-    this.filterService.setEndDateTolocalStorage(event.dateEnd)
-    this.filterService.changeFilter.next(true)   
+    this.filterService.setStartDateTolocalStorage(event.dateStart.toString())
+    this.filterService.setEndDateTolocalStorage(event.dateEnd.toString())
+    this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+    this.filterService.setlocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())   
+    // this.queryBuilderService.updateParams()
+    this.filterService.changeFilter.next(true)
+    console.log(this.filterService.endDate.value)
   }
 
   ngOnInit(): void {
