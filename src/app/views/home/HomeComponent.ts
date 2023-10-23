@@ -238,11 +238,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       // console.log(this.filterService.locationLatitude.value, this.filterService.locationLongitude.value)
       let events: any[] = []
       if (response.places.length) {
-        response.places.forEach((place:any) => {
-          events.push(place.event.id)
-        })
-        let events_collect = new Set(events);
-        this.filterService.setEventsCount(events_collect.size)
+        
+        
+        
       }
       this.cdr.detectChanges();
       observer.next(EMPTY);
