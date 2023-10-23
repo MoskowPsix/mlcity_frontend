@@ -20,4 +20,8 @@ export class PlaceService {
     //return this.http.get<IPlsce[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`, { params: {...params} } )
   }
 
+  getPlaceById(id:number){
+    console.log(id)
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/places/${id}`)
+  }
 }

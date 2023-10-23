@@ -192,13 +192,28 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.objectsInsideCircle.events.add('click', (e: any) => {
       this.modalContent = [];
-
+      
       if (!e.get('target')._clusterBounds) {
-
+        console.log(e.get('target'))
+        console.log(e.get('target').properties.get('geoObjects'))
         if (e.get('target').properties.get('geoObjects') !== undefined) {
+          console.log("WORK")
           e.get('target').properties.get('geoObjects').forEach((element: any) => {
+            console.log("WORK 2")
+              console.log(element)
+              let place
             if (element.options._options.balloonContent.type === 'event') {
-            this.modalContent.push(element.options._options.balloonContent.event);
+              this.placeService.getPlaceById(element.options._options.balloonContent.id).pipe(
+                takeUntil(this.destroy$)
+                  
+                ).subscribe((response: any) => {
+                
+                  this.modalContent.push(response.event)
+                  console.log(response)
+                
+              })
+              console.log(place)
+            
             this.activeClaster = e.get('target');
             e.get('target').options.set('preset', 'islands#invertedPinkClusterIcons');
             } else {
@@ -226,6 +241,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         }
         this.navigationService.modalEventShowOpen.next(true);
+        console.log(this.modalContent)
       }
   });
   }
@@ -303,6 +319,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   setPlacemarks(collection: any, type: string) {
+
     collection.map((item: any) => {
       
       let time_event = Math.ceil(new Date(item.date_start).getTime() / 1000)
