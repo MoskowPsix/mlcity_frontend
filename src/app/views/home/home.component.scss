@@ -3,7 +3,7 @@
 	height: 94vh;
 	ion-progress-bar {
 		position: absolute;
-		z-index: 1;
+		z-index: 2;
 	}
 	app-sight-type-carusel{
 		transition: 0.5;
@@ -56,7 +56,7 @@
 	width: 100%;
 	top: -40px;
 	transition: 0.5s ease-in-out;
-	z-index: 4;
+	z-index: 1;
 }
 .swither{
 	padding: 6px;
@@ -173,7 +173,7 @@ ion-spinner{
 		ion-progress-bar {
 			top: 3.5rem;
 			position: absolute;
-			z-index: 1;
+			z-index: 2;
 		}
 		app-sight-type-carusel{
 			transition: 0.5;
@@ -251,7 +251,7 @@ ion-spinner{
 		ion-progress-bar {
 			top: 7.4rem;
 			position: absolute;
-			z-index: 1;
+			z-index: 2;
 		}
 		app-sight-type-carusel{
 			transition: 0.5;

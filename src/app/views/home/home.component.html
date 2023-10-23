@@ -9,7 +9,7 @@
 
     <div class="calendula-container" #calendula [ngStyle]="{'top':headerHeight.offsetHeight + 'px'}">
       <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
-      <!-- <app-sight-type-carusel (typeOutput)="sightTypesChange($event)"></app-sight-type-carusel> -->
+      <app-event-type-carusel (typeOutput)="eventTypesChange($event)"></app-event-type-carusel>
     </div>
     
 
