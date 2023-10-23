@@ -1,9 +1,9 @@
 .filters{
     position: relative;
-    z-index: 999999;
+    z-index: 1;
 }
-.calendula {
-	
+app-event-type-carusel{
+	z-index: 4;
 }
 .segments {
 	background-color:#ced4e0;

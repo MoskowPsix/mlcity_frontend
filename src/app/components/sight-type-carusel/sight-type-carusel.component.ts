@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { EventTypeService } from 'src/app/services/event-type.service';
 import { SightTypeService } from 'src/app/services/sight-type.service';
@@ -12,22 +12,21 @@ export class SightTypeCaruselComponent  implements OnInit {
   private readonly destroy$ = new Subject<void>()
 
   @Output() typeOutput = new EventEmitter();
-  @ViewChild('wigetScroll') wigetScroll!: ElementRef;
+  @ViewChild('wigetSightScroll') wigetSightScroll!: ElementRef;
   scroll?: any
   typesLoaded: boolean = true
   types: any[] = []
-  type_id!: number
+  @Input() type_id: any
 
   constructor(
-    private eventTypeService: EventTypeService,
     private sightTypeService: SightTypeService
   ) { }
 
   scrollLeft() {
-    this.wigetScroll.nativeElement.scrollTo({ left: (this.wigetScroll.nativeElement.scrollLeft - this.scroll), behavior: 'smooth' });
+    this.wigetSightScroll.nativeElement.scrollTo({ left: (this.wigetSightScroll.nativeElement.scrollLeft - this.scroll), behavior: 'smooth' });
   }
   scrollRight() {
-    this.wigetScroll.nativeElement.scrollTo({ left: (this.wigetScroll.nativeElement.scrollLeft + this.scroll), behavior: 'smooth' });
+    this.wigetSightScroll.nativeElement.scrollTo({ left: (this.wigetSightScroll.nativeElement.scrollLeft + this.scroll), behavior: 'smooth' });
   }
 
   getTypesEvent() {
@@ -41,14 +40,29 @@ export class SightTypeCaruselComponent  implements OnInit {
   getTypeId(id: any) {
     this.type_id = id
     this.onTypeOutput()
+    this.fixCenterElement(id)
   }
   onTypeOutput() {
     this.typeOutput.emit(this.type_id)
   }
 
+  fixCenterElement(type_id: any) {
+    var elem = this.wigetSightScroll.nativeElement.offsetWidth
+    let left = document.getElementById(type_id+'sight')!.offsetLeft
+    let right = elem - document.getElementById(type_id+'sight')!.offsetLeft  
+    // console.log( this.wigetSightScroll.nativeElement)
+    if (left > right) {
+      this.wigetSightScroll.nativeElement.scrollTo({left: left - elem/2, behavior: 'smooth'})
+    } else if (right > left) {
+      this.wigetSightScroll.nativeElement.scrollTo({right:right - elem/2, behavior: 'smooth'})
+    }
+  }
+
   ngOnInit() {
     this.getTypesEvent()
     if(!this.scroll) {this.scroll = 300}
+    if(!this.type_id) {this.type_id = 'all'}
+    setTimeout(() => {this.fixCenterElement(this.type_id)}, 5000) 
   }
 
 }

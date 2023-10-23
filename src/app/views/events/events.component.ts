@@ -37,6 +37,9 @@ export class EventsComponent implements OnInit, OnDestroy {
   totalPagesEventsCity: number = 1
   totalPagesEventsGeolocation: number = 1
 
+  eventTypeId: any
+  sightTypeId: any
+
   constructor(
     private eventsService: EventsService,
     private toastService: ToastService,
@@ -144,7 +147,19 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.city = response.location.name
       })
     })
+    this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
+      this.eventTypeId = value[0]
+    });
 
+  }
+  eventTypesChange(typeId: any){
+    if (typeId !== 'all') {
+      this.filterService.setEventTypesTolocalStorage([typeId])
+      this.filterService.changeFilter.next(true)
+    } else {
+      this.filterService.setEventTypesTolocalStorage([])
+      this.filterService.changeFilter.next(true)
+    }
   }
 
   ngOnDestroy(){
