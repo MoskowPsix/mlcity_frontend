@@ -76,7 +76,7 @@
           </ng-container> 
           
           <ng-container *ngIf="!loadingMoreEventsCity">
-            <div *ngIf="currentPageEventsCity !== totalPagesEventsCity" class="ion-margin-horizontal">
+            <div *ngIf="nextPage" class="ion-margin-horizontal">
               <ion-button expand="block" (click)="eventsCityLoadingMore()" [disabled]="loadingMoreEventsCity">
                 <ion-icon *ngIf="!loadingMoreEventsCity" slot="start" name="reload-outline"></ion-icon>
                 <span>Загрузить еще</span>

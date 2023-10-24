@@ -13,6 +13,7 @@ import { DomSanitizer } from '@angular/platform-browser'
 import {register} from 'swiper/element/bundle'
 import {Swiper} from 'swiper/types'
 import { SightsService } from 'src/app/services/sights.service'
+import { CommentsService } from 'src/app/services/comments.service'
 
 @Component({
   selector: 'app-event-card',
@@ -24,6 +25,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     private authService: AuthService,
     private eventsService: EventsService,
     private sightsService: SightsService,
+    private commentsServices: CommentsService,
     private toastService: ToastService,
     private vkService: VkService,
     private cdr: ChangeDetectorRef,
@@ -35,7 +37,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   @Input() callFromCabinet: boolean = true
   @Input() event!: any
   @Input() isSight: boolean = false
-  @Input() comments: boolean = true
+  comments: boolean = false
 
   @ViewChild('swiper')
   elementRef?: ElementRef
@@ -268,7 +270,21 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   toggleComment() {
-    this.comments ?  this.comments = false : this.comments = true
+    if (!this.comments && !this.event.comments && !this.isSight) {
+      this.commentsServices.getCommentsEventsIds(this.event.id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.event['comments'] = response.comments
+        response.comments ?  this.comments = true : this.comments = false
+      })
+    } else if(!this.comments && !this.event.comments && this.isSight) {
+      this.commentsServices.getCommentsSightsIds(this.event.id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.event['comments'] = response.comments
+        response.comments ?  this.comments = true : this.comments = false
+      })
+    }else if(!this.comments && this.event.comments) {
+      this.comments = true
+    } else if (this.comments && this.event.comments) {
+      this.comments = false
+    }
   }
   takeUntilDestroyed() {
     console.log(this.event.name)

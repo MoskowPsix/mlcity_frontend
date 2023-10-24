@@ -147,7 +147,6 @@ export class HeaderComponent implements OnInit,OnDestroy {
       this.minLengthEventsListError = false
       this.queryParams =  {
         pagination: true,
-        page: 1,
         limit: 50,
         favoriteUser: true,
         likedUser: true,

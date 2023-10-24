@@ -34,8 +34,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   currentPageEventsCity: number = 1
   currentPageEventsGeolocation: number = 1
 
-  totalPagesEventsCity: number = 1
-  totalPagesEventsGeolocation: number = 1
+  nextPage: boolean = false
 
   eventTypeId: any
   sightTypeId: any
@@ -64,8 +63,8 @@ export class EventsComponent implements OnInit, OnDestroy {
       map((respons:any) => {
         this.eventsCity.push(...respons.events.data)
         this.filterService.setEventsCount(respons.events.total)
-        this.totalPagesEventsCity = respons.events.last_page
-        //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
+        this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(respons.events.next_cursor)
+        respons.events.next_cursor ? this.nextPage = true : this.nextPage = false
       }),
       tap(() => {
         this.loadingEventsCity = true  
@@ -80,43 +79,43 @@ export class EventsComponent implements OnInit, OnDestroy {
     ).subscribe()
   }
 
-  getEventsGeolocation(){
-    this.loadingMoreEventsGeolocation ? this.loadingEventsGeolocation = true : this.loadingEventsGeolocation = false
+  // getEventsGeolocation(){
+  //   this.loadingMoreEventsGeolocation ? this.loadingEventsGeolocation = true : this.loadingEventsGeolocation = false
 
-    this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsPublicForGeolocationTab')).pipe(
-      delay(100),
-      retry(3),
-      map((respons:any) => {
-        this.eventsGeolocation.push(...respons.events.data)
-        this.totalPagesEventsGeolocation = respons.events.last_page
-        //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
-      }),
-      tap(() => {
-        this.loadingEventsGeolocation = true  
-        this.loadingMoreEventsGeolocation = false
-      }),
-      catchError((err) =>{
-        this.toastService.showToast(MessagesErrors.default, 'danger')
-        this.loadingEventsGeolocation = false
-        return of(EMPTY) 
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe()
-  }
+  //   this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsPublicForGeolocationTab')).pipe(
+  //     delay(100),
+  //     retry(3),
+  //     map((respons:any) => {
+  //       this.eventsGeolocation.push(...respons.events.data)
+  //       this.totalPagesEventsGeolocation = respons.events.last_page
+  //       //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
+  //     }),
+  //     tap(() => {
+  //       this.loadingEventsGeolocation = true  
+  //       this.loadingMoreEventsGeolocation = false
+  //     }),
+  //     catchError((err) =>{
+  //       this.toastService.showToast(MessagesErrors.default, 'danger')
+  //       this.loadingEventsGeolocation = false
+  //       return of(EMPTY) 
+  //     }),
+  //     takeUntil(this.destroy$)
+  //   ).subscribe()
+  // }
 
   eventsCityLoadingMore(){
     this.loadingMoreEventsCity = true
     this.currentPageEventsCity++
-    this.queryBuilderService.paginationPublicEventsCityCurrentPage.next(this.currentPageEventsCity)
+    // this.queryBuilderService.paginationPublicEventsCityCurrentPage.next(this.currentPageEventsCity)
     this.getEventsCity()
   }
 
-  eventsGeolocationLoadingMore(){
-    this.loadingMoreEventsGeolocation = true
-    this.currentPageEventsGeolocation++
-    this.queryBuilderService.paginationPublicEventsGeolocationCurrentPage.next(this.currentPageEventsGeolocation)
-    this.getEventsGeolocation()
-  }
+  // eventsGeolocationLoadingMore(){
+  //   this.loadingMoreEventsGeolocation = true
+  //   this.currentPageEventsGeolocation++
+  //   this.queryBuilderService.paginationPublicEventsGeolocationCurrentPage.next(this.currentPageEventsGeolocation)
+  //   this.getEventsGeolocation()
+  // }
 
   onSegmentChanged(event: any){
     this.segment = event.detail.value
@@ -128,7 +127,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.eventsCity = []
     this.eventsGeolocation = []
     this.getEventsCity()
-    this.getEventsGeolocation()
+    // this.getEventsGeolocation()
 
     //Подписываемся на изменение фильтра 
     this.filterService.changeFilter.pipe(debounceTime(1000),takeUntil(this.destroy$)).subscribe((value) => {
@@ -136,7 +135,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.eventsCity = []
         this.eventsGeolocation = []
         this.getEventsCity()
-        this.getEventsGeolocation()
+        // this.getEventsGeolocation()
       }
       this.navigationService.appFirstLoading.next(false)// чтобы удалялся фильтр,
     })

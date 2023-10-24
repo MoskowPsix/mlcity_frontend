@@ -32,8 +32,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   currentPageSightsCity: number = 1
   currentPageSightsGeolocation: number = 1
 
-  totalPagesSightsCity: number = 1
-  totalPagesSightsGeolocation: number = 1
+  nextPage: boolean = false
 
   sightTypeId: any
 
@@ -54,10 +53,11 @@ export class SightsComponent implements OnInit, OnDestroy {
       delay(100),
       retry(3),
       map((respons:any) => {
+        console.log(respons)
         this.sightsCity.push(...respons.sights.data)
-        this.filterService.setSightsCount(respons.sights.total)
-        this.totalPagesSightsCity = respons.sights.last_page
-        //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
+        this.filterService.setSightsCount(respons.total)
+        this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(respons.sights.next_cursor)
+        respons.sights.next_cursor ? this.nextPage = true : this.nextPage = false
       }),
       tap(() => {
         this.loadingSightsCity = true  
@@ -72,43 +72,43 @@ export class SightsComponent implements OnInit, OnDestroy {
     ).subscribe()
   }
 
-  getSightsGeolocation(){
-    this.loadingMoreSightsGeolocation ? this.loadingSightsGeolocation = true : this.loadingSightsGeolocation = false
+  // getSightsGeolocation(){
+  //   this.loadingMoreSightsGeolocation ? this.loadingSightsGeolocation = true : this.loadingSightsGeolocation = false
 
-    this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsPublicForGeolocationTab')).pipe(
-      delay(100),
-      retry(3),
-      map((respons:any) => {
-        this.sightsGeolocation.push(...respons.sights.data)
-        this.totalPagesSightsGeolocation = respons.sights.last_page
-        //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
-      }),
-      tap(() => {
-        this.loadingSightsGeolocation = true  
-        this.loadingMoreSightsGeolocation = false
-      }),
-      catchError((err) =>{
-        this.toastService.showToast(MessagesErrors.default, 'danger')
-        this.loadingSightsGeolocation = false
-        return of(EMPTY) 
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe()
-  }
+  //   this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsPublicForGeolocationTab')).pipe(
+  //     delay(100),
+  //     retry(3),
+  //     map((respons:any) => {
+  //       this.sightsGeolocation.push(...respons.sights.data)
+  //       this.totalPagesSightsGeolocation = respons.sights.last_page
+  //       //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
+  //     }),
+  //     tap(() => {
+  //       this.loadingSightsGeolocation = true  
+  //       this.loadingMoreSightsGeolocation = false
+  //     }),
+  //     catchError((err) =>{
+  //       this.toastService.showToast(MessagesErrors.default, 'danger')
+  //       this.loadingSightsGeolocation = false
+  //       return of(EMPTY) 
+  //     }),
+  //     takeUntil(this.destroy$)
+  //   ).subscribe()
+  // }
 
   sightsCityLoadingMore(){
     this.loadingMoreSightsCity = true
     this.currentPageSightsCity++
-    this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(this.currentPageSightsCity)
+    // this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(this.currentPageSightsCity)
     this.getSightsCity()
   }
 
-  sightsGeolocationLoadingMore(){
-    this.loadingMoreSightsGeolocation = true
-    this.currentPageSightsGeolocation++
-    this.queryBuilderService.paginationPublicSightsGeolocationCurrentPage.next(this.currentPageSightsGeolocation)
-    this.getSightsGeolocation()
-  }
+  // sightsGeolocationLoadingMore(){
+  //   this.loadingMoreSightsGeolocation = true
+  //   this.currentPageSightsGeolocation++
+  //   this.queryBuilderService.paginationPublicSightsGeolocationCurrentPage.next(this.currentPageSightsGeolocation)
+  //   this.getSightsGeolocation()
+  // }
 
   onSegmentChanged(event: any){
     this.segment = event.detail.value
@@ -118,7 +118,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     this.sightsCity = []
     this.sightsGeolocation = []
     this.getSightsCity()
-    this.getSightsGeolocation()
+    // this.getSightsGeolocation()
 
     //Подписываемся на изменение фильтра 
     this.filterService.changeFilter.pipe(debounceTime(1000),takeUntil(this.destroy$)).subscribe((value) => {
@@ -126,7 +126,7 @@ export class SightsComponent implements OnInit, OnDestroy {
         this.sightsCity = []
         this.sightsGeolocation = []
         this.getSightsCity()
-        this.getSightsGeolocation()
+        // this.getSightsGeolocation()
       }
       this.navigationService.appFirstLoading.next(false)// чтобы удалялся фильтр,
     })

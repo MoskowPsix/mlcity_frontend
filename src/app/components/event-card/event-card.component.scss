@@ -1,6 +1,13 @@
 ion-card{
     border-radius: 0.8rem;
     border: 0.5px solid #c6c6c7;
+
+    app-comments-list{
+        transform: .5s;
+    }
+    .comment-container{
+        transform: .5s;
+    }
     swiper-container {
         height: 25rem;
     }

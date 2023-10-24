@@ -55,7 +55,7 @@
               <ion-row class="ion-justify-content-start">
                 <ion-col size-xl="4" size-lg="4" size-md="4">
                   <div class="ion-align-item-center">
-                    <app-filters-not-button></app-filters-not-button>
+                    <!-- <app-filters-not-button></app-filters-not-button> -->
                   </div>
                 </ion-col> 
                 <ion-col size-xl="4" size-lg="6" size-md="6" size-xs="12">
@@ -68,7 +68,7 @@
             </ng-container>
             
             <ng-container *ngIf="!loadingMoreSightsCity">
-              <div *ngIf="currentPageSightsCity !== totalPagesSightsCity" class="ion-margin-horizontal">
+              <div *ngIf="nextPage" class="ion-margin-horizontal">
                 <ion-button expand="block" (click)="sightsCityLoadingMore()" [disabled]="loadingMoreSightsCity">
                   <ion-icon *ngIf="!loadingMoreSightsCity" slot="start" name="reload-outline"></ion-icon>
                   <span>Загрузить еще</span>
