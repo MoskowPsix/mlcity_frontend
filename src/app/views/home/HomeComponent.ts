@@ -185,6 +185,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async setPlacemarksAndClusters() {
+    console.log('ok')
     //При изменении радиуса проверяем метки для показа/скрытия
     this.objectsInsideCircle = ymaps.geoQuery(this.placemarks).searchInside(this.CirclePoint).clusterize({ hasBalloon: false, clusterBalloonPanelMaxMapArea: 0, clusterOpenBalloonOnClick: true });
     this.map.target.geoObjects.add(this.objectsInsideCircle);
@@ -192,27 +193,33 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.objectsInsideCircle.events.add('click', (e: any) => {
       this.modalContent = [];
+      console.log('ok1')
       
       if (!e.get('target')._clusterBounds) {
-        console.log(e.get('target'))
-        console.log(e.get('target').properties.get('geoObjects'))
         if (e.get('target').properties.get('geoObjects') !== undefined) {
           console.log("WORK")
           e.get('target').properties.get('geoObjects').forEach((element: any) => {
             console.log("WORK 2")
-              console.log(element)
-              let place
             if (element.options._options.balloonContent.type === 'event') {
-              this.placeService.getPlaceById(element.options._options.balloonContent.id).pipe(
-                takeUntil(this.destroy$)
+              // this.placeService.getPlaceById(element.options._options.balloonContent.id).pipe(
+              //   takeUntil(this.destroy$)
                   
-                ).subscribe((response: any) => {
+              //   ).subscribe((response: any) => {
                 
-                  this.modalContent.push(response.event)
-                  console.log(response)
+              //     this.modalContent.push(response[0].event)
+              //     console.log(response)
                 
-              })
-              console.log(place)
+              // })
+              
+              forkJoin(this.getPlacesIds(element.options._options.balloonContent.id, 'event')).pipe(
+                catchError((err) => {
+                  return of(EMPTY);
+                }),
+                takeUntil(this.destroy$)
+              ).subscribe(() => {
+                console.log('success')                
+              });
+            
             
             this.activeClaster = e.get('target');
             e.get('target').options.set('preset', 'islands#invertedPinkClusterIcons');
@@ -224,7 +231,14 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
         } else {
           if (e.get('target').options._options.balloonContent.type === 'event') {
-            this.modalContent.push(e.get('target').options._options.balloonContent.event);
+            forkJoin(this.getPlacesIds(e.get('target').options._options.balloonContent.id, 'event')).pipe(
+              catchError((err) => {
+                return of(EMPTY);
+              }),
+              takeUntil(this.destroy$)
+            ).subscribe(() => {
+              console.log('success')                
+            });
             //console.log()
             // this.eventsService.getEventById(e.get('target').options._options.balloonContent.event.id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             //   this.modalContent.push(response)
@@ -236,16 +250,33 @@ export class HomeComponent implements OnInit, OnDestroy {
           } else {
             this.modalContent.push(e.get('target').options._options.balloonContent);
             this.activePlacemark = e.get('target');
-            this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico;
+            console.log(e.get('target'))
+            
             e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`));
           }
         }
-        this.navigationService.modalEventShowOpen.next(true);
         console.log(this.modalContent)
+        this.navigationService.modalEventShowOpen.next(true);
+        
       }
   });
   }
 
+  getPlacesIds(id: number, type: string): Observable<any> {
+    return new Observable((observer) => {
+      this.placeService.getPlaceById(id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        if (type=='event'){
+          this.modalContent.push(response[0].event)
+        }
+        
+        
+          console.log(response)
+          this.cdr.detectChanges();
+          observer.next(EMPTY);
+          observer.complete();
+      })
+    })
+  }
   getPlaces(): Observable<any> {
     return new Observable((observer) => {
     this.eventsLoading = true;
@@ -306,6 +337,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     else if(this.stateType=='sights'){
 
       this.setPlacemarks(this.sights, 'sights');
+      console.log(this.sights)
     }
     else if(this.stateType=="all"){
       this.setPlacemarks(this.places, 'event');
@@ -349,7 +381,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             balloonAutoPan: false,
             // С иконкой
             // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"></div>`)
+            iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker" ></div>`)
           });
           this.placemarks.push(placemark);
          
