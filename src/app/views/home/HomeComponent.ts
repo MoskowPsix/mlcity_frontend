@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { YaReadyEvent } from 'angular8-yandex-maps';
 import { catchError, EMPTY, of, Subject, takeUntil, forkJoin, Observable, debounceTime, debounce, timer } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
@@ -81,6 +81,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private queryBuilderService: QueryBuilderService,
     private placeService: PlaceService,
+    private ngZone: NgZone
   ) { }
 
   // при клике по кнопке радиуча (5 10 15 20 25)
@@ -211,7 +212,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 
               // })
               
-              forkJoin(this.getPlacesIds(element.options._options.balloonContent.id, 'event')).pipe(
+              forkJoin([this.getPlacesIds(element.options._options.balloonContent.id, 'event')]).pipe(
                 catchError((err) => {
                   return of(EMPTY);
                 }),
@@ -231,7 +232,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
         } else {
           if (e.get('target').options._options.balloonContent.type === 'event') {
-            forkJoin(this.getPlacesIds(e.get('target').options._options.balloonContent.id, 'event')).pipe(
+            forkJoin([this.getPlacesIds(e.get('target').options._options.balloonContent.id, 'event')]).pipe(
               catchError((err) => {
                 return of(EMPTY);
               }),
@@ -263,10 +264,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getPlacesIds(id: number, type: string): Observable<any> {
+    
     return new Observable((observer) => {
       this.placeService.getPlaceById(id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
         if (type=='event'){
-          this.modalContent.push(response[0].event)
+          this.ngZone.run(()=> {
+            this.modalContent.push(response.places.event)
+          })
+          
         }
         
         
