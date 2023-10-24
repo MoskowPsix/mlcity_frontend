@@ -1,6 +1,7 @@
 <ion-content> 
   <ion-grid class="mb-6-5rem">
-    <ion-row class="ion-justify-content-center">
+
+    <!-- <ion-row class="ion-justify-content-center">
       <ion-col size-lg="8" size-md="12" size-xs="12">
         <ion-segment mode="ios" value="sightsCitySegment"  (ionChange)="onSegmentChanged($event)" class="segments">
           <ion-segment-button value="sightsCitySegment">
@@ -19,11 +20,15 @@
           </ion-segment-button> 
         </ion-segment>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
+    <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" [type_id]="sightTypeId"></app-sight-type-carusel>
+
+
     
       <ion-row class="ion-justify-content-center">
         <ion-col size-lg="10" size-md="12" size-xs="12">
-          <div [hidden]="segment !== 'sightsCitySegment'" class="segment-box">
+          <!-- <div [hidden]="segment !== 'sightsCitySegment'" class="segment-box"> -->
+          <div class="segment-box">
             <ng-container *ngIf="!loadingSightsCity">
               <ion-row class="ion-justify-content-center">
                 <ion-col size-lg="4" size-md="6" size-xs="12">
@@ -50,7 +55,7 @@
               <ion-row class="ion-justify-content-start">
                 <ion-col size-xl="4" size-lg="4" size-md="4">
                   <div class="ion-align-item-center">
-                    <app-filters-not-button></app-filters-not-button>
+                    <!-- <app-filters-not-button></app-filters-not-button> -->
                   </div>
                 </ion-col> 
                 <ion-col size-xl="4" size-lg="6" size-md="6" size-xs="12">
@@ -63,7 +68,7 @@
             </ng-container>
             
             <ng-container *ngIf="!loadingMoreSightsCity">
-              <div *ngIf="currentPageSightsCity !== totalPagesSightsCity" class="ion-margin-horizontal">
+              <div *ngIf="nextPage" class="ion-margin-horizontal">
                 <ion-button expand="block" (click)="sightsCityLoadingMore()" [disabled]="loadingMoreSightsCity">
                   <ion-icon *ngIf="!loadingMoreSightsCity" slot="start" name="reload-outline"></ion-icon>
                   <span>Загрузить еще</span>
@@ -78,7 +83,7 @@
             </ng-container>
           </div>
   
-          <div [hidden]="segment !== 'sightsGeolocationSegment'" class="segment-box">
+          <!-- <div [hidden]="segment !== 'sightsGeolocationSegment'" class="segment-box">
             <ng-container *ngIf="!loadingSightsGeolocation">
               <ion-row class="ion-justify-content-center">
                 <ion-col *ngFor="let key of [1,2,3,4,5,6]" size-lg="4" size-md="6" size-xs="12">
@@ -131,7 +136,7 @@
                 <ion-spinner class="ion-margin-vertical"></ion-spinner>
               </ion-row>
             </ng-container>
-          </div>
+          </div> -->
       
         </ion-col>
       </ion-row>

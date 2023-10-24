@@ -5,14 +5,13 @@
 		position: absolute;
 		z-index: 2;
 	}
-	app-sight-type-carusel{
+	.sight-carusel-container{
 		transition: 0.5;
 		position: absolute;
 		margin-left: 0px;
 		margin-right: 0px;
 		top: 4rem;
 		width: 100%;
-		height: 10px;
 		z-index: 1;
 	}
 }
@@ -175,12 +174,21 @@ ion-spinner{
 			position: absolute;
 			z-index: 2;
 		}
-		app-sight-type-carusel{
+		// app-sight-type-carusel{
+		// 	transition: 0.5;
+		// 	position: absolute;
+		// 	top: 3.5rem;
+		// 	width: 100%;
+		// 	height: 10px;
+		// 	z-index: 1;
+		// }
+		.sight-carusel-container{
 			transition: 0.5;
 			position: absolute;
+			margin-left: 0px;
+			margin-right: 0px;
 			top: 3.5rem;
 			width: 100%;
-			height: 10px;
 			z-index: 1;
 		}
 	}
@@ -253,14 +261,23 @@ ion-spinner{
 			position: absolute;
 			z-index: 2;
 		}
-		app-sight-type-carusel{
+		// app-sight-type-carusel{
+		// 	transition: 0.5;
+		// 	position: absolute;
+		// 	margin-left: 0px;
+		// 	margin-right: 0px;
+		// 	top: 7rem;
+		// 	width: 100%;
+		// 	height: 10px;
+		// 	z-index: 1;
+		// }
+		.sight-carusel-container{
 			transition: 0.5;
 			position: absolute;
 			margin-left: 0px;
 			margin-right: 0px;
 			top: 7rem;
 			width: 100%;
-			height: 10px;
 			z-index: 1;
 		}
 	}

@@ -102,8 +102,8 @@
       <ion-label>{{event.views_users_count}}</ion-label>
     </ion-chip>
   </ion-item>
-  <div class="comments" *ngIf="comments">
-    <app-comments-list [comments]="event.comments" [isSight]="isSight" [event_id]="event.id"></app-comments-list>
+  <div class="comment-container" class="comments" *ngIf="comments">
+    <app-comments-list [comments]="comments" [isSight]="isSight" [event_id]="event.id"></app-comments-list>
   </div>
 
 </ion-card>

@@ -86,14 +86,14 @@ export class FavoritesComponent implements OnInit {
     eventsLoadingMore(){
       this.loadingMoreEvents = true
       this.currentPageEvents++
-      this.queryBuilderService.paginationPublicEventsFavoritesCurrentPage.next(this.currentPageEvents)
+      // this.queryBuilderService.paginationPublicEventsFavoritesCurrentPage.next(this.currentPageEvents)
       this.getEvents()
     }
 
     sightsLoadingMore(){
       this.loadingMoreSights = true
       this.currentPageSights++
-      this.queryBuilderService.paginationPublicSightsFavoritesCurrentPage.next(this.currentPageSights)
+      // this.queryBuilderService.paginationPublicSightsFavoritesCurrentPage.next(this.currentPageSights)
       this.getSights()
     }
 

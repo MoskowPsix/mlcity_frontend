@@ -32,6 +32,12 @@ import { UserService } from './user.service';
     getCommentId(id: number) {
       return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/comment/${id}`)
     }
+    getCommentsEventsIds(id: number) {
+      return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}/comments`)
+    }
+    getCommentsSightsIds(id: number) {
+      return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${id}/comments`)
+    }
     updateCommentId(id: number, text: any) {
       const params = {
         text: text

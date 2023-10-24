@@ -23,21 +23,21 @@ export class QueryBuilderService {
   locationId?: number
   radius?: number
   
-  public paginationPublicEventsCityCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  public paginationPublicEventsCityCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
   //public paginationPublicEventsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicEventsGeolocationCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  // public paginationPublicEventsGeolocationCurrentPage!: BehaviorSubject<string>
   //public paginationPublicEventsGeolocationTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicEventsFavoritesCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  public paginationPublicEventsFavoritesCurrentPage: BehaviorSubject<string>= new BehaviorSubject<string>('')
 
-  public paginationPublicSightsCityCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  public paginationPublicSightsCityCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
   //public paginationPublicSightsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
 
-  public paginationPublicSightsGeolocationCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  // public paginationPublicSightsGeolocationCurrentPage!: BehaviorSubject<string>
   //public paginationPublicSightsGeolocatioTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
   
-  public paginationPublicSightsFavoritesCurrentPage: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
+  public paginationPublicSightsFavoritesCurrentPage:BehaviorSubject<string>= new BehaviorSubject<string>('')
 
 
   constructor(private mapService: MapService, private filterService: FilterService, private userService: UserService) { }
@@ -76,9 +76,9 @@ export class QueryBuilderService {
       case 'eventsPublicForCityTab':  //Публичная страница мероприятий /events - вкладка по события городу
         this.buildQueryEventsPublicForCityTab()
         break;
-      case 'eventsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка события рядом
-        this.buildQueryEventsPublicForGeolocationTab()
-        break;
+      // case 'eventsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка события рядом
+      //   this.buildQueryEventsPublicForGeolocationTab()
+      //   break;
       case 'sightsFavorites':   //Страница избранного -  /cabinet/favorites
         this.buildQuerySightsFavorites()
         break;
@@ -88,9 +88,9 @@ export class QueryBuilderService {
       case 'sightsPublicForCityTab': //Публичная страница мероприятий /events - вкладка места по городу
         this.buildQuerySightsPublicForCityTab()
         break;
-      case 'sightsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка места рядом
-        this.buildQuerySightsPublicForGeolocationTab()
-        break; 
+      // case 'sightsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка места рядом
+      //   this.buildQuerySightsPublicForGeolocationTab()
+      //   break; 
       default:
         this.buildQueryDefault()
         break;
@@ -138,40 +138,39 @@ export class QueryBuilderService {
   }
   
   buildQueryEventsPublicForCityTab(){
-    this.queryParams =  {
-      pagination: true,
-      page: this.paginationPublicEventsCityCurrentPage.value,
-      userId: this.userID,
-      favoriteUser: true,
-      likedUser: true,
-      statuses: [Statuses.publish].join(','),
-      statusLast: true,
-      locationId: this.locationId,
-      eventTypes: this.eventTypes,
-      dateStart: this.dateStart,
-      dateEnd: this.dateEnd
-    }  
+      this.queryParams =  {
+        page: this.paginationPublicEventsCityCurrentPage.value,
+        userId: this.userID,
+        favoriteUser: true,
+        likedUser: true,
+        statuses: [Statuses.publish].join(','),
+        statusLast: true,
+        locationId: this.locationId,
+        eventTypes: this.eventTypes,
+        dateStart: this.dateStart,
+        dateEnd: this.dateEnd
+      }  
   }
 
-  buildQueryEventsPublicForGeolocationTab(){
-    this.queryParams =  {
-      pagination: true,
-      page: this.paginationPublicEventsGeolocationCurrentPage.value,
-      userId: this.userID,
-      favoriteUser: true,
-      likedUser: true,
-      statuses: [Statuses.publish].join(','),
-      statusLast: true,
-      locationId: this.locationId,
-      latitude: this.latitude,
-      longitude: this.longitude,
-      radius: this.radius,
-      //forEventPage: true,
-      eventTypes: this.eventTypes,
-      dateStart: this.dateStart,
-      dateEnd: this.dateEnd
-    }  
-  }
+  // buildQueryEventsPublicForGeolocationTab(){
+  //   this.queryParams =  {
+  //     pagination: true,
+  //     page: this.paginationPublicEventsGeolocationCurrentPage.value,
+  //     userId: this.userID,
+  //     favoriteUser: true,
+  //     likedUser: true,
+  //     statuses: [Statuses.publish].join(','),
+  //     statusLast: true,
+  //     locationId: this.locationId,
+  //     latitude: this.latitude,
+  //     longitude: this.longitude,
+  //     radius: this.radius,
+  //     //forEventPage: true,
+  //     eventTypes: this.eventTypes,
+  //     dateStart: this.dateStart,
+  //     dateEnd: this.dateEnd
+  //   }  
+  // }
 
   buildQuerySightsFavorites() {
     this.queryParams =  {
@@ -194,7 +193,6 @@ export class QueryBuilderService {
 
   buildQuerySightsPublicForCityTab(){
     this.queryParams =  {
-      pagination: true,
       page: this.paginationPublicSightsCityCurrentPage.value,
       userId: this.userID,
       favoriteUser: true,
@@ -207,22 +205,22 @@ export class QueryBuilderService {
     }  
   }
 
-  buildQuerySightsPublicForGeolocationTab(){
-    this.queryParams =  {
-      pagination: true,
-      page: this.paginationPublicSightsGeolocationCurrentPage.value,
-      userId: this.userID,
-      favoriteUser: true,
-      likedUser: true,
-      statuses: [Statuses.publish].join(','),
-      statusLast: true,
-      locationId: this.locationId,
-      latitude: this.latitude,
-      longitude: this.longitude,
-      radius: this.radius,
-      //forEventPage: true,
-      sightTypes: this.sightTypes,
-    }  
-  }
+  // buildQuerySightsPublicForGeolocationTab(){
+  //   this.queryParams =  {
+  //     pagination: true,
+  //     page: this.paginationPublicSightsGeolocationCurrentPage.value,
+  //     userId: this.userID,
+  //     favoriteUser: true,
+  //     likedUser: true,
+  //     statuses: [Statuses.publish].join(','),
+  //     statusLast: true,
+  //     locationId: this.locationId,
+  //     latitude: this.latitude,
+  //     longitude: this.longitude,
+  //     radius: this.radius,
+  //     //forEventPage: true,
+  //     sightTypes: this.sightTypes,
+  //   }  
+  // }
 
 }
