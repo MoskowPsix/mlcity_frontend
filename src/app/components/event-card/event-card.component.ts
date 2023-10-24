@@ -202,6 +202,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   ngOnInit() {
+    console.log(this.event)
     this.userAuth = this.authService.getAuthState()
     this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     this.favorite = this.event.favorites_users_exists! 
@@ -213,6 +214,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
       this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
       this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
     }
+
+    
   }
 
   ngAfterViewInit(): void {
