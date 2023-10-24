@@ -31,6 +31,9 @@ export class SightsService {
   getSights(params: IGetEventsAndSights) { //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)
     return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights`, { params: {...params} } )
   }
+  getSightsForMap(params: IGetEventsAndSights){
+    return this.http.get<any[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights-for-map`, {params: {...params}})
+  }
 
   getSightById(id: number) {
     return this.http.get<ISight>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${id}`)

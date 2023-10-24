@@ -21,7 +21,6 @@ export class PlaceService {
   }
 
   getPlaceById(id:number){
-    console.log(id)
     return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/places/${id}`)
   }
 }

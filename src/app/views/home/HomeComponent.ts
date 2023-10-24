@@ -203,7 +203,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async setPlacemarksAndClusters() {
-    console.log('ok')
+
     //При изменении радиуса проверяем метки для показа/скрытия
     this.objectsInsideCircle = ymaps.geoQuery(this.placemarks).searchInside(this.CirclePoint).clusterize({ hasBalloon: false, clusterBalloonPanelMaxMapArea: 0, clusterOpenBalloonOnClick: true });
     this.map.target.geoObjects.add(this.objectsInsideCircle);
@@ -211,13 +211,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.objectsInsideCircle.events.add('click', (e: any) => {
       this.modalContent = [];
-      console.log('ok1')
-      
+            
       if (!e.get('target')._clusterBounds) {
         if (e.get('target').properties.get('geoObjects') !== undefined) {
-          console.log("WORK")
+
           e.get('target').properties.get('geoObjects').forEach((element: any) => {
-            console.log("WORK 2")
+
             if (element.options._options.balloonContent.type === 'event') {
               // this.placeService.getPlaceById(element.options._options.balloonContent.id).pipe(
               //   takeUntil(this.destroy$)
@@ -235,7 +234,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 }),
                 takeUntil(this.destroy$)
               ).subscribe(() => {
-                console.log('success')                
+               
               });
             
             
@@ -254,8 +253,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 return of(EMPTY);
               }),
               takeUntil(this.destroy$)
-            ).subscribe(() => {
-              console.log('success')                
+            ).subscribe(() => {               
             });
             //console.log()
             // this.eventsService.getEventById(e.get('target').options._options.balloonContent.event.id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
@@ -266,14 +264,20 @@ export class HomeComponent implements OnInit, OnDestroy {
             //this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico;
             e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`));
           } else {
-            this.modalContent.push(e.get('target').options._options.balloonContent);
+            forkJoin([this.getSightsIds(e.get('target').options._options.balloonContent.id)]).pipe(
+              catchError((err) => {
+                return of(EMPTY);
+              }),
+              takeUntil(this.destroy$)
+            ).subscribe(() => {               
+            });
             this.activePlacemark = e.get('target');
-            console.log(e.get('target'))
+           
             
             e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`));
           }
         }
-        console.log(this.modalContent)
+        
         this.navigationService.modalEventShowOpen.next(true);
         
       }
@@ -290,12 +294,20 @@ export class HomeComponent implements OnInit, OnDestroy {
           })
           
         }
-        
-        
-          console.log(response)
           this.cdr.detectChanges();
           observer.next(EMPTY);
           observer.complete();
+      })
+    })
+  }
+
+  getSightsIds(id: number): Observable<any>{
+    return new Observable((observer) => {
+      this.sightsService.getSightById(id).pipe(takeUntil(this.destroy$)).subscribe((response: any)=> {
+        this.ngZone.run(()=> {
+          this.modalContent.push(response)
+          console.log(response)
+        })
       })
     })
   }
@@ -321,7 +333,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getSights(): Observable<any> {
     return new Observable((observer) => {
       this.sightsLoading = true;
-      this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+      this.sightsService.getSightsForMap(this.queryBuilderService.queryBuilder('sightsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
         this.sights = response.sights;
         this.filterService.setSightsCount(response.sights.length)
         //this.sightsLoading = false
@@ -359,7 +371,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     else if(this.stateType=='sights'){
 
       this.setPlacemarks(this.sights, 'sights');
-      console.log(this.sights)
     }
     else if(this.stateType=="all"){
       this.setPlacemarks(this.places, 'event');
@@ -536,7 +547,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   onSegmentChanged(event: any, p: number){
     if(p==1)
     {
-      console.log(this.headerHeightM.nativeElement)
       this.buttonActive.nativeElement.style.transform = "translateY(0px)"
       this.calendula.nativeElement.style.top = this.headerHeight.offsetHeight + "px"
     }

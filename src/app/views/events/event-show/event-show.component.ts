@@ -157,11 +157,9 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     //Получаем ид ивента из параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => { 
-      this.eventId = params['id']; 
-      console.log(params['id'])
-      console.log('before',this.eventId)
+      this.eventId = params['id'];      
     }); 
-    console.log('after',this.eventId)
+    
     this.userAuth = this.authService.getAuthState()
     
     this.getEvent()
