@@ -53,22 +53,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   headerHeightM: any = document.getElementById('header-m')
   
 
-  objectsInsideCircle!: any;
-  pixelCenter: any;
+  objectsInsideCircle!: any
+  pixelCenter: any
 
-  isFilterChanged: boolean = false;
+  isFilterChanged: boolean = false
 
-  eventsLoading: boolean = false;
-  sightsLoading: boolean = false;
+  eventsLoading: boolean = false
+  sightsLoading: boolean = false
   stateType: string = "events"
 
-  modalEventShowOpen: boolean = false;
-  modalContent: any[] = [];
-  activePlacemark?: any;
-  activeClaster?: any;
-  activeIcoLink: string = '';
-  events: IEvent[] = [];
-  sights: ISight[] = [];
+  sightTypeId: any
+  eventTypeId: any
+
+  modalEventShowOpen: boolean = false
+  modalContent: any[] = []
+  activePlacemark?: any
+  activeClaster?: any
+  activeIcoLink: string = ''
+  events: IEvent[] = []
+  sights: ISight[] = []
   places: IPlace[] = []
 
   constructor(
@@ -89,17 +92,31 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.setRadiusTolocalStorage(radius.toString())
   }
 
-  sightTypesChange(typeId: number){
+  sightTypesChange(typeId: any){
+    if (typeId !== 'all') {
     this.filterService.setSightTypesTolocalStorage([typeId])
     this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
     this.filterService.setlocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
     this.filterService.changeFilter.next(true)
+    } else {
+      this.filterService.setSightTypesTolocalStorage([])
+      this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+      this.filterService.setlocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
+      this.filterService.changeFilter.next(true)
+    }
   }
-  eventTypesChange(typeId: number){
-    this.filterService.setEventTypesTolocalStorage([typeId])
-    this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
-    this.filterService.setlocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
-    this.filterService.changeFilter.next(true)
+  eventTypesChange(typeId: any){
+    if (typeId !== 'all') {
+      this.filterService.setEventTypesTolocalStorage([typeId])
+      this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+      this.filterService.setlocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
+      this.filterService.changeFilter.next(true)
+    } else {
+      this.filterService.setEventTypesTolocalStorage([])
+      this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+      this.filterService.setlocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
+      this.filterService.changeFilter.next(true)
+    }
   }
 
   async onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>): Promise<void> {
@@ -549,6 +566,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.filterService.locationLatitude.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.mapService.circleCenterLatitude.next(value);
+    });
+    this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
+      this.sightTypeId = value[0]
+    });
+    this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
+      this.eventTypeId = value[0]
     });
 
     

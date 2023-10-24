@@ -1,6 +1,5 @@
 .content {
     display: flex;
-    position: fixed;
     width: 100%;
     background-color: white;
     border-radius:12px;
@@ -23,7 +22,7 @@
         display: flex;
         align-items: center;
         align-content: center;
-        flex-direction: row-reverse;
+        flex-direction: row;
         overflow-y: hidden;
         overflow-x: overlay;
         flex: 11;
@@ -84,7 +83,7 @@
             display: flex;
             align-items: center;
             align-content: center;
-            flex-direction: row-reverse;
+            flex-direction: row;
             overflow-y: hidden;
             overflow-x: overlay;
             min-width: 100%;

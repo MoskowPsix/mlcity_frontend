@@ -35,6 +35,8 @@ export class SightsComponent implements OnInit, OnDestroy {
   totalPagesSightsCity: number = 1
   totalPagesSightsGeolocation: number = 1
 
+  sightTypeId: any
+
   constructor(
     private sightsService: SightsService,
     private toastService: ToastService,
@@ -135,7 +137,20 @@ export class SightsComponent implements OnInit, OnDestroy {
         this.city = response.location.name
       })
     })
+    this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
+      this.sightTypeId = value[0]
+    });
 
+  }
+
+  sightTypesChange(typeId: any){
+    if (typeId !== 'all') {
+      this.filterService.setSightTypesTolocalStorage([typeId])
+      this.filterService.changeFilter.next(true)
+    } else {
+      this.filterService.setSightTypesTolocalStorage([])
+      this.filterService.changeFilter.next(true)
+    }
   }
 
   ngOnDestroy(){
