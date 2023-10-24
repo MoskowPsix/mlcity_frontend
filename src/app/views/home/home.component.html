@@ -65,7 +65,7 @@
         <ng-container *ngIf="modalContent">
           <ion-row class="ion-justify-content-start">
             <ion-col *ngFor="let item of modalContent; let i = index" size="12">
-              <app-event-card [event]="item" [isSight]="false"></app-event-card>
+              <app-event-card [event]="item" [isSight]="item.type === 'sights' ? true : false"></app-event-card>
             </ion-col>
             <!-- <ion-col size="12">
               <app-event-card [event]="modalContent"></app-event-card>
