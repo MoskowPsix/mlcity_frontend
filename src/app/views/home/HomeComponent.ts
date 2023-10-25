@@ -218,25 +218,13 @@ export class HomeComponent implements OnInit, OnDestroy {
           e.get('target').properties.get('geoObjects').forEach((element: any) => {
 
             if (element.options._options.balloonContent.type === 'event') {
-              // this.placeService.getPlaceById(element.options._options.balloonContent.id).pipe(
-              //   takeUntil(this.destroy$)
-                  
-              //   ).subscribe((response: any) => {
-                
-              //     this.modalContent.push(response[0].event)
-              //     console.log(response)
-                
-              // })
-              
+            
               forkJoin([this.getPlacesIds(element.options._options.balloonContent.id, 'event')]).pipe(
                 catchError((err) => {
                   return of(EMPTY);
                 }),
                 takeUntil(this.destroy$)
-              ).subscribe(() => {
-               
-              });
-            
+              ).subscribe()
             
             this.activeClaster = e.get('target');
             e.get('target').options.set('preset', 'islands#invertedPinkClusterIcons');
@@ -253,13 +241,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 return of(EMPTY);
               }),
               takeUntil(this.destroy$)
-            ).subscribe(() => {               
-            });
-            //console.log()
-            // this.eventsService.getEventById(e.get('target').options._options.balloonContent.event.id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-            //   this.modalContent.push(response)
-            //   console.log(this.modalContent)
-            // });
+            ).subscribe()
             this.activePlacemark = e.get('target');
             //this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico;
             e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`));
@@ -290,13 +272,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.placeService.getPlaceById(id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
         if (type=='event'){
           this.ngZone.run(()=> {
+            response.places.event.type = 'events'
             this.modalContent.push(response.places.event)
           })
-          
         }
-          this.cdr.detectChanges();
-          observer.next(EMPTY);
-          observer.complete();
+        this.cdr.detectChanges();
+        observer.next(EMPTY);
+        observer.complete();
       })
     })
   }
@@ -305,8 +287,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     return new Observable((observer) => {
       this.sightsService.getSightById(id).pipe(takeUntil(this.destroy$)).subscribe((response: any)=> {
         this.ngZone.run(()=> {
+          response.type = 'sights'
           this.modalContent.push(response)
-          console.log(response)
         })
       })
     })
@@ -573,7 +555,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.setlocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())   
     // this.queryBuilderService.updateParams()
     this.filterService.changeFilter.next(true)
-    console.log(this.filterService.endDate.value)
   }
 
   ngOnInit(): void {

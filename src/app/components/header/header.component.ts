@@ -192,8 +192,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
         }),
         takeUntil(this.destroy$)
         ).subscribe((response:any) => {
-          if(response.events.total){
-            this.filterService.setEventsCount(response.events.total)
+          if(response.events.length){
+            this.filterService.setEventsCount(response.result.total)
           }
         
       })
@@ -204,10 +204,9 @@ export class HeaderComponent implements OnInit,OnDestroy {
         }),
         takeUntil(this.destroy$)
         ).subscribe((response:any) => {
-          if(response.sights.total){
-              this.filterService.setSightsCount(response.sights.total)
+          if(response.sights.length){
+              this.filterService.setSightsCount(response.result.total)
           }
-        
       })
       if (this.queryBuilderService.userID) {
         this.eventsService.getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites')).pipe(
@@ -216,8 +215,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
           }),
           takeUntil(this.destroy$)
         ).subscribe((response:any) => {
-          if(response.result.total){
-            console.log(response)
+          if(response.result.length){
             this.filterService.setFavoritesCount(response.result.total)
           }
           
@@ -229,8 +227,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
           }),
           takeUntil(this.destroy$)
         ).subscribe((response: any) =>{
-          if(response){
-            this.filterService.setFavoritesCount(this.filterService.favoritesCount.value + response.result.total)
+          if(response.result.length){
+              this.filterService.setFavoritesCount(this.filterService.favoritesCount.value + response.result.total)
           }
           
         })

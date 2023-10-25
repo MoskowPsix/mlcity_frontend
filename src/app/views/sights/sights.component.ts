@@ -53,7 +53,6 @@ export class SightsComponent implements OnInit, OnDestroy {
       delay(100),
       retry(3),
       map((respons:any) => {
-        console.log(respons)
         this.sightsCity.push(...respons.sights.data)
         this.filterService.setSightsCount(respons.total)
         this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(respons.sights.next_cursor)
@@ -132,11 +131,11 @@ export class SightsComponent implements OnInit, OnDestroy {
     })
 
     //Подписываемся на город
-    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        this.city = response.location.name
-      })
-    })
+    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+    //     this.city = response.location.name
+    //   })
+    // })
     this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.sightTypeId = value[0]
     });

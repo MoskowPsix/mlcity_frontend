@@ -141,11 +141,11 @@ export class EventsComponent implements OnInit, OnDestroy {
     })
 
     //Подписываемся на город
-    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        this.city = response.location.name
-      })
-    })
+    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+    //     this.city = response.location.name
+    //   })
+    // })
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.eventTypeId = value[0]
     });
