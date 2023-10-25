@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { IEvent } from 'src/app/models/event';
@@ -17,6 +17,8 @@ import { LocationService } from 'src/app/services/location.service';
 export class EventsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
 
+  @ViewChild('ContentCol') ContentCol!: ElementRef;
+  
   city: string = ''
   segment:string = 'eventsCitySegment'
 
@@ -35,6 +37,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   currentPageEventsGeolocation: number = 1
 
   nextPage: boolean = false
+  loadTrue: boolean = false
 
   eventTypeId: any
   sightTypeId: any
@@ -63,8 +66,9 @@ export class EventsComponent implements OnInit, OnDestroy {
       map((respons:any) => {
         this.eventsCity.push(...respons.events.data)
         this.filterService.setEventsCount(respons.events.total)
-        this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(respons.events.next_cursor)
+        this.queryBuilderService.paginationPublicEventsCityCurrentPage.next(respons.events.next_cursor)
         respons.events.next_cursor ? this.nextPage = true : this.nextPage = false
+        respons.events.next_cursor ? this.loadTrue = true : this.loadTrue = false
       }),
       tap(() => {
         this.loadingEventsCity = true  
@@ -122,6 +126,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    window.addEventListener('scroll', this.scrollPaginate, true);
     this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value}
     //console.log(this.date)
     this.eventsCity = []
@@ -158,6 +163,16 @@ export class EventsComponent implements OnInit, OnDestroy {
     } else {
       this.filterService.setEventTypesTolocalStorage([])
       this.filterService.changeFilter.next(true)
+    }
+  }
+
+  scrollPaginate = (): void => {
+    const boundingClientRect = this.ContentCol.nativeElement?.getBoundingClientRect();
+    // console.log(this.ContentCol.nativeElement.getBoundingClientRect().bottom, window.innerHeight)
+    if ((boundingClientRect.bottom <= (window.innerHeight * 2)) && !(boundingClientRect.bottom <= window.innerHeight) && this.eventsCity && this.loadTrue) {
+      this.loadTrue = false
+      this.eventsCityLoadingMore()
+      console.log('ok')
     }
   }
 

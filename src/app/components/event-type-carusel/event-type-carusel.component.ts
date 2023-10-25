@@ -10,8 +10,8 @@ import { EventTypeService } from 'src/app/services/event-type.service';
 export class EventTypeCaruselComponent  implements OnInit {
   private readonly destroy$ = new Subject<void>()
 
-  @Output() typeOutput = new EventEmitter();
-  @ViewChild('wigetScroll') wigetScroll!: ElementRef;
+  @Output() typeOutput = new EventEmitter()
+  @ViewChild('wigetScroll') wigetScroll!: ElementRef
   scroll?: any
   typesLoaded: boolean = true
   types: any[] = []
