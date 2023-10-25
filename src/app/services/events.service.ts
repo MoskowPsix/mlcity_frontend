@@ -45,6 +45,9 @@ export class EventsService {
   getEventsFavorites(params: any) { 
     return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-events`, { params: {...params} })
   }
+  getEventsForUser(params: IGetEventsAndSights) {
+    return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events-for-author`, { params: {...params} } )
+  }
 
   toggleFavorite(event_id:number) {
     const params = {

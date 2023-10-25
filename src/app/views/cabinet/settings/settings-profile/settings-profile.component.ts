@@ -33,21 +33,15 @@ export class SettingsProfileComponent  implements OnInit {
 
 
   getUser(){
-    
     this.subscription_2 =  this.userService.getUser().subscribe((user: any) => {
-      
       this.user = user;
       this.avatar_url = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}${this.user.avatar}`
       this.avatarLoad = true
-      
     })
   }
 
   createFormData(){
-    console.log(this.formData.get('avatar'))
     this.formData.append('new_name',this.resetForm.value.new_name)
-    
-    
     return this.formData
   }
 
@@ -58,9 +52,6 @@ export class SettingsProfileComponent  implements OnInit {
 
       this.userService.changeName(user).pipe(
         takeUntil(this.destroy$),
-        tap((response) => {
-          //this.resetForm.controls['new_name'].reset()
-        }),
         catchError((err)=>{
           this.toastService.showToast('Убедитесь что поле Имя не пустое', 'danger')
           return of(EMPTY)
@@ -70,7 +61,6 @@ export class SettingsProfileComponent  implements OnInit {
           this.userService.setUser(response.user)
           this.getUser()
           this.previewPhotoUrl = ''
-          console.log(response)
           this.toastService.showToast('Данные обновлены!','success')
         }
       })
@@ -82,13 +72,10 @@ export class SettingsProfileComponent  implements OnInit {
     if (file){
       this.formData.append('avatar', file, file.name)
       this.previewPhoto(file)
-
-    //   console.log(this.resetForm)
     }
   }
 
   previewPhoto(file: File){
-
     const reader: FileReader = new FileReader();
     reader.onload = () => {
       this.previewPhotoUrl = reader.result as string;
@@ -98,7 +85,6 @@ export class SettingsProfileComponent  implements OnInit {
 
   ngOnInit() {
     this.getUser()
-    
     this.resetForm = new FormGroup({
       new_name: new FormControl(this.user.name,[Validators.minLength(1)]),
     })

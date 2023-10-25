@@ -24,10 +24,7 @@ export class SettingsPrivacyComponent  implements OnInit {
   onSubmit() {
     if(this.passwordResetForm.status=='VALID'){
       if(this.passwordResetForm.value.new_password != this.passwordResetForm.value.retry_password){
-        console.log("Wrong passwords")
-        this.toastService.showToast('Пароли не совпадают','danger')
-          
-        
+        this.toastService.showToast('Пароли не совпадают','danger') 
       }
       else{
         this.authService.resetPassword(this.passwordResetForm.value).pipe(

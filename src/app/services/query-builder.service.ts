@@ -34,6 +34,10 @@ export class QueryBuilderService {
   public paginationPublicSightsCityCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
   //public paginationPublicSightsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
 
+  public paginationPublicEventsForAuthorCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+
+  public paginationPublicSightsForAuthorCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+
   // public paginationPublicSightsGeolocationCurrentPage!: BehaviorSubject<string>
   //public paginationPublicSightsGeolocatioTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1) 
   
@@ -88,14 +92,28 @@ export class QueryBuilderService {
       case 'sightsPublicForCityTab': //Публичная страница мероприятий /events - вкладка места по городу
         this.buildQuerySightsPublicForCityTab()
         break;
-      // case 'sightsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка места рядом
-      //   this.buildQuerySightsPublicForGeolocationTab()
-      //   break; 
+      case 'eventsPublicForAuthor': //Публичная страница мероприятий /events - вкладка места рядом
+        this.buildQueryEventsPublicForAuthor()
+        break;
+      case 'sightsPublicForAuthor': //Публичная страница мероприятий /events - вкладка места рядом
+        this.buildQuerySightsPublicForAuthor()
+        break;  
       default:
         this.buildQueryDefault()
         break;
     }
     return this.queryParams
+  }
+
+  buildQueryEventsPublicForAuthor() {
+    this.queryParams = {
+      page: this.paginationPublicEventsForAuthorCurrentPage.value
+    }
+  }
+  buildQuerySightsPublicForAuthor() {
+    this.queryParams = {
+      page: this.paginationPublicSightsForAuthorCurrentPage.value
+    }
   }
 
   buildQueryDefault(){

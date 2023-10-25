@@ -42,6 +42,9 @@ export class SightsService {
   getSightsFavorites(params: any) { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
     return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-sights`, { params: {...params} })
   }
+  getSightsForUser(params: IGetEventsAndSights) { //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)
+    return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights-for-author`, { params: {...params} } )
+  }
 
 
   checkLiked(sight_id:number){

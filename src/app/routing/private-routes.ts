@@ -13,6 +13,8 @@ import { NotificationsComponent } from '../views/cabinet/notifications/notificat
 import { SettingsComponent } from '../views/cabinet/settings/settings.component';
 import { SettingsProfileComponent } from '../views/cabinet/settings/settings-profile/settings-profile.component';
 import { SettingsPrivacyComponent } from '../views/cabinet/settings/settings-privacy/settings-privacy.component';
+import { MyEventsComponent } from '../views/cabinet/my-events/my-events.component';
+import { MySightsComponent } from '../views/cabinet/my-sights/my-sights.component';
 
 export const privateRoutes: Routes = [ 
     {
@@ -68,7 +70,7 @@ export const privateRoutes: Routes = [
     // },
     {
       path: 'cabinet/events',
-      component: EventsComponent,
+      component: MyEventsComponent,
       canActivate: [AuthGuard],
       // children: [
       //   {
@@ -98,7 +100,7 @@ export const privateRoutes: Routes = [
     },
     {
       path: 'cabinet/sights',
-      component: SightsComponent,
+      component: MySightsComponent,
       canActivate: [AuthGuard],
       // children: [
       //   {
