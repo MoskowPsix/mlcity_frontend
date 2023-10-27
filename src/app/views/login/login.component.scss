@@ -7,9 +7,20 @@
     cursor: pointer;
     color: #3880ff;
 }
+.logo-telephone {
+    padding: 0.4rem;
+    padding-left: 2rem;
+    font-size: 3.1rem;
+    cursor: pointer;
+    color: #3880ff;
+}
 
 .social-block-title{
     display: flex;
     align-items: center;
     color:#6b7280
+}
+
+ion-modal {
+--height: 30%;
 }
