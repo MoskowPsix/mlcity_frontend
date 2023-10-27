@@ -5,6 +5,8 @@ import { IEvent } from '../models/event';
 import { environment } from 'src/environments/environment';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
 import { UserService } from './user.service';
+import { IPlace } from '../models/place';
+import { IGetEventPlaces } from '../models/event-places';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +38,10 @@ export class EventsService {
 
   getEvents(params: IGetEventsAndSights) { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
     return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`, { params: {...params} } )
+  }
+
+  getEventPlaces(id?: number, params?:IGetEventsAndSights){
+    return this.http.get<IPlace[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}/places`,{params: {...params}})
   }
 
   getEventById(id: number) {

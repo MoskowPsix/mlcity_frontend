@@ -1,6 +1,7 @@
 <ion-row class="seances-container">
   <ion-col sizeLg="7"> 
     <div class="map">
+      <ion-skeleton-text animated="true" *ngIf="loadMap"></ion-skeleton-text>
       <ya-map 
           (ready)="onMapReady($event)"
           [zoom]="15"  
@@ -51,6 +52,12 @@
                 <div class="seance-time-hour-container">
                   <div>{{seance.dateStart|date:'H:mm'}} - {{seance.dateEnd|date:'H:mm'}}</div>
                 </div>
+              </div>
+
+              <div *ngIf="loadSeance">
+                <ion-skeleton-text animated="true" class="seance-skelet"></ion-skeleton-text>
+                <ion-skeleton-text animated="true" class="seance-skelet"></ion-skeleton-text>
+                <ion-skeleton-text animated="true" class="seance-skelet"></ion-skeleton-text>
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit,OnDestroy, AfterViewInit, ChangeDetectorRef, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil, tap, retry, catchError, of, EMPTY} from 'rxjs';
+import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay} from 'rxjs';
 import { IEvent } from 'src/app/models/event';
 import { EventsService } from 'src/app/services/events.service';
 import { IonicSlides } from '@ionic/angular';
@@ -12,6 +12,8 @@ import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { AuthService } from 'src/app/services/auth.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { IPlace } from 'src/app/models/place';
+import { QueryBuilderService } from 'src/app/services/query-builder.service';
+import { PlaceService } from 'src/app/services/place.service';
 // import { Swiper } from 'swiper/types';
 
 @Component({
@@ -31,8 +33,9 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   eventId?: number
   event?: IEvent
-  places?: any
+  places: any[] = []
   loadingEvent: boolean = true
+  loadPlace: boolean = false
 
   favorite: boolean = false
   loadingFavotire: boolean = false
@@ -48,6 +51,10 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
     private sanitizer:DomSanitizer,
+    private queryBuilderService: QueryBuilderService,
+    private placeService: PlaceService,
+    
+    
   ) {}
 
   
@@ -63,6 +70,37 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     }); 
   }
+
+  getEventPlaces(){
+    this.loadPlace = true
+    this.eventsService.getEventPlaces(this.eventId, this.queryBuilderService.queryBuilder('eventPlaces')).pipe(
+      delay(100),
+      retry(3),
+      tap(() => this.loadPlace = false),
+      map((response:any) => {
+        this.places.push(...response.places.data)
+        console.log(response)
+        this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(response.places.next_cursor)
+        console.log(this.queryBuilderService.paginataionPublicEventPlacesCurrentPage)
+        
+      }),
+      catchError((error) => {
+        console.log(error)
+        this.toastService.showToast(MessagesErrors.default, 'danger')
+        return of(EMPTY)
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      
+    })
+  }
+
+  setActivePlace(i: number){
+    this.places[i].active = true
+    console.log(this.places[i])
+  }
+
+ 
 
   getMinPrice(prices: any[]) {
     let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub)
@@ -162,6 +200,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     
     this.userAuth = this.authService.getAuthState()
     
+    this.getEventPlaces()
     this.getEvent()
     this.checkLiked()
     this.checFavorite()

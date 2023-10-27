@@ -4,6 +4,11 @@
     margin: -4px 4px;
 }
 
+.place-skelet{
+    border-radius: 6px;
+    height: 60px;
+}
+
 .event-container{
     background-color: white; 
     border-radius: 16px; 
@@ -122,6 +127,9 @@ ion-accordion-group{
         background-color: white; 
         border-radius: 0; 
         margin: 0;
+    }
+    .place-skelet{
+        height: 98px;
     }
 }
   

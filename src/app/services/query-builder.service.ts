@@ -36,6 +36,8 @@ export class QueryBuilderService {
 
   public paginationPublicEventsForAuthorCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
+  public paginataionPublicEventPlacesCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+
   public paginationPublicSightsForAuthorCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   // public paginationPublicSightsGeolocationCurrentPage!: BehaviorSubject<string>
@@ -97,6 +99,9 @@ export class QueryBuilderService {
         break;
       case 'sightsPublicForAuthor': //Публичная страница мероприятий /events - вкладка места рядом
         this.buildQuerySightsPublicForAuthor()
+        break;
+      case 'eventPlaces':
+        this.buildQueryEventPlaces()
         break;  
       default:
         this.buildQueryDefault()
@@ -168,6 +173,12 @@ export class QueryBuilderService {
         dateStart: this.dateStart,
         dateEnd: this.dateEnd
       }  
+  }
+
+  buildQueryEventPlaces(){
+    this.queryParams = {
+      page: this.paginataionPublicEventPlacesCurrentPage.value
+    }
   }
 
   // buildQueryEventsPublicForGeolocationTab(){
