@@ -206,19 +206,20 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     this.favorite = this.event.favorites_users_exists! 
     this.like = this.event.liked_users_exists!
-    window.addEventListener('scroll', this.scrollEvent, true);
+    // window.addEventListener('scroll', this.scro.llEvent, true);
 
     //КИдаем запрос в ВК чтобы обновить лайки и лайкнуть у нас если юзер лайкнул в ВК
     if(this.event.vk_group_id && this.event.vk_post_id){
       this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
       this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
     }
-
+    
     
   }
 
   ngAfterViewInit(): void {
     register()
+
     this.swiper = this.swiperRef?.nativeElement.swiper
     setTimeout(() => {
       this.swiperCurrentSlide = this.swiper?.realIndex! + 1
@@ -230,7 +231,12 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     this.swiper?.on('slideChange', () => {
       this.swiperCurrentSlide = this.swiper?.realIndex! + 1
     })
+    
     this.cdr.detectChanges()
+  }
+
+  testFocus(){
+    console.log("get focused")
   }
 
   scrollEvent = (): void => {

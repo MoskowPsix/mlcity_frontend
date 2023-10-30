@@ -25,7 +25,7 @@
       <!-- <div class="ion-padding" slot="content"> -->
           <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
         <!-- <ng-container> -->
-          <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
+          <!-- <app-calendula (dateOutput)="setDate($event)" [date]="date"/> -->
         <!-- </ng-container> -->
       <!-- </div> -->
     
@@ -43,8 +43,8 @@
                     <!-- <app-filters-not-button></app-filters-not-button> -->
                   </div>
                 </ion-col> 
-                <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card">
-                  <app-event-card *ngFor="let event of eventsCity; let i = index" [event]="event"></app-event-card>
+                <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card" #cardContainer>
+                  <app-event-card *ngFor="let event of eventsCity; let i = index" [event]="event" id="i"></app-event-card>
                   <ng-container *ngIf="!eventsCity.length && loadingEventsCity">
                     <app-no-data/>
                   </ng-container>

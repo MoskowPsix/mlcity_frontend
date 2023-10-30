@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { IEvent } from 'src/app/models/event';
@@ -8,13 +8,15 @@ import { FilterService } from 'src/app/services/filter.service';
 import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { LocationService } from 'src/app/services/location.service';
+import { register } from 'swiper/element';
+
 
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss'],
 })
-export class EventsComponent implements OnInit, OnDestroy {
+export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>()
 
   city: string = ''
@@ -24,6 +26,8 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   eventsCity: IEvent[] = []
   eventsGeolocation: IEvent[] = []
+
+  @ViewChild('cardContainer') cardContainer!: ElementRef
 
   loadingEventsCity: boolean = false
   loadingEventsGeolocation: boolean = false
@@ -53,6 +57,8 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.filterService.setEndDateTolocalStorage(event.dateEnd)
     this.filterService.changeFilter.next(true)   
   }
+
+  
  
   getEventsCity(){
     this.loadingMoreEventsCity ? this.loadingEventsCity = true : this.loadingEventsCity = false
@@ -150,6 +156,8 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.eventTypeId = value[0]
     });
 
+    console.log(this.cardContainer)
+
   }
   eventTypesChange(typeId: any){
     if (typeId !== 'all') {
@@ -165,6 +173,10 @@ export class EventsComponent implements OnInit, OnDestroy {
     // отписываемся от всех подписок
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  ngAfterViewInit(): void {
+    
   }
 
 }
