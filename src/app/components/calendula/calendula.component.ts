@@ -165,8 +165,9 @@ export class CalendulaComponent  implements OnInit {
       }
       now_date = now_date + 86400000
       //this.onDateOutput()
-      setTimeout(() => {this.fixCenterElement(new Date(this.getDateYMD(this.dateStart)).getTime())}, 3000);
+      
     }
+    setTimeout(() => {this.fixCenterElement(new Date(this.getDateYMD(this.dateStart)).getTime())}, 3000);
   }
 
 

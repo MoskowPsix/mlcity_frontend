@@ -206,7 +206,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     this.favorite = this.event.favorites_users_exists! 
     this.like = this.event.liked_users_exists!
-    // window.addEventListener('scroll', this.scro.llEvent, true);
+    // window.addEventListener('scrollend', this.scrollEvent, true);
 
     //КИдаем запрос в ВК чтобы обновить лайки и лайкнуть у нас если юзер лайкнул в ВК
     if(this.event.vk_group_id && this.event.vk_post_id){
@@ -240,6 +240,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   scrollEvent = (): void => {
+    
     const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
     if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {
       if (!this.viewElementTimeStart){

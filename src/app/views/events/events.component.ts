@@ -24,10 +24,14 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   date: any
 
+  viewElement: boolean = false
   eventsCity: IEvent[] = []
   eventsGeolocation: IEvent[] = []
 
-  @ViewChild('cardContainer') cardContainer!: ElementRef
+  @ViewChild('cardContainer') 
+  cardContainer!: ElementRef
+  @ViewChild('widgetsContent') widgetsContent!: ElementRef;
+  @ViewChild('test') test!: ElementRef
 
   loadingEventsCity: boolean = false
   loadingEventsGeolocation: boolean = false
@@ -40,6 +44,12 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   nextPage: boolean = false
 
+  viewElementTimeStart: number = 0
+  viewElementTimeEnd: number = 0
+
+  event_id: number = 0
+  events_ids: any[] = []
+
   eventTypeId: any
   sightTypeId: any
 
@@ -49,7 +59,8 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
     private filterService: FilterService,
     private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private eventService: EventsService
   ) { }
   
   setDate(event: any) {
@@ -156,9 +167,60 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
       this.eventTypeId = value[0]
     });
 
-    console.log(this.cardContainer)
+    // console.log(this.cardContainer)
+    window.addEventListener('scrollend', this.scrollEvent, true);
 
   }
+  scrollEvent = (): void => {
+
+    for(let i = 0; i<this.widgetsContent.nativeElement.children.length; i++){
+      let viewEvent
+      this.events_ids.forEach((item: any) => {
+        if (item === this.widgetsContent.nativeElement.children[i].id) {
+          viewEvent = true
+        } else {
+          viewEvent = false
+        }
+      })
+      const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
+      if(boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0 && !viewEvent){
+        console.log(this.widgetsContent.nativeElement.children[i].id)
+        if (!this.viewElementTimeStart){
+          this.viewElementTimeStart = new Date().getTime()
+          this.event_id = this.widgetsContent.nativeElement.children[i].id
+        } 
+      } else if ((this.viewElementTimeStart && !viewEvent) && (this.event_id !== this.widgetsContent.nativeElement.children[i].id) || ((this.viewElementTimeStart && !viewEvent) &&  boundingClientRect.width === 0) && (this.event_id !== this.widgetsContent.nativeElement.children[i].id)) {
+        
+        this.viewElementTimeEnd = new Date().getTime()
+        let time: any
+        time = (new Date().getTime() - this.viewElementTimeStart)/1000
+        console.log(time)
+        console.log(this.widgetsContent.nativeElement.children[i].id)
+        if (time > 3.141) {
+            console.log(this.widgetsContent.nativeElement.children[i].id)
+            this.eventsService.addView(this.widgetsContent.nativeElement.children[i].id, time).pipe(
+              delay(100),
+              retry(3),
+              map((response => {
+                this.events_ids.push(this.widgetsContent.nativeElement.children[i].id)
+              })),
+              catchError((err) =>{
+                return of(EMPTY) 
+              }),
+              takeUntil(this.destroy$)
+            ).subscribe()
+          
+          // this.viewElement = true
+        }
+        // this.viewElementTimeStart = 0
+        // this.viewElementTimeEnd = 0
+      } else {
+        this.viewElementTimeStart = 0
+        this.viewElementTimeEnd = 0
+        this.event_id = 0
+      }
+    } 
+}
   eventTypesChange(typeId: any){
     if (typeId !== 'all') {
       this.filterService.setEventTypesTolocalStorage([typeId])
@@ -173,6 +235,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
     // отписываемся от всех подписок
     this.destroy$.next();
     this.destroy$.complete();
+    
   }
 
   ngAfterViewInit(): void {
