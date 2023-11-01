@@ -32,7 +32,6 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('cardContainer') 
   cardContainer!: ElementRef
   @ViewChild('widgetsContent') widgetsContent!: ElementRef;
-  @ViewChild('test') test!: ElementRef
 
   loadingEventsCity: boolean = false
   loadingEventsGeolocation: boolean = false
@@ -45,8 +44,9 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   nextPage: boolean = false
 
-  timeStart!: number
-  timeEnd!: number
+  timeStart: number = 0
+  timeEnd: number = 0
+  viewId!: string
 
   viewElementTimeStart: number = 0
   viewElementTimeEnd: number = 0
@@ -186,27 +186,38 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if(boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0){
 
-        
 
-        if (!this.timeStart){
+
+        if (this.timeStart==0){
           this.timeStart = new Date().getTime()
+          console.log("Время заданно", this.timeStart)
+        } 
+
+        else{
+          this.timeEnd = new Date().getTime()
+          this.viewId = this.widgetsContent.nativeElement.children[i].id
+          console.log(this.widgetsContent.nativeElement.children[i].id)
+          let time = (new Date().getTime() - this.timeStart)/1000
+          if(time>=3.14){
+            console.log("WORK!!!!!")
+          }
+          console.log((new Date().getTime() - this.timeStart)/1000)
+          this.timeStart = 0
+          this.test()
         }  
-      } else if((this.timeStart && !viewElement) || ((this.timeStart && !viewElement) && (boundingClientRect.width === 0 && boundingClientRect.width === 0))){
-        this.timeEnd = new Date().getTime()
-        console.log(this.widgetsContent.nativeElement.children[i].id)
-        let time = (new Date().getTime() - this.timeStart)/1000
-        if(time>=3.14){
-          console.log("WORK!!!!!")
-        }
-        console.log(this.timeStart, this.timeEnd)
-        viewElement = true
-        this.timeStart = 0
-      }
+
+      } 
       
       
     } 
-    
-}
+    viewElement = true
+    console.log(this.timeStart)
+  }
+
+  test(){
+    this.timeStart = new Date().getTime()
+    console.log("Время заданно", this.timeStart)
+  }
   eventTypesChange(typeId: any){
     if (typeId !== 'all') {
       this.filterService.setEventTypesTolocalStorage([typeId])
