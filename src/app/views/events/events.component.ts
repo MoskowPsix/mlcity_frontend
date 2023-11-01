@@ -9,6 +9,7 @@ import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { LocationService } from 'src/app/services/location.service';
 import { register } from 'swiper/element';
+import { time } from 'console';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   date: any
 
-  viewElement: boolean = false
+  
   eventsCity: IEvent[] = []
   eventsGeolocation: IEvent[] = []
 
@@ -43,6 +44,9 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   currentPageEventsGeolocation: number = 1
 
   nextPage: boolean = false
+
+  timeStart!: number
+  timeEnd!: number
 
   viewElementTimeStart: number = 0
   viewElementTimeEnd: number = 0
@@ -172,54 +176,36 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
   scrollEvent = (): void => {
+    let viewElement: boolean = false
 
     for(let i = 0; i<this.widgetsContent.nativeElement.children.length; i++){
-      let viewEvent
-      this.events_ids.forEach((item: any) => {
-        if (item === this.widgetsContent.nativeElement.children[i].id) {
-          viewEvent = true
-        } else {
-          viewEvent = false
-        }
-      })
+  
       const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
-      if(boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0 && !viewEvent){
-        console.log(this.widgetsContent.nativeElement.children[i].id)
-        if (!this.viewElementTimeStart){
-          this.viewElementTimeStart = new Date().getTime()
-          this.event_id = this.widgetsContent.nativeElement.children[i].id
-        } 
-      } else if ((this.viewElementTimeStart && !viewEvent) && (this.event_id !== this.widgetsContent.nativeElement.children[i].id) || ((this.viewElementTimeStart && !viewEvent) &&  boundingClientRect.width === 0) && (this.event_id !== this.widgetsContent.nativeElement.children[i].id)) {
+
+      
+
+      if(boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0){
+
         
-        this.viewElementTimeEnd = new Date().getTime()
-        let time: any
-        time = (new Date().getTime() - this.viewElementTimeStart)/1000
-        console.log(time)
+
+        if (!this.timeStart){
+          this.timeStart = new Date().getTime()
+        }  
+      } else if((this.timeStart && !viewElement) || ((this.timeStart && !viewElement) && (boundingClientRect.width === 0 && boundingClientRect.width === 0))){
+        this.timeEnd = new Date().getTime()
         console.log(this.widgetsContent.nativeElement.children[i].id)
-        if (time > 3.141) {
-            console.log(this.widgetsContent.nativeElement.children[i].id)
-            this.eventsService.addView(this.widgetsContent.nativeElement.children[i].id, time).pipe(
-              delay(100),
-              retry(3),
-              map((response => {
-                this.events_ids.push(this.widgetsContent.nativeElement.children[i].id)
-              })),
-              catchError((err) =>{
-                return of(EMPTY) 
-              }),
-              takeUntil(this.destroy$)
-            ).subscribe()
-          
-          // this.viewElement = true
+        let time = (new Date().getTime() - this.timeStart)/1000
+        if(time>=3.14){
+          console.log("WORK!!!!!")
         }
-        // this.viewElementTimeStart = 0
-        // this.viewElementTimeEnd = 0
-      } else {
-        this.viewElementTimeStart = 0
-        this.viewElementTimeEnd = 0
-        this.event_id = 0
+        console.log(this.timeStart, this.timeEnd)
+        viewElement = true
+        this.timeStart = 0
       }
+      
+      
     } 
+    
 }
   eventTypesChange(typeId: any){
     if (typeId !== 'all') {
