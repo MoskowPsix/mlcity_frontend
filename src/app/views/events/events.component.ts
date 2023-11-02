@@ -47,7 +47,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   timeStart: number = 0
   timeEnd: number = 0
-  viewId!: number
+  viewId: number[] = []
 
   viewElementTimeStart: number = 0
   viewElementTimeEnd: number = 0
@@ -186,23 +186,22 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
       
 
       if(boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0){
-
+        this.viewId.push(this.widgetsContent.nativeElement.children[i].id)
         
 
         if (this.timeStart==0){
           this.timeStart = new Date().getTime()
-          console.log("Время заданно", this.timeStart)
         } 
 
         else{
-
-          this.timeEnd = new Date().getTime()
-          console.log(this.widgetsContent.nativeElement.children[i].id)
+      
           let time = (new Date().getTime() - this.timeStart)/1000
 
           if(time>=3.14){
             console.log("WORK!!!!!")
-            this.eventsService.addView(this.viewId, time).pipe(
+            let id = this.viewId[this.viewId.length-2]
+            console.log(id)
+            this.eventsService.addView(id, time).pipe(
               delay(100),
               retry(3),
               catchError((err) =>{
