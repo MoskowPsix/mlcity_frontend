@@ -77,6 +77,7 @@ import { SafeUrlPipe } from './views/events/event-create/event-create.pipe';
 import { SafeUrlPipe2 } from './components/event-card/event-card.pipe';
 import { MyEventsComponent } from './views/cabinet/my-events/my-events.component';
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component';
+import { RegistrationComponent } from './views/registration/registration.component';
 
 
 
@@ -134,6 +135,7 @@ registerLocaleData(localeRu, 'ru');
     SafeUrlPipe2,
     MyEventsComponent,
     MySightsComponent,
+    RegistrationComponent
     
   ],
   imports: [

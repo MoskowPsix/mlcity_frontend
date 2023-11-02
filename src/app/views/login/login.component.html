@@ -188,9 +188,15 @@
 
                     <ion-item>
                         
-                          <ion-input formControlName="email" class="Login_inputs" label="Email input" type="email" placeholder="Email" required> 
-                            <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
+                         
+
+                          <ion-input (input)="MailOrPhone()" formControlName="email" class="Login_inputs" label="Email input" type="email" placeholder="Email" required> 
+                            <img *ngIf="iconState" class="Login_icon" src="/assets/icons/call-outline.svg" alt="">
+                            <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
                           </ion-input>
+
+                          
+
 
                     </ion-item>
 
@@ -210,6 +216,8 @@
                       <ion-note *ngIf="loginForm.controls['password'].hasError('required')" color="danger">Пароль не может быть пустым</ion-note>
                     </div>
                 </ion-list>
+
+
 
           </ion-div>
 
