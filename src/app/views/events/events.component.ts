@@ -10,6 +10,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { LocationService } from 'src/app/services/location.service';
 import { register } from 'swiper/element';
 import { time } from 'console';
+import { throws } from 'assert';
 
 
 @Component({
@@ -46,7 +47,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   timeStart: number = 0
   timeEnd: number = 0
-  viewId!: string
+  viewId!: number
 
   viewElementTimeStart: number = 0
   viewElementTimeEnd: number = 0
@@ -186,7 +187,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if(boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0){
 
-
+        
 
         if (this.timeStart==0){
           this.timeStart = new Date().getTime()
@@ -194,15 +195,25 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
         } 
 
         else{
+
           this.timeEnd = new Date().getTime()
-          this.viewId = this.widgetsContent.nativeElement.children[i].id
           console.log(this.widgetsContent.nativeElement.children[i].id)
           let time = (new Date().getTime() - this.timeStart)/1000
+
           if(time>=3.14){
             console.log("WORK!!!!!")
+            this.eventsService.addView(this.viewId, time).pipe(
+              delay(100),
+              retry(3),
+              catchError((err) =>{
+                return of(EMPTY) 
+              }),
+              takeUntil(this.destroy$)
+            ).subscribe()
           }
-          console.log((new Date().getTime() - this.timeStart)/1000)
+          
           this.timeStart = 0
+       
           this.test()
         }  
 
