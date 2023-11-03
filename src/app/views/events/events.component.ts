@@ -198,9 +198,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
           let time = (new Date().getTime() - this.timeStart)/1000
 
           if(time>=3.14){
-            console.log("WORK!!!!!")
             let id = this.viewId[this.viewId.length-2]
-            console.log(id)
             this.eventsService.addView(id, time).pipe(
               delay(100),
               retry(3),
@@ -221,12 +219,10 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
       
     } 
     viewElement = true
-    console.log(this.timeStart)
   }
 
   test(){
     this.timeStart = new Date().getTime()
-    console.log("Время заданно", this.timeStart)
   }
   eventTypesChange(typeId: any){
     if (typeId !== 'all') {

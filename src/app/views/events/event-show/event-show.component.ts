@@ -79,13 +79,10 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       tap(() => this.loadPlace = false),
       map((response:any) => {
         this.places.push(...response.places.data)
-        console.log(response)
         this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(response.places.next_cursor)
-        console.log(this.queryBuilderService.paginataionPublicEventPlacesCurrentPage)
         
       }),
       catchError((error) => {
-        console.log(error)
         this.toastService.showToast(MessagesErrors.default, 'danger')
         return of(EMPTY)
       }),
@@ -97,7 +94,6 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   setActivePlace(i: number){
     this.places[i].active = true
-    console.log(this.places[i])
   }
 
  
