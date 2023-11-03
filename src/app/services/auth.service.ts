@@ -76,5 +76,14 @@ export class AuthService {
 
     return this.http.put<PasswordReset>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/reset_password`,data)
   }
+
+  checkName(name: string) {
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/email/check/${name}`)
+  }
+  
+
+  checkEmail(mail:string){
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/email/check/${mail}`)
+  }
   
 }

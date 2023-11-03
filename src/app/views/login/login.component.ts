@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
 
+
   loginAfterSocial(user_id: number){
     if (user_id > 0){
       this.loginForm.disable()
@@ -69,6 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onLoading(){
     this.loadingService.showLoading()
+    
   }
     
   positiveResponseAfterLogin(data:any){
@@ -101,16 +103,15 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.iconState = true;
 
       }
-
+      
     }
-
-
   }
 
   ngOnInit() {
+
     //Создаем поля для формы
     this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.minLength(3), Validators.minLength(50)]),
+      email: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
       password: new FormControl('', [Validators.required, Validators.minLength(3)]),
     });
 
@@ -121,6 +122,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
     this.loginAfterSocial(this.user_id)
+    this.MailOrPhone();
   }
 
   ngOnDestroy() {
