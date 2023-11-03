@@ -672,14 +672,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   getSight(event: any, num: number) {
     if (event.target.value.length >= 3){
       this.sightsListLoading = true
-      this.sightServices.getSights({searchText: event.target.value, locationId: this.createEventForm.value.places[num].value.locationId}).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        this.sightsList = response.sights
+      this.sightServices.getSights({searchText: event.target.value, locationId: this.createEventForm.value.places[num].value.locationId, limit: 100}).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.sightsList = response.sights.data
         this.sightsListLoading = false
       })
     }
   }
 
   setSight(item:any, num: number) {
+    console.log(item)
     this.placeArrayForm[num].sight_name = item.name
     this.createEventForm.value.places[num].patchValue({sight_id: item.id, coords: [item.latitude, item.longitude], address: item.address })
     this.addPlacemark([item.latitude, item.longitude], num)
