@@ -36,6 +36,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   places: any[] = []
   loadingEvent: boolean = true
   loadPlace: boolean = false
+  loadMore: boolean = true
 
   favorite: boolean = false
   loadingFavotire: boolean = false
@@ -72,14 +73,18 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getEventPlaces(){
-    this.loadPlace = true
+    if (this.loadMore)
+    {
+      this.loadPlace = true
     this.eventsService.getEventPlaces(this.eventId, this.queryBuilderService.queryBuilder('eventPlaces')).pipe(
       delay(100),
       retry(3),
       tap(() => this.loadPlace = false),
       map((response:any) => {
         this.places.push(...response.places.data)
+        console.log(response)
         this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(response.places.next_cursor)
+        response.places.next_cursor ? this.loadMore = true : this.loadMore = false
         
       }),
       catchError((error) => {
@@ -90,6 +95,8 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe(() => {
       
     })
+    }
+    
   }
 
   setActivePlace(i: number){

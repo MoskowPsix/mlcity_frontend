@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { IEvent } from 'src/app/models/event';
@@ -149,6 +149,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     window.addEventListener('scroll', this.scrollPaginate, true);
+    window.addEventListener('scrollend',this.scrollEvent, true)
     this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value}
     //console.log(this.date)
     this.eventsCity = []
@@ -245,7 +246,6 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
     if ((boundingClientRect.bottom <= (window.innerHeight * 2)) && !(boundingClientRect.bottom <= window.innerHeight) && this.eventsCity && this.loadTrue) {
       this.loadTrue = false
       this.eventsCityLoadingMore()
-      console.log('ok')
     }
   }
 
