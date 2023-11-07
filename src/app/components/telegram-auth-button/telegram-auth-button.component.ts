@@ -19,10 +19,9 @@ export class TelegramAuthButtonComponent implements AfterViewInit {
     script.setAttribute('data-telegram-login', environment.telegramBotName);
     script.setAttribute('data-size', 'small');
     // Callback function in global scope
-    script.setAttribute('data-auth-url', 'http://mlcity.ru:3443/api/social-auth/telegram/callback');
+    script.setAttribute('data-auth-url', environment.telegramRedirect);
     script.setAttribute('data-request-access', 'write');
     script.setAttribute('data-userpic', 'false');
-    script.setAttribute('data-request-access', 'write');
     element.parentElement.replaceChild(script, element);
     // <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="PraktZarbot" data-size="small" data-userpic="false" data-auth-url="http://mlcity.ru:3443/api/social-auth/telegram/callback" data-request-access="write"></script>
   }
