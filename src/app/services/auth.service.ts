@@ -78,7 +78,7 @@ export class AuthService {
   }
 
   checkName(name: string) {
-    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/email/check/${name}`)
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/name/check/${name}`)
   }
   
 

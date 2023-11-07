@@ -14,6 +14,8 @@ export class RegistrationComponent  implements OnInit {
 
   constructor(
     private authservice: AuthService
+
+    
   ) { }
 
   
@@ -21,14 +23,14 @@ export class RegistrationComponent  implements OnInit {
    
   }
 
-
+  
 
   ngOnInit() {
     this.registerForm = new FormGroup({
-      email: new FormControl(' ', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(3)]),
       retryPassword: new FormControl ('',[Validators.required,Validators.minLength(3)] ),
-      name:new FormControl(' ',[Validators.required,Validators.minLength(3)] )
+      name:new FormControl('',[Validators.required,Validators.minLength(3)] )
     });
   }
 
@@ -53,25 +55,32 @@ export class RegistrationComponent  implements OnInit {
     
   }
 
-  checkEmail() {
+   checkEmail() {
 
 
 
     if (!this.registerForm.controls['email'].invalid) {
-      this.authservice.checkEmail(this.registerForm.value.mail).pipe(
+       this.authservice.checkEmail(this.registerForm.value.mail).pipe(
         map((respons:any) => {
           console.log(respons)
-        }),
-        catchError((err) =>{
-          return of(EMPTY) 
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe()
-  }
+         }),
+         catchError((err) =>{
+           return of(EMPTY) 
+         }),
+         takeUntil(this.destroy$)
+       ).subscribe()
+   }
 
 
 
-  }
+   }
 
+   checkPassword(){
+
+    
+    console.log(document.getElementsByClassName('.emailclass'));
+
+   }
+  
 
 }
