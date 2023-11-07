@@ -18,9 +18,9 @@ export class UserService {
     return this.user.asObservable()
   }
 
-  getUserById(): Observable<IUser> {
-    return this.http.get<IUser>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users`)
-  } 
+  getUserById(id: number): Observable<IUser> {
+    return this.http.get<IUser>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${id}`)
+  }
 
   setUser(user: IUser) {
     //this.user.value = []
