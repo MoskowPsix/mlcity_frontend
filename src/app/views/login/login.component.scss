@@ -44,10 +44,7 @@ ion-input{
     --padding-left: 20px;
 }
 
-input:-webkit-autofill{
 
-    -webkit-box-shadow:0 0 0px 1000px white inset;
-}
 
 
 
@@ -60,7 +57,7 @@ border: none;
         display: flex;
         justify-content: center;
         align-items: center;
-        
+        height: 75vh;
 
         .LoginMainBlock{
             background-color: #FFF;

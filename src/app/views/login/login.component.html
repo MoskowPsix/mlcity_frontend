@@ -188,9 +188,15 @@
 
                     <ion-item>
                         
-                          <ion-input formControlName="email" class="Login_inputs" label="Email input" type="email" placeholder="Email" required> 
-                            <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
+                         
+
+                          <ion-input (input)="MailOrPhone()" formControlName="email" class="Login_inputs" label="Email input" type="email" placeholder="Email" required> 
+                            <img *ngIf="iconState" class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
+                            <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
                           </ion-input>
+
+                          
+
 
                     </ion-item>
 
@@ -211,6 +217,8 @@
                     </div>
                 </ion-list>
 
+
+
           </ion-div>
 
 
@@ -223,24 +231,24 @@
                   
               <ion-item>
                   
-                    <ion-button type="submit" [disabled] ="loginForm.invalid || loginForm.disabled" class="Login_btns">
+                    <ion-button type="submit" [disabled]="loginForm.invalid || loginForm.disabled" class="Login_btns">
                         Вход
                     </ion-button>
                   
               </ion-item>
 
-
+              <ion-router-link class="Login_main_link" routerLink="/registration">
                 <ion-item>
 
 
-                  <ion-button class="Login_btns CreateAcc_btn">
+                <ion-button class="Login_btns CreateAcc_btn">
                     Создать аккаунт
                 </ion-button>
 
 
                 </ion-item>
 
-             
+              </ion-router-link>
 
 
 

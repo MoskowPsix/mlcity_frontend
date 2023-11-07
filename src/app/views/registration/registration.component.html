@@ -1,0 +1,150 @@
+<ng-container>
+  <ion-content class="MainBlock">
+    <!-- Обёртка для центрирования -->
+      <ion-grid class="Login_wrapper">
+        
+        <form [formGroup] = 'registerForm' (ngSubmit) = "ngOnInit()">
+  
+  
+         <ion-row class="LoginMainBlock">
+            <ion-header class="LoginMainBlock_header">
+              <ion-router-link class="Login_main_link" routerLink="/home">
+  
+                <div class="Login_logo">
+                 
+                  <ion-div class="Login_logo_wrapper">
+  
+                    <img *ngIf="true" src="/assets/icons/favicon.png" alt="">
+                    <img *ngIf="false"alt="logo" src="/svg/no-photo.svg" />
+            
+                    <ion-label class="Login_logo_text">
+                      mlcity
+                    </ion-label>
+  
+                  </ion-div>
+  
+                </div>
+              </ion-router-link>
+                
+            </ion-header>
+             
+            <ion-div class="Login_inputs_main">
+                  
+              <ion-list>
+  
+                      <ion-item>
+                            <ion-input formControlName="name" (input)="checkName()" class="Login_inputs" label="name" type="text" placeholder="Имя" required> 
+                              <img class="Login_icon" src="/assets/icons/user.svg" alt="">
+                            </ion-input>
+                      </ion-item>
+
+                      <ion-item>
+                            <ion-input formControlName="email" (input)="checkEmail()" class="Login_inputs emailclass" label="E-mail" type="text" placeholder="E-mail" required> 
+                              <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
+                            </ion-input>
+                      </ion-item>
+
+
+                      <ion-item>
+                            <ion-input formControlName="password" (input) = "checkPassword()" id="reg_password" class="Login_inputs" label="password" type="password" placeholder="Пароль" required> 
+                              <img class="Login_icon" src="/assets/icons/login_password.svg" alt="">
+                            </ion-input>
+                      </ion-item>
+  
+  
+      
+  
+                      <ion-item>
+                            <ion-input  class ="Login_inputs reg_password_verfi" label="Password_verfi" type="password"   placeholder="Подтверждение пароля">
+                               <img class="Login_icon" src="/assets/icons/login_password.svg" alt="">
+                            </ion-input>
+                      </ion-item>
+  
+                  
+                  </ion-list>
+  
+  
+  
+            </ion-div>
+  
+  
+  
+            <ion-div class="Login_btns_content">
+  
+  
+              <ion-list>
+  
+                    
+                <ion-item>
+                    
+                      <ion-button type="submit"class="Login_btns">
+                          Зарегестрироваться
+                      </ion-button>
+                    
+                </ion-item>
+  
+                <ion-router-link class="Login_main_link" routerLink="/registration">
+                  <ion-item>
+  
+  
+                  <ion-button class="Login_btns CreateAcc_btn">
+                      Создать аккаунт
+                  </ion-button>
+  
+  
+                  </ion-item>
+  
+                </ion-router-link>
+  
+  
+  
+               </ion-list>
+               
+              
+  
+  
+  
+  
+            </ion-div>
+  
+  
+            
+  
+              <ion-list class="LoginWith_list">
+  
+                       <h6 class="LoginWith_list_text">Войти с помощью</h6>
+  
+                <ion-item>
+  
+                 
+  
+                  <a href="#">
+                  
+                    <ion-div class="vk_logo_circle">
+                       <ion-div class="vk_logo_quad">
+                        <ion-icon class="logo-vk" name="logo-vk"></ion-icon>
+                       </ion-div>
+                    </ion-div>
+                  </a>
+              </ion-item>
+  
+  
+  
+              </ion-list>
+  
+              
+             
+               
+  
+           
+  
+  
+         </ion-row>
+  
+         
+        </form>
+      </ion-grid>
+  </ion-content>
+  
+  
+</ng-container>
