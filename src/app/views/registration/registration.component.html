@@ -3,7 +3,7 @@
     <!-- Обёртка для центрирования -->
       <ion-grid class="Login_wrapper">
         
-        <form [formGroup] = 'registerForm' (ngSubmit) = "ngOnInit()">
+        <form [formGroup] = 'registerForm' (ngSubmit)="onSubmitReg()">
   
   
          <ion-row class="LoginMainBlock">
@@ -33,20 +33,28 @@
               <ion-list>
   
                       <ion-item>
-                            <ion-input formControlName="name" (input)="checkName()" class="Login_inputs" label="name" type="text" placeholder="Имя" required> 
+                            <ion-input formControlName="name" class="Login_inputs" label="name" type="text" placeholder="Имя" [value]="registerForm.value.name" required> 
                               <img class="Login_icon" src="/assets/icons/user.svg" alt="">
+                            
                             </ion-input>
+                            
+                              
+                            
+                           
+
                       </ion-item>
 
+                      <ion-note *ngIf="!nameBusy" color="danger">Имя {{registerForm.value.name}} занято попробуйте другое</ion-note>
+
                       <ion-item>
-                            <ion-input formControlName="email" (input)="checkEmail()" class="Login_inputs emailclass" label="E-mail" type="text" placeholder="E-mail" required> 
+                            <ion-input formControlName="email" class="Login_inputs emailclass" label="E-mail" type="text" placeholder="E-mail" required> 
                               <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
                             </ion-input>
                       </ion-item>
 
 
                       <ion-item>
-                            <ion-input formControlName="password" (input) = "checkPassword()" id="reg_password" class="Login_inputs" label="password" type="password" placeholder="Пароль" required> 
+                            <ion-input formControlName="password" id="reg_password" class="Login_inputs" label="password" type="password" placeholder="Пароль" [value]="registerForm.value.password" required> 
                               <img class="Login_icon" src="/assets/icons/login_password.svg" alt="">
                             </ion-input>
                       </ion-item>
@@ -55,7 +63,7 @@
       
   
                       <ion-item>
-                            <ion-input  class ="Login_inputs reg_password_verfi" label="Password_verfi" type="password"   placeholder="Подтверждение пароля">
+                            <ion-input formControlName="password_confirmation" class ="Login_inputs reg_password_verfi" label="Password_verfi" type="password"   placeholder="Подтверждение пароля">
                                <img class="Login_icon" src="/assets/icons/login_password.svg" alt="">
                             </ion-input>
                       </ion-item>
@@ -77,7 +85,7 @@
                     
                 <ion-item>
                     
-                      <ion-button type="submit"class="Login_btns">
+                      <ion-button [disabled]="registerForm.invalid || registerForm.disabled" type="submit" class="Login_btns">
                           Зарегестрироваться
                       </ion-button>
                     
@@ -88,7 +96,7 @@
   
   
                   <ion-button class="Login_btns CreateAcc_btn">
-                      Создать аккаунт
+                      Войти в аккаунт
                   </ion-button>
   
   

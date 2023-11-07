@@ -62,6 +62,9 @@ export class AuthService {
       })
     )
   }
+  register(data: any){
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/register`, data)
+  }
 
   logout() {
     this.tokenService.removeToken()
