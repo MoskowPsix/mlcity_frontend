@@ -24,9 +24,9 @@
     
       <!-- <div class="ion-padding" slot="content"> -->
           <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
-        <!-- <ng-container> -->
-          <!-- <app-calendula (dateOutput)="setDate($event)" [date]="date"/> -->
-        <!-- </ng-container> -->
+        <ng-container>
+          <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
+        </ng-container>
       <!-- </div> -->
     
     

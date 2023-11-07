@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core'
+import { Component, Input, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core'
 import { catchError, delay, EMPTY, map, of, retry, Subject, switchMap, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { MessagesAuth } from 'src/app/enums/messages-auth'
@@ -19,6 +19,7 @@ import { CommentsService } from 'src/app/services/comments.service'
   selector: 'app-event-card',
   templateUrl: './event-card.component.html',
   styleUrls: ['./event-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   constructor(
@@ -202,7 +203,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   ngOnInit() {
-    
+    // register()
     this.userAuth = this.authService.getAuthState()
     this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     this.favorite = this.event.favorites_users_exists! 

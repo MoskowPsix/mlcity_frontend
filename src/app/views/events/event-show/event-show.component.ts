@@ -82,7 +82,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       tap(() => this.loadPlace = false),
       map((response:any) => {
         this.places.push(...response.places.data)
-        console.log(response)
+  
         this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(response.places.next_cursor)
         response.places.next_cursor ? this.loadMore = true : this.loadMore = false
         

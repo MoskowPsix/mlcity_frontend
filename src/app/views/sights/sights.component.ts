@@ -34,6 +34,12 @@ export class SightsComponent implements OnInit, OnDestroy {
   currentPageSightsCity: number = 1
   currentPageSightsGeolocation: number = 1
 
+  cardContainer!: ElementRef
+  @ViewChild('widgetsContent') widgetsContent!: ElementRef
+  viewId: number[] = []
+  timeStart: number = 0
+
+
   nextPage: boolean = false
   loadTrue:boolean = false
 
@@ -46,7 +52,8 @@ export class SightsComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService,
-    private locationService: LocationService
+    private locationService: LocationService,
+
   ) { }
 
   getSightsCity(){
@@ -117,8 +124,59 @@ export class SightsComponent implements OnInit, OnDestroy {
     this.segment = event.detail.value
   }
 
+  scrollEvent = (): void => {
+ 
+    let viewElement: boolean = false
+
+    for(let i = 0; i<this.widgetsContent.nativeElement.children.length; i++){
+  
+      const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
+      
+      
+
+      if(boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0){
+        this.viewId.push(this.widgetsContent.nativeElement.children[i].id)
+    
+
+        if (this.timeStart==0){
+          this.timeStart = new Date().getTime()
+        } 
+
+        else{
+      
+          let time = (new Date().getTime() - this.timeStart)/1000
+
+          if(time>=3.14){
+            let id = this.viewId[this.viewId.length-2]
+            this.sightsService.addView(id, time).pipe(
+              delay(100),
+              retry(1),
+              catchError((err) =>{
+                return of(EMPTY) 
+              }),
+              takeUntil(this.destroy$)
+            ).subscribe()
+          }
+          
+          this.timeStart = 0
+       
+          this.timerReload()
+        }  
+
+      } 
+      
+      
+    } 
+    viewElement = true
+  }
+
+  timerReload(){
+    this.timeStart = new Date().getTime()
+  }
+
   ngOnInit() {
     window.addEventListener('scroll', this.scrollPaginate, true);
+    window.addEventListener('scrollend',this.scrollEvent, true)
     this.sightsCity = []
     this.sightsGeolocation = []
     this.getSightsCity()
@@ -163,7 +221,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     if ((boundingClientRect.bottom <= (window.innerHeight * 2)) && !(boundingClientRect.bottom <= window.innerHeight) && this.sightsCity && this.loadTrue) {
       this.loadTrue = false
       this.sightsCityLoadingMore()
-      console.log('ok')
+
     }
   }
 
