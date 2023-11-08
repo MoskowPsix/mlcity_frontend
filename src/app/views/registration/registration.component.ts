@@ -16,6 +16,10 @@ export class RegistrationComponent  implements OnInit {
   nameBusy:boolean = true
   emailBusy:boolean = true
   passwordConfirm:boolean = true
+  busyName:string = ""
+  busyEmail:string = ""
+  busyPass: boolean = false
+
 
   constructor(
     private toastService: ToastService,
@@ -28,14 +32,16 @@ export class RegistrationComponent  implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(3)]),
       password_confirmation: new FormControl ('',[Validators.required,Validators.minLength(3)] ),
-      name:new FormControl('',[Validators.required,Validators.minLength(3)] ),
+      name:new FormControl('',[Validators.required,Validators.minLength(3), Validators.maxLength(50)] ),
       number: new FormControl('',[Validators.minLength(10),Validators.minLength(10)]),
+      avatar: new FormControl('')
     });
   }
 
   
 
   checkName() {
+    this.busyName = this.registerForm.value.name;
     if(this.registerForm.value.name.length != " " && this.registerForm.value.name.length != "" ) {
       console.log(this.registerForm.controls['name'].invalid)
             if (!this.registerForm.controls['name'].invalid) {
@@ -54,14 +60,11 @@ export class RegistrationComponent  implements OnInit {
   }
 
    checkEmail() {
+    this.busyEmail = this.registerForm.value.email;
     if (!this.registerForm.controls['email'].invalid) {
        this.authservice.checkEmail(this.registerForm.value.mail).pipe(
         map((respons:any) => {
-          if(respons){
-
-          }else if(!respons){
-            this.emailBusy = false;
-          }
+          this.emailBusy = respons.email
          }),
          catchError((err) =>{
            return of(EMPTY) 
@@ -73,24 +76,64 @@ export class RegistrationComponent  implements OnInit {
 
    checkPassword(){
     if(this.registerForm.value.password == this.registerForm.value.password_confirmation){
-      console.log('password ok');
-    }
-    else{
-      console.log('password dont ok')
+      this.busyPass = true    
+    }else{
+      this.busyPass = false
     }
    }
   
 
+   OpenPassword(input:string){
+    let passwordInput:any = document.getElementById("reg_password")
+    let img:any = document.getElementById("eye_img")
+    if(passwordInput.type === 'password'){
+      passwordInput.type = 'text'
+      img.src = "../assets/icons/eye_open.svg"
+      
+    } 
+    else if (passwordInput.type === 'text'){
+      passwordInput.type ='password'
+      img.src = "../assets/icons/eye_closed.svg"
+    }
+    
+   }
+
+
+   
+   OpenPasswordConfirm(input:string,event:any){
+    
+
+
+    let passwordInput:any = document.getElementById(input)
+    let img:any = document.getElementById("eye_img_confirm")
+    if(passwordInput.type === 'password'){
+      passwordInput.type = 'text'
+      img.src = "../assets/icons/eye_open.svg"
+      
+    } 
+    else if (passwordInput.type === 'text'){
+      passwordInput.type ='password'
+      img.src = "../assets/icons/eye_closed.svg"
+    }
+
+    
+   }
+
+
+
    onSubmitReg(){
+    this.registerForm.value.password == this.registerForm.value.password_confirmation ? this.busyPass = true : this.busyPass = false
     this.checkEmail();
     this.checkName();
-    this.checkPassword();
-    if (this.emailBusy && this.nameBusy) {
+    if (this.emailBusy && this.nameBusy && this.busyPass) {
     this.authservice.register(this.registerForm.value).pipe( 
       delay(100),
       retry(3),
       map((respons:any) => {
-          
+          console.log('ok')
+          if (respons.status == 'success') {
+            this.toastService.showToast('Вы успешно зарегестрировались!!!', 'success')
+          }
          }),
       tap(() => {
         

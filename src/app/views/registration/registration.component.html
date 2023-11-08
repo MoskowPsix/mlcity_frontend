@@ -30,10 +30,10 @@
              
             <ion-div class="Login_inputs_main">
                   
-              <ion-list>
+              <ion-list style="text-align: center;">
   
-                      <ion-item>
-                            <ion-input formControlName="name" class="Login_inputs" label="name" type="text" placeholder="Имя" [value]="registerForm.value.name" required> 
+                      <ion-item class="inputDontButton">
+                            <ion-input formControlName="name" class="Login_inputs InputDontButton"  label="name" type="text" placeholder="Имя" [value]="registerForm.value.name" required> 
                               <img class="Login_icon" src="/assets/icons/user.svg" alt="">
                             
                             </ion-input>
@@ -44,31 +44,36 @@
 
                       </ion-item>
 
-                      <ion-note *ngIf="!nameBusy" color="danger">Имя {{registerForm.value.name}} занято попробуйте другое</ion-note>
-
+                      <ion-note *ngIf="!nameBusy" style="text-align: center;" color="danger">{{busyName}} уже занято, попробуйте другое</ion-note>
                       <ion-item>
-                            <ion-input formControlName="email" class="Login_inputs emailclass" label="E-mail" type="text" placeholder="E-mail" required> 
+                        <ion-input formControlName="number" class="Login_inputs emailclass InputDontButton" label="number" type="tel" placeholder="Телефон" required> 
+                          <!-- <img class="Login_icon" src="/assets/icons/login_mail.svg" alt=""> -->
+                          <ion-icon name="call-outline"></ion-icon>
+                         
+                        </ion-input>
+                  </ion-item>
+                      <ion-item>
+                            <ion-input formControlName="email" class="Login_inputs emailclass InputDontButton" label="E-mail" type="text" placeholder="E-mail" required> 
                               <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
+                             
                             </ion-input>
                       </ion-item>
 
+                      <ion-note *ngIf="!emailBusy" style="text-align: center;" color="danger">{{this.registerForm.value.email}} уже зарегестрирована</ion-note>
 
                       <ion-item>
                             <ion-input formControlName="password" id="reg_password" class="Login_inputs" label="password" type="password" placeholder="Пароль" [value]="registerForm.value.password" required> 
-                              <img class="Login_icon" src="/assets/icons/login_password.svg" alt="">
+                              <button type="button" style="background: none; margin-top: -22px;"><img id="eye_img" (click) = "OpenPassword('reg_password')" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
                             </ion-input>
                       </ion-item>
-  
-  
-      
-  
                       <ion-item>
-                            <ion-input formControlName="password_confirmation" class ="Login_inputs reg_password_verfi" label="Password_verfi" type="password"   placeholder="Подтверждение пароля">
-                               <img class="Login_icon" src="/assets/icons/login_password.svg" alt="">
+                            <ion-input formControlName="password_confirmation" class ="Login_inputs reg_password_verfi" label="Password_verfi" type="password" id="confirm_password"  placeholder="Подтверждение пароля">
+                              <button type="button" style="background: none; margin-top: -22px;"><img id="eye_img_confirm" (click) = "OpenPasswordConfirm('confirm_password', $event)" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
                             </ion-input>
+                      
                       </ion-item>
   
-                  
+                      
                   </ion-list>
   
   
