@@ -78,6 +78,7 @@ import { SafeUrlPipe2 } from './components/event-card/event-card.pipe';
 import { MyEventsComponent } from './views/cabinet/my-events/my-events.component';
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component';
 import { RegistrationComponent } from './views/registration/registration.component';
+import { TelegramAuthButtonComponent } from './components/telegram-auth-button/telegram-auth-button.component';
 
 
 
@@ -91,6 +92,7 @@ registerLocaleData(localeRu, 'ru');
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
+    TelegramAuthButtonComponent,
     AppComponent,
     EventsComponent,
     CabinetComponent,
