@@ -90,8 +90,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginForm.enable()
   }
 
-  MailOrPhone() {
-    let loginValue:string = this.loginForm.value.email;
+  MailOrName() {
+    let loginValue:string = this.loginForm.value.name;
     let loginValueArr:string[] = loginValue.split('');
 
 
@@ -111,7 +111,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     //Создаем поля для формы
     this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+      name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
       password: new FormControl('', [Validators.required, Validators.minLength(3)]),
     });
 
@@ -122,7 +122,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
     this.loginAfterSocial(this.user_id)
-    this.MailOrPhone();
+    this.MailOrName();
   }
 
   ngOnDestroy() {

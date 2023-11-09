@@ -190,7 +190,7 @@
                         
                          
 
-                          <ion-input (input)="MailOrPhone()" formControlName="email" class="Login_inputs" label="Email input" type="email" placeholder="Email" required> 
+                          <ion-input (input)="MailOrName()" formControlName="email" class="Login_inputs" label="Email input" type="email" placeholder="Email" required> 
                             <img *ngIf="iconState" class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
                             <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
                           </ion-input>
@@ -201,9 +201,9 @@
                     </ion-item>
 
 
-                    <div style="text-align: center;" class="errorEmail" *ngIf="loginForm.controls['email'].invalid && loginForm.controls['email'].touched">
-                      <ion-note *ngIf="loginForm.controls['email'].hasError('email')" color="danger">Введите корректный email</ion-note>
-                      <ion-note *ngIf="loginForm.controls['email'].hasError('required')" color="danger">Поле email не может быть пустым</ion-note>
+                    <div style="text-align: center;" class="errorEmail" *ngIf="loginForm.controls['name'].invalid && loginForm.controls['name'].touched">
+                      <ion-note *ngIf="loginForm.controls['name'].hasError('name')" color="danger">Введите корректный email или имя пользователя</ion-note>
+                      <ion-note *ngIf="loginForm.controls['name'].hasError('required')" color="danger">Поле не может быть пустым</ion-note>
                     </div>
 
                     <ion-item>
