@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { ISight } from 'src/app/models/sight';
@@ -17,6 +17,8 @@ import { LocationService } from 'src/app/services/location.service';
 export class SightsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
 
+  @ViewChild('ContentCol') ContentCol!: ElementRef;
+
   city: string = ''
   segment:string = 'sightsCitySegment'
 
@@ -33,6 +35,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   currentPageSightsGeolocation: number = 1
 
   nextPage: boolean = false
+  loadTrue:boolean = false
 
   sightTypeId: any
 
@@ -57,6 +60,7 @@ export class SightsComponent implements OnInit, OnDestroy {
         this.filterService.setSightsCount(respons.total)
         this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(respons.sights.next_cursor)
         respons.sights.next_cursor ? this.nextPage = true : this.nextPage = false
+        respons.sights.next_cursor ? this.loadTrue = true : this.loadTrue = false
       }),
       tap(() => {
         this.loadingSightsCity = true  
@@ -114,6 +118,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    window.addEventListener('scroll', this.scrollPaginate, true);
     this.sightsCity = []
     this.sightsGeolocation = []
     this.getSightsCity()
@@ -149,6 +154,16 @@ export class SightsComponent implements OnInit, OnDestroy {
     } else {
       this.filterService.setSightTypesTolocalStorage([])
       this.filterService.changeFilter.next(true)
+    }
+  }
+
+  scrollPaginate = (): void => {
+    const boundingClientRect = this.ContentCol.nativeElement?.getBoundingClientRect();
+    // console.log(this.ContentCol.nativeElement.getBoundingClientRect().bottom, window.innerHeight)
+    if ((boundingClientRect.bottom <= (window.innerHeight * 2)) && !(boundingClientRect.bottom <= window.innerHeight) && this.sightsCity && this.loadTrue) {
+      this.loadTrue = false
+      this.sightsCityLoadingMore()
+      console.log('ok')
     }
   }
 

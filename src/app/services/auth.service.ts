@@ -66,6 +66,15 @@ export class AuthService {
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/register`, data)
   }
 
+  setPassword(pass: any[]): Observable<IUser> {
+    const params = pass
+    return this.getCSRF().pipe(
+      mergeMap(res => {
+        return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/set_password`, params)
+      })
+    )
+  }
+
   logout() {
     this.tokenService.removeToken()
     this.userService.removeUserFromLocalStorage()

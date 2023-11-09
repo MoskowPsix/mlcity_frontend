@@ -202,6 +202,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   ngOnInit() {
+    register()
     this.userAuth = this.authService.getAuthState()
     this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     this.favorite = this.event.favorites_users_exists! 
@@ -218,8 +219,12 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   ngAfterViewInit(): void {
+<<<<<<< HEAD
     register()
 
+=======
+    // register()
+>>>>>>> origin/Develop
     this.swiper = this.swiperRef?.nativeElement.swiper
     setTimeout(() => {
       this.swiperCurrentSlide = this.swiper?.realIndex! + 1

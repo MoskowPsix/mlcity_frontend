@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+=======
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+>>>>>>> origin/Develop
 import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { IEvent } from 'src/app/models/event';
@@ -21,6 +25,8 @@ import { throws } from 'assert';
 export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>()
 
+  @ViewChild('ContentCol') ContentCol!: ElementRef;
+  
   city: string = ''
   segment:string = 'eventsCitySegment'
 
@@ -44,6 +50,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   currentPageEventsGeolocation: number = 1
 
   nextPage: boolean = false
+  loadTrue: boolean = false
 
   timeStart: number = 0
   timeEnd: number = 0
@@ -85,8 +92,9 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
       map((respons:any) => {
         this.eventsCity.push(...respons.events.data)
         this.filterService.setEventsCount(respons.events.total)
-        this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(respons.events.next_cursor)
+        this.queryBuilderService.paginationPublicEventsCityCurrentPage.next(respons.events.next_cursor)
         respons.events.next_cursor ? this.nextPage = true : this.nextPage = false
+        respons.events.next_cursor ? this.loadTrue = true : this.loadTrue = false
       }),
       tap(() => {
         this.loadingEventsCity = true  
@@ -144,6 +152,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    window.addEventListener('scroll', this.scrollPaginate, true);
     this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value}
     //console.log(this.date)
     this.eventsCity = []
@@ -235,6 +244,16 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.filterService.setEventTypesTolocalStorage([])
       this.filterService.changeFilter.next(true)
+    }
+  }
+
+  scrollPaginate = (): void => {
+    const boundingClientRect = this.ContentCol.nativeElement?.getBoundingClientRect();
+    // console.log(this.ContentCol.nativeElement.getBoundingClientRect().bottom, window.innerHeight)
+    if ((boundingClientRect.bottom <= (window.innerHeight * 2)) && !(boundingClientRect.bottom <= window.innerHeight) && this.eventsCity && this.loadTrue) {
+      this.loadTrue = false
+      this.eventsCityLoadingMore()
+      console.log('ok')
     }
   }
 
