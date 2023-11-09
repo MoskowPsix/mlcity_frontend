@@ -193,7 +193,7 @@
             
           </ion-row>
           <ion-row class="ion-justify-content-center">
-            <ion-button (click)="getEventPlaces()">Показать больше</ion-button>
+            <ion-button (click)="getEventPlaces()" *ngIf="loadMore">Показать больше</ion-button>
           </ion-row>
           
           

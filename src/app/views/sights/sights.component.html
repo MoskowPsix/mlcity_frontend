@@ -59,7 +59,9 @@
                   </div>
                 </ion-col> 
                 <ion-col size-xl="4" size-lg="6" size-md="6" size-xs="12">
-                  <div *ngFor="let sight of sightsCity; let i = index" ><app-event-card [isSight]="true" [event]="sight"></app-event-card></div>
+                  <div #widgetsContent>
+                    <app-event-card #cardContainer *ngFor="let sight of sightsCity; let i = index" [isSight]="true" [event]="sight"></app-event-card>
+                  </div>
                   <ng-container *ngIf="!sightsCity.length && loadingSightsCity">
                     <app-no-data/>
                   </ng-container>

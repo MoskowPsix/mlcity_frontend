@@ -41,10 +41,8 @@ export class PlaceInfoComponent  implements OnInit {
       tap(()=> {this.loadSeance = false}),
       map((response)=>{
         this.place_date = response.seances
-        console.log(response)
       }),
       catchError((error) => {
-        console.log(error)
         this.toastSerivce.showToast(MessagesErrors.default, 'danger')
         return of(EMPTY)
       }),

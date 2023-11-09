@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-=======
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
->>>>>>> origin/Develop
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { IEvent } from 'src/app/models/event';
@@ -16,11 +12,13 @@ import { register } from 'swiper/element';
 import { time } from 'console';
 import { throws } from 'assert';
 
+register()
 
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss'],
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>()
@@ -50,7 +48,6 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   currentPageEventsGeolocation: number = 1
 
   nextPage: boolean = false
-  loadTrue: boolean = false
 
   timeStart: number = 0
   timeEnd: number = 0
@@ -61,6 +58,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   event_id: number = 0
   events_ids: any[] = []
+  loadTrue: boolean = false
 
   eventTypeId: any
   sightTypeId: any
@@ -99,6 +97,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
       tap(() => {
         this.loadingEventsCity = true  
         this.loadingMoreEventsCity = false
+       
       }),
       catchError((err) =>{
         this.toastService.showToast(MessagesErrors.default, 'danger')
@@ -153,6 +152,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     window.addEventListener('scroll', this.scrollPaginate, true);
+    window.addEventListener('scrollend',this.scrollEvent, true)
     this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value}
     //console.log(this.date)
     this.eventsCity = []
@@ -182,7 +182,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     // console.log(this.cardContainer)
-    window.addEventListener('scrollend', this.scrollEvent, true);
+   
 
   }
   scrollEvent = (): void => {
@@ -196,7 +196,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if(boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0){
         this.viewId.push(this.widgetsContent.nativeElement.children[i].id)
-        
+     
 
         if (this.timeStart==0){
           this.timeStart = new Date().getTime()
@@ -207,12 +207,10 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
           let time = (new Date().getTime() - this.timeStart)/1000
 
           if(time>=3.14){
-            console.log("WORK!!!!!")
             let id = this.viewId[this.viewId.length-2]
-            console.log(id)
             this.eventsService.addView(id, time).pipe(
               delay(100),
-              retry(3),
+              retry(1),
               catchError((err) =>{
                 return of(EMPTY) 
               }),
@@ -222,7 +220,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
           
           this.timeStart = 0
        
-          this.test()
+          this.timerReload()
         }  
 
       } 
@@ -230,12 +228,10 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
       
     } 
     viewElement = true
-    console.log(this.timeStart)
   }
 
-  test(){
+  timerReload(){
     this.timeStart = new Date().getTime()
-    console.log("Время заданно", this.timeStart)
   }
   eventTypesChange(typeId: any){
     if (typeId !== 'all') {
@@ -253,7 +249,6 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
     if ((boundingClientRect.bottom <= (window.innerHeight * 2)) && !(boundingClientRect.bottom <= window.innerHeight) && this.eventsCity && this.loadTrue) {
       this.loadTrue = false
       this.eventsCityLoadingMore()
-      console.log('ok')
     }
   }
 
