@@ -33,6 +33,8 @@
     "@capacitor/keyboard": "^5.0.0",
     "@capacitor/status-bar": "^5.0.0",
     "@ionic/angular": "^6.1.9",
+    "@maskito/angular": "^1.8.1",
+    "@maskito/core": "^1.8.1",
     "angular8-yandex-maps": "^15.0.0",
     "cordova-plugin-nativegeocoder": "^3.5.0",
     "cordova-plugin-request-location-accuracy": "^2.3.0",

@@ -38,41 +38,44 @@
                             
                             </ion-input>
                             
-                              
-                            
-                           
 
                       </ion-item>
 
                       <ion-note *ngIf="!nameBusy" style="text-align: center;" color="danger">{{busyName}} уже занято, попробуйте другое</ion-note>
                       <ion-item>
-                        <ion-input formControlName="number" class="Login_inputs emailclass InputDontButton" label="number" type="tel" placeholder="Телефон" required> 
-                          <!-- <img class="Login_icon" src="/assets/icons/login_mail.svg" alt=""> -->
-                          <ion-icon name="call-outline"></ion-icon>
-                         
+                        <ion-input formControlName = "number" class="Login_inputs emailclass InputDontButton"    
+                         label = "number" 
+                         type = "tel" placeholder = "Телефон"   
+                         [maskito]="phoneMask"
+                         [maskitoElement]="maskPredicate"
+                         required> 
+
+                          <img src="/assets/icons/phone_reg.svg" class="Login_icon " alt="Описание изображения">
+
+
                         </ion-input>
                   </ion-item>
                       <ion-item>
                             <ion-input formControlName="email" class="Login_inputs emailclass InputDontButton" label="E-mail" type="text" placeholder="E-mail" required> 
                               <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
-                             
+          
                             </ion-input>
                       </ion-item>
 
-                      <ion-note *ngIf="!emailBusy" style="text-align: center;" color="danger">{{this.registerForm.value.email}} уже зарегестрирована</ion-note>
+                      <ion-note *ngIf="!emailBusy" style="text-align: center;" color="danger"> Ваш E-mail уже зарегестрирован</ion-note>
 
                       <ion-item>
-                            <ion-input formControlName="password" id="reg_password" class="Login_inputs" label="password" type="password" placeholder="Пароль" [value]="registerForm.value.password" required> 
+                            <ion-input clear-on-edit = "false" formControlName="password" id="reg_password" class="Login_inputs" label="password" type="text" placeholder="Пароль" [value]="registerForm.value.password" required> 
                               <button type="button" style="background: none; margin-top: -22px;"><img id="eye_img" (click) = "OpenPassword('reg_password')" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
                             </ion-input>
                       </ion-item>
                       <ion-item>
-                            <ion-input formControlName="password_confirmation" class ="Login_inputs reg_password_verfi" label="Password_verfi" type="password" id="confirm_password"  placeholder="Подтверждение пароля">
+                            <ion-input clear-on-edit = "false" formControlName="password_confirmation" class ="Login_inputs reg_password_verfi" label="Password_verfi" type="text" id="confirm_password"  placeholder="Подтверждение пароля">
                               <button type="button" style="background: none; margin-top: -22px;"><img id="eye_img_confirm" (click) = "OpenPasswordConfirm('confirm_password', $event)" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
                             </ion-input>
                       
                       </ion-item>
-  
+                      <ion-note *ngIf="!busyPass" style="text-align: center;" color="danger">Пароли не совпадают</ion-note>
                       
                   </ion-list>
   
@@ -90,13 +93,13 @@
                     
                 <ion-item>
                     
-                      <ion-button [disabled]="registerForm.invalid || registerForm.disabled" type="submit" class="Login_btns">
+                      <ion-button [disabled]="registerForm.invalid || registerForm.disabled && busyPass == false" type="submit" class="Login_btns">
                           Зарегестрироваться
                       </ion-button>
                     
                 </ion-item>
   
-                <ion-router-link class="Login_main_link" routerLink="/registration">
+                <ion-router-link class="Login_main_link" routerLink="/login">
                   <ion-item>
   
   

@@ -4,6 +4,7 @@ import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } fro
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { MaskitoOptions,MaskitoElementPredicateAsync } from '@maskito/core';
 
 @Component({
   selector: 'app-registration',
@@ -18,7 +19,13 @@ export class RegistrationComponent  implements OnInit {
   passwordConfirm:boolean = true
   busyName:string = ""
   busyEmail:string = ""
-  busyPass: boolean = false
+  busyPass: boolean = true
+
+  readonly phoneMask: MaskitoOptions = {
+    mask: ['+', '7', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
+  };
+  
+  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
 
 
   constructor(
@@ -27,15 +34,22 @@ export class RegistrationComponent  implements OnInit {
   ) { }
 
 
+  
   ngOnInit() {
     this.registerForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      password_confirmation: new FormControl ('',[Validators.required,Validators.minLength(3)] ),
+      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      password_confirmation: new FormControl ('',[Validators.required,Validators.minLength(8)] ),
       name:new FormControl('',[Validators.required,Validators.minLength(3), Validators.maxLength(50)] ),
       number: new FormControl('',[Validators.minLength(10),Validators.minLength(10)]),
       avatar: new FormControl('')
     });
+  
+    this.OpenPassword('reg_password');
+    this.OpenPasswordConfirm('confirm_password',event);
+
+  
+
   }
 
   
@@ -64,7 +78,9 @@ export class RegistrationComponent  implements OnInit {
     if (!this.registerForm.controls['email'].invalid) {
        this.authservice.checkEmail(this.registerForm.value.mail).pipe(
         map((respons:any) => {
-          this.emailBusy = respons.email
+          
+          this.emailBusy = respons.user_email
+          console.log(respons)
          }),
          catchError((err) =>{
            return of(EMPTY) 
@@ -76,9 +92,11 @@ export class RegistrationComponent  implements OnInit {
 
    checkPassword(){
     if(this.registerForm.value.password == this.registerForm.value.password_confirmation){
-      this.busyPass = true    
+      this.busyPass = true 
+      console.log(this.busyPass)   
     }else{
       this.busyPass = false
+      console.log(this.busyPass)
     }
    }
   
@@ -86,18 +104,27 @@ export class RegistrationComponent  implements OnInit {
    OpenPassword(input:string){
     let passwordInput:any = document.getElementById("reg_password")
     let img:any = document.getElementById("eye_img")
-    if(passwordInput.type === 'password'){
-      passwordInput.type = 'text'
+    if(passwordInput.type == 'password'){
       img.src = "../assets/icons/eye_open.svg"
+      passwordInput.type = 'text'
+     
       
     } 
-    else if (passwordInput.type === 'text'){
+    else if (passwordInput.type == 'text'){
       passwordInput.type ='password'
       img.src = "../assets/icons/eye_closed.svg"
     }
     
    }
 
+
+   SubmitPhone(){
+      let clearPhone:string = this.registerForm.value.number
+      let newStr = clearPhone.replace(/\+7|\s|\-|\(|\)/g, '')
+      this.registerForm.value.number = newStr
+      console.log(this.registerForm.value.number)
+       
+   }
 
    
    OpenPasswordConfirm(input:string,event:any){
@@ -122,15 +149,16 @@ export class RegistrationComponent  implements OnInit {
 
 
    onSubmitReg(){
-    this.registerForm.value.password == this.registerForm.value.password_confirmation ? this.busyPass = true : this.busyPass = false
-    this.checkEmail();
-    this.checkName();
+    this.checkPassword()
+    this.checkEmail()
+    this.checkName()
+    this.SubmitPhone();
     if (this.emailBusy && this.nameBusy && this.busyPass) {
     this.authservice.register(this.registerForm.value).pipe( 
       delay(100),
       retry(3),
       map((respons:any) => {
-          console.log('ok')
+          console.log(respons)
           if (respons.status == 'success') {
             this.toastService.showToast('Вы успешно зарегестрировались!!!', 'success')
           }

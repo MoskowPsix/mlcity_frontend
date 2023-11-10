@@ -79,7 +79,7 @@ import { MyEventsComponent } from './views/cabinet/my-events/my-events.component
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component';
 import { RegistrationComponent } from './views/registration/registration.component';
 import { TelegramAuthButtonComponent } from './components/telegram-auth-button/telegram-auth-button.component';
-
+import {MaskitoModule} from '@maskito/angular';
 
 
 const mapConfig: YaConfig = {
@@ -137,7 +137,7 @@ registerLocaleData(localeRu, 'ru');
     SafeUrlPipe2,
     MyEventsComponent,
     MySightsComponent,
-    RegistrationComponent
+    RegistrationComponent,
     
   ],
   imports: [
@@ -149,6 +149,7 @@ registerLocaleData(localeRu, 'ru');
     HttpClientModule, 
     HttpClientJsonpModule,
     ReactiveFormsModule,
+    MaskitoModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
