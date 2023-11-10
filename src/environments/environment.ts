@@ -11,9 +11,7 @@ export const environment = {
   BACKEND_URL: 'http://localhost',
   BACKEND_PORT: '8000',
   vkontakteAuthUrl: `http://localhost:8000/api/social-auth/vkontakte`,
-  vkontakteServiceKey: '7c6d50047c6d50047c6d5004647f7f17fc77c6d7c6d50041fa47869a3cc84a7c0bed429',
-  telegramBotName: `PraktZarbot`,
-  telegramRedirect: `http://localhost:8000/api/social-auth/telegram/callback`,
+  vkontakteServiceKey: '7c6d50047c6d50047c6d5004647f7f17fc77c6d7c6d50041fa47869a3cc84a7c0bed429'
   // cityName: 'Заречный',
   // cityRegion: 'Свердловская область',
   // cityCoordsLatitude: 56.81497464978607,

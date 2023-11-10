@@ -209,6 +209,9 @@
                     <div style="text-align: center;" class="errorEmail" *ngIf="loginForm.controls['name'].invalid && loginForm.controls['name'].touched">
                       <ion-note *ngIf="loginForm.controls['name'].hasError('name')" color="danger">Введите корректный email или имя пользователя</ion-note>
                       <ion-note *ngIf="loginForm.controls['name'].hasError('required')" color="danger">Поле не может быть пустым</ion-note>
+                    <div style="text-align: center;" class="errorEmail" *ngIf="loginForm.controls['name'].invalid && loginForm.controls['name'].touched">
+                      <ion-note *ngIf="loginForm.controls['name'].hasError('name')" color="danger">Введите корректный email или имя пользователя</ion-note>
+                      <ion-note *ngIf="loginForm.controls['name'].hasError('required')" color="danger">Поле не может быть пустым</ion-note>
                     </div>
 
                     <ion-item>
