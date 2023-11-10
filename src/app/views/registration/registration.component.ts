@@ -20,6 +20,7 @@ export class RegistrationComponent  implements OnInit {
   busyName:string = ""
   busyEmail:string = ""
   busyPass: boolean = true
+  submitResponce:boolean = true
 
   readonly phoneMask: MaskitoOptions = {
     mask: ['+', '7', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
@@ -146,6 +147,10 @@ export class RegistrationComponent  implements OnInit {
     
    }
 
+   openModal(){
+
+   }
+
 
 
    onSubmitReg(){
@@ -158,7 +163,7 @@ export class RegistrationComponent  implements OnInit {
       delay(100),
       retry(3),
       map((respons:any) => {
-          console.log(respons)
+          this.submitResponce = true
           if (respons.status == 'success') {
             this.toastService.showToast('Вы успешно зарегестрировались!!!', 'success')
           }

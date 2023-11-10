@@ -25,7 +25,6 @@
       
       <app-telegram-auth-button></app-telegram-auth-button>
     </ion-row>
->>>>>>>>> Temporary merge branch 2
 
     <ion-row class="ion-justify-content-center">
       <ion-col size-md="3" size-xs="12">
@@ -67,8 +66,7 @@
         </ion-accordion-group>
       </ion-col>
     </ion-row>
-  </ion-grid>
-<<<<<<<<< Temporary merge branch 1
+  </ion-grid> -->
 
   <ion-modal #modal [isOpen]="modalPass" [presentingElement]="presentingElement">
     <ng-template>
@@ -110,7 +108,7 @@
 
       </ion-content>
     </ng-template>
-  </ion-modal> -->
+  </ion-modal>
 
 
 <!-- коментарий -->
@@ -193,26 +191,21 @@
 
                     <ion-item>
                         
-                         
-
                           <ion-input (input)="MailOrName()" formControlName="name" class="Login_inputs" label="Email input" type="email" placeholder="Email" required> 
                             <img *ngIf="iconState" class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
                             <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
                           </ion-input>
 
-                          
-
-
                     </ion-item>
 
-
-                    <div style="text-align: center;" class="errorEmail" *ngIf="loginForm.controls['name'].invalid && loginForm.controls['name'].touched">
-                      <ion-note *ngIf="loginForm.controls['name'].hasError('name')" color="danger">Введите корректный email или имя пользователя</ion-note>
-                      <ion-note *ngIf="loginForm.controls['name'].hasError('required')" color="danger">Поле не может быть пустым</ion-note>
                     <div style="text-align: center;" class="errorEmail" *ngIf="loginForm.controls['name'].invalid && loginForm.controls['name'].touched">
                       <ion-note *ngIf="loginForm.controls['name'].hasError('name')" color="danger">Введите корректный email или имя пользователя</ion-note>
                       <ion-note *ngIf="loginForm.controls['name'].hasError('required')" color="danger">Поле не может быть пустым</ion-note>
                     </div>
+                    <!-- <div style="text-align: center;" class="errorEmail" *ngIf="loginForm.controls['name'].invalid && loginForm.controls['name'].touched">
+                      <ion-note *ngIf="loginForm.controls['name'].hasError('name')" color="danger">Введите корректный email или имя пользователя</ion-note>
+                      <ion-note *ngIf="loginForm.controls['name'].hasError('required')" color="danger">Поле не может быть пустым</ion-note>
+                    </div> -->
 
                     <ion-item>
                           <ion-input formControlName="password" class ="Login_inputs" label="Password input" type="password"   placeholder="Пароль">
@@ -223,7 +216,7 @@
                     <div style="text-align: center;" *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="validation">
                       <ion-note *ngIf="loginForm.controls['password'].hasError('required')" color="danger">Пароль не может быть пустым</ion-note>
                     </div>
-                </ion-list>
+            </ion-list>
 
 
 

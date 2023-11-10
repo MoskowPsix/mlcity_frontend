@@ -114,7 +114,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           let time = Math.ceil(new Date().getTime() / 100000)
           let created_time = Math.ceil(new Date(data.user.social_account.created_at).getTime() / 100000)
           let now_time = time
-          console.log(created_time, now_time)
           if (created_time === now_time) {
             this.modalPass = true
           }
@@ -174,7 +173,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     //Создаем поля для формы
     this.loginForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-      name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
       password: new FormControl('', [Validators.required, Validators.minLength(3)]),
     });
 
@@ -190,7 +188,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }); 
 
 
-    this.loginAfterSocial(this.user_id)
+    // this.loginAfterSocial(this.user_id)
     this.MailOrName();
 
   }

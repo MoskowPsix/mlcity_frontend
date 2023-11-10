@@ -118,12 +118,69 @@
                
               
   
-  
+               
   
   
             </ion-div>
   
-  
+            <ion-modal backdropDismiss="false" [isOpen] = "submitResponce">
+
+              <ng-template>
+                  <ion-content>
+
+
+                      <ion-div  style="display: flex; justify-content: center; margin-top: -50px;">
+                          <ion-div style="display: flex;" class="Login_logo_wrapper">
+    
+                            <img style="width: 100px; height: 100px;" *ngIf="true" src="/assets/icons/favicon.png" alt="">
+                            <img style="width: 100px; height: 100px;"  *ngIf="false"alt="logo" src="/svg/no-photo.svg" />
+                    
+                            <ion-label style="
+                            
+                            text-transform: uppercase;
+                            margin-top: 10px;
+                            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                            font-weight: 800;
+                            font-size: 45.4pt;
+                            color: #007BBE;
+                        
+                            
+                            " class="Login_logo_text">
+                              mlcity
+                            </ion-label>
+          
+                          </ion-div>
+        
+                      </ion-div>
+
+                      <ion-col style="display: flex; justify-content: center; align-items: center; height: 100%;" class="ion-justify-content-center">
+                        
+                          <p style="width: 90%; margin-left: 30px; font-size: 27pt; color:#129AE4; font-family: 'Montserrat', sans-serif; margin-left: auto; margin-right: auto;">
+                            Введите код, отправленный вам на почту
+                          </p>
+
+                        
+                      </ion-col>
+                      <form  style="width: 90%; margin-left: 30px;" action="">
+
+                        <ion-input style=" letter-spacing:25px; font-size: 40pt;"></ion-input>
+                        <div style="display: flex; margin-right: 30px;">
+                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
+                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
+                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
+                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
+                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
+                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
+                          
+        
+
+
+                        </div>
+                      </form>
+                  </ion-content>
+              </ng-template>
+
+            </ion-modal>
             
   
               <ion-list class="LoginWith_list">
