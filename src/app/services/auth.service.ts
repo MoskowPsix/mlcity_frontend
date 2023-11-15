@@ -98,4 +98,14 @@ export class AuthService {
     return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/email/check/${mail}`)
   }
   
+  checkNumber(number:string){
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/number/check/${number}`)
+  }
+
+  verfiEmail(number:number){
+    const param = {
+      code: number
+    };
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/verificationEmail/`, param)
+  }
 }

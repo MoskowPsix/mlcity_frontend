@@ -54,7 +54,10 @@
 
 
                         </ion-input>
+                        
+
                   </ion-item>
+                  <ion-note *ngIf="!busyNumber" style="text-align: center;" color="danger"> Ваш телефон уже зарегестрирован</ion-note>
                       <ion-item>
                             <ion-input formControlName="email" class="Login_inputs emailclass InputDontButton" label="E-mail" type="text" placeholder="E-mail" required> 
                               <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
@@ -75,7 +78,9 @@
                             </ion-input>
                       
                       </ion-item>
-                      <ion-note *ngIf="!busyPass" style="text-align: center;" color="danger">Пароли не совпадают</ion-note>
+                      <ion-note *ngIf="(registerForm.value.password.length < 8 && registerForm.value.password.length > 0) || (registerForm.value.password_confirmation.length < 8 && registerForm.value.password_confirmation.length > 0)" color="danger">Пароль должен содержать минимум 8 символов</ion-note>
+       
+                      <!-- <ion-note *ngIf="!busyPass" style="text-align: center;" color="danger">Пароли не совпадают</ion-note> --> 
                       
                   </ion-list>
   
@@ -122,8 +127,16 @@
   
   
             </ion-div>
-  
-            <ion-modal backdropDismiss="false" [isOpen] = "submitResponce">
+            
+
+
+            <!-- test -->
+        
+
+
+
+
+            <ion-modal #modal backdropDismiss="false" [isOpen] = "submitResponce">
 
               <ng-template>
                   <ion-content>
@@ -158,21 +171,17 @@
                           <p style="width: 90%; margin-left: 30px; font-size: 27pt; color:#129AE4; font-family: 'Montserrat', sans-serif; margin-left: auto; margin-right: auto;">
                             Введите код, отправленный вам на почту
                           </p>
-
+                      
                         
                       </ion-col>
-                      <form  style="width: 90%; margin-left: 30px;" action="">
+                      <form [formGroup] = "modalForm"  style="width: 90%;" action="">
 
-                        <ion-input style=" letter-spacing:25px; font-size: 40pt;"></ion-input>
-                        <div style="display: flex; margin-right: 30px;">
-                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
-                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
-                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
-                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
-                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
-                          <div style="width: 47px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
-                          
-        
+                        <ion-input [maskito] = "maskNumber" [maskitoElement]="maskPredicate"  maxlength= 4  inputmode="numeric" (ionChange) ="confirmEmail()" id="ModalInput" class="ModalInput" formControlName = "emailConfirmInput"  #inputId style=" letter-spacing:40px; font-size: 50pt;  margin-left: 35px;"></ion-input>
+                        <div style="display: flex; justify-content: center;  margin-left: 25px">
+                          <div style="width: 70px;; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
+                          <div style="width: 70px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
+                          <div style="width: 70px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
+                          <div style="width: 70px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
 
 
                         </div>
