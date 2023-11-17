@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { TokenService } from 'src/app/services/token.service';
 import { Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
+import internal from 'stream';
 
 @Component({
   selector: 'app-registration',
@@ -30,6 +31,11 @@ export class RegistrationComponent  implements OnInit {
   modalOpen:boolean = false
   busyNumber:boolean = true
   modalCount:number = 0
+  confirmCode:boolean = true
+  codeCount:number = 0
+  interval:any
+  timerRertyFormated:any
+
 
   @ViewChild('modal') modal!:IonModal
 
@@ -210,7 +216,6 @@ export class RegistrationComponent  implements OnInit {
 
       this.authservice.verfiEmail(+this.modalForm.value.emailConfirmInput).pipe(
         delay(100),
-        retry(3),
         map((respons:any) => {
           this.cancel()
           if(respons.status === 'success'){
@@ -218,11 +223,30 @@ export class RegistrationComponent  implements OnInit {
             this.router.navigate(['cabinet'])
             this.registerForm.reset()
             this.registerForm.enable()
+          }else{
            
           }
-        })
+        }),
+        catchError((err) =>{
+          this.toastService.showToast(err.message, 'warning')
+          if(err.status == 403 || err.status == 401){
+            this.confirmCode = false
+            this.codeCount = 1
+          }
+          return of(EMPTY) 
+        }),
       ).subscribe()
 
+    }
+   }
+
+    
+
+   CodeCountFn(){
+    console.log('hello')
+    if(this.modalForm.value.emailConfirmInput.length >=3 && this.codeCount == 1){
+      this.confirmCode = true
+      this.codeCount = 0
     }
    }
 
@@ -266,7 +290,7 @@ export class RegistrationComponent  implements OnInit {
       delay(100),
       retry(3),
       map((respons:any) => {
-       
+          this.RetryCode()
           this.submitResponce = true
           //this.confirmEmail();
           if (respons.status == 'success') {
@@ -294,5 +318,62 @@ export class RegistrationComponent  implements OnInit {
     console.log(this.registerForm)
    }
 
+
+
+   RetryCode(){
+
+    // let minutes:any = 1;
+    // let seconds:any = 59;
+    // let interval:any
+    // this.interval = setInterval(()=>{
+    //   if(minutes > 0){
+        
+    //     seconds--
+    //   }
+    //   if(seconds == 0){
+    //     seconds = 59
+    //     minutes--
+    //   }else if(minutes == 0 && seconds == 0){
+    //     clearInterval(this.interval);
+    //   }
+
+    //   console.log(minutes,seconds)
+    //   if(minutes < 0){
+    //     console.log(0 +':'+seconds)
+    //   }
+    //   if(seconds < 10){
+    //     console.log(minutes+':'+"0"+seconds)
+    //   }
+    // },1000)
+
+
+
+      let minutes: any = 1;
+  let seconds: any = 59;
+  let interval: any;
+
+  interval = setInterval(() => {
+    if (minutes >= 0) {
+      seconds--;
+
+      if (seconds < 0) {
+        seconds = 59;
+        minutes--;
+      }
+
+      let formattedTime = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+      this.timerRertyFormated = formattedTime;
+      console.log(formattedTime);
+
+      if (minutes === 0 && seconds === 0) {
+        clearInterval(interval);
+      }
+    }
+  }, 1000);
+  
+
+   }
+
+   
 
 }
