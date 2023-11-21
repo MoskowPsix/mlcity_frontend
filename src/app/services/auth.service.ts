@@ -108,4 +108,10 @@ export class AuthService {
     };
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/verificationEmail/`, param)
   }
+
+
+  retryCode(){
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/verificationUserEmail/`);
+  }
+
 }

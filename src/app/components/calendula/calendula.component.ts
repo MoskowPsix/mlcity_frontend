@@ -10,7 +10,7 @@ export class CalendulaComponent  implements OnInit {
   constructor( private filterService: FilterService, private renderer: Renderer2 ) { }
   @Input() scroll!: number 
   @Output() dateOutput = new EventEmitter();
-  @Input() date!: {dateStart: string, dateEnd: string}
+  @Input() date: any = {dateStart: Date().toLocaleString, dateEnd: Date().toLocaleString,}
   @ViewChild('widgetsContent') widgetsContent!: ElementRef;
   date_full: any = [
     {name: 'Январь', data: []}, 
@@ -24,8 +24,14 @@ export class CalendulaComponent  implements OnInit {
     {name: 'Сентябрь', data: []},  
     {name: 'Октябрь', data: []}, 
     {name: 'Ноябрь', data: []}, 
-    {name: 'Декабрь', data: []}
+    {name: 'Декабрь', data: []},
+    {name: 'Январь 2024', data: []}
   ]
+
+  date_full_year:any = 
+    {now_year: {months: this.date_full,year: new Date(this.getDateYMD(new Date().getTime())).getFullYear()},
+    new_year: {months: this.date_full, year: new Date(this.getDateYMD(new Date().getTime())).getFullYear() + 1}}
+
    dateStart: number = 0
    dateEnd: number = 0
 
@@ -104,6 +110,11 @@ export class CalendulaComponent  implements OnInit {
     if(!this.scroll) {
       this.scroll = 500
     } 
+
+    const full_year: any = {now_year: {months: [],year: new Date(this.getDateYMD(new Date().getTime())).getFullYear()},
+                            new_year: {months: [], year: new Date(this.getDateYMD(new Date().getTime())).getFullYear() + 1}}
+
+
     // Подгрузить дату из стора(как понял)
     this.dateStart  = new Date(this.date.dateStart).getTime()
     this.dateEnd = Math.ceil(new Date(this.date.dateEnd).getTime()) 
@@ -111,62 +122,118 @@ export class CalendulaComponent  implements OnInit {
     let now_date: any =  new Date(this.getDateYMD(new Date().getTime())).getTime()
     let data: any
     let count: number
-    for (count = 0; count <= 90; count++) {
+    for (count = 0; count <= 365; count++) {
       let now_month: any = new Date(now_date).getMonth()
-      switch (now_month) {
-        case 0:
-          this.date_full[0].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('1');
-          break;
-        case 1:
-          this.date_full[1].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('2');
-          break;
-        case 2:
-          this.date_full[2].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('3');
-          break;
-        case 3:
-          this.date_full[3].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('4');
-          break;
-        case 4:
-          this.date_full[4].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('5');
-          break;
-        case 5:
-          this.date_full[5].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('6');
-          break;
-        case 6:
-          this.date_full[6].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('7');
-          break;
-        case 7:
-          //console.log('8');
-          this.date_full[7].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          break;
-        case 8:
-          this.date_full[8].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('9');
-          break;
-        case 9:
-          this.date_full[9].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('10');
-          break;
-        case 10:
-          this.date_full[10].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('11');
-          break;
-        case 11:
-          this.date_full[11].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
-          //console.log('12');
-          break;
-      }
+      let now_year: any = new Date(now_date).getFullYear()
+      if(this.date_full_year.now_year.year == now_year) {
+        switch (now_month) {
+          case 0:
+            this.date_full_year.now_year.mounth[0].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('1');
+            break;
+          case 1:
+            this.date_full_year.now_year.mounth[1].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('2');
+            break;
+          case 2:
+            this.date_full_year.now_year.mounth[2].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('3');
+            break;
+          case 3:
+            this.date_full_year.now_year.mounth[3].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('4');
+            break;
+          case 4:
+            this.date_full_year.now_year.mounth[4].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('5');
+            break;
+          case 5:
+            this.date_full_year.now_year.mounth[5].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('6');
+            break;
+          case 6:
+             this.date_full_year.now_year.mounth[6].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('7');
+            break;
+          case 7:
+            //console.log('8');
+             this.date_full_year.now_year.mounth[7].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            break;
+          case 8:
+            this.date_full_year.now_year.mounth[8].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('9');
+            break;
+          case 9:
+            this.date_full_year.now_year.mounth[9].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('10');
+            break;
+          case 10:
+            this.date_full_year.now_year.mounth[10].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('11');
+            break;
+          case 11:
+            this.date_full_year.now_year.mounth[11].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+            //console.log('12');
+            break;
+          }
+        } else if(this.date_full_year.new_year.year == now_year) {
+          
+          switch (now_month) {
+            case 0:
+              this.date_full_year.new_year.mounth[0].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('1');
+              break;
+            case 1:
+              this.date_full_year.new_year.mounth[1].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('2');
+              break;
+            case 2:
+              this.date_full_year.new_year.mounth[2].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('3');
+              break;
+            case 3:
+              this.date_full_year.new_year.mounth[3].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('4');
+              break;
+            case 4:
+              this.date_full_year.new_year.mounth[4].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('5');
+              break;
+            case 5:
+              this.date_full_year.new_year.mounth[5].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('6');
+              break;
+            case 6:
+              this.date_full_year.new_year.mounth[6].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('7');
+              break;
+            case 7:
+              //console.log('8');
+              this.date_full_year.new_year.mounth[7].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              break;
+            case 8:
+              this.date_full_year.new_year.mounth[8].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('9');
+              break;
+            case 9:
+              this.date_full_year.new_year.mounth[9].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('10');
+              break;
+            case 10:
+              this.date_full_year.new_year.mounth[10].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('11');
+              break;
+            case 11:
+              this.date_full_year.new_year.mounth[11].data.push({number: new Date(now_date).getDate(), day_week: new Date(now_date).getDay(), full_date: new Date(now_date).toString(), min: Math.ceil(now_date)})
+              //console.log('12');
+              break;
+            }
+        }
       now_date = now_date + 86400000
       //this.onDateOutput()
       
     }
+    console.log(this.date_full_year)
     setTimeout(() => {this.fixCenterElement(new Date(this.getDateYMD(this.dateStart)).getTime())}, 3000);
   }
 

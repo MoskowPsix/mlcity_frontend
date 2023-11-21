@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 import { TokenService } from 'src/app/services/token.service';
 import { Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
+// import { MessagesErrors } from 'src/app/enums/messages-register';
 import internal from 'stream';
 
 @Component({
@@ -35,6 +36,7 @@ export class RegistrationComponent  implements OnInit {
   codeCount:number = 0
   interval:any
   timerRertyFormated:any
+  timerRetryButton:boolean = false
 
 
   @ViewChild('modal') modal!:IonModal
@@ -88,7 +90,6 @@ export class RegistrationComponent  implements OnInit {
   checkName() {
     this.busyName = this.registerForm.value.name;
     if(this.registerForm.value.name.length != " " && this.registerForm.value.name.length != "" ) {
-      console.log(this.registerForm.controls['name'].invalid)
             if (!this.registerForm.controls['name'].invalid) {
                 this.authservice.checkName(this.registerForm.value.name).pipe(
                   map((respons:any) => {
@@ -119,7 +120,6 @@ export class RegistrationComponent  implements OnInit {
         map((respons:any) => {
           
           this.emailBusy = respons.user_email
-          console.log(respons)
          }),
          catchError((err) =>{
            return of(EMPTY) 
@@ -175,7 +175,6 @@ export class RegistrationComponent  implements OnInit {
       let clearPhone:string = this.registerForm.value.number
       let newStr = clearPhone.replace(/\+7|\s|\-|\(|\)/g, '')
       this.registerForm.value.number = newStr
-      console.log(this.registerForm.value.number)
        
    }
 
@@ -206,14 +205,7 @@ export class RegistrationComponent  implements OnInit {
 
 
    confirmEmail(){
-    // let inputModal:any = document.querySelector('.ModalInput')?.textContent
-    // console.log(inputModal.length)
-    // this.modalCount++;
-    console.log(this.modalForm.value.emailConfirmInput)
-  
     if(this.modalForm.value.emailConfirmInput.length == 4){
-      console.log('4 символа')
-
       this.authservice.verfiEmail(+this.modalForm.value.emailConfirmInput).pipe(
         delay(100),
         map((respons:any) => {
@@ -243,7 +235,6 @@ export class RegistrationComponent  implements OnInit {
     
 
    CodeCountFn(){
-    console.log('hello')
     if(this.modalForm.value.emailConfirmInput.length >=3 && this.codeCount == 1){
       this.confirmCode = true
       this.codeCount = 0
@@ -260,7 +251,6 @@ export class RegistrationComponent  implements OnInit {
           this.positiveResponseAfterLogin(data)
         },
         error: err => {
-          console.log(err)
           this.loadingService.hideLoading()
 
         }
@@ -291,6 +281,7 @@ export class RegistrationComponent  implements OnInit {
       retry(3),
       map((respons:any) => {
           this.RetryCode()
+          this.timerRetryButton = false
           this.submitResponce = true
           //this.confirmEmail();
           if (respons.status == 'success') {
@@ -310,12 +301,8 @@ export class RegistrationComponent  implements OnInit {
         return of(EMPTY) 
       }),
       takeUntil(this.destroy$)
-      ).subscribe(responce => {
- 
-        console.log(responce)
-      })
+      ).subscribe()
     }
-    console.log(this.registerForm)
    }
 
 
@@ -348,25 +335,25 @@ export class RegistrationComponent  implements OnInit {
 
 
 
-      let minutes: any = 1;
-  let seconds: any = 59;
-  let interval: any;
+      let minutes: any = 0;
+      let seconds: any = 15;
+      let interval: any;
 
-  interval = setInterval(() => {
-    if (minutes >= 0) {
-      seconds--;
+      interval = setInterval(() => {
+      if (minutes >= 0) {
+        seconds--;
 
-      if (seconds < 0) {
-        seconds = 59;
-        minutes--;
-      }
+          if (seconds < 0) {
+          seconds = 59;
+          minutes--;
+        }
 
       let formattedTime = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
       this.timerRertyFormated = formattedTime;
-      console.log(formattedTime);
 
       if (minutes === 0 && seconds === 0) {
         clearInterval(interval);
+        this.timerRetryButton = true;
       }
     }
   }, 1000);
@@ -376,4 +363,30 @@ export class RegistrationComponent  implements OnInit {
 
    
 
-}
+
+   RertryCodeBtn(){
+    this.timerRetryButton = false
+    this.RetryCode()
+        this.authservice.retryCode().pipe(
+         map((respons:any) => {
+          }),
+          catchError((err) =>{
+            return of(EMPTY) 
+          }),
+        ).subscribe()
+     }
+
+  }
+
+
+
+
+    
+
+
+
+   
+
+
+
+

@@ -11,11 +11,12 @@ import { CheckAuthCanActiveGuard } from "../guards/check-auth.can-active.guard";
 import { EventShowComponent } from "../views/events/event-show/event-show.component";
 import { SightShowComponent } from "../views/sights/sight-show/sight-show.component";
 import {FiltersNotButtonComponent} from "../components/filters_not_button/filters_not_button.component"
+import { CalendulaComponent } from "../components/calendula/calendula.component";
 
 export const publicRoutes: Routes = [ 
     {
       path: 'test',
-      component: FiltersNotButtonComponent,
+      component: CalendulaComponent,
       canActivate: [CheckAuthCanActiveGuard],
     },
     {
