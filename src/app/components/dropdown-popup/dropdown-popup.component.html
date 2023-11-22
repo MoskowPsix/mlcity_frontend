@@ -10,7 +10,7 @@
 </ion-button>
 
 
-<ion-popover trigger="popover-button" [trigger]="id" triggerAction="click" [dismissOnSelect]="true" showBackdrop="false">
+<ion-popover  trigger="popover-button" [trigger]="id" triggerAction="click" [dismissOnSelect]="true" showBackdrop="false">
   <ng-template>
     <ion-list lines="none">
       <div *ngFor="let parent of listItems | keyvalue">   
@@ -48,7 +48,7 @@
               class="logout"
             >
               <ion-icon *ngIf="itemIco" [name]="parent.value.icon" slot="start"  color="primary"></ion-icon> 
-              <ion-label>
+              <ion-label >
                 {{ parent.value.title }}
               </ion-label>
             </ion-item>

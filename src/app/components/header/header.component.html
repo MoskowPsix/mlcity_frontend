@@ -38,7 +38,7 @@
 </ion-header>
 
 <!-- Декстопное меню -->
-<ion-row class="header ion-justify-content-end ion-align-items-center ion-margin-horizontal" id="header">
+<ion-div class="header ion-align-items-center" id="header">
     <ion-router-link color="dark" routerLink="/home">
         <ion-col size="auto" class="logo">
             <img  src="assets/icons/favicon.png">
@@ -46,7 +46,7 @@
         </ion-col>
     </ion-router-link>
     
-    <ion-col size="auto" class="ion-padding-horizontal ion-align-self-center">
+    <ion-col style="margin-left: 3px;" size="auto" class="cityButton ion-padding-horizontal ion-align-self-center">
         <ion-button fill="clear" size="small" color="dark" (click)="isModalSearchCityesOpen(true)">
             {{ city| truncate:[20,'']}}...
             <ion-icon name="location" color="primary"></ion-icon>
@@ -55,12 +55,12 @@
         </ion-button>
     </ion-col>
 
-     <ion-col style="width: 80px;" class="ion-padding-horizontal"> 
+     <ion-col style="padding-right: 3px;" class="searchParrent ion-padding-horizontal"> 
         <!-- <ion-searchbar placeholder="Поиск" color="light" (click)="isModalSearchEventsOpen(true)"></ion-searchbar> -->
-         <ion-button  fill="outline" expand="block" (click)="isModalSearchEventsOpen(true)"><ion-icon name="search" slot="start"></ion-icon>Поиск</ion-button>
+         <ion-button style="min-width: 80px; display: flex; justify-content: center; "  fill="outline" expand="block" (click)="isModalSearchEventsOpen(true)" class="SearchInput"><ion-icon style="width: 20px; height: 20px; --font-size: 20px;" name="search" slot="start"></ion-icon>поиск</ion-button>
     </ion-col> 
 
-    <ion-col size="auto" class="menu ion-align-items-center">
+    <ion-col  size="auto" class="menu ion-align-items-center">
         <div *ngFor="let item of menuPublic">
             <app-dropdown-popup 
                 *ngIf="item.children?.length > 0;  else itemMenu" 
@@ -94,7 +94,7 @@
     <!-- <ion-col class="auth">
         <app-menu-auth></app-menu-auth>
     </ion-col> -->
-</ion-row>
+</ion-div>
 
 
 <!-- Диалог подтверждения города -->
