@@ -1,4 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-calendula',
@@ -6,7 +8,8 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
   styleUrls: ['./calendula.component.scss'],
 })
 export class CalendulaComponent  implements OnInit {
-  constructor(  ) { }
+  constructor(  ) { 
+  }
   @Input() scroll: number = 500
   @Output() dateOutput = new EventEmitter();
   @Output() date: any = {dateStart: this.getDateYMD(new Date().getTime()), dateEnd: this.getDateYMD(new Date().getTime())}
@@ -44,9 +47,14 @@ export class CalendulaComponent  implements OnInit {
 
    dateStart: number = 0
    dateEnd: number = 0
+   range: any = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl()
+  });
+
 
      
-  choosedDate(event: any) {
+  change(event: any) {
     console.log(event)
   }
 
@@ -59,6 +67,7 @@ export class CalendulaComponent  implements OnInit {
   }
   onDateOutput() {
     this.dateOutput.emit(this.date)
+    console.log(this.date)
   }
   scrollLeft(){
     this.widgetsContent.nativeElement.scrollTo({ left: (this.widgetsContent.nativeElement.scrollLeft - this.scroll), behavior: 'smooth' });
@@ -239,8 +248,15 @@ export class CalendulaComponent  implements OnInit {
       //this.onDateOutput()
       
     }
-    console.log(this.date_full_year)
-    setTimeout(() => {this.fixCenterElement(new Date(this.getDateYMD(this.dateStart)).getTime())}, 3000);
+    setTimeout(() => {this.fixCenterElement(new Date(this.getDateYMD(this.dateStart)).getTime())}, 3000)
+    this.range.valueChanges.subscribe((date: any) => {
+      this.dateStart = new Date(date.start).getTime()
+      this.dateEnd = new Date(date.end).getTime()
+
+      this.date.dateStart = new Date(date.start).toISOString()
+      this.date.dateEnd = new Date(date.end).toISOString()
+      this.onDateOutput()
+    });
   }
 
 
