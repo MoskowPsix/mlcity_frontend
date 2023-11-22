@@ -78,7 +78,10 @@ import { SafeUrlPipe2 } from './components/event-card/event-card.pipe';
 import { MyEventsComponent } from './views/cabinet/my-events/my-events.component';
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component';
 import { RegistrationComponent } from './views/registration/registration.component';
-import {MaskitoModule} from '@maskito/angular';
+import { MaskitoModule } from '@maskito/angular';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 const mapConfig: YaConfig = {
@@ -147,7 +150,10 @@ registerLocaleData(localeRu, 'ru');
     HttpClientModule, 
     HttpClientJsonpModule,
     ReactiveFormsModule,
-    MaskitoModule
+    MaskitoModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
