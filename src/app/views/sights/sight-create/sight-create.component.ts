@@ -30,6 +30,10 @@ import { LocationService } from 'src/app/services/location.service';
 import { Location } from 'src/app/models/location';
 import { FilterService } from 'src/app/services/filter.service';
 
+
+
+register()
+
 @Component({
   selector: 'app-sight-create',
   templateUrl: './sight-create.component.html',
@@ -600,7 +604,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    register()
     this.cdr.detectChanges()
     // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
     //   this.swiper = res.first.nativeElement.swiper

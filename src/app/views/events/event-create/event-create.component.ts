@@ -33,7 +33,7 @@ import { SafeUrlPipe } from './event-create.pipe';
 
 
 
-
+register()
 @Component({
   selector: 'app-event-create',
   templateUrl: './event-create.component.html',
@@ -721,7 +721,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   ngAfterViewInit() {
-    register()
     this.cdr.detectChanges()
     // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
     //   this.swiper = res.first.nativeElement.swiper

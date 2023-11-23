@@ -16,6 +16,8 @@ import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { PlaceService } from 'src/app/services/place.service';
 // import { Swiper } from 'swiper/types';
 
+
+register()
 @Component({
   selector: 'app-event-show',
   templateUrl: './event-show.component.html',
@@ -211,7 +213,6 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    register()
     this.cdr.detectChanges()
     // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
     //   this.swiper = res.first.nativeElement.swiper

@@ -13,6 +13,8 @@ import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { AuthService } from 'src/app/services/auth.service';
 // import { Swiper } from 'swiper/types';
 
+
+register()
 @Component({
   selector: 'app-sight-show',
   templateUrl: './sight-show.component.html',
@@ -149,7 +151,6 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    register()
     this.cdr.detectChanges()
     // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
     //   this.swiper = res.first.nativeElement.swiper
