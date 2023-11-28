@@ -35,10 +35,10 @@
     color:#fff;
 }
 
-// @media screen and (min-width: 0px) and (max-width: 768px) {
-//     .footer-mobile{ display: flex; }  /* show it on small screens */
-//   }
+@media screen and (min-width: 0px) and (max-width: 1060px) {
+    .footer-mobile{ display: flex; }  /* show it on small screens */
+  }
   
-//   @media (min-width: 768px)  {
-//    .footer-mobile{ display: none; }   /* hide it elsewhere */
-//   }
+  @media (min-width: 1060px)  {
+   .footer-mobile{ display: none; }   /* hide it elsewhere */
+  }

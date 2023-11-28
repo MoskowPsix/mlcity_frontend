@@ -5,11 +5,6 @@
         "route": "/cabinet",
         "children":[
             {
-                "title": "Избранное",              
-                "icon": "star",
-                "route": "/cabinet/favorites"
-            },
-            {
                 "title": "Уведомления",               
                 "icon": "notifications",
                 "route": "/cabinet/notifications"
