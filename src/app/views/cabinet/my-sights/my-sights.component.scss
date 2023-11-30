@@ -29,6 +29,25 @@ ion-segment-button{
 	//margin-top: 5px;
 }
 
+
+
+
+.edditButton{
+	margin-right: 20px;
+	margin-top: 20px;
+	--background-color: none;
+    border: none;
+    margin-top: -1px;
+    z-index: 30;
+	margin-left: auto;
+	width: 10%;
+}
+
+
+
+ion-modal{
+}
+
 @keyframes fade-in {
     0% {
       opacity: 0;

@@ -24,6 +24,9 @@ export class MySightsComponent  implements OnInit, OnDestroy {
 
   loadSights: boolean = false
   loadMoreSights: boolean = false
+  edditModalOpen:boolean = false
+
+
 
   sightsLoadingMore(){
     this.loadMoreSights = true
@@ -53,6 +56,14 @@ export class MySightsComponent  implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe()
   }
+
+  
+  openModal(){
+    this.edditModalOpen = true
+    console.log("я ебал гибдд")
+  }
+
+
   ngOnInit() {
     this.getMySights();
   }
@@ -62,5 +73,5 @@ export class MySightsComponent  implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
+  
 }
