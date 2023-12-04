@@ -45,7 +45,30 @@ ion-segment-button{
 
 
 
+
+
 ion-modal{
+
+	--overflow-y: visible;
+	--min-height:100%;
+	--min-widht:100%;
+	
+
+	.mainImgBlock{
+		width: 400px;
+		min-height: 400px;
+		
+	}
+	.ImglIist{
+		display: flex;
+		justify-content: center;
+	}
+
+	.imgblock{
+		width: 100px;
+		height: 100px;
+		
+	}
 }
 
 @keyframes fade-in {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { SightsService } from 'src/app/services/sights.service';
@@ -25,8 +25,15 @@ export class MySightsComponent  implements OnInit, OnDestroy {
   loadSights: boolean = false
   loadMoreSights: boolean = false
   edditModalOpen:boolean = false
+  name:any = this.sights
+  sightModal:any
+  sightModalArray:any[] = []
+  MainImgSrc:any = ''
+  addNewFile:boolean = false
 
-
+  @ViewChild('idImgList') idImgList!: ElementRef;
+  @ViewChild('widgetsContent') widgetsContent!: ElementRef;
+  
 
   sightsLoadingMore(){
     this.loadMoreSights = true
@@ -58,11 +65,34 @@ export class MySightsComponent  implements OnInit, OnDestroy {
   }
 
   
-  openModal(){
+  openModal(sight:any){
     this.edditModalOpen = true
-    console.log("я ебал гибдд")
+    this.sightModal = sight
+    this.sightModalArray = this.sightModal.files
+    console.log(this.widgetsContent?.nativeElement)
+   
   }
 
+  mainImg(event:any){
+    let MainImg:any = document.getElementsByClassName("mainImgBlock")
+    MainImg.src = event.srcElement.currentSrc
+    this.sightModalArray[0].link =  MainImg.src
+   
+    }
+  
+  mainImgLoaded(){
+    this.MainImgSrc =  this.sightModalArray[0].link
+  }
+ 
+
+
+  closeModal(){
+    this.edditModalOpen = false
+  }
+
+  UserAddNewImgs(){
+    this.addNewFile = true
+  }
 
   ngOnInit() {
     this.getMySights();

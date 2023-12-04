@@ -13,16 +13,95 @@
                 </ion-col> 
                 <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card">
                   <!-- цикл создания карточек -->
-                  <ion-div *ngFor="let sight of sights; let i = index"> 
+                  <ion-div #widgetsContent *ngFor="let sight of sights; let i = index"> 
                     
-                    <ion-button class="edditButton" id="editModal" (click)="openModal()" expand="block"><ion-icon name="pencil-outline"></ion-icon></ion-button>
-                    <app-event-card [event]="sight"></app-event-card>
+                    <ion-button class="edditButton" id="editModal" (click)="openModal(sight)" expand="block"><ion-icon name="pencil-outline"></ion-icon></ion-button>
+                    <app-event-card [event]="sight" [isSight]="true"></app-event-card>
                   </ion-div>
 
-                  <ion-modal [isOpen] = "edditModalOpen">
-                    <ng-template #name>
-                     
-                    </ng-template>
+                  <ion-modal backdropDismiss="false" [isOpen] = "edditModalOpen">
+                  
+                   
+                      <ng-template #name>
+                        <ion-button (click) = "closeModal()">
+                          закрыть
+                      </ion-button>
+                      <div style="overflow-y: scroll;">
+                       <form action="">
+                        
+
+                          <h2>Название достопримечтаельности</h2>
+                          <ion-input value="{{sightModal.name}}" ></ion-input>
+                          <ion-column>
+                                
+                              <div style="display: flex; justify-content: center;">
+                                  <img class="mainImgBlock" src = "{{this.sightModalArray[0].link}}">
+  
+                              </div>
+    
+                                <ion-list  class="ImglIist">
+                                  <ion-grid>
+                                      <ion-col *ngFor="let file of sightModalArray">
+                                        <img class="imgblock" src="{{file.link}}" (click)="mainImg($event)">
+                                      </ion-col>
+                                      <ion-col *ngIf="this.addNewFile">
+                                        <ion-col *ngFor="let file of sightModalArray" >
+                                          <img class="imgblock" src="{{file.link}}" (click)="mainImg($event)">
+                                        </ion-col>  
+                                      </ion-col>
+                                      
+
+                                      <input type="file" accept="image/*" #file [hidden] = "true">
+                                      <ion-button (click)="file.click()" (click) = "UserAddNewImgs()" style="margin-bottom: 10px;" class="imgblock">Добавить</ion-button>
+                                  </ion-grid>
+    
+                             
+                            </ion-list>
+                          </ion-column>
+    
+    
+                          <ion-column>
+                            <h2>Название достопримечтаельности</h2>
+                            <ion-input value="{{sightModal.name}}" ></ion-input>
+                          </ion-column>
+                          <ion-column>
+                            <h2>Название достопримечтаельности</h2>
+                            <ion-input value="{{sightModal.name}}" ></ion-input>
+                          </ion-column>
+                          <ion-column>
+                            <h2>Название достопримечтаельности</h2>
+                            <ion-input value="{{sightModal.name}}" ></ion-input>
+                          </ion-column>
+                          <ion-column>
+                            <h2>Название достопримечтаельности</h2>
+                            <ion-input value="{{sightModal.name}}" ></ion-input>
+                          </ion-column>
+                          <ion-column>
+                            <h2>Название достопримечтаельности</h2>
+                            <ion-input value="{{sightModal.name}}" ></ion-input>
+                          </ion-column>
+                          <ion-column>
+                            <h2>Название достопримечтаельности</h2>
+                            <ion-input value="{{sightModal.name}}" ></ion-input>
+                          </ion-column>
+                          <ion-column>
+                            <h2>Название достопримечтаельности</h2>
+                            <ion-input value="{{sightModal.name}}" ></ion-input>
+                          </ion-column>
+                          <ion-column>
+                            <h2>Название достопримечтаельности</h2>
+                            <ion-input value="{{sightModal.name}}" ></ion-input>
+                          </ion-column>
+
+                        
+
+
+                       
+  
+                       </form>
+                       </div>
+                      </ng-template>
+                  
                     
                   </ion-modal>
 
