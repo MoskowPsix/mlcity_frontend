@@ -41,17 +41,25 @@
     
                                 <ion-list  class="ImglIist">
                                   <ion-grid>
-                                      <ion-col *ngFor="let file of sightModalArray">
+                                      <ion-col style="flex-direction: column;" *ngFor="let file of sightModalArray">
+                                        <ion-col>
+                                          <ion-button style=" margin-right: -20px; width: 10px; height: 40px;"><ion-icon name="trash-outline" style="z-index: 99;"></ion-icon></ion-button>
                                         <img class="imgblock" src="{{file.link}}" (click)="mainImg($event)">
+                                        </ion-col>
                                       </ion-col>
                                       <ion-col *ngIf="this.addNewFile">
-                                        <ion-col *ngFor="let file of sightModalArray" >
-                                          <img class="imgblock" src="{{file.link}}" (click)="mainImg($event)">
+                                        <ion-col *ngFor="let img of imagesPreview">
+                                          <div>
+                                            
+                                            <img class="imgblock" src="{{img}}" (click)="mainImg($event)" style="z-index: 1;">
+                                          </div>
+                                          
+                                        
                                         </ion-col>  
                                       </ion-col>
                                       
 
-                                      <input type="file" accept="image/*" #file [hidden] = "true">
+                                      <input type="file" (change) = "changeFile($event)" accept="image/*" #file [hidden] = "true">
                                       <ion-button (click)="file.click()" (click) = "UserAddNewImgs()" style="margin-bottom: 10px;" class="imgblock">Добавить</ion-button>
                                   </ion-grid>
     

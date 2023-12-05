@@ -30,6 +30,9 @@ export class MySightsComponent  implements OnInit, OnDestroy {
   sightModalArray:any[] = []
   MainImgSrc:any = ''
   addNewFile:boolean = false
+  previewPhotoUrl!:string
+  uploadFiles: string[] = []
+  imagesPreview: string[] = []
 
   @ViewChild('idImgList') idImgList!: ElementRef;
   @ViewChild('widgetsContent') widgetsContent!: ElementRef;
@@ -93,6 +96,26 @@ export class MySightsComponent  implements OnInit, OnDestroy {
   UserAddNewImgs(){
     this.addNewFile = true
   }
+
+  changeFile(event:any){
+      for (var i = 0; i < event.target.files.length; i++) {
+            this.uploadFiles.push(event.target.files[i])
+          }
+          this.previewPhoto()
+  }
+
+  previewPhoto(){
+    this.imagesPreview.length=0;
+    this.uploadFiles.forEach((file: any) => {
+      let reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        this.imagesPreview.push(reader.result as string) 
+      }
+    })
+
+  }
+
 
   ngOnInit() {
     this.getMySights();
