@@ -40,28 +40,31 @@
                               </div>
     
                                 <ion-list  class="ImglIist">
-                                  <ion-grid>
-                                      <ion-col style="flex-direction: column;" *ngFor="let file of sightModalArray">
-                                        <ion-col>
-                                          <ion-button style=" margin-right: -20px; width: 10px; height: 40px;"><ion-icon name="trash-outline" style="z-index: 99;"></ion-icon></ion-button>
+                                  <ion-col>
+                                    <ion-col style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px; flex-direction: column;">
+
+                                      <div *ngFor="let file of sightModalArray">
                                         <img class="imgblock" src="{{file.link}}" (click)="mainImg($event)">
-                                        </ion-col>
-                                      </ion-col>
-                                      <ion-col *ngIf="this.addNewFile">
-                                        <ion-col *ngFor="let img of imagesPreview">
-                                          <div>
-                                            
-                                            <img class="imgblock" src="{{img}}" (click)="mainImg($event)" style="z-index: 1;">
-                                          </div>
-                                          
-                                        
-                                        </ion-col>  
-                                      </ion-col>
+                                        <button (click) = "deleteImg($event)" style="background-color: blue; color: white; margin-top: -20px; margin-bottom: 20px;" type="button">удалить</button>
+                                      </div>
+                                    
+                                      <div class="VissibilityImg" *ngFor="let img of imagesPreview" >
+                                        <div *ngIf="addNewFile">
+                                          <img class="imgblock" src="{{img.url}}" [attr.data-filename]="img.name" (click)="mainImg($event, img)" style="z-index: 1;">
+                                          <button (click) = "deleteImgNew($event)" style="background-color: blue; color: white; margin-top: -20px; margin-bottom: 20px;" type="button">удалить</button>
+                                        </div>
+                                      </div>
+                                    
+                                    </ion-col>
+                                    
+
+
+
                                       
 
                                       <input type="file" (change) = "changeFile($event)" accept="image/*" #file [hidden] = "true">
                                       <ion-button (click)="file.click()" (click) = "UserAddNewImgs()" style="margin-bottom: 10px;" class="imgblock">Добавить</ion-button>
-                                  </ion-grid>
+                                </ion-col>
     
                              
                             </ion-list>

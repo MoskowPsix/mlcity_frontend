@@ -32,7 +32,8 @@ export class MySightsComponent  implements OnInit, OnDestroy {
   addNewFile:boolean = false
   previewPhotoUrl!:string
   uploadFiles: string[] = []
-  imagesPreview: string[] = []
+  imagesPreview: any[] = []
+  removedImages:string[] = []
 
   @ViewChild('idImgList') idImgList!: ElementRef;
   @ViewChild('widgetsContent') widgetsContent!: ElementRef;
@@ -76,7 +77,8 @@ export class MySightsComponent  implements OnInit, OnDestroy {
    
   }
 
-  mainImg(event:any){
+  mainImg(event:any, img: any = null){
+    console.log(event.target)
     let MainImg:any = document.getElementsByClassName("mainImgBlock")
     MainImg.src = event.srcElement.currentSrc
     this.sightModalArray[0].link =  MainImg.src
@@ -100,6 +102,7 @@ export class MySightsComponent  implements OnInit, OnDestroy {
   changeFile(event:any){
       for (var i = 0; i < event.target.files.length; i++) {
             this.uploadFiles.push(event.target.files[i])
+            console.log(this.uploadFiles)
           }
           this.previewPhoto()
   }
@@ -110,11 +113,56 @@ export class MySightsComponent  implements OnInit, OnDestroy {
       let reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => {
-        this.imagesPreview.push(reader.result as string) 
+        this.imagesPreview.push({url: reader.result as string, name: file.name })
+       
       }
     })
 
   }
+
+
+  deleteImg(event:any){
+    const buttonDelete = event.target as HTMLElement
+    const btnParrent = buttonDelete.parentElement
+    buttonDelete.parentElement?.classList.add('hidden')
+   let imgSrc:any = btnParrent?.firstElementChild
+  
+   if (imgSrc.src && !this.removedImages.includes(imgSrc.src)) {
+    this.removedImages.push(imgSrc.src);
+  }
+
+  }
+  deleteImgNew(event:any){
+    
+    const buttonDelete = event.target as HTMLElement
+    const btnParrent = buttonDelete.parentElement
+    const btnGrandpa = btnParrent?.parentElement
+    btnGrandpa?.classList.add('hidden')
+    let imgSrc:any = btnParrent?.firstElementChild
+    const imgName = imgSrc.getAttribute('data-filename')
+    console.log(imgName)
+    if (imgSrc.src && !this.removedImages.includes(imgSrc.src)) {
+      this.removedImages.push(imgSrc.src);
+      const indexPreview =  this.imagesPreview.indexOf(imgSrc.src)
+      if(indexPreview !== -1){
+        this.imagesPreview.splice(indexPreview,1)
+   
+      }
+    
+    }
+
+    
+    const indexFile = this.uploadFiles.indexOf(imgSrc.src)
+    console.log(indexFile)
+ 
+
+  //  console.log(this.removedImages)
+  }
+  
+
+
+
+
 
 
   ngOnInit() {
