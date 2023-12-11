@@ -1,81 +1,50 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { SightsService } from 'src/app/services/sights.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { ToastService } from 'src/app/services/toast.service';
-
 @Component({
-  selector: 'app-my-events',
-  templateUrl: './my-sights.component.html',
-  styleUrls: ['./my-sights.component.scss'],
+  selector: 'app-sight-gallery',
+  templateUrl: './sight-gallery.component.html',
+  styleUrls: ['./sight-gallery.component.scss'],
 })
-export class MySightsComponent  implements OnInit, OnDestroy {
-  private readonly destroy$ = new Subject<void>()
+export class SightGalleryComponent  implements OnInit {
 
   constructor(
     private sightsService: SightsService,
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
   ) { }
+
+
   nextPage: boolean = false
-  sights: any[] = []
+  @Input() files!: any
     
   loadSights: boolean = false
   loadMoreSights: boolean = false
   edditModalOpen:boolean = false
-  name:any = this.sights
-  sightModal:any
-  sightModalArray:any[] = []
+  sightModalArray:any[] = [] //Главный массив с картинками, загруженными ранее
   MainImgSrc:any = ''
   addNewFile:boolean = false
   previewPhotoUrl!:string
-  uploadFiles: File[] = []
-  imagesPreview: any[] = []
-  removedImages:string[] = []
+  uploadFiles: File[] = [] //загруженые файлы
+  imagesPreview: any[] = [] //превьюшки
+  removedImages:string[] = [] //удаляшки
 
   @ViewChild('idImgList') idImgList!: ElementRef;
   @ViewChild('widgetsContent') widgetsContent!: ElementRef;
   
 
-  sightsLoadingMore(){
-    this.loadMoreSights = true
-    this.getMySights()
-  }
+
 
   getMySights() {
-    this.sightsService.getSightsForUser(this.queryBuilderService.queryBuilder('sightsPublicForAuthor')).pipe(
-      delay(100),
-      retry(3),
-      map((respons:any) => {
-        this.sights.push(...respons.sights.data)
-        if (respons.events.next_cursor) {
-          this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(respons.events.next_cursor)
-        }
-        respons.events.next_cursor ? this.nextPage = true : this.nextPage = false
-      }),
-      tap(() => {
-        this.loadSights = true  
-        this.loadMoreSights = false
-      }),
-      catchError((err) =>{
-        this.loadSights = true
-        this.toastService.showToast(MessagesErrors.default, 'danger')
-        return of(EMPTY) 
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe()
+    this.sightModalArray = this.files
   }
 
   
-  openModal(sight:any){
-    this.edditModalOpen = true
-    this.sightModal = sight
-    this.sightModalArray = this.sightModal.files
-    console.log(this.widgetsContent?.nativeElement)
-   
-  }
+
 
   mainImg(event:any, img: any = null){
     console.log(event.target)
@@ -90,10 +59,6 @@ export class MySightsComponent  implements OnInit, OnDestroy {
   }
  
 
-
-  closeModal(){
-    this.edditModalOpen = false
-  }
 
   UserAddNewImgs(){
     this.addNewFile = true
@@ -172,12 +137,16 @@ export class MySightsComponent  implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getMySights();
+    console.log(this.files)
   }
   
   ngOnDestroy(){
-    // отписываемся от всех подписок
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
   
+  }
+
+
+
+  
+
+
 }

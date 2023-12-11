@@ -16,14 +16,16 @@ export class SightTypeComponent  implements OnInit {
     private sightTypeService: SightTypeService,
     private eventTypeService: EventTypeService,
   ) { }
+  
   @Input() types: any[] = []
   @Input() isSight: boolean = false
+
 
   // types: any[] = []
 
   typesLoaded: boolean = true
   //@Output() onChange
-
+  typesLenght:number = 0
   getTypesSight() {
     this.sightTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
       // console.log(response)
@@ -41,6 +43,7 @@ export class SightTypeComponent  implements OnInit {
     })
   }
   ngOnInit() {
+    
     if (!this.types && this.isSight){
       this.getTypesSight()
     } else if (!this.types && !this.isSight) {
