@@ -15,6 +15,7 @@ import { SettingsProfileComponent } from '../views/cabinet/settings/settings-pro
 import { SettingsPrivacyComponent } from '../views/cabinet/settings/settings-privacy/settings-privacy.component';
 import { MyEventsComponent } from '../views/cabinet/my-events/my-events.component';
 import { MySightsComponent } from '../views/cabinet/my-sights/my-sights.component';
+import { EdditSightComponent } from '../views/cabinet/my-sights/edit-sight/eddit-sight.component';
 
 export const privateRoutes: Routes = [ 
     {
@@ -99,19 +100,28 @@ export const privateRoutes: Routes = [
       canActivate: [AuthGuard],
     },
     {
+      path: 'cabinet/sights/:id/edit',
+      component: EdditSightComponent,
+      canActivate: [AuthGuard],
+    },
+    {
       path: 'cabinet/sights',
       component: MySightsComponent,
       canActivate: [AuthGuard],
-      // children: [
-      //   {
-      //     path: 'cabinet/sights/:id',
-      //     component: SightShowComponent,
-      //   },
-      //   {
-      //     path: 'cabinet/sights/create',
-      //     component: SightCreateComponent,
-      //   },
-      // ]
+      children: [
+        // {
+        //   path: 'cabinet/sights/:id',
+        //   component: SightShowComponent,
+        // },
+        // {
+        //   path: 'cabinet/sights/create',
+        //   component: SightCreateComponent,
+        // },
+        // {
+        //   path: ':id/edit',
+        //   component: EdditSightComponent,
+        // },
+      ]
     },
     {
       path: 'cabinet/sights/:id/view',

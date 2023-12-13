@@ -82,6 +82,8 @@ import { MaskitoModule } from '@maskito/angular';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { EdditSightComponent } from './views/cabinet/my-sights/edit-sight/eddit-sight.component';
+import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.component';
 
 
 const mapConfig: YaConfig = {
@@ -139,6 +141,9 @@ registerLocaleData(localeRu, 'ru');
     MyEventsComponent,
     MySightsComponent,
     RegistrationComponent,
+    EdditSightComponent,
+    SightGalleryComponent
+    
     
   ],
   imports: [

@@ -167,7 +167,7 @@ ion-spinner{
 	color:#737373;
 }
 
-@media screen and (min-width: 0px) and (max-width: 768px) {
+@media screen and (min-width: 0px) and (max-width: 1060px) {
 	.map {
 		ion-progress-bar {
 			top: 3.5rem;
@@ -230,7 +230,7 @@ ion-spinner{
 	}
 }
 
-@media(min-width: 768px) {
+@media(min-width: 1068px) {
 	#modalEventShow {
 		&::part(content){
             // position: absolute;
@@ -254,7 +254,7 @@ ion-spinner{
 	}
 }
 
-@media screen and (min-width: 769px) and (max-width: 1313px) {
+@media screen and (min-width: 1060px) and (max-width: 1272px) {
 	.map {
 		ion-progress-bar {
 			top: 7.4rem;

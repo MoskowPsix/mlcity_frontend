@@ -18,9 +18,9 @@
       <!-- Пока нет иконок для типо, они отключены -->
       <!-- <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/> -->
       <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-      <ion-radio *ngIf="!type.stypes.length" slot="end" value="{{ type.id }}"></ion-radio>
+      <ion-checkbox *ngIf="!type.stypes.length" slot="end" value="{{ type.id }}"></ion-checkbox>
     </ion-item>
-    <div class="ion-padding" slot="content" *ngIf="type.stypes || type.etypes">
+    <div class="ion-padding" slot="content" [hidden]="type.stypes.length < 1 ">
       <app-sight-type [types]="type.stypes" [isSight]="isSight"></app-sight-type>
     </div>
   </ion-accordion>
@@ -32,9 +32,9 @@
       <!-- Пока нет иконок для типо, они отключены -->
       <!-- <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/> -->
       <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-      <ion-radio *ngIf="!type.etypes.length" slot="end" value="{{ type.id }}"></ion-radio>
+      <ion-checkbox *ngIf="!type.etypes.length" slot="end" value="{{ type.id }}"></ion-checkbox>
     </ion-item>
-    <div class="ion-padding" slot="content" *ngIf="type.stypes || type.etypes">
+    <div class="ion-padding" slot="content" [hidden]="type.etypes.length < 1 ">
       <app-sight-type [types]="type.etypes" [isSight]="isSight"></app-sight-type>
     </div>
   </ion-accordion>
