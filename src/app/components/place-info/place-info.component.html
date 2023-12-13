@@ -34,23 +34,23 @@
         <div class="seances">
           <div class="seance-time-container ion-justify-content-center">
             <div class="seance-time-c1">
-              <div *ngFor="let seance of place_date" [hidden]="!(getUnixTime(date.dateStart) <= getUnixTime(seance.dateStart) && getUnixTime(seance.dateStart) <= getUnixTime(date.dateEnd))" style="display: flex;" class="seance-time-c2">
+              <div *ngFor="let seance of place_date" [hidden]="!(getUnixTime(date.dateStart) <= getUnixTime(seance.date_start) && getUnixTime(seance.date_start) <= getUnixTime(date.dateEnd))" style="display: flex;" class="seance-time-c2">
                 <ion-col style="max-width:90px">
                 <div style="display: flex;">
-                  <div class="vertical-text" [ngClass]="{'day-color': (dayWeek(seance.dateStart) === 6) || (dayWeek(seance.dateStart) === 0) }">
+                  <div class="vertical-text" [ngClass]="{'day-color': (dayWeek(seance.dates_start) === 6) || (dayWeek(seance.date_start) === 0) }">
                     {{ seance.dateStart|date:'EE' }}
                   </div>
                   <div>
-                    <p class="seance-time-day" >{{ seance.dateStart|date:'d' }}</p>
+                    <p class="seance-time-day" >{{ seance.date_start|date:'d' }}</p>
                   </div>
                 </div>
                 <div class="seance-time-month">
-                  {{ seance.dateStart|date:'MMMM' }}
+                  {{ seance.date_start|date:'MMMM' }}
                 </div>
                 </ion-col>
 
                 <div class="seance-time-hour-container">
-                  <div>{{seance.dateStart|date:'H:mm'}} - {{seance.dateEnd|date:'H:mm'}}</div>
+                  <div>{{seance.date_start|date:'H:mm'}} - {{seance.date_end|date:'H:mm'}}</div>
                 </div>
               </div>
 
