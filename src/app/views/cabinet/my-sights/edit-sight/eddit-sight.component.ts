@@ -11,6 +11,8 @@ import { LocationService } from 'src/app/services/location.service';
 import { Location } from 'src/app/models/location';
 import { YaEvent, YaReadyEvent } from 'angular8-yandex-maps';
 import { IPlace } from 'src/app/models/place';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-eddit-sight',
@@ -49,8 +51,18 @@ export class EdditSightComponent  implements OnInit {
   region:string ='Свердловская область'
   loadMap: boolean = true
   sightTime:any 
+  edditForm!:FormGroup
+  sightTypesOldID:any 
+  typesNow:any[] = []
+  childeVariable:any
+
+
   @Input() place!:any 
 
+
+
+
+  
 
   segmentClick(event:Event){
     let btn = event.target as HTMLButtonElement
@@ -89,6 +101,11 @@ export class EdditSightComponent  implements OnInit {
         
         console.log(this.sight)
         this.place = this.sight
+        this.sightTypesOldID = this.place.types
+        
+       //передаём массив выбраных типов в компонент с чекбоксами
+       this.typesNow = this.typesNow.concat(this.sightTypesOldID)
+       console.log(this.typesNow)
       }),
       catchError((err) =>{
         return of(EMPTY) 
@@ -108,6 +125,8 @@ export class EdditSightComponent  implements OnInit {
     })
   }
 
+
+  
 
   //получаем город
   getCityes(event: any){
@@ -148,10 +167,44 @@ export class EdditSightComponent  implements OnInit {
     this.loadMap = false
   }
 
+
+  edditSight(){
+    //главная проверка данных
+    if(
+      this.sight.description !== this.edditForm.value.descriptionSight ||
+      this.sight.name !== this.edditForm.value.nameSight 
+      
+      )
+    
+    {
+      console.log('что то было изменено ')
+      console.log(this.sight.name)
+      console.log(this.edditForm.value.nameSight)
+      console.log( this.edditForm.value.descriptionSight)
+      console.log(this.sight.description)
+    }
+    else{
+      console.log('всё как предже')
+    }
+  }
+
+
+
+showTypesNow(){
+
+}
+
+
   ngOnInit() {
     this.getTypes()
     this.getUserId()
     this.getSight()
+    this.edditForm = new FormGroup({
+    nameSight: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    prices: new FormControl([], Validators.required),
+    types: new FormControl([],Validators.required),
+    descriptionSight: new FormControl('', [Validators.required, Validators.minLength(8)])
+    })
   }
 
 }

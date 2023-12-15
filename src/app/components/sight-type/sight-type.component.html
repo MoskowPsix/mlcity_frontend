@@ -18,11 +18,29 @@
       <!-- Пока нет иконок для типо, они отключены -->
       <!-- <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/> -->
       <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-      <ion-checkbox *ngIf="!type.stypes.length" slot="end" value="{{ type.id }}"></ion-checkbox>
+      
+      <ion-checkbox *ngIf="!type.stypes.length" slot="end" value="{{ type.id }}" [checked]="typesNow.find((item) => {if(item.id == type.id) {return true} else {return false})})"></ion-checkbox>
+      <ng-container *ngIf="true">
+         <!-- <div>
+          <p>текущий тип</p>
+          {{ typesNow| json }}
+          <p>тип</p>
+          <p>тип</p>
+          <p>тип</p>
+          <p>тип</p>
+          <p>тип</p>
+          <p>тип</p>
+          <p>тип</p>
+          <p>тип</p>
+          <p>тип</p>
+          <p>тип</p>
+          {{ type| json }}
+         </div> -->
+      </ng-container>
     </ion-item>
     <div class="ion-padding" slot="content" [hidden]="type.stypes.length < 1 ">
-      <app-sight-type [types]="type.stypes" [isSight]="isSight"></app-sight-type>
-    </div>
+      <app-sight-type [typesNow]="typesNow" [types]="type.stypes" [isSight]="isSight"></app-sight-type>
+    </div> 
   </ion-accordion>
 </ion-accordion-group>
 

@@ -32,9 +32,10 @@
 
       <ion-column>
 
-        <ion-button (click) = "backStage()">Назад</ion-button>
+        <ion-button *ngIf="segment !==1" (click) = "backStage()">Назад</ion-button>
         <ion-button (click) = "nextStage()">Далее</ion-button>
-        <form action="" >
+        <ion-button (click) = "edditSight()">Проверить запрос</ion-button>
+        <form [formGroup] = "edditForm">
           <!-- Шаг первый -->
           <ion-column [hidden] = "segment !== 1">
 
@@ -42,16 +43,20 @@
             <ion-input disabled="true" value="{{sight.sponsor}}" style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-input>
 
             <ion-label>Название достопримечательности</ion-label>
-            <ion-input value="{{sight.name}}" style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-input>
+            <ion-input  formControlName="nameSight"  value="{{sight.name}}" style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-input>
     
             <ion-label>Об достопримечательности</ion-label>
-            <ion-textarea value="{{sight.description}}" style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-textarea>
+            <ion-textarea formControlName = "descriptionSight" value="{{sight.description}}" style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-textarea>
           </ion-column>
           <!-- Шаг второй -->
+          <ion-radio-group formControlName="types">
+
+            <ion-column [hidden] = "segment !== 2">
+              <app-sight-type [typesNow]="typesNow"  [types]="types" [isSight]="true"></app-sight-type>
+            </ion-column>
+            
+          </ion-radio-group>
           
-          <ion-column [hidden] = "segment !== 2">
-            <app-sight-type [types]="types" [isSight]="true"></app-sight-type>
-          </ion-column>
           <!-- Шаг третий -->
 
           <ion-column  [hidden] = "segment !== 3">
@@ -94,14 +99,6 @@
             <ion-label>Об достопримечательности</ion-label>
             <ion-textarea style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-textarea>
           </ion-column>
-
-
-
-
-
-
-         
-
 
 
         </form>
