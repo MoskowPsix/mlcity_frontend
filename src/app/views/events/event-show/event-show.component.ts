@@ -202,9 +202,9 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     }); 
     
     this.userAuth = this.authService.getAuthState()
-    
-    this.getEventPlaces()
     this.getEvent()
+    this.getEventPlaces()
+    
     this.checkLiked()
     this.checFavorite()
     
