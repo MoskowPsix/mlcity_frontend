@@ -55,6 +55,8 @@ export class EdditSightComponent  implements OnInit {
   sightTypesOldID:any 
   typesNow:any[] = []
   childeVariable:any
+  removedTypes: string[] = []
+  addetTypes: string[] = []
 
 
   @Input() place!:any 
@@ -191,6 +193,44 @@ export class EdditSightComponent  implements OnInit {
 
 
 showTypesNow(){
+
+}
+getType(event: any){ 
+  console.log('Я работаю')
+let nowTypesId: any[] = []
+
+
+for(let i = 0; i < this.typesNow.length; i++){
+  if(nowTypesId.indexOf(this.typesNow[i].id)==-1){
+    nowTypesId.push(String(this.typesNow[i].id))
+    
+  }
+}
+
+console.log(nowTypesId.indexOf('76'))
+if ((nowTypesId.indexOf(event) == -1) && (this.removedTypes.indexOf(event) == -1) && (this.addetTypes.indexOf(event) == -1))  {
+  this.addetTypes.push(event)
+  console.log('Добавленых типов', this.addetTypes)
+ 
+}
+//добавляю в массив апдейта
+else if (this.removedTypes.indexOf(event) !== -1 && this.addetTypes.indexOf(event) == -1 && nowTypesId.indexOf(event) == -1){
+  this.removedTypes.splice(this.removedTypes.indexOf(event), 1)
+  this.addetTypes.push(event)
+  console.log('Добавленых типов', this.addetTypes)
+  
+}
+// удаляю из массива апдейтов
+else if(this.addetTypes.indexOf(event) !==-1  && nowTypesId.indexOf(event) ==-1){
+  this.addetTypes.splice(this.addetTypes.indexOf(event),1)
+  console.log('Добавленых типов', this.addetTypes)
+}
+ // добавляю в массив удалённых добавленные ранее
+else if(nowTypesId.indexOf(event) !== -1){
+  console.log('Удаление добавленых ранее типов', this.removedTypes)
+}
+
+console.log(nowTypesId)
 
 }
 

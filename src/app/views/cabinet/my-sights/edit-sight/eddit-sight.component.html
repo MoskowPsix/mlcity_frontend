@@ -52,7 +52,7 @@
           <ion-radio-group formControlName="types">
 
             <ion-column [hidden] = "segment !== 2">
-              <app-sight-type [typesNow]="typesNow"  [types]="types" [isSight]="true"></app-sight-type>
+              <app-sight-type [typesNow]="typesNow"  [types]="types" [isSight]="true" (typeOutput)="getType($event)"></app-sight-type>
             </ion-column>
             
           </ion-radio-group>
