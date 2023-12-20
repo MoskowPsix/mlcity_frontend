@@ -25,38 +25,85 @@
 
 
 
-<ion-content >
-  
+<ion-content style="--display: flex; --flex-direction: row;" >
+  <ion-column class="buttonNavigationParrent">
+    <ion-button class="buttonNavigation" *ngIf="segment !==1" (click) = "backStage()">Назад</ion-button>
+    <ion-button class="buttonNavigation" disabled="true" *ngIf="segment ==1" (click) = "backStage()">Назад</ion-button>
+  </ion-column> 
+
+  <ion-column>
+
+    
   <ion-column style="display: flex; justify-content: center; width: 100%;" *ngIf="loadSight">
    
 
-      <ion-column>
-
-        <ion-button *ngIf="segment !==1" (click) = "backStage()">Назад</ion-button>
-        <ion-button (click) = "nextStage()">Далее</ion-button>
-        <ion-button (click) = "edditSight()">Проверить запрос</ion-button>
         <form [formGroup] = "edditForm">
           <!-- Шаг первый -->
           <ion-column [hidden] = "segment !== 1">
 
-            <ion-label>Организатор</ion-label>
-            <ion-input disabled="true" value="{{sight.sponsor}}" style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-input>
+          
+            <div>
+              <ion-label class="inputLabel">Организатор</ion-label>
+            </div>
 
-            <ion-label>Название достопримечательности</ion-label>
-            <ion-input  formControlName="nameSight"  value="{{sight.name}}" style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-input>
-    
-            <ion-label>Об достопримечательности</ion-label>
-            <ion-textarea formControlName = "descriptionSight" value="{{sight.description}}" style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-textarea>
+            <ion-input style="background: #fff;" class="custom" disabled="true" value="{{sight.sponsor}}"></ion-input>
+
+            <div class="inputLabel">
+              <ion-label class="inputLabel">Название достопримечательности</ion-label>
+            </div>
+      
+            <ion-input class="custom"  style="background: #fff;" formControlName="nameSight"  value="{{sight.name}}"></ion-input>
+            
+            <div class="inputLabel">
+              <ion-label class="inputLabel">Об достопримечательности</ion-label>
+            </div>
+            
+            <ion-textarea class="custom"  style="background: #fff; min-height: 150px;" formControlName = "descriptionSight" value="{{sight.description}}"></ion-textarea>
           </ion-column>
           <!-- Шаг второй -->
-          <ion-radio-group formControlName="types">
+          <ion-column style="display: flex;">
 
-            <ion-column [hidden] = "segment !== 2">
-              <app-sight-type [typesNow]="typesNow"  [types]="types" [isSight]="true" (typeOutput)="getType($event)"></app-sight-type>
-            </ion-column>
-            
-          </ion-radio-group>
-          
+            <ion-radio-group formControlName="types">
+
+              <ion-column style="display: flex;" [hidden] = "segment !== 2">
+                <app-sight-type [typesNow]="typesNow"  [types]="types" [isSight]="true" (typeOutput)="getType($event)"></app-sight-type>
+
+                
+                  <div style="margin-left: 20px;">
+                    
+                    <div>
+                      Выбраны категории:
+                    </div>
+                    <ion-column style="flex-direction: column;">
+                      <ion-column *ngFor="let item of typesNow">
+                        <span>{{item.name}}</span>
+                        <ion-button>удалить</ion-button>
+                      </ion-column>
+
+                      <ion-column *ngFor="let item of addetTypesName">
+                        <span>{{item}}</span>
+                        <ion-button>удалить</ion-button>
+                      </ion-column>
+                    </ion-column>
+                  </div>
+               
+
+             
+
+                
+    
+                 
+               
+              </ion-column>
+              
+             
+
+
+            </ion-radio-group>
+         
+
+          </ion-column>
+
           <!-- Шаг третий -->
 
           <ion-column  [hidden] = "segment !== 3">
@@ -107,7 +154,9 @@
 
       </ion-column>
       
-    
+        <ion-column class="buttonNavigationParrent">
+          <ion-button class="buttonNavigation" (click) = "nextStage()">Далее</ion-button>
+        </ion-column>
   </ion-column>
 
 

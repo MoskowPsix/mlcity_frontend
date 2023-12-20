@@ -12,8 +12,8 @@
   </ng-container>
 </ng-container>
 
-<ion-accordion-group *ngIf="typesLoaded && isSight" >
-  <ion-accordion *ngFor="let type of types" toggleIcon="{{type.stypes.length ? 'chevron-down-outline' : 'none'}}">
+<ion-accordion-group *ngIf="typesLoaded && isSight" [multiple]="true" [value]="1">
+  <ion-accordion [open]="true"  *ngFor="let type of types; let i = index"  toggleIcon="{{type.stypes.length ? 'chevron-down-outline' : 'none'}}">
     <ion-item slot="header">
       <!-- Пока нет иконок для типо, они отключены -->
       <!-- <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/> -->
