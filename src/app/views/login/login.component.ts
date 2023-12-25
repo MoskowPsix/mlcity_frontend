@@ -110,6 +110,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.loadingService.showLoading()
       this.userService.getUserById().pipe(takeUntil(this.destroy$)).subscribe({
         next: (data: any) => {
+          console.log(data)
           let timeZone = new Date().getTimezoneOffset()
           let time = Math.ceil(new Date().getTime() / 100000)
           let created_time = Math.ceil(new Date(data.user.social_account.created_at).getTime() / 100000)

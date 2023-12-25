@@ -193,8 +193,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.stepStart = 1
       this.stepCurrency = 1
     } else {
-      this.stepStart = 3
-      this.stepCurrency = 3
+      this.stepStart = 1
+      this.stepCurrency = 1
       //this.nextButtonDisable = true
     }
   }
