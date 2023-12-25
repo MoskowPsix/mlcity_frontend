@@ -59,50 +59,122 @@
       </ion-row>
       
         <!-- шаг 1 -->
-      <ion-row [hidden]="stepCurrency !== 1" class="ion-justify-content-center">
-        <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
-          <ion-list>
-
+     
+        <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center">
+          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
+            <ion-list>
+            <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
               <ion-list-header>
-                <ion-label>Выберите группу, из которой следует загрузить посты</ion-label>
-              </ion-list-header>  
-              <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event)" [allowEmptySelection]="true" [value]="vkGroupSelected">
-                <ng-container>
-                  <ion-item>
-                    <ion-avatar>
-                      <img alt="ava" src="/assets/icons/favicon.png" />
-                    </ion-avatar>
-                    <ion-label class="ion-padding-start">Моя страница</ion-label>
-                    <ion-radio slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
-                  </ion-item>
-                </ng-container>
-                <ng-container *ngFor="let group of vkGroups">
-                    <ion-item>
-                      <ion-avatar>
-                        <img alt="ava" src="{{ group.photo_50 }}" />
-                      </ion-avatar>
-                      <ion-label class="ion-padding-start">{{ group.name }}</ion-label>
-                      <ion-radio slot="end" value="-{{ group.id }}"></ion-radio>
-                    </ion-item>
-                </ng-container>
-              </ion-radio-group>
-              <!-- Грузим чужие посты из вк, временное решение -->
-              <ng-container>
-                <ion-item>
-                  <ion-label class="ion-padding-start">
-                    <ion-input label="Url input" type="text" placeholder="URL группы" (ionChange)="onFocusPlace($event)"></ion-input>
-                  </ion-label>
-                    <ion-button (click)="setVkPostsByGroupURL(); stepNext()">Загрузить URL</ion-button>
-                </ion-item>
-              </ng-container>
-
+                <ion-label>Выберите тип мероприятия</ion-label>
+              </ion-list-header>
+              <app-sight-type [types]="types" [isSight]="false"></app-sight-type>
+              
+            </ion-radio-group>
           </ion-list>
-        </ion-col>
-      </ion-row>
+          </ion-col>
+        </ion-row>
+      
 
       <!-- шаг 2 -->
       <ion-row  [hidden]="stepCurrency !== 2" class="ion-justify-content-center" >
         <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 2" @fade>
+
+          <ion-column style="display: flex;">
+
+
+            <ion-button class="selectGroup">
+
+              Загрузить пост
+
+            </ion-button>
+
+            <ion-column class="nameParrent">
+              <div>
+
+                <ion-item fill="outline">
+                  <ion-label position="floating">Название мероприятия</ion-label>
+                  <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
+                  <ion-input formControlName="name" type="text" name="name" required></ion-input>
+                </ion-item>
+  
+              </div>
+
+              <div *ngIf="createEventForm.controls['name'].invalid && createEventForm.controls['name'].dirty"  class="validation">
+                <ion-note *ngIf="!createEventForm.controls['name'].hasError('minLength')" color="danger">Название мероприятия должно содержать минимум 3 символа</ion-note>
+              </div>
+            </ion-column>
+            
+          
+          
+           
+            <!-- Организатор -->
+
+          <ion-row>
+           
+            <ion-column class="organizaterParrent">
+              <ion-item class="organizerMain" fill="outline">
+                <ion-label position="floating">Организатор мероприятия</ion-label>
+                <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
+                <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
+
+                
+              </ion-item>
+
+              <div *ngIf="createEventForm.controls['sponsor'].invalid && createEventForm.controls['sponsor'].dirty"  class="validation">
+                <ion-note *ngIf="!createEventForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор мероприятия" должно содержать минимум 3 символа</ion-note>
+              </div>
+            </ion-column>
+
+           
+
+          </ion-row>
+
+          </ion-column>
+
+           
+       
+
+          <!-- название мероприятия -->
+
+          <ion-list>
+
+            <ion-list-header>
+              <ion-label>Выберите группу, из которой следует загрузить посты</ion-label>
+            </ion-list-header>  
+            <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event)" [allowEmptySelection]="true" [value]="vkGroupSelected">
+              <ng-container>
+                <ion-item>
+                  <ion-avatar>
+                    <img alt="ava" src="/assets/icons/favicon.png" />
+                  </ion-avatar>
+                  <ion-label class="ion-padding-start">Моя страница</ion-label>
+                  <ion-radio slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
+                </ion-item>
+              </ng-container>
+              <ng-container *ngFor="let group of vkGroups">
+                  <ion-item>
+                    <ion-avatar>
+                      <img alt="ava" src="{{ group.photo_50 }}" />
+                    </ion-avatar>
+                    <ion-label class="ion-padding-start">{{ group.name }}</ion-label>
+                    <ion-radio slot="end" value="-{{ group.id }}"></ion-radio>
+                  </ion-item>
+              </ng-container>
+            </ion-radio-group>
+            <!-- Грузим чужие посты из вк, временное решение -->
+            <ng-container>
+              <ion-item>
+                <ion-label class="ion-padding-start">
+                  <ion-input label="Url input" type="text" placeholder="URL группы" (ionChange)="onFocusPlace($event)"></ion-input>
+                </ion-label>
+                  <ion-button (click)="setVkPostsByGroupURL(); stepNext()">Загрузить URL</ion-button>
+              </ion-item>
+            </ng-container>
+
+
+
+
+        </ion-list>
           <ion-list-header>
             <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
           </ion-list-header>
@@ -377,16 +449,7 @@
       
       <!-- шаг 7 -->
       <ion-row  [hidden]="stepCurrency !== 7" class="ion-justify-content-center">
-        <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 7" @fade>
-          <ion-item fill="outline">
-            <ion-label position="floating">Организатор мероприятия</ion-label>
-            <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-            <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
-          </ion-item>
-          <div *ngIf="createEventForm.controls['sponsor'].invalid && createEventForm.controls['sponsor'].dirty"  class="validation">
-            <ion-note *ngIf="!createEventForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор мероприятия" должно содержать минимум 3 символа</ion-note>
-          </div>
-        </ion-col>
+        
       </ion-row>
       
       
