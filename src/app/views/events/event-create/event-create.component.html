@@ -35,25 +35,31 @@
               <!-- </div>
             </ng-container> -->
 
-            <ng-container>
-              <div *ngFor="let step of [].constructor(steps); let i = index" class="stepper-items" >
-                <ion-button 
+          
+            <ion-column style="display: flex; justify-content: center;">
+              <ng-container style="display: flex; justify-content: center;">
+              
+                <div *ngFor="let step of [].constructor(steps); let i = index" class="stepper-items" >
+                  <ion-button class="buttonBar"
+                    shape="round" 
+                    (click)="goToStep(i)" 
+                    [color]="stepCurrency === i ? 'primary' : !stepIsValid(i) && stepCurrency !== i? 'danger' : 'light'"  
+                  >
+                  {{ i + 1 }}
+                </ion-button>
+                <!-- С зелеными шагами
+                  <ion-button 
                   shape="round" 
-                  (click)="goToStep(i)" 
-                  [color]="stepCurrency === i ? 'primary' : !stepIsValid(i) && stepCurrency !== i? 'danger' : 'light'"  
+                  (click)="goToStep(i + 3)" 
+                  [color]="stepCurrency - 2 === i + 1 ? 'primary' : stepCurrency - 2 > i + 1 && stepIsValid(i + 3) ? 'success' : !stepIsValid(i + 3) && stepCurrency - 2 !== i + 1 ? 'danger' : 'light'"  
                 >
-                {{ i + 1 }}
-              </ion-button>
-              <!-- С зелеными шагами
-                <ion-button 
-                shape="round" 
-                (click)="goToStep(i + 3)" 
-                [color]="stepCurrency - 2 === i + 1 ? 'primary' : stepCurrency - 2 > i + 1 && stepIsValid(i + 3) ? 'success' : !stepIsValid(i + 3) && stepCurrency - 2 !== i + 1 ? 'danger' : 'light'"  
-              >
-                {{ i + 1 }}
-              </ion-button> -->
-              </div>
-            </ng-container>
+                  {{ i + 1 }}
+                </ion-button> -->
+                </div>
+            
+              </ng-container>
+            </ion-column>
+            
           </div>
           <!-- stepStart {{ stepStart }} stepCurrency {{ stepCurrency }} -->
             <!-- <ion-label>Шаг {{  stepStart === 3 ?  stepCurrency - 2 : stepCurrency }} из {{ vkGroups ? steps : steps - 2 }}</ion-label> -->
@@ -759,8 +765,8 @@
             <ion-button *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
           </ion-col>
           <ion-col size-lg="2" size-md="4">
-            <ion-button *ngIf="stepCurrency !== steps"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-            <ion-button *ngIf="stepCurrency === steps" type="submit" [disabled] ="createEventForm.invalid || createEventForm.disabled"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+            <ion-button *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+            <ion-button *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createEventForm.invalid || createEventForm.disabled"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
           </ion-col>     
         </ion-row>
       </div>

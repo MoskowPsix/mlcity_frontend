@@ -546,18 +546,18 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Блокировка шагов в баре
   stepIsValid(step:number = this.stepStart){
     switch (step) {
+    
       case 1:
-      case 2:
-        return true
-      case 3:
         return this.createEventForm.controls['name'].invalid  ?  false :  true
-      case 4:
+      case 1:
+        return this.createEventForm.controls['sponsor'].invalid  ?  false :  true
+      
+      case 2:
         return this.createEventForm.controls['description'].invalid  ? false :  true 
-      case 6:
+      case 2:
         return this.createEventForm.hasError('dateInvalid') ?  false :  true
-      case 7:
-        return this.createEventForm.controls['sponsor'].invalid  ?  false :  true      
-      case 9:
+              
+      case 4:
         //return !this.createEventForm.controls['coords'].value.length ? false :  true  
         return this.createEventForm.controls['places'].invalid ? false :  true 
       default:
