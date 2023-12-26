@@ -74,6 +74,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   stepCurrency: number = 0
 
   steps:number = 12
+  openModalPostValue:boolean = false
+  openModalPostCount:number = 0
+  openModalGroupValue:boolean = false
   vkGroups: any
   //Создать переменную для постов со страницы
   vkGroupSelected: number | null = null
@@ -189,7 +192,44 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
 
- 
+ //модальноеп окно с выьором поста
+
+
+ openModalPost(event:any){
+  
+  
+  if(this.openModalPostCount === 0){
+    this.openModalPostValue = true
+    console.log(this.openModalPostCount)
+    this.openModalPostCount++
+  }
+  else{
+    console.log(this.openModalPostCount)
+    this.openModalPostValue = false
+    this.openModalPostCount = 0
+  }
+ }
+
+ closeModalPost(){
+  this.openModalPostValue = false
+  
+ }
+
+
+ openModalGroup(){
+  this.openModalGroupValue = true
+ }
+
+ closeModalGroup(){
+  this.openModalGroupValue = false
+ }
+
+ closeAllModals(){
+  this.openModalPostValue = false
+  this.openModalGroupValue = false
+ }
+
+
 
   //Устанавливаем шаги
   setSteps(){
