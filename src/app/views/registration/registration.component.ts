@@ -198,12 +198,6 @@ export class RegistrationComponent  implements OnInit {
     
    }
 
-   openModal(){
-
-   }
-
-
-
    confirmEmail(){
     if(this.modalForm.value.emailConfirmInput.length == 4){
       this.authservice.verfiEmail(+this.modalForm.value.emailConfirmInput).pipe(
