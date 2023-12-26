@@ -73,7 +73,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   stepStart: number = 0
   stepCurrency: number = 0
 
-  steps:number = 12
+  steps:number = 5
   openModalPostValue:boolean = false
   openModalPostCount:number = 0
   openModalGroupValue:boolean = false

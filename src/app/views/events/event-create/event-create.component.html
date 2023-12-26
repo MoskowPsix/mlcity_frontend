@@ -750,77 +750,7 @@
         </ion-col>
       </ion-row>
       
-      <!-- шаг 7 -->
-      <ion-row  [hidden]="stepCurrency !== 7" class="ion-justify-content-center">
-        
-      </ion-row>
-      
-      
-      <!-- шаг 8 -->
-      <ion-row  [hidden]="stepCurrency !== 8" class="ion-justify-content-center">
-        <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 8" @fade>
-          <ion-list>
-          <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
-            <ion-list-header>
-              <ion-label>Выберите тип мероприятия</ion-label>
-            </ion-list-header>
-            <app-sight-type [types]="types" [isSight]="false"></app-sight-type>
-            
-          </ion-radio-group>
-        </ion-list>
-        </ion-col>
-      </ion-row>
-      
-      <!-- шаг 9 -->
-      <ion-row  [hidden]="stepCurrency !== 9" class="ion-justify-content-center">
-        
-      </ion-row>
-      
-      <!-- шаг 10 -->
-      <ion-row  [hidden]="stepCurrency !== 10" class="ion-justify-content-center">
-        
-      </ion-row>
-      
-     
-      
-
-      <!-- шаг 12 -->
-      <ion-row  [hidden]="stepCurrency !== 12" class="ion-justify-content-center">
-        <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 12" @fade>
-          <ion-list>
-            <ion-radio-group formControlName="status" (ionChange)="selectedStatus($event)" [value]="statusSelected" required>
-              <ng-container *ngIf="!statusesLoaded">
-                <ng-container *ngFor="let key of [1,2,3,4,5]">
-                  <ion-item>
-                    <ion-avatar>
-                      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    </ion-avatar>
-                    <ion-label class="ion-padding-start">
-                      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    </ion-label>
-                  </ion-item>
-                </ng-container>
-              </ng-container>
-
-              <ng-container *ngIf="statusesLoaded">
-                <ng-container *ngFor="let status of statuses">
-                  <ion-item *ngIf="status.name === 'На модерации'">
-                    <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
-                    <ion-label>Отправить на модерацию</ion-label>
-                    <ion-radio slot="end" [value]="status.id"></ion-radio>
-                  </ion-item>
-                  <ion-item *ngIf="status.name === 'Черновик'">
-                    <ion-icon name="create" slot="start" color="medium" size="large"></ion-icon>
-                    <ion-label>Оставить в черновиках</ion-label>
-                    <ion-radio slot="end" [value]="status.id"></ion-radio>
-                  </ion-item>
-                </ng-container>
-              </ng-container>
-              
-            </ion-radio-group>
-          </ion-list>
-        </ion-col>
-      </ion-row>
+    
 
        <!-- Десктопный блок кнопок -->
       <div class="buttons-dekstop">
