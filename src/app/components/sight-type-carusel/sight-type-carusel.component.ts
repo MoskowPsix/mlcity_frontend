@@ -31,10 +31,8 @@ export class SightTypeCaruselComponent  implements OnInit {
 
   getTypesEvent() {
     this.sightTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-      // console.log(response)
       this.types = response.types
       response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
-      // console.log(this.types)
     })
   }
   getTypeId(id: any) {

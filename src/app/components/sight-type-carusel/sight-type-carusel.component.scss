@@ -16,35 +16,50 @@
         margin-right: 0px;
         margin-top: auto;
         margin-bottom: auto;
+        display: none;
         position: relative;
+        color: rgba(92, 90, 90, 0.7);
     }
     .container{
+        max-height: 44px;
         display: flex;
         align-items: center;
-        align-content: center;
         justify-content: center;
+        align-content: center;
         flex-direction: row;
-        flex:0;
         overflow-y: hidden;
         overflow-x: overlay;
         position:relative;
         white-space: nowrap;
 
         .item:hover {
-            border-radius: 12px;
             background-color: rgb(74, 146, 247,0.5);
         }
         .item {
+            cursor: pointer;
             transition:0.2s;
             padding-left: 2rem;
             padding-right: 2rem;
             padding-top: 0.1rem;
             padding-bottom: 0.1rem;
+            border-bottom-width:0px;
+            border-bottom: 3px solid transparent; 
+            border-bottom-left-radius: 1px;
+            border-bottom-right-radius: 1px;
+            padding-bottom: 3px;
+            transition:0.7s ; 
         }
         .item.active{
-            border-radius: 12px;
-            background-color: rgb(74, 146, 247,0.5);
+            border-bottom-width:20px;
+            border-bottom: 3px solid #7c94c8;
+            border-bottom-left-radius: 1px;
+            border-bottom-right-radius: 1px;
+            padding-bottom: 3px;
+            transition: 0.7s ease; /* Добавляем анимацию */
         }
+
+
+     
     }
     .container::-webkit-scrollbar {
         display: none;
@@ -57,16 +72,38 @@
         /*outline: 1px solid slategrey;*/
     }
     .ico_right {
+        color: rgba(92, 90, 90, 0.7);
         flex: 0.5;
         height: 2.5rem;
         margin-left: 0px;
+        display: none;
         margin-top: auto;
         margin-bottom: auto;
         position: relative;
     }
 }
 
-@media screen and (min-width: 0px) and (max-width: 768px) {
+
+@media screen and (min-width: 0px) and (max-width: 1049px) {
+
+    .container{
+        margin-top: 0px;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        flex-direction: row;
+        overflow-y: hidden;
+        overflow-x: overlay;
+        min-width: 100%;
+        position:relative;
+        white-space: nowrap;
+    }
+
+
+}
+
+
+@media screen and (min-width: 0px) and (max-width: 1017px) {
     .content {
         .ico_right {
         flex: 0;
@@ -81,6 +118,7 @@
         }
 
         .container{
+            margin-top: -38px;
             display: flex;
             align-items: center;
             align-content: center;
@@ -92,10 +130,26 @@
             white-space: nowrap;
     
             .item {
-                margin-left: 4rem;
+                margin-left: 0.2rem;
+                border-bottom-width:0px;
+                border-bottom: 3px solid transparent; 
+                border-bottom-left-radius: 1px;
+                border-bottom-right-radius: 1px;
+                padding-bottom: 3px;
+                transition:0.7s ; 
             }
+            .item:hover {
+                background-color: #ffffff;
+            }
+
             .item-active{
-                background-color: aquamarine;
+                border-bottom-width:20px;
+                background-color: #ffffff;
+                border-bottom: 3px solid #7c94c8;
+                border-bottom-left-radius: 1px;
+                border-bottom-right-radius: 1px;
+                padding-bottom: 3px;
+                transition: 0.7s ease; /* Добавляем анимацию */
             }
         }
         
