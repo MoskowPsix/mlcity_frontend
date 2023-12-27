@@ -195,7 +195,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
  //модальноеп окно с выьором поста
 
 
- openModalPost(event:any){
+ openModalPost(event:any = null){
   
   
   if(this.openModalPostCount === 0){
@@ -209,6 +209,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.openModalPostCount = 0
   }
  }
+
+
+
+
 
  closeModalPost(){
   this.openModalPostValue = false
@@ -258,17 +262,19 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   setVkPostsByGroupID(group_id: number){
     this.vkService.getPostsGroup(group_id, 30).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.vkGroupPosts = response.response
+      console.log(response.response)
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
+      this.openModalPost()
     })
   }
   // Грузим посты по URL сообщества
-  async setVkPostsByGroupURL() {
-    await this.vkService.getGroupeIdUrl(this.inputValue).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      let group_id: number
-      group_id = response.response[0].id - response.response[0].id - response.response[0].id
-      this.setVkPostsByGroupID(group_id)
-    })
-  }
+  // setVkPostsByGroupURL() {
+  //    this.vkService.getGroupeIdUrl(this.inputValue).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+  //     let group_id: number
+  //     group_id = response.response[0].id - response.response[0].id - response.response[0].id
+  //     this.setVkPostsByGroupID(group_id)
+  //   })
+  // }
   onFocusPlace(event: any){
     this.inputValue = event.detail.value;
   }

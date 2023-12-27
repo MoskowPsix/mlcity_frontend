@@ -119,7 +119,7 @@
                                 <img alt="ava" src="/assets/icons/favicon.png" />
                               </ion-avatar>
                               <ion-label class="ion-padding-start">Моя страница</ion-label>
-                              <ion-radio slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
+                              <ion-radio (click)="openModalPost($event)" slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
                             </ion-item>
                           </ng-container>
                           <ng-container *ngFor="let group of vkGroups">
@@ -140,14 +140,14 @@
                           </ng-container>
                         </ion-radio-group>
                         <!-- Грузим чужие посты из вк, временное решение -->
-                        <ng-container>
+                        <!-- <ng-container>
                           <ion-item>
                             <ion-label class="ion-padding-start">
                               <ion-input label="Url input" type="text" placeholder="URL группы" (ionChange)="onFocusPlace($event)"></ion-input>
                             </ion-label>
-                              <ion-button (click)="setVkPostsByGroupURL(); stepNext()">Загрузить URL</ion-button>
+                              <ion-button  (click)="setVkPostsByGroupURL();  stepNext();">Загрузить URL</ion-button>
                           </ion-item>
-                        </ng-container>
+                        </ng-container> -->
                         
                     </ion-list>
            
