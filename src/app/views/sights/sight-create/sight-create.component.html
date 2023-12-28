@@ -1,14 +1,20 @@
 <ion-content>
 
-    <ion-grid>
-      <form [formGroup]="createSightForm" (submit)="onSubmit()" enctype="multipart/form-data"> 
+    <ion-grid class="main">
+
+
+      <form class="mainChild" [formGroup]="createSightForm" (submit)="onSubmit()" enctype="multipart/form-data"> 
         
+        <ion-column class="mainLabelAndBar">
+          <div class="ion-text-start">
+            <h3 class="mt-0">Создание достопримечательности</h3>
+          </div>
+        </ion-column>
+
+
         <ion-row class="ion-justify-content-center">
           <ion-col size-lg="4" size-md="8" size-xs="12">
-            <div class="ion-text-start">
-              <!-- {{ createEventForm.value | json }} -->
-              <h3 class="mt-0">Создание достопримечательности</h3>
-            </div>
+            
   
             <div class="stepper-progress">
 
@@ -35,6 +41,8 @@
               
                 </ng-container>
               </ion-column>
+
+              
             </div>
             <!-- stepStart {{ stepStart }} stepCurrency {{ stepCurrency }} -->
               <!-- <ion-label>Шаг {{  stepStart === 3 ?  stepCurrency - 2 : stepCurrency }} из {{ vkGroups ? steps : steps - 2 }}</ion-label> -->
@@ -363,6 +371,7 @@
                 </ion-item>
                 <ion-item>
                   <ion-textarea 
+                  value="test"
                   formControlName="workTime" 
                   placeholder="..." 
                   [autoGrow]="true" 
@@ -436,76 +445,8 @@
         </ion-row>
         
         <!-- шаг 4  -->
-        <ion-row  [hidden]="stepCurrency !== 4" class="ion-justify-content-center">
-          
-        </ion-row>
-              
-        <!-- шаг 5 -->
-        <ion-row  [hidden]="stepCurrency !== 5" class="ion-justify-content-center">
-         
-        </ion-row>
-        
-        <!-- шаг 6 -->
-        <ion-row  [hidden]="stepCurrency !== 6" class="ion-justify-content-center">
-       
-        </ion-row>
-        
-        <!-- шаг 7 -->
-        <ion-row  [hidden]="stepCurrency !== 7" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 7" @fade>
-            <ion-item fill="outline">
-              <ion-label position="floating">Организатор достопримечательности</ion-label>
-              <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-              <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
-            </ion-item>
-            <div *ngIf="createSightForm.controls['sponsor'].invalid && createSightForm.controls['sponsor'].dirty"  class="validation">
-              <ion-note *ngIf="!createSightForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор достопримечательности" должно содержать минимум 3 символа</ion-note>
-            </div>
-          </ion-col>
-        </ion-row>
-        
-        
-        <!-- шаг 8 -->
-        <ion-row  [hidden]="stepCurrency !== 8" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 8" @fade>
-            <ion-list>
-            <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
-              <ion-list-header>
-                <ion-label>Выберите тип достопримечательности</ion-label>
-              </ion-list-header>
-  
-              <!-- <ng-container *ngIf="!typesLoaded">
-                <ng-container *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
-                  <ion-item>
-                    <ion-avatar>
-                      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    </ion-avatar>
-                    <ion-label class="ion-padding-start">
-                      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    </ion-label>
-                  </ion-item>
-                </ng-container>
-              </ng-container> -->
-  
-              <!-- <ng-container *ngIf="typesLoaded"> -->
-                <!-- <ng-container *ngFor="let type of types">
-                  <ion-item>
-                    <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/>
-                    <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-                    <ion-radio slot="end" value="{{ type.id }}"></ion-radio>
-                  </ion-item>
-                </ng-container> -->
-                <app-sight-type [types]="types" [isSight]="true"></app-sight-type>
-              <!-- </ng-container> -->
-              
-            </ion-radio-group>
-          </ion-list>
-          </ion-col>
-        </ion-row>
-        
-        <!-- шаг 9 -->
-        <ion-row  [hidden]="stepCurrency !== 9" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 9" @fade>
+        <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
+          <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
             <ion-list>
               <ion-item>
                 <ion-label><p>Выбран:</p><span>{{city}} </span>,<span> {{region}}</span></ion-label>
@@ -558,67 +499,32 @@
               >
               </ya-map>
             </div>
-            </ion-col>
+          </ion-col>
         </ion-row>
-        
-        <!-- шаг 10 -->
-        <ion-row  [hidden]="stepCurrency !== 10" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 10" @fade>
+              
+        <!-- шаг 5 -->
+        <ion-row  [hidden]="stepCurrency !== 4" class="ion-justify-content-center">
+
+          <ion-col size-lg="4" size-md="8" size-xs="12"  @fade>
+            
             <ion-item fill="outline">
               <ion-label position="floating">Стоимость билета</ion-label>
               <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
               <ion-input formControlName="price" type="number" name="price"></ion-input>
             </ion-item>
           </ion-col>
-        </ion-row>
-        
-        <!-- шаг 11 -->
-        <ion-row  [hidden]="stepCurrency !== 11" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 11" @fade>
+
+
+          <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
             <ion-item>
               <ion-label position="floating" class="position-label-inside">Доп. материалы</ion-label>
               <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
             </ion-item>
           </ion-col>
+
         </ion-row>
-  
-        <!-- шаг 12 -->
-        <ion-row  [hidden]="stepCurrency !== 12" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 12" @fade>
-            <ion-list>
-              <ion-radio-group formControlName="status" (ionChange)="selectedStatus($event)" [value]="statusSelected" required>
-                <ng-container *ngIf="!statusesLoaded">
-                  <ng-container *ngFor="let key of [1,2,3,4,5]">
-                    <ion-item>
-                      <ion-avatar>
-                        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                      </ion-avatar>
-                      <ion-label class="ion-padding-start">
-                        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                      </ion-label>
-                    </ion-item>
-                  </ng-container>
-                </ng-container>
-  
-                <ng-container *ngIf="statusesLoaded">
-                  <ng-container *ngFor="let status of statuses">
-                    <ion-item *ngIf="status.name === 'На модерации'">
-                      <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
-                      <ion-label>Отправить на модерацию</ion-label>
-                      <ion-radio slot="end" [value]="status.id"></ion-radio>
-                    </ion-item>
-                    <ion-item *ngIf="status.name === 'Черновик'">
-                      <ion-icon name="create" slot="start" color="medium" size="large"></ion-icon>
-                      <ion-label>Оставить в черновиках</ion-label>
-                      <ion-radio slot="end" [value]="status.id"></ion-radio>
-                    </ion-item>
-                  </ng-container>
-                </ng-container>
-                
-              </ion-radio-group>
-            </ion-list>
-          </ion-col>
-        </ion-row>
+        
+        
   
          <!-- Десктопный блок кнопок -->
         <div class="buttons-dekstop">
@@ -627,8 +533,8 @@
               <ion-button *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
             </ion-col>
             <ion-col size-lg="2" size-md="4">
-              <ion-button *ngIf="stepCurrency !== steps"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-              <ion-button *ngIf="stepCurrency === steps" type="submit" [disabled] ="createSightForm.invalid "><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+              <ion-button *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+              <ion-button *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createSightForm.invalid "><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
             </ion-col>     
           </ion-row>
         </div>
@@ -641,7 +547,7 @@
             </ion-col>
             <ion-col size="6">
               <ion-button *ngIf="stepCurrency !== steps"  (click)="stepNext()" expand="block">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-              <ion-button *ngIf="stepCurrency === steps" type="submit" [disabled] ="createSightForm.invalid || createSightForm.disabled" expand="block"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+              <ion-button *ngIf="stepCurrency == steps - 1" type="submit" [disabled] ="createSightForm.invalid || createSightForm.disabled" expand="block"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
             </ion-col>     
           </ion-row>
         </div>

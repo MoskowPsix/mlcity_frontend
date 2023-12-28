@@ -84,6 +84,33 @@
     align-self: center;
 }
 
+
+
+.main{
+    min-height: 100vh;
+    width: 90%;
+    margin: 0 auto;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+
+    .mainChild{
+        width: 70%;
+        
+        .mainLabelAndBar h3{
+            margin-left: 10%;
+            margin-top: 30px;
+            color: #6793F5;
+            font-size: 56px;
+        }
+    }
+}
+
+
+
+
+
+
 ion-item.photo-label {
     --background: transparent;
 }

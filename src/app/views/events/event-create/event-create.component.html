@@ -1,70 +1,49 @@
 <ion-content>
 
-  <ion-grid>
-    <form [formGroup]="createEventForm" (submit)="onSubmit()" enctype="multipart/form-data"> 
+  <ion-grid class="main">
+    <form class="mainChild" [formGroup]="createEventForm" (submit)="onSubmit()" enctype="multipart/form-data"> 
       
-      <ion-row class="ion-justify-content-center">
-        <ion-col size-lg="4" size-md="8" size-xs="12">
-          <div class="ion-text-start">
-            <!-- {{ createEventForm.value | json }} -->
-            <h3 class="mt-0">Создание мероприятия</h3>
-          </div>
+      <ion-column class="mainLabelAndBar">
+        <div class="ion-text-start">
+          <h3 class="mt-0 mainLabelAndBarText">Создание мероприятия</h3>
+        </div>
 
-          <div class="stepper-progress">
-            <!-- <ng-container *ngIf="vkGroups">
-              <div *ngFor="let step of [].constructor(steps); let i = index" class="stepper-items">
-                <ion-button 
-                  shape="round" 
-                  (click)="goToStep(i + 1)" 
-                  [color]="stepCurrency === i + 1 ? 'primary' : !stepIsValid(i + 1) ? 'danger' : 'light'"  
-                  [disabled]="vkGroupPostSelected && ( i === 99)"
-                >
-                {{ i + 1 }}
-              </ion-button> -->
-              <!-- С зелеными шагами
-                <ion-button 
-                  shape="round" 
-                  (click)="goToStep(i + 1)" 
-                  [color]="stepCurrency === i + 1 ? 'primary' : stepCurrency > i + 1 && stepIsValid(i + 1) ? 'success' : !stepIsValid(i + 1) ? 'danger' : 'light'"  
-                  [disabled]="vkGroupPostSelected && (i === 3 || i === 4)"
-                >
-                {{ i + 1 }}
-              </ion-button> -->
+        <!-- кнопки шагов -->
 
-              
-              <!-- </div>
-            </ng-container> -->
-
-          
-            <ion-column style="display: flex; justify-content: center;">
-              <ng-container style="display: flex; justify-content: center;">
-              
-                <div *ngFor="let step of [].constructor(steps); let i = index" class="stepper-items" >
-                  <ion-button class="buttonBar"
-                    shape="round" 
-                    (click)="goToStep(i)" 
-                    [color]="stepCurrency === i ? 'primary' : !stepIsValid(i) && stepCurrency !== i? 'danger' : 'light'"  
-                  >
-                  {{ i + 1 }}
-                </ion-button>
-                <!-- С зелеными шагами
-                  <ion-button 
-                  shape="round" 
-                  (click)="goToStep(i + 3)" 
-                  [color]="stepCurrency - 2 === i + 1 ? 'primary' : stepCurrency - 2 > i + 1 && stepIsValid(i + 3) ? 'success' : !stepIsValid(i + 3) && stepCurrency - 2 !== i + 1 ? 'danger' : 'light'"  
-                >
-                  {{ i + 1 }}
-                </ion-button> -->
+        <ion-column>
+          <ion-col size-lg="4" size-md="8" size-xs="12">
+            <div class="stepper-progress">
+              <ion-column class="stepsButtonsMain">
+                <div class="stepLabel">
+                  <h2 class="stepLabelText">Шаг</h2>
                 </div>
-            
-              </ng-container>
-            </ion-column>
-            
-          </div>
-          <!-- stepStart {{ stepStart }} stepCurrency {{ stepCurrency }} -->
-            <!-- <ion-label>Шаг {{  stepStart === 3 ?  stepCurrency - 2 : stepCurrency }} из {{ vkGroups ? steps : steps - 2 }}</ion-label> -->
-        </ion-col>
-      </ion-row>
+                  <div *ngFor="let step of [].constructor(steps); let i = index" class="stepper-items" >
+                    <div class="buttonWraper">
+                          <ion-button class="buttonBar"
+                            shape="round" 
+                            (click)="goToStep(i)" 
+                            [color]="stepCurrency === i ? 'primary' : !stepIsValid(i) && stepCurrency !== i? 'danger' : 'light'"> {{ i + 1 }}
+                          </ion-button>
+
+                          <div style="margin-left: 60px;"></div>
+
+                    </div>
+                  
+
+                  </div>
+              </ion-column>
+              
+            </div>
+           
+          </ion-col>
+        </ion-column>
+
+
+      </ion-column>
+
+
+
+     
       
         <!-- шаг 1 -->
      

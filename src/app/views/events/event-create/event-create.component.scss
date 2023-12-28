@@ -112,6 +112,58 @@ ion-padding {
 }
 
 
+.main{
+    min-height: 100vh;
+    width: 90%;
+    margin: 0 auto;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+
+    .mainChild{
+        width: 70%;
+        
+        .mainLabelAndBar{
+            margin-left: 10%;
+            margin-top: 30px;
+            
+            .mainLabelAndBarText{
+                color: #4C81F7;
+                font-size: 56px;
+            }
+        }
+
+
+        .stepsButtonsMain{
+            display: flex;
+
+            .buttonWraper{
+                
+            }
+            .buttonBar{
+                box-shadow: none;
+                margin-top: 26px;
+            }
+
+            .stepLabel{
+                margin-top: 0px;
+                margin-left:vh;
+                .stepLabelText{
+                
+                    color: #4C81F7;
+                    font-size: 44px;
+                }
+
+            }
+        }
+    }
+
+   
+}
+
+
+
+
 @media screen and (min-width: 0px) and (max-width: 992px) {
     .video_content {
         display: block;

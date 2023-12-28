@@ -297,7 +297,10 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   
   //Выбор типа
   selectedType(type_id: any){
-    type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
+
+    if(/^\d+$/.test(type_id.detail.value)){
+      type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
+    }
   }
 
   //Получаем статусы и устанавливаем статус по умолчанию
@@ -538,12 +541,19 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Клик по кнопке веперед
   stepNext(){
    this.stepCurrency++ 
+   console.log(this.stepCurrency)
+   console.log(this.steps)
   }
 
   //Клик по нкопке назад
   stepPrev(){
    this.stepCurrency--
   }
+
+
+
+
+
 
   //Клик по шагу в баре
   goToStep(step: number){
