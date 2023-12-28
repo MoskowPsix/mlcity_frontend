@@ -157,6 +157,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       }),
       tap(() => {
         this.loadingService.hideLoading()  
+
       }),
       catchError((err) =>{
         this.toastService.showToast(err.error?.message || err.error?.error_msg || MessagesErrors.default, 'danger')
@@ -352,8 +353,13 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.location = item
     this.city = item.name
     this.region = item.location_parent.name
-    this.createSightForm.value.coords = [item.latitude, item.longotude]
+    this.createSightForm.patchValue({coords: [item.latitude, item.longotude]})
     this.createSightForm.patchValue({locationId: item.id})
+    this.map.target.geoObjects.removeAll()
+    this.placemark = new ymaps.Placemark([item.latitude, item.longitude])
+    this.map.target.geoObjects.add(this.placemark)
+    this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
+    this.map.target.setZoom(17)
   }
   onClearSearch(){
     this.minLengthCityesListError = false
@@ -366,15 +372,17 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     const { target, event } = e;
     this.createSightForm.patchValue({coords: [event.get('coords')[0], event.get('coords')[1]] })
     // this.createEventForm.value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
-    this.map.target.geoObjects.removeAll()
-    this.placemark= new ymaps.Placemark(this.createSightForm.value.coords)
-    this.map.target.geoObjects.add(this.placemark)
     if (!Capacitor.isNativePlatform())  {
       this.ReserveGeocoder()
     } else {
       // this.createEventForm.value.address =await this.mapService.ReserveGeocoderNative(this.createEventForm.value.coords).then(res=>{console.log("res "+res)})
       this.ReserveGeocoder()
     }
+    this.map.target.geoObjects.removeAll()
+    this.placemark = new ymaps.Placemark(this.createSightForm.value.coords)
+    this.map.target.geoObjects.add(this.placemark)
+    this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
+    this.map.target.setZoom(17)
   }
  
    // Поиск по улицам
@@ -388,15 +396,16 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     
     const search = new ymaps.SuggestView('search-map');  
     search.events.add('select',()=>{     
-    if (!Capacitor.isNativePlatform())  {
-      this.ForwardGeocoder()
-    } else {
-      // this.createEventForm.value.address=(<HTMLInputElement>document.getElementById("search-map")).value
-      // let coords = this.mapService.ForwardGeocoderNative(this.createEventForm.value.address)
-      // this.addPlacemark(coords!)
-      this.ForwardGeocoder()
-    }
+      if (!Capacitor.isNativePlatform())  {
+        this.ForwardGeocoder()
+      } else {
+        // this.createEventForm.value.address=(<HTMLInputElement>document.getElementById("search-map")).value
+        // let coords = this.mapService.ForwardGeocoderNative(this.createEventForm.value.address)
+        // this.addPlacemark(coords!)
+        this.ForwardGeocoder()
+      }
     })
+    // this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
   }
 
   //При выборе из выпадающего списка из поиска создает метку по адресу улицы

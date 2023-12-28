@@ -537,7 +537,7 @@
                               <ion-lable><h3>Город не найден...</h3></ion-lable>
                           </ion-item> -->
                           <ion-list *ngIf="!cityesListLoading">
-                            <ion-item *ngFor="let item of cityesList; let i = index" (click)="setCityes(item, i)" class="search-item" [hidden]="item.location_parent.name === 'РФ'">
+                            <ion-item *ngFor="let item of cityesList" (click)="setCityes(item, i)" class="search-item" [hidden]="item.location_parent.name === 'РФ'">
                               <ion-label>
                                   <h2>{{ item.name }}</h2>
                                   <p>{{ item.location_parent.name }}</p>

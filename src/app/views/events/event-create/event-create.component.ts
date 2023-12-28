@@ -365,6 +365,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       // this.createEventForm.value.address =await this.mapService.ReserveGeocoderNative(this.createEventForm.value.coords).then(res=>{console.log("res "+res)})
       this.ReserveGeocoder(num)
     }
+    this.maps[num].target.geoObjects.removeAll()
+    this.maps[num].target.geoObjects.add(new ymaps.Placemark([event.get('coords')[0], event.get('coords')[1]]))
+    this.maps[num].target.setBounds(new ymaps.Placemark([event.get('coords')[0], event.get('coords')[1]]).geometry?.getBounds()!, {checkZoomRange:false})
+    this.maps[num].target.setZoom(17)
   }
  
    // Поиск по улицам
@@ -730,14 +734,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.sightsList = []
   }
   setCityes(item:any, num:number){
-    //console.log(item)
-    // this.location = item
+    console.log(item.name, num)
     this.placeArrayForm[num].city = item.name
     this.placeArrayForm[num].region = item.location_parent.name
-    this.placeArrayForm[num].latitude = item.latitude
-    this.placeArrayForm[num].longitude = item.longitude
-    //console.log(item)
     this.createEventForm.value.places[num].patchValue({locationId: item.id})
+    this.maps[num].target.geoObjects.removeAll()
+    // this.placemark = new ymaps.Placemark([item.latitude, item.longitude])
+    this.maps[num].target.geoObjects.add(new ymaps.Placemark([item.latitude, item.longitude]))
+    this.maps[num].target.setBounds(new ymaps.Placemark([item.latitude, item.longitude]).geometry?.getBounds()!, {checkZoomRange:false})
+    this.maps[num].target.setZoom(17)
     this.onClearSearch()
   }
 
