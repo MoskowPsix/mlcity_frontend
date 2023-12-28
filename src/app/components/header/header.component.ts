@@ -182,58 +182,9 @@ export class HeaderComponent implements OnInit,OnDestroy {
     } else {
       this.minLengthEventsListError = true
     }
-    this.getEventsAndSightsAndFavorites()
   }
 
-  getEventsAndSightsAndFavorites(){  
-      this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsPublicForCityTab')).pipe(
-        catchError((err) =>{
-          return of(EMPTY) 
-        }),
-        takeUntil(this.destroy$)
-        ).subscribe((response:any) => {
-          if(response.events.length){
-            this.filterService.setEventsCount(response.result.total)
-          }
-        
-      })
-
-      this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsPublicForCityTab')).pipe(
-        catchError((err) =>{
-          return of(EMPTY) 
-        }),
-        takeUntil(this.destroy$)
-        ).subscribe((response:any) => {
-          if(response.sights.length){
-              this.filterService.setSightsCount(response.result.total)
-          }
-      })
-      if (this.queryBuilderService.userID) {
-        this.eventsService.getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites')).pipe(
-          catchError((err) =>{
-            return of(EMPTY) 
-          }),
-          takeUntil(this.destroy$)
-        ).subscribe((response:any) => {
-          if(response.result.length){
-            this.filterService.setFavoritesCount(response.result.total)
-          }
-          
-        })
-      
-        this.sightsService.getSightsFavorites(this.queryBuilderService.queryBuilder('sightsFavorites')).pipe(  
-          catchError((err) =>{
-            return of(EMPTY) 
-          }),
-          takeUntil(this.destroy$)
-        ).subscribe((response: any) =>{
-          if(response.result.length){
-              this.filterService.setFavoritesCount(this.filterService.favoritesCount.value + response.result.total)
-          }
-          
-        })
-    }
-  }
+ 
 
   onSegmentChanged(event:any){
     this.segment = event.detail.value
@@ -313,7 +264,6 @@ export class HeaderComponent implements OnInit,OnDestroy {
     this.menuPublic = menuPublicData
 
     //Capacitor.isNativePlatform() ? console.log('ипользуется мобильная версия') : console.log('ипользуется веб версия')
-    this.getEventsAndSightsAndFavorites()
   }
 
   ngOnDestroy(){
