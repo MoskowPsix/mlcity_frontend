@@ -73,7 +73,7 @@
           <ion-list>
             <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
               <ion-list-header>
-                <ion-label>Выберите тип мероприятия</ion-label>
+                <ion-label>Выберите тип достопримечательности</ion-label>
               </ion-list-header>
               <app-sight-type [types]="types" [isSight]="false"></app-sight-type>
               
@@ -112,14 +112,14 @@
                         <ion-list-header>
                           <ion-label>Выберите группу, из которой следует загрузить посты</ion-label>
                         </ion-list-header>  
-                        <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event)" [allowEmptySelection]="true" [value]="vkGroupSelected">
+                        <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event); openModalPost($event); saveChangeId()" [allowEmptySelection]="true" [value]="vkGroupSelected">
                           <ng-container>
                             <ion-item>
                               <ion-avatar>
                                 <img alt="ava" src="/assets/icons/favicon.png" />
                               </ion-avatar>
                               <ion-label class="ion-padding-start">Моя страница</ion-label>
-                              <ion-radio (click)="openModalPost($event)" slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
+                              <ion-radio slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
                             </ion-item>
                           </ng-container>
                           <ng-container *ngFor="let group of vkGroups">
@@ -131,7 +131,7 @@
                                 </ion-avatar>
                                 <ion-label class="ion-padding-start">{{ group.name }}</ion-label>
 
-                                <ion-radio (click)="openModalPost($event)" slot="end" value="-{{ group.id }}"></ion-radio>
+                                <ion-radio  slot="end" value="-{{ group.id }}"></ion-radio>
                               </ion-item>
 
                               <div>

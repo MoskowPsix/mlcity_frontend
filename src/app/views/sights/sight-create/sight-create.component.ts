@@ -63,9 +63,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   
   inputValue: string = ""
   user: any
-  stepStart: number = 1
-  stepCurrency: number = 1
-  steps:number = 12
+  stepStart: number = 0
+  stepCurrency: number = 0
+  steps:number = 5
   vkGroups: any
   //Создать переменную для постов со страницы
   vkGroupSelected: number | null = null
@@ -174,14 +174,14 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   //Устанавливаем шаги
   setSteps(){
-    if(this.vkGroups){
-      this.stepStart = 1
-      this.stepCurrency = 1
-    } else {
-      this.stepStart = 3
-      this.stepCurrency = 3
-      //this.nextButtonDisable = true
-    }
+    // if(this.vkGroups){
+    //   this.stepStart = 1
+    //   this.stepCurrency = 1
+    // } else {
+    //   this.stepStart = 3
+    //   this.stepCurrency = 3
+    //   //this.nextButtonDisable = true
+    // }
   }
 
   //Выбираем группу
@@ -483,18 +483,12 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   
   //Клик по кнопке веперед
   stepNext(){
-    if(this.stepCurrency !== this.steps){
-      this.vkGroupPostSelected && this.stepCurrency === 3 ? this.stepCurrency = this.stepCurrency + 3 : this.stepCurrency++
-     // this.disabledNextButton()
-    }   
+   this.stepCurrency++ 
   }
 
   //Клик по нкопке назад
   stepPrev(){
-    if(this.stepCurrency !== this.stepStart){
-      this.vkGroupPostSelected && this.stepCurrency === 6 ? this.stepCurrency = this.stepCurrency - 3 : this.stepCurrency--
-     // this.disabledNextButton()
-    }   
+   this.stepCurrency--
   }
 
   //Клик по шагу в баре

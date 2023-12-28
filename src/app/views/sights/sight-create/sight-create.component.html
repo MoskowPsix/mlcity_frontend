@@ -11,47 +11,30 @@
             </div>
   
             <div class="stepper-progress">
-              <ng-container *ngIf="vkGroups">
-                <div *ngFor="let step of [].constructor(steps); let i = index" class="stepper-items">
-                  <ion-button 
-                    shape="round" 
-                    (click)="goToStep(i + 1)" 
-                    [color]="stepCurrency === i + 1 ? 'primary' : !stepIsValid(i + 1) ? 'danger' : 'light'"  
-                    [disabled]="vkGroupPostSelected && (i === 15)"
-                  >
-                  {{ i + 1 }}
-                </ion-button>
-                <!-- С зелеными шагами
-                  <ion-button 
-                    shape="round" 
-                    (click)="goToStep(i + 1)" 
-                    [color]="stepCurrency === i + 1 ? 'primary' : stepCurrency > i + 1 && stepIsValid(i + 1) ? 'success' : !stepIsValid(i + 1) ? 'danger' : 'light'"  
-                    [disabled]="vkGroupPostSelected && (i === 3 || i === 4)"
-                  >
-                  {{ i + 1 }}
-                </ion-button> -->
-                </div>
-              </ng-container>
-  
-              <ng-container *ngIf="!vkGroups">
-                <div *ngFor="let step of [].constructor(steps - 2); let i = index" class="stepper-items" >
-                  <ion-button 
+
+              <ion-column style="display: flex; justify-content: center;">
+                <ng-container style="display: flex; justify-content: center;">
+                
+                  <div *ngFor="let step of [].constructor(steps); let i = index" class="stepper-items" >
+                    <ion-button class="buttonBar"
+                      shape="round" 
+                      (click)="goToStep(i)" 
+                      [color]="stepCurrency === i ? 'primary' : !stepIsValid(i) && stepCurrency !== i? 'danger' : 'light'"  
+                    >
+                    {{ i + 1 }}
+                  </ion-button>
+                  <!-- С зелеными шагами
+                    <ion-button 
                     shape="round" 
                     (click)="goToStep(i + 3)" 
-                    [color]="stepCurrency - 2 === i + 1 ? 'primary' : !stepIsValid(i + 3) && stepCurrency - 2 !== i + 1 ? 'danger' : 'light'"  
+                    [color]="stepCurrency - 2 === i + 1 ? 'primary' : stepCurrency - 2 > i + 1 && stepIsValid(i + 3) ? 'success' : !stepIsValid(i + 3) && stepCurrency - 2 !== i + 1 ? 'danger' : 'light'"  
                   >
-                  {{ i + 1 }}
-                </ion-button>
-                <!-- С зелеными шагами
-                  <ion-button 
-                  shape="round" 
-                  (click)="goToStep(i + 3)" 
-                  [color]="stepCurrency - 2 === i + 1 ? 'primary' : stepCurrency - 2 > i + 1 && stepIsValid(i + 3) ? 'success' : !stepIsValid(i + 3) && stepCurrency - 2 !== i + 1 ? 'danger' : 'light'"  
-                >
-                  {{ i + 1 }}
-                </ion-button> -->
-                </div>
-              </ng-container>
+                    {{ i + 1 }}
+                  </ion-button> -->
+                  </div>
+              
+                </ng-container>
+              </ion-column>
             </div>
             <!-- stepStart {{ stepStart }} stepCurrency {{ stepCurrency }} -->
               <!-- <ion-label>Шаг {{  stepStart === 3 ?  stepCurrency - 2 : stepCurrency }} из {{ vkGroups ? steps : steps - 2 }}</ion-label> -->
@@ -59,51 +42,23 @@
         </ion-row>
         
           <!-- шаг 1 -->
-        <ion-row [hidden]="stepCurrency !== 1" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
+          <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
+            <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
             <ion-list>
-  
+              <ion-radio-group formControlName="type" (ionChange)="selectedType($event);" [value]="typeSelected" required>
                 <ion-list-header>
-                  <ion-label>Выберите группу, из которой следует загрузить посты</ion-label>
-                </ion-list-header>  
-  
-                <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event)" [allowEmptySelection]="true" [value]="vkGroupSelected">
-                  <ng-container>
-                    <ion-item>
-                      <ion-avatar>
-                        <img alt="ava" src="/assets/icons/favicon.png" />
-                      </ion-avatar>
-                      <ion-label class="ion-padding-start">Моя страница</ion-label>
-                      <ion-radio slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
-                    </ion-item>
-                  </ng-container>
-                    <ng-container *ngFor="let group of vkGroups">
-                      <ion-item>
-                        <ion-avatar>
-                          <img alt="ava" src="{{ group.photo_50 }}" />
-                        </ion-avatar>
-                        <ion-label class="ion-padding-start">{{ group.name }}</ion-label>
-                        <ion-radio slot="end" value="-{{ group.id }}"></ion-radio>
-                      </ion-item>
-                  </ng-container>
-                </ion-radio-group>
-                <!-- Грузим чужие посты из вк, временное решение -->
-                <ng-container>
-                  <ion-item>
-                    <ion-label class="ion-padding-start">
-                      <ion-input label="Url input" type="text" placeholder="URL группы" (ionChange)="onFocusPlace($event)"></ion-input>
-                    </ion-label>
-                      <ion-button (click)="setVkPostsByGroupURL(); stepNext()">Загрузить URL</ion-button>
-                  </ion-item>
-                </ng-container>
-  
+                  <ion-label>Выберите тип достопримечательности</ion-label>
+                </ion-list-header>
+                <app-sight-type [types]="types" [isSight]="true"></app-sight-type>
+                
+              </ion-radio-group>
             </ion-list>
-          </ion-col>
-        </ion-row>
+            </ion-col>
+          </ion-row>
   
         <!-- шаг 2 -->
-        <ion-row  [hidden]="stepCurrency !== 2" class="ion-justify-content-center" >
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 2" @fade>
+        <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center" >
+          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
             <ion-list-header>
               <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание достопримечательности и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
             </ion-list-header>
