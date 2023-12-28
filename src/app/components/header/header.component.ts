@@ -122,7 +122,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     }
   }
 
-  //Устанавливаем город, регион и координаты в локал сторадж и всервис
+  //Устанавливаем город, регион и координаты в локал сторадж и в сервис
   onSelectedCity(item:any){  
     this.city = item.name
     this.region = item.location_parent.name
@@ -132,7 +132,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     //Получаем координаты по городу и записываем их
     this.mapService.ForwardGeocoder(item.name + '' + item.location_parent.name).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.filterService.setLocationLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
-      this.filterService.setlocationLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
+      this.filterService.setLocationLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
     this.filterService.changeFilter.next(true)
     this.filterService.changeCityFilter.next(true)

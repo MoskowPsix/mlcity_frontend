@@ -88,7 +88,7 @@ export class FilterService {
     return localStorage.getItem('locationLatitude')
   }
 
-  setlocationLongitudeTolocalStorage(locationLongitude:string = this.locationLongitude.value){
+  setLocationLongitudeTolocalStorage(locationLongitude:string = this.locationLongitude.value){
     localStorage.setItem('locationLongitude', locationLongitude)
     this.locationLongitude.next(locationLongitude)
   }

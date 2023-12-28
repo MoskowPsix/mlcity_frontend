@@ -206,7 +206,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     //Получаем координаты по городу и записываем их
     this.mapService.ForwardGeocoder(item.name + '' + item.location_parent.name).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.filterService.setLocationLatitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[0].toString())
-      this.filterService.setlocationLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
+      this.filterService.setLocationLongitudeTolocalStorage(value.geoObjects.get(0).geometry.getCoordinates()[1].toString())
     })
     this.filterService.changeFilter.next(true)
     this.filterService.changeCityFilter.next(true)
