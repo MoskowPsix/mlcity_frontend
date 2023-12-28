@@ -77,6 +77,10 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   typesLoaded: boolean = false
   typeSelected: number | null = null
   statuses: IStatus[] = []
+  openModalPostValue:boolean = false
+  openModalPostCount:number = 0
+  openModalGroupValue:boolean = false
+  vkGroupModalSelected:any = 0
   statusesLoaded: boolean = false
   statusSelected: number | null = null
   city:string  = 'Заречный'
@@ -194,6 +198,56 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPosts = null
     }
   }
+
+
+  openModalPost(event:any = null){
+  
+    if(this.vkGroupSelected == null){
+      this.vkGroupSelected = this.vkGroupModalSelected
+      this.setVkPostsByGroupID(this.vkGroupModalSelected)
+    }
+    
+      this.openModalPostValue = true    
+          
+      console.log(this.vkGroupSelected)
+    
+ }
+
+
+ saveChangeId(){
+  if(this.vkGroupSelected !=null){
+    this.vkGroupModalSelected = this.vkGroupSelected
+  }
+  console.log(this.vkGroupModalSelected)
+ }
+
+
+
+
+ closeModalPost(){
+  this.openModalPostValue = false
+  
+ }
+
+
+ openModalGroup(){
+  this.openModalGroupValue = true
+ }
+
+ closeModalGroup(){
+  this.openModalGroupValue = false
+ }
+
+ closeAllModals(){
+  this.openModalPostValue = false
+  this.openModalGroupValue = false
+ }
+
+
+
+
+
+
 
   //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){

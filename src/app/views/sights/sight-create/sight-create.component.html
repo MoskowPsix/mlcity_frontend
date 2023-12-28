@@ -58,253 +58,396 @@
   
         <!-- шаг 2 -->
         <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center" >
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
-            <ion-list-header>
-              <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание достопримечательности и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
-            </ion-list-header>
-            <div *ngIf="vkGroupPosts; else notSelectedGroup">              
-              <!-- Скелетна анимация -->
-              <ng-container *ngIf="!vkGroupPostsLoaded">
-                <ng-container *ngFor="let key of [1,2]">
-                  <ion-card>
-                    
-                    <ion-item class="ion-margin-end">
-                      <ion-avatar slot="start">
-                        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                      </ion-avatar>
-                      <ion-label>
-                        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                      </ion-label>
-                    </ion-item>
-  
-  
-                    <ion-card-content>
-                      <ion-skeleton-text [animated]="true" style="height: 100px;"></ion-skeleton-text>
-                    </ion-card-content>
-  
-                    <ion-row class="ion-padding-horizontal">
-                      <ng-container  *ngFor="let key of [1,2,3]">
-                        <ion-col size="4" class="ion-align-self-center ion-justify-content-center">
-                          <ion-skeleton-text [animated]="true" style="height: 80px;"></ion-skeleton-text>
-                        </ion-col>             
-                      </ng-container> 
-                    </ion-row>
-                    
-                  </ion-card>
-                  
-                </ng-container>
-              </ng-container>
-  
-              <ng-container *ngIf="vkGroupPostsLoaded">
-                <ng-container *ngFor="let post of vkGroupPosts.items; let i = index">
-                  <ion-card *ngIf="!post.copy_history">
-                    <ng-container *ngFor="let profile of vkGroupPosts.profiles; index as i" class="card-profile">
-                      <ion-item *ngIf="i === 0" class="ion-margin-end">
-                        <ion-avatar slot="start">
-                          <img alt="ava" src="{{ profile.photo_50 }}" />
-                        </ion-avatar>
-                        <ion-label>{{ profile.first_name }}</ion-label>
-                      </ion-item>
-                    </ng-container>
-  
-                    <ion-card-content *ngIf="post.text">
-                      <app-read-more text="{{ post.text }}"></app-read-more>
-                    </ion-card-content>
-                    <!-- Фото во вложении -->
-                    <swiper-container 
-                      #swiper
-                      autoplay="true"
-                      autoplay-delay="5000"
-                      autoplay-disableOnInteraction="false"
-                      navigation="true"
-                      [pagination]="true"
-                      [grabCursor]="true"
-                      [zoom]="false"
-                      [slidesPerView]="1"
-                      [centeredSlides]="true"
-                      [followFinger]="true" 
-                      [loop]="true" 
-                      [initialSlide]="0"  
-                      *ngIf="post.attachments" class="card-container-content">
-                      <ng-container *ngFor="let attachment of post.attachments">
-                        <ng-container *ngIf="attachment.photo" >
-                          <ng-container *ngFor="let photo of attachment.photo.sizes">
-                            <swiper-slide *ngIf="photo.type === 'x'">
-                              <a href="{{photo.url}}" target="_blank"><img alt="ava" [src]="photo.url"/></a>
-                            </swiper-slide>
-                          </ng-container>
-                        </ng-container> 
-                      </ng-container> 
-                    </swiper-container>
+        <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
 
-                    <ng-container *ngIf="post.attachments" class="card-container-content">
-                      <ng-container *ngFor="let attachment of post.attachments">
-                        <!-- Видео во вложении -->
-                        <ng-container *ngIf="attachment.video" >
-                          <ion-col class="video_col">
-                                <span class="video-title">{{ attachment.video.title }}</span>
-                                <iframe class="video_content" [src]="getUrlVideo(attachment.video.owner_id, attachment.video.id)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
-                                <p>Описание видео: </p>
-                                <app-read-more *ngIf="attachment.video.description" text="{{ attachment.video.description }}"></app-read-more>
-                            </ion-col>    
-                        </ng-container>
+          <ion-column style="display: flex;">
 
-                        <!-- Ссылки во вложении -->
-                        <ion-card ng-container *ngIf="attachment.link">
-                          <ion-item button detail="true" href="{{ attachment.link.url }}" *ngIf="attachment.link">
-                            <ion-thumbnail slot="start">
-                                <img src="{{attachment.link.photo.sizes[1].url}}"/>
-                            </ion-thumbnail>
-                            <ion-label>
-                              <h3>{{ attachment.link.title }}</h3>
-                              <p>{{attachment.link.caption}}</p>
-                            </ion-label>
-                          </ion-item>
-                        </ion-card>
-                      </ng-container>
-                    </ng-container>
-                    
-                    <ion-footer>
-                      <div class="ion-text-end">
-                        <ion-button (click)="selectedVkGroupPost(post)" class="ion-margin" [color]="vkGroupPostSelected?.id === post.id ? 'success' : 'medium'">
-                          <ion-icon *ngIf="vkGroupPostSelected?.id === post.id" name="checkmark-outline" slot="start"></ion-icon>
-                          {{ vkGroupPostSelected?.id === post.id ? 'Выбрано' : 'Выбрать'}} 
-                        </ion-button>
-                      </div>  
-                    </ion-footer>
-                  </ion-card>
-                  
-                </ng-container>
-              </ng-container>
-            </div>
+
+            <ion-button (click)="openModalGroup()" class="selectGroup">
+
+              Загрузить пост
+
+            </ion-button>
             
-            <ng-template #notSelectedGroup>
-              <ion-row>
-                <ion-list-header>
-                  <ion-note color="medium" class="ion-padding-vertical">Вы не выбрали группу, для выбора вернитесь назад и выберите группу (шаг 1)</ion-note>
-                </ion-list-header>
+
+            <ion-modal backdropDismiss="false" [isOpen] ="openModalGroupValue" [canDismiss]="openModalGroupValue">
+
+
+
+              <ng-template>
+
+                <ion-content>
+
+
+
+                    <ion-list>
+          
+                        <ion-list-header>
+                          <ion-label>Выберите группу, из которой следует загрузить посты</ion-label>
+                        </ion-list-header>  
+                        <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event); openModalPost($event); saveChangeId()" [allowEmptySelection]="true" [value]="vkGroupSelected">
+                          <ng-container>
+                            <ion-item>
+                              <ion-avatar>
+                                <img alt="ava" src="/assets/icons/favicon.png" />
+                              </ion-avatar>
+                              <ion-label class="ion-padding-start">Моя страница</ion-label>
+                              <ion-radio slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
+                            </ion-item>
+                          </ng-container>
+                          <ng-container *ngFor="let group of vkGroups">
+                            
+
+                              <ion-item>
+                                <ion-avatar>
+                                  <img alt="ava" src="{{ group.photo_50 }}" />
+                                </ion-avatar>
+                                <ion-label class="ion-padding-start">{{ group.name }}</ion-label>
+
+                                <ion-radio  slot="end" value="-{{ group.id }}"></ion-radio>
+                              </ion-item>
+
+                              <div>
+                                
+                              </div>
+                          </ng-container>
+                        </ion-radio-group>
+                        <!-- Грузим чужие посты из вк, временное решение -->
+                        <!-- <ng-container>
+                          <ion-item>
+                            <ion-label class="ion-padding-start">
+                              <ion-input label="Url input" type="text" placeholder="URL группы" (ionChange)="onFocusPlace($event)"></ion-input>
+                            </ion-label>
+                              <ion-button  (click)="setVkPostsByGroupURL();  stepNext();">Загрузить URL</ion-button>
+                          </ion-item>
+                        </ng-container> -->
+                        
+                    </ion-list>
+           
+                   
+
+                    <ion-button (click)="closeModalGroup()">
+                      Продолжить в редакторе
+                    </ion-button>
+
+
+                </ion-content>
+
+              </ng-template>
+
+
+            </ion-modal>
+
+
+            <ion-modal backdropDismiss="false" [isOpen]="openModalPostValue">
+
+                      <ng-template>
+                          <ion-content>
+                            <ion-button (click)="closeModalPost()">
+                              Вернутся к выбору группы
+                            </ion-button>
+
+                            <ion-button (click)="closeAllModals()">
+                              Закрыть
+                            </ion-button>
+
+                            <ion-list-header>
+                              <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
+                            </ion-list-header>
+                            
+                            <div *ngIf="vkGroupPosts; else notSelectedGroup">              
+                              <!-- Скелетна анимация -->
+                              <ng-container *ngIf="!vkGroupPostsLoaded">
+                                <ng-container *ngFor="let key of [1,2]">
+                                  <ion-card>
+                                    
+                                    <ion-item class="ion-margin-end">
+                                      <ion-avatar slot="start">
+                                        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                                      </ion-avatar>
+                                      <ion-label>
+                                        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                                      </ion-label>
+                                    </ion-item>
+                  
+                  
+                                    <ion-card-content>
+                                      <ion-skeleton-text [animated]="true" style="height: 100px;"></ion-skeleton-text>
+                                    </ion-card-content>
+                  
+                                    <ion-row class="ion-padding-horizontal">
+                                      <ng-container  *ngFor="let key of [1,2,3]">
+                                        <ion-col size="4" class="ion-align-self-center ion-justify-content-center">
+                                          <ion-skeleton-text [animated]="true" style="height: 80px;"></ion-skeleton-text>
+                                        </ion-col>             
+                                      </ng-container> 
+                                    </ion-row>
+                                    
+                                  </ion-card>
+                                  
+                                </ng-container>
+                              </ng-container>
+                  
+                              <ng-container *ngIf="vkGroupPostsLoaded">
+                                <ng-container *ngFor="let post of vkGroupPosts.items; let i = index">
+                                  <ion-card *ngIf="!post.copy_history">
+                                    <ng-container *ngIf="vkGroupPosts.profiles">
+                                    <ng-container *ngFor="let profile of vkGroupPosts.profiles; index as i" class="card-profile">
+                                      <ion-item *ngIf="i === 0" class="ion-margin-end">
+                                        <ion-avatar slot="start">
+                                          <img alt="ava" src="{{ profile.photo_50 }}" />
+                                        </ion-avatar>
+                                        <ion-label>{{ profile.first_name }}</ion-label>
+                                      </ion-item>
+                                    </ng-container>
+                                    </ng-container>
+                                    
+                                    <ion-card-content *ngIf="post.text">
+                                      <app-read-more text="{{ post.text }}"></app-read-more>
+                                    </ion-card-content>
+                                    <!-- Фото во вложении -->
+                                    <swiper-container 
+                                      #swiper
+                                      autoplay="true"
+                                      autoplay-delay="5000"
+                                      autoplay-disableOnInteraction="false"
+                                      navigation="true"
+                                      [pagination]="true"
+                                      [grabCursor]="true"
+                                      [zoom]="false"
+                                      [slidesPerView]="1"
+                                      [centeredSlides]="true"
+                                      [followFinger]="true" 
+                                      [loop]="true" 
+                                      [initialSlide]="0"  
+                                      *ngIf="post.attachments" class="card-container-content">
+                                      <ng-container *ngFor="let attachment of post.attachments">
+                                        <ng-container *ngIf="attachment.photo" >
+                                          <ng-container *ngFor="let photo of attachment.photo.sizes">
+                                            <swiper-slide *ngIf="photo.type === 'x'">
+                                              <a href="{{photo.url}}" target="_blank"><img alt="ava" [src]="photo.url"/></a>
+                                            </swiper-slide>
+                                          </ng-container>
+                                        </ng-container> 
+                                      </ng-container> 
+                                    </swiper-container>
+                  
+                                    <ng-container *ngIf="post.attachments" class="card-container-content">
+                                      <ng-container *ngFor="let attachment of post.attachments">
+                                        <!-- Видео во вложении -->
+                                        <ng-container *ngIf="attachment.video" >
+                                          <ion-col class="video_col">
+                                                <span class="video-title">{{ attachment.video.title }}</span>
+                                                <iframe class="video_content" [src]="attachment.video.owner_id | safeVideoById:attachment.video.id" allow="autoplay; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen width="100%" height="100%"></iframe>
+                                                <p>Описание видео: </p>
+                                                <app-read-more *ngIf="attachment.video.description" text="{{ attachment.video.description }}"></app-read-more>
+                                            </ion-col>    
+                                        </ng-container>
+                  
+                                        <!-- Ссылки во вложении -->
+                                        <ion-card ng-container *ngIf="attachment.link">
+                                          <ion-item button detail="true" href="{{ attachment.link.url }}" *ngIf="attachment.link">
+                                            <ion-thumbnail slot="start">
+                                                <img src="{{attachment.link.photo.sizes[1].url}}"/>
+                                            </ion-thumbnail>
+                                            <ion-label>
+                                              <h3>{{ attachment.link.title }}</h3>
+                                              <p>{{attachment.link.caption}}</p>
+                                            </ion-label>
+                                          </ion-item>
+                                        </ion-card>
+                                      </ng-container>
+                                    </ng-container>
+                                    
+                                    <ion-footer>
+                                      <div class="ion-text-end">
+                                        <ion-button (click)="closeAllModals()" (click)="selectedVkGroupPost(post)" class="ion-margin" [color]="vkGroupPostSelected?.id === post.id ? 'success' : 'medium'">
+                                          <ion-icon  *ngIf="vkGroupPostSelected?.id === post.id" name="checkmark-outline" slot="start"></ion-icon>
+                                          {{ vkGroupPostSelected?.id === post.id ? 'Выбрано' : 'Выбрать'}} 
+                                        </ion-button>
+                                      </div>  
+                                    </ion-footer>
+                                  </ion-card>
+                                  
+                                </ng-container>
+                              </ng-container>
+                            </div>
+                            
+                            <ng-template #notSelectedGroup>
+                              <ion-row>
+                                <ion-list-header>
+                                  <ion-note color="medium" class="ion-padding-vertical">Вы не выбрали группу, для выбора вернитесь назад и выберите группу (шаг 1)</ion-note>
+                                </ion-list-header>
+                              </ion-row>
+                            </ng-template>
+
+
+                          </ion-content>
+                      </ng-template>
+
+            </ion-modal>
+
+            
+
+
+
+
+
+            <ion-column class="nameParrent">
+              <ion-row size-lg="4" size-md="8" size-xs="12" @fade>
+                <ion-item fill="outline">
+                  <ion-label position="floating">Название достопримечательности</ion-label>
+                  <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
+                  <ion-input formControlName="name" type="text" name="name" required></ion-input>
+                </ion-item>
+
+                
+                  <ion-item fill="outline">
+                    <ion-label position="floating">Организатор достопримечательности</ion-label>
+                    <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
+                    <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
+                  </ion-item>
+
+                  <div *ngIf="createSightForm.controls['sponsor'].invalid && createSightForm.controls['sponsor'].dirty"  class="validation">
+                    <ion-note *ngIf="!createSightForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор достопримечательности" должно содержать минимум 3 символа</ion-note>
+                  </div>
+               
+
+                <div *ngIf="createSightForm.controls['name'].invalid && createSightForm.controls['name'].dirty"  class="validation">
+                  <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название достопримечательности должно содержать минимум 3 символа</ion-note>
+                </div>
               </ion-row>
-            </ng-template>
-          </ion-col>
-        </ion-row>
+
+            </ion-column>
+
+          </ion-column>
+
+        
+        </ion-col>
+      </ion-row>
         
         <!-- шаг 3 -->
-        <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 3" @fade>
-            <ion-item fill="outline">
-              <ion-label position="floating">Название достопримечательности</ion-label>
-              <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
-              <ion-input formControlName="name" type="text" name="name" required></ion-input>
+        <ion-row  [hidden]="stepCurrency !== 2" class="ion-justify-content-center">
+         
+            
+  
+            <ion-item>
+              <ion-label position="floating">Об достопримечательности</ion-label>
+                <ion-textarea 
+                  formControlName="description" 
+                  placeholder="Введите информацию о достопримечательности..." 
+                  [autoGrow]="true" 
+                  required
+                >
+              </ion-textarea>
+
+
+
+              <div *ngIf="createSightForm.controls['description'].invalid && createSightForm.controls['description'].dirty"  class="validation">
+                <ion-note *ngIf="!createSightForm.controls['description'].hasError('minLength')" color="danger">поле "Об Достопримечательности" должно содержать минимум 10 символа</ion-note>
+              </div>
+
             </ion-item>
-            <div *ngIf="createSightForm.controls['name'].invalid && createSightForm.controls['name'].dirty"  class="validation">
-              <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название достопримечательности должно содержать минимум 3 символа</ion-note>
-            </div>
-          </ion-col>
+
+
+
+            <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
+              <!-- <div *ngIf="createSightForm.hasError('dateInvalid')">
+                <ion-note color="danger"> Время работы или время посещения.</ion-note>
+              </div> -->
+              <ion-list>
+               <ion-item>
+                  <ion-label>
+                    <h3>Описание времени работы или времени посещения достопримечательности.</h3>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-textarea 
+                  formControlName="workTime" 
+                  placeholder="..." 
+                  [autoGrow]="true" 
+                  required
+                  >
+                  </ion-textarea>
+                </ion-item>
+              </ion-list>
+  
+    
+            </ion-col>
+
+       
+            <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
+              <!-- <ion-label position="floating">Добавление фотографий (*.png, *.jpeg)</ion-label> -->
+              <div  class="ion-margin-vertical">
+                <div class="upload-overlay ion-activatable custom-parent" (click)="filesUpload.click()">  
+                  <ion-item lines="none" class="photo-label">
+                    <ion-icon name="images" slot="start" color="primary"></ion-icon>
+                    <ion-label color="medium">Выбрать фото (*.png, *.jpeg)</ion-label>
+                  </ion-item>
+                  <ion-ripple-effect></ion-ripple-effect>
+                </div>
+                <input formControlName="files_img" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
+                
+                <ion-note *ngIf="createSightForm.controls['files_img'].hasError('requiredFileType')" color="danger">Допустимые форматы *.png, *.jpeg</ion-note>
+    
+                <!-- Image Preview -->
+                <ion-row  *ngIf="imagesPreview">
+                  <ng-container *ngFor="let img of imagesPreview">
+                    <ion-col size="4" class="ion-align-self-center ion-justify-content-center">
+                      <img [src]="img" alt="preview">
+                      <ion-button size="small" color="danger" expand="block" (click)="deleteFile(img)">
+                        <ion-icon name="trash-bin" slot="start"></ion-icon>
+                        Удалить
+                      </ion-button>
+                    </ion-col>    
+                  </ng-container>    
+                </ion-row>
+              </div>
+    
+              <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
+                <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
+                  <ng-conteiner *ngIf="attachment.type === 'photo'">
+  
+                    <ng-container *ngFor="let photo of attachment.photo.sizes">
+                      <ion-col *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
+                        <img alt="ava" src="{{ photo.url }}" /> 
+                      </ion-col>     
+                    </ng-container>
+  
+                  </ng-conteiner>
+                </ng-container> 
+              </ion-row>
+    
+              <ion-row *ngIf="vkGroups && vkGroupPostSelected && !vkGroupPostSelected.attachments.length" class="ion-padding-vertical">
+                <ion-col class="ion-align-self-center ion-justify-content-center">
+                  <ion-label color="medium">В выбранном посте нету фотографиий</ion-label>
+                </ion-col> 
+              </ion-row>
+    
+              <!-- <ion-row *ngIf="vkGroups && !vkGroupPostSelected" class="ion-padding-vertical">
+                <ion-col class="ion-align-self-center ion-justify-content-center">
+                  <ion-label color="medium">Вы не выбрали пост, невозможно подгрузить фотографии</ion-label>
+                </ion-col> 
+              </ion-row> -->
+            </ion-col>
+
+
+
         </ion-row>
         
         <!-- шаг 4  -->
         <ion-row  [hidden]="stepCurrency !== 4" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 4" @fade>
-            <div *ngIf="createSightForm.controls['description'].invalid && createSightForm.controls['description'].dirty"  class="validation">
-              <ion-note *ngIf="!createSightForm.controls['description'].hasError('minLength')" color="danger">поле "Об Достопримечательности" должно содержать минимум 10 символа</ion-note>
-            </div>
-  
-            <ion-item>
-              <ion-label position="floating">Об достопримечательности</ion-label>
-              <ion-textarea 
-                formControlName="description" 
-                placeholder="Введите информацию о достопримечательности..." 
-                [autoGrow]="true" 
-                required
-              >
-            </ion-textarea>
-            </ion-item>
-          </ion-col>
+          
         </ion-row>
               
         <!-- шаг 5 -->
         <ion-row  [hidden]="stepCurrency !== 5" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 5" @fade>
-            <!-- <ion-label position="floating">Добавление фотографий (*.png, *.jpeg)</ion-label> -->
-            <div  class="ion-margin-vertical">
-              <div class="upload-overlay ion-activatable custom-parent" (click)="filesUpload.click()">  
-                <ion-item lines="none" class="photo-label">
-                  <ion-icon name="images" slot="start" color="primary"></ion-icon>
-                  <ion-label color="medium">Выбрать фото (*.png, *.jpeg)</ion-label>
-                </ion-item>
-                <ion-ripple-effect></ion-ripple-effect>
-              </div>
-              <input formControlName="files_img" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
-              
-              <ion-note *ngIf="createSightForm.controls['files_img'].hasError('requiredFileType')" color="danger">Допустимые форматы *.png, *.jpeg</ion-note>
-  
-              <!-- Image Preview -->
-              <ion-row  *ngIf="imagesPreview">
-                <ng-container *ngFor="let img of imagesPreview">
-                  <ion-col size="4" class="ion-align-self-center ion-justify-content-center">
-                    <img [src]="img" alt="preview">
-                    <ion-button size="small" color="danger" expand="block" (click)="deleteFile(img)">
-                      <ion-icon name="trash-bin" slot="start"></ion-icon>
-                      Удалить
-                    </ion-button>
-                  </ion-col>    
-                </ng-container>    
-              </ion-row>
-            </div>
-  
-            <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
-              <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
-                <ng-conteiner *ngIf="attachment.type === 'photo'">
-
-                  <ng-container *ngFor="let photo of attachment.photo.sizes">
-                    <ion-col *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
-                      <img alt="ava" src="{{ photo.url }}" /> 
-                    </ion-col>     
-                  </ng-container>
-
-                </ng-conteiner>
-              </ng-container> 
-            </ion-row>
-  
-            <ion-row *ngIf="vkGroups && vkGroupPostSelected && !vkGroupPostSelected.attachments.length" class="ion-padding-vertical">
-              <ion-col class="ion-align-self-center ion-justify-content-center">
-                <ion-label color="medium">В выбранном посте нету фотографиий</ion-label>
-              </ion-col> 
-            </ion-row>
-  
-            <!-- <ion-row *ngIf="vkGroups && !vkGroupPostSelected" class="ion-padding-vertical">
-              <ion-col class="ion-align-self-center ion-justify-content-center">
-                <ion-label color="medium">Вы не выбрали пост, невозможно подгрузить фотографии</ion-label>
-              </ion-col> 
-            </ion-row> -->
-          </ion-col>
+         
         </ion-row>
         
         <!-- шаг 6 -->
         <ion-row  [hidden]="stepCurrency !== 6" class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 6" @fade>
-            <!-- <div *ngIf="createSightForm.hasError('dateInvalid')">
-              <ion-note color="danger"> Время работы или время посещения.</ion-note>
-            </div> -->
-            <ion-list>
-             <ion-item>
-                <ion-label>
-                  <h3>Описание времени работы или времени посещения достопримечательности.</h3>
-                </ion-label>
-              </ion-item>
-              <ion-item>
-                <ion-textarea 
-                formControlName="workTime" 
-                placeholder="..." 
-                [autoGrow]="true" 
-                required
-                >
-                </ion-textarea>
-              </ion-item>
-            </ion-list>
-
-  
-          </ion-col>
+       
         </ion-row>
         
         <!-- шаг 7 -->
