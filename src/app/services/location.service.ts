@@ -29,4 +29,11 @@ export class LocationService {
     }
     return this.http.get<Location[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/locationWithRegion`, { params: {...params} } )
   }
+  getLocationByCoords(coords: number[]) {
+    const params = {
+      latitude: coords[0], 
+      longitude: coords[1] 
+    }
+    return this.http.get<Location>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/locations/search/coords`, { params: {...params} } )
+  }
 }

@@ -233,13 +233,13 @@ export class MapService {
   //Устанавливаем дефолтные значения после подтверждения диалога на смену города
   setCoordsFromChangeCityDialog(){
     // Запрашиваем ид
-    this.locationService.getLocationsWithRegion(this.geolocationCity.value, this.geolocationRegion.value).pipe().subscribe((response: any) => {
-      this.filterService.setLocationTolocalStorage(response.locations.id)
+    this.locationService.getLocationByCoords([this.geolocationLatitude.value, this.geolocationLongitude.value]).pipe().subscribe((response: any) => {
+      this.filterService.setLocationTolocalStorage(response.location.id)
     })
-    this.filterService.setLocationTolocalStorage(this.geolocationCity.value)
-    this.filterService.setLocationTolocalStorage(this.geolocationRegion.value)
+    // this.filterService.setLocationTolocalStorage(this.geolocationCity.value)
+    // this.filterService.setLocationTolocalStorage(this.geolocationRegion.value)
     this.filterService.setLocationLatitudeTolocalStorage(this.geolocationLatitude.value.toString())
-    this.filterService.setlocationLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
+    this.filterService.setLocationLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
   }
 
   hideChangeCityDialog(){
@@ -251,7 +251,7 @@ export class MapService {
     if (!this.filterService.getLocationFromlocalStorage()){
       this.filterService.setLocationTolocalStorage()
       this.filterService.setLocationLatitudeTolocalStorage()
-      this.filterService.setlocationLongitudeTolocalStorage()
+      this.filterService.setLocationLongitudeTolocalStorage()
 
       cityCoords.push(parseFloat(this.filterService.locationLatitude.value), parseFloat(this.filterService.locationLongitude.value))
     } else {
