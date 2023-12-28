@@ -29,6 +29,7 @@ import { FilterService } from 'src/app/services/filter.service';
 import { LocationService } from 'src/app/services/location.service';
 import { SightsService } from 'src/app/services/sights.service';
 import { SafeUrlPipe } from './event-create.pipe';
+import { Router } from '@angular/router';
 
 
 
@@ -80,6 +81,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   vkGroups: any
   //Создать переменную для постов со страницы
   vkGroupSelected: number | null = null
+  vkGroupModalSelected:any = 0
   vkGroupPosts: any
   vkGroupPostsLoaded: boolean = false
   vkGroupPostsDisabled: boolean = false
@@ -128,6 +130,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private statusesService: StatusesService, 
     private mapService: MapService, 
     private sanitizer:DomSanitizer,
+    private router: Router,
     private yaGeocoderService: YaGeocoderService) {}
    
   //поулчаем юзера и устанвлвиаем группы и шаги
@@ -197,19 +200,24 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
  openModalPost(event:any = null){
   
-  
-  if(this.openModalPostCount === 0){
-    this.openModalPostValue = true
-    console.log(this.openModalPostCount)
-    this.openModalPostCount++
-  }
-  else{
-    console.log(this.openModalPostCount)
-    this.openModalPostValue = false
-    this.openModalPostCount = 0
-  }
+    if(this.vkGroupSelected == null){
+      this.vkGroupSelected = this.vkGroupModalSelected
+      this.setVkPostsByGroupID(this.vkGroupModalSelected)
+    }
+    
+      this.openModalPostValue = true    
+          
+      console.log(this.vkGroupSelected)
+    
  }
 
+
+ saveChangeId(){
+  if(this.vkGroupSelected !=null){
+    this.vkGroupModalSelected = this.vkGroupSelected
+  }
+  console.log(this.vkGroupModalSelected)
+ }
 
 
 
@@ -258,13 +266,20 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+
+
+
+
+
+  
+
   //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){
     this.vkService.getPostsGroup(group_id, 30).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.vkGroupPosts = response.response
       console.log(response.response)
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
-      this.openModalPost()
+      
     })
   }
   // Грузим посты по URL сообщества
@@ -301,12 +316,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.eventTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.types = response.types
       response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
+      console.log(this.types)
     })
   }
   
   //Выбор типа
   selectedType(type_id: any){
-    type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
+    //костыль на проверку id или icordeon 
+    if(/^\d+$/.test(type_id.detail.value)){
+      type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
+    }
+    //Хоть и кринж лютый но работает!!!!!!!!
   }
 
   //Получаем статусы и устанавливаем статус по умолчанию
@@ -625,6 +645,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         //this.city = ''
         this.createEventForm.enable()
         this.stepCurrency =  this.stepStart 
+        this.router.navigate(['/home']);
       }),
       catchError((err) =>{
         this.toastService.showToast(err.error.message || MessagesErrors.default, 'danger')
@@ -735,6 +756,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+
+    console.log(this.types)
+
     let locationId: any;
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
       locationId = value

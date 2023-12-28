@@ -63,9 +63,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   
   inputValue: string = ""
   user: any
-  stepStart: number = 1
-  stepCurrency: number = 1
-  steps:number = 12
+  stepStart: number = 0
+  stepCurrency: number = 0
+  steps:number = 5
   vkGroups: any
   //Создать переменную для постов со страницы
   vkGroupSelected: number | null = null
@@ -77,6 +77,10 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   typesLoaded: boolean = false
   typeSelected: number | null = null
   statuses: IStatus[] = []
+  openModalPostValue:boolean = false
+  openModalPostCount:number = 0
+  openModalGroupValue:boolean = false
+  vkGroupModalSelected:any = 0
   statusesLoaded: boolean = false
   statusSelected: number | null = null
   city:string  = 'Заречный'
@@ -174,14 +178,14 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   //Устанавливаем шаги
   setSteps(){
-    if(this.vkGroups){
-      this.stepStart = 1
-      this.stepCurrency = 1
-    } else {
-      this.stepStart = 3
-      this.stepCurrency = 3
-      //this.nextButtonDisable = true
-    }
+    // if(this.vkGroups){
+    //   this.stepStart = 1
+    //   this.stepCurrency = 1
+    // } else {
+    //   this.stepStart = 3
+    //   this.stepCurrency = 3
+    //   //this.nextButtonDisable = true
+    // }
   }
 
   //Выбираем группу
@@ -194,6 +198,56 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPosts = null
     }
   }
+
+
+  openModalPost(event:any = null){
+  
+    if(this.vkGroupSelected == null){
+      this.vkGroupSelected = this.vkGroupModalSelected
+      this.setVkPostsByGroupID(this.vkGroupModalSelected)
+    }
+    
+      this.openModalPostValue = true    
+          
+      console.log(this.vkGroupSelected)
+    
+ }
+
+
+ saveChangeId(){
+  if(this.vkGroupSelected !=null){
+    this.vkGroupModalSelected = this.vkGroupSelected
+  }
+  console.log(this.vkGroupModalSelected)
+ }
+
+
+
+
+ closeModalPost(){
+  this.openModalPostValue = false
+  
+ }
+
+
+ openModalGroup(){
+  this.openModalGroupValue = true
+ }
+
+ closeModalGroup(){
+  this.openModalGroupValue = false
+ }
+
+ closeAllModals(){
+  this.openModalPostValue = false
+  this.openModalGroupValue = false
+ }
+
+
+
+
+
+
 
   //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){
@@ -483,18 +537,12 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   
   //Клик по кнопке веперед
   stepNext(){
-    if(this.stepCurrency !== this.steps){
-      this.vkGroupPostSelected && this.stepCurrency === 3 ? this.stepCurrency = this.stepCurrency + 3 : this.stepCurrency++
-     // this.disabledNextButton()
-    }   
+   this.stepCurrency++ 
   }
 
   //Клик по нкопке назад
   stepPrev(){
-    if(this.stepCurrency !== this.stepStart){
-      this.vkGroupPostSelected && this.stepCurrency === 6 ? this.stepCurrency = this.stepCurrency - 3 : this.stepCurrency--
-     // this.disabledNextButton()
-    }   
+   this.stepCurrency--
   }
 
   //Клик по шагу в баре
