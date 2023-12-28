@@ -104,6 +104,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   createSightForm: FormGroup = new FormGroup({})
 
   constructor(
+    private locationServices: LocationService,
     private filterService: FilterService, 
     private locationSevices: LocationService,
     private cdr: ChangeDetectorRef,
@@ -351,6 +352,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.location = item
     this.city = item.name
     this.region = item.location_parent.name
+    this.createSightForm.value.coords = [item.latitude, item.longotude]
     this.createSightForm.patchValue({locationId: item.id})
   }
   onClearSearch(){
@@ -625,6 +627,12 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    let locId: any
+    let coords: any
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {locId = value})
+    this.locationServices.getLocationsIds(locId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+      coords = [response.location.latitude, response.location.longitude]
+    })
     //Создаем поля для формы
     this.createSightForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -633,7 +641,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       workTime: new FormControl(''),
       address: new FormControl('',[Validators.required]),
       locationId: new FormControl('',[Validators.required]),
-      coords: new FormControl('',[Validators.required, Validators.minLength(2)]),
+      coords: new FormControl(coords,[Validators.required, Validators.minLength(2)]),
       type:  new FormControl({value: '1', disabled: false},[Validators.required]),
       status:  new FormControl({value: this.statusSelected, disabled: false},[Validators.required]),
       files_img: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
@@ -649,6 +657,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.getStatuses()
     this.getNowCityes();
     //this.getLocations()
+    // this.placemark= new ymaps.Placemark(this.createSightForm.value.coords)
+    // this.map.target.geoObjects.add(this.placemark)
   }
 
   ngOnDestroy(){

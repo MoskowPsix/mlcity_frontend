@@ -659,8 +659,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   addPlaceForm() {
     let locId: any
+    let coords: any
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {locId = value})
     this.locationServices.getLocationsIds(locId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+      coords = [response.location.latitude, response.location.longitude]
       this.placeArrayForm.push({city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', seances: [{num_s: 0}] })
     })
       // this.createEventForm.value.places[num].patchValue({address: 'City'}) // вставка значений
@@ -668,7 +670,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         new FormGroup({
           sight_id: new FormControl('', [Validators.minLength(1)]),
           locationId: new FormControl(locId, [Validators.minLength(1)]),
-          coords:  new FormControl('',[Validators.required, Validators.minLength(2)]), 
+          coords:  new FormControl(coords,[Validators.required, Validators.minLength(2)]), 
           address: new FormControl('',[Validators.required]),
           seances: new FormControl([new FormGroup({
             dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
@@ -732,6 +734,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     // this.location = item
     this.placeArrayForm[num].city = item.name
     this.placeArrayForm[num].region = item.location_parent.name
+    this.placeArrayForm[num].latitude = item.latitude
+    this.placeArrayForm[num].longitude = item.longitude
     //console.log(item)
     this.createEventForm.value.places[num].patchValue({locationId: item.id})
     this.onClearSearch()
