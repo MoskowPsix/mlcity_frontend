@@ -86,6 +86,7 @@ import { EdditSightComponent } from './views/cabinet/my-sights/edit-sight/eddit-
 import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.component';
 
 
+
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex,
   lang: 'ru_RU',

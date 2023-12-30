@@ -192,6 +192,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.getEventsAndSights();
       }
     });
+    this.map.target.controls.add('geolocationControl',{size:"large",position: {bottom:0, right:0, top:"-150px",}})
+    this.map.target.controls.get("zoomControl").set("size",'small')
     // if (!this.map) {
     //   this.onMapReady({target, ymaps});
     // }
@@ -558,6 +560,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    
+    let geolocationButton = document.querySelector("ymaps-2-1-79-controls__control_toolbar")
+    console.log(geolocationButton)
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.radius = parseInt(value);
@@ -602,7 +607,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.eventTypeId = value[0]
     });
 
-    
+
     
   }
   ngOnDestroy() {
