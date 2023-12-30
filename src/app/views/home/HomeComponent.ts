@@ -192,8 +192,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.getEventsAndSights();
       }
     });
-    this.map.target.controls.add('geolocationControl',{size:"large",position: {bottom:0, right:0, top:"-150px",}})
-    this.map.target.controls.get("zoomControl").set("size",'small')
+    this.map.target.controls.add('geolocationControl',{size:"large",position: {left:'50% ',bottom:0, right:0, top:"-150px",}})
+    
     // if (!this.map) {
     //   this.onMapReady({target, ymaps});
     // }
