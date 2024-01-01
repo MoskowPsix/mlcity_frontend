@@ -192,7 +192,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.getEventsAndSights();
       }
     });
-    this.map.target.controls.add('geolocationControl',{size:"large",position: {left:'50% ',bottom:0, right:0, top:"-150px",width:"150px"}})
+    // this.map.target.controls.add('geolocationControl',{size:"large",position: {left:'50% ',bottom:0, right:0, top:"-150px",width:"150px"}})
     
     // if (!this.map) {
     //   this.onMapReady({target, ymaps});
@@ -571,25 +571,17 @@ export class HomeComponent implements OnInit, OnDestroy {
           
         ];
         this.map.target.setCenter(coordinates)
-        console.log('Coordinates:', coordinates);
+        
       }, (error) => {
-        console.error('Error getting geolocation:', error);
+        this.toastService.showToast("Убедитесь что доступ к геолокации предоставлен",'warning');
+        
       });
     }
     
         
   }
 
-  setGeoCoords(){
-    // let latitude: number = geo.coords.latitude
-    // let longitude: number = geo.coords.longitude
-    this.test()
-    // this.map.target.setCenter([latitude,longitude])
-  }
-
-  test(){
-    console.log("test")
-  }
+  
 
   ngOnInit(): void {
     //Подписываемся на изменение радиуса
