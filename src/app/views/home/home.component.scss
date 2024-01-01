@@ -65,6 +65,23 @@
 	align-items: center;
 }
 
+@media (max-width: 768px) {
+	.geo-container{
+		position: absolute;
+		top: 72%;
+		right: 0;
+		margin-right: 45px;
+	
+		z-index: 3;
+	}
+	.container-swither{
+	
+		top:60%;
+	 
+	
+	}
+}
+
 .geo-button-container:hover{
 	cursor: pointer;
 }
@@ -256,6 +273,7 @@ ion-spinner{
 }
 
 @media(min-width: 1068px) {
+	
 	#modalEventShow {
 		&::part(content){
             // position: absolute;
