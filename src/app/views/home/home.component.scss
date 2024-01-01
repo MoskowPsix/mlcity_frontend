@@ -47,9 +47,33 @@
  
 
 }
-.content-swither{
+.geo-container{
+	position: absolute;
+	top: 80%;
+	right: 0;
+	margin-right: 35px;
 
+	z-index: 3;
 }
+.geo-button-container{
+	width: 48px;
+	display: flex;
+	height: 48px;
+	box-shadow: 3px 3px 5px rgb(219, 218, 218);
+	background-color: #ffffff;
+	border-radius: 100%;
+	align-items: center;
+}
+
+.geo-button-container:hover{
+	cursor: pointer;
+}
+
+.geo-button{
+	margin-left: auto;
+	margin-right: auto;
+}
+
 
 .calendula-container{
 	position: absolute;

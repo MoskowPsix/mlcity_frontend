@@ -192,7 +192,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.getEventsAndSights();
       }
     });
-    this.map.target.controls.add('geolocationControl',{size:"large",position: {left:'50% ',bottom:0, right:0, top:"-150px",}})
+    this.map.target.controls.add('geolocationControl',{size:"large",position: {left:'50% ',bottom:0, right:0, top:"-150px",width:"150px"}})
     
     // if (!this.map) {
     //   this.onMapReady({target, ymaps});
@@ -295,6 +295,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
     })
   }
+  
   getPlaces(): Observable<any> {
     return new Observable((observer) => {
     this.eventsLoading = true;
@@ -366,6 +367,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.setBoundsCoordsToMapService();
     this.cdr.detectChanges();
   }
+
+  
 
   setPlacemarks(collection: any, type: string) {
 
@@ -559,10 +562,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.changeFilter.next(true)
   }
 
-  ngOnInit(): void {
+  getGeoPosition(){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const coordinates = [
+          position.coords.latitude,
+          position.coords.longitude
+          
+        ];
+        this.map.target.setCenter(coordinates)
+        console.log('Coordinates:', coordinates);
+      }, (error) => {
+        console.error('Error getting geolocation:', error);
+      });
+    }
     
-    let geolocationButton = document.querySelector("ymaps-2-1-79-controls__control_toolbar")
-    console.log(geolocationButton)
+        
+  }
+
+  setGeoCoords(){
+    // let latitude: number = geo.coords.latitude
+    // let longitude: number = geo.coords.longitude
+    this.test()
+    // this.map.target.setCenter([latitude,longitude])
+  }
+
+  test(){
+    console.log("test")
+  }
+
+  ngOnInit(): void {
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.radius = parseInt(value);

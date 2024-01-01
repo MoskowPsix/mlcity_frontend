@@ -16,7 +16,6 @@
     
     
     <div class="container-swither">
-      
       <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" #event>
         <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon>
       </div>
@@ -26,6 +25,12 @@
       </div>
       <div class="swither" (click)="onSegmentChanged(new, 3)" #new>
         <ion-icon name="flame" class="swither-icon" color="primary"></ion-icon>
+      </div>
+    </div>
+
+    <div class="geo-container">
+      <div class="geo-button-container" (click)="getGeoPosition()">
+        <ion-icon class="geo-button" color="primary" name="locate-outline" size="large"></ion-icon>
       </div>
     </div>
 
