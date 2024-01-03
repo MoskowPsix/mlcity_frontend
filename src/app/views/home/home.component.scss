@@ -49,7 +49,7 @@
 }
 .geo-container{
 	position: absolute;
-	top: 80%;
+	top: 75%;
 	right: 0;
 	margin-right: 35px;
 
@@ -65,7 +65,7 @@
 	align-items: center;
 }
 
-@media (max-width: 768px) {
+@media only screen and (max-width: 768px) {
 	.geo-container{
 		position: absolute;
 		top: 72%;
