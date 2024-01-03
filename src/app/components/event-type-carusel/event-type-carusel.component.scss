@@ -36,25 +36,26 @@
         white-space: nowrap;
 
         .item:hover {
-            background-color: rgb(74, 146, 247,0.5);
+            background-color: rgba(143, 183, 240, 0.5);
         }
         .item {
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 4vh;
+            min-width: 20vh;
             cursor: pointer;
             text-align: center;
             transition:0.2s;
-            padding-left: 2rem;
-            padding-right: 1rem;
-            padding-top: 0.1rem;
-            padding-bottom: 0.1rem;
-            border-bottom-width:0px;
-            border-bottom: 3px solid transparent; 
-            border-bottom-left-radius: 1px;
-            border-bottom-right-radius: 1px;
-            padding-bottom: 3px;
+            margin-left: 1rem;
+            margin-right: 1rem;
         }
         .item.active{
-            background-color: #7c94c8;
+            background-color:#4C81F7;
             text-align: center;
+            color: #ffffff;
             
         }
 
@@ -136,6 +137,8 @@
                 /* padding-right: 2rem; */
                 padding-top: 0.1rem;
                 padding-bottom: 0.1rem;
+                padding-left: 0;
+                padding-right: 0;
                 border-bottom-width: 0px;
                 border-bottom: 3px solid transparent;
                 border-bottom-left-radius: 1px;
