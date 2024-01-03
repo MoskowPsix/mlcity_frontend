@@ -84,6 +84,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { EdditSightComponent } from './views/cabinet/my-sights/edit-sight/eddit-sight.component';
 import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.component';
+import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component';
 
 
 
@@ -143,7 +144,8 @@ registerLocaleData(localeRu, 'ru');
     MySightsComponent,
     RegistrationComponent,
     EdditSightComponent,
-    SightGalleryComponent
+    SightGalleryComponent,
+    SettingsMenuComponent
     
     
   ],

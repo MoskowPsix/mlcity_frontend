@@ -174,6 +174,13 @@
                         </ion-item>
                         <ion-item 
                             lines="none"
+                            [routerLink]="[ '/cabinet/settings/privacy' ]"
+                        >
+                        <ion-icon name="finger-print-outline" slot="start"></ion-icon>
+                            <ion-label text-wrap>Безопасность</ion-label>
+                        </ion-item>
+                        <!-- <ion-item 
+                            lines="none"
                             [routerLink]="[ '/cabinet/settings/notifications' ]"
                         >
                             <ion-icon name="notifications" slot="start" color="medium"></ion-icon> 
@@ -181,11 +188,10 @@
                         </ion-item>
                         <ion-item 
                             lines="none"
-                            [routerLink]="[ '/cabinet/settings/favorites' ]"
-                        >
+                            [routerLink]="[ '/cabinet/settings/favorites' ]">
                             <ion-icon name="star" slot="start" color="medium"></ion-icon> 
                             <ion-label text-wrap>Избранное</ion-label>
-                        </ion-item>
+                        </ion-item> -->
                       </div>
                     </ion-accordion>
                   </ion-accordion-group>

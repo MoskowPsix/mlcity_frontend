@@ -37,18 +37,18 @@ export const privateRoutes: Routes = [
     {
       path: 'cabinet/settings',
       component: SettingsComponent,
-      // children: [
-      //   {
-      //     path:'cabinet/settings/profile',
-      //     component: SettingsProfileComponent,
-      //     outlet:'profile'
-      //   },
-      //   {
-      //     path:'privacy',
-      //     component: SettingsPrivacyComponent,
-      //     outlet:'privacy'
-      //   }
-      // ],
+      children: [
+        {
+          path:'profile',
+          component: SettingsProfileComponent,
+          
+        },
+        {
+          path:'privacy',
+          component: SettingsPrivacyComponent,
+          
+        }
+      ],
       canActivate: [AuthGuard],
       // children: [
     },
