@@ -8,6 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { fileTypeValidator } from 'src/app/validators/file-type.validators';
 import { environment } from 'src/environments/environment';
 
+
 @Component({
   selector: 'app-settings-profile',
   templateUrl: './settings-profile.component.html',
@@ -25,10 +26,11 @@ export class SettingsProfileComponent  implements OnInit {
   avatar_url!: string
   previewPhotoUrl!: string
   
+  
 
   constructor(
     private userService: UserService,
-    private toastService: ToastService
+    private toastService: ToastService,
     ) { }
 
 
@@ -88,6 +90,8 @@ export class SettingsProfileComponent  implements OnInit {
     this.resetForm = new FormGroup({
       new_name: new FormControl(this.user.name,[Validators.minLength(1)]),
     })
+
+
   }
 
 }

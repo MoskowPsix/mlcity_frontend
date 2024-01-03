@@ -1,7 +1,7 @@
 <ng-container>
   <div class="form-container">
     <ion-card>
-  
+      <ion-row class="ion-justify-content-center">
     <form class="form" [formGroup]="resetForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
       <ion-col>
         <ion-list>
@@ -14,9 +14,6 @@
           </ng-template>
 
         </ion-row>
-
-       
-
         <ion-row class="ion-justify-content-center" style="margin-top:1rem;">
           <ion-item lines="none">
             <ion-button  (click)="f.click()" size="default" fill="solid">
@@ -42,6 +39,7 @@
       </ion-col>
         
     </form>
+  </ion-row>
   </ion-card>
   </div>
 </ng-container>
