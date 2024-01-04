@@ -24,15 +24,28 @@
             </ion-item-divider>
           </div>
                 
-          <ion-item 
-            *ngFor="let child of parent.value.children"
-            [routerLink]="[ child.route ]"
-          >
-            <ion-icon *ngIf="itemIco" [name]="child.icon" slot="start"  color="primary"></ion-icon> 
-            <ion-label>
-              {{ child.title }}
-            </ion-label>
-          </ion-item>
+          <div *ngFor="let child of parent.value.children" >
+                <ion-item 
+                *ngIf="child.title == 'Все' else otherPath"
+                lines="none"
+                [href]="backendUrl"
+                [routerLinkActive]="['active']"
+              >
+                <ion-icon name="{{ child.icon }}"  slot="start" color="primary"></ion-icon>            
+                <ion-label>{{ child.title }}</ion-label>
+              </ion-item>
+              
+              <ng-template #otherPath>
+                <ion-item 
+                lines="none"
+                [routerLink]="child.route"
+                [routerLinkActive]="['active']"
+              >
+                <ion-icon name="{{ child.icon }}"  slot="start" color="primary"></ion-icon>            
+                <ion-label>{{ child.title }}</ion-label>
+              </ion-item>
+              </ng-template>
+              </div>
 
         </div>   
         
