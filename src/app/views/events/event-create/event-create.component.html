@@ -94,10 +94,10 @@
             <div>
               <ion-column class="nameParrent">
                 <div>
-                  <ion-item style="max-width: 600px;"> 
+                  <ion-item style="max-width: 600px;" fill="outline"> 
                     <ion-label position="floating">Название мероприятия</ion-label>
                     <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
-                    <ion-input style="max-width: 300px;" size="small" class="nameEvent" formControlName="name" type="text" name="name" required></ion-input>                  
+                    <ion-input fill="solid" style="max-width: 300px;" size="small" class="nameEvent" formControlName="name" type="text" name="name" required></ion-input>                  
                   </ion-item>
     
                 </div>
@@ -112,11 +112,14 @@
            
                 <ion-column class="organizaterParrent">
                   
-                  <ion-item class="organizerMain">
+                  <ion-item class="organizerMain"
+                    fill="outline"
+                  >
                     <ion-label position="floating">Организатор мероприятия</ion-label>
                     <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                     <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
                   </ion-item>
+                  
     
                  
                 </ion-column>
@@ -236,13 +239,13 @@
                           Вернутся к выбору группы
                         </ion-button>
 
-                        <ion-button class="modalBtnBottom" (click)="closeModalGroup()">
-                          Закрыть
-                        </ion-button>
-
                         <ion-list-header>
                           <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
                         </ion-list-header>
+
+                        <ion-button class="modalBtnBottom" (click)="closeModalGroup()">
+                          Закрыть
+                        </ion-button>
                         
                         <div *ngIf="vkGroupPosts; else notSelectedGroup">              
                           <!-- Скелетна анимация -->
@@ -378,12 +381,12 @@
 
 
 
-        <div class="openModalBtnWraper">
+        <!-- <div class="openModalBtnWraper">
           <ion-button class="openModalBtn" style="--border-radius:8px;" (click)="openModalGroup()" class="selectGroup">
             <ion-icon style="margin-right: 1vh;"  name='logo-vk'></ion-icon>
             Загрузить пост
           </ion-button>
-        </div>
+        </div> -->
         <ion-column class="stepThird">
 
           <ion-col @fade>
@@ -404,15 +407,16 @@
                     <ion-col *ngIf="stepCurrency === 2" @fade>
                       
                       
-                      <ion-item>
+                      <ion-item style="min-width: 60%;" fill="outline">
                      
-
-                        <ion-label position="floating">Об мероприятии</ion-label>
+                        <ion-label position="stacked">Об мероприятии</ion-label>
+                   
                         <ion-textarea 
+                        
                           formControlName="description" 
                           placeholder="Введите информацию об мероприятии.." 
                           [autoGrow]="true" 
-                          required
+                        
                           style="padding-bottom: 8vh;"
                           
                         >
@@ -420,11 +424,41 @@
                        
 
                       </ion-textarea>
-                        <ion-button style="--background: none; --box-shadow: none;" class="addPhoto">
+
+                        <ion-button  (click)="filesUpload.click()" style="--background: none; --box-shadow: none;" class="addPhoto">
                           <ion-icon class="addPhotoIcon" style="color: gray;" name="image-outline"></ion-icon>
                         </ion-button>
+
+                      
+
                       </ion-item>
                     
+                      <ion-button class="openModalBtn" style="--border-radius:8px; margin-top: 10%;" (click)="openModalGroup()" class="selectGroup">
+                        <ion-icon style="margin-right: 1vh;"  name='logo-vk'></ion-icon>
+                        Загрузить пост
+                      </ion-button>
+
+                      <!-- модалка с загрузкой фото -->
+
+                      <ion-modal [isOpen]="openModalImgs">
+
+                        <div class="">  
+
+                          <ion-item lines="none" class="photo-label">
+                            <ion-icon name="images" slot="start" color="primary"></ion-icon>
+                            <ion-label color="medium">Выбрать фото (*.png, *.jpeg)</ion-label>
+                          </ion-item>
+            
+            
+                          <ion-ripple-effect></ion-ripple-effect>
+                        </div>
+
+
+                        <input formControlName="files" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
+                        
+                        <ion-note *ngIf="createEventForm.controls['files'].hasError('requiredFileType')" color="danger">Допустимые форматы *.png, *.jpeg</ion-note>
+
+                      </ion-modal>
                        
                   
 
@@ -439,12 +473,52 @@
 
               </div>
 
-
+              
 
             </ion-column>
 
 
-            
+            <ion-col class="photoMain"  @fade>
+              <!-- <ion-label position="floating">Добавление фотографий (*.png, *.jpeg)</ion-label> -->
+              <div class="ion-margin-vertical">
+                <!-- Image Preview -->
+                <ion-row  *ngIf="imagesPreview">
+    
+                  <ng-container *ngFor="let img of imagesPreview">
+                    <ion-col class="imagesPreviewParrent ion-justify-content-center">
+                      <img class="imagesPreview" [src]="img" alt="preview">
+    
+                      <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(img)">
+                        <ion-icon name="trash-bin" slot="start"></ion-icon>
+                      </ion-button>
+    
+                    </ion-col>    
+                  </ng-container>    
+                </ion-row>
+              </div>
+    
+              <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
+                <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
+                  <ng-container *ngFor="let photo of attachment.photo.sizes">
+                    <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
+                      <img class="imagesPreview" alt="ava" src="{{ photo.url }}" /> 
+                    </ion-col>     
+                  </ng-container>  
+                </ng-container> 
+              </ion-row>
+    
+              <ion-row *ngIf="vkGroups && vkGroupPostSelected && !vkGroupPostSelected.attachments.length" class="ion-padding-vertical">
+                <ion-col class="ion-align-self-center ion-justify-content-center">
+                  <ion-label color="medium">В выбранном посте нету фотографий</ion-label>
+                </ion-col> 
+              </ion-row>
+    
+              <!-- <ion-row *ngIf="vkGroups && !vkGroupPostSelected" class="ion-padding-vertical">
+                <ion-col class="ion-align-self-center ion-justify-content-center">
+                  <ion-label color="medium">Вы не выбрали пост, невозможно подгрузить фотографии</ion-label>
+                </ion-col> 
+              </ion-row> -->
+            </ion-col>
             
             <ion-column>
 
@@ -518,63 +592,7 @@
 
         </ion-column>
 
-        <ion-col class="photoMain"  @fade>
-          <!-- <ion-label position="floating">Добавление фотографий (*.png, *.jpeg)</ion-label> -->
-          <div class="ion-margin-vertical">
-            <div class="upload-overlay ion-activatable custom-parent" (click)="filesUpload.click()">  
-
-              <ion-item lines="none" class="photo-label">
-                <ion-icon name="images" slot="start" color="primary"></ion-icon>
-                <ion-label color="medium">Выбрать фото (*.png, *.jpeg)</ion-label>
-              </ion-item>
-
-
-
-              <ion-ripple-effect></ion-ripple-effect>
-            </div>
-            <input formControlName="files" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
-            
-            <ion-note *ngIf="createEventForm.controls['files'].hasError('requiredFileType')" color="danger">Допустимые форматы *.png, *.jpeg</ion-note>
-
-            <!-- Image Preview -->
-            <ion-row  *ngIf="imagesPreview">
-
-              <ng-container *ngFor="let img of imagesPreview">
-                <ion-col class="imagesPreviewParrent ion-justify-content-center">
-                  <img class="imagesPreview" [src]="img" alt="preview">
-
-                  <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(img)">
-                    <ion-icon name="trash-bin" slot="start"></ion-icon>
-                    Удалить
-                  </ion-button>
-
-                </ion-col>    
-              </ng-container>    
-            </ion-row>
-          </div>
-
-          <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
-            <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
-              <ng-container *ngFor="let photo of attachment.photo.sizes">
-                <ion-col *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
-                  <img alt="ava" src="{{ photo.url }}" /> 
-                </ion-col>     
-              </ng-container>  
-            </ng-container> 
-          </ion-row>
-
-          <ion-row *ngIf="vkGroups && vkGroupPostSelected && !vkGroupPostSelected.attachments.length" class="ion-padding-vertical">
-            <ion-col class="ion-align-self-center ion-justify-content-center">
-              <ion-label color="medium">В выбранном посте нету фотографий</ion-label>
-            </ion-col> 
-          </ion-row>
-
-          <!-- <ion-row *ngIf="vkGroups && !vkGroupPostSelected" class="ion-padding-vertical">
-            <ion-col class="ion-align-self-center ion-justify-content-center">
-              <ion-label color="medium">Вы не выбрали пост, невозможно подгрузить фотографии</ion-label>
-            </ion-col> 
-          </ion-row> -->
-        </ion-col>
+        
        
       </ion-row>
             

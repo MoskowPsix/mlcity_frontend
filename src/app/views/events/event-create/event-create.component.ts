@@ -75,6 +75,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   stepCurrency: number = 0
   steps:number = 5
 
+  openModalImgs:boolean = false
   openModalPostValue:boolean = false
   openModalPostCount:number = 0
   openModalGroupValue:boolean = false
@@ -195,7 +196,18 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
 
- //модальноеп окно с выьором поста
+
+  openModalImgsFnc(){
+    this.openModalImgs = true
+  }
+
+  closeModalImgsFnc(){
+    this.openModalImgs = false
+  }
+
+
+
+ //модальноеп окно с выбором поста
 
 
  openModalPost(event:any = null){
@@ -451,9 +463,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.resetUploadInfo()
 
     for (var i = 0; i < event.target.files.length; i++) {
-      this.uploadFiles.push(event.target.files[i])
+        this.uploadFiles.push(event.target.files[i])
+      
     }
-
+    console.log(this.uploadFiles)
     this.createEventForm.patchValue({files: ''}) // Если не обнулять будет ошибка
 
     this.createImagesPreview()  
