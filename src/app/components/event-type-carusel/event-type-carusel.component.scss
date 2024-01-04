@@ -45,7 +45,9 @@
             align-items: center;
             text-align: center;
             min-height: 4vh;
-            min-width: 20vh;
+            padding-left: 1vh;
+            padding-right: 1vh;
+            min-width: auto + 2vh;
             cursor: pointer;
             text-align: center;
             transition:0.2s;
