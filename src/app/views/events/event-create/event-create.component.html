@@ -218,7 +218,7 @@
        
                
 
-                <ion-button class="modalBtnBottom" (click)="closeModalGroup()">
+                <ion-button class="modalBtnBottom" (click)="closeAllModals()">
                   Закрыть
                 </ion-button>
 
@@ -231,7 +231,7 @@
         </ion-modal>
 
 
-        <ion-modal class="modal"  backdropDismiss="false" [isOpen]="openModalPostValue">
+        <ion-modal class="modal"  backdropDismiss="false" [isOpen]="openModalPostValue" [canDismiss]="openModalPostValue">
 
                   <ng-template>
                       <ion-content>
@@ -243,7 +243,7 @@
                           <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
                         </ion-list-header>
 
-                        <ion-button class="modalBtnBottom" (click)="closeModalGroup()">
+                        <ion-button class="modalBtnBottom" (click)="closeAllModals()">
                           Закрыть
                         </ion-button>
                         
@@ -387,7 +387,7 @@
             Загрузить пост
           </ion-button>
         </div> -->
-        <ion-column class="stepThird">
+        <ion-column class="stepThird ion-justify-content-center">
 
           <ion-col @fade>
 
@@ -404,10 +404,10 @@
 
                 
 
-                    <ion-col *ngIf="stepCurrency === 2" @fade>
+                    <ion-col style="width: 80%;" *ngIf="stepCurrency === 2" @fade>
                       
                       
-                      <ion-item style="min-width: 60%;" fill="outline">
+                      <ion-item style="width: 60vh;" fill="outline">
                      
                         <ion-label position="stacked">Об мероприятии</ion-label>
                    
@@ -433,10 +433,20 @@
 
                       </ion-item>
                     
-                      <ion-button class="openModalBtn" style="--border-radius:8px; margin-top: 10%;" (click)="openModalGroup()" class="selectGroup">
-                        <ion-icon style="margin-right: 1vh;"  name='logo-vk'></ion-icon>
-                        Загрузить пост
-                      </ion-button>
+                      <div style="display: flex; align-items: center;">
+                        
+                        <ion-button class="openModalBtn" style="--border-radius:8px; margin-top: 10%;" (click)="openModalGroup()" class="selectGroup">
+                          <ion-icon style="margin-right: 1vh;"  name='logo-vk'></ion-icon>
+                          Загрузить пост
+                        </ion-button>
+
+                        <div style="background: rgba(66, 66, 66, 0.623); color: #fff;">
+                          тест тест тест тест тест
+                        </div>
+
+                      </div>
+
+
 
                       <!-- модалка с загрузкой фото -->
 
