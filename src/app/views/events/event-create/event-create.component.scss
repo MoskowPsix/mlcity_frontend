@@ -130,6 +130,7 @@ ion-padding {
         .mainLabelAndBar{
             margin-left: 10%;
             margin-top: 30px;
+            margin-bottom: 10%;
             
             .mainLabelAndBarText{
                 color: #4C81F7;
@@ -141,13 +142,13 @@ ion-padding {
 
         .stepsButtonsMain{
             display: flex;
-
+           
             .buttonWraper{
                 
             }
             .buttonBar{
                 box-shadow: none;
-                
+              
             }
 
             .ion-text-start{
@@ -165,20 +166,26 @@ ion-padding {
   
 
             .buttonBarClicked{
-              
+                --border-radius: 50%;
+                width: 4vh;
+                height: 4vh;
                 --background: #4D71CC;
                 color: #fff;
                 font-size: 1.5vh
             }
 
             .buttonBarDanger{
-                
+                --border-radius: 50%;
+                width: 4vh;
+                height: 4vh;
                 --background: #b84232;
                 color: #fff;
                 font-size: 1.5vh;
             }   
             .buttonBarLight{
-              
+                --border-radius: 50%;
+                width: 4vh;
+                height: 4vh;
                 --background: #C8D8FF;
                 color: #6793F5;
                 font-size: 1.5vh;
@@ -186,6 +193,7 @@ ion-padding {
             }   
 
             .buttonsNavigate{
+                
                 margin-left: 1vh;
                 margin-right: 1vh;
                 --border-radius: 12px;
@@ -212,6 +220,49 @@ ion-padding {
 
       
     }
+
+    .BtnModalParrent{
+        margin-top: 5%;
+        transition: 1s;
+    }
+    .descriptionButton{
+        display: none;
+        transition: 0.3s;
+        background: rgba(66, 66, 66, 0.623);
+        color: #fff; 
+        max-width: 20vh; 
+        border-radius: 8px 8px 8px 0px;
+        padding-top: 1vh;
+        padding-bottom: 1vh;
+        padding-left: 1vh;
+        padding-right: 1vh;
+        font-size: 12px;
+        margin-top: -2vh;
+
+    }
+
+    .BtnModalParrent:hover{
+        transition: 1s;
+        .descriptionButton{
+            display: block;
+            transition: 0.3s;
+            background: rgba(66, 66, 66, 0.623);
+            color: #fff; 
+            max-width: 20vh; 
+            border-radius: 8px 8px 8px 0px;
+            padding-top: 1vh;
+            padding-bottom: 1vh;
+            padding-left: 1vh;
+            padding-right: 1vh;
+            font-size: 12px;
+            margin-top: -2vh;
+    
+        }
+    
+    }
+
+
+   
 
     .nameEvent{
         --border-radius:12px;
@@ -315,6 +366,7 @@ ion-padding {
 }
 
 .timeParrent{
+    margin-top: -10%;
     display: flex;
 }
 
@@ -392,8 +444,9 @@ ion-padding {
     }
 
     .stepper-progress {
-        margin-top: 2vh;
+
         justify-content:center;
+        margin-bottom: 3vh;
 
     }
     

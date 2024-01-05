@@ -20,9 +20,10 @@
             <div class="stepper-progress">
               <ion-column class="stepsButtonsMain">
 
+                <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency == stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
                 <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
 
-                  <div *ngFor="let step of [].constructor(steps); let i = index" class="stepper-items" >
+                  <div *ngFor="let step of [].constructor(steps); let i = index" class=" " >
                     <div class="buttonWraper">
 
 
@@ -42,7 +43,6 @@
 
                         
 
-                          <div style="margin-left: 60px;"></div>
 
                     </div>  
                   </div>
@@ -433,15 +433,15 @@
 
                       </ion-item>
                     
-                      <div style="display: flex; align-items: center;">
+                      <div class="BtnModalParrent" style="display: flex; align-items: center;">
                         
                         <ion-button class="openModalBtn" style="--border-radius:8px; margin-top: 10%;" (click)="openModalGroup()" class="selectGroup">
                           <ion-icon style="margin-right: 1vh;"  name='logo-vk'></ion-icon>
                           Загрузить пост
                         </ion-button>
 
-                        <div style="background: rgba(66, 66, 66, 0.623); color: #fff;">
-                          тест тест тест тест тест
+                        <div class="descriptionButton">
+                          вы можете загрузить описание и изображения из группы вконтакте
                         </div>
 
                       </div>
