@@ -76,6 +76,7 @@
 
 .stepper-progress {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     column-gap: 2.4rem;
     row-gap: 0.2rem;
@@ -141,8 +142,13 @@ ion-padding {
         
 
         .stepsButtonsMain{
+            max-width: 900px;
+
+            z-index: 1090000;
+            margin-top: 4%;
             display: flex;
-           
+            justify-content: center;
+            background-color: #fff;
             .buttonWraper{
                 
             }
