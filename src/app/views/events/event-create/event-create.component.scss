@@ -39,10 +39,23 @@
 }
 
 .buttons-dekstop{
+    
     position: fixed;
     // top: 9rem;
     top: 6.7em;
     width: 100%;
+}
+
+
+.buttons-desktop-wrapper{
+    max-width: 60%;
+    display: flex;
+    justify-content: center;
+}
+
+
+.btnsWrapperBack{
+    margin-right: 60%;
 }
 
 .map {
@@ -172,26 +185,34 @@ ion-padding {
   
 
             .buttonBarClicked{
+                margin-left: 1vh;
+                margin-right: 1vh;
                 --border-radius: 50%;
-                width: 4vh;
-                height: 4vh;
+                width: 5vh;
+                height: 5vh;
                 --background: #4D71CC;
                 color: #fff;
                 font-size: 1.5vh
             }
 
             .buttonBarDanger{
+                margin-left: 1vh;
+                margin-right: 1vh;
                 --border-radius: 50%;
-                width: 4vh;
-                height: 4vh;
+                width: 5vh;
+                height: 5vh;
                 --background: #b84232;
                 color: #fff;
                 font-size: 1.5vh;
+               
+
             }   
             .buttonBarLight{
+                margin-left: 1vh;
+                margin-right: 1vh;
                 --border-radius: 50%;
-                width: 4vh;
-                height: 4vh;
+                width: 5vh;
+                height: 5vh;
                 --background: #C8D8FF;
                 color: #6793F5;
                 font-size: 1.5vh;

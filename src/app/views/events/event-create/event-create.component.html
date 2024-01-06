@@ -16,12 +16,33 @@
         <!-- кнопки шагов -->
 
         <ion-column>
-          <ion-col size-lg="4" size-md="8" size-xs="12">
-            <div class="stepper-progress">
-              <ion-column class="stepsButtonsMain buttons-dekstop">
 
+          <div class="buttons-dekstop">
+
+            <div class="buttons-desktop-wrapper">
+
+              <div class="btnsWrapperBack">
                 <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency == stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
                 <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+              </div>
+  
+  
+              <div class="btnsWrapper">
+                <ion-button class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+                <ion-button class="buttonsNavigate" *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createEventForm.invalid || createEventForm.disabled"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+              </div>
+
+            </div>
+
+            
+
+          </div>
+
+          <ion-col size-lg="4" size-md="8" size-xs="12">
+            <div class="stepper-progress">
+              <ion-column class="stepsButtonsMain ">
+
+                
 
                   <div *ngFor="let step of [].constructor(steps); let i = index" class=" " >
                     <div class="buttonWraper">
@@ -48,8 +69,7 @@
                   </div>
 
 
-                  <ion-button class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-                  <ion-button class="buttonsNavigate" *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createEventForm.invalid || createEventForm.disabled"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+                 
 
               </ion-column>
               
@@ -806,7 +826,7 @@
       
       <!-- шаг 5 -->
       <ion-row  [hidden]="stepCurrency !== 4" class="ion-justify-content-center">
-        <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 4" class="ion-justify-content-center" @fade>
+        <ion-col *ngIf="stepCurrency === 4" class="ion-justify-content-center" @fade>
           <ion-card *ngFor="let item of createEventForm.controls['price'].value; let i_p = index">
             <ng-container [formGroup]="createEventForm.controls['price'].value[i_p]">
               <ion-card-hider>
