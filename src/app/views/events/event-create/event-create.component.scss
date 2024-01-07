@@ -39,24 +39,34 @@
 }
 
 .buttons-dekstop{
-    
+  
     position: fixed;
     // top: 9rem;
     top: 6.7em;
     width: 100%;
+    z-index: 10000000;
+    
 }
 
 
 .buttons-desktop-wrapper{
-    max-width: 60%;
+    margin: 0 auto;
+    max-width: 90%;
     display: flex;
     justify-content: center;
 }
 
 
 .btnsWrapperBack{
-    margin-right: 60%;
+    margin-right: auto;
+    margin-left: 4%
 }
+
+.btnsWrapperNext{
+   margin-right: 4%;
+   margin-left: auto;
+}
+
 
 .map {
     width: 100%;
@@ -402,6 +412,7 @@ ion-padding {
 }
 
 .dateLast{
+    margin-left: auto;
 
 }
 
