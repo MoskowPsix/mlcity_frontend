@@ -1,57 +1,95 @@
 <ion-content>
 
-    <ion-grid class="main">
+  <div class="buttons-dekstop">
 
+    <div class="buttons-desktop-wrapper">
+
+      <div class="btnsWrapperBack">
+        <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency == stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+        <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+      </div>
+
+
+      <div class="btnsWrapper btnsWrapperNext">
+        <ion-button class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        <ion-button class="buttonsNavigate" *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createSightForm.invalid "><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+      </div>
+
+    </div>
+  </div>
+
+
+    <ion-grid class="main">
 
       <form class="mainChild" [formGroup]="createSightForm" (submit)="onSubmit()" enctype="multipart/form-data"> 
         
+
+
         <ion-column class="mainLabelAndBar">
           <div class="ion-text-start">
-            <h3 class="mt-0">Создание достопримечательности</h3>
+            <h3 [hidden]="stepCurrency != 0" class="mt-0 mainLabelAndBarText">Тип мероприятия</h3>
+            <h3 [hidden]="stepCurrency != 1" class="mt-0 mainLabelAndBarText">Название мероприятия</h3>
+            <h3 [hidden]="stepCurrency != 2" class="mt-0 mainLabelAndBarText">О мероприятие</h3>
+            <h3 [hidden]="stepCurrency != 3" class="mt-0 mainLabelAndBarText">Место проведения</h3>
+            <h3 [hidden]="stepCurrency != 4" class="mt-0 mainLabelAndBarText">Цена и материалы</h3>
+           
           </div>
+  
+          <!-- кнопки шагов -->
+  
+          <ion-column>
+  
+          
+  
+            <ion-col size-lg="4" size-md="8" size-xs="12">
+              <div class="stepper-progress">
+                <ion-column class="stepsButtonsMain ">
+  
+                  
+  
+                    <div *ngFor="let step of [].constructor(steps); let i = index" class=" " >
+                      <div class="buttonWraper">
+  
+  
+                        <ion-button  *ngIf="stepCurrency === i" (click)="goToStep(i)" class="buttonBarClicked animated fadeIn">
+                            {{ i + 1 }}
+                          </ion-button>
+  
+                          <ion-button *ngIf="!stepIsValid(i) && stepCurrency !== i" (click)="goToStep(i)" class="buttonBarDanger animated fadeIn">
+                            {{ i + 1 }}
+                          </ion-button>
+  
+                          <ion-button *ngIf="!(stepCurrency === i) && stepIsValid(i) && stepCurrency !== i" (click)="goToStep(i)" class="buttonBarLight animated fadeIn">
+                            {{ i + 1 }}
+                          </ion-button>
+  
+                            
+  
+                          
+  
+  
+                      </div>  
+                    </div>
+  
+  
+                   
+  
+                </ion-column>
+                
+              </div>
+             
+            </ion-col>
+          </ion-column>
+  
+  
         </ion-column>
 
 
-        <ion-row class="ion-justify-content-center">
-          <ion-col size-lg="4" size-md="8" size-xs="12">
-            
-  
-            <div class="stepper-progress">
 
-              <ion-column style="display: flex; justify-content: center;">
-                <ng-container style="display: flex; justify-content: center;">
-                
-                  <div *ngFor="let step of [].constructor(steps); let i = index" class="stepper-items" >
-                    <ion-button class="buttonBar"
-                      shape="round" 
-                      (click)="goToStep(i)" 
-                      [color]="stepCurrency === i ? 'primary' : !stepIsValid(i) && stepCurrency !== i? 'danger' : 'light'"  
-                    >
-                    {{ i + 1 }}
-                  </ion-button>
-                  <!-- С зелеными шагами
-                    <ion-button 
-                    shape="round" 
-                    (click)="goToStep(i + 3)" 
-                    [color]="stepCurrency - 2 === i + 1 ? 'primary' : stepCurrency - 2 > i + 1 && stepIsValid(i + 3) ? 'success' : !stepIsValid(i + 3) && stepCurrency - 2 !== i + 1 ? 'danger' : 'light'"  
-                  >
-                    {{ i + 1 }}
-                  </ion-button> -->
-                  </div>
-              
-                </ng-container>
-              </ion-column>
-
-              
-            </div>
-            <!-- stepStart {{ stepStart }} stepCurrency {{ stepCurrency }} -->
-              <!-- <ion-label>Шаг {{  stepStart === 3 ?  stepCurrency - 2 : stepCurrency }} из {{ vkGroups ? steps : steps - 2 }}</ion-label> -->
-          </ion-col>
-        </ion-row>
         
           <!-- шаг 1 -->
           <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
-            <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
+            <ion-col size-lg="8" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
             <ion-list>
               <ion-radio-group formControlName="type" (ionChange)="selectedType($event);" [value]="typeSelected" required>
                 <ion-list-header>
@@ -66,10 +104,48 @@
   
         <!-- шаг 2 -->
         <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center" >
-        <ion-col size-lg="4" size-md="8" size-xs="12" *ngIf="stepCurrency === 1" @fade>
 
-          <ion-column style="display: flex;">
+        <ion-col *ngIf="stepCurrency === 1" @fade>
 
+          <ion-column class="stepSecond">
+
+            <div>
+              <ion-column class="nameParrent">
+
+                <div>
+
+                  <ion-item style="max-width: 600px;" fill="outline">
+                    <ion-label position="floating">Название достопримечательности</ion-label>
+                    <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
+                    <ion-input style="max-width: 300px;" formControlName="name" type="text" name="name" required></ion-input>
+                  </ion-item>
+
+                  <div *ngIf="createSightForm.controls['name'].invalid && createSightForm.controls['name'].dirty"  class="validation">
+                    <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название достопримечательности должно содержать минимум 3 символа</ion-note>
+                  </div>
+                </div>
+
+              </ion-column>
+
+
+              <ion-row>
+                <ion-column class="organizaterParrent">
+                  <ion-item  class="organizerMain" fill="outline">
+                    <ion-label position="floating">Организатор достопримечательности</ion-label>
+                    <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
+                    <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
+                  </ion-item>
+                </ion-column>
+
+                <ion-column>
+                  
+                </ion-column>
+
+              </ion-row>
+
+            </div>
+
+          
 
             <ion-button (click)="openModalGroup()" class="selectGroup">
 
@@ -301,32 +377,7 @@
 
 
 
-            <ion-column class="nameParrent">
-              <ion-row size-lg="4" size-md="8" size-xs="12" @fade>
-                <ion-item fill="outline">
-                  <ion-label position="floating">Название достопримечательности</ion-label>
-                  <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
-                  <ion-input formControlName="name" type="text" name="name" required></ion-input>
-                </ion-item>
-
-                
-                  <ion-item fill="outline">
-                    <ion-label position="floating">Организатор достопримечательности</ion-label>
-                    <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-                    <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
-                  </ion-item>
-
-                  <div *ngIf="createSightForm.controls['sponsor'].invalid && createSightForm.controls['sponsor'].dirty"  class="validation">
-                    <ion-note *ngIf="!createSightForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор достопримечательности" должно содержать минимум 3 символа</ion-note>
-                  </div>
-               
-
-                <div *ngIf="createSightForm.controls['name'].invalid && createSightForm.controls['name'].dirty"  class="validation">
-                  <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название достопримечательности должно содержать минимум 3 символа</ion-note>
-                </div>
-              </ion-row>
-
-            </ion-column>
+          
 
           </ion-column>
 
@@ -527,17 +578,7 @@
         
   
          <!-- Десктопный блок кнопок -->
-        <div class="buttons-dekstop">
-          <ion-row class="ion-justify-content-around">
-            <ion-col size-lg="2" size-md="4" class="left">
-              <ion-button *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
-            </ion-col>
-            <ion-col size-lg="2" size-md="4">
-              <ion-button *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-              <ion-button *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createSightForm.invalid "><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
-            </ion-col>     
-          </ion-row>
-        </div>
+        
   
         <!-- Фиксированный блок кнопок для мобилы-->
         <div class="buttons-mobile">
