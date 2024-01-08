@@ -578,18 +578,16 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Блокировка шагов в баре
   stepIsValid(step:number = this.stepStart){
     switch (step) {
+    
       case 1:
-      case 2:
-        return true
-      case 3:
         return this.createSightForm.controls['name'].invalid  ?  false :  true
-      case 4:
+      case 2:
         return this.createSightForm.controls['description'].invalid  ? false :  true 
       // case 7:
       //   return this.createSightForm.hasError('dateInvalid') ?  false :  true
-      case 8:
+      case 1:
         return this.createSightForm.controls['sponsor'].invalid  ?  false :  true
-      case 9:
+      case 3:
         //freturn !this.createEventForm.controls['coords'].value.length ? false :  true  
         return this.createSightForm.controls['coords'].invalid ? false :  true
       default:

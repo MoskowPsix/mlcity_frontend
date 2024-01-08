@@ -466,30 +466,11 @@
 
 
 
-                      <!-- модалка с загрузкой фото -->
-
-                      <ion-modal [isOpen]="openModalImgs">
-
-                        <div class="">  
-
-                          <ion-item lines="none" class="photo-label">
-                            <ion-icon name="images" slot="start" color="primary"></ion-icon>
-                            <ion-label color="medium">Выбрать фото (*.png, *.jpeg)</ion-label>
-                          </ion-item>
-            
-            
-                          <ion-ripple-effect></ion-ripple-effect>
-                        </div>
-
-
                         <input formControlName="files" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
-                        
                         <ion-note *ngIf="createEventForm.controls['files'].hasError('requiredFileType')" color="danger">Допустимые форматы *.png, *.jpeg</ion-note>
 
-                      </ion-modal>
-                       
                   
-
+                       
 
                       <div *ngIf="createEventForm.controls['description'].invalid && createEventForm.controls['description'].dirty"  class="validation">
                         <ion-note *ngIf="!createEventForm.controls['description'].hasError('minLength')" color="danger">поле "Об мероприятии" должно содержать минимум 10 символов</ion-note>
