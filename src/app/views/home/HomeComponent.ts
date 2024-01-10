@@ -192,6 +192,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.getEventsAndSights();
       }
     });
+    this.map.target.controls.remove("zoomControl")
     // this.map.target.controls.add('geolocationControl',{size:"large",position: {left:'50% ',bottom:0, right:0, top:"-150px",width:"150px"}})
     
     // if (!this.map) {
