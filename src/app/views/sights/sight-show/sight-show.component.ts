@@ -32,6 +32,8 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   sight?: ISight
   loadingSight: boolean = true
 
+  map!: YaReadyEvent<ymaps.Map>;
+
   favorite: boolean = false
   loadingFavorite: boolean = false
 
@@ -82,7 +84,7 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
     let icoLink = this.sight && this.sight.types && this.sight.types.length ? this.host + ':' + this.port + this.sight.types[0].ico : ''
-
+    this.map = { target, ymaps };
     //Создаем метку 
     target.geoObjects.add(
       new ymaps.Placemark([this.sight?.latitude,this.sight?.longitude],{}, {
@@ -90,6 +92,8 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
         iconContentLayout: ymaps.templateLayoutFactory.createClass(`'<div class="marker"><img src="${icoLink}"/></div>'`)
       })
     )
+    this.map.target.controls.remove("zoomControl")
+    this.map.target.behaviors.disable("drag")
   }
 
   toggleFavorite(sight_id:number){

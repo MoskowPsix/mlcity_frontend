@@ -81,6 +81,22 @@
 	
 	}
 }
+@media only screen and (min-width: 1370px) and (max-width:1920px) {
+	.geo-container{
+		position: absolute;
+		top: 84%;
+		right: 0;
+		margin-right: 45px;
+	
+		z-index: 3;
+	}
+	.container-swither{
+	
+		top:75%;
+	 
+	
+	}
+}
 
 .geo-button-container:hover{
 	cursor: pointer;

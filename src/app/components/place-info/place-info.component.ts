@@ -21,6 +21,7 @@ export class PlaceInfoComponent  implements OnInit {
 
   loadMap: boolean = true
   loadSeance!: boolean
+  map!: YaReadyEvent<ymaps.Map>;
 
 
   constructor(
@@ -52,12 +53,15 @@ export class PlaceInfoComponent  implements OnInit {
 
   onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>) {
     //Создаем метку 
+    this.map = { target, ymaps };
     target.geoObjects.add(
       new ymaps.Placemark([this.place?.latitude, this.place?.longitude],{}, {
         iconLayout: 'default#imageWithContent',
         iconContentLayout: ymaps.templateLayoutFactory.createClass(`'<div class="marker"></div>'`)
       })
     )
+    this.map.target.controls.remove("zoomControl")
+    this.map.target.behaviors.disable("drag")
     this.loadMap = false
   }
 
