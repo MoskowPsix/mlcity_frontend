@@ -12,7 +12,7 @@
             {
                 "title": "Настройки",               
                 "icon": "settings",
-                "route": "/cabinet/settings"
+                "route": "/cabinet/settings/profile"
             }
         ]
     },

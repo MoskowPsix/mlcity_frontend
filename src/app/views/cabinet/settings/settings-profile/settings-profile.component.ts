@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { time } from 'console';
 import { env } from 'process';
 import { EMPTY, Subject, Subscription, catchError, takeUntil, of, tap } from 'rxjs';
+import { LoadingService } from 'src/app/services/loading.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { fileTypeValidator } from 'src/app/validators/file-type.validators';
@@ -31,6 +32,7 @@ export class SettingsProfileComponent  implements OnInit {
   constructor(
     private userService: UserService,
     private toastService: ToastService,
+    private loadingService: LoadingService
     ) { }
 
 
@@ -51,7 +53,7 @@ export class SettingsProfileComponent  implements OnInit {
     
     if (this.resetForm.status=='VALID'){
       let user: FormData = this.createFormData()
-
+      this.loadingService.showLoading()
       this.userService.changeName(user).pipe(
         takeUntil(this.destroy$),
         catchError((err)=>{
@@ -63,6 +65,7 @@ export class SettingsProfileComponent  implements OnInit {
           this.userService.setUser(response.user)
           this.getUser()
           this.previewPhotoUrl = ''
+          this.loadingService.hideLoading()
           this.toastService.showToast('Данные обновлены!','success')
         }
       })

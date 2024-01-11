@@ -44,8 +44,6 @@ export class UserService {
   }
 
   changeName(data: FormData): Observable<any>{
-    console.log(data.get('avatar'))
-    console.log(data.get('new_name'))
     // return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/profile/users`,{'new_name':data.get('new_name'), 'avatar':data.get('avatar')})
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/profile/users`,data)
 
