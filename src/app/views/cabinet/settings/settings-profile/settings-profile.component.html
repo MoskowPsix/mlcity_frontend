@@ -7,7 +7,9 @@
         <ion-list>
         <ion-row class="ion-justify-content-center">
           <ion-skeleton-text animated *ngIf="!avatarLoad"></ion-skeleton-text>
-          <img [src]="backendUrl + user.avatar" class="image_avatar" [hidden]="!avatarLoad" *ngIf="user.avatar && !previewPhotoUrl else prevPhoto">
+          <ion-avatar class="image_avatar">
+            <img [src]="avatarUrl" [hidden]="!avatarLoad" *ngIf="user.avatar && !previewPhotoUrl else prevPhoto">
+          </ion-avatar>
           
           <ng-template #prevPhoto>
             <ion-icon *ngIf="!user.avatar && !previewPhotoUrl" name="person-circle" class="image_avatar"></ion-icon>

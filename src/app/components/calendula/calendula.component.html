@@ -1,5 +1,6 @@
 
     <div class="home-container">
+      <!-- {{date.dateStart}} / {{date.dateEnd}} / {{getDateYMD(dateStart)}} / {{getDateYMD(dateEnd)}} -->
       <div class="home-caendcont" #widgetsContent>
         <button class="scroll_left">
           <ion-icon size="large" name="chevron-back-outline" class="ico_left" (click)="scrollLeft()" ></ion-icon>
@@ -16,8 +17,8 @@
         <div class="home-month" *ngFor="let month_now of date_full_year.now_year.now_months"  [hidden]="month_now.data.length === 0" >
           <span class="home-mothname">{{month_now.name}}</span>
           <div class="home-monthdata">
-            <button class="home-day" *ngFor="let day of month_now.data" [class.active]="day.min / 100 > dateStart / 100 && dateEnd > day.min" [class.active-left]="getDateYMD(day.min) === getDateYMD(dateStart)" [class.active-right]="getDateYMD(dateEnd) === getDateYMD(day.min)" (click)='setDate(day.min)' [attr.id]="day.min">
-              <div class="home-day-content" [class.active]="getDateYMD(day.min) === getDateYMD(dateStart) || getDateYMD(day.min) === getDateYMD(dateEnd)">
+            <button class="home-day" *ngFor="let day of month_now.data" [class.active]="day.min / 100 > unixTime(date.dateStart) / 100 && unixTime(date.dateEnd) > day.min" [class.active-left]="getDateYMD(day.min) === getDateYMD(date.dateStart)" [class.active-right]="getDateYMD(date.dateEnd) === getDateYMD(day.min)" (click)='setDate(day.min)' [attr.id]="day.min">
+              <div class="home-day-content" [class.active]="getDateYMD(day.min) === getDateYMD(date.dateStart) || getDateYMD(day.min) === getDateYMD(date.dateEnd)">
                 <span class="home-text">{{day.number}}</span>
                 <span *ngIf="day.day_week === 0" class="home-text01">ПН</span>
                 <span *ngIf="day.day_week === 1" class="home-text01">ВТ</span>
