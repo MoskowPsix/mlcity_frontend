@@ -20,6 +20,7 @@ export class MenuAuthComponent implements OnInit {
   subscription_2!: Subscription
   user: any
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
+  avatarUrl!: string
 
   constructor(private authService: AuthService, private userService: UserService) { }
 
@@ -35,8 +36,17 @@ export class MenuAuthComponent implements OnInit {
   getUser(){
     this.subscription_2 =  this.userService.getUser().subscribe((user) => {
       this.user = user
+
+      if (this.user.avatar.includes("https")){
+        this.avatarUrl = this.user.avatar
+      }
+      else {
+        this.avatarUrl = `${this.backendUrl}${this.user.avatar}`
+      }
     })
   }
+
+
 
   ngOnInit() {
     this.checkAuthenticated()

@@ -15,6 +15,7 @@ import { SightsService } from 'src/app/services/sights.service';
 import { PlaceService } from 'src/app/services/place.service';
 import { IPlace } from 'src/app/models/place';
 import { types } from 'util';
+import { YandexMetricService } from 'src/app/services/yandex-metric.service';
 
 
 
@@ -84,7 +85,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private queryBuilderService: QueryBuilderService,
     private placeService: PlaceService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private metricaService: YandexMetricService
   ) { }
 
   // при клике по кнопке радиуча (5 10 15 20 25)
@@ -586,6 +588,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     //Подписываемся на изменение радиуса
+
+    this.metricaService.metrica()
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.radius = parseInt(value);
       if (this.map && this.map.target)
