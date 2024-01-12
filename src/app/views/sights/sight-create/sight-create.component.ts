@@ -96,6 +96,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   cityesListLoading:boolean = false
   searchCityes: FormControl =  new FormControl('')
 
+  priceArrayForm: any[] = []
+  createEventForm: FormGroup = new FormGroup({})
+
   //nextButtonDisable: boolean = false
 
   placemark!: ymaps.Placemark
@@ -211,7 +214,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     
       this.openModalPostValue = true    
           
-      console.log(this.vkGroupSelected)
+     
     
  }
 
@@ -220,7 +223,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   if(this.vkGroupSelected !=null){
     this.vkGroupModalSelected = this.vkGroupSelected
   }
-  console.log(this.vkGroupModalSelected)
+
  }
 
 
@@ -552,8 +555,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Клик по кнопке веперед
   stepNext(){
    this.stepCurrency++ 
-   console.log(this.stepCurrency)
-   console.log(this.steps)
+
   }
 
   //Клик по нкопке назад
@@ -667,6 +669,18 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     // this.placemark= new ymaps.Placemark(this.createSightForm.value.coords)
     // this.map.target.geoObjects.add(this.placemark)
   }
+
+  //функция добавления цен
+  // addPrice() {
+  //   this.priceArrayForm.push({price: ''})
+  //   this.createEventForm.controls['price'].value.push(
+  //     new FormGroup({
+  //       cors_rub: new FormControl('', [Validators.required]),
+  //       description: new FormControl('', [Validators.required, Validators.minLength(5)]),
+  //     })
+  //   )
+  // }
+
 
   ngOnDestroy(){
     // отписываемся от всех подписок

@@ -219,7 +219,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     
       this.openModalPostValue = true    
           
-      console.log(this.vkGroupSelected)
+  
     
  }
 
@@ -228,7 +228,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   if(this.vkGroupSelected !=null){
     this.vkGroupModalSelected = this.vkGroupSelected
   }
-  console.log(this.vkGroupModalSelected)
+
  }
 
 
@@ -289,7 +289,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   setVkPostsByGroupID(group_id: number){
     this.vkService.getPostsGroup(group_id, 30).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.vkGroupPosts = response.response
-      console.log(response.response)
+   
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
       
     })
@@ -328,7 +328,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.eventTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.types = response.types
       response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
-      console.log(this.types)
+ 
     })
   }
   
@@ -417,7 +417,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.maps[num].target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
       this.maps[num].target.setZoom(17)
     } catch (error) {
-      console.log(error)
+     
     }
   }
 
@@ -466,7 +466,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.uploadFiles.push(event.target.files[i])
       
     }
-    console.log(this.uploadFiles)
+    
     this.createEventForm.patchValue({files: ''}) // Если не обнулять будет ошибка
 
     this.createImagesPreview()  
@@ -580,7 +580,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   goToStep(step: number){
     if(this.stepCurrency !== step){
       this.stepCurrency = step
-      console.log(step)
+      
       //this.disabledNextButton()
       this.stepIsValid()
     }   
@@ -754,7 +754,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.sightsList = []
   }
   setCityes(item:any, num:number){
-    console.log(item.name, num)
+
     this.placeArrayForm[num].city = item.name
     this.placeArrayForm[num].region = item.location_parent.name
     this.createEventForm.value.places[num].patchValue({locationId: item.id})
@@ -777,7 +777,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   setSight(item:any, num: number) {
-    console.log(item)
+
     this.placeArrayForm[num].sight_name = item.name
     this.createEventForm.value.places[num].patchValue({sight_id: item.id, coords: [item.latitude, item.longitude], address: item.address })
     this.addPlacemark([item.latitude, item.longitude], num)
@@ -787,7 +787,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
 
-    console.log(this.types)
+
 
     let locationId: any;
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
