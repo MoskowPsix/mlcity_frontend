@@ -410,12 +410,26 @@
           <ion-col @fade>
 
 
+
+            <div class="BtnModalParrent " style="display: flex; align-items: center;">
+                        
+              <ion-button class="openModalBtn" style="--border-radius:8px;" (click)="openModalGroup()" class="selectGroup">
+                <ion-icon style="margin-right: 1vh;"  name='logo-vk'></ion-icon>
+                Загрузить из поста
+              </ion-button>
+
+              <div class="descriptionButton">
+                вы можете загрузить описание и изображения из группы вконтакте
+              </div>
+
+            </div>
+
             <ion-column class="timeAndDescription">
 
 
 
              
-
+             
           
 
               <div class="descriptionParrent">
@@ -443,26 +457,45 @@
 
                       </ion-textarea>
 
-                        <ion-button  (click)="filesUpload.click()" style="--background: none; --box-shadow: none;" class="addPhoto">
-                          <ion-icon class="addPhotoIcon" style="color: gray;" name="image-outline"></ion-icon>
-                        </ion-button>
 
-                      
+                            <div class="ion-margin-vertical">
+                              <!-- Image Preview -->
+                              <ion-row  *ngIf="imagesPreview">
+                  
+                                <ng-container *ngFor="let img of imagesPreview">
+                                  <ion-col class="imagesPreviewParrent ion-justify-content-center">
+                                    <img class="imagesPreview" [src]="img" alt="preview">
+                  
+                                    <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(img)">
+                                      <ion-icon name="trash-bin" slot="start"></ion-icon>
+                                    </ion-button>
+                  
+                                  </ion-col>    
+                                </ng-container>    
+                              </ion-row>
+
+                              <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
+                                <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
+                                  <ng-container *ngFor="let photo of attachment.photo.sizes">
+                                    <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
+                                      <img class="imagesPreview" alt="ava" src="{{ photo.url }}" /> 
+                                    </ion-col>     
+                                  </ng-container>  
+                                </ng-container> 
+                              </ion-row>
+                            </div>
+                       
+
+                          <ion-item style="border-top: 1px solid rgba(85, 84, 84, 0.226);">
+
+                            <ion-button  (click)="filesUpload.click()" style="--background: none; --box-shadow: none;" class="addPhoto">
+                              <ion-icon class="addPhotoIcon" style="color: gray;" name="image-outline"></ion-icon>
+                            </ion-button>
+                          </ion-item>
 
                       </ion-item>
                     
-                      <div class="BtnModalParrent" style="display: flex; align-items: center;">
-                        
-                        <ion-button class="openModalBtn" style="--border-radius:8px; margin-top: 10%;" (click)="openModalGroup()" class="selectGroup">
-                          <ion-icon style="margin-right: 1vh;"  name='logo-vk'></ion-icon>
-                          Загрузить пост
-                        </ion-button>
-
-                        <div class="descriptionButton">
-                          вы можете загрузить описание и изображения из группы вконтакте
-                        </div>
-
-                      </div>
+                 
 
 
 
@@ -489,32 +522,8 @@
 
             <ion-col class="photoMain"  @fade>
               <!-- <ion-label position="floating">Добавление фотографий (*.png, *.jpeg)</ion-label> -->
-              <div class="ion-margin-vertical">
-                <!-- Image Preview -->
-                <ion-row  *ngIf="imagesPreview">
-    
-                  <ng-container *ngFor="let img of imagesPreview">
-                    <ion-col class="imagesPreviewParrent ion-justify-content-center">
-                      <img class="imagesPreview" [src]="img" alt="preview">
-    
-                      <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(img)">
-                        <ion-icon name="trash-bin" slot="start"></ion-icon>
-                      </ion-button>
-    
-                    </ion-col>    
-                  </ng-container>    
-                </ion-row>
-              </div>
-    
-              <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
-                <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
-                  <ng-container *ngFor="let photo of attachment.photo.sizes">
-                    <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
-                      <img class="imagesPreview" alt="ava" src="{{ photo.url }}" /> 
-                    </ion-col>     
-                  </ng-container>  
-                </ng-container> 
-              </ion-row>
+              
+      
     
               <ion-row *ngIf="vkGroups && vkGroupPostSelected && !vkGroupPostSelected.attachments.length" class="ion-padding-vertical">
                 <ion-col class="ion-align-self-center ion-justify-content-center">
