@@ -15,8 +15,8 @@ export class PlaceInfoComponent  implements OnInit {
   private readonly destroy$ = new Subject<void>()
 
   @Input() place!: IPlace
-  place_date: any
-  date: any = {dateStart: new Date().toISOString(), dateEnd: new Date().toISOString()}
+  place_date!: any[]
+  date: any = {dateStart: new Date().toLocaleDateString('pt-br').split( '/' ).reverse( ).join( '-' ), dateEnd: new Date().toLocaleDateString('pt-br').split( '/' ).reverse( ).join( '-' )}
   @Input() load_seances!: boolean
 
   loadMap: boolean = true
@@ -31,7 +31,7 @@ export class PlaceInfoComponent  implements OnInit {
 
   
   getUnixTime(time: string) {
-    return Math.ceil(new Date(time).getTime() / 86400000)
+    return new Date(time).toLocaleDateString('pt-br').split( '/' ).reverse( ).join( '-' )
   }
 
   getSeanses(){
@@ -39,9 +39,10 @@ export class PlaceInfoComponent  implements OnInit {
     this.placeService.getSeanses(this.place.id).pipe(
       delay(500),
       retry(3),
-      tap(()=> {this.loadSeance = false}),
+      tap(()=> {}),
       map((response)=>{
         this.place_date = response.seances
+        this.normalizeDate()
       }),
       catchError((error) => {
         this.toastSerivce.showToast(MessagesErrors.default, 'danger')
@@ -74,30 +75,26 @@ export class PlaceInfoComponent  implements OnInit {
   changeDateRange(event: any){
     this.date.dateStart = event.dateStart
     this.date.dateEnd = event.dateEnd
-
   }
   //Отбрасываем дату которая меньше нашей
   normalizeDate(){
-    let cur_date: Date = new Date();
-
+    this.loadSeance = false
     if (this.place_date.length > 1) {
-    let test = this.place_date.filter((d: any) => {
-      new Date(d.dateStart).getTime()>=cur_date.getTime()
-    })
-    this.changeDateRange({dateStart: new Date(test[0].dateStart).toISOString(), dateEnd: new Date(test[0].dateStart).toISOString()})
-  } else {
-    this.changeDateRange({dateStart: new Date(this.place_date[0].dateStart).toISOString(), dateEnd: new Date(this.place_date[0].dateStart).toISOString()})
-  }
-    // this.date.dateStart = new Date(test[0].dateStart)
-    // this.date.dateEnd = new Date(test[0].dateEnd)
-    // console.log(test)
-
+      let test = this.place_date.filter((d: any) => {
+        if(new Date(d.date_start).getTime() >= new Date().getTime()) {
+          return d
+        }
+        
+      })
+      this.changeDateRange({dateStart: new Date().toLocaleDateString('pt-br').split( '/' ).reverse( ).join( '-' ), dateEnd: new Date(test[0].date_start).toLocaleDateString('pt-br').split( '/' ).reverse( ).join( '-' )})
+    } else {
+      this.changeDateRange({dateStart: new Date().toLocaleDateString('pt-br').split( '/' ).reverse( ).join( '-' ), dateEnd: new Date().toLocaleDateString('pt-br').split( '/' ).reverse( ).join( '-' )})
+    }
   }
   
   ngOnInit() {
     if(this.load_seances){
       this.getSeanses()
-    this.normalizeDate()
     }
     
     
