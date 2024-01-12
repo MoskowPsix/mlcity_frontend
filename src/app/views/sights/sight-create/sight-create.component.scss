@@ -244,11 +244,24 @@ ion-item.photo-label {
     }
 
     .BtnModalParrent{
+        
+        display: flex;
+        justify-content: center;
+        margin-top: 5%;
+        transition: 1s;
+    }
+    .BtnModalParrent{
+        
+        display: flex;
+        justify-content: center;
         margin-top: 5%;
         transition: 1s;
     }
     .descriptionButton{
-        display: none;
+        transition: 1s;
+        position: absolute;
+        visibility: none;
+        opacity: 0;
         transition: 0.3s;
         background: rgba(66, 66, 66, 0.623);
         color: #fff; 
@@ -266,7 +279,11 @@ ion-item.photo-label {
     .BtnModalParrent:hover{
         transition: 1s;
         .descriptionButton{
+            position: absolute;
             display: block;
+            margin-right: -72%;
+            opacity: 1;
+            transition: opacity 0.3s, padding 0.3s;
             transition: 0.3s;
             background: rgba(66, 66, 66, 0.623);
             color: #fff; 
@@ -418,7 +435,7 @@ ion-item.photo-label {
         min-height: 200px;
     }
     .buttons-mobile{
-        display: block;
+        display: none;
     }
 
     .buttons-dekstop{

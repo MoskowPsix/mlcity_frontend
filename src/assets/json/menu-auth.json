@@ -5,11 +5,6 @@
         "route": "/cabinet",
         "children":[
             {
-                "title": "Уведомления",               
-                "icon": "notifications",
-                "route": "/cabinet/notifications"
-            },
-            {
                 "title": "Настройки",               
                 "icon": "settings",
                 "route": "/cabinet/settings/profile"

@@ -24,8 +24,9 @@ export class SettingsProfileComponent  implements OnInit {
   formData: FormData = new FormData()
   avatar: string = ''
   avatarLoad: boolean = false
-  avatar_url!: string
+  avatarUrl!: string
   previewPhotoUrl!: string
+  backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   
   
 
@@ -39,7 +40,12 @@ export class SettingsProfileComponent  implements OnInit {
   getUser(){
     this.subscription_2 =  this.userService.getUser().subscribe((user: any) => {
       this.user = user;
-      this.avatar_url = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}${this.user.avatar}`
+      if (this.user.avatar.includes("https")){
+        this.avatarUrl = this.user.avatar
+      }
+      else {
+        this.avatarUrl = `${this.backendUrl}${this.user.avatar}`
+      }
       this.avatarLoad = true
     })
   }

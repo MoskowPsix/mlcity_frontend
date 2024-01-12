@@ -69,12 +69,12 @@
 
                       <ion-item>
                             <ion-input clear-on-edit = "false" formControlName="password" id="reg_password" class="Login_inputs" label="password" type="text" placeholder="Пароль" [value]="registerForm.value.password" required> 
-                              <button type="button" style="background: none; margin-top: -22px;"><img id="eye_img" (click) = "OpenPassword('reg_password')" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
+                              <button type="button" style="background: none;"><img id="eye_img" (click) = "OpenPassword('reg_password')" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
                             </ion-input>
                       </ion-item>
                       <ion-item>
                             <ion-input clear-on-edit = "false" formControlName="password_confirmation" class ="Login_inputs reg_password_verfi" label="Password_verfi" type="text" id="confirm_password"  placeholder="Подтверждение пароля">
-                              <button type="button" style="background: none; margin-top: -22px;"><img id="eye_img_confirm" (click) = "OpenPasswordConfirm('confirm_password', $event)" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
+                              <button type="button" style="background: none;"><img id="eye_img_confirm" (click) = "OpenPasswordConfirm('confirm_password', $event)" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
                             </ion-input>
                       
                       </ion-item>

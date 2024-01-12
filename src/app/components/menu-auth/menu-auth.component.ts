@@ -4,7 +4,8 @@ import menuAuthData from '../../../assets/json/menu-auth.json'
 import { IMenu } from 'src/app/models/menu'
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
-
+import { environment } from 'src/environments/environment';
+import { env } from 'process';
 @Component({
   selector: 'app-menu-auth',
   templateUrl: './menu-auth.component.html',
@@ -18,6 +19,8 @@ export class MenuAuthComponent implements OnInit {
   subscription_1!: Subscription 
   subscription_2!: Subscription
   user: any
+  backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
+  avatarUrl!: string
 
   constructor(private authService: AuthService, private userService: UserService) { }
 
@@ -33,8 +36,17 @@ export class MenuAuthComponent implements OnInit {
   getUser(){
     this.subscription_2 =  this.userService.getUser().subscribe((user) => {
       this.user = user
+
+      if (this.user.avatar.includes("https")){
+        this.avatarUrl = this.user.avatar
+      }
+      else {
+        this.avatarUrl = `${this.backendUrl}${this.user.avatar}`
+      }
     })
   }
+
+
 
   ngOnInit() {
     this.checkAuthenticated()
