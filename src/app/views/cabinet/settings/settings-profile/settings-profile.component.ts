@@ -26,6 +26,7 @@ export class SettingsProfileComponent  implements OnInit {
   avatarLoad: boolean = false
   avatar_url!: string
   previewPhotoUrl!: string
+  backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   
   
 
