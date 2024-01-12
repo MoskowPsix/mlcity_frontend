@@ -2,10 +2,13 @@
   <ion-col size="12" *ngIf="isAuthenticated; else notAuth" class="auth">
     <ion-icon src="assets/icons/ring.svg" class="ring"></ion-icon>
 
-    <ion-avatar slot="start">
-      <ion-icon *ngIf="!user && !user?.avatar" name="person-circle"></ion-icon>
-      <img *ngIf="user && user?.avatar" alt="Silhouette of a person's head" src="{{ user.avatar }}" />
+    <ion-avatar class="avatar">
+      <img *ngIf="user.avatar" alt="Silhouette of a person's head" [src] = "backendUrl + user.avatar"/>
+      <ion-icon *ngIf="!user.avatar" class="avatar ion-justify-content-center" size="large" name="person-circle"></ion-icon>
     </ion-avatar>
+
+    
+    
 
     <app-dropdown-popup 
       [id]="'authMenu'"
