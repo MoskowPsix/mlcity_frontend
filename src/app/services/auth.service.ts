@@ -84,8 +84,6 @@ export class AuthService {
   }
 
   resetPassword(data:PasswordReset){
-    console.log(data)
-
     return this.http.put<PasswordReset>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/reset_password`,data)
   }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EMPTY, Subject, catchError, of, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
@@ -17,16 +18,19 @@ export class SettingsPrivacyComponent  implements OnInit {
 
   constructor(
     private toastService: ToastService,
-    private authService: AuthService
+    private authService: AuthService,
+    private loadingService: LoadingService
   ) { }
 
 
   onSubmit() {
     if(this.passwordResetForm.status=='VALID'){
+      
       if(this.passwordResetForm.value.new_password != this.passwordResetForm.value.retry_password){
         this.toastService.showToast('Пароли не совпадают','danger') 
       }
       else{
+        this.loadingService.showLoading()
         this.authService.resetPassword(this.passwordResetForm.value).pipe(
           takeUntil(this.destroy$),
           catchError((err) =>{
@@ -34,6 +38,7 @@ export class SettingsPrivacyComponent  implements OnInit {
             return of(EMPTY) 
           }),
           ).subscribe((response: any) => {
+            this.loadingService.hideLoading()
             if(response.status=='success'){
               this.toastService.showToast('Пароль изменен','success')
             }

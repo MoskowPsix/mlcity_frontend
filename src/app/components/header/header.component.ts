@@ -92,6 +92,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   //Скрыть диалог подтверждения города
   hideCityDialog(){
     this.mapService.hideChangeCityDialog()
+    this.navigationService.modalSearchCityesOpen.next(true)
   }
 
   //Открытие модалки для поиска городов

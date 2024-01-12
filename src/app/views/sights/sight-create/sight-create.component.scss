@@ -17,10 +17,7 @@
         display: flex;
         padding: 24px;
     }
-    // ion-input {
-    //     border: 0.5px solid rgba(168, 168, 168, 0.5);
-    //     border-radius: 4px;
-    // }
+    
     .list-seances {
         background-color: rgba(108, 136, 245, 0.025);
         margin-top: 4px;
@@ -41,7 +38,6 @@
 .buttons-dekstop{
   
     position: fixed;
-    // top: 9rem;
     top: 6.7em;
     width: 100%;
     z-index: 10000000;
@@ -85,7 +81,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    // margin: 1rem;
     font-style: italic;
     cursor: pointer;
     position: relative;
@@ -130,16 +125,6 @@
 ion-item.photo-label {
     --background: transparent;
 }
-
-
-
-
-ion-padding {
-
-    -horizontal {}
-}
-
-
 .main{
     min-height: 100vh;
     width: 90%;
@@ -391,10 +376,6 @@ ion-padding {
     justify-content: center;
 
 }
-
-.descriptionParrent{
-   
-}
 .imagesPreview{
     
     width: 14vh;
@@ -423,16 +404,10 @@ ion-padding {
     margin-top: -10%;
     display: flex;
 }
-
-.dateStart{
-
-}
-
 .dateLast{
     margin-left: auto;
 
 }
-
 .addPhoto{
     min-width: 5vh;
     min-height: 5vh;
