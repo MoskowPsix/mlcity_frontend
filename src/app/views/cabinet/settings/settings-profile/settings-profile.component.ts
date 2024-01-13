@@ -40,7 +40,7 @@ export class SettingsProfileComponent  implements OnInit {
   getUser(){
     this.subscription_2 =  this.userService.getUser().subscribe((user: any) => {
       this.user = user;
-      if (this.user.avatar.includes("https")){
+      if (this.user.avatar && this.user.avatar.includes("https")){
         this.avatarUrl = this.user.avatar
       }
       else {
