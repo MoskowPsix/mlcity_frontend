@@ -618,29 +618,22 @@
       <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
         <ion-col *ngIf="stepCurrency === 3" @fade>
           <ion-list-header>
-            <ion-label>На карте выберите место проведения мероприятия или введите адрес в поле поиска</ion-label>
+            <ion-label>На карте выберите место проведения мероприятия</ion-label>
           </ion-list-header>
             <ion-row class="place-list">
               <ng-container *ngFor="let array of placeArrayForm; let i = index">
                 <ion-card [formGroup]="createEventForm.controls['places'].value[i]">
                   <ion-card-header>
-                    <ion-item>
+                   
                     <ion-row>
-                      <ion-item lines="none">
-                        <ion-icon size="large" name="earth-outline" color="primary"></ion-icon>
-                      </ion-item>
-                      <ion-item lines="none">
-                        <ion-label>
-                          <h1>Место проведения {{ i + 1 }} </h1>
-                        </ion-label>
-                      </ion-item>
+                        <ion-item disabled="true"  style="width: 100%;" fill="" class="" >
+                          <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
+                          <ion-input  fill="outline"  required formControlName="address" (ionChange)="clearSearche($event, i)" placeholder="Адрес мероприятия..." id="{{'search-map-'+i}}" type="text" name="search" required></ion-input>
+                        </ion-item>
+              
                       </ion-row>
-                      <ion-item lines="none" slot="end">
-                        <ion-chip color="danger" (click)="deletePlaceForm(i)">Удалить
-                          <!-- <ion-icon name="close-outline"></ion-icon> -->
-                        </ion-chip>
-                      </ion-item>
-                    </ion-item>
+                 
+                 
                   </ion-card-header>
                   <ion-card-content>
                   <ion-list>
@@ -703,10 +696,7 @@
                       </ion-col>
 
                     <!-- Поиск не работает, сломан -->
-                    <ion-item class="input-address" lines="none">
-                      <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-                      <ion-input formControlName="address" (ionChange)="clearSearche($event, i)" placeholder="Адрес мероприятия..." id="{{'search-map-'+i}}" type="text" name="search" required></ion-input>
-                    </ion-item>
+                  
                     
                     <ion-item >
                       <div class="map ">
@@ -813,7 +803,7 @@
       </ion-row>
       
       <!-- шаг 5 -->
-      <ion-row  [hidden]="stepCurrency !== 4" class="ion-justify-content-center">
+      <ion-row  [hidden]="stepCurrency !== 4" style="max-width: 60%; display: flex; margin: 0 auto;">
         <ion-col *ngIf="stepCurrency === 4" class="ion-justify-content-center" @fade>
           <ion-card *ngFor="let item of createEventForm.controls['price'].value; let i_p = index">
             <ng-container [formGroup]="createEventForm.controls['price'].value[i_p]">
@@ -842,19 +832,19 @@
               </ion-item>
             </ng-container>
           </ion-card>
-          <ion-chip color="primary" class="ion-justify-item-center" (click)="addPrice()">
+          <ion-chip style="margin-bottom: 2rem;" color="primary" class="ion-justify-item-center" (click)="addPrice()">
             <ion-label>Добавить цену</ion-label>
             <ion-icon name="add-outline"></ion-icon>
           </ion-chip>
 
 
           
-            <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
-              <ion-item>
-                <ion-label position="floating" class="position-label-inside">Доп. материалы</ion-label>
-                <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
-              </ion-item>
-            </ion-col>
+          <ion-col style="margin-top: 15px;" size-lg="4" size-md="8" size-xs="12" @fade>
+            <ion-item fill="outline">
+              <ion-label position="floating" class="position-label-inside">Доп. материалы</ion-label>
+              <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
+            </ion-item>
+          </ion-col>
      
 
 

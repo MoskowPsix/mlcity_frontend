@@ -587,12 +587,12 @@
             </ion-list>
 
             <ion-list-header>
-              <ion-label>На карте выберите место достопримечательности или введите адрес в поле поиска</ion-label>
+              <ion-label>На карте выберите место достопримечательности</ion-label>
             </ion-list-header>
             
             <ion-item fill="outline" class="ion-margin-vertical">
               <ion-label position="floating">Поиск по адресу</ion-label>
-              <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
+              <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
               <ion-input formControlName="address" (ionChange)="clearSearche($event)" id="search-map" type="text" name="search" value="{{this.createSightForm.value.address}}" required></ion-input>
             </ion-item>
   
@@ -625,14 +625,52 @@
 
 
             <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
-              <ion-item>
+              <ion-item fill="outline">
                 <ion-label position="floating" class="position-label-inside">Доп. материалы</ion-label>
                 <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
               </ion-item>
             </ion-col>
 
+
+            <ion-col>
+              <ion-list>
+                <ion-radio-group formControlName="status" (ionChange)="selectedStatus($event)" [value]="statusSelected" required>
+                  <ng-container *ngIf="!statusesLoaded">
+                    <ng-container *ngFor="let key of [1,2,3,4,5]">
+                      <ion-item>
+                        <ion-avatar>
+                          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </ion-avatar>
+                        <ion-label class="ion-padding-start">
+                          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                        </ion-label>
+                      </ion-item>
+                    </ng-container>
+                  </ng-container>
+    
+                  <ng-container *ngIf="statusesLoaded">
+                    <ng-container *ngFor="let status of statuses">
+                      <ion-item *ngIf="status.name === 'На модерации'">
+                        <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
+                        <ion-label>Отправить на модерацию</ion-label>
+                        <ion-radio slot="end" [value]="status.id"></ion-radio>
+                      </ion-item>
+                      <ion-item *ngIf="status.name === 'Черновик'">
+                        <ion-icon name="create" slot="start" color="medium" size="large"></ion-icon>
+                        <ion-label>Оставить в черновиках</ion-label>
+                        <ion-radio slot="end" [value]="status.id"></ion-radio>
+                      </ion-item>
+                    </ng-container>
+                  </ng-container>
+                  
+                </ion-radio-group>
+              </ion-list>
+            </ion-col>
+        
+
           </ion-col>
 
+      
 
           
 
