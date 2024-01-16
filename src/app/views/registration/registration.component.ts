@@ -35,7 +35,7 @@ export class RegistrationComponent  implements OnInit {
   confirmCode:boolean = true
   codeCount:number = 0
   interval:any
-  timerRertyFormated:any
+  timerRertyFormated:any = 0
   timerRetryButton:boolean = false
 
 
@@ -262,7 +262,7 @@ export class RegistrationComponent  implements OnInit {
 
 
    async onSubmitReg(){
-
+    this.loadingService.showLoading()
     await this.checkPassword()
     await this.checkEmail()
     await this.checkName()
@@ -282,6 +282,7 @@ export class RegistrationComponent  implements OnInit {
             this.toastService.showToast('Вы успешно зарегестрировались!!!', 'success')
             respons.access_token ? this.loginAfterSocial(respons.access_token) : this.loginAfterSocial('no') 
           }
+          this.loadingService.hideLoading()
           // this.registerForm.disable();
 
          }),
@@ -290,9 +291,11 @@ export class RegistrationComponent  implements OnInit {
         
       }),
       catchError((err) =>{
-       
+        this.loadingService.hideLoading()
         this.toastService.showToast(err.message, 'warning')
         return of(EMPTY) 
+        
+        
       }),
       takeUntil(this.destroy$)
       ).subscribe()

@@ -325,9 +325,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Получаем типы мероприятий
   getTypes(){
+   
     this.eventTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.types = response.types
-      response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
+      this.typesLoaded = true
+
  
     })
   }
@@ -815,6 +817,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.addPrice()
     // console.log(this.createEventForm)
   }
+
+
 
   ngOnDestroy(){
     // отписываемся от всех подписок

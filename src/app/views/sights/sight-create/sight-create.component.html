@@ -88,14 +88,29 @@
 
         
           <!-- шаг 1 -->
+
+
+          <ng-container *ngIf="!typesLoaded">
+            <ng-container *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
+              <ion-item>
+                <ion-avatar>
+                  <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                </ion-avatar>
+                <ion-label class="ion-padding-start">
+                  <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                </ion-label>
+              </ion-item>
+            </ng-container>
+          </ng-container>
+
           <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
             <ion-col size-lg="8" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
             <ion-list>
               <ion-radio-group formControlName="type" (ionChange)="selectedType($event);" [value]="typeSelected" required>
                 <ion-list-header>
-                  <ion-label>Выберите тип достопримечательности</ion-label>
+                  <ion-label *ngIf="typesLoaded">Выберите тип достопримечательности</ion-label>
                 </ion-list-header>
-                <app-sight-type [types]="types" [isSight]="true"></app-sight-type>
+                <app-sight-type [types]="types" [typesLoaded] = "typesLoaded" [isSight]="true"></app-sight-type>
                 
               </ion-radio-group>
             </ion-list>
