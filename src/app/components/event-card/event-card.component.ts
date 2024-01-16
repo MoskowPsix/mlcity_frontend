@@ -78,7 +78,11 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
         this.eventsService.toggleFavorite(event_id).pipe(
           tap(() => {
             this.favorite = !this.favorite
+            this.favorite ? this.event.favorites_users_count++ : this.event.favorites_users_count--
             this.loadingFavotire = false
+          }),
+          tap(() => {
+            this.cdr.detectChanges()
           }),
           catchError((err) =>{
             this.toastService.showToast(MessagesErrors.default, 'danger')
@@ -91,7 +95,11 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
         this.sightsService.toggleFavorite(event_id).pipe(
           tap(() => {
             this.favorite = !this.favorite
+            this.favorite ? this.event.favorites_users_count++ : this.event.favorites_users_count--
             this.loadingFavotire = false
+          }),
+          tap(() => {
+            this.cdr.detectChanges()
           }),
           catchError((err) =>{
             this.toastService.showToast(MessagesErrors.default, 'danger')
@@ -112,23 +120,41 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
-      this.loadingLike = true // для отображения спинера
-      this.eventsService.toggleLike(event_id).pipe(
-        tap(() => {
-          this.like = !this.like
-          this.like 
-            ? this.startLikesCount++ 
-            : this.startLikesCount !== 0 
-              ? this.startLikesCount-- 
-              : 0
-          this.loadingLike = false
-        }),
-        catchError((err) =>{
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY) 
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe()
+      if (!this.isSight) {
+        this.loadingLike = true // для отображения спинера
+        this.eventsService.toggleLike(event_id).pipe(
+          tap(() => {
+            this.like = !this.like
+            this.like ? this.event.liked_users_count++ : this.event.liked_users_count--
+            this.loadingLike = false
+          }),
+          tap(() => {
+            this.cdr.detectChanges()
+          }),
+          catchError((err) =>{
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY) 
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe()
+      } else {
+        this.loadingLike = true // для отображения спинера
+        this.sightsService.toggleLike(event_id).pipe(
+          tap(() => {
+            this.like = !this.like
+            this.like ? this.event.liked_users_count++ : this.event.liked_users_count--
+            this.loadingLike = false
+          }),
+          tap(() => {
+            this.cdr.detectChanges()
+          }),
+          catchError((err) =>{
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY) 
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe()
+      }
     }
   }
 
