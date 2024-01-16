@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 // import { MessagesErrors } from 'src/app/enums/messages-register';
 import internal from 'stream';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-registration',
@@ -37,7 +38,7 @@ export class RegistrationComponent  implements OnInit {
   interval:any
   timerRertyFormated:any = 0
   timerRetryButton:boolean = false
-
+  vkontakteAuthUrl: string = environment.vkontakteAuthUrl
 
   @ViewChild('modal') modal!:IonModal
 
