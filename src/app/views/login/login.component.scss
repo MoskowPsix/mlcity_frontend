@@ -31,10 +31,7 @@
 // }
 
 
-ion-item{
-    --border-style: none;
-    --background:none;
-}
+
 
 ion-list{
    background:none;
@@ -58,6 +55,10 @@ background:none;
 border: none;
 
     .Login_wrapper{
+        ion-item{
+            --border-style: none;
+            --background:none;
+        }
         margin-top: 42px;
         display: flex;
         justify-content: center;
@@ -280,3 +281,36 @@ ion-modal {
 --height: 630px;
 }
 
+.vkPasswordModal{
+
+    --max-width: 80rem;
+    --height: 480px;
+    ion-item{
+       margin-bottom:1rem ;
+       --padding: 0;
+    }
+
+    .vkPasswordModalMainWrapper{
+        display: flex;
+        justify-content: center;
+    }
+
+    .vkPasswordModalMain{
+        
+    }
+
+    .vkPasswordModalNote{
+        padding: 12px;
+        
+        color: #222427a3;
+        font-weight: 500;
+        font-size: 14px;
+        margin-top: 2vh;
+        border-radius: 6px 6px 0px 6px;
+    }
+
+
+}
+.vkPasswordModalHeader{
+
+}

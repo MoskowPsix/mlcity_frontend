@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 // import { MessagesErrors } from 'src/app/enums/messages-register';
 import internal from 'stream';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-registration',
@@ -35,9 +36,9 @@ export class RegistrationComponent  implements OnInit {
   confirmCode:boolean = true
   codeCount:number = 0
   interval:any
-  timerRertyFormated:any
+  timerRertyFormated:any = 0
   timerRetryButton:boolean = false
-
+  vkontakteAuthUrl: string = environment.vkontakteAuthUrl
 
   @ViewChild('modal') modal!:IonModal
 
@@ -262,7 +263,7 @@ export class RegistrationComponent  implements OnInit {
 
 
    async onSubmitReg(){
-
+    this.loadingService.showLoading()
     await this.checkPassword()
     await this.checkEmail()
     await this.checkName()
@@ -282,6 +283,7 @@ export class RegistrationComponent  implements OnInit {
             this.toastService.showToast('Вы успешно зарегестрировались!!!', 'success')
             respons.access_token ? this.loginAfterSocial(respons.access_token) : this.loginAfterSocial('no') 
           }
+          this.loadingService.hideLoading()
           // this.registerForm.disable();
 
          }),
@@ -290,9 +292,11 @@ export class RegistrationComponent  implements OnInit {
         
       }),
       catchError((err) =>{
-       
+        this.loadingService.hideLoading()
         this.toastService.showToast(err.message, 'warning')
         return of(EMPTY) 
+        
+        
       }),
       takeUntil(this.destroy$)
       ).subscribe()

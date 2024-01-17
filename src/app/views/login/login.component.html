@@ -68,45 +68,66 @@
     </ion-row>
   </ion-grid> -->
 
-  <ion-modal #modal [isOpen]="modalPass" [presentingElement]="presentingElement">
+
+  <!-- модальное окно с паролем для вк -->
+  <ion-modal class="vkPasswordModal" #modal [isOpen]="modalPass" [presentingElement]="presentingElement">
     <ng-template>
       <ion-header>
-        <ion-toolbar>
+        <ion-toolbar class="vkPasswordModalHeader">
           <ion-title>Установить новый пароль</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="modal.dismiss()">Закрыть</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding">
+
+      <ion-col class="vkPasswordModalMainWrapper">
+
+        
+      <ion-content class="ion-padding vkPasswordModalMain">
         <ion-item lines="none" [formGroup]="formSetPassword">
+
+
           <ion-col>
-            <ion-item>
-              <ion-label><h2>Введите пароль: </h2></ion-label>
-              <ion-input
+
+            <ion-item fill="outline" class="vkPasswordModalInput">
+              <ion-label>
+
+              </ion-label>
+              <ion-input 
                 label="Введите пароль"
                 labelPlacement="stacked"
                 type="password"
-                placeholder="*******"
+                placeholder="Введите пароль"
                 formControlName="password"
               ></ion-input>
             </ion-item>
 
-              <ion-item>
-                <ion-label><h2>Повторите пароль: </h2></ion-label>
+              <ion-item fill="outline">
+                <ion-label></ion-label>
                 <ion-input
                 label="Повторите введённый пароль"
                 labelPlacement="stacked"
                 type="password"
-                placeholder="*******"
+                placeholder="Повторите введённый пароль"
                 formControlName="password_retry"
               ></ion-input>
             </ion-item>
           </ion-col>
         </ion-item>
+        <ion-column  >
+          <div class="vkPasswordModalNote">
+            
+            Этот момент представляет собой важное, но необязательное условие. 
+            Указанный пароль будет привязан к вашей учетной записи, что позволит вам войти под своим именем и паролем.
+          </div>
+        </ion-column>
         <ion-item lines="none"><ion-button slot="end" (click)="setPass()">Подтвердить</ion-button></ion-item>
-
       </ion-content>
+
+      </ion-col>
+
+
     </ng-template>
   </ion-modal>
 
