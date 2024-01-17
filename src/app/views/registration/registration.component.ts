@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs';
+import { EMPTY, Subject, catchError, delay, filter, map, of, retry, takeUntil, tap } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -8,10 +8,13 @@ import { MaskitoOptions,MaskitoElementPredicateAsync } from '@maskito/core';
 import { LoadingService } from 'src/app/services/loading.service';
 import { UserService } from 'src/app/services/user.service';
 import { TokenService } from 'src/app/services/token.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 // import { MessagesErrors } from 'src/app/enums/messages-register';
 import internal from 'stream';
+import { Location }  from '@angular/common';
+import { Metrika } from 'ng-yandex-metrika';
+
 
 @Component({
   selector: 'app-registration',
@@ -45,7 +48,7 @@ export class RegistrationComponent  implements OnInit {
   readonly phoneMask: MaskitoOptions = {
     mask: ['+', '7', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
   };
-  
+
   readonly maskPredicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
 
   readonly maskNumber:MaskitoOptions = {
@@ -59,11 +62,27 @@ export class RegistrationComponent  implements OnInit {
     private userService: UserService,
     private tokenService: TokenService,
     private router: Router,
-  
-  ) { }
+    private metrika: Metrika,
+    private location: Location,
+
+  )
+  { 
+    let prevPath = this.location.path();
+    this.router
+    .events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe(() => {
+        const newPath = location.path();
+        this.metrika.hit(newPath, {
+          referer: prevPath,
+          callback: () => { console.log('hit end'); }
+        });
+        prevPath = newPath;
+      });
+  }
 
 
-  
+
   ngOnInit() {
     this.registerForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -78,14 +97,14 @@ export class RegistrationComponent  implements OnInit {
       emailConfirmInput:new FormControl('',[Validators.required,Validators.minLength(4)])
     });
 
-  
+
     this.OpenPassword('reg_password');
     this.OpenPasswordConfirm('confirm_password',event);
-   
- 
+
+
   }
 
-  
+
 
   checkName() {
     this.busyName = this.registerForm.value.name;
@@ -96,13 +115,13 @@ export class RegistrationComponent  implements OnInit {
                     this.nameBusy = respons.user_name;
                   }),
                   catchError((err) =>{
-                    return of(EMPTY) 
+                    return of(EMPTY)
                   }),
                   takeUntil(this.destroy$)
                 ).subscribe()
             }
         }
-    
+
   }
 
 
@@ -118,11 +137,11 @@ export class RegistrationComponent  implements OnInit {
     if (!this.registerForm.controls['email'].invalid) {
        this.authservice.checkEmail(this.registerForm.value.email).pipe(
         map((respons:any) => {
-          
+
           this.emailBusy = respons.user_email
          }),
          catchError((err) =>{
-           return of(EMPTY) 
+           return of(EMPTY)
          }),
        ).subscribe()
     }
@@ -145,14 +164,14 @@ export class RegistrationComponent  implements OnInit {
 
    checkPassword(){
     if(this.registerForm.value.password == this.registerForm.value.password_confirmation){
-      this.busyPass = true 
-  
+      this.busyPass = true
+
     }else{
       this.busyPass = false
-     
+
     }
    }
-  
+
 
    OpenPassword(input:string){
     let passwordInput:any = document.getElementById("reg_password")
@@ -160,14 +179,14 @@ export class RegistrationComponent  implements OnInit {
     if(passwordInput.type == 'password'){
       img.src = "../assets/icons/eye_open.svg"
       passwordInput.type = 'text'
-     
-      
-    } 
+
+
+    }
     else if (passwordInput.type == 'text'){
       passwordInput.type ='password'
       img.src = "../assets/icons/eye_closed.svg"
     }
-    
+
    }
 
 
@@ -175,12 +194,12 @@ export class RegistrationComponent  implements OnInit {
       let clearPhone:string = this.registerForm.value.number
       let newStr = clearPhone.replace(/\+7|\s|\-|\(|\)/g, '')
       this.registerForm.value.number = newStr
-       
+
    }
 
-   
+
    OpenPasswordConfirm(input:string,event:any){
-    
+
 
 
     let passwordInput:any = document.getElementById(input)
@@ -188,14 +207,14 @@ export class RegistrationComponent  implements OnInit {
     if(passwordInput.type === 'password'){
       passwordInput.type = 'text'
       img.src = "../assets/icons/eye_open.svg"
-      
-    } 
+
+    }
     else if (passwordInput.type === 'text'){
       passwordInput.type ='password'
       img.src = "../assets/icons/eye_closed.svg"
     }
 
-    
+
    }
 
    confirmEmail(){
@@ -210,7 +229,7 @@ export class RegistrationComponent  implements OnInit {
             this.registerForm.reset()
             this.registerForm.enable()
           }else{
-           
+
           }
         }),
         catchError((err) =>{
@@ -219,14 +238,14 @@ export class RegistrationComponent  implements OnInit {
             this.confirmCode = false
             this.codeCount = 1
           }
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
       ).subscribe()
 
     }
    }
 
-    
+
 
    CodeCountFn(){
     if(this.modalForm.value.emailConfirmInput.length >=3 && this.codeCount == 1){
@@ -268,9 +287,9 @@ export class RegistrationComponent  implements OnInit {
     await this.checkName()
     await this.SubmitPhone()
     await this.checkNumber()
-   
+
     if (this.emailBusy && this.nameBusy && this.busyPass) {
-    this.authservice.register(this.registerForm.value).pipe( 
+    this.authservice.register(this.registerForm.value).pipe(
       delay(100),
       retry(3),
       map((respons:any) => {
@@ -280,22 +299,22 @@ export class RegistrationComponent  implements OnInit {
           //this.confirmEmail();
           if (respons.status == 'success') {
             this.toastService.showToast('Вы успешно зарегестрировались!!!', 'success')
-            respons.access_token ? this.loginAfterSocial(respons.access_token) : this.loginAfterSocial('no') 
+            respons.access_token ? this.loginAfterSocial(respons.access_token) : this.loginAfterSocial('no')
           }
           this.loadingService.hideLoading()
           // this.registerForm.disable();
 
          }),
-        
+
       tap(() => {
-        
+
       }),
       catchError((err) =>{
         this.loadingService.hideLoading()
         this.toastService.showToast(err.message, 'warning')
-        return of(EMPTY) 
-        
-        
+        return of(EMPTY)
+
+
       }),
       takeUntil(this.destroy$)
       ).subscribe()
@@ -311,7 +330,7 @@ export class RegistrationComponent  implements OnInit {
     // let interval:any
     // this.interval = setInterval(()=>{
     //   if(minutes > 0){
-        
+
     //     seconds--
     //   }
     //   if(seconds == 0){
@@ -354,11 +373,11 @@ export class RegistrationComponent  implements OnInit {
       }
     }
   }, 1000);
-  
+
 
    }
 
-   
+
 
 
    RertryCodeBtn(){
@@ -368,7 +387,7 @@ export class RegistrationComponent  implements OnInit {
          map((respons:any) => {
           }),
           catchError((err) =>{
-            return of(EMPTY) 
+            return of(EMPTY)
           }),
         ).subscribe()
      }
@@ -378,11 +397,11 @@ export class RegistrationComponent  implements OnInit {
 
 
 
-    
 
 
 
-   
+
+
 
 
 
