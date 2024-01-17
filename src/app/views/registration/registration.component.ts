@@ -14,6 +14,7 @@ import { IonModal } from '@ionic/angular';
 import internal from 'stream';
 import { Location }  from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class RegistrationComponent  implements OnInit {
   interval:any
   timerRertyFormated:any = 0
   timerRetryButton:boolean = false
-
+  vkontakteAuthUrl: string = environment.vkontakteAuthUrl
 
   @ViewChild('modal') modal!:IonModal
 
