@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core'
+import { Component, Input, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef, ChangeDetectionStrategy, NgZone} from '@angular/core'
 import { catchError, delay, EMPTY, map, of, retry, Subject, switchMap, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { MessagesAuth } from 'src/app/enums/messages-auth'
@@ -14,7 +14,7 @@ import {register} from 'swiper/element/bundle'
 import {Swiper} from 'swiper/types'
 import { SightsService } from 'src/app/services/sights.service'
 import { CommentsService } from 'src/app/services/comments.service'
-
+import numeral from 'numeral'
 register()
 
 @Component({
@@ -33,6 +33,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     private vkService: VkService,
     private cdr: ChangeDetectorRef,
     private sanitizer:DomSanitizer,
+
   ) { }
   
   private readonly destroy$ = new Subject<void>()
@@ -96,6 +97,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
           tap(() => {
             this.favorite = !this.favorite
             this.favorite ? this.event.favorites_users_count++ : this.event.favorites_users_count--
+            
             this.loadingFavotire = false
           }),
           tap(() => {
@@ -219,6 +221,9 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
       ).subscribe()
     }   
   }
+  getCurentNumber(numer: number) {
+    return numeral(numer).format('0.0a')
+  }
 
   getMinPrice(prices: any[]) {
     let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub)
@@ -242,7 +247,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
       this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
       this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
     }
-    
     
   }
 
