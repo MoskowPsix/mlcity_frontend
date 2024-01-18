@@ -4,28 +4,20 @@ import { tap, throwError } from 'rxjs'
 import { environment } from 'src/environments/environment';
 import { ISight } from '../models/sight';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
-import { UserService } from './user.service';
+import { UserService } from './user.service'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class SightsService {
 
-  constructor(private http: HttpClient, private userService: UserService) { this.getUserId() }
+  constructor(private http: HttpClient, private userService: UserService) { this.user_id = this.getUserId() }
 
-  private user_id: number = 0
+  private user_id: number
 
   getUserId(){
-    this.userService.getUser().pipe(
-      //take(1),
-      tap((user: any) => {
-        if (user) {
-          this.user_id = user.id
-        } else {
-          this.getUserId()
-        }
-      })
-    ).subscribe().unsubscribe();    
+    const user = this.userService.getUserFromLocalStorage()
+    return user.id
   }
 
   getSights(params: IGetEventsAndSights) { //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)
