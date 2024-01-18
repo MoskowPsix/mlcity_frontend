@@ -113,6 +113,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.setRadiusTolocalStorage(radius.toString())
   }
 
+  pinRadiusFormatter(value: number) {
+    return `${value} км.`;
+  }
+  radiusChange(event:any){
+    this.filterService.setRadiusTolocalStorage(event.detail.value)
+  }
+  radiusPlus(){
+    let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
+    if (radius+1 <= 25) {
+      this.filterService.setRadiusTolocalStorage(`${radius+1}`)
+    }
+  }
+  radiusMinus(){
+    let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
+    if (radius-1 >= 1) {
+      this.filterService.setRadiusTolocalStorage(`${radius-1}`)
+    }
+  }
+
   sightTypesChange(typeId: any){
     if (typeId !== 'all') {
     this.filterService.setSightTypesTolocalStorage([typeId])
