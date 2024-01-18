@@ -1,6 +1,6 @@
 import { Component, OnInit,OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil, tap, retry, catchError, of, EMPTY} from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, filter} from 'rxjs';
 import { ISight } from 'src/app/models/sight';
 import { SightsService } from 'src/app/services/sights.service';
 import { IonicSlides } from '@ionic/angular';
@@ -12,6 +12,9 @@ import { ToastService } from 'src/app/services/toast.service';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { AuthService } from 'src/app/services/auth.service';
 // import { Swiper } from 'swiper/types';
+import { Location }  from '@angular/common';
+import { Metrika } from 'ng-yandex-metrika';
+
 
 @Component({
   selector: 'app-sight-show',
@@ -46,8 +49,25 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private sightsService: SightsService,
     private toastService: ToastService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private metrika: Metrika,
+    private location: Location,
+    private router: Router
+  ) 
+  {
+    let prevPath = this.location.path();
+    this.router
+    .events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe(() => {
+        const newPath = location.path();
+        this.metrika.hit(newPath, {
+          referer: prevPath,
+          callback: () => { console.log('hit end'); }
+        });
+        prevPath = newPath;
+      });
+  }
 
   
   getSight(){
