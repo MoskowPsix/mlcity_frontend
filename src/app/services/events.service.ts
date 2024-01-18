@@ -18,22 +18,14 @@ export class EventsService {
     private http: HttpClient,
     private userService: UserService,
   ) {
-    this.getUserId()
+    this.user_id = this.getUserId()
   }
 
   private user_id: number = 0
 
   getUserId(){
-    this.userService.getUser().pipe(
-      //take(1),
-      tap((user: any) => {
-        if (user) {
-          this.user_id = user.id
-        } else {
-          this.getUserId()
-        }
-      })
-    ).subscribe().unsubscribe();    
+    const user = this.userService.getUserFromLocalStorage()
+    return user.id
   }
 
   getEvents(params: IGetEventsAndSights) { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)

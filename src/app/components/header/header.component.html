@@ -159,7 +159,7 @@
                 <app-no-data />
             </ng-container>
             <ion-list>
-              <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" [hidden]="item.location_parent.name === 'РФ'" class="search-item">
+              <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" class="search-item">
                 <ion-label>
                     {{ item.name }}<p>{{ item.location_parent.name }}</p>
                 </ion-label>
