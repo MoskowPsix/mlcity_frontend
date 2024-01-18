@@ -25,7 +25,7 @@ export class MapService {
   public geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationRegion: BehaviorSubject<string> = new BehaviorSubject('')
-  
+
 
 
   options: NativeGeocoderOptions = {
@@ -33,10 +33,10 @@ export class MapService {
     maxResults: 1,
     defaultLocale: 'ru_RU'
   }
-  
+
   constructor(
-    private nativegeocoder: NativeGeocoder, 
-    private locationAccuracy: LocationAccuracy, 
+    private nativegeocoder: NativeGeocoder,
+    private locationAccuracy: LocationAccuracy,
     private yaGeocoderService: YaGeocoderService,
     private filterService: FilterService,
     private navigationService: NavigationService,
@@ -67,7 +67,7 @@ export class MapService {
 
       //Запускаем поиск геопозиции в вебе
       //console.log('ипользуется веб версия')
-      await this.setCenterMap(map, CirclePoint) 
+      await this.setCenterMap(map, CirclePoint)
 
     } else {
 
@@ -83,7 +83,7 @@ export class MapService {
           const status = await this.enableLocation();
           //console.log("стат " + status)
           if(status) {
-            await this.setCenterMap(map, CirclePoint) 
+            await this.setCenterMap(map, CirclePoint)
           } else {
             //Если человек отказывается активировать GPS "нет,спасибо"
             let coords = await this.defaultCoords()
@@ -121,7 +121,6 @@ export class MapService {
     try {
        coords = await this.getCurrentLocation();
        this.setPlacemark(map, CirclePoint, coords!, true)
-
     } catch (error) {
        coords = await this.defaultCoords()
        this.setPlacemark(map, CirclePoint, coords!, false)
@@ -224,12 +223,12 @@ export class MapService {
 
     if (!this.filterService.getLocationFromlocalStorage() ){
       this.setCoordsFromChangeCityDialog()
-      //this.showChangeCityDialog.next(true)
-    } else  if (this.geolocationCity.value && this.filterService.getLocationFromlocalStorage() !== this.geolocationCity.value){
       this.showChangeCityDialog.next(true)
-    } 
+    } else  if (this.geolocationCity.value && this.filterService.getLocationFromlocalStorage() !== this.geolocationCity.value){
+      this.showChangeCityDialog.next(false)
+    }
   }
-  
+
   //Устанавливаем дефолтные значения после подтверждения диалога на смену города
   setCoordsFromChangeCityDialog(){
     // Запрашиваем ид
@@ -240,6 +239,11 @@ export class MapService {
     // this.filterService.setLocationTolocalStorage(this.geolocationRegion.value)
     this.filterService.setLocationLatitudeTolocalStorage(this.geolocationLatitude.value.toString())
     this.filterService.setLocationLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
+
+    // this.showChangeCityDialog.next(false)
+
+    this.filterService.changeFilter.next(true)
+    this.filterService.changeCityFilter.next(true)
   }
 
   hideChangeCityDialog(){
@@ -255,6 +259,7 @@ export class MapService {
 
       cityCoords.push(parseFloat(this.filterService.locationLatitude.value), parseFloat(this.filterService.locationLongitude.value))
     } else {
+      this.showChangeCityDialog.next(false)
       cityCoords.push(parseFloat(this.filterService.getLocationLatitudeFromlocalStorage()!), parseFloat(this.filterService.getLocationLongitudeFromlocalStorage()!))
     }
     return cityCoords
@@ -263,16 +268,16 @@ export class MapService {
   // Определяем местоположение пользователя
   async positionFilter(map: any, circlePoint: ymaps.Circle){
     //if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter.value) {
-    //Если первый запуск приложения то устанавливаем геопозицию   
+    //Если первый запуск приложения то устанавливаем геопозицию
     if (this.navigationService.appFirstLoading.value){
       await this.geolocationMapNative(map, circlePoint)
-    }  
-    // Было ещё в условии: this.filterService.changeCityFilter.value && 
+    }
+    // Было ещё в условии: this.filterService.changeCityFilter.value &&
     //Если не первый запуск и менялся фильтр города то перекидываем на город
     if (!this.navigationService.appFirstLoading.value) {
         await circlePoint.geometry?.setCoordinates([parseFloat(this.filterService.locationLatitude.value), parseFloat(this.filterService.locationLongitude.value)])
         map.target.setBounds(circlePoint.geometry?.getBounds()!, {checkZoomRange: true})
-    } 
+    }
     //ветка если юзать this.filterService.saveFilters.value === 1
     // else {
     //   await circlePoint.geometry?.setCoordinates(this.defaultCoords())

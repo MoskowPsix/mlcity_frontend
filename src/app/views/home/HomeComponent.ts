@@ -660,6 +660,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.filterService.locationLatitude.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.mapService.circleCenterLatitude.next(value);
+      
     });
     this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.sightTypeId = value[0]

@@ -11,15 +11,15 @@
       <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
     </div>
 
-    <div class="range-radius">
+    <!-- <div class="range-radius">
       <ion-row class="" >
         <ion-icon (click)="radiusMinus()" name="remove-outline" class="swither-icon" color="primary"></ion-icon>
-        <ion-range 
-        [ticks]="true" 
-        [snaps]="true" 
-        [min]="1" 
-        [max]="25" 
-        [pin]="true" 
+        <ion-range
+        [ticks]="true"
+        [snaps]="true"
+        [min]="1"
+        [max]="25"
+        [pin]="true"
         [value]="radius"
         [pinFormatter]="pinRadiusFormatter"
         (ionKnobMoveEnd)="radiusChange($event)"
@@ -27,7 +27,7 @@
         <ion-icon (click)="radiusPlus()" name="add-outline" class="swither-icon" color="primary"></ion-icon>
         <ion-label class="ion-padding-horizontal">{{ radius }} км.</ion-label>
       </ion-row>
-    </div>
+    </div> -->
 
     <div class="container-swither">
       <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" #event>
