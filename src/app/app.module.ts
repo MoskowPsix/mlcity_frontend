@@ -86,6 +86,7 @@ import { EdditSightComponent } from './views/cabinet/my-sights/edit-sight/eddit-
 import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.component';
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component';
 import { MetrikaModule } from 'ng-yandex-metrika';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 
 
@@ -157,6 +158,7 @@ registerLocaleData(localeRu, 'ru');
     AppRoutingModule,
     AngularYandexMapsModule.forRoot(mapConfig),
     HttpClientModule,
+    NgxSliderModule,
     MetrikaModule.forRoot(
       {id: 96112606,
       webvisor: true,
