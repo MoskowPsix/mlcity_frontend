@@ -58,12 +58,12 @@ export class HeaderComponent implements OnInit,OnDestroy {
   sightsList: any[] = [];
   searchEvents: FormControl =  new FormControl('')
 
-  queryParams?: IGetEventsAndSights 
+  queryParams?: IGetEventsAndSights
 
   constructor(
     private queryBuilderService: QueryBuilderService,
-    private navigationService: NavigationService, 
-    private mapService: MapService, 
+    private navigationService: NavigationService,
+    private mapService: MapService,
     private vkService: VkService,
     private toastService: ToastService,
     private eventsService: EventsService,
@@ -109,7 +109,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     this.navigationService.modalSearchEventsOpen.next(isOpen)
   }
 
-  //Получаем города 
+  //Получаем города
   getCityes(event: any){
     if (event.target.value.length >= 3){
       this.cityesListLoading = true
@@ -124,7 +124,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   }
 
   //Устанавливаем город, регион и координаты в локал сторадж и в сервис
-  onSelectedCity(item:any){  
+  onSelectedCity(item:any){
     console.log(item)
     this.city = item.name
     this.region = item.location_parent.name
@@ -139,11 +139,11 @@ export class HeaderComponent implements OnInit,OnDestroy {
     this.filterService.changeFilter.next(true)
     this.filterService.changeCityFilter.next(true)
     this.modalClose()
-    this.toastService.showToast(MessagesCityes.setCitySuccess, 'success') 
+    this.toastService.showToast(MessagesCityes.setCitySuccess, 'success')
   }
 
   //Получить ивенты
-  getEventsAndSights(event: any){  
+  getEventsAndSights(event: any){
     if (event.target.value.length >= 3){
       this.eventsListLoading = true
       this.minLengthEventsListError = false
@@ -162,7 +162,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
         catchError((err) =>{
           this.eventsListLoading = false
           this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
         takeUntil(this.destroy$)
         ).subscribe((response:any) => {
@@ -174,7 +174,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
         catchError((err) =>{
           this.sightsListLoading = false
           this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
         takeUntil(this.destroy$)
         ).subscribe((response:any) => {
@@ -186,12 +186,12 @@ export class HeaderComponent implements OnInit,OnDestroy {
     }
   }
 
- 
+
 
   onSegmentChanged(event:any){
     this.segment = event.detail.value
   }
-  
+
   //Очистить поля поисков в модалках поиска горда и выбора ивента
   onClearSearch(){
     this.minLengthCityesListError = false
@@ -216,7 +216,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
   //Меняем радиус
   radiusChange(event:any){
     this.filterService.setRadiusTolocalStorage(event.detail.value)
-    
+
   }
 
   ngOnInit() {
@@ -239,6 +239,13 @@ export class HeaderComponent implements OnInit,OnDestroy {
     //Подписываемся на город
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.locationId = value
+      // Запрашиваем локацию по ид если меняется
+      if(value){
+        this.locationService.getLocationsIds(value).pipe().subscribe( value =>{
+          this.city = value.location.name
+          this.region = value.location.location_parent.name
+        })
+      }
     })
 
     //Подписываемся на город из Геолокации
@@ -261,7 +268,7 @@ export class HeaderComponent implements OnInit,OnDestroy {
     this.mapService.showChangeCityDialog.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.showChangeCityDialog = value
     })
-    
+
     //Формируем меню из файла
     this.menuPublic = menuPublicData
 

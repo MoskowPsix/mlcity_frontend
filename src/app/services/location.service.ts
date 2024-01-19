@@ -15,7 +15,7 @@ export class LocationService {
   }
 
   getLocationsIds(id: number) { //Получаем регио или город по id
-    return this.http.get<Location[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/location/${id}`)
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/location/${id}`)
   }
 
   getLocationsName(name: string) { //Получаем по имени город или регион
@@ -31,8 +31,8 @@ export class LocationService {
   }
   getLocationByCoords(coords: number[]) {
     const params = {
-      latitude: coords[0], 
-      longitude: coords[1] 
+      latitude: coords[0],
+      longitude: coords[1]
     }
     return this.http.get<Location>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/locations/search/coords`, { params: {...params} } )
   }

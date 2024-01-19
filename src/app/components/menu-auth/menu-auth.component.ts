@@ -16,7 +16,7 @@ export class MenuAuthComponent implements OnInit {
   menuAuth: IMenu[] = []
   isAuthenticated: boolean = false
   subscriptions: Subscription[] = []
-  subscription_1!: Subscription 
+  subscription_1!: Subscription
   subscription_2!: Subscription
   user: any
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
@@ -37,7 +37,7 @@ export class MenuAuthComponent implements OnInit {
     this.subscription_2 =  this.userService.getUser().subscribe((user) => {
       this.user = user
 
-      if (this.user.avatar.includes("https")){
+      if (this.user.avatar && this.user.avatar.includes("https")){
         this.avatarUrl = this.user.avatar
       }
       else {
@@ -64,9 +64,9 @@ export class MenuAuthComponent implements OnInit {
       this.subscriptions.forEach((subscription) => {
         if (subscription){
           subscription.unsubscribe()
-        }      
+        }
       })
-     }  
+     }
   }
 
 }

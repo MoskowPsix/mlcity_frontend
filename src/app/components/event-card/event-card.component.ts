@@ -42,6 +42,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   @Input() event!: any
   @Input() isSight: boolean = false
   comments: boolean = false
+  loadingComment: boolean = false
 
   @ViewChild('swiper')
   elementRef?: ElementRef
@@ -222,7 +223,11 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     }   
   }
   getCurentNumber(numer: number) {
-    return numeral(numer).format('0.0a')
+    if ( numer <= 999 ) {
+      return numeral(numer).format('0')
+    } else {
+      return numeral(numer).format('0.0a')
+    }
   }
 
   getMinPrice(prices: any[]) {
@@ -247,7 +252,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
       this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
       this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
     }
-    
   }
 
   ngAfterViewInit(): void {
@@ -264,10 +268,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     })
     
     this.cdr.detectChanges()
-  }
-
-  testFocus(){
-    console.log("get focused")
   }
 
   scrollEvent = (): void => {
@@ -310,24 +310,56 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
   toggleComment() {
+    this.loadingComment = true
     if (!this.comments && !this.event.comments && !this.isSight) {
-      this.commentsServices.getCommentsEventsIds(this.event.id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        this.event['comments'] = response.comments
-        response.comments ?  this.comments = true : this.comments = false
+      this.commentsServices.getCommentsEventsIds(this.event.id).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          this.loadingComment = false
+          this.comments = true
+        }),
+        map((response:any) => {
+          this.event.comments = response.comments
+        }),
+        tap(() => {
+          this.cdr.detectChanges()
+        }),
+        catchError(err => {
+          console.log(err)
+          return of(EMPTY)
+        })
+        ).subscribe((response: any) => {
+        // this.event['comments'] = response.comments
       })
     } else if(!this.comments && !this.event.comments && this.isSight) {
-      this.commentsServices.getCommentsSightsIds(this.event.id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        this.event['comments'] = response.comments
-        response.comments ?  this.comments = true : this.comments = false
+      this.commentsServices.getCommentsSightsIds(this.event.id).pipe(
+        takeUntil(this.destroy$),
+        tap(() => {
+          this.loadingComment = false
+          this.comments = true
+        }),
+        map((response:any) => {
+          this.event.comments = response.comments
+        }),
+        tap(() => {
+          this.cdr.detectChanges()
+        }),
+        catchError(err => {
+          console.log(err)
+          return of(EMPTY)
+        })
+      )
+      .subscribe((response: any) => {
+        // this.event['comments'] = response.comments
+        // console.log(this.event)
       })
     }else if(!this.comments && this.event.comments) {
       this.comments = true
+      this.loadingComment = false
     } else if (this.comments && this.event.comments) {
       this.comments = false
+      this.loadingComment = false
     }
-  }
-  takeUntilDestroyed() {
-    console.log(this.event.name)
   }
   ngOnDestroy(){
     // отписываемся от всех подписок

@@ -21,8 +21,10 @@ export class VkService {
       //take(1),
       tap((user: any) => {
         if (user) {
-          this.vk_access_token = user.social_account.token
-          this.vk_user_id = user.social_account.provider_id
+          if (user.social_account) {
+            this.vk_access_token = user.social_account.token
+            this.vk_user_id = user.social_account.provider_id
+          }
         } else {
           this.getAccessToken()
         }
