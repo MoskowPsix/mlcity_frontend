@@ -11,13 +11,21 @@ import { UserService } from './user.service';
 })
 export class SightsService {
 
-  constructor(private http: HttpClient, private userService: UserService) { this.user_id = this.getUserId() }
+  constructor(private http: HttpClient, private userService: UserService) { this.getUserId() }
 
-  private user_id: number
+  private user_id: number = 0
 
   getUserId(){
-    const user = this.userService.getUserFromLocalStorage()
-    return user.id
+    this.userService.getUser().pipe(
+      //take(1),
+      tap((user: any) => {
+        if (user) {
+          this.user_id = user.id
+        } else {
+          this.getUserId()
+        }
+      })
+    ).subscribe().unsubscribe();    
   }
 
   getSights(params: IGetEventsAndSights) { //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)
@@ -32,6 +40,7 @@ export class SightsService {
   }
   
   getSightsFavorites(params: any) { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
+    this.getUserId()
     return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-sights`, { params: {...params} })
   }
   getSightsForUser(params: IGetEventsAndSights) { //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)
