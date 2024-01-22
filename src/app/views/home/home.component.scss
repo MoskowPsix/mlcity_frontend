@@ -2,7 +2,7 @@
 ::ng-deep {
 
 	.range-radius-custom{
-		min-height:200px;;
+		min-height:200px;
 	}
 	.range-radius-custom .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
 			background-color: #ffffff;
@@ -34,7 +34,7 @@
 .range-radius-main {
     margin-left: 12px;
     height: 300px;
-    max-width: 44px;
+    max-width: 50px;
     background-color: #fff;
     border-radius: 16px;
     background-color: none;
@@ -99,17 +99,17 @@
 @media only screen and (max-width: 768px) {
 	.geo-container{
 		position: absolute;
-		top: 72%;
+		top: 84%;
 		right: 0;
 		margin-right: 45px;
 	
 		z-index: 3;
 	}
 	.container-swither{
-	
-		top:60%;
-	 
-	
+		top: 75%;
+	}
+	.range-radius-main {
+		margin-top: 35vh;
 	}
 }
 @media only screen and (min-width: 1370px) and (max-width:1920px) {
