@@ -20,6 +20,7 @@ import { Metrika } from 'ng-yandex-metrika';
 import { NavigationEnd, Router } from '@angular/router';
 import { Location }  from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { NgxSliderModule, Options   }from'@angular-slider/ngx-slider';
 
 @Component({
   selector: 'app-home',
@@ -43,6 +44,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   placemarks_tomorrow: ymaps.Placemark[] = [];
   placemarks_week: ymaps.Placemark[] = [];
   placemarks_month: ymaps.Placemark[] = [];
+ 
+
+  //настройки ползунка радиуса
+  options: Options = {
+    floor: 1,
+    ceil: 25,
+    vertical: true,
+    
+    getPointerColor:(value:number)=>{
+      return "#0085FF"
+    }
+  
+
+  };
 
 
   CirclePoint!: ymaps.Circle;
@@ -117,13 +132,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     return `${value} км.`;
   }
   radiusChange(event:any){
-    this.filterService.setRadiusTolocalStorage(event.detail.value)
+    console.log(event.value)
+    this.filterService.setRadiusTolocalStorage(event.value)
   }
   radiusPlus(){
     let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
     if (radius+1 <= 25) {
       this.filterService.setRadiusTolocalStorage(`${radius+1}`)
     }
+
+      
   }
   radiusMinus(){
     let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
