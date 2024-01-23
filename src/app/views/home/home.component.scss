@@ -2,7 +2,7 @@
 ::ng-deep {
 
 	.range-radius-custom{
-		min-height:200px;;
+		
 	}
 	.range-radius-custom .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
 			background-color: #ffffff;
@@ -11,6 +11,12 @@
 	.range-radius-custom .ngx-slider .ngx-slider-bubble {
 	
 		display: none;
+	}
+
+
+	.range-radius-custom .ngx-slider .ngx-slider-active{
+		z-index: -2;
+		border: none;
 	}
 }
 .map {
@@ -111,6 +117,13 @@
 	 
 	
 	}
+	.range-radius-main{
+		max-height: 208px;
+	}
+	.range-radius-custom{
+		max-height: 124px;
+
+	}
 }
 @media only screen and (min-width: 1370px) and (max-width:1920px) {
 	.geo-container{
@@ -127,6 +140,8 @@
 	 
 	
 	}
+
+
 }
 
 .geo-button-container:hover{
