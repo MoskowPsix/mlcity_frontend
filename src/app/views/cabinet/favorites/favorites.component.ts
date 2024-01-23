@@ -52,7 +52,7 @@ export class FavoritesComponent implements OnInit {
       }),
       catchError((err) =>{
         //console.log(err)
-        this.toastService.showToast(MessagesErrors.CommentError, 'danger')
+        this.toastService.showToast(MessagesErrors.default, 'danger')
         return of(EMPTY) 
       }),
       takeUntil(this.destroy$)
@@ -73,7 +73,7 @@ export class FavoritesComponent implements OnInit {
         }),
         catchError((err) =>{
           //console.log(err)
-          this.toastService.showToast(MessagesErrors.CommentError, 'danger')
+          this.toastService.showToast(MessagesErrors.default, 'danger')
           return of(EMPTY) 
         }),
         takeUntil(this.destroy$)
