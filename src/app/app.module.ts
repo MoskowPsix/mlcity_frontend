@@ -85,6 +85,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { EdditSightComponent } from './views/cabinet/my-sights/edit-sight/eddit-sight.component';
 import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.component';
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component';
+import { TypesComponent } from './components/types/types.component';
 
 
 
@@ -145,7 +146,8 @@ registerLocaleData(localeRu, 'ru');
     RegistrationComponent,
     EdditSightComponent,
     SightGalleryComponent,
-    SettingsMenuComponent
+    SettingsMenuComponent,
+    TypesComponent
     
     
   ],
