@@ -32,11 +32,6 @@
                 "route": "/contacts/feedback"
             },
             {
-                "title": "Поддержка",
-                "icon": "chatbox-ellipses",
-                "route": "/contacts/support"
-            },
-            {
                 "title": "О проекте",
                 "icon": "information-circle",
                 "route": "/about"

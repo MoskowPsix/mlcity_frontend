@@ -37,12 +37,19 @@ export class MenuAuthComponent implements OnInit {
     this.subscription_2 =  this.userService.getUser().subscribe((user) => {
       this.user = user
 
-      if (this.user.avatar && this.user.avatar.includes("https")){
-        this.avatarUrl = this.user.avatar
+    if(this.user){
+      if(this.user.avatar){
+        if (this.user.avatar.includes("https")){
+          this.avatarUrl = this.user.avatar
+        }
+        else {
+          this.avatarUrl = `${this.backendUrl}${this.user.avatar}`
+        }
       }
-      else {
-        this.avatarUrl = `${this.backendUrl}${this.user.avatar}`
-      }
+
+    }
+
+
     })
   }
 
@@ -50,7 +57,9 @@ export class MenuAuthComponent implements OnInit {
 
   ngOnInit() {
     this.checkAuthenticated()
-    this.getUser()
+    this.userService.user.subscribe(()=>{
+      this.getUser()
+    })
     this.menuAuth = menuAuthData
 
     //Добавляем подписки в массив
