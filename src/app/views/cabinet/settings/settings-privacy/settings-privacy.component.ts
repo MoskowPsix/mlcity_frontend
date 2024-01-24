@@ -14,7 +14,7 @@ export class SettingsPrivacyComponent  implements OnInit {
 
   passwordResetForm: FormGroup = new FormGroup({})
   private readonly destroy$ = new Subject<void>()
- 
+
 
   constructor(
     private toastService: ToastService,
@@ -25,17 +25,22 @@ export class SettingsPrivacyComponent  implements OnInit {
 
   onSubmit() {
     if(this.passwordResetForm.status=='VALID'){
-      
+
       if(this.passwordResetForm.value.new_password != this.passwordResetForm.value.retry_password){
-        this.toastService.showToast('Пароли не совпадают','danger') 
+        this.toastService.showToast('Пароли не совпадают','danger')
       }
       else{
         this.loadingService.showLoading()
         this.authService.resetPassword(this.passwordResetForm.value).pipe(
           takeUntil(this.destroy$),
           catchError((err) =>{
+            if(err.status == 401){
+              this.authService.logout()
+            }
+            this.loadingService.hideLoading()
+            console.log(err)
             this.toastService.showToast('Возможно вы ввели не верный текущий пароль', 'danger')
-            return of(EMPTY) 
+            return of(EMPTY)
           }),
           ).subscribe((response: any) => {
             this.loadingService.hideLoading()

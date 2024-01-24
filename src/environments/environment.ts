@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   apiKeyYandex: '3a8040b4-161a-485b-b16e-1968065fb4ac',
+  YANDEX_METRICA_KEY: 96112606,
+  YANDEX_METRICA_ON: false,
   APP_NAME: 'MyLittleCity',
   BASE_URL: 'http://localhost',
   PORT: '8100',

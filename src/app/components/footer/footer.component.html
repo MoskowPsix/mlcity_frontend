@@ -1,18 +1,18 @@
 <!-- мобильный футтер -->
 <div class="footer-mobile">
-    <div 
+    <div
         class="item"
         [routerLink]="['home']"
-        [routerLinkActive]="['item-active']"  
+        [routerLinkActive]="['item-active']"
     >
         <ion-icon name="map" class="icon" [routerLinkActive]="['active']"></ion-icon>
         <span class="title" [routerLinkActive]="['active']">Карта</span>
     </div>
 
-    <div 
+    <div
         class="item"
         [routerLink]="['events']"
-        [routerLinkActive]="['item-active']"  
+        [routerLinkActive]="['item-active']"
     >
         <ion-row>
             <ion-icon name="balloon" class="icon" [routerLinkActive]="['active']"></ion-icon>
@@ -21,10 +21,10 @@
         <span class="title" [routerLinkActive]="['active']">События</span>
     </div>
 
-    <div 
+    <div
         class="item"
         [routerLink]="['sights']"
-        [routerLinkActive]="['item-active']"  
+        [routerLinkActive]="['item-active']"
     >
         <ion-row>
             <ion-icon name="prism" class="icon" [routerLinkActive]="['active']"></ion-icon>
@@ -33,11 +33,11 @@
         <span class="title" [routerLinkActive]="['active']">Места</span>
     </div>
 
-    <div 
+    <div
         class="item"
         [routerLink]="['cabinet/favorites']"
-        [routerLinkActive]="['item-active']" 
-        [routerLinkActiveOptions]="{exact: true}" 
+        [routerLinkActive]="['item-active']"
+        [routerLinkActiveOptions]="{exact: true}"
     >
         <ion-row>
             <ion-icon name="star" class="icon" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"></ion-icon>
@@ -50,15 +50,21 @@
         class="item"
         [routerLink]="['cabinet']"
         [routerLinkActive]="['item-active']"
-        [routerLinkActiveOptions]="{exact: true}"  
+        [routerLinkActiveOptions]="{exact: true}"
     >
-        <ion-icon name="person" class="icon" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"></ion-icon>
-        <span class="title" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">Кабинет</span>
+
+          <ion-avatar class="user-avatar" *ngIf="isAuth">
+            <img *ngIf="avatarUrl" [src] = "avatarUrl" alt="Аватар пользователя">
+          </ion-avatar>
+          <ion-icon *ngIf="!isAuth" name="person" class="icon" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"></ion-icon>
+          <span class="title user-name" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">{{ user ? user.name: "Кабинет" }}</span>
+
+
     </div>
     <!-- <div *ngIf="!isAuthenticated"
         class="item"
         [routerLink]="['login']"
-        [routerLinkActive]="['item-active']"  
+        [routerLinkActive]="['item-active']"
     >
         <ion-icon name="log-in" class="icon" [routerLinkActive]="['active']"></ion-icon>
         <span class="title"  [routerLinkActive]="['active']">Вход</span>

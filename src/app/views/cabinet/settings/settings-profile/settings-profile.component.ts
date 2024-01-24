@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { time } from 'console';
 import { env } from 'process';
 import { EMPTY, Subject, Subscription, catchError, takeUntil, of, tap } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
@@ -16,7 +17,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./settings-profile.component.scss'],
 })
 export class SettingsProfileComponent  implements OnInit {
-  
+
   private readonly destroy$ = new Subject<void>()
   subscription_2!: Subscription
   user!: any
@@ -27,13 +28,14 @@ export class SettingsProfileComponent  implements OnInit {
   avatarUrl!: string
   previewPhotoUrl!: string
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
-  
-  
+
+
 
   constructor(
     private userService: UserService,
     private toastService: ToastService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private authService: AuthService
     ) { }
 
 
@@ -56,13 +58,17 @@ export class SettingsProfileComponent  implements OnInit {
   }
 
   onSubmit(){
-    
+
     if (this.resetForm.status=='VALID'){
       let user: FormData = this.createFormData()
       this.loadingService.showLoading()
       this.userService.changeName(user).pipe(
         takeUntil(this.destroy$),
         catchError((err)=>{
+          if(err.status == 401){
+            this.authService.logout()
+          }
+          this.loadingService.hideLoading()
           this.toastService.showToast('Убедитесь что поле Имя не пустое', 'danger')
           return of(EMPTY)
         }),
