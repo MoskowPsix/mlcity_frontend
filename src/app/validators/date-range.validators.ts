@@ -8,7 +8,7 @@ import { AbstractControl, ValidationErrors } from "@angular/forms"
   const from = new Date(control.get("dateStart")?.value)
   const to = new Date(control.get("dateEnd")?.value)
   let invalid = false
-
+  console.log('from: ' + from + 'to: ' + to)
   if (from && to) {
     invalid = from.getTime() > to.getTime()
 
