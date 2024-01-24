@@ -38,7 +38,6 @@ export class SettingsPrivacyComponent  implements OnInit {
               this.authService.logout()
             }
             this.loadingService.hideLoading()
-            console.log(err)
             this.toastService.showToast('Возможно вы ввели не верный текущий пароль', 'danger')
             return of(EMPTY)
           }),

@@ -62,7 +62,6 @@ export class FooterComponent implements OnInit, OnDestroy {
           }
         }
       }
-      console.log(user)
     })
   }
 
