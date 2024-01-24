@@ -3,6 +3,11 @@
     flex-direction: row;
     justify-content: space-evenly;
 
+    .user-avatar{
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
     .item{
         display: flex;
         flex-direction: column;
@@ -16,10 +21,16 @@
         .icon{
             font-size: 1.5rem;
         }
-        
+
         .title{
             font-size: 0.7rem;
             margin-top: 0.25rem;
+        }
+        .user-name{
+          max-width: 55px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
     }
 }
@@ -38,7 +49,7 @@
 @media screen and (min-width: 0px) and (max-width: 1060px) {
     .footer-mobile{ display: flex; }  /* show it on small screens */
   }
-  
+
   @media (min-width: 1060px)  {
    .footer-mobile{ display: none; }   /* hide it elsewhere */
   }
