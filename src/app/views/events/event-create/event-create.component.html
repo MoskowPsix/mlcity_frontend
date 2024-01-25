@@ -10,7 +10,7 @@
 
 
       <div class="btnsWrapper btnsWrapperNext">
-        <ion-button class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        <ion-button [disabled]="detectedDataInvalid()" class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
         <ion-button class="buttonsNavigate" *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createEventForm.invalid || createEventForm.disabled"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
       </div>
 
@@ -57,10 +57,6 @@
                         <ion-button *ngIf="!(stepCurrency === i) && stepIsValid(i) && stepCurrency !== i" (click)="goToStep(i)" class="buttonBarLight animated fadeIn">
                           {{ i + 1 }}
                         </ion-button>
-
-                          
-
-                        
 
 
                     </div>  
@@ -134,9 +130,7 @@
     
                 </div>
   
-                <div *ngIf="createEventForm.controls['name'].invalid && createEventForm.controls['name'].dirty"  class="validation">
-                  <ion-note *ngIf="!createEventForm.controls['name'].hasError('minLength')" color="danger">Название мероприятия должно содержать минимум 3 символа</ion-note>
-                </div>
+                
               </ion-column>
 
 
@@ -158,9 +152,7 @@
                 
                 <ion-column>
     
-                  <div *ngIf="createEventForm.controls['sponsor'].invalid && createEventForm.controls['sponsor'].dirty"  class="validation">
-                    <ion-note *ngIf="!createEventForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор мероприятия" должно содержать минимум 3 символа</ion-note>
-                  </div>
+                
     
                 </ion-column>
                 
@@ -170,8 +162,12 @@
                
     
               </ion-row>
-
-
+              <div *ngIf="createEventForm.controls['sponsor'].invalid && createEventForm.controls['sponsor'].dirty"  class="validation">
+                <ion-note *ngIf="!createEventForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор мероприятия" должно содержать минимум 3 символа</ion-note>
+              </div>
+              <ion-col *ngIf="createEventForm.controls['name'].invalid && createEventForm.controls['name'].dirty"  class="validation">
+                <ion-note *ngIf="!createEventForm.controls['name'].hasError('minLength')" color="danger">Название мероприятия должно содержать минимум 3 символа</ion-note>
+              </ion-col>
             </div>            
 
            
@@ -180,12 +176,12 @@
           
            
             <!-- Организатор -->
-
+         
         
 
           </ion-column>
 
-          
+       
          
         </ion-col>
       </ion-row>
@@ -607,13 +603,17 @@
 
               </div>
 
-              <div  style="max-width: 22vh;" *ngIf="createEventForm.hasError('dateInvalid')">
-                <ion-note color="danger">Дата начала не может быть позднее даты конца, а дата конца не может быть раньше даты начала</ion-note>
-              </div>
+           
 
             </ion-column>
 
+            <div  style="max-width: 60vh;" *ngIf="createEventForm.hasError('dateInvalid')">
+              <ion-note color="danger">Дата начала не может быть позднее даты конца, а дата конца не может быть раньше даты начала.</ion-note>
+            </div>
 
+            <div  style="max-width: 60vh;" *ngIf="!dataValid">
+              <ion-note color="danger">Минимальная длительность мероприятия 15 минут!</ion-note>
+            </div>
 
           </ion-col>
           

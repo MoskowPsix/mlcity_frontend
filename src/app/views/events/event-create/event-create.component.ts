@@ -74,7 +74,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   stepStart: number = 0
   stepCurrency: number = 0
   steps:number = 5
-
+  dataValid:boolean = true
   openModalImgs:boolean = false
   openModalPostValue:boolean = false
   openModalPostCount:number = 0
@@ -106,9 +106,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   cityesList: any[] = []
   sightsListLoading = false
   sightsList: any[] = []
-
+  dectedDataIvalid:boolean=false;
   priceArrayForm: any[] = []
-
+  
   //nextButtonDisable: boolean = false
 
   placemark!: ymaps.Placemark
@@ -590,6 +590,58 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   //Блокировка шагов в баре
+
+
+  detectedDataInvalid(){
+    let dataStart:any = new Date(this.createEventForm.controls['dateStart'].value)
+    let dataEnd:any = new Date(this.createEventForm.controls['dateEnd'].value).getTime()
+    let dataEndPlus:any = new Date(dataStart.getTime()+15*60000)
+
+    //разница в 15 минутах
+
+    switch(this.stepCurrency){
+      case 0:
+        return false
+        //шаг первый
+      case 1:
+        //шаг второй
+        if( this.createEventForm.controls['name'].invalid ||  this.createEventForm.controls['sponsor'].invalid){
+          return true
+        }
+        else{
+          return false
+        }
+      case 2:
+        //шаг третий 
+        if( this.createEventForm.controls['description'].invalid ||  this.createEventForm.hasError('dateInvalid') || dataEnd <= dataEndPlus || dataStart > dataEndPlus ){
+          if( dataEnd <= dataEndPlus){
+            this.dataValid = false
+          }else{
+            this.dataValid = true
+          }
+          // console.log(dataStart)
+          // console.log(dataEnd)
+          return true
+         
+        }
+        else{
+          return false
+        }
+      case 3:
+        if( this.createEventForm.controls['places'].invalid){
+          return true
+        }
+        else{
+          return false
+        }
+      default:
+        return true
+    }
+
+    
+  }
+
+  
   stepIsValid(step:number = this.stepStart){
     switch (step) {
     
