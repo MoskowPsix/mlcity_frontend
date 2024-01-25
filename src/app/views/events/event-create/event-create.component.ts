@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgModule } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef, NgModule, Output, EventEmitter } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
 import { FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
@@ -65,6 +65,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>()
 
+
+  count: number = 0
+  //@Input() type?: number
 
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
@@ -134,6 +137,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private router: Router,
     private yaGeocoderService: YaGeocoderService) {}
    
+    
+    onAdd(event:Event) {
+      this.count++
+      console.log(event)
+    }
+
   //поулчаем юзера и устанвлвиаем группы и шаги
   getUserWithSocialAccount(){
     this.userService.getUser().pipe(
@@ -388,8 +397,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
    // Поиск по улицам
    onMapReady(e: YaReadyEvent<ymaps.Map>, num: number) {
     this.maps[num] = e;
-    if (this.createEventForm.value.places[num].value.coords){     
-      this.addPlacemark(this.createEventForm.value.places[num].value.coords, num)
+    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value){   
+      const coords: number[] = [Number(this.filterService.getLocationLatitudeFromlocalStorage()), Number(this.filterService.getLocationLongitudeFromlocalStorage())]
+      this.addPlacemark(coords, num)
     } else {
       this.mapService.geolocationMapNative(this.maps[num]);
     }
@@ -771,8 +781,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       locId = value
       if (value) {
         this.locationServices.getLocationsIds(locId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+          console.log(response)
           coords = [response.location.latitude, response.location.longitude]
-          this.placeArrayForm.push({city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', seances: [{num_s: 0}] })
+          this.placeArrayForm.push({city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', coords: coords, seances: [{num_s: 0}] })
         })
       } else {
         locId = ''
@@ -904,6 +915,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.getStatuses()
     this.addPrice()
     // console.log(this.createEventForm)
+    
   }
 
 

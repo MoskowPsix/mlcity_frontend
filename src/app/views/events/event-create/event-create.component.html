@@ -10,8 +10,8 @@
 
 
       <div class="btnsWrapper btnsWrapperNext">
-        <ion-button [disabled]="detectedDataInvalid()" class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-        <ion-button class="buttonsNavigate" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+        <ion-button class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        <ion-button class="buttonsNavigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createEventForm.invalid || createEventForm.disabled"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
       </div>
 
     </div>
@@ -93,7 +93,7 @@
               </ion-label>
             </ion-item>
           </ng-container>
-        </ng-container>
+        </ng-container> 
      
         <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
           <ion-col size-lg="8" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
@@ -107,6 +107,8 @@
             </ion-radio-group>
           </ion-list>
           </ion-col>
+          <!-- <ion-label>{{ count }}</ion-label>
+          <app-types (buttonClick)="onAdd($event)"></app-types> -->
         </ion-row>
       
 
@@ -717,7 +719,7 @@
                         <ya-map (ready)="onMapReady($event, i)" 
                           [zoom]="11"
                           (yaclick)="onMapClick($event, i)"
-                          [center]="[56.81497464978607, 61.32053375244141]"
+                          [center]="this.createEventForm.controls['places'].value[i].coords"
                           [state]="{
                             controls: [
                               'zoomControl',
