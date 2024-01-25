@@ -11,7 +11,7 @@
 
       <div class="btnsWrapper btnsWrapperNext">
         <ion-button [disabled]="detectedDataInvalid()" class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-        <ion-button class="buttonsNavigate" *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createEventForm.invalid || createEventForm.disabled"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+        <ion-button class="buttonsNavigate" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
       </div>
 
     </div>

@@ -627,12 +627,48 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           return false
         }
       case 3:
-        if( this.createEventForm.controls['places'].invalid){
+        let placeValid:boolean = false
+          this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
+
+           if(item.controls.address.value.length > 0){
+            placeValid =  true
+           }
+           else{
+            placeValid =  false
+           }
+
+          })
+
+          if(placeValid){
+            return false
+          }
+          else
+          {
+            return true
+          }
+        
+      case 4:
+        
+      let priceValid = false
+      this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
+        console.log(item.controls.cors_rub.value)
+        if(item.controls.cors_rub.value >= 0 && item.controls.description.value.length >= 3){
+          priceValid =  true
+          console.log("можна")
+        }
+        else{
+          console.log("незя")
+          priceValid =  false
+        }
+       })
+
+        if(this.createEventForm.invalid || this.createEventForm.disabled || !priceValid ){
           return true
         }
         else{
           return false
         }
+      
       default:
         return true
     }
