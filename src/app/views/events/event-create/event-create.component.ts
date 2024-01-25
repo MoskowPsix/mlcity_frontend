@@ -388,8 +388,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
    // Поиск по улицам
    onMapReady(e: YaReadyEvent<ymaps.Map>, num: number) {
     this.maps[num] = e;
-    if (this.createEventForm.value.places[num].value.coords){     
-      this.addPlacemark(this.createEventForm.value.places[num].value.coords, num)
+    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value){   
+      const coords: number[] = [Number(this.filterService.getLocationLatitudeFromlocalStorage()), Number(this.filterService.getLocationLongitudeFromlocalStorage())]
+      this.addPlacemark(coords, num)
     } else {
       this.mapService.geolocationMapNative(this.maps[num]);
     }
@@ -683,8 +684,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       locId = value
       if (value) {
         this.locationServices.getLocationsIds(locId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+          console.log(response)
           coords = [response.location.latitude, response.location.longitude]
-          this.placeArrayForm.push({city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', seances: [{num_s: 0}] })
+          this.placeArrayForm.push({city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', coords: coords, seances: [{num_s: 0}] })
         })
       } else {
         locId = ''

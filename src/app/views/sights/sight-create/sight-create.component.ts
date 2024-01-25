@@ -392,8 +392,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
    // Поиск по улицам
    onMapReady(e: YaReadyEvent<ymaps.Map>) {
     this.map = e;
-    if (this.createSightForm.value.coords){     
-      this.addPlacemark(this.createSightForm.value.coords)
+    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value){     
+      const coords: number[] = [Number(this.filterService.getLocationLatitudeFromlocalStorage()), Number(this.filterService.getLocationLongitudeFromlocalStorage())]
+      this.addPlacemark(coords)
     } else {
       this.mapService.geolocationMapNative(this.map);
     }

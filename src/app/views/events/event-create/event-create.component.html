@@ -717,7 +717,7 @@
                         <ya-map (ready)="onMapReady($event, i)" 
                           [zoom]="11"
                           (yaclick)="onMapClick($event, i)"
-                          [center]="[56.81497464978607, 61.32053375244141]"
+                          [center]="this.createEventForm.controls['places'].value[i].coords"
                           [state]="{
                             controls: [
                               'zoomControl',
