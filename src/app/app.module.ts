@@ -148,7 +148,8 @@ registerLocaleData(localeRu, 'ru');
     RegistrationComponent,
     EdditSightComponent,
     SightGalleryComponent,
-    SettingsMenuComponent
+    SettingsMenuComponent,
+    TypesComponent,
     
     
   ],

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgModule } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef, NgModule, Output, EventEmitter } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
 import { FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
@@ -65,6 +65,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>()
 
+
+  count: number = 0
+  //@Input() type?: number
 
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
@@ -134,6 +137,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private router: Router,
     private yaGeocoderService: YaGeocoderService) {}
    
+    
+    onAdd(event:Event) {
+      this.count++
+      console.log(event)
+    }
+
   //поулчаем юзера и устанвлвиаем группы и шаги
   getUserWithSocialAccount(){
     this.userService.getUser().pipe(
@@ -816,6 +825,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.getStatuses()
     this.addPrice()
     // console.log(this.createEventForm)
+    
   }
 
 

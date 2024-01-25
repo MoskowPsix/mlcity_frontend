@@ -2,10 +2,7 @@
     .child-types-block{
         width: 100px;
         height: 100px;
-        //background-color: #A0A0A0;
-        margin: 30px;
-        // border-radius: 13px;
-        // 
+        margin: 30px; 
 
         .icon-btn{
             width: 100%;
@@ -15,15 +12,17 @@
             align-items: center;
             --background: #A0A0A0;
             --border-radius:13px;
+        }
             
-            
-            //&:active,
-            &:focus {
+        .icon-btn:hover {
+                --background:#0084FF;
+            }
+
+        .icon-btn:focus {
                 --background:#0084FF;
             }
             
-            
-        }
+        
         
         .button-container {
             display: flex;

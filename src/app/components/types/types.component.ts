@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-types',
@@ -6,9 +6,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./types.component.scss'],
 })
 export class TypesComponent  implements OnInit {
+  receivedData:string=''
+  num?: number = 10
+  @Input() type!: any[] 
+  @Output() buttonClick = new EventEmitter()
+  
+
+  add(){
+    this.buttonClick.emit(this.num)
+  }
 
   constructor() { }
 
-  ngOnInit() {}
+  onType(id: number) {
+    
+  }
 
+ 
+  ngOnInit() {
+    
+  }
+    
 }
