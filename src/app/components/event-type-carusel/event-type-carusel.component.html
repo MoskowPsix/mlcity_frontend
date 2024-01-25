@@ -1,7 +1,7 @@
 <ion-row class="content">
   <ion-icon name="chevron-back-outline" class="ico_left" (click)="scrollLeft()" ></ion-icon>
   <div class="container" #wigetScroll>
-    <p style="text-align: center;" class="item" [class.active]="type_id === 'all'" (click)="getTypeId('all')" id="all">Все</p>
+    <p  class="item" [class.active]="type_id === 'all'" (click)="getTypeId('all')" id="all">Все</p>
     <p class="item" *ngFor="let type of types" [class.active]="type.id === type_id" (click)="getTypeId(type.id)" id="{{type.id}}">{{type.name}}</p>
     
   </div>

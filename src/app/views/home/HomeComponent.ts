@@ -648,7 +648,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (this.map && this.map.target)
         this.map.target.setBounds((this.CirclePoint.geometry?.getBounds())!, { checkZoomRange: true });
     });
+    
+    this.filterService.locationLongitude.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      this.mapService.circleCenterLongitude.next(value);
+    });
 
+    this.filterService.locationLatitude.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
+      this.mapService.circleCenterLatitude.next(value);
+      
+    });
     //Подписываемся на состояние модалки показа ивентов и мест
     this.navigationService.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.modalEventShowOpen = value;
@@ -670,15 +678,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.map.target.setBounds((this.CirclePoint.geometry?.getBounds())!, { checkZoomRange: true });
         this.getEventsAndSights();
       }
-    });
-
-    this.filterService.locationLongitude.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
-      this.mapService.circleCenterLongitude.next(value);
-    });
-
-    this.filterService.locationLatitude.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
-      this.mapService.circleCenterLatitude.next(value);
-      
     });
     this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.sightTypeId = value[0]
