@@ -14,7 +14,7 @@
                         <img src="assets/icons/favicon.png">
                         <span>{{ appName }}</span>
                     </div>
-                </ion-title> 
+                </ion-title>
             </ion-col> -->
             <ion-col *ngIf="showBackButton" size="auto">
                 <ion-icon  name="chevron-back" size="large" color="primary" appBackButton></ion-icon>
@@ -22,7 +22,7 @@
 
             <ion-col class="ion-align-self-start">
                 <ion-button fill="clear" size="small" color="dark" (click)="isModalSearchCityesOpen(true)">
-                    <!-- {{ city| truncate:[20,'']}}... -->
+                    {{ city| truncate:[20,'']}}...
                     <ion-icon name="location" color="primary"></ion-icon>
                     <ion-label>+{{ radius }}км</ion-label>
                     <ion-icon slot="end" name="chevron-down"></ion-icon>
@@ -45,7 +45,7 @@
             <span >{{ appName }}</span>
         </ion-col>
     </ion-router-link>
-    
+
     <ion-col style="margin-left: 3px;" size="auto" class="cityButton ion-padding-horizontal ion-align-self-center">
         <ion-button fill="clear" size="small" color="dark" (click)="isModalSearchCityesOpen(true)">
             {{ city| truncate:[20,'']}}...
@@ -55,15 +55,15 @@
         </ion-button>
     </ion-col>
 
-     <ion-col style="padding-right: 3px;" class="searchParrent ion-padding-horizontal"> 
+     <ion-col style="padding-right: 3px;" class="searchParrent ion-padding-horizontal">
         <!-- <ion-searchbar placeholder="Поиск" color="light" (click)="isModalSearchEventsOpen(true)"></ion-searchbar> -->
          <ion-button style="min-width: 80px; display: flex; justify-content: center; "  fill="outline" expand="block" (click)="isModalSearchEventsOpen(true)" class="SearchInput"><ion-icon style="width: 20px; height: 20px; --font-size: 20px;" name="search" slot="start"></ion-icon>поиск</ion-button>
-    </ion-col> 
+    </ion-col>
 
     <ion-col  size="auto" class="menu ion-align-items-center">
         <div *ngFor="let item of menuPublic">
-            <app-dropdown-popup 
-                *ngIf="item.children?.length > 0;  else itemMenu" 
+            <app-dropdown-popup
+                *ngIf="item.children?.length > 0;  else itemMenu"
                 [id]="'publicMenu'"
                 [headerLeftIco]="true"
                 [headerLeftIcoName]="'call'"
@@ -72,10 +72,10 @@
                 [itemIco]="true"
             >
             </app-dropdown-popup>
-        
+
             <ng-template #itemMenu>
                 <ion-button
-                    fill="clear" 
+                    fill="clear"
                     color="dark"
                     [routerLink]="[item.route]"
                     [routerLinkActive]="['active']"
@@ -85,8 +85,8 @@
                     <!-- <ion-badge *ngIf="item.title === 'События'" slot="end" >{{ getEventService() }}</ion-badge>
                     <ion-badge *ngIf="item.title === 'Места'" slot="end" >{{ getSightService() }}</ion-badge> -->
                 </ion-button>
-                
-            </ng-template>     
+
+            </ng-template>
         </div>
         <app-menu-auth></app-menu-auth>
     </ion-col>
@@ -132,12 +132,12 @@
         <ion-note color="primary" class="ion-padding-horizontal ion-padding-top">Текущий город: {{ city }}, {{ region }}</ion-note>
 
         <!-- <div class="ion-padding-bottom" slot="content">
-            <ion-range 
-             [ticks]="true" 
-             [snaps]="true" 
-             [min]="1" 
-             [max]="25" 
-             [pin]="true" 
+            <ion-range
+             [ticks]="true"
+             [snaps]="true"
+             [min]="1"
+             [max]="25"
+             [pin]="true"
              [value]="radius"
              [pinFormatter]="pinRadiusFormatter"
              (ionKnobMoveEnd)="radiusChange($event)"
@@ -212,7 +212,7 @@
                 <app-no-data />
             </ng-container>
 
-            <ng-container *ngIf="!eventsListLoading  && !sightsListLoading && (eventsList.length || sightsList.length)">             
+            <ng-container *ngIf="!eventsListLoading  && !sightsListLoading && (eventsList.length || sightsList.length)">
                 <ng-container *ngIf="segment === 'events'">
                     <ng-container *ngIf="eventsList.length">
                         <ion-row class="ion-justify-content-start">
@@ -239,7 +239,7 @@
                 </ng-container> -->
             </ng-container>
 
-            
+
 
           </ion-content>
     </ng-template>

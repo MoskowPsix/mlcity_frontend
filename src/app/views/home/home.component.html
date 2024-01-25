@@ -15,10 +15,10 @@
    
     <div class="range-radius-main">
 
-      <div class="range-radius-custom" style="height: 228px;">
+      <div class="range-radius-custom" style="height: 208px;">
         <ion-icon (click)="radiusPlus()" name="add-outline" class="swither-icon-range" color="primary"></ion-icon>
        
-          <ngx-slider 
+          <ngx-slider style="border:none" 
           [value]="radius" 
           [options]="options"
           (userChange)="radiusChange($event)"

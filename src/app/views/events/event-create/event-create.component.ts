@@ -77,7 +77,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   stepStart: number = 0
   stepCurrency: number = 0
   steps:number = 5
-
+  dataValid:boolean = true
   openModalImgs:boolean = false
   openModalPostValue:boolean = false
   openModalPostCount:number = 0
@@ -109,9 +109,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   cityesList: any[] = []
   sightsListLoading = false
   sightsList: any[] = []
-
+  dectedDataIvalid:boolean=false;
   priceArrayForm: any[] = []
-
+  
   //nextButtonDisable: boolean = false
 
   placemark!: ymaps.Placemark
@@ -397,8 +397,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
    // Поиск по улицам
    onMapReady(e: YaReadyEvent<ymaps.Map>, num: number) {
     this.maps[num] = e;
-    if (this.createEventForm.value.places[num].value.coords){     
-      this.addPlacemark(this.createEventForm.value.places[num].value.coords, num)
+    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value){   
+      const coords: number[] = [Number(this.filterService.getLocationLatitudeFromlocalStorage()), Number(this.filterService.getLocationLongitudeFromlocalStorage())]
+      this.addPlacemark(coords, num)
     } else {
       this.mapService.geolocationMapNative(this.maps[num]);
     }
@@ -598,6 +599,58 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   //Блокировка шагов в баре
+
+
+  detectedDataInvalid(){
+    let dataStart:any = new Date(this.createEventForm.controls['dateStart'].value)
+    let dataEnd:any = new Date(this.createEventForm.controls['dateEnd'].value).getTime()
+    let dataEndPlus:any = new Date(dataStart.getTime()+15*60000)
+
+    //разница в 15 минутах
+
+    switch(this.stepCurrency){
+      case 0:
+        return false
+        //шаг первый
+      case 1:
+        //шаг второй
+        if( this.createEventForm.controls['name'].invalid ||  this.createEventForm.controls['sponsor'].invalid){
+          return true
+        }
+        else{
+          return false
+        }
+      case 2:
+        //шаг третий 
+        if( this.createEventForm.controls['description'].invalid ||  this.createEventForm.hasError('dateInvalid') || dataEnd <= dataEndPlus || dataStart > dataEndPlus ){
+          if( dataEnd <= dataEndPlus){
+            this.dataValid = false
+          }else{
+            this.dataValid = true
+          }
+          // console.log(dataStart)
+          // console.log(dataEnd)
+          return true
+         
+        }
+        else{
+          return false
+        }
+      case 3:
+        if( this.createEventForm.controls['places'].invalid){
+          return true
+        }
+        else{
+          return false
+        }
+      default:
+        return true
+    }
+
+    
+  }
+
+  
   stepIsValid(step:number = this.stepStart){
     switch (step) {
     
@@ -692,8 +745,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       locId = value
       if (value) {
         this.locationServices.getLocationsIds(locId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+          console.log(response)
           coords = [response.location.latitude, response.location.longitude]
-          this.placeArrayForm.push({city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', seances: [{num_s: 0}] })
+          this.placeArrayForm.push({city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', coords: coords, seances: [{num_s: 0}] })
         })
       } else {
         locId = ''

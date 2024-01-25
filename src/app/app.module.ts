@@ -96,6 +96,13 @@ const mapConfig: YaConfig = {
   lang: 'ru_RU',
 };
 
+const metricaConfig: any = {
+  id: environment.YANDEX_METRICA_ON ? 96112606: 0,
+  clickmap:true,
+  trackLinks:true,
+  accurateTrackBounce:true
+}
+
 registerLocaleData(localeRu, 'ru');
 
 @NgModule({
@@ -161,14 +168,7 @@ registerLocaleData(localeRu, 'ru');
     AngularYandexMapsModule.forRoot(mapConfig),
     HttpClientModule,
     NgxSliderModule,
-    MetrikaModule.forRoot(
-      {id: 96112606,
-      webvisor: true,
-      clickmap:true,
-      trackLinks:true,
-      accurateTrackBounce:true,},
-      1,
-    ),
+    MetrikaModule.forRoot(metricaConfig),
     HttpClientJsonpModule,
     ReactiveFormsModule,
     MaskitoModule,
