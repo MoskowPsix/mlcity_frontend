@@ -1,4 +1,18 @@
 
+::ng-deep {
+
+	.range-radius-custom{
+		min-height:200px;
+	}
+	.range-radius-custom .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
+			background-color: #ffffff;
+	}
+
+	.range-radius-custom .ngx-slider .ngx-slider-bubble {
+	
+		display: none;
+	}
+}
 .map {
 	width: 100%;
 	height: 94vh;
@@ -15,6 +29,23 @@
 		width: 100%;
 		z-index: 1;
 	}
+}
+
+.range-radius-main {
+    margin-left: 12px;
+    height: 300px;
+    max-width: 50px;
+    background-color: #fff;
+    border-radius: 16px;
+    background-color: none;
+    position: absolute;
+    margin-top: 20vh;
+    z-index: 100;
+}
+
+.range-radius{
+	min-width: 100%;
+	transform: rotate(271deg);
 }
 
 .loader {
@@ -38,7 +69,7 @@
 	margin-top: 1%;
 	margin-left: 10px;
 	padding: 5px;
-    z-index: 3;
+    z-index: 103;
 	background-color: white;
 	border-radius: 16px;
 	display: flex;
@@ -68,17 +99,21 @@
 @media only screen and (max-width: 768px) {
 	.geo-container{
 		position: absolute;
-		top: 72%;
+		top: 80%;
 		right: 0;
 		margin-right: 45px;
 	
 		z-index: 3;
 	}
 	.container-swither{
-	
-		top:60%;
-	 
-	
+		top: 65%;
+	}
+	.range-radius-main {
+		height: 15rem;
+		margin-top: 21vh;
+		ngx-slider{
+			height: 10rem;
+		}
 	}
 }
 @media only screen and (min-width: 1370px) and (max-width:1920px) {
@@ -127,6 +162,13 @@
 	border-radius:24px;
 }
 
+.swither-icon-range{
+	margin-left: 7px;
+	background-color: #fff;
+	width: 30px;
+	height: 30px;
+	border-radius: 16px;
+}
 
 .swither-icon{
 	width: 30px;
@@ -287,6 +329,11 @@ ion-spinner{
 		}
 	}
 }
+
+
+
+
+
 
 @media(min-width: 1068px) {
 	

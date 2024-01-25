@@ -507,6 +507,22 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+
+
+  addPrice() {
+    this.priceArrayForm.push({price: ''})
+    this.createSightForm.controls['price'].value.push(
+      new FormGroup({
+        cors_rub: new FormControl('', [Validators.required]),
+        description: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      })
+    )
+  }
+
+  deletePrice(num: number) {
+    this.createSightForm.controls['price'].value.splice(num, 1)
+  }
+
   //формируем дату для отправки на сервер
   createFormData(){
     if(this.uploadFiles && !this.createSightForm.controls['files_img'].hasError('requiredFileType')){
@@ -540,7 +556,10 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.formData.append('locationId', this.createSightForm.controls['locationId'].value)
     this.formData.append('type', this.createSightForm.controls['type'].value)
     this.formData.append('status', this.createSightForm.controls['status'].value)
-    this.formData.append('price', this.createSightForm.controls['price'].value)
+    this.createSightForm.controls['price'].value.forEach((item: any, i: number) => {
+      this.formData.append(`price[${i}][cost_rub]`, item.controls.cors_rub.value),
+      this.formData.append(`price[${i}][descriptions]`, item.controls.description.value)
+    });
     this.formData.append('materials', this.createSightForm.controls['materials'].value)
     this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null)
     // if (this.vkGroupPostSelected?.likes.count){
@@ -601,7 +620,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Отпрвка формы
   
   onSubmit(){
+  
     let sight = this.createFormData() // собираем формдату
+    console.log(this.createFormData().getAll('prices'))
     this.createSightForm.disable()
     this.loadingService.showLoading()
     this.sightsService.create(sight).pipe(
@@ -624,8 +645,10 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         this.createSightForm.controls['locationId'].reset()
         this.createSightForm.enable()
         this.stepCurrency =  this.stepStart 
+        console.log(this.createSightForm)
       }),
       catchError((err) =>{
+        console.log(this.createSightForm)
         console.log(err)
         this.toastService.showToast(err.message || MessagesErrors.default, 'danger')
         this.createSightForm.enable()
@@ -634,6 +657,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       }),
       takeUntil(this.destroy$)
     ).subscribe()
+
+  
   }
 
   ngOnInit() {
@@ -655,7 +680,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       type:  new FormControl({value: '1', disabled: false},[Validators.required]),
       status:  new FormControl({value: this.statusSelected, disabled: false},[Validators.required]),
       files_img: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
-      price: new FormControl('',[Validators.maxLength(6)]),
+      price: new FormControl([],[Validators.required]),
       materials: new FormControl(''),
     },[dateRangeValidator])
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
@@ -666,6 +691,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.getTypes()
     this.getStatuses()
     this.getNowCityes();
+    this.addPrice()
     //this.getLocations()
     // this.placemark= new ymaps.Placemark(this.createSightForm.value.coords)
     // this.map.target.geoObjects.add(this.placemark)

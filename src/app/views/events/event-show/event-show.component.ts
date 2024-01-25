@@ -1,6 +1,6 @@
 import { Component, OnInit,OnDestroy, AfterViewInit, ChangeDetectorRef, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay} from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter} from 'rxjs';
 import { IEvent } from 'src/app/models/event';
 import { EventsService } from 'src/app/services/events.service';
 import { IonicSlides } from '@ionic/angular';
@@ -14,6 +14,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { IPlace } from 'src/app/models/place';
 import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { PlaceService } from 'src/app/services/place.service';
+import { Location }  from '@angular/common';
+import { Metrika } from 'ng-yandex-metrika';
+
 // import { Swiper } from 'swiper/types';
 
 @Component({
@@ -54,9 +57,26 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private sanitizer:DomSanitizer,
     private queryBuilderService: QueryBuilderService,
     private placeService: PlaceService,
+    private metrika: Metrika,
+    private location: Location,
+    private router: Router
     
     
-  ) {}
+  ) 
+  {
+    let prevPath = this.location.path();
+    this.router
+    .events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe(() => {
+        const newPath = location.path();
+        this.metrika.hit(newPath, {
+          referer: prevPath,
+          callback: () => { console.log('hit end'); }
+        });
+        prevPath = newPath;
+      });
+  }
 
   
   getEvent(){

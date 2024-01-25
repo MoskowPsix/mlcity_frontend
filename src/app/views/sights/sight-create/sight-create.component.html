@@ -12,7 +12,7 @@
 
       <div class="btnsWrapper btnsWrapperNext">
         <ion-button class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-        <ion-button class="buttonsNavigate" *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createSightForm.invalid "><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+        <ion-button class="buttonsNavigate" *ngIf="stepCurrency === steps-1" (click)="onSubmit()" type="submit" ><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
       </div>
 
     </div>
@@ -90,7 +90,7 @@
           <!-- шаг 1 -->
 
 
-          <ng-container *ngIf="!typesLoaded">
+          <ng-container *ngIf="!typesLoaded && stepCurrency==0">
             <ng-container *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
               <ion-item>
                 <ion-avatar>
@@ -614,7 +614,7 @@
             <div class="map">
               <ya-map (ready)="onMapReady($event)" 
                 [zoom]="11"
-                (yaclick)=" ($event)"
+                (yaclick)=" onMapClick($event)"
                 [center]="[56.81497464978607, 61.32053375244141]"
                 [state]="{
                   controls: [
@@ -631,12 +631,33 @@
         <ion-row style="max-width: 60%; display: flex; margin: 0 auto;"  [hidden]="stepCurrency !== 4" class="ion-justify-content-center">
 
           <ion-col  @fade>
+            <ion-card  *ngFor="let item of createSightForm.controls['price'].value; let i_p = index">
+              <ng-container [formGroup]="createSightForm.controls['price'].value[i_p]" >
+                <ion-item  fill="">
+
+                  <ion-label position="floating">Стоимость билета {{i_p+1}}</ion-label>
+                  <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
+                  <ion-input formControlName="cors_rub" type="number" name="price"></ion-input>
+
+                </ion-item>
+
+                <ion-item fiil="" lines="none">
+                  <ion-label position="floating">Описание</ion-label>
+                  <ion-textarea formControlName="description" type="text" name="price"></ion-textarea>
+                </ion-item>
+              </ng-container>
+
+             
+                <ion-chip color="danger" (click)="deletePrice(i_p)">Удалить
+                  <!-- <ion-icon name="close-outline"></ion-icon> -->
+                </ion-chip>
+           
+            </ion-card>
             
-            <ion-item fill="outline">
-              <ion-label position="floating">Стоимость билета</ion-label>
-              <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-              <ion-input formControlName="price" type="number" name="price"></ion-input>
-            </ion-item>
+            <ion-chip style="margin-bottom: 2rem;" color="primary" class="ion-justify-item-center" (click)="addPrice()">
+              <ion-label>Добавить цену</ion-label>
+              <ion-icon name="add-outline"></ion-icon>
+            </ion-chip>
 
 
             <ion-col size-lg="4" size-md="8" size-xs="12" @fade>

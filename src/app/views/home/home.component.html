@@ -1,21 +1,49 @@
 <ion-content>
     <div class="buttons-wrapper">
-      
       <div class="filters">
         <!-- <app-filters></app-filters> -->
-        
-      </div>   
+
+      </div>
     </div>
 
     <div class="calendula-container" #calendula [ngStyle]="{'top':headerHeight.offsetHeight + 'px'}">
       <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
       <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
     </div>
-    
 
     
-    
+   
+    <div class="range-radius-main">
+
+      <div class="range-radius-custom" style="height: 228px;">
+        <ion-icon (click)="radiusPlus()" name="add-outline" class="swither-icon-range" color="primary"></ion-icon>
+       
+          <ngx-slider 
+          [value]="radius" 
+          [options]="options"
+          (userChange)="radiusChange($event)"
+          ></ngx-slider>
+          <ion-icon (click)="radiusMinus()" name="remove-outline" class="swither-icon-range " color="primary"></ion-icon>
+      </div>
+
+      <!-- <ion-row class="" >
+        <ion-range class="range-radius"
+        [ticks]="true" 
+        [snaps]="true" 
+        [min]="1" 
+        [max]="25" 
+        [pin]="true" 
+        [value]="radius"
+        [pinFormatter]="pinRadiusFormatter"
+        (ionKnobMoveEnd)="radiusChange($event)"
+        ></ion-range>
+   
+        <ion-label class="ion-padding-horizontal">{{ radius }} км.</ion-label>
+      </ion-row> -->
+    </div>
+
     <div class="container-swither">
+      
       <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" #event>
         <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon>
       </div>
@@ -34,14 +62,14 @@
       </div>
     </div>
 
-  
+
   <div class="map">
     <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading"></ion-progress-bar>
     <div class="sight-carusel-container">
       <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
     </div>
     <ya-map (ready)="onMapReady($event)"
-      [zoom]="15"  
+      [zoom]="15"
       [center]="[0,0]"
       [state]="{controls: ['zoomControl']}"
       [options]="{
@@ -81,7 +109,7 @@
         <ng-container *ngIf="!modalContent">
           <app-no-data/>
         </ng-container>
-        
+
       </ion-content>
     </ng-template>
   </ion-modal>

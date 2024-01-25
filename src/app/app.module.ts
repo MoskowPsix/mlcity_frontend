@@ -46,7 +46,7 @@ import { SightTypeCaruselComponent } from './components/sight-type-carusel/sight
 import { EventTypeCaruselComponent } from './components/event-type-carusel/event-type-carusel.component'
 
 import { AuthService } from './services/auth.service';
-import { ToastService } from './services/toast.service'; 
+import { ToastService } from './services/toast.service';
 import { TokenService } from './services/token.service';
 import { UserService } from './services/user.service';
 import { LoadingService } from './services/loading.service';
@@ -86,6 +86,8 @@ import { EdditSightComponent } from './views/cabinet/my-sights/edit-sight/eddit-
 import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.component';
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component';
 import { TypesComponent } from './components/types/types.component';
+import { MetrikaModule } from 'ng-yandex-metrika';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 
 
@@ -146,18 +148,26 @@ registerLocaleData(localeRu, 'ru');
     RegistrationComponent,
     EdditSightComponent,
     SightGalleryComponent,
-    SettingsMenuComponent,
-    TypesComponent
+    SettingsMenuComponent
     
     
   ],
   imports: [
-    BrowserModule, 
+    BrowserModule,
     BrowserAnimationsModule,
-    IonicModule.forRoot(), 
-    AppRoutingModule, 
-    AngularYandexMapsModule.forRoot(mapConfig), 
-    HttpClientModule, 
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    AngularYandexMapsModule.forRoot(mapConfig),
+    HttpClientModule,
+    NgxSliderModule,
+    MetrikaModule.forRoot(
+      {id: 96112606,
+      webvisor: true,
+      clickmap:true,
+      trackLinks:true,
+      accurateTrackBounce:true,},
+      1,
+    ),
     HttpClientJsonpModule,
     ReactiveFormsModule,
     MaskitoModule,
@@ -167,9 +177,9 @@ registerLocaleData(localeRu, 'ru');
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
-    AuthService, 
+    AuthService,
     LoadingService,
     TokenService,
     ToastService,

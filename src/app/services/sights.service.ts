@@ -4,7 +4,7 @@ import { tap, throwError } from 'rxjs'
 import { environment } from 'src/environments/environment';
 import { ISight } from '../models/sight';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
-import { UserService } from './user.service';
+import { UserService } from './user.service'; 
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +40,7 @@ export class SightsService {
   }
   
   getSightsFavorites(params: any) { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
+    this.getUserId()
     return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-sights`, { params: {...params} })
   }
   getSightsForUser(params: IGetEventsAndSights) { //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)

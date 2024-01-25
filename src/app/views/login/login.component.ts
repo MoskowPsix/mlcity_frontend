@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Subject, filter, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
@@ -11,6 +11,9 @@ import { environment } from 'src/environments/environment';
 import { MessagesAuth } from 'src/app/enums/messages-auth';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { ActionSheetController } from '@ionic/angular';
+import { Location }  from '@angular/common';
+import { Metrika } from 'ng-yandex-metrika';
+
 
 @Component({
   selector: 'app-login',
@@ -42,7 +45,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute, 
     private router: Router,  
     private actionSheetCtrl: ActionSheetController,
-  ){}
+    private metrika: Metrika,
+    private location: Location,
+  )
+  {
+    let prevPath = this.location.path();
+    this.router
+    .events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe(() => {
+        const newPath = location.path();
+        this.metrika.hit(newPath, {
+          referer: prevPath,
+          callback: () => { console.log('hit end'); }
+        });
+        prevPath = newPath;
+      });
+  }
 
   loginPhone() {
     this.formSetPassword = new FormGroup({

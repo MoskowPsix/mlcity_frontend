@@ -16,8 +16,11 @@ import { PlaceService } from 'src/app/services/place.service';
 import { IPlace } from 'src/app/models/place';
 import { types } from 'util';
 import { YandexMetricService } from 'src/app/services/yandex-metric.service';
-
-
+import { Metrika } from 'ng-yandex-metrika';
+import { NavigationEnd, Router } from '@angular/router';
+import { Location }  from '@angular/common';
+import { filter } from 'rxjs/operators';
+import { NgxSliderModule, Options   }from'@angular-slider/ngx-slider';
 
 @Component({
   selector: 'app-home',
@@ -41,6 +44,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   placemarks_tomorrow: ymaps.Placemark[] = [];
   placemarks_week: ymaps.Placemark[] = [];
   placemarks_month: ymaps.Placemark[] = [];
+ 
+
+  //настройки ползунка радиуса
+  options: Options = {
+    floor: 1,
+    ceil: 25,
+    vertical: true,
+    
+    getPointerColor:(value:number)=>{
+      return "#0085FF"
+    }
+  
+
+  };
 
 
   CirclePoint!: ymaps.Circle;
@@ -52,7 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   date: any = {dateStart: new Date().toISOString(), dateEnd: new Date().toISOString()}
   headerHeight: any = document.getElementById('header')
   headerHeightM: any = document.getElementById('header-m')
-  
+
 
   objectsInsideCircle!: any
   pixelCenter: any
@@ -86,13 +103,51 @@ export class HomeComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     private placeService: PlaceService,
     private ngZone: NgZone,
-    private metricaService: YandexMetricService
-  ) { }
+    private metrika: Metrika,
+    private router: Router,
+    private location: Location,
+  )
+  {
+    let prevPath = this.location.path();
+    this.router
+    .events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe(() => {
+        const newPath = location.path();
+        this.metrika.hit(newPath, {
+          referer: prevPath,
+          callback: () => { console.log('hit end'); }
+        });
+        prevPath = newPath;
+      });
+  }
 
   // при клике по кнопке радиуча (5 10 15 20 25)
   setRadius(radius: number) {
     this.CirclePoint.geometry?.setRadius(1000 * radius)
     this.filterService.setRadiusTolocalStorage(radius.toString())
+  }
+
+  pinRadiusFormatter(value: number) {
+    return `${value} км.`;
+  }
+  radiusChange(event:any){
+    console.log(event.value)
+    this.filterService.setRadiusTolocalStorage(event.value)
+  }
+  radiusPlus(){
+    let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
+    if (radius+1 <= 25) {
+      this.filterService.setRadiusTolocalStorage(`${radius+1}`)
+    }
+
+      
+  }
+  radiusMinus(){
+    let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
+    if (radius-1 >= 1) {
+      this.filterService.setRadiusTolocalStorage(`${radius-1}`)
+    }
   }
 
   sightTypesChange(typeId: any){
@@ -196,7 +251,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
     this.map.target.controls.remove("zoomControl")
     // this.map.target.controls.add('geolocationControl',{size:"large",position: {left:'50% ',bottom:0, right:0, top:"-150px",width:"150px"}})
-    
+
     // if (!this.map) {
     //   this.onMapReady({target, ymaps});
     // }
@@ -216,21 +271,21 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.objectsInsideCircle.events.add('click', (e: any) => {
       this.modalContent = [];
-            
+
       if (!e.get('target')._clusterBounds) {
         if (e.get('target').properties.get('geoObjects') !== undefined) {
 
           e.get('target').properties.get('geoObjects').forEach((element: any) => {
 
             if (element.options._options.balloonContent.type === 'event') {
-            
+
               forkJoin([this.getPlacesIds(element.options._options.balloonContent.id, 'event')]).pipe(
                 catchError((err) => {
                   return of(EMPTY);
                 }),
                 takeUntil(this.destroy$)
               ).subscribe()
-            
+
             this.activeClaster = e.get('target');
             e.get('target').options.set('preset', 'islands#invertedPinkClusterIcons');
             } else {
@@ -256,23 +311,23 @@ export class HomeComponent implements OnInit, OnDestroy {
                 return of(EMPTY);
               }),
               takeUntil(this.destroy$)
-            ).subscribe(() => {               
+            ).subscribe(() => {
             });
             this.activePlacemark = e.get('target');
-           
-            
+
+
             e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`));
           }
         }
-        
+
         this.navigationService.modalEventShowOpen.next(true);
-        
+
       }
   });
   }
 
   getPlacesIds(id: number, type: string): Observable<any> {
-    
+
     return new Observable((observer) => {
       this.placeService.getPlaceById(id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
         if (type=='event'){
@@ -298,7 +353,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
     })
   }
-  
+
   getPlaces(): Observable<any> {
     return new Observable((observer) => {
     this.eventsLoading = true;
@@ -307,9 +362,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       // console.log(this.filterService.locationLatitude.value, this.filterService.locationLongitude.value)
       let events: any[] = []
       if (response.places.length) {
-        
-        
-        
+
+
+
       }
       this.cdr.detectChanges();
       observer.next(EMPTY);
@@ -335,7 +390,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   setMapData() {
     if (this.objectsInsideCircle) {
       this.map.target.geoObjects.remove(this.objectsInsideCircle);
-      
+
       this.objectsInsideCircle.remove(this.placemarks);
       this.placemarks = [];
     }
@@ -351,8 +406,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     //this.setPlacemarks(this.events, 'events');
-    
-    
+
+
     if(this.stateType=="events"){
       this.setPlacemarks(this.places, 'event');
     }
@@ -364,19 +419,19 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.setPlacemarks(this.places, 'event');
       this.setPlacemarks(this.sights, 'sights');
     }
-    
+
 
     this.setPlacemarksAndClusters();
     this.setBoundsCoordsToMapService();
     this.cdr.detectChanges();
   }
 
-  
+
 
   setPlacemarks(collection: any, type: string) {
 
     collection.map((item: any) => {
-      
+
       let time_event = Math.ceil(new Date(item.date_start).getTime() / 1000)
       let time_now = Math.ceil(new Date().getTime() / 1000);
       let time_deff = time_event - time_now
@@ -407,7 +462,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker" ></div>`)
           });
           this.placemarks.push(placemark);
-         
+
       }
       // if ( 0 > time_deff ) { // Сейчас
       //   placemark = new ymaps.Placemark(
@@ -426,7 +481,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       //       balloonAutoPan: false,
       //       iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: 0040ff;" class="marker"><img src="${icoLink}"/></div>`)
       //     });
-      //     this.placemarks.push(placemark);    
+      //     this.placemarks.push(placemark);
       // } else if (604800 > time_deff && time_deff > 86400) { // Через неделю
       //   placemark = new ymaps.Placemark(
       //   [item.latitude, item.longitude],
@@ -467,7 +522,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       //console.log(item.date_start)
 
         //Клик по метке и загрузка ивента в модалку
-        // placemark.events.add('click', () => { 
+        // placemark.events.add('click', () => {
         //   placemark.options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${icoLink}"/></div>`))
         //   this.modalContent = item// <------------ тут надо что-то придумать чтобы и ивенты и места показывались, не путались ид. а также с кластаризацией
         //   this.navigationService.modalEventShowOpen.next(true)
@@ -507,9 +562,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       else if(this.stateType=="sights"){
         sources.push(this.getSights())
       }
-    
 
-      
+
+
       forkJoin(sources).pipe(
         catchError((err) => {
           this.toastService.showToast(MessagesErrors.default, 'danger');
@@ -521,9 +576,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$)
       ).subscribe(() => {
-        
+
         this.setMapData();
-        
+
       });
     // } else {
     //   this.getEventsAndSights()
@@ -549,7 +604,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     {
       this.buttonActive.nativeElement.style.transform = "translateY(92px)"
     }
-    
+
   }
   changeDateRange(event: any){
     this.date.dateStart = event.dateStart
@@ -560,7 +615,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.setStartDateTolocalStorage(event.dateStart.toString())
     this.filterService.setEndDateTolocalStorage(event.dateEnd.toString())
     this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
-    this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())   
+    this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
     // this.queryBuilderService.updateParams()
     this.filterService.changeFilter.next(true)
   }
@@ -571,25 +626,23 @@ export class HomeComponent implements OnInit, OnDestroy {
         const coordinates = [
           position.coords.latitude,
           position.coords.longitude
-          
+
         ];
         this.map.target.setCenter(coordinates)
-        
+
       }, (error) => {
         this.toastService.showToast("Убедитесь что доступ к геолокации предоставлен",'warning');
-        
+
       });
     }
-    
-        
+
+
   }
 
-  
+
 
   ngOnInit(): void {
     //Подписываемся на изменение радиуса
-
-    this.metricaService.metrica()
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe(value => {
       this.radius = parseInt(value);
       if (this.map && this.map.target)
@@ -610,7 +663,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.cdr.detectChanges();
     });
 
-    //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город. 
+    //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(value => {
       if (value === true) {
         this.mapService.positionFilter(this.map, this.CirclePoint);
@@ -625,6 +678,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.filterService.locationLatitude.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.mapService.circleCenterLatitude.next(value);
+      
     });
     this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.sightTypeId = value[0]
@@ -634,7 +688,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
 
-    
+
   }
   ngOnDestroy() {
     // отписываемся от всех подписок

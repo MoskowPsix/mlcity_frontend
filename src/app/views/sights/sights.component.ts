@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime } from 'rxjs';
+import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime, filter } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { ISight } from 'src/app/models/sight';
 import { ToastService } from 'src/app/services/toast.service';
@@ -8,6 +8,9 @@ import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { SightsService } from 'src/app/services/sights.service';
 import { LocationService } from 'src/app/services/location.service';
+import { Metrika } from 'ng-yandex-metrika';
+import { NavigationEnd, Router } from '@angular/router';
+import { Location }  from '@angular/common';
 
 @Component({
   selector: 'app-sights',
@@ -48,13 +51,30 @@ export class SightsComponent implements OnInit, OnDestroy {
   constructor(
     private sightsService: SightsService,
     private toastService: ToastService,
- 
+
     private filterService: FilterService,
     private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService,
     private locationService: LocationService,
+    private metrika: Metrika,
+    private router: Router,
+    private location: Location,
 
-  ) { }
+  )
+  {
+    let prevPath = this.location.path();
+    this.router
+    .events
+      .pipe(filter(event => (event instanceof NavigationEnd)))
+      .subscribe(() => {
+        const newPath = location.path();
+        this.metrika.hit(newPath, {
+          referer: prevPath,
+          callback: () => { console.log('hit end'); }
+        });
+        prevPath = newPath;
+      });
+  }
 
   getSightsCity(){
     this.loadingMoreSightsCity ? this.loadingSightsCity = true : this.loadingSightsCity = false
@@ -70,13 +90,13 @@ export class SightsComponent implements OnInit, OnDestroy {
         respons.sights.next_cursor ? this.loadTrue = true : this.loadTrue = false
       }),
       tap(() => {
-        this.loadingSightsCity = true  
+        this.loadingSightsCity = true
         this.loadingMoreSightsCity = false
       }),
       catchError((err) =>{
         this.toastService.showToast(MessagesErrors.default, 'danger')
         this.loadingSightsCity = false
-        return of(EMPTY) 
+        return of(EMPTY)
       }),
       takeUntil(this.destroy$)
     ).subscribe()
@@ -94,13 +114,13 @@ export class SightsComponent implements OnInit, OnDestroy {
   //       //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
   //     }),
   //     tap(() => {
-  //       this.loadingSightsGeolocation = true  
+  //       this.loadingSightsGeolocation = true
   //       this.loadingMoreSightsGeolocation = false
   //     }),
   //     catchError((err) =>{
   //       this.toastService.showToast(MessagesErrors.default, 'danger')
   //       this.loadingSightsGeolocation = false
-  //       return of(EMPTY) 
+  //       return of(EMPTY)
   //     }),
   //     takeUntil(this.destroy$)
   //   ).subscribe()
@@ -125,25 +145,25 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   scrollEvent = (): void => {
- 
+
     let viewElement: boolean = false
 
     for(let i = 0; i<this.widgetsContent.nativeElement.children.length; i++){
-  
+
       const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
-      
-      
+
+
 
       if(boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0){
         this.viewId.push(this.widgetsContent.nativeElement.children[i].id)
-    
+
 
         if (this.timeStart==0){
           this.timeStart = new Date().getTime()
-        } 
+        }
 
         else{
-      
+
           let time = (new Date().getTime() - this.timeStart)/1000
 
           if(time>=3.14){
@@ -152,21 +172,21 @@ export class SightsComponent implements OnInit, OnDestroy {
               delay(100),
               retry(1),
               catchError((err) =>{
-                return of(EMPTY) 
+                return of(EMPTY)
               }),
               takeUntil(this.destroy$)
             ).subscribe()
           }
-          
-          this.timeStart = 0
-       
-          this.timerReload()
-        }  
 
-      } 
-      
-      
-    } 
+          this.timeStart = 0
+
+          this.timerReload()
+        }
+
+      }
+
+
+    }
     viewElement = true
   }
 
@@ -182,7 +202,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     this.getSightsCity()
     // this.getSightsGeolocation()
 
-    //Подписываемся на изменение фильтра 
+    //Подписываемся на изменение фильтра
     this.filterService.changeFilter.pipe(debounceTime(1000),takeUntil(this.destroy$)).subscribe((value) => {
       if (value === true){
         this.sightsCity = []
