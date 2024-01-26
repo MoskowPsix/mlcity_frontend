@@ -5,10 +5,9 @@ import { AbstractControl, ValidationErrors } from "@angular/forms"
   if (!control.get('dateStart')?.value || !control.get('dateEnd')?.value)
     return null
 
-  const from = new Date(control.get("dateStart")?.value)
-  const to = new Date(control.get("dateEnd")?.value)
+  const from = new Date(control.get("dateStart")?.value.slice(0, 19))
+  const to = new Date(control.get("dateEnd")?.value.slice(0, 19))
   let invalid = false
-  console.log('from: ' + from + 'to: ' + to)
   if (from && to) {
     invalid = from.getTime() > to.getTime()
 
