@@ -217,7 +217,7 @@
                     <ng-container *ngIf="eventsList.length">
                         <ion-row class="ion-justify-content-start">
                             <ion-col *ngFor="let event of eventsList; let i = index" size-md="6" size-xs="12">
-                              <app-event-card [event]="event"></app-event-card>
+                              <app-event-card [event]="event" [isSight]="false"></app-event-card>
                             </ion-col>
                         </ion-row>
                     </ng-container>
@@ -228,7 +228,11 @@
 
                 <ng-container *ngIf="segment === 'sights'">
                     <ng-container *ngIf="sightsList.length">
-                        достопримечательности
+                        <ion-row class="ion-justify-content-start">
+                            <ion-col *ngFor="let sight of sightsList; let i = index" size-md="6" size-xs="12">
+                              <app-event-card [event]="sight" [isSight]="true"></app-event-card>
+                            </ion-col>
+                        </ion-row>
                     </ng-container>
                     <ng-container *ngIf="!sightsList.length">
                         <app-no-data />
