@@ -14,6 +14,8 @@ import { AuthService } from 'src/app/services/auth.service';
 // import { Swiper } from 'swiper/types';
 import { Location }  from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
+import { Title } from '@angular/platform-browser';
+import { Meta } from '@angular/platform-browser';
 
 
 @Component({
@@ -45,15 +47,17 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   startLikesCount: number = 0
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private sightsService: SightsService,
     private toastService: ToastService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
     private metrika: Metrika,
     private location: Location,
-    private router: Router
-  ) 
+    private router: Router,
+    private titleService: Title,
+    private metaService: Meta
+  )
   {
     let prevPath = this.location.path();
     this.router
@@ -63,49 +67,50 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
         const newPath = location.path();
         this.metrika.hit(newPath, {
           referer: prevPath,
-          callback: () => { console.log('hit end'); }
         });
         prevPath = newPath;
       });
   }
 
-  
+
   getSight(){
     this.sightsService.getSightById(this.sightId!).pipe(
       retry(3),
       tap(() => this.loadingSight = false),
       takeUntil(this.destroy$)
-    ).subscribe((sight:any )=> { 
+    ).subscribe((sight:any )=> {
       if(sight)
         this.sight = sight
+        this.titleService.setTitle(sight.name)
+        this.metaService.updateTag({name:"description",  content: sight.description})
         this.startLikesCount = this.sight?.likes ? this.sight.likes.vk_count + this.sight.likes.local_count : 0
-    }); 
+    });
   }
 
   checkLiked(){
-    if (this.userAuth) 
+    if (this.userAuth)
       this.sightsService.checkLiked(this.sightId!).pipe(
         retry(3),
         takeUntil(this.destroy$)
-      ).subscribe((liked:boolean )=> { 
+      ).subscribe((liked:boolean )=> {
         this.like = liked
-      }); 
+      });
   }
 
   checkFavorite(){
-    if (this.userAuth) 
+    if (this.userAuth)
       this.sightsService.checkFavorite(this.sightId!).pipe(
         retry(3),
         takeUntil(this.destroy$)
-      ).subscribe((favorite:boolean )=> { 
+      ).subscribe((favorite:boolean )=> {
         this.favorite = favorite
-      }); 
+      });
   }
 
   onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
     let icoLink = this.sight && this.sight.types && this.sight.types.length ? this.host + ':' + this.port + this.sight.types[0].ico : ''
     this.map = { target, ymaps };
-    //Создаем метку 
+    //Создаем метку
     target.geoObjects.add(
       new ymaps.Placemark([this.sight?.latitude,this.sight?.longitude],{}, {
         iconLayout: 'default#imageWithContent',
@@ -128,11 +133,11 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
         }),
         catchError((err) =>{
           this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
         takeUntil(this.destroy$)
       ).subscribe()
-    }  
+    }
   }
 
   toggleLike(sight_id:number){
@@ -143,16 +148,16 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
       this.sightsService.toggleLike(sight_id).pipe(
         tap(() => {
           this.like = !this.like
-          this.like 
-            ? this.startLikesCount++ 
-            : this.startLikesCount !== 0 
-              ? this.startLikesCount-- 
+          this.like
+            ? this.startLikesCount++
+            : this.startLikesCount !== 0
+              ? this.startLikesCount--
               : 0
           this.loadingLike = false
         }),
         catchError((err) =>{
           this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
         takeUntil(this.destroy$)
       ).subscribe()
@@ -161,12 +166,12 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     //Получаем ид ивента из параметра маршрута
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => { 
-      this.sightId = params['id']; 
-    }); 
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      this.sightId = params['id'];
+    });
 
     this.userAuth = this.authService.getAuthState()
-    
+
     this.getSight()
     this.checkLiked()
     this.checkFavorite()

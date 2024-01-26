@@ -21,6 +21,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Location }  from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { NgxSliderModule, Options   }from'@angular-slider/ngx-slider';
+import { Title } from '@angular/platform-browser';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -106,8 +108,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     private metrika: Metrika,
     private router: Router,
     private location: Location,
+    private titleService: Title,
+    private metaService: Meta
+    
   )
   {
+    this.titleService.setTitle("MLCity - Мероприятия и достопремечательности вокруг вас")
+    this.metaService.updateTag({name: "description", content: "Узнайте какие события и достопремечательности проходят рядом с вами и в вашем городе."})
     let prevPath = this.location.path();
     this.router
     .events
@@ -116,7 +123,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         const newPath = location.path();
         this.metrika.hit(newPath, {
           referer: prevPath,
-          callback: () => { console.log('hit end'); }
         });
         prevPath = newPath;
       });

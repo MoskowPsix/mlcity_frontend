@@ -16,6 +16,8 @@ import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { PlaceService } from 'src/app/services/place.service';
 import { Location }  from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
+import { Title } from '@angular/platform-browser';
+import { Meta } from '@angular/platform-browser';
 
 // import { Swiper } from 'swiper/types';
 
@@ -49,7 +51,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   startLikesCount: number = 0
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private eventsService: EventsService,
     private toastService: ToastService,
     private authService: AuthService,
@@ -59,10 +61,12 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private placeService: PlaceService,
     private metrika: Metrika,
     private location: Location,
-    private router: Router
-    
-    
-  ) 
+    private router: Router,
+    private titleService: Title,
+    private metaService: Meta
+
+
+  )
   {
     let prevPath = this.location.path();
     this.router
@@ -72,24 +76,26 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
         const newPath = location.path();
         this.metrika.hit(newPath, {
           referer: prevPath,
-          callback: () => { console.log('hit end'); }
         });
         prevPath = newPath;
       });
   }
 
-  
+
   getEvent(){
     this.eventsService.getEventById(this.eventId!).pipe(
       retry(3),
       tap(() => this.loadingEvent = false),
       takeUntil(this.destroy$)
-    ).subscribe((event:IEvent )=> { 
+    ).subscribe((event:IEvent )=> {
       if(event)
         this.event = event
-      
+      console.log(event)
+        this.titleService.setTitle(event.name)
+        this.metaService.updateTag({name: "description", content: event.description})
+
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
-    }); 
+    });
   }
 
   getEventPlaces(){
@@ -102,10 +108,10 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       tap(() => this.loadPlace = false),
       map((response:any) => {
         this.places.push(...response.places.data)
-  
+
         this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(response.places.next_cursor)
         response.places.next_cursor ? this.loadMore = true : this.loadMore = false
-        
+
       }),
       catchError((error) => {
         this.toastService.showToast(MessagesErrors.default, 'danger')
@@ -113,17 +119,17 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       }),
       takeUntil(this.destroy$)
     ).subscribe(() => {
-      
+
     })
     }
-    
+
   }
 
   setActivePlace(i: number){
     this.places[i].active = true
   }
 
- 
+
 
   getMinPrice(prices: any[]) {
     let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub)
@@ -141,29 +147,29 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   checkLiked(){
-    if (this.userAuth) 
+    if (this.userAuth)
       this.eventsService.checkLiked(this.eventId!).pipe(
         retry(3),
         takeUntil(this.destroy$)
-      ).subscribe((liked:boolean )=> { 
+      ).subscribe((liked:boolean )=> {
         this.like = liked
-      }); 
+      });
   }
 
   checFavorite(){
-    if (this.userAuth) 
+    if (this.userAuth)
       this.eventsService.checkFavorite(this.eventId!).pipe(
         retry(3),
         takeUntil(this.destroy$)
-      ).subscribe((favorite:boolean )=> { 
+      ).subscribe((favorite:boolean )=> {
         this.favorite = favorite
-      }); 
+      });
   }
 
   // onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
   //   let icoLink = this.event && this.event.types && this.event.types.length ? this.host + ':' + this.port + this.event.types[0].ico : ''
 
-  //   //Создаем метку 
+  //   //Создаем метку
   //   target.geoObjects.add(
   //     new ymaps.Placemark([this.event?.latitude,this.event?.longitude],{}, {
   //       iconLayout: 'default#imageWithContent',
@@ -184,11 +190,11 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
         }),
         catchError((err) =>{
           this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
         takeUntil(this.destroy$)
       ).subscribe()
-    }  
+    }
   }
 
   toggleLike(event_id:number){
@@ -199,16 +205,16 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       this.eventsService.toggleLike(event_id).pipe(
         tap(() => {
           this.like = !this.like
-          this.like 
-            ? this.startLikesCount++ 
-            : this.startLikesCount !== 0 
-              ? this.startLikesCount-- 
+          this.like
+            ? this.startLikesCount++
+            : this.startLikesCount !== 0
+              ? this.startLikesCount--
               : 0
           this.loadingLike = false
         }),
         catchError((err) =>{
           this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
         takeUntil(this.destroy$)
       ).subscribe()
@@ -217,17 +223,17 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     //Получаем ид ивента из параметра маршрута
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => { 
-      this.eventId = params['id'];      
-    }); 
-    
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      this.eventId = params['id'];
+    });
+
     this.userAuth = this.authService.getAuthState()
     this.getEvent()
     this.getEventPlaces()
-    
+
     this.checkLiked()
     this.checFavorite()
-    
+
   }
 
   ngAfterViewInit() {
