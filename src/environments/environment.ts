@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiKeyYandex: '3a8040b4-161a-485b-b16e-1968065fb4ac',
+  apiKeyYandex: '226cca4a-d7de-46b5-9bc8-889f70ebfe64',
+  apiKeyYandexSubject: '6483f031-ac2f-4600-a338-269045f79ee2',
   YANDEX_METRICA_KEY: 96112606,
   YANDEX_METRICA_ON: false,
   APP_NAME: 'MyLittleCity',

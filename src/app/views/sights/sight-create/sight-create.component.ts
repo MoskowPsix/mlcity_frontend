@@ -204,55 +204,38 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-
   openModalPost(event:any = null){
   
     if(this.vkGroupSelected == null){
       this.vkGroupSelected = this.vkGroupModalSelected
       this.setVkPostsByGroupID(this.vkGroupModalSelected)
     }
-    
       this.openModalPostValue = true    
-          
-     
-    
  }
 
 
- saveChangeId(){
-  if(this.vkGroupSelected !=null){
-    this.vkGroupModalSelected = this.vkGroupSelected
+  saveChangeId(){
+    if(this.vkGroupSelected !=null){
+      this.vkGroupModalSelected = this.vkGroupSelected
+    }
   }
 
- }
+  closeModalPost(){
+    this.openModalPostValue = false
+  }
 
+  openModalGroup(){
+    this.openModalGroupValue = true
+  }
 
+  closeModalGroup(){
+    this.openModalGroupValue = false
+  }
 
-
- closeModalPost(){
-  this.openModalPostValue = false
-  
- }
-
-
- openModalGroup(){
-  this.openModalGroupValue = true
- }
-
- closeModalGroup(){
-  this.openModalGroupValue = false
- }
-
- closeAllModals(){
-  this.openModalPostValue = false
-  this.openModalGroupValue = false
- }
-
-
-
-
-
-
+  closeAllModals(){
+    this.openModalPostValue = false
+    this.openModalGroupValue = false
+  }
 
   //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){
@@ -353,7 +336,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     }
   }
   setCityes(item:any){
-    //console.log(item)
     this.location = item
     this.city = item.name
     this.region = item.location_parent.name
@@ -400,7 +382,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     }
     
     const search = new ymaps.SuggestView('search-map');  
-    search.events.add('select',()=>{     
+    // search.setApikeys({suggest: environment.apiKeyYandexSubject})
+    // search.options = []
+    search.events.add('select', () => {     
       if (!Capacitor.isNativePlatform())  {
         this.ForwardGeocoder()
       } else {
@@ -452,7 +436,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
       const firstGeoObject = result.geoObjects.get(0);
       this.addPlacemark(firstGeoObject.geometry.getCoordinates())
-
       // this.city=firstGeoObject.getLocalities(0)[0]
 
     }) 
@@ -623,7 +606,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   onSubmit(){
   
     let sight = this.createFormData() // собираем формдату
-    console.log(this.createFormData().getAll('prices'))
     this.createSightForm.disable()
     this.loadingService.showLoading()
     this.sightsService.create(sight).pipe(
@@ -646,10 +628,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         this.createSightForm.controls['locationId'].reset()
         this.createSightForm.enable()
         this.stepCurrency =  this.stepStart 
-        console.log(this.createSightForm)
       }),
       catchError((err) =>{
-        console.log(this.createSightForm)
         console.log(err)
         this.toastService.showToast(err.message || MessagesErrors.default, 'danger')
         this.createSightForm.enable()

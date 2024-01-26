@@ -92,7 +92,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 
 const mapConfig: YaConfig = {
-  apikey: environment.apiKeyYandex,
+  apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
 };
 
