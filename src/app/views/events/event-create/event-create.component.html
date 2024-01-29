@@ -96,8 +96,9 @@
         </ng-container> 
      
         <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
+       
           <ion-col size-lg="8" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
-          <ion-list>
+          <!-- <ion-list>
             <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
               <ion-list-header>
                 <ion-label *ngIf="typesLoaded">Выберите тип мероприятия</ion-label>
@@ -105,10 +106,11 @@
               <app-sight-type [types]="types" [typesLoaded] = "typesLoaded" [isSight]="false"></app-sight-type>
               
             </ion-radio-group>
-          </ion-list>
+          </ion-list> -->
+          
           </ion-col>
-          <!-- <ion-label>{{ count }}</ion-label>
-          <app-types (buttonClick)="onAdd($event)"></app-types> -->
+          
+          <app-types (buttonClick)="onAdd($event)"></app-types> 
         </ion-row>
       
 
