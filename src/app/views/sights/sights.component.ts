@@ -73,10 +73,12 @@ export class SightsComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
         ).subscribe((response) => {
           console.log(response)
-          this.titleService.setTitle("Мероприятия в " + response.location.name)
+          this.titleService.setTitle("Достопримечательности в городе " + response.location.name)
+
+          this.metaService.updateTag({name:"description", content:"Достопримечательности вашего города тут"})
         })
     })
-    
+
     let prevPath = this.location.path();
     this.router
     .events
