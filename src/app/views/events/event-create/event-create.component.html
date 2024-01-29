@@ -10,8 +10,8 @@
 
 
       <div class="btnsWrapper btnsWrapperNext">
-        <ion-button class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-        <ion-button class="buttonsNavigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled] ="createEventForm.invalid || createEventForm.disabled"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+        <ion-button class="buttonsNavigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        <ion-button class="buttonsNavigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
       </div>
 
     </div>
@@ -96,8 +96,9 @@
         </ng-container> 
      
         <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
+       
           <ion-col size-lg="8" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
-          <ion-list>
+          <!-- <ion-list>
             <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
               <ion-list-header>
                 <ion-label *ngIf="typesLoaded">Выберите тип мероприятия</ion-label>
@@ -105,10 +106,11 @@
               <app-sight-type [types]="types" [typesLoaded] = "typesLoaded" [isSight]="false"></app-sight-type>
               
             </ion-radio-group>
-          </ion-list>
+          </ion-list> -->
+          
           </ion-col>
-          <!-- <ion-label>{{ count }}</ion-label>
-          <app-types (buttonClick)="onAdd($event)"></app-types> -->
+          
+          <app-types (buttonClick)="onAdd($event)"></app-types> 
         </ion-row>
       
 
@@ -633,6 +635,7 @@
             
       <!-- шаг 4 -->
       <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
+        <!-- <ion-button (click)="searchMinSeans()">test</ion-button> -->
         <ion-col *ngIf="stepCurrency === 3" @fade>
           <ion-list-header>
             <ion-label>На карте выберите место проведения мероприятия</ion-label>
