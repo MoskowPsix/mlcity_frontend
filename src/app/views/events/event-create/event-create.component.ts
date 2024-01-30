@@ -140,7 +140,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     
     onAdd(event:Event) {
       this.count++
-      console.log(event)
+    
     }
 
   //поулчаем юзера и устанвлвиаем группы и шаги
@@ -638,9 +638,22 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }
       case 3:
         let placeValid:boolean = false
+        let seansValid:boolean = false
+      
           this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
 
-           if(item.controls.address.value.length > 0){
+            item.controls.seances.value.forEach((item_sean: any, i_sean: number) => {
+              if(item_sean.controls.dateStart.value >= item_sean.controls.dateEnd.value){
+                seansValid = false
+              
+              }
+              else{
+                seansValid = true
+              }
+              
+            })
+
+           if(item.controls.address.value.length > 0 ||item.controls.address.value){
             placeValid =  true
            }
            else{
@@ -649,7 +662,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
           })
 
-          if(placeValid){
+          if(placeValid && seansValid){
             return false
           }
           else
@@ -661,13 +674,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         
       let priceValid = false
       this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
-        console.log(item.controls.cors_rub.value)
+      
         if(item.controls.cors_rub.value >= 0 && item.controls.description.value.length >= 3){
           priceValid =  true
-          console.log("можна")
+       
         }
         else{
-          console.log("незя")
+      
           priceValid =  false
         }
        })
@@ -884,6 +897,44 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.addPlacemark([item.latitude, item.longitude], num)
     this.onClearSearch()
   }
+
+  //ищем минимальный и максимальный плейс
+
+    searchMinSeans(){
+
+    let minSeans:any = { 
+      value:{
+        dateStart: new Date().toISOString(), 
+        dateEnd: new Date().toISOString()
+      }
+    }
+    let maxSeans:any = { 
+      value:{
+        dateStart: new Date().toISOString(), 
+        dateEnd: new Date().toISOString()
+      }
+    }
+    // minSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
+    // maxSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
+    this.createEventForm.controls['places'].value.forEach((item: any, i: number)=>{
+      item.controls['seances'].value.forEach((item_sean: any, i_sean: number) => {
+        if(item_sean.value.dateStart < minSeans.value.dateStart){
+          minSeans = item_sean
+         
+        }
+        if(item_sean.value.dateEnd > maxSeans.value.dateEnd){
+          maxSeans = item_sean
+        }
+      })
+    })
+
+  
+
+
+    }
+
+
+
 
   ngOnInit() {
 

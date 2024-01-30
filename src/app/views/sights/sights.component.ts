@@ -11,6 +11,8 @@ import { LocationService } from 'src/app/services/location.service';
 import { Metrika } from 'ng-yandex-metrika';
 import { NavigationEnd, Router } from '@angular/router';
 import { Location }  from '@angular/common';
+import { Title } from '@angular/platform-browser';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-sights',
@@ -59,9 +61,24 @@ export class SightsComponent implements OnInit, OnDestroy {
     private metrika: Metrika,
     private router: Router,
     private location: Location,
+    private titleService: Title,
+    private metaService: Meta
 
   )
   {
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.locationService.getLocationsIds(value).pipe(
+        delay(100),
+        retry(3),
+        takeUntil(this.destroy$)
+        ).subscribe((response) => {
+          console.log(response)
+          this.titleService.setTitle("Достопримечательности в городе " + response.location.name)
+
+          this.metaService.updateTag({name:"description", content:"Достопримечательности вашего города тут"})
+        })
+    })
+
     let prevPath = this.location.path();
     this.router
     .events
@@ -195,6 +212,16 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    //   this.locationService.getLocationsIds(value).pipe(
+    //     delay(100),
+    //     retry(3),
+    //     takeUntil(this.destroy$)
+    //     ).subscribe((response) => {
+    //       console.log(response)
+    //       this.titleService.setTitle("Мероприятия в " + response.location.name)
+    //     })
+    // })
     window.addEventListener('scroll', this.scrollPaginate, true);
     window.addEventListener('scrollend',this.scrollEvent, true)
     this.sightsCity = []
@@ -222,6 +249,8 @@ export class SightsComponent implements OnInit, OnDestroy {
     this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.sightTypeId = value[0]
     });
+
+
 
   }
 

@@ -14,6 +14,8 @@ import { throws } from 'assert';
 import { Metrika } from 'ng-yandex-metrika';
 import { NavigationEnd, Router } from '@angular/router';
 import { Location }  from '@angular/common';
+import { Title } from '@angular/platform-browser';
+import { Meta } from '@angular/platform-browser';
 
 register()
 
@@ -77,8 +79,22 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
     private metrika: Metrika,
     private router: Router,
     private location: Location,
+    private titleService: Title,
+    private metaService: Meta
   )
   {
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.locationService.getLocationsIds(value).pipe(
+        delay(100),
+        retry(3),
+        takeUntil(this.destroy$)
+        ).subscribe((response) => {
+          console.log(response)
+          this.titleService.setTitle("Мероприятия в городе " + response.location.name)
+          this.metaService.updateTag({name:"description", content:"Мероприятия вашего города тут"})
+        })
+    })
+
     let prevPath = this.location.path();
     this.router
     .events
@@ -171,8 +187,8 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    window.addEventListener('scroll', this.scrollPaginate, true);
-    window.addEventListener('scrollend',this.scrollEvent, true)
+    // window.addEventListener('scroll', this.scrollPaginate, true);
+    // window.addEventListener('scrollend',this.scrollEvent, true)
     this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value}
     //console.log(this.date)
     this.eventsCity = []

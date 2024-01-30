@@ -1,4 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-about',
@@ -19,24 +21,28 @@ export class AboutComponent implements OnInit {
   myScroll(event: Event) {
     console.log(1)
   }
-  
 
 
 
-  constructor() { }
+
+  constructor(
+    private titleService: Title,
+    private metaService: Meta
+  ) { }
 
   ngOnInit() {
-    // window.addEventListener('scroll', , true);
+    this.titleService.setTitle("О проекте Мой Маленький Город")
+    this.metaService.updateTag({name:"description", content: "Наша команда делает приложение для жителей малых городов и поселков."})
   }
 
 
   scrollEvent = (): void => {
     let viewElement: boolean = false
 
-  
+
   }
 
-  
+
 
 
 

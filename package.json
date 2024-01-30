@@ -9,7 +9,8 @@
     "build": "ng build --aot --build-optimizer --common-chunk --vendor-chunk --named-chunks",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "generate-sitemap": "sitemap-generator https://mlcity.ru/"
   },
   "private": true,
   "dependencies": {
@@ -45,6 +46,7 @@
     "ng-yandex-metrika": "^15.1.0",
     "numeral": "^2.0.6",
     "rxjs": "~7.5.0",
+    "sitemap-generator": "^8.5.1",
     "swiper": "^10.3.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

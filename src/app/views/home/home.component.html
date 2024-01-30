@@ -1,3 +1,4 @@
+<meta name="description" content="Узнайте какие события и достопремечательности проходят рядом с вами и в вашем городе.">
 <ion-content>
     <div class="buttons-wrapper">
       <div class="filters">
@@ -11,15 +12,15 @@
       <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
     </div>
 
-    
-   
+
+
     <div class="range-radius-main">
 
       <div class="range-radius-custom" style="height: 208px;">
         <ion-icon (click)="radiusPlus()" name="add-outline" class="swither-icon-range" color="primary"></ion-icon>
-       
-          <ngx-slider style="border:none" 
-          [value]="radius" 
+
+          <ngx-slider style="border:none"
+          [value]="radius"
           [options]="options"
           (userChange)="radiusChange($event)"
           ></ngx-slider>
@@ -28,22 +29,22 @@
 
       <!-- <ion-row class="" >
         <ion-range class="range-radius"
-        [ticks]="true" 
-        [snaps]="true" 
-        [min]="1" 
-        [max]="25" 
-        [pin]="true" 
+        [ticks]="true"
+        [snaps]="true"
+        [min]="1"
+        [max]="25"
+        [pin]="true"
         [value]="radius"
         [pinFormatter]="pinRadiusFormatter"
         (ionKnobMoveEnd)="radiusChange($event)"
         ></ion-range>
-   
+
         <ion-label class="ion-padding-horizontal">{{ radius }} км.</ion-label>
       </ion-row> -->
     </div>
 
     <div class="container-swither">
-      
+
       <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" #event>
         <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon>
       </div>

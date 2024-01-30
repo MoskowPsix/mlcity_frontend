@@ -21,6 +21,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Location }  from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { NgxSliderModule, Options   }from'@angular-slider/ngx-slider';
+import { Title } from '@angular/platform-browser';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -44,18 +46,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   placemarks_tomorrow: ymaps.Placemark[] = [];
   placemarks_week: ymaps.Placemark[] = [];
   placemarks_month: ymaps.Placemark[] = [];
- 
+
 
   //настройки ползунка радиуса
   options: Options = {
     floor: 1,
     ceil: 25,
     vertical: true,
-    
+
     getPointerColor:(value:number)=>{
       return "#0085FF"
     }
-  
+
 
   };
 
@@ -106,8 +108,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     private metrika: Metrika,
     private router: Router,
     private location: Location,
+    private titleService: Title,
+    private metaService: Meta
+
   )
   {
+    this.titleService.setTitle("MLCity - Мероприятия и достопремечательности вокруг вас")
     let prevPath = this.location.path();
     this.router
     .events
@@ -116,7 +122,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         const newPath = location.path();
         this.metrika.hit(newPath, {
           referer: prevPath,
-          callback: () => { console.log('hit end'); }
         });
         prevPath = newPath;
       });
@@ -141,7 +146,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.filterService.setRadiusTolocalStorage(`${radius+1}`)
     }
 
-      
+
   }
   radiusMinus(){
     let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
@@ -648,14 +653,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (this.map && this.map.target)
         this.map.target.setBounds((this.CirclePoint.geometry?.getBounds())!, { checkZoomRange: true });
     });
-    
+
     this.filterService.locationLongitude.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.mapService.circleCenterLongitude.next(value);
     });
 
     this.filterService.locationLatitude.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.mapService.circleCenterLatitude.next(value);
-      
+
     });
     //Подписываемся на состояние модалки показа ивентов и мест
     this.navigationService.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
