@@ -17,15 +17,16 @@
             align-items: center;
             background: #A0A0A0;
             border-radius:13px;
+            transition: 0.4s;
         }
             
-        .icon-btn:hover {
+        .icon-btn_active {
+            transition: 0.4s;
                 background:#0084FF;
-            }
+                
+        }
 
-        .icon-btn:focus {
-                background:#0084FF;
-            }
+       
             
         
         

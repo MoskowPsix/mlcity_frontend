@@ -89,7 +89,6 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
         retry(3),
         takeUntil(this.destroy$)
         ).subscribe((response) => {
-          console.log(response)
           this.titleService.setTitle("Мероприятия в городе " + response.location.name)
           this.metaService.updateTag({name:"description", content:"Мероприятия вашего города тут"})
         })
@@ -103,7 +102,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
         const newPath = location.path();
         this.metrika.hit(newPath, {
           referer: prevPath,
-          callback: () => { console.log('hit end'); }
+          callback: () => {  }
         });
         prevPath = newPath;
       });

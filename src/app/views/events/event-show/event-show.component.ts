@@ -16,6 +16,7 @@ import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { PlaceService } from 'src/app/services/place.service';
 import { Location }  from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
+import { HelpersService } from 'src/app/services/helpers.service';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
 
@@ -63,10 +64,9 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private location: Location,
     private router: Router,
     private titleService: Title,
-    private metaService: Meta
-
-
-  )
+    private metaService: Meta,
+    private helpers: HelpersService,
+  ) 
   {
     let prevPath = this.location.path();
     this.router
@@ -89,8 +89,8 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       takeUntil(this.destroy$)
     ).subscribe((event:IEvent )=> {
       if(event)
+        window.history.pushState("abc", "Title", `/sights/${this.eventId}/${this.helpers.translit(event.name)}`)
         this.event = event
-      console.log(event)
         this.titleService.setTitle(event.name)
         this.metaService.updateTag({name: "description", content: event.description})
 

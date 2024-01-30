@@ -52,9 +52,15 @@ export const publicRoutes: Routes = [
     },
     {
       path: 'sights/:id',
-      pathMatch: 'full',
+      // pathMatch: 'full',
       component: SightShowComponent, // Поменять на компонет места
       canActivate: [CheckAuthCanActiveGuard],
+      children: [
+        { 
+          path: ':name', 
+          component: SightShowComponent,
+        }
+      ]
     },
     {
       path: 'add_sight',

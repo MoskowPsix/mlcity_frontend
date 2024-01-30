@@ -49,12 +49,12 @@
                       <ion-button  *ngIf="stepCurrency === i" (click)="goToStep(i)" class="buttonBarClicked animated fadeIn">
                           {{ i + 1 }}
                         </ion-button>
-
+<!-- 
                         <ion-button *ngIf="!stepIsValid(i) && stepCurrency !== i" (click)="goToStep(i)" class="buttonBarDanger animated fadeIn">
                           {{ i + 1 }}
-                        </ion-button>
+                        </ion-button> -->
 
-                        <ion-button *ngIf="!(stepCurrency === i) && stepIsValid(i) && stepCurrency !== i" (click)="goToStep(i)" class="buttonBarLight animated fadeIn">
+                        <ion-button disabled="true" *ngIf="!(stepCurrency === i)" (click)="goToStep(i)" class="buttonBarLight animated fadeIn">
                           {{ i + 1 }}
                         </ion-button>
 
@@ -110,7 +110,7 @@
           
           </ion-col>
           
-          <app-types (buttonClick)="onAdd($event)"></app-types> 
+          <app-types (typeOutput)="receiveType($event)"></app-types> 
         </ion-row>
       
 
@@ -551,7 +551,7 @@
                 </ion-col> 
               </ion-row> -->
             </ion-col>
-            
+<!--             
             <ion-column>
 
 
@@ -610,15 +610,13 @@
 
            
 
-            </ion-column>
+            </ion-column> -->
 
             <div  style="max-width: 60vh;" *ngIf="createEventForm.hasError('dateInvalid')">
               <ion-note color="danger">Дата начала не может быть позднее даты конца, а дата конца не может быть раньше даты начала.</ion-note>
             </div>
 
-            <div  style="max-width: 60vh;" *ngIf="!dataValid">
-              <ion-note color="danger">Минимальная длительность мероприятия 15 минут!</ion-note>
-            </div>
+          
 
           </ion-col>
           
@@ -642,23 +640,23 @@
           </ion-list-header>
             <ion-row class="place-list">
               <ng-container *ngFor="let array of placeArrayForm; let i = index">
+                <ion-column style="min-width: 100%;">
+                  <ion-item  fill="outline" class="ion-margin-vertical" >
+                    <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
+                    <ion-input  fill="outline" formControlName="address" (ionChange)="clearSearche($event, i)" placeholder="Адрес мероприятия..." id="{{'search-map-'+i}}" type="text" name="search" required></ion-input>
+                  </ion-item>
+        
+                </ion-column>
                 <ion-card [formGroup]="createEventForm.controls['places'].value[i]">
                   <ion-card-header>
                    
-                    <ion-row>
-                        <ion-item disabled="true"  style="width: 100%;" fill="" class="" >
-                          <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
-                          <ion-input  fill="outline"  required formControlName="address" (ionChange)="clearSearche($event, i)" placeholder="Адрес мероприятия..." id="{{'search-map-'+i}}" type="text" name="search" required></ion-input>
-                        </ion-item>
-              
-                      </ion-row>
-                 
-                 
+                   
+                
                   </ion-card-header>
                   <ion-card-content>
                   <ion-list>
                       <!-- Город мероприятия -->
-                      <ion-col>
+                      <!-- <ion-col>
                         <p>Выбран:</p><span>{{array.city}} </span>,<span> {{array.region}}</span>
                       <div class="ion-padding" >
                         <ion-searchbar animated="true" placeholder="Найти город..." (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
@@ -670,9 +668,7 @@
                                   </ion-item>
                               </ion-list>
                           </ng-container>
-                          <!-- <ion-item lines="none" *ngIf="!cityesListLoading && !cityesList.length">
-                              <ion-lable><h3>Город не найден...</h3></ion-lable>
-                          </ion-item> -->
+                     
                           <ion-list *ngIf="!cityesListLoading">
                             <ion-item *ngFor="let item of cityesList" (click)="setCityes(item, i)" class="search-item" [hidden]="item.location_parent.name === 'РФ'">
                               <ion-label>
@@ -682,8 +678,8 @@
                             </ion-item>
                           </ion-list>
                       </div>
-                      </ion-col>
-                      <ion-col>
+                      </ion-col> -->
+                      <!-- <ion-col>
                         <p>Выбран:</p><span>{{array.sight_name}}</span>
                       <div class="ion-padding" >
                         <ion-searchbar animated="true" placeholder="Найти достопримечательность..." (ionChange)="getSight($event, i)" (ionClear)="onClearSearch()"  debounce="500" #sightSearchbar></ion-searchbar>
@@ -695,9 +691,7 @@
                                   </ion-item>
                               </ion-list>
                           </ng-container>
-                          <!-- <ion-item lines="none" *ngIf="!sightsListLoading && !cityesList.length">
-                              <ion-lable><h3>Город не найден...</h3></ion-lable>
-                          </ion-item> -->
+                        
                           <ion-list *ngIf="!sightsListLoading">
                             <ion-item *ngFor="let item of sightsList" (click)="setSight(item, i)" class="search-item">
                               <ion-item>
@@ -707,13 +701,12 @@
                                 <ion-label>
                                   <h2>{{ item.name }}</h2>
                                   <p>{{ item.address }}</p>
-                                  <!-- <p>Автор: {{item.author.name}}</p> -->
                                 </ion-label>
                               </ion-item>
                             </ion-item>
                           </ion-list>
                       </div>
-                      </ion-col>
+                      </ion-col> -->
 
                     <!-- Поиск не работает, сломан -->
                   
@@ -809,9 +802,9 @@
                   </ion-list>
                   </ion-card-content>
 
-                  <ion-card-footer>
+                  <!-- <ion-card-footer>
 
-                  </ion-card-footer>
+                  </ion-card-footer> -->
                 </ion-card>
               </ng-container>
               <ion-chip color="primary" class="ion-justify-item-center" (click)="addPlaceForm()">

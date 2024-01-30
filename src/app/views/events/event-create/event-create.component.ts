@@ -75,7 +75,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   inputValue: string = ""
   user: any
   stepStart: number = 0
-  stepCurrency: number = 0
+  stepCurrency: number = 3
   steps:number = 5
   dataValid:boolean = true
   openModalImgs:boolean = false
@@ -93,6 +93,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   types: IEventType[] = []
   typesLoaded: boolean = false
   typeSelected: number | null = null
+  currentType:number = 0
   statuses: IStatus[] = []
   statusesLoaded: boolean = false
   statusSelected: number | null = null
@@ -334,23 +335,28 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Получаем типы мероприятий
   getTypes(){
-   
     this.eventTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.types = response.types
       this.typesLoaded = true
-
- 
     })
+  }
+
+
+  //ловим еммит и устанавливаем значение 
+  receiveType(event:Event){
+    this.currentType = Number(event);
+    this.createEventForm.controls['type'].setValue( Number(event));
+   
   }
   
   //Выбор типа
-  selectedType(type_id: any){
-    //костыль на проверку id или icordeon 
-    if(/^\d+$/.test(type_id.detail.value)){
-      type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
-    }
-    //Хоть и кринж лютый но работает!!!!!!!!
-  }
+  // selectedType(type_id: any){
+  //   //костыль на проверку id или icordeon 
+  //   if(/^\d+$/.test(type_id.detail.value)){
+  //     type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
+  //   }
+  //   //Хоть и кринж лютый но работает!!!!!!!!
+  // }
 
   //Получаем статусы и устанавливаем статус по умолчанию
   getStatuses(){
@@ -404,6 +410,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.mapService.geolocationMapNative(this.maps[num]);
     }
     const search = new ymaps.SuggestView('search-map-'+num); 
+    
     search.events.add('select',()=>{ 
       this.ForwardGeocoder(num) 
       if (!Capacitor.isNativePlatform())  {
@@ -610,7 +617,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
     switch(this.stepCurrency){
       case 0:
-        return false
+       
+        if(this.currentType <= 0){
+          return true
+        } else{
+          return false
+        }
+        
         //шаг первый
       case 1:
         //шаг второй
@@ -622,7 +635,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }
       case 2:
         //шаг третий 
-        if( this.createEventForm.controls['description'].invalid ||  this.createEventForm.hasError('dateInvalid') || dataEnd <= dataEndPlus || dataStart > dataEndPlus ){
+        if( this.createEventForm.controls['description'].invalid ||  this.createEventForm.hasError('dateInvalid')){
           if( dataEnd <= dataEndPlus){
             this.dataValid = false
           }else{
@@ -753,7 +766,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Отпрвка формы
   
-  onSubmit(){
+ onSubmit(){
+   this.searchMinSeans()
+    //собираем плейсы
     let event = this.createFormData() // собираем формдату
     this.createEventForm.disable()
     this.loadingService.showLoading()
@@ -794,7 +809,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       locId = value
       if (value) {
         this.locationServices.getLocationsIds(locId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-          console.log(response)
+         
           coords = [response.location.latitude, response.location.longitude]
           this.placeArrayForm.push({city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', coords: coords, seances: [{num_s: 0}] })
         })
@@ -926,11 +941,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           maxSeans = item_sean
         }
       })
+   
     })
+    
+    this.createEventForm.controls['dateStart'].setValue(minSeans.value.dateStart.slice(0, 19))
+    this.createEventForm.controls['dateEnd'].setValue(maxSeans.value.dateEnd.slice(0, 19))
 
-  
 
-
+    
     }
 
 

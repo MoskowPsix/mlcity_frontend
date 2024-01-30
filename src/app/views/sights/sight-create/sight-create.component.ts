@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
-import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
+import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry, map } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { SightTypeService } from 'src/app/services/sight-type.service';
@@ -90,6 +90,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   uploadFiles: string[] = []
   formData: FormData = new FormData()
   imagesPreview: string[] = []
+  locationLoader: boolean = false
 
   minLengthCityesListError:boolean = false
   cityesList: any[] = [];
@@ -356,6 +357,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //При клике ставим метку, если метка есть, то перемещаем ее
   async onMapClick(e: YaEvent<ymaps.Map>) {
     const { target, event } = e;
+
+    this.setLocationForCoords([event.get('coords')[0], event.get('coords')[1]])
+    
     this.createSightForm.patchValue({coords: [event.get('coords')[0], event.get('coords')[1]] })
     // this.createEventForm.value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
     if (!Capacitor.isNativePlatform())  {
@@ -426,6 +430,23 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       //this.createSightForm.value.address = firstGeoObject.getAddressLine()
     })
   }
+  setLocationForCoords(coords: number[]) {
+    this.locationLoader = true
+    this.locationServices.getLocationByCoords(coords).pipe(
+      delay(100),
+      retry(2),
+      catchError(err => {
+        this.toastService.showToast(MessagesErrors.LocationSearchError, 'warning')
+        this.locationLoader = false
+        return of(EMPTY)
+      })
+    ).subscribe((response:any) => {
+      this.createSightForm.patchValue({locationId: response.location.id})
+      this.city = response.location.name
+      this.region = response.location.location_parent.name
+      this.locationLoader = false
+    }) 
+  }
 
   ForwardGeocoder(): void{
     this.createSightForm.value.address=(<HTMLInputElement>document.getElementById("search-map")).value
@@ -436,6 +457,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
       const firstGeoObject = result.geoObjects.get(0);
       this.addPlacemark(firstGeoObject.geometry.getCoordinates())
+      this.setLocationForCoords(firstGeoObject.geometry.getCoordinates())
       // this.city=firstGeoObject.getLocalities(0)[0]
 
     }) 
@@ -461,6 +483,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
     this.createImagesPreview()  
   }
+
 
   resetUploadInfo(){
     this.imagesPreview = [] // очищаем превьюшки

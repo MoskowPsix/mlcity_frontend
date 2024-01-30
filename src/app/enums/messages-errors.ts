@@ -4,5 +4,6 @@ export enum MessagesErrors {
     vkTokenError = 'На стороне Вконтакте возникли проблемы, пожалуйста авторизуйтесь заново',
     vkLikesError = 'Не удалось обновить лайки',
     CommentsNoValue = 'Комментарий пуст',
-    CommentError = 'Комментарий не опубликован'
+    CommentError = 'Комментарий не опубликован',
+    LocationSearchError = 'не согли найти город, попробуйте ещё...'
 }
