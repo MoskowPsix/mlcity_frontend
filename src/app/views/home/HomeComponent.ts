@@ -445,6 +445,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       //let icoLink = item && item.types && item.types.length ? this.host + ':' + this.port + item.types[0].ico : '';
        let icoLink = 0;
       let placemark
+      // console.log(item.ico)
       if(item.type === 'event'){
         placemark = new ymaps.Placemark(
         [item.latitude, item.longitude],
@@ -453,7 +454,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           balloonAutoPan: false,
           // С иконкой
           // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"><img src="${icoLink}"/></div>`)
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"><img src="${this.host + ":" + this.port + item.ico}"/></div>`)
         });
         this.placemarks.push(placemark);
       } else {
