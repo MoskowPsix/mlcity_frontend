@@ -91,7 +91,6 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       if(event)
         window.history.pushState("abc", "Title", `/sights/${this.eventId}/${this.helpers.translit(event.name)}`)
         this.event = event
-      console.log(event)
         this.titleService.setTitle(event.name)
         this.metaService.updateTag({name: "description", content: event.description})
 
