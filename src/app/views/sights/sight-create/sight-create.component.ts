@@ -436,7 +436,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       delay(100),
       retry(2),
       catchError(err => {
-        console.log(err)
+        this.toastService.showToast(MessagesErrors.LocationSearchError, 'warning')
         this.locationLoader = false
         return of(EMPTY)
       })
