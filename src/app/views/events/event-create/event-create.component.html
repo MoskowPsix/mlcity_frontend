@@ -640,6 +640,14 @@
           </ion-list-header>
             <ion-row class="place-list">
               <ng-container *ngFor="let array of placeArrayForm; let i = index">
+                <ion-item lines="none">
+                  <ion-label *ngIf="!locationLoader"><p>Текущий город:</p><span style="width: 100%;">{{placeArrayForm[i].city}} ({{placeArrayForm[i].region}})</span></ion-label>
+    
+                  <ion-list style="width: 50%" *ngIf="locationLoader">
+                    <ion-skeleton-text [animated]="true" style="width: 40%"></ion-skeleton-text>
+                    <ion-skeleton-text [animated]="true" style="width: 100%; height: 1rem;"></ion-skeleton-text>
+                  </ion-list>
+                </ion-item> 
                 <ion-column style="min-width: 100%;">
                   <ion-item  fill="outline" class="ion-margin-vertical" >
                     <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
