@@ -16,6 +16,7 @@ import { QueryBuilderService } from 'src/app/services/query-builder.service';
 import { PlaceService } from 'src/app/services/place.service';
 import { Location }  from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
+import { HelpersService } from 'src/app/services/helpers.service';
 
 // import { Swiper } from 'swiper/types';
 
@@ -59,7 +60,8 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private placeService: PlaceService,
     private metrika: Metrika,
     private location: Location,
-    private router: Router
+    private router: Router,
+    private helpers: HelpersService,
     
     
   ) 
@@ -86,6 +88,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       takeUntil(this.destroy$)
     ).subscribe((event:IEvent )=> { 
       if(event)
+        window.history.pushState("abc", "Title", `/sights/${this.eventId}/${this.helpers.translit(event.name)}`)
         this.event = event
       
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0

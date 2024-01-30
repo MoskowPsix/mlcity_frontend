@@ -14,6 +14,7 @@ import { AuthService } from 'src/app/services/auth.service';
 // import { Swiper } from 'swiper/types';
 import { Location }  from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
+import { HelpersService } from 'src/app/services/helpers.service';
 
 
 @Component({
@@ -52,7 +53,8 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private metrika: Metrika,
     private location: Location,
-    private router: Router
+    private router: Router,
+    private helpers: HelpersService,
   ) 
   {
     let prevPath = this.location.path();
@@ -76,7 +78,9 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
       tap(() => this.loadingSight = false),
       takeUntil(this.destroy$)
     ).subscribe((sight:any )=> { 
+      console.log(sight)
       if(sight)
+        window.history.pushState("abc", "Title", `/sights/${this.sightId}/${this.helpers.translit(sight.name)}`)
         this.sight = sight
         this.startLikesCount = this.sight?.likes ? this.sight.likes.vk_count + this.sight.likes.local_count : 0
     }); 
