@@ -62,9 +62,10 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private placeService: PlaceService,
     private metrika: Metrika,
     private location: Location,
-    private router: Router
-    
-    
+    private router: Router,
+    private titleService: Title,
+    private metaService: Meta,
+    private helpers: HelpersService,
   ) 
   {
     let prevPath = this.location.path();
