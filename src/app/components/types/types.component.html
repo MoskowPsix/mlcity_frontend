@@ -1,9 +1,11 @@
 <div class="main-types-block">
-  <div *ngFor="let type of types" class="child-types-block">
+  <div *ngFor="let type of types; let i = index" class="child-types-block" (click)="addType(type)" (click)="addType(type)" (click)= "addTypeHtml(typeButton)" >
     <div >
-   
-      <button (click)="add()" class="icon-btn">
-        <div class="button-container">
+      <button
+      type="button" 
+      [class.icon-btn_active]="type.id == buttonClicked"
+      class="icon-btn" >
+        <div #typeButton class="button-container" id={{type.id}}>
           <img [src]="backendUrl + type.ico" class="button-icon" alt={{type.name}}>
           <ion-label class="button-text">{{type.name}}</ion-label>
         </div>  
