@@ -13,6 +13,8 @@ import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { ActionSheetController } from '@ionic/angular';
 import { Location }  from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
+import { Title } from '@angular/platform-browser';
+import { Meta } from '@angular/platform-browser';
 
 
 @Component({
@@ -26,7 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
 
   vkontakteAuthUrl: string = environment.vkontakteAuthUrl
-  user_id!: number 
+  user_id!: number
   loginForm!: FormGroup
   responseData: any
   iconState: boolean = true;
@@ -35,20 +37,25 @@ export class LoginComponent implements OnInit, OnDestroy {
   presentingElement: undefined
   formSetPassword!: FormGroup
 
-  
+
   constructor(
-    private authService: AuthService, 
-    private loadingService: LoadingService, 
-    private toastService: ToastService, 
-    private tokenService: TokenService, 
+    private authService: AuthService,
+    private loadingService: LoadingService,
+    private toastService: ToastService,
+    private tokenService: TokenService,
     private userService: UserService,
-    private route: ActivatedRoute, 
-    private router: Router,  
+    private route: ActivatedRoute,
+    private router: Router,
     private actionSheetCtrl: ActionSheetController,
     private metrika: Metrika,
     private location: Location,
+    private titleService: Title,
+    private metaService: Meta
   )
   {
+    this.titleService.setTitle("Вход на сайт MLCity.")
+    this.metaService.updateTag({name:"description", content:"Вход на сайт."})
+
     let prevPath = this.location.path();
     this.router
     .events
@@ -148,13 +155,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onLoading(){
     this.loadingService.showLoading()
-    
+
   }
-    
+
   positiveResponseAfterLogin(data:any){
     this.responseData = data
-    this.userService.setUser(this.responseData.user) 
-    
+    this.userService.setUser(this.responseData.user)
+
     this.loadingService.hideLoading()
     this.toastService.showToast(MessagesAuth.login, 'success')
     this.loginForm.reset()
@@ -184,7 +191,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.iconState = true;
 
       }
-      
+
     }
   }
 
@@ -202,10 +209,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     //Получаем ид юзера и параметра маршрута
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => { 
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.token = params['user_id']
-      this.token ? this.loginAfterSocial(this.token) : this.loginAfterSocial('no') 
-    }); 
+      this.token ? this.loginAfterSocial(this.token) : this.loginAfterSocial('no')
+    });
 
 
     // this.loginAfterSocial(this.user_id)

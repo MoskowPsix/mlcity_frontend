@@ -125,7 +125,6 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
   //Устанавливаем город, регион и координаты в локал сторадж и в сервис
   onSelectedCity(item:any){
-    console.log(item)
     this.city = item.name
     this.region = item.location_parent.name
     this.filterService.setLocationTolocalStorage(item.id)

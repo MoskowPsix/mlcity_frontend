@@ -572,7 +572,7 @@
         <!-- шаг 4  -->
         <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
           <ion-col @fade>
-            <ion-list>
+            <!-- <ion-list>
               <ion-item>
                 <ion-label><p>Выбран:</p><span>{{city}} </span>,<span> {{region}}</span></ion-label>
               </ion-item>
@@ -587,7 +587,7 @@
                       </ion-list>
                   </ng-container>
                   <ion-item lines="none" *ngIf="!cityesListLoading && !cityesList.length">
-                      <!-- <app-no-data /> -->
+                      
                       <ion-lable><h3>Город не найден...</h3></ion-lable>
                   </ion-item>
                   <ion-list>
@@ -599,18 +599,25 @@
                     </ion-item>
                   </ion-list>
               </div>
-            </ion-list>
-
+            </ion-list> -->
             <ion-list-header>
-              <ion-label>На карте выберите место достопримечательности</ion-label>
+              <ion-label>На карте выберите место достопримечательности</ion-label>           
             </ion-list-header>
-            
             <ion-item fill="outline" class="ion-margin-vertical">
               <ion-label position="floating">Поиск по адресу</ion-label>
               <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
               <ion-input formControlName="address" (ionChange)="clearSearche($event)" id="search-map" type="text" name="search" value="{{this.createSightForm.value.address}}" required></ion-input>
             </ion-item>
   
+            <ion-item lines="none">
+              <ion-label *ngIf="!locationLoader"><p>Текущий город:</p><span style="width: 100%;">{{city}} ({{region}})</span></ion-label>
+
+              <ion-list style="width: 50%" *ngIf="locationLoader">
+                <ion-skeleton-text [animated]="true" style="width: 40%"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100%; height: 1rem;"></ion-skeleton-text>
+              </ion-list>
+            </ion-item> 
+
             <div class="map">
               <ya-map (ready)="onMapReady($event)" 
                 [zoom]="11"
@@ -621,6 +628,12 @@
                     'zoomControl',
                     'fullscreenControl',]
                   }" 
+                [options]="{
+                  yandexMapDisablePoiInteractivity: true,
+                  maxZoom:18,
+                  suppressMapOpenBlock: true,
+                  suppressObsoleteBrowserNotifier: true
+                }"
               >
               </ya-map>
             </div>

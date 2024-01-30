@@ -46,18 +46,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   placemarks_tomorrow: ymaps.Placemark[] = [];
   placemarks_week: ymaps.Placemark[] = [];
   placemarks_month: ymaps.Placemark[] = [];
- 
+
 
   //настройки ползунка радиуса
   options: Options = {
     floor: 1,
     ceil: 25,
     vertical: true,
-    
+
     getPointerColor:(value:number)=>{
       return "#0085FF"
     }
-  
+
 
   };
 
@@ -110,11 +110,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     private location: Location,
     private titleService: Title,
     private metaService: Meta
-    
+
   )
   {
     this.titleService.setTitle("MLCity - Мероприятия и достопремечательности вокруг вас")
-    this.metaService.updateTag({name: "description", content: "Узнайте какие события и достопремечательности проходят рядом с вами и в вашем городе."})
     let prevPath = this.location.path();
     this.router
     .events
@@ -147,7 +146,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.filterService.setRadiusTolocalStorage(`${radius+1}`)
     }
 
-      
+
   }
   radiusMinus(){
     let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
@@ -654,14 +653,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (this.map && this.map.target)
         this.map.target.setBounds((this.CirclePoint.geometry?.getBounds())!, { checkZoomRange: true });
     });
-    
+
     this.filterService.locationLongitude.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.mapService.circleCenterLongitude.next(value);
     });
 
     this.filterService.locationLatitude.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.mapService.circleCenterLatitude.next(value);
-      
+
     });
     //Подписываемся на состояние модалки показа ивентов и мест
     this.navigationService.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {

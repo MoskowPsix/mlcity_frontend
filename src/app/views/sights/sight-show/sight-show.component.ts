@@ -16,6 +16,7 @@ import { Location }  from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
+import { HelpersService } from 'src/app/services/helpers.service';
 
 
 @Component({
@@ -56,7 +57,8 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private location: Location,
     private router: Router,
     private titleService: Title,
-    private metaService: Meta
+    private metaService: Meta,
+    private helpers: HelpersService,
   )
   {
     let prevPath = this.location.path();
@@ -79,7 +81,9 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
       tap(() => this.loadingSight = false),
       takeUntil(this.destroy$)
     ).subscribe((sight:any )=> {
+      console.log(sight)
       if(sight)
+        window.history.pushState("abc", "Title", `/sights/${this.sightId}/${this.helpers.translit(sight.name)}`)
         this.sight = sight
         this.titleService.setTitle(sight.name)
         this.metaService.updateTag({name:"description",  content: sight.description})

@@ -15,6 +15,8 @@ import internal from 'stream';
 import { Location }  from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
 import { environment } from 'src/environments/environment';
+import { Title } from '@angular/platform-browser';
+import { Meta } from '@angular/platform-browser';
 
 
 @Component({
@@ -65,9 +67,14 @@ export class RegistrationComponent  implements OnInit {
     private router: Router,
     private metrika: Metrika,
     private location: Location,
+    private titleService: Title,
+    private metaService: Meta
 
   )
-  { 
+  {
+    this.titleService.setTitle("Регистрация на сайте MLCity.")
+    this.metaService.updateTag({name:"description", content:"Регистрация на сайте."})
+
     let prevPath = this.location.path();
     this.router
     .events
