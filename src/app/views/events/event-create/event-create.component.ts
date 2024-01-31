@@ -337,7 +337,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //ловим еммит и устанавливаем значение 
   receiveType(event:Event){
     this.currentType = Number(event);
-    this.createEventForm.controls['type'].setValue( Number(event));
+    console.log(this.currentType)
+    this.createEventForm.controls['type'].setValue(Number(event));
    
   }
   

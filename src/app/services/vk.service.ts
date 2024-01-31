@@ -17,19 +17,27 @@ export class VkService {
   }
 
   getAccessToken(){
-    this.userService.getUser().pipe(
-      //take(1),
-      tap((user: any) => {
-        if (user) {
-          if (user.social_account) {
-            this.vk_access_token = user.social_account.token
-            this.vk_user_id = user.social_account.provider_id
-          }
-        } else {
-          this.getAccessToken()
-        }
-      })
-    ).subscribe().unsubscribe();    
+    const user = this.userService.getUserFromLocalStorage()
+    if (user) {
+      if (user.social_account) {
+        this.vk_access_token = user.social_account.token
+        this.vk_user_id = user.social_account.user_id
+      } 
+    }
+    // this.userService.getUserFromLocalStorage().pipe(
+    //   //take(1),
+    //   tap((user: any) => {
+    //     console.log(user)
+    //     if (user) {
+    //       if (user.social_account) {
+    //         this.vk_access_token = user.social_account.token
+    //         this.vk_user_id = user.social_account.provider_id
+    //       }
+    //     } else {
+    //       this.getAccessToken()
+    //     }
+    //   })
+    // ).subscribe().unsubscribe();    
   }
 
     //инфо о методе  https://dev.vk.com/method/groups.get

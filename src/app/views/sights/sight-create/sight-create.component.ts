@@ -63,6 +63,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   
   inputValue: string = ""
   user: any
+  currentType:number = 0
   stepStart: number = 0
   stepCurrency: number = 0
   steps:number = 5
@@ -457,7 +458,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
       const firstGeoObject = result.geoObjects.get(0);
       this.addPlacemark(firstGeoObject.geometry.getCoordinates())
-      this.createSightForm.value.patchValue({coords: firstGeoObject.geometry.getCoordinates()})
+      // this.createSightForm.value.patchValue({coords: firstGeoObject.geometry.getCoordinates()})
+      this.createSightForm.controls['coords'].setValue(firstGeoObject.geometry.getCoordinates())
       this.setLocationForCoords(firstGeoObject.geometry.getCoordinates())
       // this.city=firstGeoObject.getLocalities(0)[0]
 
@@ -593,8 +595,12 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
 
 
-
-
+  //отправляем данные
+  receiveType(event:Event){
+    this.currentType = Number(event);
+    this.createSightForm.controls['type'].setValue(Number(event));
+   
+  }
 
   //Клик по шагу в баре
   goToStep(step: number){
@@ -606,6 +612,70 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   //Блокировка шагов в баре
+
+  detectedDataInvalid(){
+    switch(this.stepCurrency){
+      case 0:
+        if(this.currentType <= 0){
+          return true
+         
+        } else{
+          return false
+   
+        }
+        case 1:
+          //шаг второй
+          if( this.createSightForm.controls['name'].invalid ||  this.createSightForm.controls['sponsor'].invalid){
+            return true
+          }
+          else{
+            return false
+          }
+          case 2:
+            //шаг третий
+            if( this.createSightForm.controls['description'].invalid ||  this.createSightForm.controls['workTime'].invalid){
+              return true
+            }
+            else{
+              return false
+            }
+          case 3:
+            //шаг четвёртый
+            if(this.createSightForm.controls['coords'].invalid || this.createSightForm.controls['address'].invalid){
+              return true
+            }
+            else{
+              return false
+            }
+          case 4:
+            let priceValid:any 
+            this.createSightForm.controls['price'].value.forEach((item: any, i: number) => {
+      
+              if(item.controls.cors_rub.value != null && item.controls.description.value.length >= 3){
+                priceValid =  true
+              }
+              else{
+                priceValid =  false
+              }
+             })
+
+             if(this.createEventForm.invalid || this.createEventForm.disabled || !priceValid ){
+              return true
+            }
+            else{
+              return false
+            }
+
+        //шаг первый
+      default:
+        return true
+    }
+
+    
+  }
+
+
+  
   stepIsValid(step:number = this.stepStart){
     switch (step) {
     
@@ -678,7 +748,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('',[Validators.required, Validators.minLength(10)]),
-      workTime: new FormControl(''),
+      workTime: new FormControl('',[Validators.minLength(3)]),
       address: new FormControl('',[Validators.required]),
       locationId: new FormControl('',[Validators.required]),
       coords: new FormControl(coords,[Validators.required, Validators.minLength(2)]),
