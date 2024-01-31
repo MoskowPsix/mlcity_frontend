@@ -457,6 +457,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
       const firstGeoObject = result.geoObjects.get(0);
       this.addPlacemark(firstGeoObject.geometry.getCoordinates())
+      this.createSightForm.value.patchValue({coords: firstGeoObject.geometry.getCoordinates()})
       this.setLocationForCoords(firstGeoObject.geometry.getCoordinates())
       // this.city=firstGeoObject.getLocalities(0)[0]
 
