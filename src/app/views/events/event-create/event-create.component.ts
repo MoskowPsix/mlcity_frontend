@@ -457,6 +457,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
       this.addPlacemark(firstGeoObject.geometry.getCoordinates(), num)
+      this.createEventForm.controls['places'].value[num].patchValue({coords: firstGeoObject.geometry.getCoordinates()})
       this.setLocationForCoords(firstGeoObject.geometry.getCoordinates(),num)
       //this.city=firstGeoObject.getLocalities(0)[0]
 
