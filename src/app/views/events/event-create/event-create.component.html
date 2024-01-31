@@ -639,7 +639,7 @@
             <ion-label>На карте выберите место проведения мероприятия</ion-label>
           </ion-list-header>
             <ion-row class="place-list">
-              <ng-container *ngFor="let array of placeArrayForm; let i = index">
+              <ng-container *ngFor="let array of placeArrayForm; let i = index" [formGroup]="createEventForm.controls['places'].value[i]">
                 <ion-item lines="none">
                   <ion-label *ngIf="!locationLoader"><p>Текущий город:</p><span style="width: 100%;">{{placeArrayForm[i].city}} ({{placeArrayForm[i].region}})</span></ion-label>
     
@@ -651,11 +651,11 @@
                 <ion-column style="min-width: 100%;">
                   <ion-item  fill="outline" class="ion-margin-vertical" >
                     <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
-                    <ion-input  fill="outline" formControlName="address" (ionChange)="clearSearche($event, i)" placeholder="Адрес мероприятия..." id="{{'search-map-'+i}}" type="text" name="search" required></ion-input>
+                    <ion-input  fill="outline" formControlName="address" value="{{this.createEventForm.controls['places'].value[i].controls['address'].value}}" (ionChange)="clearSearche($event, i)" placeholder="Адрес мероприятия..." id="{{'search-map-'+i}}" type="text" name="search" required></ion-input>
                   </ion-item>
         
                 </ion-column>
-                <ion-card [formGroup]="createEventForm.controls['places'].value[i]">
+                <ion-card >
                   <ion-card-header>
                    
                    
@@ -730,6 +730,12 @@
                               'zoomControl',
                               'fullscreenControl',]
                             }" 
+                          [options]="{
+                            yandexMapDisablePoiInteractivity: true,
+                            maxZoom:18,
+                            suppressMapOpenBlock: true,
+                            suppressObsoleteBrowserNotifier: true
+                          }"
                         >
                         </ya-map>
                       </div>

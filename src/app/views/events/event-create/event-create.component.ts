@@ -376,6 +376,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   onMapClick(e: YaEvent<ymaps.Map>, num: number) {
     const { target, event } = e;
     this.setLocationForCoords([event.get('coords')[0], event.get('coords')[1]] ,num)
+    // this.createEventForm.value.places[num].patchValue({address: this.mapService.ReserveGeocoderNative([event.get('coords')[0], event.get('coords')[1]])})
     this.createEventForm.value.places[num].patchValue({coords: [event.get('coords')[0], event.get('coords')[1]] })
     // this.createEventForm.value.places[num].value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
     this.maps[num].target.geoObjects.removeAll()
@@ -384,7 +385,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (!Capacitor.isNativePlatform())  {
       this.ReserveGeocoder(num)
     } else {
-      // this.createEventForm.value.address =await this.mapService.ReserveGeocoderNative(this.createEventForm.value.coords).then(res=>{console.log("res "+res)})
+      // this.createEventForm.value.places[num].patchValue({address: this.mapService.ReserveGeocoderNative(this.createEventForm.value.coords)})
       this.ReserveGeocoder(num)
     }
     this.maps[num].target.geoObjects.removeAll()
@@ -443,13 +444,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       const firstGeoObject = result.geoObjects.get(0);
       
       //this.city=firstGeoObject.getLocalities(0)[0]
-      this.createEventForm.value.places[num].patchValue({address: firstGeoObject.getAddressLine()})
+      this.createEventForm.controls['places'].value[num].patchValue({address: firstGeoObject.getAddressLine()})
       //this.createEventForm.value.address = firstGeoObject.getAddressLine()
     })
   }
 
   ForwardGeocoder(num: number): void{
-    this.createEventForm.value.places[num].patchValue({address: (<HTMLInputElement>document.getElementById('search-map-'+num)).value})
+    this.createEventForm.controls['places'].value[num].patchValue({address: (<HTMLInputElement>document.getElementById('search-map-'+num)).value})
     const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.places[num].value.address, {
       results: 1,
     });
@@ -652,20 +653,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             item.controls.seances.value.forEach((item_sean: any, i_sean: number) => {
               if(item_sean.controls.dateStart.value >= item_sean.controls.dateEnd.value){
                 seansValid = false
-              
-              }
-              else{
+              } else {
                 seansValid = true
-              }
-              
+              } 
             })
-
-           if(item.controls.address.value.length > 0 ||item.controls.address.value){
-            placeValid =  true
-           }
-           else{
-            placeValid =  false
-           }
+            
+            if(item.controls.address.value.length > 0 ||item.controls.address.value){
+              placeValid =  true
+            }
+            else{
+              placeValid =  false
+            }
 
           })
 
@@ -816,9 +814,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.createEventForm.controls['places'].value.push( 
         new FormGroup({
           sight_id: new FormControl('', [Validators.minLength(1)]),
-          locationId: new FormControl(locId, [Validators.minLength(1)]),
+          locationId: new FormControl(locId, [Validators.minLength(1), Validators.required]),
           coords:  new FormControl(coords,[Validators.required, Validators.minLength(2)]), 
-          address: new FormControl('',[Validators.required]),
+          address: new FormControl('',[Validators.minLength(1), Validators.required]),
           seances: new FormControl([new FormGroup({
             dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
             dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
