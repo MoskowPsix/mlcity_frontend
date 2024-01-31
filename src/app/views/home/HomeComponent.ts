@@ -308,7 +308,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               takeUntil(this.destroy$)
             ).subscribe()
             this.activePlacemark = e.get('target');
-            //this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico;
+            this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.ico;
             e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`));
           } else {
             forkJoin([this.getSightsIds(e.get('target').options._options.balloonContent.id)]).pipe(
@@ -454,7 +454,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           balloonAutoPan: false,
           // С иконкой
           // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"><img src="${icoLink}"/></div>`)
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"><img src="${this.host + ":" + this.port + item.ico}"/></div>`)
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"><img style="color:#008aed;" src="${this.host + ":" + this.port + item.ico}"/></div>`)
         });
         this.placemarks.push(placemark);
       } else {

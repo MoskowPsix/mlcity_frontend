@@ -70,9 +70,14 @@ ion-toolbar {
 .alert-radio-label.sc-ion-alert-md {
     white-space: pre-line !important;
  }
- 
+
 .alert-radio-label.sc-ion-alert-ios {
      white-space: pre-line !important;
+}
+
+.marker-ico {
+  margin:auto;
+  transform: rotate(0);
 }
 
 .marker {
@@ -115,8 +120,13 @@ ion-toolbar {
     animation-delay: 1.1s;
 }
 .marker.now > img {
-    transform: rotate(45deg);
-    padding: 7px 0 0 7px;
+  width: 75%;
+  height: 75%;
+  position: absolute;
+  top: 50%;
+  left: 53%;
+  filter: invert(63%) sepia(65%) saturate(6812%) hue-rotate(205deg) brightness(100%) contrast(103%);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .marker.active {
@@ -127,7 +137,13 @@ ion-toolbar {
 }
 
 .marker.active > img {
-    padding: 14px 0 0 10px;
+  width: 75%;
+  height: 75%;
+  position: absolute;
+  top: 50%;
+  left: 53%;
+  filter: invert(63%) sepia(65%) saturate(6812%) hue-rotate(205deg) brightness(100%) contrast(103%);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .marker:after{
@@ -146,10 +162,17 @@ ion-toolbar {
     animation-delay: 1.1s;
 }
 .marker > img {
-    transform: rotate(45deg);
-    padding: 7px 0 0 7px;
+    width: 75%;
+    height: 75%;
+    position: absolute;
+    top: 50%;
+    left: 53%;
+    filter: invert(63%) sepia(65%) saturate(6812%) hue-rotate(205deg) brightness(100%) contrast(103%);
+    transform: translate(-50%, -50%) rotate(45deg);
+    // padding: 7px 0 0 7px;
 }
- 
+
+
 swiper-container {
     --swiper-pagination-bullet-inactive-color: var(--ion-color-step-200, #cccccc);
     --swiper-pagination-color: var(--ion-color-primary, #ffaf38);
@@ -174,7 +197,7 @@ swiper-slide {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 2%;  
+        border-radius: 2%;
     }
 }
 
@@ -195,7 +218,7 @@ swiper-slide {
 @media screen and (min-width: 0px) and (max-width: 768px) {
     ion-content{
         --padding-top: 3.3em;
-        --padding-bottom: 3.5rem;   
+        --padding-bottom: 3.5rem;
     }
 
     // ion-content.md{
@@ -213,9 +236,9 @@ swiper-slide {
     ion-label{
         white-space: pre-line !important;
     }
-   
+
 }
-  
+
 @media screen and (min-width: 768px)  {
     ion-content{
         --padding-top: 4rem;
