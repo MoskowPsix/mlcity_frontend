@@ -13,6 +13,7 @@ export class EventTypeCaruselComponent  implements OnInit {
   @Output() typeOutput = new EventEmitter()
   @ViewChild('wigetScroll') wigetScroll!: ElementRef
   scroll?: any
+  clickAll:boolean = false
   typesLoaded: boolean = true
   types: any[] = []
   @Input() type_id?: any
@@ -35,6 +36,11 @@ export class EventTypeCaruselComponent  implements OnInit {
   }
   getTypeId(id: any) {
     this.type_id = id
+    if(id == 'all'){
+      this.clickAll = true
+    }else{
+      this.clickAll = false
+    }
     this.onTypeOutput()
     this.fixCenterElement(id)
   }

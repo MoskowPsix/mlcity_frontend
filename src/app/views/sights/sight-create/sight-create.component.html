@@ -11,8 +11,8 @@
 
 
       <div class="btnsWrapper btnsWrapperNext">
-        <ion-button class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-        <ion-button class="buttonsNavigate" *ngIf="stepCurrency === steps-1" (click)="onSubmit()" type="submit" ><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+        <ion-button [disabled]="detectedDataInvalid()" class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        <ion-button [disabled]="detectedDataInvalid()" class="buttonsNavigate" *ngIf="stepCurrency === steps-1" (click)="onSubmit()" type="submit" ><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
       </div>
 
     </div>
@@ -55,11 +55,9 @@
                             {{ i + 1 }}
                           </ion-button>
   
-                          <ion-button *ngIf="!stepIsValid(i) && stepCurrency !== i" (click)="goToStep(i)" class="buttonBarDanger animated fadeIn">
-                            {{ i + 1 }}
-                          </ion-button>
+                         
   
-                          <ion-button *ngIf="!(stepCurrency === i) && stepIsValid(i) && stepCurrency !== i" (click)="goToStep(i)" class="buttonBarLight animated fadeIn">
+                          <ion-button [disabled]="true" *ngIf="!(stepCurrency === i)" (click)="goToStep(i)" class="buttonBarLight animated fadeIn">
                             {{ i + 1 }}
                           </ion-button>
   
@@ -104,17 +102,9 @@
           </ng-container>
 
           <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
-            <ion-col size-lg="8" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
-            <ion-list>
-              <ion-radio-group formControlName="type" (ionChange)="selectedType($event);" [value]="typeSelected" required>
-                <ion-list-header>
-                  <ion-label *ngIf="typesLoaded">Выберите тип достопримечательности</ion-label>
-                </ion-list-header>
-                <app-sight-type [types]="types" [typesLoaded] = "typesLoaded" [isSight]="true"></app-sight-type>
-                
-              </ion-radio-group>
-            </ion-list>
-            </ion-col>
+           
+              <app-types [types]="types" (typeOutput)="receiveType($event)"></app-types> 
+         
           </ion-row>
   
         <!-- шаг 2 -->
@@ -603,14 +593,14 @@
             <ion-list-header>
               <ion-label>На карте выберите место достопримечательности</ion-label>           
             </ion-list-header>
-            <ion-item fill="outline" class="ion-margin-vertical">
+            <ion-item style="z-index: 10" fill="outline" class="ion-margin-vertical">
               <ion-label position="floating">Поиск по адресу</ion-label>
               <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
               <ion-input formControlName="address" (ionChange)="clearSearche($event)" id="search-map" type="text" name="search" value="{{this.createSightForm.value.address}}" required></ion-input>
             </ion-item>
   
-            <ion-item lines="none">
-              <ion-label *ngIf="!locationLoader"><p>Текущий город:</p><span style="width: 100%;">{{city}} ({{region}})</span></ion-label>
+            <ion-item style="z-index: 1" lines="none">
+              <ion-label *ngIf="!locationLoader"><p>Текущий город:</p><span style="width: 100%; ;">{{city}} ({{region}})</span></ion-label>
 
               <ion-list style="width: 50%" *ngIf="locationLoader">
                 <ion-skeleton-text [animated]="true" style="width: 40%"></ion-skeleton-text>

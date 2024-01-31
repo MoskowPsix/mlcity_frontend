@@ -18,7 +18,7 @@ export class TypesComponent  implements OnInit {
     private eventTypeService: EventTypeService,
   ) { }
   
-   types: any[] = []
+  @Input() types: any[] = []
 
   @Output() typeOutput = new EventEmitter();
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
@@ -29,6 +29,7 @@ export class TypesComponent  implements OnInit {
 
 
  addType(id:any){
+  console.log(id)
  this.typeOutput.emit(id.id)
   
  }
@@ -38,23 +39,14 @@ export class TypesComponent  implements OnInit {
   console.log(this.buttonClicked)
  }
 
-  getTypesEvent() {
-    this.eventTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-      // console.log(response)
-      this.types = response.types
-      console.log(this.types)
-      response.types ? this.typesLoaded = true :  this.typesLoaded = false //для скелетной анимации
-      // console.log(this.types)
-    })
-  }
-
+  
 
   addTypeButton(){
    
   }
 
   ngOnInit() {
-    this.getTypesEvent()
+
   }
     
 }

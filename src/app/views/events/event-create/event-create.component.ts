@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef, NgModule, Output, EventEmitter } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
-import { switchMap, tap, of, Subject, takeUntil, catchError } from 'rxjs';
+import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry } from 'rxjs';
 import { FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { EventTypeService } from 'src/app/services/event-type.service';
@@ -75,7 +75,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   inputValue: string = ""
   user: any
   stepStart: number = 0
-  stepCurrency: number = 3
+  stepCurrency: number = 0
   steps:number = 5
   dataValid:boolean = true
   openModalImgs:boolean = false
@@ -101,6 +101,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   uploadFiles: string[] = []
   formData: FormData = new FormData()
   imagesPreview: string[] = []
+  locationLoader: boolean = false
 
   placeArrayForm: any[] = []
   seancesArrayForm: any[] = []
@@ -205,8 +206,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
   openModalImgsFnc(){
     this.openModalImgs = true
   }
@@ -215,24 +214,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.openModalImgs = false
   }
 
-
-
  //модальноеп окно с выбором поста
-
-
  openModalPost(event:any = null){
-  
     if(this.vkGroupSelected == null){
       this.vkGroupSelected = this.vkGroupModalSelected
       this.setVkPostsByGroupID(this.vkGroupModalSelected)
     }
-    
-      this.openModalPostValue = true    
-          
-  
-    
+    this.openModalPostValue = true     
  }
-
 
  saveChangeId(){
   if(this.vkGroupSelected !=null){
@@ -241,14 +230,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
  }
 
-
-
-
  closeModalPost(){
   this.openModalPostValue = false
   
  }
-
 
  openModalGroup(){
   this.openModalGroupValue = true
@@ -262,8 +247,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   this.openModalPostValue = false
   this.openModalGroupValue = false
  }
-
-
 
   //Устанавливаем шаги
   setSteps(){
@@ -287,13 +270,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPosts = null
     }
   }
-
-
-
-
-
-
-  
 
   //Грузим посты по ИД группы
   setVkPostsByGroupID(group_id: number){
@@ -340,12 +316,29 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.typesLoaded = true
     })
   }
-
+  setLocationForCoords(coords: number[], num:number) {
+    this.locationLoader = true
+    this.locationServices.getLocationByCoords(coords).pipe(
+      delay(100),
+      retry(2),
+      catchError(err => {
+        this.toastService.showToast(MessagesErrors.LocationSearchError, 'warning')
+        this.locationLoader = false
+        return of(EMPTY)
+      })
+    ).subscribe((response:any) => {
+      this.createEventForm.value.places[num].patchValue({locationId: response.location.id})
+      this.placeArrayForm[num].city = response.location.name
+      this.placeArrayForm[num].region = response.location.location_parent.name
+      this.locationLoader = false
+    }) 
+  }
 
   //ловим еммит и устанавливаем значение 
   receiveType(event:Event){
     this.currentType = Number(event);
-    this.createEventForm.controls['type'].setValue( Number(event));
+    console.log(this.currentType)
+    this.createEventForm.controls['type'].setValue(Number(event));
    
   }
   
@@ -383,6 +376,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //При клике ставим метку, если метка есть, то перемещаем ее
   onMapClick(e: YaEvent<ymaps.Map>, num: number) {
     const { target, event } = e;
+    this.setLocationForCoords([event.get('coords')[0], event.get('coords')[1]] ,num)
+    // this.createEventForm.value.places[num].patchValue({address: this.mapService.ReserveGeocoderNative([event.get('coords')[0], event.get('coords')[1]])})
     this.createEventForm.value.places[num].patchValue({coords: [event.get('coords')[0], event.get('coords')[1]] })
     // this.createEventForm.value.places[num].value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
     this.maps[num].target.geoObjects.removeAll()
@@ -391,7 +386,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (!Capacitor.isNativePlatform())  {
       this.ReserveGeocoder(num)
     } else {
-      // this.createEventForm.value.address =await this.mapService.ReserveGeocoderNative(this.createEventForm.value.coords).then(res=>{console.log("res "+res)})
+      // this.createEventForm.value.places[num].patchValue({address: this.mapService.ReserveGeocoderNative(this.createEventForm.value.coords)})
       this.ReserveGeocoder(num)
     }
     this.maps[num].target.geoObjects.removeAll()
@@ -420,6 +415,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         // let coords = this.mapService.ForwardGeocoderNative(this.createEventForm.value.places[num].value.address)
         // this.addPlacemark(coords!)
         this.ForwardGeocoder(num)
+        
       }
     })
   }
@@ -449,20 +445,21 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       const firstGeoObject = result.geoObjects.get(0);
       
       //this.city=firstGeoObject.getLocalities(0)[0]
-      this.createEventForm.value.places[num].patchValue({address: firstGeoObject.getAddressLine()})
+      this.createEventForm.controls['places'].value[num].patchValue({address: firstGeoObject.getAddressLine()})
       //this.createEventForm.value.address = firstGeoObject.getAddressLine()
     })
   }
 
   ForwardGeocoder(num: number): void{
-    this.createEventForm.value.places[num].patchValue({address: (<HTMLInputElement>document.getElementById('search-map-'+num)).value})
+    this.createEventForm.controls['places'].value[num].patchValue({address: (<HTMLInputElement>document.getElementById('search-map-'+num)).value})
     const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.places[num].value.address, {
       results: 1,
     });
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
       this.addPlacemark(firstGeoObject.geometry.getCoordinates(), num)
-
+      this.createEventForm.controls['places'].value[num].patchValue({coords: firstGeoObject.geometry.getCoordinates()})
+      this.setLocationForCoords(firstGeoObject.geometry.getCoordinates(),num)
       //this.city=firstGeoObject.getLocalities(0)[0]
 
     }) 
@@ -658,20 +655,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             item.controls.seances.value.forEach((item_sean: any, i_sean: number) => {
               if(item_sean.controls.dateStart.value >= item_sean.controls.dateEnd.value){
                 seansValid = false
-              
-              }
-              else{
+              } else {
                 seansValid = true
-              }
-              
+              } 
             })
-
-           if(item.controls.address.value.length > 0 ||item.controls.address.value){
-            placeValid =  true
-           }
-           else{
-            placeValid =  false
-           }
+            
+            if(item.controls.address.value.length > 0 ||item.controls.address.value){
+              placeValid =  true
+            }
+            else{
+              placeValid =  false
+            }
 
           })
 
@@ -822,9 +816,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.createEventForm.controls['places'].value.push( 
         new FormGroup({
           sight_id: new FormControl('', [Validators.minLength(1)]),
-          locationId: new FormControl(locId, [Validators.minLength(1)]),
+          locationId: new FormControl(locId, [Validators.minLength(1), Validators.required]),
           coords:  new FormControl(coords,[Validators.required, Validators.minLength(2)]), 
-          address: new FormControl('',[Validators.required]),
+          address: new FormControl('',[Validators.minLength(1), Validators.required]),
           seances: new FormControl([new FormGroup({
             dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
             dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
@@ -883,7 +877,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.sightsList = []
   }
   setCityes(item:any, num:number){
-
     this.placeArrayForm[num].city = item.name
     this.placeArrayForm[num].region = item.location_parent.name
     this.createEventForm.value.places[num].patchValue({locationId: item.id})
@@ -916,49 +909,38 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //ищем минимальный и максимальный плейс
 
     searchMinSeans(){
-
-    let minSeans:any = { 
-      value:{
-        dateStart: new Date().toISOString(), 
-        dateEnd: new Date().toISOString()
-      }
-    }
-    let maxSeans:any = { 
-      value:{
-        dateStart: new Date().toISOString(), 
-        dateEnd: new Date().toISOString()
-      }
-    }
-    // minSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
-    // maxSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
-    this.createEventForm.controls['places'].value.forEach((item: any, i: number)=>{
-      item.controls['seances'].value.forEach((item_sean: any, i_sean: number) => {
-        if(item_sean.value.dateStart < minSeans.value.dateStart){
-          minSeans = item_sean
-         
+      let minSeans:any = { 
+        value:{
+          dateStart: new Date().toISOString(), 
+          dateEnd: new Date().toISOString()
         }
-        if(item_sean.value.dateEnd > maxSeans.value.dateEnd){
-          maxSeans = item_sean
+      }
+      let maxSeans:any = { 
+        value:{
+          dateStart: new Date().toISOString(), 
+          dateEnd: new Date().toISOString()
         }
+      }
+      // minSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
+      // maxSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
+      this.createEventForm.controls['places'].value.forEach((item: any, i: number)=>{
+        item.controls['seances'].value.forEach((item_sean: any, i_sean: number) => {
+          if(item_sean.value.dateStart < minSeans.value.dateStart){
+            minSeans = item_sean
+          
+          }
+          if(item_sean.value.dateEnd > maxSeans.value.dateEnd){
+            maxSeans = item_sean
+          }
+        })
+    
       })
-   
-    })
-    
-    this.createEventForm.controls['dateStart'].setValue(minSeans.value.dateStart.slice(0, 19))
-    this.createEventForm.controls['dateEnd'].setValue(maxSeans.value.dateEnd.slice(0, 19))
-
-
-    
+      
+      this.createEventForm.controls['dateStart'].setValue(minSeans.value.dateStart.slice(0, 19))
+      this.createEventForm.controls['dateEnd'].setValue(maxSeans.value.dateEnd.slice(0, 19))
     }
-
-
-
 
   ngOnInit() {
-
-
-
-
     let locationId: any;
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
       locationId = value
@@ -983,8 +965,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.getTypes()
     this.getStatuses()
     this.addPrice()
-    // console.log(this.createEventForm)
-    
   }
 
 
