@@ -142,7 +142,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     
     onAdd(event:Event) {
       this.count++
-    
     }
 
   //поулчаем юзера и устанвлвиаем группы и шаги
@@ -960,8 +959,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
     },[dateRangeValidator])
 
-    this.addPlaceForm()
     this.getUserWithSocialAccount()
+    this.addPlaceForm()
     this.getTypes()
     this.getStatuses()
     this.addPrice()
