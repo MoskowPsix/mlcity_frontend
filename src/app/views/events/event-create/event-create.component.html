@@ -16,10 +16,10 @@
 
     </div>
   </div>
-  
+
   <ion-grid class="main">
-    <form class="mainChild" [formGroup]="createEventForm" (submit)="onSubmit()" enctype="multipart/form-data"> 
-      
+    <form class="mainChild" [formGroup]="createEventForm" (submit)="onSubmit()" enctype="multipart/form-data">
+
       <ion-column class="mainLabelAndBar">
         <div class="ion-text-start">
           <h3 [hidden]="stepCurrency != 0" class="mt-0 mainLabelAndBarText">Тип мероприятия</h3>
@@ -27,20 +27,20 @@
           <h3 [hidden]="stepCurrency != 2" class="mt-0 mainLabelAndBarText">О мероприятие</h3>
           <h3 [hidden]="stepCurrency != 3" class="mt-0 mainLabelAndBarText">Место проведения</h3>
           <h3 [hidden]="stepCurrency != 4" class="mt-0 mainLabelAndBarText">Цена и материалы</h3>
-         
+
         </div>
 
         <!-- кнопки шагов -->
 
         <ion-column>
 
-        
+
 
           <ion-col size-lg="4" size-md="8" size-xs="12">
             <div class="stepper-progress">
               <ion-column class="stepsButtonsMain ">
 
-                
+
 
                   <div *ngFor="let step of [].constructor(steps); let i = index" class=" " >
                     <div class="buttonWraper">
@@ -49,7 +49,7 @@
                       <ion-button  *ngIf="stepCurrency === i" (click)="goToStep(i)" class="buttonBarClicked animated fadeIn">
                           {{ i + 1 }}
                         </ion-button>
-<!-- 
+<!--
                         <ion-button *ngIf="!stepIsValid(i) && stepCurrency !== i" (click)="goToStep(i)" class="buttonBarDanger animated fadeIn">
                           {{ i + 1 }}
                         </ion-button> -->
@@ -59,16 +59,16 @@
                         </ion-button>
 
 
-                    </div>  
+                    </div>
                   </div>
 
 
-                 
+
 
               </ion-column>
-              
+
             </div>
-           
+
           </ion-col>
         </ion-column>
 
@@ -77,8 +77,8 @@
 
 
 
-     
-      
+
+
         <!-- шаг 1 -->
 
 
@@ -93,10 +93,10 @@
               </ion-label>
             </ion-item>
           </ng-container>
-        </ng-container> 
-     
+        </ng-container>
+
         <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
-       
+
           <ion-col size-lg="8" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
           <!-- <ion-list>
             <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
@@ -104,44 +104,44 @@
                 <ion-label *ngIf="typesLoaded">Выберите тип мероприятия</ion-label>
               </ion-list-header>
               <app-sight-type [types]="types" [typesLoaded] = "typesLoaded" [isSight]="false"></app-sight-type>
-              
+
             </ion-radio-group>
           </ion-list> -->
-          
+
           </ion-col>
-          
-          <app-types [types]="types" (typeOutput)="receiveType($event)"></app-types> 
+
+          <app-types [types]="types" (typeOutput)="receiveType($event)"></app-types>
         </ion-row>
-      
+
 
       <!-- шаг 2 -->
       <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center">
-        
+
         <ion-col *ngIf="stepCurrency === 1" @fade>
 
-          <ion-column class="stepSecond">     
+          <ion-column class="stepSecond">
 
-           
+
 
             <div>
               <ion-column class="nameParrent">
                 <div>
-                  <ion-item style="max-width: 600px;" fill="outline"> 
+                  <ion-item style="max-width: 600px;" fill="outline">
                     <ion-label position="floating">Название мероприятия</ion-label>
                     <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
-                    <ion-input fill="solid" style="max-width: 300px;" size="small" class="nameEvent" formControlName="name" type="text" name="name" required></ion-input>                  
+                    <ion-input fill="solid" style="max-width: 300px;" size="small" class="nameEvent" formControlName="name" type="text" name="name" required></ion-input>
                   </ion-item>
-    
+
                 </div>
-  
-                
+
+
               </ion-column>
 
 
               <ion-row>
-           
+
                 <ion-column class="organizaterParrent">
-                  
+
                   <ion-item class="organizerMain"
                     fill="outline"
                   >
@@ -149,22 +149,22 @@
                     <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                     <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
                   </ion-item>
-                  
-    
-                 
+
+
+
                 </ion-column>
-                
+
                 <ion-column>
-    
-                
-    
+
+
+
                 </ion-column>
-                
-               
-                
-    
-               
-    
+
+
+
+
+
+
               </ion-row>
               <div *ngIf="createEventForm.controls['sponsor'].invalid && createEventForm.controls['sponsor'].dirty"  class="validation">
                 <ion-note *ngIf="!createEventForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор мероприятия" должно содержать минимум 3 символа</ion-note>
@@ -172,24 +172,24 @@
               <ion-col *ngIf="createEventForm.controls['name'].invalid && createEventForm.controls['name'].dirty"  class="validation">
                 <ion-note *ngIf="!createEventForm.controls['name'].hasError('minLength')" color="danger">Название мероприятия должно содержать минимум 3 символа</ion-note>
               </ion-col>
-            </div>            
+            </div>
 
-           
-            
-          
-          
-           
+
+
+
+
+
             <!-- Организатор -->
-         
-        
+
+
 
           </ion-column>
 
-       
-         
+
+
         </ion-col>
       </ion-row>
-      
+
       <!-- шаг 3 -->
 
       <ion-row style="display: flex; justify-content: center;"  [hidden]="stepCurrency !== 2">
@@ -204,10 +204,10 @@
 
 
                 <ion-list>
-      
+
                     <ion-list-header>
                       <ion-label class="modalLabel">Выберите группу, из которой следует загрузить посты</ion-label>
-                    </ion-list-header>  
+                    </ion-list-header>
 
                     <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event); openModalPost($event); saveChangeId()" [allowEmptySelection]="true" [value]="vkGroupSelected">
                       <ng-container>
@@ -220,7 +220,7 @@
                         </ion-item>
                       </ng-container>
                       <ng-container *ngFor="let group of vkGroups">
-                        
+
 
                           <ion-item>
                             <ion-avatar>
@@ -232,7 +232,7 @@
                           </ion-item>
 
                           <div>
-                            
+
                           </div>
                       </ng-container>
                     </ion-radio-group>
@@ -245,10 +245,10 @@
                           <ion-button  (click)="setVkPostsByGroupURL();  stepNext();">Загрузить URL</ion-button>
                       </ion-item>
                     </ng-container> -->
-                    
+
                 </ion-list>
-       
-               
+
+
 
                 <ion-button class="modalBtnBottom" (click)="closeAllModals()">
                   Закрыть
@@ -278,13 +278,13 @@
                         <ion-button class="modalBtnBottom" (click)="closeAllModals()">
                           Закрыть
                         </ion-button>
-                        
-                        <div *ngIf="vkGroupPosts; else notSelectedGroup">              
+
+                        <div *ngIf="vkGroupPosts; else notSelectedGroup">
                           <!-- Скелетна анимация -->
                           <ng-container *ngIf="!vkGroupPostsLoaded">
                             <ng-container *ngFor="let key of [1,2]">
                               <ion-card>
-                                
+
                                 <ion-item class="ion-margin-end">
                                   <ion-avatar slot="start">
                                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
@@ -293,25 +293,25 @@
                                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                                   </ion-label>
                                 </ion-item>
-              
-              
+
+
                                 <ion-card-content>
                                   <ion-skeleton-text [animated]="true" style="height: 100px;"></ion-skeleton-text>
                                 </ion-card-content>
-              
+
                                 <ion-row class="ion-padding-horizontal">
                                   <ng-container  *ngFor="let key of [1,2,3]">
                                     <ion-col size="4" class="ion-align-self-center ion-justify-content-center">
                                       <ion-skeleton-text [animated]="true" style="height: 80px;"></ion-skeleton-text>
-                                    </ion-col>             
-                                  </ng-container> 
+                                    </ion-col>
+                                  </ng-container>
                                 </ion-row>
-                                
+
                               </ion-card>
-                              
+
                             </ng-container>
                           </ng-container>
-              
+
                           <ng-container *ngIf="vkGroupPostsLoaded">
                             <ng-container *ngFor="let post of vkGroupPosts.items; let i = index">
                               <ion-card *ngIf="!post.copy_history">
@@ -325,12 +325,12 @@
                                   </ion-item>
                                 </ng-container>
                                 </ng-container>
-                                
+
                                 <ion-card-content *ngIf="post.text">
                                   <app-read-more text="{{ post.text }}"></app-read-more>
                                 </ion-card-content>
                                 <!-- Фото во вложении -->
-                                <swiper-container 
+                                <swiper-container
                                   #swiper
                                   autoplay="true"
                                   autoplay-delay="5000"
@@ -341,9 +341,9 @@
                                   [zoom]="false"
                                   [slidesPerView]="1"
                                   [centeredSlides]="true"
-                                  [followFinger]="true" 
-                                  [loop]="true" 
-                                  [initialSlide]="0"  
+                                  [followFinger]="true"
+                                  [loop]="true"
+                                  [initialSlide]="0"
                                   *ngIf="post.attachments" class="card-container-content">
                                   <ng-container *ngFor="let attachment of post.attachments">
                                     <ng-container *ngIf="attachment.photo" >
@@ -352,10 +352,10 @@
                                           <a href="{{photo.url}}" target="_blank"><img alt="ava" [src]="photo.url"/></a>
                                         </swiper-slide>
                                       </ng-container>
-                                    </ng-container> 
-                                  </ng-container> 
+                                    </ng-container>
+                                  </ng-container>
                                 </swiper-container>
-              
+
                                 <ng-container *ngIf="post.attachments" class="card-container-content">
                                   <ng-container *ngFor="let attachment of post.attachments">
                                     <!-- Видео во вложении -->
@@ -365,9 +365,9 @@
                                             <iframe class="video_content" [src]="attachment.video.owner_id | safeVideoById:attachment.video.id" allow="autoplay; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen width="100%" height="100%"></iframe>
                                             <p>Описание видео: </p>
                                             <app-read-more *ngIf="attachment.video.description" text="{{ attachment.video.description }}"></app-read-more>
-                                        </ion-col>    
+                                        </ion-col>
                                     </ng-container>
-              
+
                                     <!-- Ссылки во вложении -->
                                     <ion-card ng-container *ngIf="attachment.link">
                                       <ion-item button detail="true" href="{{ attachment.link.url }}" *ngIf="attachment.link">
@@ -382,21 +382,21 @@
                                     </ion-card>
                                   </ng-container>
                                 </ng-container>
-                                
+
                                 <ion-footer>
                                   <div class="ion-text-end">
                                     <ion-button (click)="closeAllModals()" (click)="selectedVkGroupPost(post)" class="ion-margin" [color]="vkGroupPostSelected?.id === post.id ? 'success' : 'medium'">
                                       <ion-icon  *ngIf="vkGroupPostSelected?.id === post.id" name="checkmark-outline" slot="start"></ion-icon>
-                                      {{ vkGroupPostSelected?.id === post.id ? 'Выбрано' : 'Выбрать'}} 
+                                      {{ vkGroupPostSelected?.id === post.id ? 'Выбрано' : 'Выбрать'}}
                                     </ion-button>
-                                  </div>  
+                                  </div>
                                 </ion-footer>
                               </ion-card>
-                              
+
                             </ng-container>
                           </ng-container>
                         </div>
-                        
+
                         <ng-template #notSelectedGroup>
                           <ion-row>
                             <ion-list-header>
@@ -426,10 +426,10 @@
 
 
             <div class="BtnModalParrent " style="display: flex; align-items: center;">
-                        
+
               <ion-button class="openModalBtn" style="--border-radius:8px;" (click)="openModalGroup()" class="selectGroup">
                 <ion-icon style="margin-right: 1vh;"  name='logo-vk'></ion-icon>
-                Загрузить из поста
+                Мои записи
               </ion-button>
 
               <div class="descriptionButton">
@@ -442,32 +442,32 @@
 
 
 
-             
-             
-          
+
+
+
 
               <div class="descriptionParrent">
 
-                
+
 
                     <ion-col style="width: 80%;" *ngIf="stepCurrency === 2" @fade>
-                      
-                      
+
+
                       <ion-item style="width: 60vh;" fill="outline">
-                     
+
                         <ion-label position="stacked">Об мероприятии</ion-label>
-                   
-                        <ion-textarea 
-                        
-                          formControlName="description" 
-                          placeholder="Введите информацию об мероприятии.." 
-                          [autoGrow]="true" 
-                        
+
+                        <ion-textarea
+
+                          formControlName="description"
+                          placeholder="Введите информацию об мероприятии.."
+                          [autoGrow]="true"
+
                           style="padding-bottom: 8vh;"
-                          
+
                         >
 
-                       
+
 
                       </ion-textarea>
 
@@ -475,30 +475,30 @@
                             <div class="ion-margin-vertical">
                               <!-- Image Preview -->
                               <ion-row  *ngIf="imagesPreview">
-                  
+
                                 <ng-container *ngFor="let img of imagesPreview">
                                   <ion-col class="imagesPreviewParrent ion-justify-content-center">
                                     <img class="imagesPreview" [src]="img" alt="preview">
-                  
+
                                     <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(img)">
                                       <ion-icon name="trash-bin" slot="start"></ion-icon>
                                     </ion-button>
-                  
-                                  </ion-col>    
-                                </ng-container>    
+
+                                  </ion-col>
+                                </ng-container>
                               </ion-row>
 
                               <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
                                 <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
                                   <ng-container *ngFor="let photo of attachment.photo.sizes">
                                     <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
-                                      <img class="imagesPreview" alt="ava" src="{{ photo.url }}" /> 
-                                    </ion-col>     
-                                  </ng-container>  
-                                </ng-container> 
+                                      <img class="imagesPreview" alt="ava" src="{{ photo.url }}" />
+                                    </ion-col>
+                                  </ng-container>
+                                </ng-container>
                               </ion-row>
                             </div>
-                       
+
 
                           <ion-item style="border-top: 1px solid rgba(85, 84, 84, 0.226);">
 
@@ -508,16 +508,16 @@
                           </ion-item>
 
                       </ion-item>
-                    
-                 
+
+
 
 
 
                         <input formControlName="files" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
                         <ion-note *ngIf="createEventForm.controls['files'].hasError('requiredFileType')" color="danger">Допустимые форматы *.png, *.jpeg</ion-note>
 
-                  
-                       
+
+
 
                       <div *ngIf="createEventForm.controls['description'].invalid && createEventForm.controls['description'].dirty"  class="validation">
                         <ion-note *ngIf="!createEventForm.controls['description'].hasError('minLength')" color="danger">поле "Об мероприятии" должно содержать минимум 10 символов</ion-note>
@@ -529,46 +529,46 @@
 
               </div>
 
-              
+
 
             </ion-column>
 
 
             <ion-col class="photoMain"  @fade>
               <!-- <ion-label position="floating">Добавление фотографий (*.png, *.jpeg)</ion-label> -->
-              
-      
-    
+
+
+
               <ion-row *ngIf="vkGroups && vkGroupPostSelected && !vkGroupPostSelected.attachments.length" class="ion-padding-vertical">
                 <ion-col class="ion-align-self-center ion-justify-content-center">
                   <ion-label color="medium">В выбранном посте нету фотографий</ion-label>
-                </ion-col> 
+                </ion-col>
               </ion-row>
-    
+
               <!-- <ion-row *ngIf="vkGroups && !vkGroupPostSelected" class="ion-padding-vertical">
                 <ion-col class="ion-align-self-center ion-justify-content-center">
                   <ion-label color="medium">Вы не выбрали пост, невозможно подгрузить фотографии</ion-label>
-                </ion-col> 
+                </ion-col>
               </ion-row> -->
             </ion-col>
-<!--             
+<!--
             <ion-column>
 
 
               <div class="timeParrent">
 
-               
+
                <div class="dateFirst">
                   <ion-list-header><ion-label>Начало мероприятия: </ion-label></ion-list-header>
-                  <ion-datetime-button 
-                    datetime="eventStart" 
+                  <ion-datetime-button
+                    datetime="eventStart"
                   ></ion-datetime-button>
-        
+
                   <ion-modal [keepContentsMounted]="true">
                     <ng-template>
-                      <ion-datetime 
-                        id="eventStart" 
-                        [firstDayOfWeek]="1" 
+                      <ion-datetime
+                        id="eventStart"
+                        [firstDayOfWeek]="1"
                         [showDefaultButtons]="true"
                         doneText="Ok"
                         cancelText="Отмена"
@@ -578,23 +578,23 @@
                     </ng-template>
                   </ion-modal>
                </div>
-               
+
 
                <div class="dateLast">
 
                 <ion-list-header><ion-label>Конец мероприятия: </ion-label></ion-list-header>
-      
-                <ion-datetime-button 
-                
-                  datetime="eventEnd" 
+
+                <ion-datetime-button
+
+                  datetime="eventEnd"
                 >
 
-              </ion-datetime-button> 
+              </ion-datetime-button>
                 <ion-modal [keepContentsMounted]="true">
                   <ng-template>
-                    <ion-datetime 
-                      id="eventEnd"  
-                      [firstDayOfWeek]="1" 
+                    <ion-datetime
+                      id="eventEnd"
+                      [firstDayOfWeek]="1"
                       [showDefaultButtons]="true"
                       doneText="Ok"
                       cancelText="Отмена"
@@ -604,11 +604,11 @@
                   </ng-template>
                 </ion-modal>
                </div>
-              
+
 
               </div>
 
-           
+
 
             </ion-column> -->
 
@@ -616,21 +616,21 @@
               <ion-note color="danger">Дата начала не может быть позднее даты конца, а дата конца не может быть раньше даты начала.</ion-note>
             </div>
 
-          
+
 
           </ion-col>
-          
 
 
 
-          
+
+
 
         </ion-column>
 
-        
-       
+
+
       </ion-row>
-            
+
       <!-- шаг 4 -->
       <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
         <!-- <ion-button (click)="searchMinSeans()">test</ion-button> -->
@@ -642,24 +642,24 @@
               <ng-container *ngFor="let array of placeArrayForm; let i = index" [formGroup]="createEventForm.controls['places'].value[i]">
                 <ion-item lines="none">
                   <ion-label *ngIf="!locationLoader"><p>Текущий город:</p><span style="width: 100%;">{{placeArrayForm[i].city}} ({{placeArrayForm[i].region}})</span></ion-label>
-    
+
                   <ion-list style="width: 50%" *ngIf="locationLoader">
                     <ion-skeleton-text [animated]="true" style="width: 40%"></ion-skeleton-text>
                     <ion-skeleton-text [animated]="true" style="width: 100%; height: 1rem;"></ion-skeleton-text>
                   </ion-list>
-                </ion-item> 
+                </ion-item>
                 <ion-column style="min-width: 100%;">
                   <ion-item  fill="outline" class="ion-margin-vertical" >
                     <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
                     <ion-input  fill="outline" formControlName="address" value="{{this.createEventForm.controls['places'].value[i].controls['address'].value}}" (ionChange)="clearSearche($event, i)" placeholder="Адрес мероприятия..." id="{{'search-map-'+i}}" type="text" name="search" required></ion-input>
                   </ion-item>
-        
+
                 </ion-column>
                 <ion-card >
                   <ion-card-header>
-                   
-                   
-                
+
+
+
                   </ion-card-header>
                   <ion-card-content>
                   <ion-list>
@@ -676,7 +676,7 @@
                                   </ion-item>
                               </ion-list>
                           </ng-container>
-                     
+
                           <ion-list *ngIf="!cityesListLoading">
                             <ion-item *ngFor="let item of cityesList" (click)="setCityes(item, i)" class="search-item" [hidden]="item.location_parent.name === 'РФ'">
                               <ion-label>
@@ -699,7 +699,7 @@
                                   </ion-item>
                               </ion-list>
                           </ng-container>
-                        
+
                           <ion-list *ngIf="!sightsListLoading">
                             <ion-item *ngFor="let item of sightsList" (click)="setSight(item, i)" class="search-item">
                               <ion-item>
@@ -717,11 +717,11 @@
                       </ion-col> -->
 
                     <!-- Поиск не работает, сломан -->
-                  
-                    
+
+
                     <ion-item >
                       <div class="map ">
-                        <ya-map (ready)="onMapReady($event, i)" 
+                        <ya-map (ready)="onMapReady($event, i)"
                           [zoom]="11"
                           (yaclick)="onMapClick($event, i)"
                           [center]="this.createEventForm.controls['places'].value[i].coords"
@@ -729,7 +729,7 @@
                             controls: [
                               'zoomControl',
                               'fullscreenControl',]
-                            }" 
+                            }"
                           [options]="{
                             yandexMapDisablePoiInteractivity: true,
                             maxZoom:18,
@@ -740,7 +740,7 @@
                         </ya-map>
                       </div>
                     </ion-item>
-                    
+
                     <ion-item *ngFor="let sean of array.seances;  let i_s = index" lines="none">
                     <!-- Создание сеансов -->
                       <ion-card [formGroup]="createEventForm.controls['places'].value[i].value.seances[i_s]" class="list-seances">
@@ -758,19 +758,19 @@
                           </ion-row>
                           </ion-item>
                         </ion-card-header>
-                          
+
                           <ion-list-header><ion-label>Начало сеанса: </ion-label></ion-list-header>
-                          <ion-datetime-button 
-                            datetime="{{'eventStart-'+i+'-'+i_s}}" 
+                          <ion-datetime-button
+                            datetime="{{'eventStart-'+i+'-'+i_s}}"
                             class="ion-margin-vertical"
                           ></ion-datetime-button>
 
-                          
+
                           <ion-modal [keepContentsMounted]="true">
                             <ng-template>
-                              <ion-datetime 
-                                id="{{'eventStart-'+i+'-'+i_s}}" 
-                                [firstDayOfWeek]="1" 
+                              <ion-datetime
+                                id="{{'eventStart-'+i+'-'+i_s}}"
+                                [firstDayOfWeek]="1"
                                 [showDefaultButtons]="true"
                                 doneText="Ok"
                                 cancelText="Отмена"
@@ -783,19 +783,19 @@
                           <div *ngIf="createEventForm.hasError('dateInvalid')">
                             <ion-note color="danger">Дата начала не может быть позднее даты конца, а дата конца не может быть раньше даты начала</ion-note>
                           </div>
-                          
+
                           <ion-list-header><ion-label>Конец сеанса: </ion-label></ion-list-header>
-                
-                          <ion-datetime-button 
-                            datetime="{{'eventEnd-'+i+'-'+i_s}}" 
+
+                          <ion-datetime-button
+                            datetime="{{'eventEnd-'+i+'-'+i_s}}"
                             class="ion-margin-vertical"
                           ></ion-datetime-button>
-                
+
                           <ion-modal [keepContentsMounted]="true">
                             <ng-template>
-                              <ion-datetime 
-                                id="{{'eventEnd-'+i+'-'+i_s}}" 
-                                [firstDayOfWeek]="1" 
+                              <ion-datetime
+                                id="{{'eventEnd-'+i+'-'+i_s}}"
+                                [firstDayOfWeek]="1"
                                 [showDefaultButtons]="true"
                                 doneText="Ok"
                                 cancelText="Отмена"
@@ -828,7 +828,7 @@
             </ion-row>
           </ion-col>
       </ion-row>
-      
+
       <!-- шаг 5 -->
       <ion-row  [hidden]="stepCurrency !== 4" style="max-width: 60%; display: flex; margin: 0 auto;">
         <ion-col *ngIf="stepCurrency === 4" class="ion-justify-content-center" @fade>
@@ -865,14 +865,14 @@
           </ion-chip>
 
 
-          
+
           <ion-col style="margin-top: 15px;" size-lg="4" size-md="8" size-xs="12" @fade>
             <ion-item fill="outline">
               <ion-label position="floating" class="position-label-inside">Доп. материалы</ion-label>
               <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
             </ion-item>
           </ion-col>
-     
+
 
 
             <ion-col >
@@ -890,7 +890,7 @@
                       </ion-item>
                     </ng-container>
                   </ng-container>
-    
+
                   <ng-container *ngIf="statusesLoaded">
                     <ng-container *ngFor="let status of statuses">
                       <ion-item *ngIf="status.name === 'На модерации'">
@@ -898,7 +898,7 @@
                         <ion-label>Отправить на модерацию</ion-label>
                         <ion-radio slot="end" [value]="status.id"></ion-radio>
                       </ion-item>
-                      
+
                       <ion-item *ngIf="status.name === 'Черновик'">
                         <ion-icon name="create" slot="start" color="medium" size="large"></ion-icon>
                         <ion-label>Оставить в черновиках</ion-label>
@@ -906,17 +906,17 @@
                       </ion-item>
                     </ng-container>
                   </ng-container>
-                  
+
                 </ion-radio-group>
               </ion-list>
             </ion-col>
         </ion-col>
       </ion-row>
-      
-    
+
+
 
        <!-- Десктопный блок кнопок -->
-      
+
 
       <!-- Фиксированный блок кнопок для мобилы-->
       <div class="buttons-mobile">
@@ -927,7 +927,7 @@
           <ion-col size="6">
             <ion-button *ngIf="stepCurrency !== steps"  (click)="stepNext()" expand="block">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
             <ion-button *ngIf="stepCurrency === steps" type="submit" [disabled] ="createEventForm.invalid || createEventForm.disabled" expand="block"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
-          </ion-col>     
+          </ion-col>
         </ion-row>
       </div>
 
