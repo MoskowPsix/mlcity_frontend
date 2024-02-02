@@ -22,7 +22,7 @@ export class VkService {
       if (user.social_account) {
         this.vk_access_token = user.social_account.token
         this.vk_user_id = user.social_account.user_id
-      } 
+      }
     }
     // this.userService.getUserFromLocalStorage().pipe(
     //   //take(1),
@@ -48,6 +48,7 @@ export class VkService {
     return this.http.jsonp<any>(`https://api.vk.com/method/groups.getById?group_id=${screen_name}&access_token=${this.vk_access_token}&v=5.131`, 'callback')
   }
   getGroups(){
+    this.getAccessToken()
     return this.http.jsonp<any>(`https://api.vk.com/method/groups.get?user_ids=${this.vk_user_id}&access_token=${this.vk_access_token}&extended=1&filter=moder&v=5.131`, 'callback')
   }
 

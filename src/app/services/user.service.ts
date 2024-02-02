@@ -23,9 +23,8 @@ export class UserService {
   } 
 
   setUser(user: IUser) {
-    //this.user.value = []
-    this.user.next(user)
     this.setUserToLocalStorage(user)
+    this.user.next(user)
   } 
   
 
