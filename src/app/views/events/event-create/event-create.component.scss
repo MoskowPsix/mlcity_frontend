@@ -1,3 +1,25 @@
+ion-label{
+
+  
+}
+
+.place-header{
+    border: 0.5px solid rgba(168, 168, 168, 0.5);
+    max-width: 98%;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+
+.place_close{
+    width: 0%;
+    height: 0%;
+    display: none;
+    transition: 0.5s height;
+}
+
+
+
 .place-list{
     display: flex;
     align-items: center;

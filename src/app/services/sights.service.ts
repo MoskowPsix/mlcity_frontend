@@ -16,16 +16,22 @@ export class SightsService {
   private user_id: number = 0
 
   getUserId(){
-    this.userService.getUser().pipe(
-      //take(1),
-      tap((user: any) => {
-        if (user) {
-          this.user_id = user.id
-        } else {
-          this.getUserId()
-        }
-      })
-    ).subscribe().unsubscribe();    
+    const user = this.userService.getUserFromLocalStorage()
+    if (user) {
+      if (user.social_account) {
+        this.user_id = user.id
+      } 
+    }
+    // this.userService.getUser().pipe(
+    //   //take(1),
+    //   tap((user: any) => {
+    //     if (user) {
+    //       this.user_id = user.id
+    //     } else {
+    //       this.getUserId()
+    //     }
+    //   })
+    // ).subscribe().unsubscribe();    
   }
 
   getSights(params: IGetEventsAndSights) { //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)

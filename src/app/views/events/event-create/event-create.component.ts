@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef, NgModule, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef, NgModule, Output, EventEmitter, ElementRef } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry } from 'rxjs';
-import { FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { EventTypeService } from 'src/app/services/event-type.service';
 import { IEventType } from 'src/app/models/event-type';
@@ -72,11 +72,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
 
+  pricesLock: any= []
+
   inputValue: string = ""
   user: any
+  placeOpen:any
   stepStart: number = 0
-  stepCurrency: number = 0
+  stepCurrency: number = 3
   steps:number = 5
+  freePrice:any = 'Бесплатно'
   dataValid:boolean = true
   openModalImgs:boolean = false
   openModalPostValue:boolean = false
@@ -142,7 +146,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     
     onAdd(event:Event) {
       this.count++
-    
     }
 
   //поулчаем юзера и устанвлвиаем группы и шаги
@@ -337,9 +340,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //ловим еммит и устанавливаем значение 
   receiveType(event:Event){
     this.currentType = Number(event);
-    console.log(this.currentType)
     this.createEventForm.controls['type'].setValue(Number(event));
    
+  }
+
+
+  getFreeOrNoPrice(event:number){
+    this.pricesLock[event].locked = !this.pricesLock[event].locked
+    if(this.pricesLock[event].locked){
+     this.createEventForm.controls['price'].value[event].controls['cors_rub'].setValue(0)
+    }
+    // priceParentMain?.children[2].[disabled] = true
   }
   
   //Выбор типа
@@ -369,6 +380,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     })
   }
 
+  //получаем Place
+  getPlaceId(place:any){
+    let placeHtml:HTMLElement = place
+    this.placeOpen = placeHtml.id
+    console.log(placeHtml.id)
+  }
   //Выбор типа
   selectedStatus(status_id: any){
     status_id.detail.value ? this.statusSelected = status_id.detail.value  :  this.statusSelected =  null
@@ -830,10 +847,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.priceArrayForm.push({price: ''})
     this.createEventForm.controls['price'].value.push(
       new FormGroup({
-        cors_rub: new FormControl('', [Validators.required]),
+        cors_rub: new FormControl(0, [Validators.required]),
         description: new FormControl('', [Validators.required, Validators.minLength(5)]),
       })
     )
+
+    this.pricesLock.push({locked: false})
+    
   }
   deletePrice(num: number) {
     this.createEventForm.controls['price'].value.splice(num, 1)
@@ -960,8 +980,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
     },[dateRangeValidator])
 
-    this.addPlaceForm()
     this.getUserWithSocialAccount()
+    this.addPlaceForm()
     this.getTypes()
     this.getStatuses()
     this.addPrice()
