@@ -89,6 +89,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   location?: Location[] = []
   locationId!:number
   uploadFiles: string[] = []
+  pricesLock: any= []
   formData: FormData = new FormData()
   imagesPreview: string[] = []
   locationLoader: boolean = false
@@ -523,10 +524,11 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.priceArrayForm.push({price: ''})
     this.createSightForm.controls['price'].value.push(
       new FormGroup({
-        cors_rub: new FormControl('', [Validators.required]),
+        cors_rub: new FormControl('0', [Validators.required]),
         description: new FormControl('', [Validators.required, Validators.minLength(5)]),
       })
     )
+    this.pricesLock.push({locked: false})
   }
 
   deletePrice(num: number) {
@@ -674,6 +676,15 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     
   }
 
+
+  getFreeOrNoPrice(event:number){
+    this.pricesLock[event].locked = !this.pricesLock[event].locked
+    if(this.pricesLock[event].locked){
+     this.createEventForm.controls['price'].value[event].controls['cors_rub'].setValue(0)
+    }
+    // priceParentMain?.children[2].[disabled] = true
+  }
+  
 
   
   stepIsValid(step:number = this.stepStart){

@@ -54,7 +54,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   swiper?: Swiper
   swiperCurrentSlide?: number
   swiperTotalSlids?: number
-
+  placeId:any
   swiperModules = [IonicSlides]
 
   userAuth: boolean = false
@@ -270,6 +270,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     this.cdr.detectChanges()
   }
 
+
   scrollEvent = (): void => {
     
     const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
@@ -308,6 +309,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     }
     //console.log(boundingClientRect)
   }
+
+
 
   toggleComment() {
     this.loadingComment = true

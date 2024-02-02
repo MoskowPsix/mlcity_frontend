@@ -635,25 +635,40 @@
 
           <ion-col  @fade>
             <ion-card  *ngFor="let item of createSightForm.controls['price'].value; let i_p = index">
-              <ng-container [formGroup]="createSightForm.controls['price'].value[i_p]" >
-                <ion-item  fill="">
 
-                  <ion-label position="floating">Стоимость билета {{i_p+1}}</ion-label>
+              <ng-container [formGroup]="createSightForm.controls['price'].value[i_p]" >
+                <ion-item fill="none">
+                  <ion-icon name="pricetag-outline" color="primary"></ion-icon>
+                  <ion-label style="color:black">
+                    <h2> Цена {{i_p+1}}</h2>
+                  </ion-label>
+
+                    <ion-chip style="margin-left: auto;" color="danger" (click)="deletePrice(i_p)">Удалить
+                      <!-- <ion-icon name="close-outline"></ion-icon> -->
+                    </ion-chip>
+                 
+                </ion-item>
+                <ion-item [disabled] = "pricesLock[i_p].locked" fill="">
+
+                  <ion-label  position="floating">Стоимость билета</ion-label>
                   <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                   <ion-input formControlName="cors_rub" type="number" name="price"></ion-input>
 
                 </ion-item>
 
-                <ion-item fiil="" lines="none">
+                <ion-item fiil="">
+                  <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                   <ion-label position="floating">Описание</ion-label>
                   <ion-textarea formControlName="description" type="text" name="price"></ion-textarea>
                 </ion-item>
               </ng-container>
 
-             
-                <ion-chip color="danger" (click)="deletePrice(i_p)">Удалить
-                  <!-- <ion-icon name="close-outline"></ion-icon> -->
-                </ion-chip>
+               
+                <ion-item>
+                  <span>Бесплатное мероприятие</span>
+                  <ion-checkbox style="margin-left: auto;"  (ionChange)="getFreeOrNoPrice(i_p)">
+                  </ion-checkbox>
+                </ion-item>
            
             </ion-card>
             
