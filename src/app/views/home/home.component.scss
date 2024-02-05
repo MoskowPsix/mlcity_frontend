@@ -2,14 +2,14 @@
 ::ng-deep {
 
 	.range-radius-custom{
-		
+
 	}
 	.range-radius-custom .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
 			background-color: #ffffff;
 	}
 
 	.range-radius-custom .ngx-slider .ngx-slider-bubble {
-	
+
 		display: none;
 	}
 
@@ -21,7 +21,7 @@
 }
 .map {
 	width: 100%;
-	height: 94vh;
+  height: 93.5vh;
 	ion-progress-bar {
 		position: absolute;
 		z-index: 2;
@@ -55,7 +55,7 @@
 }
 
 .loader {
-	
+
 	position: absolute;
 	top: 15%;
 }
@@ -66,10 +66,10 @@
     top: 3.5rem;
     padding: 1rem;
     z-index: 99999;
-	
+
 }
 .container-swither{
-	
+
     position: absolute;
 	top: 65%;
 	margin-top: 1%;
@@ -79,9 +79,9 @@
 	background-color: white;
 	border-radius: 16px;
 	display: flex;
-  	flex-direction: column; 
-  	justify-content: space-around; 
- 
+  	flex-direction: column;
+  	justify-content: space-around;
+
 
 }
 .geo-container{
@@ -103,12 +103,15 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .map{
+    height: 92vh;
+  }
 	.geo-container{
 		position: absolute;
-		top: 80%;
+		bottom: 4rem;
 		right: 0;
 		margin-right: 45px;
-	
+
 		z-index: 3;
 	}
 	.container-swither{
@@ -135,14 +138,14 @@
 		top: 84%;
 		right: 0;
 		margin-right: 45px;
-	
+
 		z-index: 3;
 	}
 	.container-swither{
-	
+
 		top:75%;
-	 
-	
+
+
 	}
 
 
@@ -315,7 +318,7 @@ ion-spinner{
 		margin-top: 56px;
 	}
 
-	
+
 
 	.filters{
 		position: fixed;
@@ -351,7 +354,7 @@ ion-spinner{
 
 
 @media(min-width: 1068px) {
-	
+
 	#modalEventShow {
 		&::part(content){
             // position: absolute;
@@ -371,7 +374,7 @@ ion-spinner{
 			--background: rgba(255, 255, 255, 0);
 			 backdrop-filter: blur(5px);
 		}
-		
+
 	}
 }
 
@@ -409,5 +412,5 @@ ion-spinner{
 	.events-counter{
 		top: 8rem;
 	}
-	
+
 }
