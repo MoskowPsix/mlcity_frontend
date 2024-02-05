@@ -634,19 +634,24 @@
             <ion-row class="place-list">
               <ng-container class="" *ngFor="let array of placeArrayForm; let i = index" [formGroup]="createEventForm.controls['places'].value[i]">
                 <ion-col class="place-header">
-
-                  <h2>Место провидения {{i+1}}</h2>
+                  <div style="display: flex; justify-content: space-between;">
+                    <h2>Место провидения {{i+1}}</h2>
+                    <ion-chip style="max-width: 7rem; text-align: center; margin-left: 1rem;" color="danger" (click)="deletePlaceForm(i)">Удалить
+                    </ion-chip>
+                    <ion-icon (click)="getPlaceId(place)" name="caret-down-outline" style="width: 2rem; height: 5rem; margin-left: auto; transition: 0.5s; cursor: pointer;"
+                    [ngClass]="{
+                      'place-row_close': placesClose[i].open == false,
+                     
+                    }"
+                    ></ion-icon> 
+                  </div>
+                  
 
                   <ion-item lines="none">
                     <ion-col style="display: flex; width: 100%;">
                       <span style="margin-right: 1rem; min-width: 2rem; display: flex; align-items: center;">Текущий город:</span>
                       <ion-label style="display: flex; justify-content: center; align-items: center;" *ngIf="!locationLoader"><span>{{placeArrayForm[i].city}} ({{placeArrayForm[i].region}})</span></ion-label>
-                      <ion-icon (click)="getPlaceId(place)" name="caret-down-outline" style="width: 2rem; height: 5rem; margin-left: auto; transition: 0.5s; cursor: pointer;"
-                      [ngClass]="{
-                        'place-row_close': placesClose[i].open == false,
-                       
-                      }"
-                      ></ion-icon> 
+                     
                       <!-- сворачиваем плейс -->
                     </ion-col>
                     <ion-list style="width: 50%" *ngIf="locationLoader">
@@ -904,7 +909,7 @@
 
           <ion-col style="margin-top: 15px;" size-lg="4" size-md="8" size-xs="12" @fade>
             <ion-item fill="outline">
-              <ion-label position="floating" class="position-label-inside">Доп. материалы</ion-label>
+          
               <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
             </ion-item>
           </ion-col>

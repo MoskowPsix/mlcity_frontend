@@ -853,7 +853,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.priceArrayForm.push({price: ''})
     this.createEventForm.controls['price'].value.push(
       new FormGroup({
-        cors_rub: new FormControl('', [Validators.required]),
+        cors_rub: new FormControl('', []),
         description: new FormControl('', [Validators.required, Validators.minLength(5)]),
       })
     )
