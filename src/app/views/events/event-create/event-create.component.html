@@ -641,7 +641,13 @@
                     <ion-col style="display: flex; width: 100%;">
                       <span style="margin-right: 1rem; min-width: 2rem; display: flex; align-items: center;">Текущий город:</span>
                       <ion-label style="display: flex; justify-content: center; align-items: center;" *ngIf="!locationLoader"><span>{{placeArrayForm[i].city}} ({{placeArrayForm[i].region}})</span></ion-label>
-                      <!-- <ion-chip  style="max-width: 7rem; margin-left: auto;">Свернуть</ion-chip> --> 
+                      <ion-icon (click)="getPlaceId(place)" name="caret-down-outline" style="width: 2rem; height: 5rem; margin-left: auto; transition: 0.5s; cursor: pointer;"
+                      [ngClass]="{
+                        'place-row_close': placesClose[i].open == false,
+                       
+                      }"
+                      ></ion-icon> 
+                      <!-- сворачиваем плейс -->
                     </ion-col>
                     <ion-list style="width: 50%" *ngIf="locationLoader">
                       <ion-skeleton-text [animated]="true" style="width: 40%"></ion-skeleton-text>
@@ -658,8 +664,11 @@
                 
           
                 <ion-card class="" >
-                  <div>
-
+                <div style=" transition: 0.5s ;" #place id="{{i}}" [ngClass]="{
+                  'place-wrapper_close': placesClose[i].open == false,
+                  'place-wrapper_open': placesClose[i].open
+                }">
+            
                   
                   <ion-card-header>
 
@@ -871,9 +880,9 @@
               </ion-card-hider>
               
               <ion-item [disabled] = "pricesLock[i_p].locked" class="price-item" >
-                <ion-label position="floating">Стоимость</ion-label>
+
                 <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-                <ion-input  formControlName="cors_rub" type="number" name="price"></ion-input>
+                <ion-input  formControlName="cors_rub" type="number" name="price" placeholder="Бесплатно"></ion-input>
               </ion-item>
               <ion-item>
                 <ion-label position="floating">Описание</ion-label>
@@ -881,10 +890,7 @@
                 <ion-textarea formControlName="description" type="text" name="price"></ion-textarea>
               </ion-item>
             </ng-container>
-            <ion-item id = "i_p">
-              <span>Бесплатное мероприятие</span>
-               <ion-checkbox (ionChange)="getFreeOrNoPrice(i_p)" style="margin-left: auto;"></ion-checkbox>
-            </ion-item>
+           
           </ion-card>
          
          

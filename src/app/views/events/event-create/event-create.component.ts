@@ -73,10 +73,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   port: string = environment.BACKEND_PORT
 
   pricesLock: any= []
+  placesClose: any = []
 
   inputValue: string = ""
   user: any
-  placeOpen:any
+  placeOpen:any = 0
   stepStart: number = 0
   stepCurrency: number = 3
   steps:number = 5
@@ -384,7 +385,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   getPlaceId(place:any){
     let placeHtml:HTMLElement = place
     this.placeOpen = placeHtml.id
-    console.log(placeHtml.id)
+    
+    this.placesClose[placeHtml.id].open = !this.placesClose[placeHtml.id].open
+    console.log(this.placeOpen)
   }
   //Выбор типа
   selectedStatus(status_id: any){
@@ -816,6 +819,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   addPlaceForm() {
     let locId: any
     let coords: any
+
+    this.placesClose.push({"open": true})
+
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
       locId = value
       if (value) {
@@ -847,7 +853,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.priceArrayForm.push({price: ''})
     this.createEventForm.controls['price'].value.push(
       new FormGroup({
-        cors_rub: new FormControl(0, [Validators.required]),
+        cors_rub: new FormControl('', [Validators.required]),
         description: new FormControl('', [Validators.required, Validators.minLength(5)]),
       })
     )

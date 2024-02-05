@@ -18,7 +18,26 @@ ion-label{
     transition: 0.5s height;
 }
 
+.place-wrapper_close{
+    transition: 0.5s ;
+    max-height: 0vh;
+}
 
+
+.place-wrapper_open{
+    transition: 0.5s height;
+    max-height: 100vh;
+}
+
+
+.place-row_open{
+    transition: 0.3s;
+    transform: rotate(90deg);
+}
+.place-row_close{
+    transition: 0.3s;
+    transform: rotate(180deg);
+}
 
 .place-list{
     display: flex;
