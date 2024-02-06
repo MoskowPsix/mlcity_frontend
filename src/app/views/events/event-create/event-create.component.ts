@@ -79,7 +79,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   user: any
   placeOpen:any = 0
   stepStart: number = 0
-  stepCurrency: number = 0
+  stepCurrency: number = 2
   steps:number = 5
   dataValid:boolean = true
   openModalImgs:boolean = false
@@ -306,7 +306,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPostSelected = null
       this.createEventForm.patchValue({description: '' });
       this.resetUploadInfo()
+      console.log(post.attachments)
     } else {
+      console.log(post.attachments)
       this.vkGroupPostSelected = post
       this.createEventForm.patchValue({description: this.vkGroupPostSelected.text });
     }
@@ -513,6 +515,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Удалить прею фотки
   deleteFile(img: string){
     this.imagesPreview = this.imagesPreview.filter((a) => a !== img);
+    this.uploadFiles = this.uploadFiles .filter((a) => a ! == img)
   }
 
   // Заполняем превью фоток 
@@ -693,12 +696,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       case 4:
         
       let priceValid = false
+      let validValidPrice = false
       this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
       
-        if(this.createEventForm.controls['price'].value.length > 1 && item.controls['description'].valid >= 3){
-          priceValid =  true
+        if(this.createEventForm.controls['price'].value.length > 1){
+          priceValid = this.createEventForm.controls['price'].value.every((item: any) => item.controls['description'].value.length >= 3);
+        }
+          
   
-        }else if(this.createEventForm.controls['price'].value.length == 1){
+        else if(this.createEventForm.controls['price'].value.length == 1){
           priceValid =  true
           console.log(this.createEventForm.controls['price'].value.length)
         }
