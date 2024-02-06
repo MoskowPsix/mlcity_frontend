@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">MLCity</string>
     <string name="title_activity_main">MLCity</string>
-    <string name="package_name">mlcity.ru</string>
-    <string name="custom_url_scheme">mlcity.ru</string>
+    <string name="package_name">com.policam.app.mlcity</string>
+    <string name="custom_url_scheme">com.policam.app.mlcity</string>
 </resources>

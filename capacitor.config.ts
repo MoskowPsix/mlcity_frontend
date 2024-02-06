@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'mlcity.ru',
+  appId: 'com.policam.app.mlcity',
   appName: 'MLCity',
   webDir: 'www',
   bundledWebRuntime: false

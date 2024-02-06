@@ -1,4 +1,4 @@
-package mlcity.ru;
+package com.policam.app.mlcity;
 
 import com.getcapacitor.BridgeActivity;
 
