@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package mlcity.ru;
 
 import com.getcapacitor.BridgeActivity;
 

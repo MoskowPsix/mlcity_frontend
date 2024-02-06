@@ -78,7 +78,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   user: any
   placeOpen:any
   stepStart: number = 0
-  stepCurrency: number = 3
+  stepCurrency: number = 0
   steps:number = 5
   freePrice:any = 'Бесплатно'
   dataValid:boolean = true

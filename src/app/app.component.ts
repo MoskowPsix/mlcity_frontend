@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
 import { FilterService } from './services/filter.service';
+import { Component, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +9,12 @@ import { FilterService } from './services/filter.service';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor(private filterService: FilterService) {
+  constructor(
+    private filterService: FilterService,
+    private router: Router, 
+    private zone: NgZone
+    ) {
+      this.initializeApp();
     //сбрасываем фильтры даты при каждом запуске прилолжения
     //this.filterService.removeDateFilters()
 
@@ -15,6 +22,21 @@ export class AppComponent {
     // if (this.filterService.saveFilters.value === 0)
     //   this.filterService.removeFilters()
   }
+
+  initializeApp() {
+    App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+        this.zone.run(() => {
+            // Example url: https://beerswift.app/tabs/tab2
+            // slug = /tabs/tab2
+            const slug = event.url.split(".app").pop();
+            if (slug) {
+                this.router.navigateByUrl(slug);
+            }
+            // If no match, do nothing - let regular routing
+            // logic take over
+        });
+    });
+}
 
 
 }
