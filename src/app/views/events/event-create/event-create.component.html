@@ -97,18 +97,7 @@
 
         <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
 
-          <ion-col size-lg="8" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
-          <!-- <ion-list>
-            <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
-              <ion-list-header>
-                <ion-label *ngIf="typesLoaded">Выберите тип мероприятия</ion-label>
-              </ion-list-header>
-              <app-sight-type [types]="types" [typesLoaded] = "typesLoaded" [isSight]="false"></app-sight-type>
-
-            </ion-radio-group>
-          </ion-list> -->
-
-          </ion-col>
+    
 
           <app-types [types]="types" (typeOutput)="receiveType($event)"></app-types>
         </ion-row>
@@ -145,7 +134,7 @@
                   <ion-item class="organizerMain"
                     fill="outline"
                   >
-                    <ion-label position="floating">Организатор мероприятия</ion-label>
+                    <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Организатор мероприятия</ion-label>
                     <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                     <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
                   </ion-item>
@@ -432,9 +421,6 @@
                 Мои записи
               </ion-button>
 
-              <div class="descriptionButton">
-                вы можете загрузить описание и изображения из группы вконтакте
-              </div>
 
             </div>
 
@@ -474,22 +460,34 @@
                                 <ng-container *ngFor="let img of imagesPreview">
                                   <ion-col class="imagesPreviewParrent ion-justify-content-center">
                                     <img class="imagesPreview" [src]="img" alt="preview">
-
                                     <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(img)">
                                       <ion-icon name="trash-bin" slot="start"></ion-icon>
                                     </ion-button>
-
                                   </ion-col>
                                 </ng-container>
                               </ion-row>
 
                               <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
                                 <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
-                                  <ng-container *ngFor="let photo of attachment.photo.sizes">
-                                    <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
+
+                                  <ion-col *ngIf="attachment.type == 'video' ">
+                                    <img class="imagesPreview" alt="ava" src="{{ attachment.video.image[0].url }}" />
+                                    <div style="background-color: rgba(0, 0, 0, 0.568); color: #fff; border-radius: 4px; margin-top:-1.5rem; position: absolute; display: flex; justify-content: space-between;"><ion-icon name="play-outline"></ion-icon></div>
+                                  </ion-col>
+
+
+                                  <ion-col *ngIf="attachment.type == 'photo' ">
+                                    <img class="imagesPreview" alt="ava" src="{{ attachment.photo.sizes[3].url }}" />
+                              
+                                  </ion-col>
+
+                                  
+                                    <!-- <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
                                       <img class="imagesPreview" alt="ava" src="{{ photo.url }}" />
-                                    </ion-col>
-                                  </ng-container>
+                                    </ion-col> -->
+                    
+
+                               
                                 </ng-container>
                               </ion-row>
                             </div>
@@ -884,7 +882,7 @@
                 </ion-item>
               </ion-card-hider>
               
-              <ion-item [disabled] = "pricesLock[i_p].locked" class="price-item" >
+              <ion-item>
 
                 <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                 <ion-input  formControlName="cors_rub" type="number" name="price" placeholder="Бесплатно"></ion-input>

@@ -72,7 +72,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
 
-  pricesLock: any= []
+
   placesClose: any = []
 
   inputValue: string = ""
@@ -81,7 +81,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   stepStart: number = 0
   stepCurrency: number = 0
   steps:number = 5
-  freePrice:any = 'Бесплатно'
   dataValid:boolean = true
   openModalImgs:boolean = false
   openModalPostValue:boolean = false
@@ -307,7 +306,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPostSelected = null
       this.createEventForm.patchValue({description: '' });
       this.resetUploadInfo()
+      console.log(post.attachments)
     } else {
+      console.log(post.attachments)
       this.vkGroupPostSelected = post
       this.createEventForm.patchValue({description: this.vkGroupPostSelected.text });
     }
@@ -346,13 +347,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
 
-  getFreeOrNoPrice(event:number){
-    this.pricesLock[event].locked = !this.pricesLock[event].locked
-    if(this.pricesLock[event].locked){
-     this.createEventForm.controls['price'].value[event].controls['cors_rub'].setValue(0)
-    }
-    // priceParentMain?.children[2].[disabled] = true
-  }
+
   
   //Выбор типа
   // selectedType(type_id: any){
@@ -520,6 +515,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Удалить прею фотки
   deleteFile(img: string){
     this.imagesPreview = this.imagesPreview.filter((a) => a !== img);
+    this.uploadFiles = this.uploadFiles .filter((a) => a ! == img)
   }
 
   // Заполняем превью фоток 
@@ -700,14 +696,19 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       case 4:
         
       let priceValid = false
+      let validValidPrice = false
       this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
       
-        if(item.controls.cors_rub.value >= 0 && item.controls.description.value.length >= 3){
+        if(this.createEventForm.controls['price'].value.length > 1){
+          priceValid = this.createEventForm.controls['price'].value.every((item: any) => item.controls['description'].value.length >= 3);
+        }
+          
+  
+        else if(this.createEventForm.controls['price'].value.length == 1){
           priceValid =  true
-       
+          console.log(this.createEventForm.controls['price'].value.length)
         }
         else{
-      
           priceValid =  false
         }
        })
@@ -858,7 +859,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       })
     )
 
-    this.pricesLock.push({locked: false})
+
     
   }
   deletePrice(num: number) {

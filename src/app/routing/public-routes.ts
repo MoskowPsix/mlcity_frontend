@@ -39,6 +39,12 @@ export const publicRoutes: Routes = [
       pathMatch: 'full',
       component: EventShowComponent,
       canActivate: [CheckAuthCanActiveGuard],
+      children: [
+        { 
+          path: ':name', 
+          component: EventShowComponent,
+        }
+      ]
     },
     {
       path: 'add_event',
