@@ -72,16 +72,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
 
-  pricesLock: any= []
+
   placesClose: any = []
 
   inputValue: string = ""
   user: any
   placeOpen:any = 0
   stepStart: number = 0
-  stepCurrency: number = 3
+  stepCurrency: number = 0
   steps:number = 5
-  freePrice:any = 'Бесплатно'
   dataValid:boolean = true
   openModalImgs:boolean = false
   openModalPostValue:boolean = false
@@ -346,13 +345,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
 
-  getFreeOrNoPrice(event:number){
-    this.pricesLock[event].locked = !this.pricesLock[event].locked
-    if(this.pricesLock[event].locked){
-     this.createEventForm.controls['price'].value[event].controls['cors_rub'].setValue(0)
-    }
-    // priceParentMain?.children[2].[disabled] = true
-  }
+
   
   //Выбор типа
   // selectedType(type_id: any){
@@ -702,12 +695,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       let priceValid = false
       this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
       
-        if(item.controls.cors_rub.value >= 0 && item.controls.description.value.length >= 3){
+        if(this.createEventForm.controls['price'].value.length > 1 && item.controls['description'].valid >= 3){
           priceValid =  true
-       
+  
+        }else if(this.createEventForm.controls['price'].value.length == 1){
+          priceValid =  true
+          console.log(this.createEventForm.controls['price'].value.length)
         }
         else{
-      
           priceValid =  false
         }
        })
@@ -858,7 +853,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       })
     )
 
-    this.pricesLock.push({locked: false})
+
     
   }
   deletePrice(num: number) {

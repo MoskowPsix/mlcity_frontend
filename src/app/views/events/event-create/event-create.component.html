@@ -97,18 +97,7 @@
 
         <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
 
-          <ion-col size-lg="8" size-md="8" size-xs="12" *ngIf="stepCurrency === 0" @fade>
-          <!-- <ion-list>
-            <ion-radio-group formControlName="type" (ionChange)="selectedType($event)" [value]="typeSelected" required>
-              <ion-list-header>
-                <ion-label *ngIf="typesLoaded">Выберите тип мероприятия</ion-label>
-              </ion-list-header>
-              <app-sight-type [types]="types" [typesLoaded] = "typesLoaded" [isSight]="false"></app-sight-type>
-
-            </ion-radio-group>
-          </ion-list> -->
-
-          </ion-col>
+    
 
           <app-types [types]="types" (typeOutput)="receiveType($event)"></app-types>
         </ion-row>
@@ -884,7 +873,7 @@
                 </ion-item>
               </ion-card-hider>
               
-              <ion-item [disabled] = "pricesLock[i_p].locked" class="price-item" >
+              <ion-item>
 
                 <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                 <ion-input  formControlName="cors_rub" type="number" name="price" placeholder="Бесплатно"></ion-input>
