@@ -102,6 +102,72 @@
 	align-items: center;
 }
 
+@media only screen and (max-height: 768px) and (max-width: 768px){
+
+	.map{
+		height: 92vh;
+	  }
+		.geo-container{
+			position: absolute;
+			bottom: 4rem;
+			right: 0;
+			margin-right: 45px;
+	
+			z-index: 3;
+		}
+		.container-swither{
+			top: 65%;
+		}
+		.range-radius-main {
+			height: 15rem;
+			margin-top: 21vh;
+			ngx-slider{
+				height: 8rem;
+			}
+		}
+		.range-radius-main{
+			max-height: 200px;
+		}
+		.range-radius-custom{
+			max-height: 175px;
+	
+		}
+
+
+}
+
+
+@media only screen and (max-height: 768px) {
+	.map{
+		height: 92vh;
+	  }
+		.geo-container{
+			position: absolute;
+			bottom: 4rem;
+			right: 0;
+			margin-right: 45px;
+	
+			z-index: 3;
+		}
+		.container-swither{
+			top: 65%;
+		}
+		.range-radius-main {
+			height: 15rem;
+			margin-top: 21vh;
+			ngx-slider{
+				height: 8rem;
+			}
+		}
+		.range-radius-main{
+			max-height: 200px;
+		}
+		.range-radius-custom{
+			max-height: 175px;
+	
+		}
+}
+
 @media only screen and (max-width: 768px) {
   .map{
     height: 92vh;
