@@ -8,7 +8,7 @@ import { MessagesComment } from 'src/app/enums/message-comment';
 import { EventsService } from '../../services/events.service';
 import { SightsService } from '../../services/sights.service';
 import { UserService } from 'src/app/services/user.service';
-
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-comments-list',
@@ -24,10 +24,10 @@ import { UserService } from 'src/app/services/user.service';
       private eventService: EventsService,
       private sightsService: SightsService,
       private userService: UserService
-      ) { 
+      ) {
         this.getUser()
       }
-      
+
     private readonly destroy$ = new Subject<void>()
 
     createCommentForm: FormGroup = new FormGroup({})
@@ -43,7 +43,9 @@ import { UserService } from 'src/app/services/user.service';
     user_avatar: string = ''
     user_auth: boolean = false
     comment_id!: any
-    user_id!: number 
+    user_id!: number
+
+    backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
 
     getUser(){
       this.userService.getUser().pipe(
@@ -57,7 +59,7 @@ import { UserService } from 'src/app/services/user.service';
             this.user_auth = false
           }
         })
-      ).subscribe().unsubscribe();    
+      ).subscribe().unsubscribe();
     }
 
     show_all_comments() {
@@ -76,11 +78,11 @@ import { UserService } from 'src/app/services/user.service';
     addCommentAnswer() {
       if (this.createCommentForm.controls['new_comment'].value) {
         if (this.isSight) {
-          this.commentsService.addCommentsSight(this.createCommentForm.controls['new_comment'].value, this.event_id, this.comment_id).pipe(  
+          this.commentsService.addCommentsSight(this.createCommentForm.controls['new_comment'].value, this.event_id, this.comment_id).pipe(
             catchError((err) =>{
               this.createCommentForm.controls['new_comment'].reset()
               this.toastService.showToast(MessagesErrors.CommentError, 'danger')
-              return of(EMPTY) 
+              return of(EMPTY)
             }),
             takeUntil(this.destroy$)
           ).subscribe((response: any) =>{
@@ -89,7 +91,7 @@ import { UserService } from 'src/app/services/user.service';
               catchError((err) =>{
                 this.createCommentForm.controls['new_comment'].reset()
                 this.toastService.showToast(MessagesErrors.default, 'danger')
-                return of(EMPTY) 
+                return of(EMPTY)
               }),
               takeUntil(this.destroy$)
             ).subscribe((response: any) =>{
@@ -105,11 +107,11 @@ import { UserService } from 'src/app/services/user.service';
             this.toastService.showToast(MessagesComment.comment_ok, 'success')
           })
         } else {
-          this.commentsService.addCommentsEvent(this.createCommentForm.controls['new_comment'].value, this.event_id, this.comment_id).pipe(  
+          this.commentsService.addCommentsEvent(this.createCommentForm.controls['new_comment'].value, this.event_id, this.comment_id).pipe(
             catchError((err) =>{
               this.createCommentForm.controls['new_comment'].reset()
               this.toastService.showToast(MessagesErrors.CommentError, 'danger')
-              return of(EMPTY) 
+              return of(EMPTY)
             }),
             takeUntil(this.destroy$)
           ).subscribe((response: any) =>{
@@ -132,12 +134,12 @@ import { UserService } from 'src/app/services/user.service';
 
 
     updateComment(id: number) {
-      this.commentsService.updateCommentId(id, this.createCommentForm.controls['update_comment'].value).pipe(  
+      this.commentsService.updateCommentId(id, this.createCommentForm.controls['update_comment'].value).pipe(
         catchError((err) =>{
           console.log(err)
           this.toastService.showToast(MessagesErrors.CommentError, 'danger')
           this.createCommentForm.controls['update_comment'].reset()
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
         takeUntil(this.destroy$)
       ).subscribe((response: any) =>{
@@ -154,11 +156,11 @@ import { UserService } from 'src/app/services/user.service';
     }
 
     deleteComment(id: number) {
-      this.commentsService.deleteCommentId(id).pipe(  
+      this.commentsService.deleteCommentId(id).pipe(
         catchError((err) =>{
           console.log(err)
           this.toastService.showToast(MessagesErrors.CommentError, 'danger')
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
         takeUntil(this.destroy$)
       ).subscribe((response: any) =>{
@@ -176,11 +178,11 @@ import { UserService } from 'src/app/services/user.service';
     addComment() {
       if (this.createCommentForm.controls['new_comment'].value) {
         if (this.isSight) {
-          this.commentsService.addCommentsSight(this.createCommentForm.controls['new_comment'].value, this.event_id).pipe(  
+          this.commentsService.addCommentsSight(this.createCommentForm.controls['new_comment'].value, this.event_id).pipe(
             catchError((err) =>{
               this.createCommentForm.controls['new_comment'].reset()
               this.toastService.showToast(MessagesErrors.CommentError, 'danger')
-              return of(EMPTY) 
+              return of(EMPTY)
             }),
             takeUntil(this.destroy$)
           ).subscribe((response: any) =>{
@@ -189,7 +191,7 @@ import { UserService } from 'src/app/services/user.service';
                 catchError((err) =>{
                   this.createCommentForm.controls['new_comment'].reset()
                   this.toastService.showToast(MessagesErrors.default, 'danger')
-                  return of(EMPTY) 
+                  return of(EMPTY)
                 }),
                 takeUntil(this.destroy$)
               ).subscribe((response: any) =>{
@@ -202,11 +204,11 @@ import { UserService } from 'src/app/services/user.service';
             this.toastService.showToast(MessagesComment.comment_ok, 'success')
             })
         } else if (!this.isSight) {
-          this.commentsService.addCommentsEvent(this.createCommentForm.controls['new_comment'].value, this.event_id).pipe(  
+          this.commentsService.addCommentsEvent(this.createCommentForm.controls['new_comment'].value, this.event_id).pipe(
             catchError((err) =>{
               this.createCommentForm.controls['new_comment'].reset()
               this.toastService.showToast(MessagesErrors.CommentError, 'danger')
-              return of(EMPTY) 
+              return of(EMPTY)
             }),
             takeUntil(this.destroy$)
           ).subscribe((response: any) =>{
@@ -215,7 +217,7 @@ import { UserService } from 'src/app/services/user.service';
                 catchError((err) =>{
                   this.createCommentForm.controls['new_comment'].reset()
                   this.toastService.showToast(MessagesErrors.default, 'danger')
-                  return of(EMPTY) 
+                  return of(EMPTY)
                 }),
                 takeUntil(this.destroy$)
               ).subscribe((response: any) =>{
@@ -257,5 +259,5 @@ import { UserService } from 'src/app/services/user.service';
       } else {
         this.bottom_load_all_comments = false
       }
-    } 
+    }
   }

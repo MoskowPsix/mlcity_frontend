@@ -1,12 +1,12 @@
 <ion-list>
     <ng-container *ngFor="let comment of prev_comment;">
         <ion-list>
-            <ion-item lines="light">  
+            <ion-item lines="light">
                 <ion-avatar slot="start">
-                    <ion-img *ngIf="comment.user.avatar" src="{{comment.user.avatar}}" />
+                    <ion-img *ngIf="comment.user.avatar" src="{{backendUrl + comment.user.avatar}}" />
                     <ion-img *ngIf="!comment.user.avatar" color="light" src="/svg/person-circle-outline.svg"/>
                 </ion-avatar>
-                <ion-label > 
+                <ion-label >
                     <h2>{{comment.user.name}}</h2>
                     <ion-note color="dark">{{ comment.text }}</ion-note><br>
                     <ion-note>{{ date(comment.created_at, comment.updated_at) }} <ion-button fill="clear" (click)="showAnswer(comment.id)">Ответить</ion-button ></ion-note>
@@ -32,14 +32,14 @@
                                                 </ion-button>
                                             </ion-toolbar>
                                         </ion-header>
-                                
+
                                         <ion-list lines="none">
                                             <ion-item detail="false">
                                                 <ion-avatar slot="start">
-                                                    <ion-img *ngIf="comment.user.avatar" src="{{comment.user.avatar}}" />
+                                                    <ion-img *ngIf="comment.user.avatar" src="{{backendUrl + comment.user.avatar}}" />
                                                     <ion-img *ngIf="!comment.user.avatar" color="light" src="/svg/person-circle-outline.svg"/>
                                                 </ion-avatar>
-                                                <ion-list > 
+                                                <ion-list >
                                                     <h2>{{comment.user.name}}</h2>
                                                     <form [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth && input_panel">
                                                         <ion-textarea formControlName="update_comment" [autoGrow]="true" readonly="false" required></ion-textarea><br>
@@ -69,14 +69,14 @@
                                                 </ion-button>
                                             </ion-toolbar>
                                         </ion-header>
-                                    
+
                                             <ion-list lines="none">
                                             <ion-item detail="false">
                                                 <ion-avatar slot="start">
-                                                    <ion-img *ngIf="comment.user.avatar" src="{{comment.user.avatar}}" />
+                                                    <ion-img *ngIf="comment.user.avatar" src="{{backendUrl + comment.user.avatar}}" />
                                                     <ion-img *ngIf="!comment.user.avatar" color="light" src="/svg/person-circle-outline.svg"/>
                                                 </ion-avatar>
-                                                <ion-list > 
+                                                <ion-list >
                                                     <h2>{{comment.user.name}}</h2>
                                                         <ion-textarea [autoGrow]="true" readonly="true" value="{{ comment.text }}"></ion-textarea><br>
                                                     <ion-note>{{ date(comment.created_at, comment.updated_at) }}</ion-note>
@@ -94,18 +94,18 @@
 
                         </ion-content>
                     </ng-template>
-                    </ion-popover> 
-            </ion-label> 
+                    </ion-popover>
+            </ion-label>
                 <!--  -->
                 </ion-item>
                 <ion-list class="comment-list" lines="none">
                 <ion-item *ngIf="comment.comments.length !== 0">
                     <app-comments-list [comments]="comment.comments" [isSight]="isSight" [event_id]="event_id" [input_panel]="false"></app-comments-list>
                 </ion-item>
-                    <form [hidden]="comment_id !== comment.id" [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth"> 
+                    <form [hidden]="comment_id !== comment.id" [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth">
                         <ion-item color="light">
                             <ion-avatar slot="start">
-                                <ion-img *ngIf="user_avatar" src="{{user_avatar}}" />
+                                <ion-img *ngIf="user_avatar" src="{{backendUrl + user_avatar}}" />
                                 <ion-img *ngIf="!user_avatar" color="light" src="/svg/person-circle-outline.svg"/>
                             </ion-avatar>
                             <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="solid" placeholder="Ответить {{ comment.user.name }}"></ion-textarea>
@@ -113,7 +113,7 @@
                                 <ion-chip color="primary" slot="end">
                                     <ion-icon  name="paper-plane-outline" (click)="addCommentAnswer()" class="ico"></ion-icon>
                                 </ion-chip>
-                            </ion-item-option>   
+                            </ion-item-option>
                         </ion-item>
                     </form>
                 </ion-list>
@@ -131,10 +131,10 @@
         </ion-chip>
     </ion-item>
 
-    <form [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth && input_panel"> 
+    <form [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth && input_panel">
         <ion-item color="light">
                 <ion-avatar slot="start">
-                    <ion-img *ngIf="user_avatar" src="{{user_avatar}}" />
+                    <ion-img *ngIf="user_avatar" src="{{backendUrl + user_avatar}}" />
                     <ion-img *ngIf="!user_avatar" color="light" src="/svg/person-circle-outline.svg"/>
                 </ion-avatar>
                     <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="outline" placeholder="Комментарий..."></ion-textarea>
@@ -142,7 +142,7 @@
                         <ion-chip color="primary" slot="end">
                             <ion-icon  color="primary" name="paper-plane-outline"  (click)="addComment()" class="ico"></ion-icon>
                         </ion-chip>
-                    </ion-item-option>   
+                    </ion-item-option>
         </ion-item>
     </form>
 </ion-list>
