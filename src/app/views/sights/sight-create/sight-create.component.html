@@ -120,7 +120,7 @@
                 <div>
 
                   <ion-item style="max-width: 600px;" fill="outline">
-                    <ion-label position="floating">Название достопримечательности</ion-label>
+                    <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Название достопримечательности</ion-label>
                     <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
                     <ion-input style="max-width: 300px;" size="small" formControlName="name" type="text" name="name" required></ion-input>
                   </ion-item>
@@ -137,7 +137,7 @@
                 <ion-column class="organizaterParrent">
                   <ion-item  class="organizerMain" fill="outline"
                   >
-                    <ion-label position="floating">Организатор достопримечательности</ion-label>
+                    <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Организатор достопримечательности</ion-label>
                     <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                     <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
                   </ion-item>
@@ -454,15 +454,25 @@
 
                             <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
                               <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
-                                <ng-conteiner *ngIf="attachment.type === 'photo'">
 
-                                  <ng-container *ngFor="let photo of attachment.photo.sizes">
-                                    <ion-col *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
-                                      <img class="imagesPreview" alt="ava" src="{{ photo.url }}" />
-                                    </ion-col>
-                                  </ng-container>
+                                <ion-col *ngIf="attachment.type == 'video' ">
+                                  <img class="imagesPreview" alt="ava" src="{{ attachment.video.image[0].url }}" />
+                                  <div style="background-color: rgba(0, 0, 0, 0.568); color: #fff; border-radius: 4px; margin-top:-1.5rem; position: absolute; display: flex; justify-content: space-between;"><ion-icon name="play-outline"></ion-icon></div>
+                                </ion-col>
 
-                                </ng-conteiner>
+
+                                <ion-col *ngIf="attachment.type == 'photo' ">
+                                  <img class="imagesPreview" alt="ava" src="{{ attachment.photo.sizes[3].url }}" />
+                            
+                                </ion-col>
+
+                                
+                                  <!-- <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
+                                    <img class="imagesPreview" alt="ava" src="{{ photo.url }}" />
+                                  </ion-col> -->
+                  
+
+                             
                               </ng-container>
                             </ion-row>
                           </div>
@@ -526,15 +536,16 @@
                   </div> -->
                   <ion-list>
                    <ion-item>
-                      <ion-label>
-                        <h3>Описание времени работы или времени посещения достопримечательности.</h3>
-                      </ion-label>
+                     
                     </ion-item>
-                    <ion-item>
+                    <ion-item fill="outline">
+                      <ion-label position="stacked">
+                        Описание времени работы или времени посещения достопримечательности
+                      </ion-label>
                       <ion-textarea
                       value="test"
                       formControlName="workTime"
-                      placeholder="..."
+                      placeholder="Введите информацию о времени работы или времени посещения..."
                       [autoGrow]="true"
                       required
                       >
@@ -640,7 +651,7 @@
                 <ion-item fill="none">
                   <ion-icon name="pricetag-outline" color="primary"></ion-icon>
                   <ion-label style="color:black">
-                    <h2> Цена {{i_p+1}}</h2>
+                    <h2> Билет {{i_p+1}}</h2>
                   </ion-label>
 
                     <ion-chip style="margin-left: auto;" color="danger" (click)="deletePrice(i_p)">Удалить
@@ -650,9 +661,11 @@
                 </ion-item>
                 <ion-item [disabled] = "pricesLock[i_p].locked" fill="">
 
-                  <ion-label  position="floating">Стоимость билета</ion-label>
+                  <ion-label position="stacked">Стоимость билета</ion-label>
                   <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-                  <ion-input formControlName="cors_rub" type="number" name="price"></ion-input>
+                  <ion-input formControlName="cors_rub" type="number" name="price"
+                  placeholder="бесплатно"
+                  ></ion-input>
 
                 </ion-item>
 
@@ -664,23 +677,18 @@
               </ng-container>
 
                
-                <ion-item>
-                  <span>Бесплатное мероприятие</span>
-                  <ion-checkbox style="margin-left: auto;"  (ionChange)="getFreeOrNoPrice(i_p)">
-                  </ion-checkbox>
-                </ion-item>
+
            
             </ion-card>
 
             <ion-chip style="margin-bottom: 2rem;" color="primary" class="ion-justify-item-center" (click)="addPrice()">
-              <ion-label>Добавить цену</ion-label>
+              <ion-label>Добавить билет</ion-label>
               <ion-icon name="add-outline"></ion-icon>
             </ion-chip>
 
 
             <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
               <ion-item fill="outline">
-                <ion-label position="floating" class="position-label-inside">Доп. материалы</ion-label>
                 <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
               </ion-item>
             </ion-col>

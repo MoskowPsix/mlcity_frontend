@@ -524,7 +524,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.priceArrayForm.push({price: ''})
     this.createSightForm.controls['price'].value.push(
       new FormGroup({
-        cors_rub: new FormControl('0', [Validators.required]),
+        cors_rub: new FormControl('', [Validators.required]),
         description: new FormControl('', [Validators.required, Validators.minLength(5)]),
       })
     )
@@ -653,8 +653,14 @@ export class SightCreateComponent implements OnInit, OnDestroy {
             let priceValid:any 
             this.createSightForm.controls['price'].value.forEach((item: any, i: number) => {
       
-              if(item.controls.cors_rub.value != null && item.controls.description.value.length >= 3){
+              if(this.createSightForm.controls['price'].value.length > 1){
+                priceValid = this.createSightForm.controls['price'].value.every((item: any) => item.controls['description'].value.length >= 3);
+              }
+                
+        
+              else if(this.createSightForm.controls['price'].value.length == 1){
                 priceValid =  true
+                console.log(this.createSightForm.controls['price'].value.length)
               }
               else{
                 priceValid =  false
@@ -677,13 +683,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
 
-  getFreeOrNoPrice(event:number){
-    this.pricesLock[event].locked = !this.pricesLock[event].locked
-    if(this.pricesLock[event].locked){
-     this.createEventForm.controls['price'].value[event].controls['cors_rub'].setValue(0)
-    }
-    // priceParentMain?.children[2].[disabled] = true
-  }
+
   
 
   
