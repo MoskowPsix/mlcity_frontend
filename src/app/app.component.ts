@@ -13,8 +13,8 @@ export class AppComponent {
   constructor(
     // private filterService: FilterService,
     // private deeplinks: Deeplinks,
-    // private router: Router,
-    // private zone: NgZone
+    private router: Router,
+    private zone: NgZone
     ) {
       // this.initializeApp();
     //сбрасываем фильтры даты при каждом запуске прилолжения
@@ -25,21 +25,21 @@ export class AppComponent {
     //   this.filterService.removeFilters()
   }
 
-  // initializeApp() {
-  //   App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
-  //     // console.log(event)
-  //       this.zone.run(() => {
-  //           // Example url: https://beerswift.app/tabs/tab2
-  //           // slug = /tabs/tab2
-  //           const slug = event.url.split(".app").pop();
-  //           if (slug) {
-  //               this.router.navigateByUrl(slug);
-  //           }
-  //           // If no match, do nothing - let regular routing
-  //           // logic take over
-  //       });
-  //   });
-  // }
+  initializeApp() {
+    App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+      console.log(event)
+        this.zone.run(() => {
+            // Example url: https://beerswift.app/tabs/tab2
+            // slug = /tabs/tab2
+            const slug = event.url.split(".ru").pop();
+            if (slug) {
+                this.router.navigateByUrl(slug);
+            }
+            // If no match, do nothing - let regular routing
+            // logic take over
+        });
+    });
+  }
 
 
 }
