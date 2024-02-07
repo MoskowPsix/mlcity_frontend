@@ -107,7 +107,7 @@
 
         .container{
             justify-content: start;
-            max-width: 98%;
+            max-width: 80%;
             display: flex;
             align-items: center;
             align-content: center;
@@ -120,9 +120,9 @@
             .item {
                 cursor: pointer;
                 transition: 0.2s;
-                margin-left: 0.1rem;
+                margin-left: 1rem;
                 margin-right:0,1rem;
-                min-width: 18vh;
+              
            
             }
           
