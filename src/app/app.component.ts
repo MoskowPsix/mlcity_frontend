@@ -16,7 +16,7 @@ export class AppComponent {
     private router: Router,
     private zone: NgZone
     ) {
-      // this.initializeApp();
+      this.initializeApp();
     //сбрасываем фильтры даты при каждом запуске прилолжения
     //this.filterService.removeDateFilters()
 
