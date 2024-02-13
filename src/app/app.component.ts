@@ -21,13 +21,11 @@ export class AppComponent {
 
   initializeApp() {
     App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => { 
-      console.log('yes')
       if (!event.url.includes(':'+environment.BACKEND_PORT)) {
         this.zone.run(() => {
             const domain = environment.DOMAIN
             const pathArray = event.url.split(domain)
             const appPath = pathArray.pop()
-            this.toast.showToast(event.url, 'success')
             if (appPath) {
               this.router.navigateByUrl(String(appPath))
             }
