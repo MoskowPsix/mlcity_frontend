@@ -25,7 +25,18 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="mlcity.ru" />
+                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/" />
+                <!-- Public routs -->
+                <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/home"/>-->
+                <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/events"/>-->
+                <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/add_event"/>-->
+                <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/sight"/>-->
+                <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/add_sight"/>-->
+                <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/about"/>-->
+                <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/contacts"/>-->
+                <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/cabinet"/>-->
+                <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/login"/>-->
+                <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/registration"/>-->
             </intent-filter>
         </activity>
 

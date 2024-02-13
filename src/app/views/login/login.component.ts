@@ -130,6 +130,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   loginAfterSocial(token: any){
+    this.onLoading
     if (token.length >= 47){
       this.tokenService.setToken(token)
       this.loginForm.disable()
@@ -154,7 +155,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onLoading(){
     this.loadingService.showLoading()
-
+    setTimeout(() => {this.loadingService.hideLoading()}, 5000)
   }
 
   positiveResponseAfterLogin(data:any){

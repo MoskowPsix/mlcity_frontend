@@ -12,6 +12,7 @@ import { EventShowComponent } from "../views/events/event-show/event-show.compon
 import { SightShowComponent } from "../views/sights/sight-show/sight-show.component";
 import {FiltersNotButtonComponent} from "../components/filters_not_button/filters_not_button.component"
 import { CalendulaComponent } from "../components/calendula/calendula.component";
+import { NoPathComponent } from "../views/no-path/no-path.component";
 
 export const publicRoutes: Routes = [
     {
@@ -26,7 +27,7 @@ export const publicRoutes: Routes = [
     },
     {
       path: '',
-      redirectTo: 'home',
+      component: NoPathComponent,
       pathMatch: 'full'
     },
     {
