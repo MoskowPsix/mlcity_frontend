@@ -15,6 +15,7 @@ import {Swiper} from 'swiper/types'
 import { SightsService } from 'src/app/services/sights.service'
 import { CommentsService } from 'src/app/services/comments.service'
 import numeral from 'numeral'
+import { HelpersService } from 'src/app/services/helpers.service'
 register()
 
 @Component({
@@ -33,9 +34,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     private vkService: VkService,
     private cdr: ChangeDetectorRef,
     private sanitizer:DomSanitizer,
+    private helpers: HelpersService,
 
   ) { }
-  
+
   private readonly destroy$ = new Subject<void>()
 
   @Input() callFromCabinet: boolean = true
@@ -49,6 +51,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   viewElement: boolean = false
   viewElementTimeStart: number = 0
   viewElementTimeEnd: number = 0
+
+  slugName?: string
 
   swiperRef: ElementRef | undefined
   swiper?: Swiper
@@ -88,7 +92,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
           }),
           catchError((err) =>{
             this.toastService.showToast(MessagesErrors.default, 'danger')
-            return of(EMPTY) 
+            return of(EMPTY)
           }),
           takeUntil(this.destroy$)
         ).subscribe()
@@ -98,7 +102,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
           tap(() => {
             this.favorite = !this.favorite
             this.favorite ? this.event.favorites_users_count++ : this.event.favorites_users_count--
-            
+
             this.loadingFavotire = false
           }),
           tap(() => {
@@ -106,12 +110,12 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
           }),
           catchError((err) =>{
             this.toastService.showToast(MessagesErrors.default, 'danger')
-            return of(EMPTY) 
+            return of(EMPTY)
           }),
           takeUntil(this.destroy$)
         ).subscribe()
       }
-    }  
+    }
   }
 
   getUrlFrame(url:string)
@@ -136,7 +140,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
           }),
           catchError((err) =>{
             this.toastService.showToast(MessagesErrors.default, 'danger')
-            return of(EMPTY) 
+            return of(EMPTY)
           }),
           takeUntil(this.destroy$)
         ).subscribe()
@@ -153,7 +157,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
           }),
           catchError((err) =>{
             this.toastService.showToast(MessagesErrors.default, 'danger')
-            return of(EMPTY) 
+            return of(EMPTY)
           }),
           takeUntil(this.destroy$)
         ).subscribe()
@@ -171,21 +175,21 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
             catchError((err) =>{
               //console.log(err)
               this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
-              return of(EMPTY) 
+              return of(EMPTY)
             }),
             takeUntil(this.destroy$)
-          ).subscribe() 
-        //}   
-        return of(count) 
+          ).subscribe()
+        //}
+        return of(count)
       }),
-      tap((count) => {    
-        if (this.event.likes !== null) 
+      tap((count) => {
+        if (this.event.likes !== null)
           this.startLikesCount = this.event.likes.local_count + count // обновляем лайки в представлении
       }),
       catchError((err) =>{
         //console.log(err)
         this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
-        return of(EMPTY) 
+        return of(EMPTY)
       }),
       takeUntil(this.destroy$)
     ).subscribe()
@@ -202,25 +206,25 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
             this.eventsService.setEventUserLiked(this.event.id).pipe(
               tap((res) => {
                 if (res.likedUser){
-                 this.like = true 
+                 this.like = true
                 }
               }),
               catchError((err) =>{
                 //console.log(err)
-                return of(EMPTY) 
+                return of(EMPTY)
               }),
               takeUntil(this.destroy$)
-            ).subscribe() 
+            ).subscribe()
           }
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
         catchError((err) =>{
           //console.log(err)
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
         takeUntil(this.destroy$)
       ).subscribe()
-    }   
+    }
   }
   getCurentNumber(numer: number) {
     if ( numer <= 999 ) {
@@ -242,9 +246,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
 
   ngOnInit() {
     console.log(this.event)
+    this.slugName = this.helpers.translit(this.event.name)
     this.userAuth = this.authService.getAuthState()
     this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
-    this.favorite = this.event.favorites_users_exists! 
+    this.favorite = this.event.favorites_users_exists!
     this.like = this.event.liked_users_exists!
     // window.addEventListener('scrollend', this.scrollEvent, true);
 
@@ -259,7 +264,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     this.swiper = this.swiperRef?.nativeElement.swiper
     setTimeout(() => {
       this.swiperCurrentSlide = this.swiper?.realIndex! + 1
-      this.swiperTotalSlids =  this.swiper?.slides.length 
+      this.swiperTotalSlids =  this.swiper?.slides.length
       this.swiper?.autoplay.start()
       ,1000
     }) // Без этого костыля автоплей работает только в первой карточке
@@ -267,18 +272,18 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
     this.swiper?.on('slideChange', () => {
       this.swiperCurrentSlide = this.swiper?.realIndex! + 1
     })
-    
+
     this.cdr.detectChanges()
   }
 
 
   scrollEvent = (): void => {
-    
+
     const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
     if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {
       if (!this.viewElementTimeStart){
         this.viewElementTimeStart = new Date().getTime()
-      } 
+      }
     } else if ((this.viewElementTimeStart && !this.viewElement) || ((this.viewElementTimeStart && !this.viewElement) && (boundingClientRect.width === 0 && boundingClientRect.width === 0))) {
       this.viewElementTimeEnd = new Date().getTime()
       let time: any
@@ -289,7 +294,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
             delay(100),
             retry(3),
             catchError((err) =>{
-              return of(EMPTY) 
+              return of(EMPTY)
             }),
             takeUntil(this.destroy$)
           ).subscribe()
@@ -298,7 +303,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
             delay(100),
             retry(3),
             catchError((err) =>{
-              return of(EMPTY) 
+              return of(EMPTY)
             }),
             takeUntil(this.destroy$)
           ).subscribe()

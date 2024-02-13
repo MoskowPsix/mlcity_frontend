@@ -1,16 +1,16 @@
 <ion-card>
   <!-- ['/sights', event.id] - было лень переделывать поэтому тут event.id подразумевает ид места, так как компонент универсальный и можно передать место -->
   <div class=" ripple-parent rectangle" >
-    <swiper-container 
-      [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]"
+    <swiper-container
+      [routerLink]="isSight ? ['/sights', event.id, slugName] : ['/events', event.id, slugName]"
       #swiper
-      [modules]="swiperModules" 
-      
+      [modules]="swiperModules"
+
       autoplay-disableOnInteraction="false"
-      [followFinger]="false" 
-      [loop]="true" 
-      [initialSlide]="0" 
-    > 
+      [followFinger]="false"
+      [loop]="true"
+      [initialSlide]="0"
+    >
 
       <ng-container *ngIf="event.files; else notFiles">
         <ng-container *ngFor="let file of event.files">
@@ -30,14 +30,14 @@
 
       <ng-template #notFiles>
         <swiper-slide><img alt="default img" src="/svg/no-photo.svg" /></swiper-slide>
-      </ng-template>     
+      </ng-template>
     </swiper-container>
 
     <ng-container *ngIf="swiperTotalSlids && swiperTotalSlids > 1">
       <div class="slids-pagination">
         {{ swiperCurrentSlide }} / {{ swiperTotalSlids }}
       </div>
-    </ng-container>      
+    </ng-container>
 
     <div class="date" *ngIf="event.date_start && event.date_end">
       <span>НАЧАЛО: {{ event.date_start | date:'d MMM в HH:mm' }}</span>
@@ -57,11 +57,11 @@
     </div>
 
     <ion-card-title>{{ event.name | truncate:[48,'...'] }}</ion-card-title>
-    
+
     <ion-card-header [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
       <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>
     </ion-card-header>
-    
+
     <ion-card-content lines="none">
       <app-read-more text="{{ event.description }}"></app-read-more>
     </ion-card-content>
@@ -74,10 +74,10 @@
         </ion-card>
       </ng-container>
     </ng-container> -->
-    
-    
+
+
   </div>
-  
+
   <ion-item class="footer" lines="none">
     <ion-row slot="start">
       <ion-chip (click)="toggleLike(event.id)" [color]="like ? 'danger' : ''" >
