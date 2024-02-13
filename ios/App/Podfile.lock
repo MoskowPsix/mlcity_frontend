@@ -1,7 +1,7 @@
 PODS:
   - Capacitor (5.5.0):
     - CapacitorCordova
-  - CapacitorApp (5.0.6):
+  - CapacitorApp (5.0.7):
     - Capacitor
   - CapacitorCordova (5.5.0)
   - CapacitorGeolocation (5.0.6):
@@ -45,7 +45,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: 57890b363df14d5d2d5d8461aa23e886cb34da2a
-  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
+  CapacitorApp: 17fecd0e6cb23feafac7eb0939417389038b0979
   CapacitorCordova: 3d3908a3d208a11a75f9df3b18c4405c4de76e1d
   CapacitorGeolocation: 7be5f77abc205c0efe319fff8587a7183e7b0240
   CapacitorHaptics: 1fffc1217c7e64a472d7845be50fb0c2f7d4204c
