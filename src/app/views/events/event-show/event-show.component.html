@@ -39,9 +39,10 @@
     <!-- content -->
     <ng-container *ngIf="event && !loadingEvent">
       <ion-row class="ion-justify-content-center">
-        <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
+        <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
 
           <swiper-container
+          class="swiper-container"
             #swiper
             [modules]="swiperModules"
             autoplay="true"
@@ -59,11 +60,21 @@
           >
             <ng-container *ngIf="event.files && event.files.length; else notFiles">
               <ng-container *ngFor="let file of event.files">
-                <swiper-slide *ngIf="file.local === 1">
+                <swiper-slide class="" *ngIf="file.local === 1">
                   <img alt="img" src="{{host}}:{{port}}{{ file.link }}" />
+                  <div class="swiper-container-img_wrapper">
+                    
+                  </div>
                 </swiper-slide>
                 <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
                   <img alt="img" src="{{ file.link }}" />
+                  <div class="swiper-container-img_wrapper">
+
+                    <div class="swiper-container-header-content">
+                        test
+                    </div>
+                  </div>
+                  
                 </swiper-slide>
                 <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
                   <iframe class="video_content" [src]="getUrlFrame(file.link)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
