@@ -83,7 +83,6 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe((sight:any )=> {
       console.log(sight)
       if(sight)
-        window.history.pushState("abc", "Title", `/sights/${this.sightId}/${this.helpers.translit(sight.name)}`)
         this.sight = sight
         this.titleService.setTitle(sight.name)
         this.metaService.updateTag({name:"description",  content: sight.description})

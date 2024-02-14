@@ -14,7 +14,7 @@ import {FiltersNotButtonComponent} from "../components/filters_not_button/filter
 import { CalendulaComponent } from "../components/calendula/calendula.component";
 import { NoPathComponent } from "../views/no-path/no-path.component";
 
-export const publicRoutes: Routes = [ 
+export const publicRoutes: Routes = [
     {
       path: 'test',
       component: CalendulaComponent,
@@ -37,12 +37,12 @@ export const publicRoutes: Routes = [
     },
     {
       path: 'events/:id',
-      pathMatch: 'full',
+      // pathMatch: 'full',
       component: EventShowComponent,
       canActivate: [CheckAuthCanActiveGuard],
       children: [
-        { 
-          path: ':name', 
+        {
+          path: ':name',
           component: EventShowComponent,
         }
       ]
@@ -63,8 +63,8 @@ export const publicRoutes: Routes = [
       component: SightShowComponent, // Поменять на компонет места
       canActivate: [CheckAuthCanActiveGuard],
       children: [
-        { 
-          path: ':name', 
+        {
+          path: ':name',
           component: SightShowComponent,
         }
       ]
@@ -94,5 +94,5 @@ export const publicRoutes: Routes = [
         }
       ]
     },
-    
+
   ];
