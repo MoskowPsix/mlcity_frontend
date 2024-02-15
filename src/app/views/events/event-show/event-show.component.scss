@@ -2,23 +2,105 @@
     width: 20px;
     height: 20px;
     margin: -4px 4px;
+  
 }
 
+swiper-slide:hover{
+    .swiper-container-img_wrapper{
+        transition: 0.5s opacity;
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgb(63,94,251);
+        background: linear-gradient(180deg, rgba(63,94,251,0) 0%, rgba(0,0,0,0.7483368347338936) 60%, rgba(0,0,0,0.7511379551820728) 61%);
+       }
+}
+
+
+
+.description_mobile{
+    display: none;
+}
+
+
+
 .swiper-container-img_wrapper{
+    transition: 0.5s opacity;
     display: flex;
     align-items: center;
     position: absolute;
     width: 100%;
+    pointer-events: none;
     height: 100%;
     background: rgb(63,94,251);
     background: linear-gradient(180deg, rgba(63,94,251,0) 0%, rgba(0,0,0,0.7483368347338936) 60%, rgba(0,0,0,0.7511379551820728) 61%);
 
+
     .swiper-container-header-content{
+        margin-top: 7rem;
         color: #fff;
-        padding: 2.25rem;
+        padding-left: 2rem;
+        .swiper-container-header-content-organizator_wrapper{
+
+            .swiper-container-header-content-organizator{
+                margin-top: 4rem;
+                font-size: calc(10px + 10*(100vh/1406)); 
+               font-family: "Montserrat-Regular";
+               text-align: start;
+            }
+        }
+
+        .swiper-container-header-content-time{
+           
+            color: #fff;
+            font-family: "Montserrat-Regular";
+            text-align: start;
+            font-size: calc(6px + 6*(100vh/1406)); 
+        }
+       
     }
 
 
+}
+
+
+.tickets-grid{
+    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 80%;
+}
+.ticket-main{
+    margin: 2rem;
+    text-align: center;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 8rem;
+  
+    border-radius: 8px;
+    border: 1px solid #BDBDBD;
+    max-width: 12rem;
+
+    .ticket-main-price{
+        
+        font-family: "Montserrat-SemiBold";
+        font-size: calc( 20px + 4*(100vh/1406));
+        font-weight: 500;
+        max-width: 12rem;
+
+    }
+    .ticket-main-description{
+        font-family: "Montserrat-Light";
+        margin-top: 0.5rem;
+        max-width: 12rem;
+    }
 }
 
 
@@ -38,12 +120,9 @@
 }
 
 .address{
-    
-    color: rgba(75, 73, 73, 0.4);
-    opacity: 85%;
-    font-size: small;
-
-
+    font-family: "Montserrat-Light";
+    color: #000000;
+    font-size: 2rem;
 }
 .map{
     height: 100%;
@@ -63,7 +142,10 @@
     font-style: italic;
 }
 .title{
-    font-size: 2rem;
+    text-align: start;
+    margin-top: 2rem;
+    font-family: "Montserrat-SemiBold";
+    font-size: calc( 16px + 24*(100vh/1406));
     font-weight: 500;
 }
 
@@ -96,9 +178,15 @@
 }
 
 .description{
+    margin-top: 1rem;
+   
+    font-family: 'Montserrat-Light';
     line-height: 1.5;
-    color:#737373;
+ 
 }
+
+
+
 ion-accordion-group{
     --backgroud-color: black;
 }
@@ -137,9 +225,13 @@ ion-accordion-group{
     .map{
         height: 15rem;
     }
+
 }
 
-@media screen and (min-width: 0px) and (max-width: 768px) {
+@media screen and (min-width: 0px) and (max-width: 960px) {
+    .swiper-container-header-content{
+        padding: 2rem;
+    }
     .event-container{
         background-color: white; 
         border-radius: 0; 
@@ -148,14 +240,29 @@ ion-accordion-group{
     .place-skelet{
         height: 98px;
     }
+    .swiper-container-header-content-organizator{
+        font-size: calc(10px + (10 + 10 * 0.7) * ((100vw - 320px) / 1406));
+     }
+     .title{
+        min-width: 80%;
+        font-size: calc(16px + (24 + 24 * 0.7) * ((100vw - 320px) / 1406));
+    }
+    .description{
+        display: none;
+    }
+    .description_mobile{
+        display: block;
+    }
+
 }
   
 @media screen and (min-width: 768px)  {
+  
     swiper-container{
         height: 30rem;
         --width: 100%;
         swiper-slide{
-            height: auto;
+            height: 100%;
         
             img {
                 border-radius: 6px;

@@ -88,6 +88,7 @@ import { SettingsMenuComponent } from './components/settings-menu/settings-menu.
 import { TypesComponent } from './components/types/types.component';
 import { MetrikaModule } from 'ng-yandex-metrika';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { CollapsedTextComponent } from './components/collapsed-text/collapsed-text.component';
 
 
 const mapConfig: YaConfig = {
@@ -156,6 +157,7 @@ registerLocaleData(localeRu, 'ru');
     SightGalleryComponent,
     SettingsMenuComponent,
     TypesComponent,
+    CollapsedTextComponent
     
     
   ],

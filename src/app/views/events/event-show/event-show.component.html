@@ -60,24 +60,74 @@
           >
             <ng-container *ngIf="event.files && event.files.length; else notFiles">
               <ng-container *ngFor="let file of event.files">
-                <swiper-slide class="" *ngIf="file.local === 1">
-                  <img alt="img" src="{{host}}:{{port}}{{ file.link }}" />
+                <swiper-slide style="min-height: 29rem;" class="" *ngIf="file.local === 1">
                   <div class="swiper-container-img_wrapper">
-                    
-                  </div>
-                </swiper-slide>
-                <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
-                  <img alt="img" src="{{ file.link }}" />
-                  <div class="swiper-container-img_wrapper">
-
                     <div class="swiper-container-header-content">
-                        test
+                        <div>
+                            <h1 class="title">{{ event.name }}</h1>
+                          
+                            <div class="swiper-container-header-content-organizator_wrapper" >
+                              <h2 class="swiper-container-header-content-organizator">Организатор: {{ event.sponsor }}</h2>
+                            </div>
+                            <h3 class="swiper-container-header-content-time">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
+                            <div style="display: flex; align-items: center;">
+                              <div style="display: flex; align-items: center;">
+                                <h3 class="swiper-container-header-content-time">{{event.types[0].name}}</h3> 
+                              </div>
+                              <ion-img style="filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(12deg) brightness(105%) contrast(101%);"  alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>
+                            </div>
+                        </div>
+                        
                     </div>
                   </div>
-                  
                 </swiper-slide>
-                <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
+
+                <swiper-slide  style="min-height: 29rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
+                  <img alt="img" src="{{ file.link }}" />
+                  <div class="swiper-container-img_wrapper">
+                    <div class="swiper-container-header-content">
+                        <div>
+                            <h1 class="title">{{ event.name }}</h1>
+                          
+                            <div class="swiper-container-header-content-organizator_wrapper" >
+                              <h2 class="swiper-container-header-content-organizator">Организатор: {{ event.sponsor }}</h2>
+                            </div>
+                            <h3 class="swiper-container-header-content-time">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
+                            <div style="display: flex; align-items: center;">
+                              <div style="display: flex; align-items: center;">
+                                <h3 class="swiper-container-header-content-time">{{event.types[0].name}}</h3> 
+                              </div>
+                              <ion-img style="filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(12deg) brightness(105%) contrast(101%);"  alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>
+                            </div>
+                        </div>
+                        
+                    </div>
+                  </div>
+                </swiper-slide>
+
+
+                <!-- видео -->
+                <swiper-slide  style="min-height: 29rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
                   <iframe class="video_content" [src]="getUrlFrame(file.link)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+                  <div class="swiper-container-img_wrapper">
+                    <div class="swiper-container-header-content">
+                        <div>
+                            <h1 class="title">{{ event.name }}</h1>
+                          
+                            <div class="swiper-container-header-content-organizator_wrapper" >
+                              <h2 class="swiper-container-header-content-organizator">Организатор: {{ event.sponsor }}</h2>
+                            </div>
+                            <h3 class="swiper-container-header-content-time">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
+                            <div style="display: flex; align-items: center;">
+                              <div style="display: flex; align-items: center;">
+                                <h3 class="swiper-container-header-content-time">{{event.types[0].name}}</h3> 
+                              </div>
+                              <ion-img style="filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(12deg) brightness(105%) contrast(101%);"  alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>
+                            </div>
+                        </div>
+                        
+                    </div>
+                  </div>
                 </swiper-slide>
               </ng-container>
             </ng-container>
@@ -91,9 +141,7 @@
 
       <ion-row class="ion-justify-content-center">
         <ion-col size-lg="8" size-md="12" size-xs="12" class="header">
-          <div class="ion-text-center">
-            <span class="title">{{ event.name }}</span>
-          </div>
+      
         </ion-col>
       </ion-row>
 
@@ -117,33 +165,59 @@
 
                 <ion-icon name="share-social-outline" class="ico share"></ion-icon>
               </div>
-              <div>
-                <ion-icon name="person" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Организатор мероприятия: </span><span class="sub-title italic">{{ event.sponsor }}</span>
-              </div>
-              <div>
-                <ion-icon name="map" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Место проведения: </span><span class="sub-title italic">{{ event.address }}</span>
-              </div>
-              <div>
-                <!-- <ion-icon name="location" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Координаты: </span><span class="sub-title italic">({{ event.latitude }}, {{ event.longitude }})</span> -->
-              </div>
-              <div>
-                <ion-icon name="calendar-number" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Когда: </span><span class="sub-title italic">{{ event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</span>
-              </div>
-              <div *ngIf="event.types && event.types.length">
-                <ion-icon name="newspaper" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Тип мероприятия: </span><span class="sub-title italic">{{ event.types[0].name }}</span><img alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>
-              </div>
-              <div *ngIf="event.price">
-                <ion-icon name="wallet" color="primary" class="ico-small"></ion-icon>
-                <span class="font-weight-bold sub-title">Билет: </span>
 
-                <!-- <span class="description italic" *ngIf="event.price[0].cost_rub=='0' else DontFree">Бесплатно</span>
-                <ng-template #DontFree>
-                  <span class="description italic">от {{ getMinPrice(event.price)}} до {{ getMaxPrice(event.price) }}</span>
-                </ng-template> -->
+
+
+
+              <div class="content-main">
+
+                <ion-col class="content-main-description">
+
+                  <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
+                    О мероприятии
+                  </div>
+
+                  <div>
+                    <div class="description">{{ event.description }}</div>
+                    <div class="description_mobile">
+                      <app-collapsed-text>
+                        {{ event.description }}
+                      </app-collapsed-text>
+                    </div>
+                  </div>
+
+
+                </ion-col>
+
+
+                <ion-col>
+                  <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
+                    Билеты
+                  </div>
+                    <div class="tickets-grid_wrapper">
+                      <ion-grid class="tickets-grid">
+                        <div  *ngFor="let price of event.price"  class="ticket-main">
+                        
+                           
+                          <div class="ticket-main-price">
+                            {{price.cost_rub}} ₽
+                          </div>
+    
+                          <div  class="ticket-main-description"> 
+                            {{price.descriptions}}
+                          </div>
+                            
+                        </div>
+                        
+                      </ion-grid>
+                    </div>
+                 
+                </ion-col>
               </div>
-              <div>
-                <span class="description italic">{{ event.description }}</span>
-              </div>
+
+           
+             
+             
             </ion-col>
 
 
@@ -170,21 +244,21 @@
           <ion-row class="events-map-container">
             <ion-accordion-group>
             <ion-accordion *ngFor="let place of places; let i= index" (click)="setActivePlace(i)" class="seance">
-              <ion-item slot="header" color="rgba(211, 207, 207, 0.45)">
+              <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
 
                 <ion-label *ngIf="!(place.location.location_parent.name=='РФ'); else otherAddress">
-                  {{ place.location.name }}, {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
-
+                  {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
                 </ion-label>
 
                 <ng-template #otherAddress>
-                <ion-label>
-                  {{ place.location.name }} <br> <p class="address">{{ place.address }}</p>
-                </ion-label>
+                
+                 <h3 class="address">{{ place.address }}</h3>
+                
                 </ng-template>
 
 
               </ion-item>
+
               <div slot="content" class="ion-padding">
                 <app-place-info [place]="place" [place_date]="place.seanses"  *ngIf="place.active" [load_seances]="place.active"></app-place-info>
               </div>

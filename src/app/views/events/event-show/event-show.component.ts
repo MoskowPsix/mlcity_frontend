@@ -38,7 +38,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   port: string = environment.BACKEND_PORT
 
   eventId?: number
-  event?: IEvent
+  event?: any
   places: any[] = []
   loadingEvent: boolean = true
   loadPlace: boolean = false
@@ -87,12 +87,12 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       retry(3),
       tap(() => this.loadingEvent = false),
       takeUntil(this.destroy$)
-    ).subscribe((event:IEvent )=> {
+    ).subscribe((event: any )=> {
       if(event)
         this.event = event
         this.titleService.setTitle(event.name)
         this.metaService.updateTag({name: "description", content: event.description})
-
+        console.log(event)
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     });
   }
