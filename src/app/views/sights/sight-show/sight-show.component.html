@@ -146,7 +146,22 @@
             <ion-row class="ion-justify-content-center">
               <ion-col size-lg="12" size-md="12" size-xs="12" class="left-block">
         
+                <div class="social-buttons">
+                  <div class="likes">
+                    <ion-icon name="chatbox-outline" class="ico"></ion-icon>
+                    <span >{{ sight.comments.length }}</span>
+                  </div>
+                  <div class="likes">
+                    <ion-icon *ngIf="!loadingLike" (click)="toggleLike(sight.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
+                    <ion-spinner *ngIf="loadingLike"></ion-spinner>
+                    <span >{{ startLikesCount }}</span>
+                  </div>
                 
+                  <ion-icon *ngIf="!loadingFavorite" (click)="toggleFavorite(sight.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
+                  <ion-spinner *ngIf="loadingFavorite"></ion-spinner>
+              
+                  <ion-icon name="share-social-outline" class="ico share"></ion-icon>
+                </div>
   
   
   
@@ -171,7 +186,7 @@
                   </ion-col>
   
   
-                  <ion-col>
+                  <ion-col *ngIf="sight.price !== null">
                     <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
                       Билеты
                     </div>
@@ -194,21 +209,33 @@
                       </div>
                    
                   </ion-col>
-                </div>
-  
-             
-               
-               
-              </ion-col>
-  
-  
-  
-              <!-- <ion-col size-lg="6" size-md="12" size-xs="12">
-                <div class="map">
-                  <ya-map
+
+
+                  <ion-col>
+                    <div class="title">
+                      Время работы
+                    </div>
+
+                    <div *ngIf=' sight.work_time !== "" ' class="simple-text">
+                      {{sight.work_time}}
+                    </div>
+                    
+                    <div style="padding: 0.1rem;" *ngIf=' sight.work_time == "" ' class="simple-text">
+                        Не указано
+                    </div>
+                  </ion-col>
+
+                  <ion-col>
+                    <h2 class="title">Адрес</h2>
+                    <h3 class="simple-text">{{sight.address}}</h3>
+                  </ion-col>
+
+
+                  <div class="map" >
+                    <ya-map 
                     (ready)="onMapReady($event)"
-                    [zoom]="15"
-                    [center]="[event.latitude, event.longitude]"
+                    [zoom]="15"  
+                    [center]="[sight.latitude, sight.longitude]"
                     [state]="{controls: ['zoomControl','fullscreenControl']}"
                     [options]="{
                       yandexMapDisablePoiInteractivity: true,
@@ -219,8 +246,21 @@
                     }"
                   >
                   </ya-map>
+                  </div>
+                    
+                   
+                           
+               
                 </div>
-              </ion-col> -->
+  
+             
+               
+               
+              </ion-col>
+  
+  
+  
+          
             </ion-row>
            
   
@@ -241,32 +281,16 @@
       <ng-container *ngIf="!sight && !loadingSight">
         <app-no-data/>
       </ng-container>
+      <!-- <app-comments-list [comments]="sight.comments" [isSight]="true" [event_id]="sight.id"></app-comments-list -->
     </div>
     
   </ion-content>
 
 
 
- <!-- <app-comments-list [comments]="sight.comments" [isSight]="true" [event_id]="sight.id"></app-comments-list>
+ 
 
 
 
 
-   <!-- <ion-col size-lg="6" size-md="12" size-xs="12">
-                <div class="map">
-                  <ya-map 
-                    (ready)="onMapReady($event)"
-                    [zoom]="15"  
-                    [center]="[sight.latitude, sight.longitude]"
-                    [state]="{controls: ['zoomControl','fullscreenControl']}"
-                    [options]="{
-                      yandexMapDisablePoiInteractivity: true,
-                      minZoom:1,
-                      maxZoom:18,
-                      suppressMapOpenBlock: true,
-                      suppressObsoleteBrowserNotifier: true
-                    }"
-                  >
-                  </ya-map>
-                </div>        
-              </ion-col> -->
+  
