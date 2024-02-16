@@ -11,6 +11,13 @@
 
 ion-item {
 
+
+}
+
+.main-title{
+
+  font-family: "Montserrat-Bold";
+
 }
 
 .about-container {
@@ -24,10 +31,20 @@ ion-item {
     justify-content: space-between;
     padding: 6rem;
     .main-list-item-description{
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+   
       max-width: 50%;
     }
    }
    
+
+   .description{
+      
+    
+    font-family: "Montserrat-Regular";
+   }
 
    
 
@@ -57,6 +74,11 @@ ion-item {
   }
   .about-container-mobail{
     display: block;
+  }
+
+
+  .description{
+    font-family: "Montserrat-Regular";
   }
 
 }
