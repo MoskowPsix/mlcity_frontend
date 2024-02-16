@@ -1,11 +1,11 @@
 <ion-content>
     <!-- skeleton animation -->
-    <div class="pb-2rem">
+    <div class="pb-2rem" style="background: #fff;" >
       <ng-container *ngIf="loadingSight">
         <ion-row class="ion-justify-content-center">
-          <ion-col size-lg="8" size-md="12" size-xs="12"> 
+          <ion-col size-lg="10" size-md="12" size-xs="12"> 
             <ion-row class="ion-justify-content-center">
-              <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
+              <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
                 <ion-skeleton-text [animated]="true" style="height: 30rem;" />
               </ion-col>
             </ion-row>
@@ -39,9 +39,10 @@
       <!-- content -->
       <ng-container *ngIf="sight && !loadingSight">
         <ion-row class="ion-justify-content-center">
-          <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
+          <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
     
-            <swiper-container 
+            <swiper-container
+              class="swiper-container" 
               #swiper
               [modules]="swiperModules" 
               autoplay="true"
@@ -59,71 +60,199 @@
             >       
               <ng-container *ngIf="sight.files && sight.files.length; else notFiles">
                 <ng-container *ngFor="let file of sight.files">
-                  <swiper-slide *ngIf="file.local === 1">
-                    <img alt="img" src="{{host}}:{{port}}{{ file.link }}" />
+                 
+                  <swiper-slide style="min-height: 29rem;" class="" *ngIf="file.local === 1">
+                    <div class="swiper-container-img_wrapper">
+                      <div class="swiper-container-header-content">
+                          <div>
+                              <h1 class="title">{{ sight.name }}</h1>
+                            
+                              <div class="swiper-container-header-content-organizator_wrapper" >
+                                <h2 *ngIf="sight.sponsor != ''" class="swiper-container-header-content-organizator">Организатор: {{ sight.sponsor}}</h2>
+                              </div>
+      
+                              <div style="display: flex; align-items: center; margin-top:2rem;">
+                                <div style="display: flex; align-items: center; ">
+                                  <h3 class="swiper-container-header-content-time">{{sight.types[0].name}}</h3> 
+                                  <ion-img style="filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(12deg) brightness(105%) contrast(101%);"  alt="ava" src="{{host}}:{{port}}{{sight.types[0].ico}}" class="ico-small"/>
+                                </div>
+                              </div>
+                          </div>
+                            
+                      </div>
+                    </div>
                   </swiper-slide>
-                  <swiper-slide *ngIf="file.local === 0">
+
+
+
+
+
+
+                  <swiper-slide style="min-height: 29rem;" *ngIf="file.local === 0">
                     <img alt="img" src="{{ file.link }}" />
+                    <div class="swiper-container-img_wrapper">
+                      <div class="swiper-container-header-content">
+                          <div>
+                              <h1 class="title">{{ sight.name }}</h1>
+                            
+                              <div class="swiper-container-header-content-organizator_wrapper" >
+                                <h2 *ngIf="sight.sponsor != ''" class="swiper-container-header-content-organizator">Организатор: {{ sight.sponsor}}</h2>
+                              </div>
+      
+                              <div style="display: flex; align-items: center; margin-top:2rem;">
+                                <div style="display: flex; align-items: center; ">
+                                  <h3 class="swiper-container-header-content-time">{{sight.types[0].name}}</h3> 
+                                  <ion-img style="filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(12deg) brightness(105%) contrast(101%);"  alt="ava" src="{{host}}:{{port}}{{sight.types[0].ico}}" class="ico-small"/>
+                                </div>
+                              </div>
+                          </div>
+                            
+                      </div>
+                    </div>
                   </swiper-slide>
                 </ng-container>
               </ng-container>
         
               <ng-template #notFiles>
-                <swiper-slide><img alt="default img" src="/svg/no-photo.svg" /></swiper-slide>
+                <swiper-slide>
+                  <img alt="default img" src="/svg/no-photo.svg" />
+                  <div class="swiper-container-img_wrapper">
+                    <div class="swiper-container-header-content">
+                        <div>
+                            <h1 class="title">{{ sight.name }}</h1>
+                          
+                            <div class="swiper-container-header-content-organizator_wrapper" >
+                              <h2 *ngIf="sight.sponsor != ''" class="swiper-container-header-content-organizator">Организатор: {{ sight.sponsor}}</h2>
+                            </div>
+    
+                            <div style="display: flex; align-items: center; margin-top:2rem;">
+                              <div style="display: flex; align-items: center; ">
+                                <h3 class="swiper-container-header-content-time">{{sight.types[0].name}}</h3> 
+                                <ion-img style="filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(12deg) brightness(105%) contrast(101%);"  alt="ava" src="{{host}}:{{port}}{{sight.types[0].ico}}" class="ico-small"/>
+                              </div>
+                            </div>
+                        </div>
+                          
+                    </div>
+                  </div>
+                </swiper-slide>
               </ng-template>     
             </swiper-container>
           </ion-col>
         </ion-row>
     
         <ion-row class="ion-justify-content-center">
-          <ion-col size-lg="8" size-md="12" size-xs="12" class="header">
-            <div class="ion-text-center">
-              <span class="title">{{ sight.name }}</span>
-            </div>
+          <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
+            <ion-row class="ion-justify-content-center">
+              <ion-col size-lg="12" size-md="12" size-xs="12" class="left-block">
+        
+                
+  
+  
+  
+                <div class="content-main">
+  
+                  <ion-col class="content-main-description">
+  
+                    <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
+                      О достопримечательности
+                    </div>
+  
+                    <div>
+                      <div class="description">{{ sight.description }}</div>
+                      <div class="description_mobile">
+                        <app-collapsed-text>
+                          {{ sight.description }}
+                        </app-collapsed-text>
+                      </div>
+                    </div>
+  
+  
+                  </ion-col>
+  
+  
+                  <ion-col>
+                    <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
+                      Билеты
+                    </div>
+                      <div class="tickets-grid_wrapper">
+                        <ion-grid class="tickets-grid">
+                          <div  *ngFor="let price of sight.price"  class="ticket-main">
+                          
+                             
+                            <div class="ticket-main-price">
+                              {{price.cost_rub}} ₽
+                            </div>
+      
+                            <div  class="ticket-main-description"> 
+                              {{price.descriptions}}
+                            </div>
+                              
+                          </div>
+                          
+                        </ion-grid>
+                      </div>
+                   
+                  </ion-col>
+                </div>
+  
+             
+               
+               
+              </ion-col>
+  
+  
+  
+              <!-- <ion-col size-lg="6" size-md="12" size-xs="12">
+                <div class="map">
+                  <ya-map
+                    (ready)="onMapReady($event)"
+                    [zoom]="15"
+                    [center]="[event.latitude, event.longitude]"
+                    [state]="{controls: ['zoomControl','fullscreenControl']}"
+                    [options]="{
+                      yandexMapDisablePoiInteractivity: true,
+                      minZoom:1,
+                      maxZoom:18,
+                      suppressMapOpenBlock: true,
+                      suppressObsoleteBrowserNotifier: true
+                    }"
+                  >
+                  </ya-map>
+                </div>
+              </ion-col> -->
+            </ion-row>
+           
+  
+  
           </ion-col>
         </ion-row>
     
-        <ion-row class="ion-justify-content-center">
+       
+    
+        <ion-row *ngIf="sight.materials" class="ion-justify-content-center">
           <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
-            <ion-row class="ion-justify-content-center">         
-              <ion-col size-lg="6" size-md="12" size-xs="12" class="left-block">
-                <div class="social-buttons">
-                  <div class="likes">
-                    <ion-icon name="chatbox-outline" class="ico"></ion-icon>
-                    <span >{{ sight.comments.length }}</span>
-                  </div>
-                  <div class="likes">
-                    <ion-icon *ngIf="!loadingLike" (click)="toggleLike(sight.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
-                    <ion-spinner *ngIf="loadingLike"></ion-spinner>
-                    <span >{{ startLikesCount }}</span>
-                  </div>
-                
-                  <ion-icon *ngIf="!loadingFavorite" (click)="toggleFavorite(sight.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
-                  <ion-spinner *ngIf="loadingFavorite"></ion-spinner>
-              
-                  <ion-icon name="share-social-outline" class="ico share"></ion-icon>
-                </div>
-                <div>
-                  <ion-icon name="person" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Организатор мероприятия: </span><span class="sub-title italic">{{ sight.sponsor }}</span>
-                </div>
-                <div>
-                  <ion-icon name="map" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Место проведения: </span><span class="sub-title italic">{{ sight.address }}</span>
-                </div>
-                <div>
-                  <ion-icon name="location" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Координаты: </span><span class="sub-title italic">({{ sight.latitude }}, {{ sight.longitude }})</span>
-                </div>
-                <div *ngIf="sight.types && sight.types.length">
-                  <ion-icon name="newspaper" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Тип мероприятия: </span><span class="sub-title italic"><img alt="ava" src="{{host}}:{{port}}{{sight.types[0].ico}}" class="ico-small"/>{{ sight.types[0].name }}</span>
-                </div>
-                <div *ngIf="sight.price">
-                  <ion-icon name="wallet" color="primary" class="ico-small"></ion-icon><span class="font-weight-bold sub-title">Билет: </span><span class="description italic">{{ sight.price }} руб.</span>
-                </div>
-                <div>
-                  <span class="description italic">{{ sight.description }}</span>
-                </div>    
-              </ion-col>
-  
-              <ion-col size-lg="6" size-md="12" size-xs="12">
+            {{ sight.materials }}
+          </ion-col>
+        </ion-row>
+    
+      </ng-container>
+    
+      <ng-container *ngIf="!sight && !loadingSight">
+        <app-no-data/>
+      </ng-container>
+    </div>
+    
+  </ion-content>
+
+
+
+ <!-- <app-comments-list [comments]="sight.comments" [isSight]="true" [event_id]="sight.id"></app-comments-list>
+
+
+
+
+   <!-- <ion-col size-lg="6" size-md="12" size-xs="12">
                 <div class="map">
                   <ya-map 
                     (ready)="onMapReady($event)"
@@ -140,25 +269,4 @@
                   >
                   </ya-map>
                 </div>        
-              </ion-col>
-            </ion-row>
-            <app-comments-list [comments]="sight.comments" [isSight]="true" [event_id]="sight.id"></app-comments-list>
-            
-          </ion-col>
-        </ion-row>
-    
-        <ion-row *ngIf="sight.materials" class="ion-justify-content-center">
-          <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
-            {{ sight.materials }}
-          </ion-col>
-        </ion-row>
-    
-      </ng-container>
-    
-      <ng-container *ngIf="!sight && !loadingSight">
-        <app-no-data/>
-      </ng-container>
-    </div>
-    
-  </ion-content>
-  
+              </ion-col> -->

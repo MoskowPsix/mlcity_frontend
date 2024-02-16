@@ -98,7 +98,7 @@
         <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
 
     
-
+          <div *ngIf="currentType == 0">Тип не выбран</div>
           <app-types [types]="types" (typeOutput)="receiveType($event)"></app-types>
         </ion-row>
 

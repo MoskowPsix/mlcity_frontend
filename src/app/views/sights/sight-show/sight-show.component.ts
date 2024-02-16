@@ -35,7 +35,7 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   port: string = environment.BACKEND_PORT
 
   sightId?: number
-  sight?: ISight
+  sight?: any
   loadingSight: boolean = true
 
   map!: YaReadyEvent<ymaps.Map>;
@@ -168,6 +168,7 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    console.log(this.sight)
     //Получаем ид ивента из параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.sightId = params['id'];

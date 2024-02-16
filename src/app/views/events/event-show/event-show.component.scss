@@ -122,7 +122,7 @@ swiper-slide:hover{
 .address{
     font-family: "Montserrat-Light";
     color: #000000;
-    font-size: 2rem;
+    font-size: calc( 16px + 24*(100vh/1406));
 }
 .map{
     height: 100%;
@@ -148,6 +148,9 @@ swiper-slide:hover{
     font-size: calc( 16px + 24*(100vh/1406));
     font-weight: 500;
 }
+
+
+
 
 .events-map-container{
     display: block;
@@ -246,6 +249,9 @@ ion-accordion-group{
      .title{
         min-width: 80%;
         font-size: calc(16px + (24 + 24 * 0.7) * ((100vw - 320px) / 1406));
+    }
+    .address{
+        font-size: calc(14px + (2 + 2 * 0.7) * ((100vw - 320px) / 1406));
     }
     .description{
         display: none;

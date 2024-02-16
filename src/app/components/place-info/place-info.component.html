@@ -38,7 +38,7 @@
                 <ion-col style="max-width:90px">
                 <div style="display: flex;">
                   <div class="vertical-text" [ngClass]="{'day-color': (dayWeek(seance.dates_start) === 6) || (dayWeek(seance.date_start) === 0) }">
-                    {{ seance.dateStart|date:'EE' }}
+                    {{ seance.date_start|date:'EE' }}
                   </div>
                   <div>
                     <p class="seance-time-day" >{{ seance.date_start|date:'d' }}</p>
