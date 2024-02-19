@@ -117,6 +117,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   sightsList: any[] = []
   dectedDataIvalid:boolean=false;
   priceArrayForm: any[] = []
+
+  isNextButtonClicked: boolean=false
+  placeValid: boolean = false
+  seansValid: boolean = false
   
   //nextButtonDisable: boolean = false
 
@@ -143,6 +147,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private router: Router,
     private yaGeocoderService: YaGeocoderService) {}
    
+    nextStep() {
+      this.isNextButtonClicked = true
+   
+      // setTimeout(() => {
+      //   this.isNextButtonClicked = false;
+      // }, 10000);
+    }
     
     onAdd(event:Event) {
       this.count++
@@ -599,8 +610,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Клик по кнопке веперед
   stepNext(){
     this.stepCurrency++
- 
-   
   }
 
   //Клик по нкопке назад
@@ -663,29 +672,29 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           return false
         }
       case 3:
-        let placeValid:boolean = false
-        let seansValid:boolean = false
+        // let placeValid:boolean = false
+        // let seansValid:boolean = false
       
           this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
 
             item.controls.seances.value.forEach((item_sean: any, i_sean: number) => {
               if(item_sean.controls.dateStart.value >= item_sean.controls.dateEnd.value){
-                seansValid = false
+                this.seansValid = false
               } else {
-                seansValid = true
+                this.seansValid = true
               } 
             })
             
             if(item.controls.address.value.length > 0 ||item.controls.address.value){
-              placeValid =  true
+              this.placeValid =  true
             }
             else{
-              placeValid =  false
+              this.placeValid =  false
             }
 
           })
 
-          if(placeValid && seansValid){
+          if(this.placeValid && this.seansValid){
             return false
           }
           else
@@ -727,6 +736,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     
   }
 
+  getMessage():string {
+    if (!this.placeValid && !this.seansValid) {
+      return 'Выберите место и время мероприятия, чтобы перейти на следующий шаг'
+    } else if (!this.placeValid) {
+      return 'Выберите место мероприятия, чтобы перейти на следующий шаг'
+    } else if (!this.seansValid) {
+      return 'Выберите время мероприятия, чтобы перейти на следующий шаг'
+    } else {
+      return ''
+    }
+  }
   
   stepIsValid(step:number = this.stepStart){
     switch (step) {

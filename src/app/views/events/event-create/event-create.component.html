@@ -10,7 +10,9 @@
 
 
       <div class="btnsWrapper btnsWrapperNext">
+        <div (click)="nextStep()">
         <ion-button class="buttonsNavigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        </div>
         <ion-button class="buttonsNavigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
       </div>
 
@@ -98,15 +100,20 @@
         <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
 
     
-          <div *ngIf="currentType == 0">Тип не выбран</div>
+      <ion-label *ngIf="isNextButtonClicked == true && currentType == 0 " class="pick">Выберите тип, чтобы перейти на следующий шаг</ion-label>
+
+    
           <app-types [types]="types" (typeOutput)="receiveType($event)"></app-types>
         </ion-row>
 
 
       <!-- шаг 2 -->
       <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center">
+        <ion-label *ngIf="isNextButtonClicked == true && createEventForm.controls['name'].invalid || createEventForm.controls['sponsor'].invalid == true" class="pick">Введите данные, чтобы перейти на следующий шаг</ion-label>
 
         <ion-col *ngIf="stepCurrency === 1" @fade>
+
+
 
           <ion-column class="stepSecond">
 
@@ -182,6 +189,8 @@
       <!-- шаг 3 -->
 
       <ion-row style="display: flex; justify-content: center;"  [hidden]="stepCurrency !== 2">
+
+        <ion-label *ngIf="isNextButtonClicked == true && createEventForm.controls['description'].invalid == true" class="pick">Введите информацию о мероприятии, чтобы перейти на следующий шаг</ion-label>
 
 
         <ion-modal class="modal" backdropDismiss="false" [isOpen] ="openModalGroupValue" [canDismiss]="openModalGroupValue">
@@ -626,6 +635,9 @@
 
       <!-- шаг 4 -->
       <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
+
+        <ion-label *ngIf="isNextButtonClicked == true" class="pick">{{ getMessage() }}</ion-label>
+
         <!-- <ion-button (click)="searchMinSeans()">test</ion-button> -->
         <ion-col *ngIf="stepCurrency === 3" @fade>
          
@@ -633,7 +645,7 @@
               <ng-container class="" *ngFor="let array of placeArrayForm; let i = index" [formGroup]="createEventForm.controls['places'].value[i]">
                 <ion-col class="place-header">
                   <div style="display: flex; justify-content: space-between;">
-                    <h2>Место провидения {{i+1}}</h2>
+                    <h2>Место проведения {{i+1}}</h2>
                     <ion-chip style="max-width: 7rem; text-align: center; margin-left: 1rem;" color="danger" (click)="deletePlaceForm(i)">Удалить
                     </ion-chip>
                     <ion-icon (click)="getPlaceId(place)" name="caret-down-outline" style="width: 2rem; height: 5rem; margin-left: auto; transition: 0.5s; cursor: pointer;"
