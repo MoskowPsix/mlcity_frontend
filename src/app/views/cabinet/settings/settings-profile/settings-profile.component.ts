@@ -57,6 +57,25 @@ export class SettingsProfileComponent  implements OnInit {
     return this.formData
   }
 
+  deleteUser() {
+    this.loadingService.showLoading()
+    this.userService.deleteUser().pipe(
+      takeUntil(this.destroy$),
+      catchError((err)=>{
+        if(err.status == 403 || err.status == 401){
+          this.authService.logout()
+        }
+        this.loadingService.hideLoading()
+        this.toastService.showToast('Не удалось удалить профиль', 'danger')
+        return of(EMPTY)
+      }),
+    ).subscribe((response => {
+      this.toastService.showToast('Профиль удалён', 'success')
+      this.loadingService.hideLoading()
+      this.authService.logout()
+    }))
+  }
+
   onSubmit(){
 
     if (this.resetForm.status=='VALID'){

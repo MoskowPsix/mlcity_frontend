@@ -42,6 +42,10 @@ export class UserService {
     this.user.next(null)
   }
 
+  deleteUser() {
+    return this.http.delete<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users`)
+  }
+
   changeName(data: FormData): Observable<any>{
     // return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/profile/users`,{'new_name':data.get('new_name'), 'avatar':data.get('avatar')})
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/profile/users`,data)

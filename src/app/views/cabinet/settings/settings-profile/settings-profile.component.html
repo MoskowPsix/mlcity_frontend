@@ -38,6 +38,9 @@
         <ion-row class="ion-justify-content-center" slot="end">
             <ion-button class="form-button" type="submit">Сохранить</ion-button>
         </ion-row>
+        <ion-row class="ion-justify-content-center" slot="end">
+          <ion-button id="open-modal" expand="block" color="danger">Удалить профиль</ion-button>
+        </ion-row>
         </ion-list>
       </ion-col>
         
@@ -46,3 +49,22 @@
   </ion-card>
   </div>
 </ng-container>
+
+
+<!-- Модальное окно удаления профиля -->
+
+<ion-modal #modal style="--height: auto;" trigger="open-modal" [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title >Удалить свой профиль?</ion-title>
+        <!-- <ion-buttons slot="end">
+          <ion-button (click)="modal.dismiss()">Close</ion-button>
+        </ion-buttons> -->
+      </ion-toolbar>
+    </ion-header>
+      <ion-button (click)="deleteUser(); modal.dismiss()" color="danger" fill="solid">Удалить профиль</ion-button>
+      <ion-button (click)="modal.dismiss()">Отмена</ion-button>
+  </ng-template>
+</ion-modal>
+
