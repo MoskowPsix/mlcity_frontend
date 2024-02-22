@@ -47,7 +47,6 @@ export class SightGalleryComponent  implements OnInit {
 
 
   mainImg(event:any, img: any = null){
-    console.log(event.target)
     let MainImg:any = document.getElementsByClassName("mainImgBlock")
     MainImg.src = event.srcElement.currentSrc
     this.sightModalArray[0].link =  MainImg.src
@@ -67,7 +66,6 @@ export class SightGalleryComponent  implements OnInit {
   changeFile(event:any){
       for (var i = 0; i < event.target.files.length; i++) {
             this.uploadFiles.push(event.target.files[i])
-            console.log(this.uploadFiles)
           }
           this.previewPhoto()
   }
@@ -105,7 +103,6 @@ export class SightGalleryComponent  implements OnInit {
     btnGrandpa?.classList.add('hidden')
     let imgSrc:any = btnParrent?.firstElementChild
     const imgName = imgSrc.getAttribute('data-filename')
-    console.log(imgName)
     if (imgSrc.src && !this.removedImages.includes(imgSrc.src)) {
       this.removedImages.push(imgSrc.src);
       const indexPreview =  this.imagesPreview.indexOf(imgSrc.src)
@@ -137,7 +134,6 @@ export class SightGalleryComponent  implements OnInit {
 
   ngOnInit() {
     this.getMySights();
-    console.log(this.files)
   }
   
   ngOnDestroy(){

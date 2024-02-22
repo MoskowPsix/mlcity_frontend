@@ -96,8 +96,6 @@ export class PlaceInfoComponent  implements OnInit {
     if(this.load_seances){
       this.getSeanses()
     }
-    
-    
     // console.log(this.place_date)
     // console.log(1<=5 && 5<=10)
   }

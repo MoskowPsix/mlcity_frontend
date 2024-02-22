@@ -137,7 +137,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     return `${value} км.`;
   }
   radiusChange(event:any){
-    console.log(event.value)
     this.filterService.setRadiusTolocalStorage(event.value)
   }
   radiusPlus(){

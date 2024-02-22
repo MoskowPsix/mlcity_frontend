@@ -81,7 +81,6 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
       tap(() => this.loadingSight = false),
       takeUntil(this.destroy$)
     ).subscribe((sight:any )=> {
-      console.log(sight)
       if(sight)
         this.sight = sight
         this.titleService.setTitle(sight.name)
@@ -168,7 +167,6 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    console.log(this.sight)
     //Получаем ид ивента из параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.sightId = params['id'];
