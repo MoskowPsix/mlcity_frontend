@@ -82,7 +82,7 @@
                   </div>
                 </swiper-slide>
 
-                <swiper-slide  style="min-height: 29rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
+                <swiper-slide  style="min-height: 38rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
                   <img alt="img" src="{{ file.link }}" />
                   <div class="swiper-container-img_wrapper">
                     <div class="swiper-container-header-content">
@@ -199,10 +199,14 @@
                         <div  *ngFor="let price of event.price"  class="ticket-main">
                         
                            
-                          <div class="ticket-main-price">
+                          <div *ngIf="price.cost_rub > 0" class="ticket-main-price">
                             {{price.cost_rub}} ₽
                           </div>
-    
+                          <div *ngIf='price.cost_rub == 0' class="ticket-main-description">
+                            Вход бесплатный
+                            
+                          </div>
+
                           <div  class="ticket-main-description"> 
                             {{price.descriptions}}
                           </div>
@@ -246,7 +250,7 @@
             <div style="margin-bottom: 2rem;" class="title">
               Расписание
             </div>
-            <ion-accordion-group>
+          <ion-accordion-group style="margin-bottom:1rem;">
             <ion-accordion style="background-color: #fff;" *ngFor="let place of places; let i= index" (click)="setActivePlace(i)" class="seance">
               <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
 
@@ -268,6 +272,7 @@
                 <app-place-info [place]="place" [place_date]="place.seanses"  *ngIf="place.active" [load_seances]="place.active"></app-place-info>
               </div>
             </ion-accordion>
+            
             <div *ngIf="loadPlace==true">
               <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
               <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>

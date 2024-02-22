@@ -25,9 +25,13 @@ swiper-slide:hover{
     display: none;
 }
 
+.swiper-container{
+    min-height: 38rem;
 
+}
 
 .swiper-container-img_wrapper{
+
     transition: 0.5s opacity;
     display: flex;
     align-items: center;
@@ -83,7 +87,7 @@ swiper-slide:hover{
     align-items: center;
     justify-content: center;
     min-height: 8rem;
-  
+    min-width: 8rem;
     border-radius: 8px;
     border: 1px solid #BDBDBD;
     max-width: 12rem;

@@ -88,6 +88,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       tap(() => this.loadingEvent = false),
       takeUntil(this.destroy$)
     ).subscribe((event: any )=> {
+      console.log(event)
       if(event)
         this.event = event
         this.titleService.setTitle(event.name)
@@ -225,6 +226,8 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       this.eventId = params['id'];
     });
 
+    console.log('')
+    
     this.userAuth = this.authService.getAuthState()
     this.getEvent()
     this.getEventPlaces()
