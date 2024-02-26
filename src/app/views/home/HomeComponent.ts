@@ -23,6 +23,7 @@ import { filter } from 'rxjs/operators';
 import { NgxSliderModule, Options   }from'@angular-slider/ngx-slider';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
+import { LocationService } from 'src/app/services/location.service';
 
 @Component({
   selector: 'app-home',
@@ -703,9 +704,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.eventTypeId = value[0]
     });
-
-
-
+    this.getEventsAndSights();
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
