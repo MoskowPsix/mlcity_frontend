@@ -63,7 +63,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   
   inputValue: string = ""
   user: any
-  currentType:number = 0
+  currentType:any = []
   stepStart: number = 0
   stepCurrency: number = 0
   steps:number = 5
@@ -566,7 +566,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.formData.append('address', this.createSightForm.controls['address'].value)
     //this.formData.append('city', this.city)
     this.formData.append('locationId', this.createSightForm.controls['locationId'].value)
-    this.formData.append('type', this.createSightForm.controls['type'].value)
+    this.formData.append('type[]', this.createSightForm.controls['type'].value)
     this.formData.append('status', this.createSightForm.controls['status'].value)
     this.createSightForm.controls['price'].value.forEach((item: any, i: number) => {
       this.formData.append(`price[${i}][cost_rub]`, item.controls.cors_rub.value),
@@ -599,9 +599,19 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   //отправляем данные
   receiveType(event:Event){
-    this.currentType = Number(event);
-    this.createSightForm.controls['type'].setValue(Number(event));
-   
+    let status = false
+    this.currentType.forEach((type: any, key: number) => {
+      if (event == type) {
+        this.currentType.splice(key, 1)
+        this.createSightForm.value.type.splice(key, 1)
+        status = true
+      }
+    })
+    if (!status) {
+      this.currentType.push(Number(event));
+      this.createSightForm.value.type.push(Number(event));
+    }
+    console.log(this.currentType)  
   }
 
   //Клик по шагу в баре
@@ -763,7 +773,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       address: new FormControl('',[Validators.required]),
       locationId: new FormControl('',[Validators.required]),
       coords: new FormControl(coords,[Validators.required, Validators.minLength(2)]),
-      type:  new FormControl({value: '1', disabled: false},[Validators.required]),
+      type:  new FormControl([],[Validators.required]),
       status:  new FormControl({value: this.statusSelected, disabled: false},[Validators.required]),
       files_img: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
       price: new FormControl([],[Validators.required]),
