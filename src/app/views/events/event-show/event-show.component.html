@@ -197,7 +197,6 @@
                     <div class="tickets-grid_wrapper">
                       <ion-grid class="tickets-grid">
                         <div  *ngFor="let price of event.price"  class="ticket-main">
-                        
                            
                           <div *ngIf="price.cost_rub > 0" class="ticket-main-price">
                             {{price.cost_rub}} ₽
@@ -252,21 +251,14 @@
             </div>
           <ion-accordion-group style="margin-bottom:1rem;">
             <ion-accordion style="background-color: #fff;" *ngFor="let place of places; let i= index" (click)="setActivePlace(i)" class="seance">
-              <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
-
+              <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px; margin-bottom: 1rem;" slot="header">
                 <ion-label *ngIf="!(place.location.location_parent.name=='РФ'); else otherAddress">
                   {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
                 </ion-label>
-
                 <ng-template #otherAddress>
-                
                  <h3 class="address">{{ place.address }}</h3>
-                
                 </ng-template>
-
-
               </ion-item>
-
 
               <div style="background-color: #fff; border: 1px solid #E6E6E6; border-radius: 8px; margin-top: -1rem;" slot="content" class="ion-padding">
                 <app-place-info [place]="place" [place_date]="place.seanses"  *ngIf="place.active" [load_seances]="place.active"></app-place-info>
@@ -293,19 +285,19 @@
           </ion-row>
 
 
-          <ion-card><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
+          <ion-card style="margin-bottom: 2rem;"><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
 
 
-
+          <ion-col *ngIf="event.materials" class="">
+            <ion-col size-lg="8" size-md="12" size-xs="12" >
+              Материалы: {{ event.materials }}
+            </ion-col>
+    
+          </ion-col>
         </ion-col>
       </ion-row>
 
-      <ion-row *ngIf="event.materials" class="ion-justify-content-center">
-        <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
-          {{ event.materials }}
-        </ion-col>
 
-      </ion-row>
 
     </ng-container>
 

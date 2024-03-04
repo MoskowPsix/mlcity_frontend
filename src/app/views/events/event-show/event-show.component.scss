@@ -120,13 +120,15 @@ swiper-slide:hover{
 
 .seance{
     background-color: rgba(211, 207, 207, 0.219);
-   
+    margin-bottom: 2rem;
 }
 
 .address{
+    padding-bottom: 1rem;
+    padding-top: 1rem;
     font-family: "Montserrat-Light";
     color: #000000;
-    font-size: calc( 16px + 24*(100vh/1406));
+    font-size: calc( 16px + 10*(100vh/1406));
 }
 .map{
     height: 100%;
