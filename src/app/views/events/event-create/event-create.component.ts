@@ -732,7 +732,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }
        })
 
-        if(this.createEventForm.invalid || this.createEventForm.disabled || !priceValid ){
+        if( this.createEventForm.disabled || !priceValid ){
           return true
         }
         else{
