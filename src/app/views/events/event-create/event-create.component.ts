@@ -667,7 +667,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }
       case 2:
         //шаг третий 
-        if( this.createEventForm.controls['description'].invalid ||  this.createEventForm.hasError('dateInvalid')){
+        if(this.uploadFiles.length !== 0 && this.createEventForm.controls['description'].invalid ||  this.createEventForm.hasError('dateInvalid')){
           if( dataEnd <= dataEndPlus){
             this.dataValid = false
           }else{
