@@ -7,7 +7,7 @@ export const environment = {
   APP_NAME: 'MyLittleCity',
   BASE_URL: 'https://mlcity.ru',
   PORT: '443',
-  BACKEND_URL: 'https://mlcity.ru',
+  BACKEND_URL: 'https://www.mlcity.ru',
   BACKEND_PORT: '3443',
   DOMAIN: 'mlcity.ru',
   vkontakteAuthUrl: `https://www.mlcity.ru:3443/api/social-auth/vkontakte`,

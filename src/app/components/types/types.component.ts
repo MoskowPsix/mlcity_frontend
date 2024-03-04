@@ -23,27 +23,28 @@ export class TypesComponent  implements OnInit {
   @Output() typeOutput = new EventEmitter();
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   typesLoaded: boolean = true
-  buttonClicked:any
+  @Input() buttonClicked:any
   @ViewChild('typeButton')
   typeButton!: ElementRef;
 
 
  addType(id:any){
-  console.log(id)
  this.typeOutput.emit(id.id)
-  
  }
 
  addTypeHtml(element:HTMLElement){
-  this.buttonClicked = element.id
-  console.log(this.buttonClicked)
+  // this.buttonClicked = element.id
  }
 
-  
-
-  addTypeButton(){
-   
-  }
+ checkIds(id: number) {
+  let type_id
+  this.buttonClicked.find((val:any) => {
+    if(id == val) {
+      type_id = true
+    }
+  })
+  return type_id
+ }
 
   ngOnInit() {
 

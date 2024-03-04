@@ -103,7 +103,7 @@
       <ion-label *ngIf="isNextButtonClicked == true && currentType == 0 " class="pick">Выберите тип, чтобы перейти на следующий шаг</ion-label>
 
     
-          <app-types [types]="types" (typeOutput)="receiveType($event)"></app-types>
+          <app-types [buttonClicked]="currentType" [types]="types" (typeOutput)="receiveType($event)"></app-types>
         </ion-row>
 
 

@@ -97,7 +97,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   types: IEventType[] = []
   typesLoaded: boolean = false
   typeSelected: number | null = null
-  currentType:number = 0
+  currentType: any = []
   statuses: IStatus[] = []
   statusesLoaded: boolean = false
   statusSelected: number | null = null
@@ -352,9 +352,19 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //ловим еммит и устанавливаем значение 
   receiveType(event:Event){
-    this.currentType = Number(event);
-    this.createEventForm.controls['type'].setValue(Number(event));
-   
+    let status = false
+    this.currentType.forEach((type: any, key: number) => {
+      if (event == type) {
+        this.currentType.splice(key, 1)
+        this.createEventForm.value.type.splice(key, 1)
+        status = true
+      }
+    })
+    if (!status) {
+      this.currentType.push(Number(event));
+      this.createEventForm.value.type.push(Number(event));
+    }
+    console.log(this.currentType)
   }
 
 
@@ -573,7 +583,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     // this.formData.append('coords', this.createEventForm.controls['coords'].value)
     // this.formData.append('address', this.createEventForm.controls['address'].value)
     // this.formData.append('city', this.city)
-    this.formData.append('type', this.createEventForm.controls['type'].value)
+    this.formData.append('type[]', this.createEventForm.controls['type'].value)
     this.formData.append('status', this.createEventForm.controls['status'].value)
 
     this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
@@ -998,7 +1008,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('',[Validators.required, Validators.minLength(10)]),
       places:new FormControl([], [Validators.required]),
-      type:  new FormControl({value: '1', disabled: false},[Validators.required]),
+      type:  new FormControl([],[Validators.required]),
       status:  new FormControl({value: this.statusSelected, disabled: false},[Validators.required]),
       files: new FormControl('',fileTypeValidator(['png','jpg','jpeg'])),
       price: new FormControl([],[Validators.required]),
