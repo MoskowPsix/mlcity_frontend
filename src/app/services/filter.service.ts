@@ -6,7 +6,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class FilterService {
 
-  private nowDate: Date = new Date()
+  private nowDateStart: Date = new Date()
+  private nowDateEnd: Date = new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 7))
   // public city: BehaviorSubject<any> = new BehaviorSubject(this.setCityTolocalStorage())
   // public region: BehaviorSubject<any> = new BehaviorSubject(this.setRegionTolocalStorage())
   public locationId: BehaviorSubject<any> = new BehaviorSubject(this.getLocationFromlocalStorage() || 0)
@@ -15,8 +16,8 @@ export class FilterService {
   public radius: BehaviorSubject<string> = new BehaviorSubject(this.getRadiusFromlocalStorage() || '1')
   // public startDate: BehaviorSubject<string> = new BehaviorSubject(this.getStartDateFromlocalStorage() || '')
   // public endDate: BehaviorSubject<string> = new BehaviorSubject(this.getEndDateFromlocalStorage() || '') // Ставим + неделю
-  public startDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDate.toISOString())
-  public endDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDate.toISOString()) // Ставим + 2 месяцев
+  public startDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDateStart.toISOString())
+  public endDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDateEnd.toISOString()) // Ставим + 2 месяцев
 
   public dateFiltersSelected:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
   

@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   minZoom = 8;
   clusterer!: ymaps.Clusterer;
   radius: number = 1;
-  date: any = {dateStart: new Date().toISOString(), dateEnd: new Date().toISOString()}
+  date: any = {dateStart: new Date().toISOString(), dateEnd: new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 7)).toISOString()}
   headerHeight: any = document.getElementById('header')
   headerHeightM: any = document.getElementById('header-m')
 
