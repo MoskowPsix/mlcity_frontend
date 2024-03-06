@@ -185,12 +185,12 @@
 
 
        <ion-row class="LoginMainBlock">
-          <ion-header class="LoginMainBlock_header">
+          <div class="LoginMainBlock_header">
             <ion-router-link class="Login_main_link" routerLink="/home">
 
               <div class="Login_logo">
                
-                <ion-div class="Login_logo_wrapper">
+                <ion-item class="Login_logo_wrapper">
 
                   <img *ngIf="true" src="/assets/icons/favicon.png" alt="">
                   <img *ngIf="false"alt="logo" src="/svg/no-photo.svg" />
@@ -199,20 +199,20 @@
                     mlcity
                   </ion-label>
 
-                </ion-div>
+                </ion-item>
 
               </div>
             </ion-router-link>
               
-          </ion-header>
+          </div>
            
-          <ion-div class="Login_inputs_main">
+          <div class="Login_inputs_main">
                 
             <ion-list>
 
                     <ion-item>
                         
-                          <ion-input (input)="MailOrName()" formControlName="name" class="Login_inputs" label="Email input" type="email" placeholder="Email" required> 
+                          <ion-input (input)="MailOrName()" formControlName="name" class="Login_inputs" type="email" placeholder="Электронная почта" required> 
                             <img *ngIf="iconState" class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
                             <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
                           </ion-input>
@@ -229,8 +229,8 @@
                     </div> -->
 
                     <ion-item>
-                          <ion-input formControlName="password" class ="Login_inputs" label="Password input" type="password"   placeholder="Пароль">
-                             <img class="Login_icon" src="/assets/icons/login_password.svg" alt="">
+                          <ion-input formControlName="password" class ="Login_inputs" type="password"   placeholder="Пароль">
+                             <img class="Login_icon" src="/src/assets/icons/login_password.svg" alt="">
                           </ion-input>
                     </ion-item>
 
@@ -241,7 +241,7 @@
 
 
 
-          </ion-div>
+          </div>
 
 
 

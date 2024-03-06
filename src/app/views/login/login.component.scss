@@ -49,8 +49,8 @@ ion-input{
 
 
 .MainBlock {
-        
-
+overflow: auto;    
+--min-height: 80vh;
 background:none;
 border: none;
 
@@ -64,11 +64,11 @@ border: none;
         justify-content: center;
         align-items: center;
         height: 75vh;
-        margin-bottom: 50px;
+        margin-bottom: 10rem;
         .LoginMainBlock{
             --webkit-appearance: none;
             background-color: #FFF;
-            max-width: 366px;
+            width: 366px;
             border: 1px solid #cdcdcd;
             border-radius: 17px;
 

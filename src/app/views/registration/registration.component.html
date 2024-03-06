@@ -4,10 +4,8 @@
       <ion-grid class="Login_wrapper">
         
         <form [formGroup] = 'registerForm' (ngSubmit)="onSubmitReg()">
-  
-  
          <ion-row class="LoginMainBlock">
-            <ion-header class="LoginMainBlock_header">
+            <div class="LoginMainBlock_header" style="margin:auto; padding-top:0.3rem;">
               <ion-router-link class="Login_main_link" routerLink="/home">
   
                 <div class="Login_logo">
@@ -26,14 +24,14 @@
                 </div>
               </ion-router-link>
                 
-            </ion-header>
+            </div>
              
             <ion-div class="Login_inputs_main">
                   
               <ion-list style="text-align: center;">
   
                       <ion-item class="inputDontButton">
-                            <ion-input formControlName="name" class="Login_inputs InputDontButton"  label="name" type="text" placeholder="Имя" [value]="registerForm.value.name" required> 
+                            <ion-input formControlName="name" class="Login_inputs InputDontButton" type="text" placeholder="Имя" [value]="registerForm.value.name" required> 
                               <img class="Login_icon" src="/assets/icons/user.svg" alt="">
                             
                             </ion-input>
@@ -44,7 +42,6 @@
                       <ion-note *ngIf="!nameBusy" style="text-align: center;" color="danger">{{busyName}} уже занято, попробуйте другое</ion-note>
                       <ion-item>
                         <ion-input formControlName = "number" class="Login_inputs emailclass InputDontButton"    
-                         label = "number" 
                          type = "tel" placeholder = "Телефон"   
                          [maskito]="phoneMask"
                          [maskitoElement]="maskPredicate"
@@ -59,7 +56,7 @@
                   </ion-item>
                   <ion-note *ngIf="!busyNumber" style="text-align: center;" color="danger"> Ваш телефон уже зарегестрирован</ion-note>
                       <ion-item>
-                            <ion-input formControlName="email" class="Login_inputs emailclass InputDontButton" label="E-mail" type="text" placeholder="E-mail" required> 
+                            <ion-input formControlName="email" class="Login_inputs emailclass InputDontButton"  type="text" placeholder="E-mail" required> 
                               <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
           
                             </ion-input>
@@ -68,12 +65,12 @@
                       <ion-note *ngIf="!emailBusy" style="text-align: center;" color="danger"> Ваш E-mail уже зарегестрирован</ion-note>
 
                       <ion-item>
-                            <ion-input clear-on-edit = "false" formControlName="password" id="reg_password" class="Login_inputs" label="password" type="text" placeholder="Пароль" [value]="registerForm.value.password" required> 
+                            <ion-input clear-on-edit = "false" formControlName="password" id="reg_password" class="Login_inputs" type="text" placeholder="Пароль" [value]="registerForm.value.password" required> 
                               <button type="button" style="background: none;"><img id="eye_img" (click) = "OpenPassword('reg_password')" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
                             </ion-input>
                       </ion-item>
                       <ion-item>
-                            <ion-input clear-on-edit = "false" formControlName="password_confirmation" class ="Login_inputs reg_password_verfi" label="Password_verfi" type="text" id="confirm_password"  placeholder="Подтверждение пароля">
+                            <ion-input clear-on-edit = "false" formControlName="password_confirmation" class ="Login_inputs reg_password_verfi"  type="text" id="confirm_password"  placeholder="Подтверждение пароля">
                               <button type="button" style="background: none;"><img id="eye_img_confirm" (click) = "OpenPasswordConfirm('confirm_password', $event)" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
                             </ion-input>
                       
