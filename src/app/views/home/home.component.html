@@ -15,10 +15,9 @@
 
 
     <div class="range-radius-main">
-
-      <div class="range-radius-custom" style="height: 208px;">
+      <p class="range-radius-custom-info" >{{radius}}км</p>
+      <div class="range-radius-custom" style="height: 11.5rem;">
         <ion-icon (click)="radiusPlus()" name="add-outline" class="swither-icon-range" color="primary"></ion-icon>
-
           <ngx-slider style="border:none"
           [value]="radius"
           [options]="options"

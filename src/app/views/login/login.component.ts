@@ -137,13 +137,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.loadingService.showLoading()
       this.userService.getUserById().pipe(takeUntil(this.destroy$)).subscribe({
         next: (data: any) => {
-          let timeZone = new Date().getTimezoneOffset()
-          let time = Math.ceil(new Date().getTime() / 100000)
-          let created_time = Math.ceil(new Date(data.user.social_account.created_at).getTime() / 100000)
-          let now_time = time
-          if (created_time === now_time) {
-            this.modalPass = true
-          }
+          // let timeZone = new Date().getTimezoneOffset()
+          // let time = Math.ceil(new Date().getTime() / 100000)
+          // let created_time = Math.ceil(new Date(data.user.social_account.created_at).getTime() / 100000)
+          // let now_time = time
+          // if (created_time === now_time) {
+          //   this.modalPass = true
+          // }
           this.positiveResponseAfterLogin(data)
         },
         error: err => {
@@ -167,7 +167,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginForm.enable()
 
     if (!this.modalPass) {
-      this.router.navigate(['cabinet'])
+      this.router.navigate(['home'])
     }
   }
 
