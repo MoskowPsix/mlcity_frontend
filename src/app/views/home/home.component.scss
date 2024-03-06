@@ -50,6 +50,7 @@
 }
 
 .range-radius-custom-info {
+	text-align: center;
 	height: 1rem;
 	width: 2rem;
 	font-size: 0.8rem;
@@ -194,17 +195,17 @@
 		top: 65%;
 	}
 	.range-radius-main {
-		height: 15rem;
+		height: 16rem;
 		margin-top: 21vh;
 		ngx-slider{
-			height: 10rem;
+			max-height: 4.5rem;
 		}
 	}
 	.range-radius-main{
-		max-height: 232px;
+		max-height: 12rem;
 	}
 	.range-radius-custom{
-		max-height: 124px;
+		
 
 	}
 }
