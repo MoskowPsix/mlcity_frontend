@@ -47,10 +47,8 @@
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Add your description for requiring permission here</string>
-
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Add your description for requiring permission here</string>
-
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Add your description for requiring permission here</string>
 </dict>
