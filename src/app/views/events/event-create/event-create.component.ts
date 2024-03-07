@@ -53,7 +53,7 @@ import { Router } from '@angular/router';
                 '500ms ease-in',
                 style({ opacity: 0 })
             ),
-      ]),   
+      ]),
     ]),
 
   ]
@@ -121,40 +121,40 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   isNextButtonClicked: boolean=false
   placeValid: boolean = false
   seansValid: boolean = false
-  
+
   //nextButtonDisable: boolean = false
 
   placemark!: ymaps.Placemark
   // map!:YaReadyEvent<ymaps.Map>
-  maps: any[] = [] 
+  maps: any[] = []
   createEventForm: FormGroup = new FormGroup({})
 
   constructor(
     private sightServices: SightsService,
     private locationServices: LocationService,
-    private filterService: FilterService, 
+    private filterService: FilterService,
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private eventsService: EventsService,
-    private loadingService: LoadingService, 
-    private toastService: ToastService, 
-    private userService: UserService, 
-    private vkService: VkService, 
-    private eventTypeService: EventTypeService, 
-    private statusesService: StatusesService, 
-    private mapService: MapService, 
+    private loadingService: LoadingService,
+    private toastService: ToastService,
+    private userService: UserService,
+    private vkService: VkService,
+    private eventTypeService: EventTypeService,
+    private statusesService: StatusesService,
+    private mapService: MapService,
     private sanitizer:DomSanitizer,
     private router: Router,
     private yaGeocoderService: YaGeocoderService) {}
-   
+
     nextStep() {
       this.isNextButtonClicked = true
-   
+
       // setTimeout(() => {
       //   this.isNextButtonClicked = false;
       // }, 10000);
     }
-    
+
     onAdd(event:Event) {
       this.count++
     }
@@ -172,37 +172,37 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       }),
       switchMap((user: any) => {
         if(!user?.social_account){
-          this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')   
+          this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')
         } else {
           // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
           return this.vkService.getGroups().pipe(
             switchMap((response: any) => {
               response?.response.items ? this.setVkGroups(response?.response.items) : this.setVkGroups([])
-              return of(EMPTY) 
+              return of(EMPTY)
             }),
             catchError((err) =>{
               //Выкидываем на логин если с ВК проблемы
               this.toastService.showToast(err.error?.message || err.error?.error_msg || MessagesErrors.vkTokenError, 'danger')
               this.loadingService.hideLoading()
               this.authService.logout()
-              return of(EMPTY) 
+              return of(EMPTY)
             })
           )
-        } 
-        return of(EMPTY) 
+        }
+        return of(EMPTY)
       }),
       tap(() => {
-        this.setSteps()  
+        this.setSteps()
       }),
       tap(() => {
-        this.loadingService.hideLoading()  
+        this.loadingService.hideLoading()
       }),
       catchError((err) =>{
         this.toastService.showToast(err.error?.message || err.error?.error_msg || MessagesErrors.default, 'danger')
         this.loadingService.hideLoading()
-        return of(EMPTY) 
+        return of(EMPTY)
       }),
-      takeUntil(this.destroy$)  
+      takeUntil(this.destroy$)
     ).subscribe();
   }
 
@@ -234,7 +234,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.vkGroupSelected = this.vkGroupModalSelected
       this.setVkPostsByGroupID(this.vkGroupModalSelected)
     }
-    this.openModalPostValue = true     
+    this.openModalPostValue = true
  }
 
  saveChangeId(){
@@ -246,7 +246,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
  closeModalPost(){
   this.openModalPostValue = false
-  
+
  }
 
  openModalGroup(){
@@ -277,7 +277,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Выбираем группу
   selectedVkGroup(group_id: any){
     if (group_id.detail.value) {
-      this.vkGroupSelected = group_id.detail.value 
+      this.vkGroupSelected = group_id.detail.value
       this.setVkPostsByGroupID(group_id.detail.value )
     } else {
       this.vkGroupSelected =  null
@@ -289,9 +289,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   setVkPostsByGroupID(group_id: number){
     this.vkService.getPostsGroup(group_id, 30).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.vkGroupPosts = response.response
-   
+
       response.response ? this.vkGroupPostsLoaded = true :  this.vkGroupPostsLoaded = false //для скелетной анимации
-      
+
     })
   }
   // Грузим посты по URL сообщества
@@ -345,10 +345,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.placeArrayForm[num].city = response.location.name
       this.placeArrayForm[num].region = response.location.location_parent.name
       this.locationLoader = false
-    }) 
+    })
   }
 
-  //ловим еммит и устанавливаем значение 
+  //ловим еммит и устанавливаем значение
   receiveType(event:Event){
     let status = false
     this.currentType.forEach((type: any, key: number) => {
@@ -366,10 +366,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
 
 
-  
+
   //Выбор типа
   // selectedType(type_id: any){
-  //   //костыль на проверку id или icordeon 
+  //   //костыль на проверку id или icordeon
   //   if(/^\d+$/.test(type_id.detail.value)){
   //     type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
   //   }
@@ -390,7 +390,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.statusesLoaded = true //для скелетной анимации
       } else {
         this.statusesLoaded = false
-      }  
+      }
     })
   }
 
@@ -398,7 +398,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   getPlaceId(place:any){
     let placeHtml:HTMLElement = place
     this.placeOpen = placeHtml.id
-    
+
     this.placesClose[placeHtml.id].open = !this.placesClose[placeHtml.id].open
   }
   //Выбор типа
@@ -426,20 +426,20 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.maps[num].target.setBounds(new ymaps.Placemark([event.get('coords')[0], event.get('coords')[1]]).geometry?.getBounds()!, {checkZoomRange:false})
     this.maps[num].target.setZoom(17)
   }
- 
+
    // Поиск по улицам
    onMapReady(e: YaReadyEvent<ymaps.Map>, num: number) {
     this.maps[num] = e;
-    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value){   
+    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value){
       const coords: number[] = [Number(this.filterService.getLocationLatitudeFromlocalStorage()), Number(this.filterService.getLocationLongitudeFromlocalStorage())]
       this.addPlacemark(coords, num)
     } else {
       this.mapService.geolocationMapNative(this.maps[num]);
     }
-    const search = new ymaps.SuggestView('search-map-'+num); 
-    
-    search.events.add('select',()=>{ 
-      this.ForwardGeocoder(num) 
+    const search = new ymaps.SuggestView('search-map-'+num);
+
+    search.events.add('select',()=>{
+      this.ForwardGeocoder(num)
       if (!Capacitor.isNativePlatform())  {
         this.ForwardGeocoder(num)
       } else {
@@ -447,7 +447,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         // let coords = this.mapService.ForwardGeocoderNative(this.createEventForm.value.places[num].value.address)
         // this.addPlacemark(coords!)
         this.ForwardGeocoder(num)
-        
+
       }
     })
   }
@@ -464,7 +464,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.maps[num].target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
       this.maps[num].target.setZoom(17)
     } catch (error) {
-     
+
     }
   }
 
@@ -475,7 +475,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     });
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
-      
+
       //this.city=firstGeoObject.getLocalities(0)[0]
       this.createEventForm.controls['places'].value[num].patchValue({address: firstGeoObject.getAddressLine()})
       //this.createEventForm.value.address = firstGeoObject.getAddressLine()
@@ -494,7 +494,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.setLocationForCoords(firstGeoObject.geometry.getCoordinates(),num)
       //this.city=firstGeoObject.getLocalities(0)[0]
 
-    }) 
+    })
   }
 
   //очистка поиска на карте
@@ -502,7 +502,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (event.detail.value == 0){
       this.createEventForm.patchValue({coords: []})
       this.placemark= new ymaps.Placemark([])
-      this.maps[num].target.geoObjects.removeAll() 
+      this.maps[num].target.geoObjects.removeAll()
     }
   }
 
@@ -512,12 +512,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
     for (var i = 0; i < event.target.files.length; i++) {
         this.uploadFiles.push(event.target.files[i])
-      
+
     }
-    
+
     this.createEventForm.patchValue({files: ''}) // Если не обнулять будет ошибка
 
-    this.createImagesPreview()  
+    this.createImagesPreview()
   }
 
   resetUploadInfo(){
@@ -535,7 +535,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.uploadFiles = this.uploadFiles .filter((a) => a ! == img)
   }
 
-  // Заполняем превью фоток 
+  // Заполняем превью фоток
   createImagesPreview(){
     if(this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')){
       this.loadingService.showLoading()
@@ -543,9 +543,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         let reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = () => {
-          this.imagesPreview.push(reader.result as string) 
+          this.imagesPreview.push(reader.result as string)
         }
-      }) 
+      })
       this.loadingService.hideLoading()
     }
   }
@@ -556,7 +556,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       for (var i = 0; i < this.uploadFiles.length; i++) {
         this.formData.append('localFilesImg[]', this.uploadFiles[i])
       }
-    } 
+    }
 
     if(this.vkGroupPostSelected?.attachments.length){
       this.vkGroupPostSelected.attachments.forEach((attachment: any) => {
@@ -570,8 +570,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         if (attachment.link) {
           this.formData.append('vkFilesLink[]', attachment.link.url)
         }
-      }) 
-    } 
+      })
+    }
 
     this.formData.append('name', this.createEventForm.controls['name'].value)
     this.formData.append('sponsor', this.createEventForm.controls['sponsor'].value)
@@ -612,7 +612,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
     return this.formData
   }
-  
+
   //Клик по кнопке веперед
   stepNext(){
     this.stepCurrency++
@@ -627,10 +627,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   goToStep(step: number){
     if(this.stepCurrency !== step){
       this.stepCurrency = step
-      
+
       //this.disabledNextButton()
       this.stepIsValid()
-    }   
+    }
   }
 
   //Блокировка шагов в баре
@@ -645,13 +645,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
     switch(this.stepCurrency){
       case 0:
-       
+
         if(this.currentType <= 0){
           return true
         } else{
           return false
         }
-        
+
         //шаг первый
       case 1:
         //шаг второй
@@ -662,7 +662,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           return false
         }
       case 2:
-        //шаг третий 
+        //шаг третий
         if(this.uploadFiles.length !== 0 && this.createEventForm.controls['description'].invalid ||  this.createEventForm.hasError('dateInvalid')){
           if( dataEnd <= dataEndPlus){
             this.dataValid = false
@@ -672,7 +672,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           // console.log(dataStart)
           // console.log(dataEnd)
           return true
-         
+
         }
         else{
           return false
@@ -680,7 +680,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       case 3:
         // let placeValid:boolean = false
         // let seansValid:boolean = false
-      
+
           this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
 
             item.controls.seances.value.forEach((item_sean: any, i_sean: number) => {
@@ -688,9 +688,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
                 this.seansValid = false
               } else {
                 this.seansValid = true
-              } 
+              }
             })
-            
+
             if(item.controls.address.value.length > 0 ||item.controls.address.value){
               this.placeValid =  true
             }
@@ -707,18 +707,18 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           {
             return true
           }
-        
+
       case 4:
-        
+
       let priceValid = false
       let validValidPrice = false
       this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
-      
+
         if(this.createEventForm.controls['price'].value.length > 1){
           priceValid = this.createEventForm.controls['price'].value.every((item: any) => item.controls['description'].value.length >= 3);
         }
-          
-  
+
+
         else if(this.createEventForm.controls['price'].value.length == 1){
           priceValid =  true
         }
@@ -733,12 +733,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         else{
           return false
         }
-      
+
       default:
         return true
     }
 
-    
+
   }
 
   getMessage():string {
@@ -752,30 +752,30 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       return ''
     }
   }
-  
+
   stepIsValid(step:number = this.stepStart){
     switch (step) {
-    
+
       case 1:
         return this.createEventForm.controls['name'].invalid  ?  false :  true
       case 1:
         return this.createEventForm.controls['sponsor'].invalid  ?  false :  true
-      
+
       case 2:
-        return this.createEventForm.controls['description'].invalid  ? false :  true 
+        return this.createEventForm.controls['description'].invalid  ? false :  true
       case 2:
         return this.createEventForm.hasError('dateInvalid') ?  false :  true
-              
+
       case 4:
-        //return !this.createEventForm.controls['coords'].value.length ? false :  true  
-        return this.createEventForm.controls['places'].invalid ? false :  true 
+        //return !this.createEventForm.controls['coords'].value.length ? false :  true
+        return this.createEventForm.controls['places'].invalid ? false :  true
       default:
         return true
     }
   }
 
   //Проверка шагов и блокировка \ разблокировка кнопок далее \ назад
-  // disabledNextButton(){  
+  // disabledNextButton(){
   //   switch (this.stepCurrency) {
   //     case 1:
   //     case 2:
@@ -786,26 +786,26 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //       break
   //     case 3:
   //      this.createEventForm.controls['name'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break 
+  //       break
   //     case 4:
   //       this.createEventForm.controls['description'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break 
+  //       break
   //     case 6:
   //       this.createEventForm.hasError('dateInvalid') ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break 
+  //       break
   //     case 7:
   //       this.createEventForm.controls['sponsor'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break    
+  //       break
   //     case 9:
   //       !this.createEventForm.controls['coords'].value.length ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break  
+  //       break
   //     default:
   //       break
   //   }
   // }
 
   //Отпрвка формы
-  
+
  onSubmit(){
    this.searchMinSeans()
     //собираем плейсы
@@ -829,14 +829,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.createEventForm.controls['places'].reset()
         //this.city = ''
         this.createEventForm.enable()
-        this.stepCurrency =  this.stepStart 
+        this.stepCurrency =  this.stepStart
         this.router.navigate(['/home']);
       }),
       catchError((err) =>{
         this.toastService.showToast(err.error.message || MessagesErrors.default, 'danger')
         this.createEventForm.enable()
         this.loadingService.hideLoading()
-        return of(EMPTY) 
+        return of(EMPTY)
       }),
       takeUntil(this.destroy$)
     ).subscribe()
@@ -852,7 +852,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       locId = value
       if (value) {
         this.locationServices.getLocationsIds(locId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-         
+
           coords = [response.location.latitude, response.location.longitude]
           this.placeArrayForm.push({city: response.location.name, region: response.location.location_parent.name, sight_id: '', sight_name: '', address: '', coords: coords, seances: [{num_s: 0}] })
         })
@@ -862,11 +862,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.placeArrayForm.push({city: 'Не указан', region: 'Не указан', sight_id: '', sight_name: '', address: '', seances: [{num_s: 0}] })
       }
     })
-      this.createEventForm.controls['places'].value.push( 
+      this.createEventForm.controls['places'].value.push(
         new FormGroup({
           sight_id: new FormControl('', [Validators.minLength(1)]),
           locationId: new FormControl(locId, [Validators.minLength(1), Validators.required]),
-          coords:  new FormControl(coords,[Validators.required, Validators.minLength(2)]), 
+          coords:  new FormControl(coords,[Validators.required, Validators.minLength(2)]),
           address: new FormControl('',[Validators.minLength(1), Validators.required]),
           seances: new FormControl([new FormGroup({
             dateStart: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [Validators.required]),
@@ -885,7 +885,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     )
 
 
-    
+
   }
   deletePrice(num: number) {
     this.createEventForm.controls['price'].value.splice(num, 1)
@@ -961,15 +961,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //ищем минимальный и максимальный плейс
 
     searchMinSeans(){
-      let minSeans:any = { 
+      let minSeans:any = {
         value:{
-          dateStart: new Date().toISOString(), 
+          dateStart: new Date().toISOString(),
           dateEnd: new Date().toISOString()
         }
       }
-      let maxSeans:any = { 
+      let maxSeans:any = {
         value:{
-          dateStart: new Date().toISOString(), 
+          dateStart: new Date().toISOString(),
           dateEnd: new Date().toISOString()
         }
       }
@@ -979,15 +979,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         item.controls['seances'].value.forEach((item_sean: any, i_sean: number) => {
           if(item_sean.value.dateStart < minSeans.value.dateStart){
             minSeans = item_sean
-          
+
           }
           if(item_sean.value.dateEnd > maxSeans.value.dateEnd){
             maxSeans = item_sean
           }
         })
-    
+
       })
-      
+
       this.createEventForm.controls['dateStart'].setValue(minSeans.value.dateStart.slice(0, 19))
       this.createEventForm.controls['dateEnd'].setValue(maxSeans.value.dateEnd.slice(0, 19))
     }
