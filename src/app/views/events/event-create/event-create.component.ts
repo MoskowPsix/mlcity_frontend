@@ -317,9 +317,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.vkGroupPostSelected = null
       this.createEventForm.patchValue({description: '' });
       this.resetUploadInfo()
-      console.log(post.attachments)
     } else {
-      console.log(post.attachments)
       this.vkGroupPostSelected = post
       this.createEventForm.patchValue({description: this.vkGroupPostSelected.text });
     }
@@ -364,7 +362,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.currentType.push(Number(event));
       this.createEventForm.value.type.push(Number(event));
     }
-    console.log(this.currentType)
   }
 
 
@@ -403,7 +400,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.placeOpen = placeHtml.id
     
     this.placesClose[placeHtml.id].open = !this.placesClose[placeHtml.id].open
-    console.log(this.placeOpen)
   }
   //Выбор типа
   selectedStatus(status_id: any){
@@ -725,7 +721,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   
         else if(this.createEventForm.controls['price'].value.length == 1){
           priceValid =  true
-          console.log(this.createEventForm.controls['price'].value.length)
         }
         else{
           priceValid =  false
