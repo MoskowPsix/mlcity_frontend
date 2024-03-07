@@ -56,18 +56,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.titleService.setTitle("Вход на сайт MLCity.")
     this.metaService.updateTag({name:"description", content:"Вход на сайт."})
 
-    let prevPath = this.location.path();
-    this.router
-    .events
-      .pipe(filter(event => (event instanceof NavigationEnd)))
-      .subscribe(() => {
-        const newPath = location.path();
-        this.metrika.hit(newPath, {
-          referer: prevPath,
-          callback: () => { console.log('hit end'); }
-        });
-        prevPath = newPath;
-      });
+    // let prevPath = this.location.path();
+    // this.router
+    // .events
+    //   .pipe(filter(event => (event instanceof NavigationEnd)))
+    //   .subscribe(() => {
+    //     const newPath = location.path();
+    //     this.metrika.hit(newPath, {
+    //       referer: prevPath,
+    //       callback: () => { console.log('hit end'); }
+    //     });
+    //     prevPath = newPath;
+    //   });
   }
 
   loginPhone() {
