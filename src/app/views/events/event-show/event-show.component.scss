@@ -5,6 +5,16 @@
   
 }
 
+.tikets-button{
+    background-color: #6393FF;
+    color: #fff;
+    padding: 0.8rem;
+    font-family: "Montserrat-Medium";
+    font-size:14px;
+    border-radius: 6px;
+}
+
+
 swiper-slide:hover{
     .swiper-container-img_wrapper{
         transition: 0.5s opacity;
@@ -44,13 +54,13 @@ swiper-slide:hover{
 
 
     .swiper-container-header-content{
-        margin-top: 7rem;
+        margin-top: auto;
         color: #fff;
         padding-left: 2rem;
+        padding-bottom: 4rem;
         .swiper-container-header-content-organizator_wrapper{
 
             .swiper-container-header-content-organizator{
-                margin-top: 4rem;
                 font-size: calc(10px + 10*(100vh/1406)); 
                font-family: "Montserrat-Regular";
                text-align: start;
@@ -62,7 +72,7 @@ swiper-slide:hover{
             color: #fff;
             font-family: "Montserrat-Regular";
             text-align: start;
-            font-size: calc(6px + 6*(100vh/1406)); 
+            font-size: 14px; 
         }
        
     }
@@ -72,7 +82,6 @@ swiper-slide:hover{
 
 
 .tickets-grid{
-    
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -80,13 +89,15 @@ swiper-slide:hover{
     max-width: 80%;
 }
 .ticket-main{
-    margin: 2rem;
+    padding: 8px;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
     text-align: center;
     flex-direction: column;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 8rem;
+    min-height: 6rem;
     min-width: 8rem;
     border-radius: 8px;
     border: 1px solid #BDBDBD;
@@ -149,9 +160,8 @@ swiper-slide:hover{
 }
 .title{
     text-align: start;
-    margin-top: 2rem;
     font-family: "Montserrat-SemiBold";
-    font-size: calc( 16px + 24*(100vh/1406));
+    font-size: 40px;
     font-weight: 500;
 }
 
@@ -210,16 +220,20 @@ ion-accordion-group{
 }
 
 .social-buttons{
+    font-family: 'Montserrat-Light';
+    bottom:4%;
+    position: absolute;
     display: flex;
-    align-items: center;
+    left: 1.8%;
     gap: 1rem;
     padding: 0.5rem;
-    color: #747474;
+    color: #ffffff;
     font-size: 1rem;
     transition: all 0.2s ease-in-out;
     z-index: 99999;
     justify-content: flex-end;
-    border-bottom: #cfcfcf 1px solid;
+    background-color: #c5c3c33d;
+    border-radius: 10rem;
 
     .likes{
         display: flex;
@@ -238,9 +252,14 @@ ion-accordion-group{
 }
 
 @media screen and (min-width: 0px) and (max-width: 960px) {
-    .swiper-container-header-content{
-        padding: 2rem;
+  
+    .swiper-container-img_wrapper{
+        .swiper-container-header-content{
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
     }
+
     .event-container{
         background-color: white; 
         border-radius: 0; 
@@ -254,7 +273,7 @@ ion-accordion-group{
      }
      .title{
         min-width: 80%;
-        font-size: calc(16px + (24 + 24 * 0.7) * ((100vw - 320px) / 1406));
+        font-size:30px;
     }
     .address{
         font-size: calc(14px + (2 + 2 * 0.7) * ((100vw - 320px) / 1406));
