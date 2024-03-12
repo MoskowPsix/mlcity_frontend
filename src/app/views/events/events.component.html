@@ -1,5 +1,7 @@
-<ion-content class="test">
-  <ion-grid class="mb-6-5rem">
+<ion-content :id="top" #lent>
+  <!-- <div id="header-anchor">35454</div> -->
+  <div id="header-anchor" style="height: 10px; width: 10px;"></div>
+  <ion-grid class="mb-6-5rem" >
     <!-- <ion-row class="ion-justify-content-center">
       <ion-col size-lg="8" size-md="12" size-xs="12">
         <ion-segment mode="ios" value="eventsCitySegment"  (ionChange)="onSegmentChanged($event)" class="segments">
@@ -23,14 +25,14 @@
     </ion-row> -->
     
       <!-- <div class="ion-padding" slot="content"> -->
-          <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
+        <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
         <ng-container>
           <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
         </ng-container>
       <!-- </div> -->
     
     
-      <div #test>
+      <div #test >
     <ion-row class="ion-justify-content-center">
       <ion-col size-lg="10" size-md="12" size-xs="12">
         <!-- <div [hidden]="segment !== 'eventsCitySegment'" class="segment-box"> -->
@@ -153,5 +155,13 @@
       </ion-col>
     </ion-row>
       </div>
-  </ion-grid>  
+  </ion-grid>
+
+
+    <a routerLink="." fragment="header-anchor" class="scroll-up" [hidden]="scrollUpState" (click)="scrollUp()">
+        <ion-icon size="large" name="chevron-up"></ion-icon>     
+    </a> 
+  
+ 
+
 </ion-content>
