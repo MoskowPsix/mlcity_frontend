@@ -16,6 +16,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Location }  from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
+import { IonContent } from '@ionic/angular';
+import { ViewportScroller } from '@angular/common';
 
 register()
 
@@ -42,6 +44,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('cardContainer')
   cardContainer!: ElementRef
   @ViewChild('widgetsContent') widgetsContent!: ElementRef;
+  @ViewChild('lent') lent!: ElementRef;
 
   loadingEventsCity: boolean = false
   loadingEventsGeolocation: boolean = false
@@ -68,6 +71,8 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   eventTypeId: any
   sightTypeId: any
 
+  scrollUpState: boolean = true
+
   constructor(
     private eventsService: EventsService,
     private toastService: ToastService,
@@ -80,7 +85,8 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private location: Location,
     private titleService: Title,
-    private metaService: Meta
+    private metaService: Meta,
+    private viewportScroller:ViewportScroller
   )
   {
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -114,7 +120,14 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.filterService.changeFilter.next(true)
   }
 
+   scrollUp() {
+    document.getElementById('top')?.scrollTo({top:0,  behavior: 'smooth'})
+  }
 
+  scrollUpCheckState() {
+    const boundingClientRect = this.widgetsContent?.nativeElement.getBoundingClientRect()
+    boundingClientRect ? this.scrollUpState = boundingClientRect.y > 0 : this.scrollUpState = false
+  }
 
   getEventsCity(){
     this.loadingMoreEventsCity ? this.loadingEventsCity = true : this.loadingEventsCity = false
@@ -186,8 +199,8 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    // window.addEventListener('scroll', this.scrollPaginate, true);
-    // window.addEventListener('scrollend',this.scrollEvent, true)
+    window.addEventListener('scroll', this.scrollPaginate, true);
+    window.addEventListener('scrollend',this.scrollEvent, true)
     this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value}
     //console.log(this.date)
     this.eventsCity = []
@@ -221,6 +234,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
   scrollEvent = (): void => {
+    this.scrollUpCheckState()
     let viewElement: boolean = false
 
     for(let i = 0; i<this.widgetsContent.nativeElement.children.length; i++){
