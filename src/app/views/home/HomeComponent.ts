@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { YaReadyEvent } from 'angular8-yandex-maps';
-import { catchError, EMPTY, of, Subject, takeUntil, forkJoin, Observable, debounceTime, debounce, timer } from 'rxjs';
+import { catchError, EMPTY, of, BehaviorSubject, Subject, takeUntil, forkJoin, Observable, debounceTime, debounce, timer } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { EventsService } from 'src/app/services/events.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   port: string = environment.BACKEND_PORT;
 
   map!: YaReadyEvent<ymaps.Map>;
+  mapElement: BehaviorSubject<any> = new BehaviorSubject(0)
   placemarks: ymaps.Placemark[] = [];
   placemarks_sights: ymaps.Placemark[] = [];
   placemarks_now: ymaps.Placemark[] = [];
@@ -704,6 +705,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.eventTypeId = value[0]
     });
+    this.mapElement.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
+      this.cdr.detectChanges();
+    })
+    this.mapElement.next(document.getElementById('map')?.offsetHeight)
     this.getEventsAndSights();
   }
   ngOnDestroy() {
