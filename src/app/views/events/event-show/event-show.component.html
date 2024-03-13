@@ -106,22 +106,6 @@
                     </div>
 
                   </div>
-                  <div class="social-buttons">
-                    <div class="likes">
-                      <ion-icon name="chatbox-outline" class="ico"></ion-icon>
-                      <span >{{ event.comments.length }}</span>
-                    </div>
-                    <div class="likes">
-                      <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
-                      <ion-spinner *ngIf="loadingLike"></ion-spinner>
-                      <span >{{ startLikesCount }}</span>
-                    </div>
-    
-                    <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
-                    <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
-    
-                    <ion-icon name="share-social-outline" class="ico share"></ion-icon>
-                  </div>
                 </swiper-slide>
 
 
@@ -159,8 +143,28 @@
         </ion-col>
       </ion-row>
 
+      <div class="social-buttons">
+        <div class="likes">
+          <ion-icon name="chatbox-outline" class="ico"></ion-icon>
+          <span >{{ event.comments.length }}</span>
+        </div>
+        <div class="likes">
+          <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
+          <ion-spinner *ngIf="loadingLike"></ion-spinner>
+          <span >{{ startLikesCount }}</span>
+        </div>
+        <div class="likes_star">
+          <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
+          <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
+        </div>
+        <div class="likes_share">
+          <ion-icon style="margin-left: 4px;" name="share-social-outline" class="ico share"></ion-icon>
+        </div>
+        
+      </div>
 
       <ion-row class="ion-justify-content-center">
+        
         <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
           <ion-row class="">
             <ion-col size-lg="12" size-md="12" size-xs="12" class="left-block">
@@ -187,7 +191,7 @@
                 </ion-col>
 
 
-                <ion-col>
+                <!-- <ion-col>
                   <div style="font-family:'Montserrat-Bold';" class="title">
                     Билеты
                   </div>
@@ -212,7 +216,7 @@
                       </ion-grid>
                     </div>
                  
-                </ion-col>
+                </ion-col> -->
               </div>
 
            
@@ -248,7 +252,6 @@
             </div>
 
           <ion-accordion-group style="margin-bottom:1rem;">
-            
             <ion-accordion style="background-color: #fff;" *ngFor="let place of places; let i= index" (click)="setActivePlace(i)" class="seance">
               <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px; margin-bottom: 1rem;" slot="header">
                 <ion-label *ngIf="!(place.location.location_parent.name=='РФ'); else otherAddress">
