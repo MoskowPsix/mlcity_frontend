@@ -69,6 +69,7 @@
       <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
     </div>
     <ya-map (ready)="onMapReady($event)"
+      id="map"
       [zoom]="15"
       [center]="[0,0]"
       [state]="{controls: ['zoomControl']}"
@@ -77,7 +78,8 @@
         minZoom:minZoom,
         maxZoom:18,
         suppressMapOpenBlock: true,
-        suppressObsoleteBrowserNotifier: true
+        suppressObsoleteBrowserNotifier: true,
+        autoFitToViewport: 'always'
       }"
     >
     </ya-map>

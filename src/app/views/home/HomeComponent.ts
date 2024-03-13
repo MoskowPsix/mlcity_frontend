@@ -24,6 +24,7 @@ import { NgxSliderModule, Options   }from'@angular-slider/ngx-slider';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
 import { LocationService } from 'src/app/services/location.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +41,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   port: string = environment.BACKEND_PORT;
 
   map!: YaReadyEvent<ymaps.Map>;
-  mapElement: BehaviorSubject<any> = new BehaviorSubject(0)
   placemarks: ymaps.Placemark[] = [];
   placemarks_sights: ymaps.Placemark[] = [];
   placemarks_now: ymaps.Placemark[] = [];
@@ -111,7 +111,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private titleService: Title,
-    private metaService: Meta
+    private metaService: Meta,
+    private route: ActivatedRoute
 
   )
   {
@@ -484,95 +485,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.placemarks.push(placemark);
 
       }
-      // if ( 0 > time_deff ) { // Сейчас
-      //   placemark = new ymaps.Placemark(
-      //   [item.latitude, item.longitude],
-      //   {}, {
-      //     balloonContent: item,
-      //     //balloonAutoPan: false,
-      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style=" border-color: rgba(129, 235, 164, 1);" class="marker now"><img src="${icoLink}"/></div>`)
-      //   });
-      //   this.placemarks.push(placemark);
-      // } else if (86400 > time_deff && time_deff > 0) { // Сегодня
-      //     placemark = new ymaps.Placemark(
-      //     [item.latitude, item.longitude],
-      //     {}, {
-      //       balloonContent: item,
-      //       balloonAutoPan: false,
-      //       iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: 0040ff;" class="marker"><img src="${icoLink}"/></div>`)
-      //     });
-      //     this.placemarks.push(placemark);
-      // } else if (604800 > time_deff && time_deff > 86400) { // Через неделю
-      //   placemark = new ymaps.Placemark(
-      //   [item.latitude, item.longitude],
-      //   {}, {
-      //     balloonContent: item,
-      //     balloonAutoPan: false,
-      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #3366ff;" class="marker"><img src="${icoLink}"/></div>`)
-      //   });
-      //   this.placemarks.push(placemark);
-      // } else if (2629743 > time_deff && time_deff > 604800) { // Через месяц
-      //   placemark = new ymaps.Placemark(
-      //   [item.latitude, item.longitude],
-      //   {}, {
-      //     balloonContent: item,
-      //     balloonAutoPan: false,
-      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #668cff;" class="marker"><img src="${icoLink}"/></div>`)
-      //   });
-      //   this.placemarks.push(placemark);
-      // } else if (31556926 > time_deff && time_deff > 2629743) { // Через год
-      //   placemark = new ymaps.Placemark(
-      //   [item.latitude, item.longitude],
-      //   {}, {
-      //     balloonContent: item,
-      //     balloonAutoPan: false,
-      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #ffffff;" class="marker"><img src="${icoLink}"/></div>`)
-      //   });
-      //   this.placemarks.push(placemark);
-      // } else if (!item.date_start && !item.date_end) { // Достопримечательности
-      //   placemark = new ymaps.Placemark(
-      //     [item.latitude, item.longitude],
-      //     {}, {
-      //       balloonContent: item,
-      //       balloonAutoPan: false,
-      //       iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #993333;" class="marker"><img src="${icoLink}"/></div>`)
-      //     });
-      //     this.placemarks.push(placemark);
-      // }
-      //console.log(item.date_start)
-
-        //Клик по метке и загрузка ивента в модалку
-        // placemark.events.add('click', () => {
-        //   placemark.options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${icoLink}"/></div>`))
-        //   this.modalContent = item// <------------ тут надо что-то придумать чтобы и ивенты и места показывались, не путались ид. а также с кластаризацией
-        //   this.navigationService.modalEventShowOpen.next(true)
-        //   this.activePlacemark = placemark
-        //   this.activeIcoLink = icoLink
-        // })
-        //this.placemarks.push(placemark);
-      //let now = this.formatDate(new Date())
     });
   }
 
-  // padTo2Digits(num: number) {
-  //   return num.toString().padStart(2, '0');
-  // }
-
-  // formatDate(date: Date) {
-  //   return (
-  //     [
-  //       date.getFullYear(),
-  //       this.padTo2Digits(date.getMonth() + 1),
-  //       this.padTo2Digits(date.getDate()),
-  //     ].join('-') +
-  //     ' ' +
-  //     [
-  //       this.padTo2Digits(date.getHours()),
-  //       this.padTo2Digits(date.getMinutes()),
-  //       this.padTo2Digits(date.getSeconds()),
-  //     ].join(':')
-  //   );
-  // }
   getEventsAndSights() {
     // if (this.queryBuilderService.latitude && this.queryBuilderService.longitude) {
       const sources: any[] = []
@@ -582,8 +497,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       else if(this.stateType=="sights"){
         sources.push(this.getSights())
       }
-
-
 
       forkJoin(sources).pipe(
         catchError((err) => {
@@ -600,9 +513,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.setMapData();
 
       });
-    // } else {
-    //   this.getEventsAndSights()
-    // }
   }
 
   modalClose() {
@@ -655,11 +565,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       });
     }
-
-
   }
-
-
 
   ngOnInit(): void {
     //Подписываемся на изменение радиуса
@@ -705,10 +611,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.eventTypeId = value[0]
     });
-    this.mapElement.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
-      this.cdr.detectChanges();
-    })
-    this.mapElement.next(document.getElementById('map')?.offsetHeight)
     this.getEventsAndSights();
   }
   ngOnDestroy() {
