@@ -87,13 +87,24 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightTypeId: any
   eventTypeId: any
 
+  sightsContentModalTotal: number = 0
+  eventsContentModalTotal: number = 0
+
+  sightsModalNextPage!: string
+  eventsModalNextPage!: string
+
   modalEventShowOpen: boolean = false
+  modalEventRadiusShowOpen: boolean = false
+  modalButtonLoader: boolean = false
+  modalNewPageLoader: boolean = false
   modalContent: any[] = []
   activePlacemark?: any
   activeClaster?: any
   activeIcoLink: string = ''
   events: IEvent[] = []
   sights: ISight[] = []
+  sightsContentModal: ISight[] = []
+  eventsContentModal: IEvent[] = []
   places: IPlace[] = []
 
   constructor(
@@ -155,6 +166,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (radius-1 >= 1) {
       this.filterService.setRadiusTolocalStorage(`${radius-1}`)
     }
+  }
+
+  openModalContent() {
+    this.navigationService.modalEventRadiusShowOpen.next(true);
   }
 
   sightTypesChange(typeId: any){
@@ -334,7 +349,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getPlacesIds(id: number, type: string): Observable<any> {
-
     return new Observable((observer) => {
       this.placeService.getPlaceById(id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
         if (type=='event'){
@@ -367,12 +381,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.placeService.getPlaces(this.queryBuilderService.queryBuilder('placesForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
       this.places = response.places
       // console.log(this.filterService.locationLatitude.value, this.filterService.locationLongitude.value)
-      let events: any[] = []
-      if (response.places.length) {
+      // let events: any[] = []
+      // if (response.places.length) {
 
 
 
-      }
+      // }
       this.cdr.detectChanges();
       observer.next(EMPTY);
       observer.complete();
@@ -380,7 +394,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  getSights(): Observable<any> {
+  getSightsForMap(): Observable<any> {
     return new Observable((observer) => {
       this.sightsLoading = true;
       this.sightsService.getSightsForMap(this.queryBuilderService.queryBuilder('sightsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
@@ -392,6 +406,48 @@ export class HomeComponent implements OnInit, OnDestroy {
         observer.complete();
       });
     });
+  }
+
+  getSights(): Observable<any> {
+    return new Observable((observer) => {
+      this.eventsLoading = true;
+      this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsModalRadiusForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.sightsContentModal.push(...response.sights.data);
+        this.sightsContentModalTotal = response.total
+        this.sightsModalNextPage = response.sights.next_cursor
+        // this.filterService.setEventsCount(response.total)
+        //this.sightsLoading = false
+        this.cdr.detectChanges();
+        observer.next(EMPTY);
+        observer.complete();
+      });
+    });
+  }
+
+  getEvents(): Observable<any> {
+    return new Observable((observer) => {
+      this.eventsLoading = true;
+      this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsModalRadiusForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.eventsContentModal.push(...response.events.data)
+        this.eventsContentModalTotal = response.total
+        this.eventsModalNextPage = response.events.next_cursor
+        // this.filterService.setEventsCount(response.total)
+        //this.sightsLoading = false
+        this.cdr.detectChanges();
+        observer.next(EMPTY);
+        observer.complete();
+      });
+    });
+  }
+
+  nextPageModal() {
+    this.modalNewPageLoader = true
+    if(this.stateType =='sights') {
+      this.queryBuilderService.paginationPublicSightsModalRadiusPage.next(this.sightsModalNextPage)
+    } else if(this.stateType =='events') {
+      this.queryBuilderService.paginationPublicEventsModalRadiusPage.next(this.eventsModalNextPage)
+    }
+    this.getEventsAndSightsForModal()
   }
 
   setMapData() {
@@ -489,13 +545,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getEventsAndSights() {
-    // if (this.queryBuilderService.latitude && this.queryBuilderService.longitude) {
+      this.modalButtonLoader = true
+      this.eventsModalNextPage = ''
+      this.sightsModalNextPage = ''
+      this.eventsContentModal = []
+      this.sightsContentModal = []
       const sources: any[] = []
       if (this.stateType=="events"){
         sources.push(this.getPlaces())
       }
       else if(this.stateType=="sights"){
-        sources.push(this.getSights())
+        sources.push(this.getSightsForMap())
       }
 
       forkJoin(sources).pipe(
@@ -509,14 +569,44 @@ export class HomeComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$)
       ).subscribe(() => {
-
         this.setMapData();
-
       });
+      this.getEventsAndSightsForModal()
+  }
+
+  getEventsAndSightsForModal() {
+
+    this.modalButtonLoader = true
+    const sourceModal: any[] = []
+    if (this.stateType=="events"){
+      sourceModal.push(this.getEvents())
+    }
+    else if(this.stateType=="sights"){
+      sourceModal.push(this.getSights())
+    }
+    forkJoin(sourceModal).pipe(
+      catchError((err) => {
+        this.toastService.showToast(MessagesErrors.default, 'danger');
+        this.modalButtonLoader = false
+        this.modalNewPageLoader = false
+        this.cdr.detectChanges();
+        return of(EMPTY);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.modalButtonLoader= false
+      this.modalNewPageLoader = false
+      this.cdr.detectChanges();
+      // this.setMapData();
+    });
   }
 
   modalClose() {
     this.navigationService.modalEventShowOpen.next(false);
+  }
+
+  modalRadiusClose() {
+    this.navigationService.modalEventRadiusShowOpen.next(false);
   }
 
   onSegmentChanged(event: any, p: number){
@@ -596,6 +686,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
       this.cdr.detectChanges();
     });
+
+    this.navigationService.modalEventRadiusShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      this.modalEventRadiusShowOpen = value;
+      this.cdr.detectChanges();
+    })
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(value => {
