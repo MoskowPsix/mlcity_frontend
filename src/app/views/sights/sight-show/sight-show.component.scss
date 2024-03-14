@@ -5,6 +5,20 @@
   
 }
 
+.content-main{
+    margin-top: -1.5rem;
+}
+
+.tikets-button{
+    background-color: #6393FF;
+    color: #fff;
+    padding: 0.8rem;
+    font-family: "Montserrat-Medium";
+    font-size:14px;
+    border-radius: 6px;
+}
+
+
 swiper-slide:hover{
     .swiper-container-img_wrapper{
         transition: 0.5s opacity;
@@ -25,9 +39,13 @@ swiper-slide:hover{
     display: none;
 }
 
+.swiper-container{
+    min-height: 38rem;
 
+}
 
 .swiper-container-img_wrapper{
+
     transition: 0.5s opacity;
     display: flex;
     align-items: center;
@@ -40,13 +58,13 @@ swiper-slide:hover{
 
 
     .swiper-container-header-content{
-        margin-top: 7rem;
+        margin-top: auto;
         color: #fff;
         padding-left: 2rem;
+        padding-bottom: 4rem;
         .swiper-container-header-content-organizator_wrapper{
 
             .swiper-container-header-content-organizator{
-                margin-top: 4rem;
                 font-size: calc(10px + 10*(100vh/1406)); 
                font-family: "Montserrat-Regular";
                text-align: start;
@@ -58,7 +76,7 @@ swiper-slide:hover{
             color: #fff;
             font-family: "Montserrat-Regular";
             text-align: start;
-            font-size: calc(6px + 6*(100vh/1406)); 
+            font-size: 14px; 
         }
        
     }
@@ -68,7 +86,6 @@ swiper-slide:hover{
 
 
 .tickets-grid{
-    
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -76,14 +93,16 @@ swiper-slide:hover{
     max-width: 80%;
 }
 .ticket-main{
-    margin: 2rem;
+    padding: 8px;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
     text-align: center;
     flex-direction: column;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 8rem;
-  
+    min-height: 6rem;
+    min-width: 8rem;
     border-radius: 8px;
     border: 1px solid #BDBDBD;
     max-width: 12rem;
@@ -116,13 +135,14 @@ swiper-slide:hover{
 
 .seance{
     background-color: rgba(211, 207, 207, 0.219);
-   
+    margin-bottom: 0.6rem;
 }
 
 .address{
+    padding-top:0.4rem;
     font-family: "Montserrat-Light";
     color: #000000;
-    font-size: calc( 16px + 24*(100vh/1406));
+    font-size: calc( 16px + 10*(100vh/1406));
 }
 .map{
     height: 100%;
@@ -143,9 +163,8 @@ swiper-slide:hover{
 }
 .title{
     text-align: start;
-    margin-top: 2rem;
     font-family: "Montserrat-SemiBold";
-    font-size: calc( 16px + 24*(100vh/1406));
+    font-size: 40px;
     font-weight: 500;
 }
 
@@ -204,29 +223,55 @@ ion-accordion-group{
 }
 
 .social-buttons{
+    font-family: "Montserrat-Medium";
     display: flex;
-    align-items: center;
+    margin: auto;
+    left: 1.8%;
     gap: 1rem;
     padding: 0.5rem;
-    color: #747474;
+    margin-top: -1rem;
+    color: #999CA1;
     font-size: 1rem;
     transition: all 0.2s ease-in-out;
     z-index: 99999;
-    justify-content: flex-end;
-    border-bottom: #cfcfcf 1px solid;
+    justify-content: flex-start;
+    max-width: 80%;
+    border-radius: 10rem;
 
     .likes{
+
+        background-color: #F6F4F5;
+        border-radius: 30px;
+        padding: 6px;
+        min-width: 60px;
         display: flex;
+        justify-content: center;
         align-items: center;
         flex-direction: row-reverse;
-        gap: 1rem;
+        gap: 0.5rem;
     }
-}
-
-@media screen and (min-width: 1324px) {
-    .ion-justify-content-center{
-        max-width: 96%;
-        margin: auto;
+    .likes_star{
+        background-color: #F6F4F5;
+        border-radius: 30px;
+        padding: 6px;
+        min-width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row-reverse;
+        gap: 0.5rem;
+    }
+    .likes_share{
+        background-color: #F6F4F5;
+        border-radius: 30px;
+        padding: 6px;
+        min-width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row-reverse;
+        gap: 0.5rem;
+        display: none;
     }
 }
 
@@ -236,12 +281,23 @@ ion-accordion-group{
         height: 15rem;
     }
 
+    .social-buttons{
+        max-width: 100%;
+    }
 }
 
 @media screen and (min-width: 0px) and (max-width: 960px) {
-    .swiper-container-header-content{
-        padding: 2rem;
+  
+    .swiper-container-img_wrapper{
+        .swiper-container-header-content{
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
     }
+
+
+ 
+
     .event-container{
         background-color: white; 
         border-radius: 0; 
@@ -255,7 +311,7 @@ ion-accordion-group{
      }
      .title{
         min-width: 80%;
-        font-size: calc(16px + (24 + 24 * 0.7) * ((100vw - 320px) / 1406));
+        font-size:30px;
     }
     .address{
         font-size: calc(14px + (2 + 2 * 0.7) * ((100vw - 320px) / 1406));
@@ -267,6 +323,20 @@ ion-accordion-group{
         display: block;
     }
 
+}
+@media screen and (min-width: 1324px) {
+    .ion-justify-content-center{
+        max-width: 96%;
+        margin: auto;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .social-buttons{
+        .likes_share{
+            display: block;
+        }
+    }
 }
   
 @media screen and (min-width: 768px)  {
@@ -286,7 +356,10 @@ ion-accordion-group{
             }
         }
     }
-    .ico.share{
-        display: none;
-    }
+    
+    
+        .ico.share{
+            display: none;
+        }
+    
 }
