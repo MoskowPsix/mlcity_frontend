@@ -53,6 +53,8 @@ import { environment } from 'src/environments/environment';
         tap((user: any) => {
           if (user) {
             this.user_avatar = user.avatar
+            console.log(this.user_avatar)
+        
             this.user_id = user.id
             this.user_auth = true
           } else {

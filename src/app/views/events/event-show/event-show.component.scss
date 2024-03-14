@@ -86,40 +86,52 @@ swiper-slide:hover{
 
 
 .tickets-grid{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 80%;
+ 
+
 }
 .ticket-main{
-    padding: 8px;
+    background-color: #fff;
+    padding: 10px;
     margin-bottom: 0.5rem;
-    margin-right: 0.5rem;
-    text-align: center;
-    flex-direction: column;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     min-height: 6rem;
-    min-width: 8rem;
+    align-items: center;
+    justify-content: space-between;
+    width: clamp(18.75rem, 14.205rem + 22.73vw, 31.25rem); 
     border-radius: 8px;
-    border: 1px solid #BDBDBD;
-    max-width: 12rem;
-
-    .ticket-main-price{
-        
-        font-family: "Montserrat-SemiBold";
-        font-size: calc( 20px + 4*(100vh/1406));
-        font-weight: 500;
-        max-width: 12rem;
-
+    display: flex;
+    background-image: url('./tiketPC.png');
+    background-size:600px, 300px;
+    background-repeat: no-repeat;
+    .circle{
+        margin-right: -2rem;
+        background-color: #fff;
+        z-index: 1000;
+ 
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
     }
-    .ticket-main-description{
-        font-family: "Montserrat-Light";
-        margin-top: 0.5rem;
-        max-width: 12rem;
+    .price-information{
+        padding: 8px;
+        margin-left: 4rem;
+        max-width: 230px;
+        background-color: #fff;
+        border-radius: 8px;
+    
+        .ticket-main-price{
+            font-family: "Montserrat-SemiBold";
+            font-size: calc( 20px + 4*(100vh/1406));
+            font-weight: 500;
+            max-width: 12rem;
+    
+        }
+        .ticket-main-description{
+            font-family: "Montserrat-Light";
+            margin-top: 0.5rem;
+            max-width: 12rem;
+        }
     }
+
 }
 
 
@@ -135,12 +147,11 @@ swiper-slide:hover{
 
 .seance{
     background-color: rgba(211, 207, 207, 0.219);
-    margin-bottom: 2rem;
+    margin-bottom: 0.6rem;
 }
 
 .address{
-    padding-bottom: 1rem;
-    padding-top: 1rem;
+
     font-family: "Montserrat-Light";
     color: #000000;
     font-size: calc( 16px + 10*(100vh/1406));
@@ -322,6 +333,12 @@ ion-accordion-group{
     }
     .description_mobile{
         display: block;
+    }
+
+    .ticket-main{
+        .price-information{
+            margin-left: 2rem;
+        }
     }
 
 }

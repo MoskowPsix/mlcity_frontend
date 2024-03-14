@@ -3,7 +3,8 @@
         <ion-list>
             <ion-item lines="light">
                 <ion-avatar slot="start">
-                    <ion-img *ngIf="comment.user.avatar" src="{{backendUrl + comment.user.avatar}}" />
+                    <ion-img *ngIf="user_avatar.includes('https') == false" src="{{backendUrl + this.user_avatar}}" />
+                    <ion-img *ngIf="user_avatar.includes('https') == true" src="{{this.user_avatar}}" />
                     <ion-img *ngIf="!comment.user.avatar" color="light" src="/svg/person-circle-outline.svg"/>
                 </ion-avatar>
                 <ion-label >
@@ -36,7 +37,8 @@
                                         <ion-list lines="none">
                                             <ion-item detail="false">
                                                 <ion-avatar slot="start">
-                                                    <ion-img *ngIf="comment.user.avatar" src="{{backendUrl + comment.user.avatar}}" />
+                                                    <ion-img *ngIf="user_avatar.includes('https') == false" src="{{backendUrl + this.user_avatar}}" />
+                                                    <ion-img *ngIf="user_avatar.includes('https') == true" src="{{this.user_avatar}}" />
                                                     <ion-img *ngIf="!comment.user.avatar" color="light" src="/svg/person-circle-outline.svg"/>
                                                 </ion-avatar>
                                                 <ion-list >
@@ -73,7 +75,8 @@
                                             <ion-list lines="none">
                                             <ion-item detail="false">
                                                 <ion-avatar slot="start">
-                                                    <ion-img *ngIf="comment.user.avatar" src="{{backendUrl + comment.user.avatar}}" />
+                                                    <ion-img *ngIf="user_avatar.includes('https') == false" src="{{backendUrl + this.user_avatar}}" />
+                                                    <ion-img *ngIf="user_avatar.includes('https') == true" src="{{this.user_avatar}}" />
                                                     <ion-img *ngIf="!comment.user.avatar" color="light" src="/svg/person-circle-outline.svg"/>
                                                 </ion-avatar>
                                                 <ion-list >
@@ -105,7 +108,8 @@
                     <form [hidden]="comment_id !== comment.id" [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth">
                         <ion-item color="light">
                             <ion-avatar slot="start">
-                                <ion-img *ngIf="user_avatar" src="{{backendUrl + user_avatar}}" />
+                                <ion-img *ngIf="user_avatar.includes('https') == false" src="{{backendUrl + this.user_avatar}}" />
+                                <ion-img *ngIf="user_avatar.includes('https') == true" src="{{this.user_avatar}}" />
                                 <ion-img *ngIf="!user_avatar" color="light" src="/svg/person-circle-outline.svg"/>
                             </ion-avatar>
                             <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="solid" placeholder="Ответить {{ comment.user.name }}"></ion-textarea>
@@ -134,8 +138,10 @@
     <form [formGroup]="createCommentForm" enctype="multipart/form-data" *ngIf="user_auth && input_panel">
         <ion-item color="light">
                 <ion-avatar slot="start">
-                    <ion-img *ngIf="user_avatar" src="{{backendUrl + user_avatar}}" />
+                    <ion-img *ngIf="user_avatar.includes('https') == false" src="{{backendUrl + this.user_avatar}}" />
+                    <ion-img *ngIf="user_avatar.includes('https') == true" src="{{this.user_avatar}}" />
                     <ion-img *ngIf="!user_avatar" color="light" src="/svg/person-circle-outline.svg"/>
+                    
                 </ion-avatar>
                     <ion-textarea formControlName="new_comment" label="Outline textarea" labelPlacement="floating" fill="outline" placeholder="Комментарий..."></ion-textarea>
                     <ion-item-option color="white">
