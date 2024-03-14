@@ -34,7 +34,7 @@ ion-card{
     }
 
     cursor: pointer;
-    transition: all .2s ease-in-out; 
+    transition: all .2s ease-in-out;
     margin: 0.5rem;
 
     .slids-pagination{
@@ -49,7 +49,6 @@ ion-card{
     }
     ion-card-title{
         position: absolute;
-        display: flex;
         align-items: center;
         top: 20.5rem;
         height: 72px;
@@ -60,8 +59,12 @@ ion-card{
         font-size: 1.5rem;
         transition: all .2s ease-in-out;
         z-index: 99999;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
-    
+
     ion-card-subtitle{
         font-style: italic;
     }
@@ -109,7 +112,7 @@ ion-card{
         border-bottom-left-radius: 100%;
         transition: all .2s ease-in-out;
         z-index: 99999;
-            
+
         img{
             object-fit: contain;
             width: 40px;
@@ -137,14 +140,14 @@ ion-card{
         .likes{
             display: flex;
             align-items: center;
-            
+
         }
 
         .ico{
             cursor: pointer;
-            transition: all .2s ease-in-out; 
-            justify-items: center; 
-            margin-left: auto; 
+            transition: all .2s ease-in-out;
+            justify-items: center;
+            margin-left: auto;
             margin-right: auto;
         }
 
@@ -160,7 +163,7 @@ ion-card{
 }
 
 ion-card:hover{
-    
+
 
     ion-card-title, .date, .price, .type{
         opacity: 0;
@@ -168,9 +171,9 @@ ion-card:hover{
 }
 
 @media screen and (min-width: 0px) and (max-width: 768px) {
-   
+
 }
-  
+
 @media screen and (min-width: 768px)  {
     .ico.share{
         display: none;
