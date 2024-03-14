@@ -26,6 +26,10 @@ export class QueryBuilderService {
   public paginationPublicEventsCityCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
   //public paginationPublicEventsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
+  public paginationPublicSightsModalRadiusPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+  public paginationPublicEventsModalRadiusPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+
+
   // public paginationPublicEventsGeolocationCurrentPage!: BehaviorSubject<string>
   //public paginationPublicEventsGeolocationTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
@@ -82,6 +86,9 @@ export class QueryBuilderService {
       case 'eventsPublicForCityTab':  //Публичная страница мероприятий /events - вкладка по события городу
         this.buildQueryEventsPublicForCityTab()
         break;
+      case 'eventsModalRadiusForMap':  //Публичная страница мероприятий /events - вкладка по события городу
+        this.buildQueryEventsModalRadiusForMap()
+        break;
       // case 'eventsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка события рядом
       //   this.buildQueryEventsPublicForGeolocationTab()
       //   break;
@@ -103,6 +110,9 @@ export class QueryBuilderService {
       case 'eventPlaces':
         this.buildQueryEventPlaces()
         break;  
+      case 'sightsModalRadiusForMap':  //Публичная страница мероприятий /events - вкладка по события городу
+        this.buildQuerySightsModalRadiusForMap()
+        break;
       default:
         this.buildQueryDefault()
         break;
@@ -157,6 +167,34 @@ export class QueryBuilderService {
       dateStart: this.dateStart,
       dateEnd: this.dateEnd,
       radius: this.radius,
+    }
+  }
+
+  buildQueryEventsModalRadiusForMap(){
+    this.queryParams =  {
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      latitude: this.latitude,
+      longitude: this.longitude,
+      eventTypes: this.eventTypes,
+      dateStart: this.dateStart,
+      dateEnd: this.dateEnd,
+      radius: this.radius,
+      page: this.paginationPublicEventsModalRadiusPage.value
+    }
+  }
+
+  buildQuerySightsModalRadiusForMap(){
+    this.queryParams =  {
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      latitude: this.latitude,
+      longitude: this.longitude,
+      eventTypes: this.eventTypes,
+      dateStart: this.dateStart,
+      dateEnd: this.dateEnd,
+      radius: this.radius,
+      page: this.paginationPublicSightsModalRadiusPage.value
     }
   }
   

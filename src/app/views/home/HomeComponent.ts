@@ -24,6 +24,7 @@ import { NgxSliderModule, Options   }from'@angular-slider/ngx-slider';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
 import { LocationService } from 'src/app/services/location.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +41,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   port: string = environment.BACKEND_PORT;
 
   map!: YaReadyEvent<ymaps.Map>;
-  mapElement: BehaviorSubject<any> = new BehaviorSubject(0)
   placemarks: ymaps.Placemark[] = [];
   placemarks_sights: ymaps.Placemark[] = [];
   placemarks_now: ymaps.Placemark[] = [];
@@ -87,13 +87,24 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightTypeId: any
   eventTypeId: any
 
+  sightsContentModalTotal: number = 0
+  eventsContentModalTotal: number = 0
+
+  sightsModalNextPage!: string
+  eventsModalNextPage!: string
+
   modalEventShowOpen: boolean = false
+  modalEventRadiusShowOpen: boolean = false
+  modalButtonLoader: boolean = false
+  modalNewPageLoader: boolean = false
   modalContent: any[] = []
   activePlacemark?: any
   activeClaster?: any
   activeIcoLink: string = ''
   events: IEvent[] = []
   sights: ISight[] = []
+  sightsContentModal: ISight[] = []
+  eventsContentModal: IEvent[] = []
   places: IPlace[] = []
 
   constructor(
@@ -111,7 +122,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private titleService: Title,
-    private metaService: Meta
+    private metaService: Meta,
+    private route: ActivatedRoute
 
   )
   {
@@ -154,6 +166,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (radius-1 >= 1) {
       this.filterService.setRadiusTolocalStorage(`${radius-1}`)
     }
+  }
+
+  openModalContent() {
+    this.navigationService.modalEventRadiusShowOpen.next(true);
   }
 
   sightTypesChange(typeId: any){
@@ -333,7 +349,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getPlacesIds(id: number, type: string): Observable<any> {
-
     return new Observable((observer) => {
       this.placeService.getPlaceById(id).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
         if (type=='event'){
@@ -366,12 +381,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.placeService.getPlaces(this.queryBuilderService.queryBuilder('placesForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
       this.places = response.places
       // console.log(this.filterService.locationLatitude.value, this.filterService.locationLongitude.value)
-      let events: any[] = []
-      if (response.places.length) {
+      // let events: any[] = []
+      // if (response.places.length) {
 
 
 
-      }
+      // }
       this.cdr.detectChanges();
       observer.next(EMPTY);
       observer.complete();
@@ -379,7 +394,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  getSights(): Observable<any> {
+  getSightsForMap(): Observable<any> {
     return new Observable((observer) => {
       this.sightsLoading = true;
       this.sightsService.getSightsForMap(this.queryBuilderService.queryBuilder('sightsForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
@@ -391,6 +406,48 @@ export class HomeComponent implements OnInit, OnDestroy {
         observer.complete();
       });
     });
+  }
+
+  getSights(): Observable<any> {
+    return new Observable((observer) => {
+      this.eventsLoading = true;
+      this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsModalRadiusForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.sightsContentModal.push(...response.sights.data);
+        this.sightsContentModalTotal = response.total
+        this.sightsModalNextPage = response.sights.next_cursor
+        // this.filterService.setEventsCount(response.total)
+        //this.sightsLoading = false
+        this.cdr.detectChanges();
+        observer.next(EMPTY);
+        observer.complete();
+      });
+    });
+  }
+
+  getEvents(): Observable<any> {
+    return new Observable((observer) => {
+      this.eventsLoading = true;
+      this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsModalRadiusForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        this.eventsContentModal.push(...response.events.data)
+        this.eventsContentModalTotal = response.total
+        this.eventsModalNextPage = response.events.next_cursor
+        // this.filterService.setEventsCount(response.total)
+        //this.sightsLoading = false
+        this.cdr.detectChanges();
+        observer.next(EMPTY);
+        observer.complete();
+      });
+    });
+  }
+
+  nextPageModal() {
+    this.modalNewPageLoader = true
+    if(this.stateType =='sights') {
+      this.queryBuilderService.paginationPublicSightsModalRadiusPage.next(this.sightsModalNextPage)
+    } else if(this.stateType =='events') {
+      this.queryBuilderService.paginationPublicEventsModalRadiusPage.next(this.eventsModalNextPage)
+    }
+    this.getEventsAndSightsForModal()
   }
 
   setMapData() {
@@ -484,106 +541,22 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.placemarks.push(placemark);
 
       }
-      // if ( 0 > time_deff ) { // Сейчас
-      //   placemark = new ymaps.Placemark(
-      //   [item.latitude, item.longitude],
-      //   {}, {
-      //     balloonContent: item,
-      //     //balloonAutoPan: false,
-      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style=" border-color: rgba(129, 235, 164, 1);" class="marker now"><img src="${icoLink}"/></div>`)
-      //   });
-      //   this.placemarks.push(placemark);
-      // } else if (86400 > time_deff && time_deff > 0) { // Сегодня
-      //     placemark = new ymaps.Placemark(
-      //     [item.latitude, item.longitude],
-      //     {}, {
-      //       balloonContent: item,
-      //       balloonAutoPan: false,
-      //       iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: 0040ff;" class="marker"><img src="${icoLink}"/></div>`)
-      //     });
-      //     this.placemarks.push(placemark);
-      // } else if (604800 > time_deff && time_deff > 86400) { // Через неделю
-      //   placemark = new ymaps.Placemark(
-      //   [item.latitude, item.longitude],
-      //   {}, {
-      //     balloonContent: item,
-      //     balloonAutoPan: false,
-      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #3366ff;" class="marker"><img src="${icoLink}"/></div>`)
-      //   });
-      //   this.placemarks.push(placemark);
-      // } else if (2629743 > time_deff && time_deff > 604800) { // Через месяц
-      //   placemark = new ymaps.Placemark(
-      //   [item.latitude, item.longitude],
-      //   {}, {
-      //     balloonContent: item,
-      //     balloonAutoPan: false,
-      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #668cff;" class="marker"><img src="${icoLink}"/></div>`)
-      //   });
-      //   this.placemarks.push(placemark);
-      // } else if (31556926 > time_deff && time_deff > 2629743) { // Через год
-      //   placemark = new ymaps.Placemark(
-      //   [item.latitude, item.longitude],
-      //   {}, {
-      //     balloonContent: item,
-      //     balloonAutoPan: false,
-      //     iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #ffffff;" class="marker"><img src="${icoLink}"/></div>`)
-      //   });
-      //   this.placemarks.push(placemark);
-      // } else if (!item.date_start && !item.date_end) { // Достопримечательности
-      //   placemark = new ymaps.Placemark(
-      //     [item.latitude, item.longitude],
-      //     {}, {
-      //       balloonContent: item,
-      //       balloonAutoPan: false,
-      //       iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #993333;" class="marker"><img src="${icoLink}"/></div>`)
-      //     });
-      //     this.placemarks.push(placemark);
-      // }
-      //console.log(item.date_start)
-
-        //Клик по метке и загрузка ивента в модалку
-        // placemark.events.add('click', () => {
-        //   placemark.options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${icoLink}"/></div>`))
-        //   this.modalContent = item// <------------ тут надо что-то придумать чтобы и ивенты и места показывались, не путались ид. а также с кластаризацией
-        //   this.navigationService.modalEventShowOpen.next(true)
-        //   this.activePlacemark = placemark
-        //   this.activeIcoLink = icoLink
-        // })
-        //this.placemarks.push(placemark);
-      //let now = this.formatDate(new Date())
     });
   }
 
-  // padTo2Digits(num: number) {
-  //   return num.toString().padStart(2, '0');
-  // }
-
-  // formatDate(date: Date) {
-  //   return (
-  //     [
-  //       date.getFullYear(),
-  //       this.padTo2Digits(date.getMonth() + 1),
-  //       this.padTo2Digits(date.getDate()),
-  //     ].join('-') +
-  //     ' ' +
-  //     [
-  //       this.padTo2Digits(date.getHours()),
-  //       this.padTo2Digits(date.getMinutes()),
-  //       this.padTo2Digits(date.getSeconds()),
-  //     ].join(':')
-  //   );
-  // }
   getEventsAndSights() {
-    // if (this.queryBuilderService.latitude && this.queryBuilderService.longitude) {
+      this.modalButtonLoader = true
+      this.eventsModalNextPage = ''
+      this.sightsModalNextPage = ''
+      this.eventsContentModal = []
+      this.sightsContentModal = []
       const sources: any[] = []
       if (this.stateType=="events"){
         sources.push(this.getPlaces())
       }
       else if(this.stateType=="sights"){
-        sources.push(this.getSights())
+        sources.push(this.getSightsForMap())
       }
-
-
 
       forkJoin(sources).pipe(
         catchError((err) => {
@@ -596,17 +569,44 @@ export class HomeComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$)
       ).subscribe(() => {
-
         this.setMapData();
-
       });
-    // } else {
-    //   this.getEventsAndSights()
-    // }
+      this.getEventsAndSightsForModal()
+  }
+
+  getEventsAndSightsForModal() {
+
+    this.modalButtonLoader = true
+    const sourceModal: any[] = []
+    if (this.stateType=="events"){
+      sourceModal.push(this.getEvents())
+    }
+    else if(this.stateType=="sights"){
+      sourceModal.push(this.getSights())
+    }
+    forkJoin(sourceModal).pipe(
+      catchError((err) => {
+        this.toastService.showToast(MessagesErrors.default, 'danger');
+        this.modalButtonLoader = false
+        this.modalNewPageLoader = false
+        this.cdr.detectChanges();
+        return of(EMPTY);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.modalButtonLoader= false
+      this.modalNewPageLoader = false
+      this.cdr.detectChanges();
+      // this.setMapData();
+    });
   }
 
   modalClose() {
     this.navigationService.modalEventShowOpen.next(false);
+  }
+
+  modalRadiusClose() {
+    this.navigationService.modalEventRadiusShowOpen.next(false);
   }
 
   onSegmentChanged(event: any, p: number){
@@ -617,7 +617,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     else if(p==2)
     {
-      this.buttonActive.nativeElement.style.transform = "translateY(46px)";
+      this.buttonActive.nativeElement.style.transform = "translateY(44px)";
       this.calendula.nativeElement.style.top = "-100px"
     }
     else if(p==3)
@@ -655,11 +655,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       });
     }
-
-
   }
-
-
 
   ngOnInit(): void {
     //Подписываемся на изменение радиуса
@@ -691,6 +687,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.cdr.detectChanges();
     });
 
+    this.navigationService.modalEventRadiusShowOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
+      this.modalEventRadiusShowOpen = value;
+      this.cdr.detectChanges();
+    })
+
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(value => {
       if (value === true) {
@@ -705,10 +706,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
       this.eventTypeId = value[0]
     });
-    this.mapElement.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
-      this.cdr.detectChanges();
-    })
-    this.mapElement.next(document.getElementById('map')?.offsetHeight)
     this.getEventsAndSights();
   }
   ngOnDestroy() {
