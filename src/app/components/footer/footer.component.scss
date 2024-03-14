@@ -8,6 +8,12 @@
       height: 1.5rem;
     }
 
+    .svg-icon{
+      filter: invert(65%) sepia(11%) saturate(10%) hue-rotate(15deg) brightness(93%) contrast(82%);
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
     .item{
         display: flex;
         flex-direction: column;

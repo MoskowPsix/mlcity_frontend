@@ -6,6 +6,14 @@
 .searchParrent{
     max-width: 131px;
 }
+
+.icon{
+  height: 1.15rem;
+  width: 1.15rem;
+  margin-right: 6px;
+  filter: invert(45%) sepia(45%) saturate(7477%) hue-rotate(194deg) brightness(102%) contrast(108%);
+}
+
 .logo {
     display: flex;
     flex-direction: row;
@@ -15,7 +23,7 @@
         height: 2rem;
         padding-right: 0.25rem;
     }
-    
+
     span {
         font-weight: bold;
         font-size: 1.5rem;
@@ -24,7 +32,7 @@
 .header{
     margin-left: 10px;   display: flex; justify-content: center;
 }
- 
+
 ion-title{
     padding-inline-start: 0.5rem;
     padding-inline-end: 0;
@@ -67,7 +75,7 @@ ion-popover{
     &::part(content){
         top: 3rem;
         left: 12rem;
-    } 
+    }
 }
 
 ion-modal ion-content{
@@ -80,9 +88,9 @@ ion-modal ion-content{
     .header-mobile {
       display: none;
     }
-  
+
     .header {
-       
+
         .menu{
             display: flex;
 
@@ -91,7 +99,7 @@ ion-modal ion-content{
             }
         }
     }
-    
+
   }
 
   @media(max-width:1299px){
@@ -106,12 +114,12 @@ ion-modal ion-content{
     .logo {
         flex-direction: row;
         align-items: center;
-    
+
         img {
             height: 2rem;
             padding-right: 2px;
         }
-        
+
         span {
             font-weight: bold;
             font-size: 16px;
@@ -147,26 +155,26 @@ ion-modal ion-content{
         padding-inline-end: 0;
         text-align: center;
     }
-    
+
     .flex{
         display: flex;
     }
-    
 
-  
+
+
 
     .z-index-9999{
         z-index: 999999;
     }
-    
+
     .city-popover{
-       
-    
+
+
         .title{
             text-align: center;
             padding-left: 6px;
         }
-    
+
         .buttons{
             display: flex;
             justify-content: space-around;
@@ -175,21 +183,21 @@ ion-modal ion-content{
     .search-item{
         cursor: pointer;
     }
-    
+
     .search-item:hover{
         --background: #f3f4f6;
     }
-    
+
     ion-popover{
         bottom: 70%;
         right: 75%;
-    
+
         &::part(content){
             top: 3rem;
             left: 12rem;
-        } 
+        }
     }
-    
+
     ion-modal ion-content{
         --padding-top: 0;
         --padding-bottom: 0;
@@ -214,7 +222,7 @@ ion-modal ion-content{
             height: 2rem;
             padding-right: 1.9px;
         }
-        
+
         span {
             font-weight: bold;
             font-size: 11px;
@@ -250,23 +258,23 @@ ion-modal ion-content{
         padding-inline-end: 0;
         text-align: center;
     }
-    
+
     .flex{
         display: flex;
     }
-    
+
     .z-index-9999{
         z-index: 999999;
     }
-    
+
     .city-popover{
-       
-    
+
+
         .title{
             text-align: center;
             padding-left: 4px;
         }
-    
+
         .buttons{
             display: flex;
             justify-content: space-around;
@@ -275,21 +283,21 @@ ion-modal ion-content{
     .search-item{
         cursor: pointer;
     }
-    
+
     .search-item:hover{
         --background: #f3f4f6;
     }
-    
+
     ion-popover{
         bottom: 70%;
         right: 75%;
-    
+
         &::part(content){
             top: 1.8rem;
             left: 10rem;
-        } 
+        }
     }
-    
+
     ion-modal ion-content{
         --padding-top: 0;
         --padding-bottom: 0;
@@ -303,7 +311,7 @@ ion-modal ion-content{
         border: none;
         width: 30px;
         margin-left: -25px;
-        
+
         max-width: 87px;
     }
 
