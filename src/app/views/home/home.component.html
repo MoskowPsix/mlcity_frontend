@@ -45,11 +45,13 @@
     <div class="container-swither">
 
       <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" #event>
-        <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon>
+        <!-- <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon> -->
+        <img src="/assets/icons/TablerTicket.svg" style="filter: invert(8%) sepia(100%) saturate(7461%) hue-rotate(248deg) brightness(94%) contrast(145%);" class="swither-icon">
       </div>
       <div class="swither-bg" #buttonActive></div>
       <div class="swither test" (click)="onSegmentChanged(sight, 2)" (click)="stateType='sights'" (click)="getEventsAndSights()" #sight>
-        <ion-icon name="prism" class="swither-icon" color="primary"></ion-icon>
+        <img src="/assets/icons/MakiMuseum.svg" style="filter: invert(8%) sepia(100%) saturate(7461%) hue-rotate(248deg) brightness(94%) contrast(145%);" class="swither-icon">
+        <!-- <ion-icon name="prism" class="swither-icon" color="primary"></ion-icon> -->
       </div>
       <!-- <div class="swither" (click)="onSegmentChanged(new, 3)" #new>
         <ion-icon name="flame" class="swither-icon" color="primary"></ion-icon>

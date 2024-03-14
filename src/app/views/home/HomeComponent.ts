@@ -527,7 +527,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     else if(p==2)
     {
-      this.buttonActive.nativeElement.style.transform = "translateY(46px)";
+      this.buttonActive.nativeElement.style.transform = "translateY(44px)";
       this.calendula.nativeElement.style.top = "-100px"
     }
     else if(p==3)
