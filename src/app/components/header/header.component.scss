@@ -315,6 +315,7 @@ ion-modal ion-content{
 // @media(max-width: 991px) {
     .header-mobile {
        --display: block;
+       max-height: 3rem;
     }
 
     .header {
