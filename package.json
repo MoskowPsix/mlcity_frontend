@@ -46,7 +46,7 @@
     "ng-yandex-metrika": "^15.1.0",
     "numeral": "^2.0.6",
     "rxjs": "~7.5.0",
-    "sitemap-generator": "^8.5.1",
+    "sitemap-generator": "^7.5.2",
     "swiper": "^10.3.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

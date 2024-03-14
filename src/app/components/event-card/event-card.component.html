@@ -56,7 +56,7 @@
       <img alt="img" src="{{host}}:{{port}}{{ event.types[0].ico }}" />
     </div>
 
-    <ion-card-title>{{ event.name | truncate:[48,'...'] }}</ion-card-title>
+    <ion-card-title class="text">{{ event.name | truncate:[60,'...'] }}</ion-card-title>
 
     <ion-card-header [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
       <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>
