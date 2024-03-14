@@ -1,4 +1,8 @@
 
+ion-modal {
+    --min-height: 20rem;
+    --height: auto;
+  }
 .ion-justify-content-end {
    --justify-content: center;
 }
@@ -323,6 +327,7 @@ ion-modal ion-content{
 // @media(max-width: 991px) {
     .header-mobile {
        --display: block;
+       max-height: 3rem;
     }
 
     .header {

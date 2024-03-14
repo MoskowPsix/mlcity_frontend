@@ -149,25 +149,25 @@
 
         <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchCityes" (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
         <ion-note *ngIf="minLengthCityesListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
-        <ion-content>
+        <!-- <ion-content> -->
             <ng-container *ngIf="cityesListLoading">
                 <ion-list class="ion-padding-end">
-                    <ion-item *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
+                    <ion-item *ngFor="let key of [1,2,3]">
                         <ion-skeleton-text [animated]="true" style="height: 1rem;" />
                     </ion-item>
                 </ion-list>
             </ng-container>
-            <ng-container *ngIf="!cityesListLoading && !cityesList.length">
+            <!-- <ng-container *ngIf="!cityesListLoading && !cityesList.length">
                 <app-no-data />
-            </ng-container>
-            <ion-list>
+            </ng-container> -->
+            <ion-list  *ngIf="!cityesListLoading">
               <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" class="search-item">
                 <ion-label>
                     {{ item.name }}<p>{{ item.location_parent.name }}</p>
                 </ion-label>
               </ion-item>
             </ion-list>
-          </ion-content>
+          <!-- </ion-content> -->
     </ng-template>
 </ion-modal>
 
