@@ -93,6 +93,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightsModalNextPage!: string
   eventsModalNextPage!: string
 
+  modalSwitcherClass:string = 'container-swither'
+  screenWidth: number = 0;
+
   modalEventShowOpen: boolean = false
   modalEventRadiusShowOpen: boolean = false
   modalButtonLoader: boolean = false
@@ -166,6 +169,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (radius-1 >= 1) {
       this.filterService.setRadiusTolocalStorage(`${radius-1}`)
     }
+  }
+
+  openModalSwitcher(){
+
+    this.screenWidth = window.innerWidth;
+    if(this.screenWidth < 768){
+
+        if(this.modalSwitcherClass == 'container-swither'){
+          this.modalSwitcherClass = 'container-swither_open'
+        }
+        else
+        {
+          this.modalSwitcherClass = 'container-swither'
+        }
+    }else{
+      this.modalSwitcherClass = 'container-swither'
+    }
+
   }
 
   openModalContent() {

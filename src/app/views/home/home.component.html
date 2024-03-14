@@ -42,7 +42,7 @@
       </ion-row> -->
     </div>
 
-    <div class="container-swither">
+    <div (click)="openModalSwitcher()" class="{{this.modalSwitcherClass}}">
 
       <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" #event>
         <!-- <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon> -->
@@ -77,12 +77,12 @@
     </div>
 
 
-  <div class="map">
+  <div  class="map">
     <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading"></ion-progress-bar>
     <div class="sight-carusel-container">
       <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
     </div>
-    <ya-map (ready)="onMapReady($event)"
+    <ya-map (ready)="onMapReady($event )"
       id="map"
       [zoom]="15"
       [center]="[0,0]"

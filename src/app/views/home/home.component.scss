@@ -79,23 +79,46 @@
     z-index: 99999;
 
 }
-.container-swither{
+.container-swither {
 
     position: absolute;
 	top: 65%;
 	margin-top: 1%;
 	margin-left: 10px;
 	padding: 5px;
-  z-index: 103;
-  max-width: 60px;
+  	z-index: 103;
+  	width: 50px;
 	background-color: white;
 	border-radius: 16px;
 	display: flex;
   	flex-direction: column;
   	justify-content: space-around;
+	transition: 0.3s all;
 
 
 }
+
+.container-swither:hover{
+	transition: 0.3s all;
+	width: 140px;
+}
+
+.container-swither_open{
+	position: absolute;
+	top: 65%;
+	margin-top: 1%;
+	margin-left: 10px;
+	padding: 5px;
+  	z-index: 103;
+  	width: 140px;
+	background-color: white;
+	border-radius: 16px;
+	display: flex;
+  	flex-direction: column;
+  	justify-content: space-around;
+	transition: 0.3s all;
+}
+
 .geo-container{
 	position: absolute;
 	top: 75%;
@@ -434,7 +457,12 @@ ion-spinner{
 }
 
 
-
+@media(max-width:768px){
+	.container-swither:hover{
+		transition: 0.3s all;
+		width: 50px;
+	}
+}
 
 
 
