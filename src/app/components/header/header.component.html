@@ -158,7 +158,7 @@
             <!-- <ng-container *ngIf="!cityesListLoading && !cityesList.length">
                 <app-no-data />
             </ng-container> -->
-            <ion-list>
+            <ion-list  *ngIf="!cityesListLoading">
               <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" class="search-item">
                 <ion-label>
                     {{ item.name }}<p>{{ item.location_parent.name }}</p>
