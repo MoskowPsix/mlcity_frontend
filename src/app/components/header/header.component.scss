@@ -3,12 +3,15 @@ ion-modal {
     --min-height: 20rem;
     --height: auto;
   }
+
 .ion-justify-content-end {
    --justify-content: center;
 }
 
 .searchParrent{
+    padding-bottom: 1rem;
     max-width: 131px;
+    min-height: 60px;
 }
 
 .icon{

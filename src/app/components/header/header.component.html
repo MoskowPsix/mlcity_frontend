@@ -1,5 +1,5 @@
-<ion-header class="header-mobile" id="header-m">
-    <ion-toolbar>
+<!-- Мобильное меню -->
+    <div class="header-mobile">
         <!-- <ion-buttons slot="end">
             <ion-menu-toggle>
                 <ion-button>
@@ -7,7 +7,7 @@
                 </ion-button>
             </ion-menu-toggle>
         </ion-buttons> -->
-        <ion-row>
+        <ion-row class="header-mobile">
             <!-- <ion-col>
                 <ion-title *ngIf="!showBackButton">
                     <div class="logo">
@@ -29,13 +29,13 @@
                 </ion-button>
             </ion-col>
 
-            <ion-col class="flex ion-justify-content-end ion-padding-horizontal z-index-9999">
+            <ion-col class="flex ion-justify-content-end z-index-9999">
                 <!-- <ion-searchbar animated="true" placeholder="Поиск"></ion-searchbar> -->
                 <ion-icon name="search" color="medium" size="large" class="ico" (click)="isModalSearchEventsOpen(true)"></ion-icon>
             </ion-col>
         </ion-row>
-    </ion-toolbar>
-</ion-header>
+    </div>
+
 
 <!-- Декстопное меню -->
 <ion-div class="header ion-align-items-center" id="header">

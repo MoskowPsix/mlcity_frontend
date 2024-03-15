@@ -1,88 +1,9 @@
 <meta name="description" content="Узнайте какие события и достопремечательности проходят рядом с вами и в вашем городе.">
 <ion-content>
-    <div class="buttons-wrapper">
-      <div class="filters">
-        <!-- <app-filters></app-filters> -->
 
-      </div>
-    </div>
-
-    <div class="calendula-container" #calendula [ngStyle]="{'top':headerHeight.offsetHeight + 'px'}">
-      <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
-      <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
-    </div>
-
-
-
-    <div class="range-radius-main">
-      <p class="range-radius-custom-info" >{{radius}}км</p>
-      <div class="range-radius-custom" style="height: 11.5rem;">
-        <ion-icon (click)="radiusPlus()" name="add-outline" class="swither-icon-range" color="primary"></ion-icon>
-          <ngx-slider style="border:none"
-          [value]="radius"
-          [options]="options"
-          (userChange)="radiusChange($event)"
-          ></ngx-slider>
-          <ion-icon (click)="radiusMinus()" name="remove-outline" class="swither-icon-range " color="primary"></ion-icon>
-      </div>
-
-      <!-- <ion-row class="" >
-        <ion-range class="range-radius"
-        [ticks]="true"
-        [snaps]="true"
-        [min]="1"jg
-        [max]="25"
-        [pin]="true"
-        [value]="radius"
-        [pinFormatter]="pinRadiusFormatter"
-        (ionKnobMoveEnd)="radiusChange($event)"
-        ></ion-range>
-
-        <ion-label class="ion-padding-horizontal">{{ radius }} км.</ion-label>
-      </ion-row> -->
-    </div>
-
-    <div (click)="openModalSwitcher()" class="{{this.modalSwitcherClass}}">
-
-      <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" #event>
-        <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon>
-        <!-- <img src="/assets/icons/TablerTicket.svg" class="swither-icon"> -->
-      </div>
-      <div class="swither-bg" #buttonActive></div>
-      <div class="swither test" (click)="onSegmentChanged(sight, 2)" (click)="stateType='sights'" (click)="getEventsAndSights()" #sight>
-        <img src="/assets/icons/MakiMuseum.svg" class="swither-icon">
-        <!-- <ion-icon name="prism" class="swither-icon" color="primary"></ion-icon> -->
-      </div>
-      <!-- <div class="swither" (click)="onSegmentChanged(new, 3)" #new>
-        <ion-icon name="flame" class="swither-icon" color="primary"></ion-icon>
-      </div> -->
-    </div>
-
-    <div class="geo-container">
-      <div class="geo-button-container" (click)="getGeoPosition()">
-        <ion-icon class="geo-button" color="primary" name="locate-outline" size="large"></ion-icon>
-      </div>
-    </div>
-
-    <div class="modalButton">
-      <ion-button (click)="openModalContent()" *ngIf="!modalButtonLoader && stateType == 'sights'" fill="solid" shape="round" [disabled]="modalButtonLoader">
-        Посмотреть {{sightsContentModalTotal}} достопримечателностей
-      </ion-button>
-      <ion-button (click)="openModalContent()" *ngIf="!modalButtonLoader && stateType == 'events'" fill="solid" shape="round" [disabled]="modalButtonLoader">
-        Посмотреть {{eventsContentModalTotal}} мероприятий
-      </ion-button>
-      <ion-button *ngIf="modalButtonLoader" fill="solid" shape="round" [disabled]="modalButtonLoader">
-        <ion-spinner name="dots"></ion-spinner>
-      </ion-button>
-    </div>
-
-
-  <div  class="map">
-    <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading"></ion-progress-bar>
-    <div class="sight-carusel-container">
-      <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
-    </div>
-    <ya-map (ready)="onMapReady($event )"
+  <!-- Карта -->
+  <div class="map">
+    <ya-map [@mapAnimate] (ready)="onMapReady($event )"
       id="map"
       [zoom]="15"
       [center]="[0,0]"
@@ -97,6 +18,74 @@
       }"
     >
     </ya-map>
+  </div>
+
+  <!-- Управление картой -->
+  <div >
+
+    <!-- Фильтры для ивентов -->
+    <div  *ngIf="stateType == 'events'" [@panelInOut] [style.height]="stateType != 'events' ? '0' : 'auto'" class="calendula-container" #calendula>
+      <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
+      <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
+    </div>
+
+    <!-- Фильтры для мест -->
+    <div  *ngIf="stateType == 'sights'" [@panelInOut] [style.height]="stateType != 'sights' ? '0' : 'auto'" class="sight-carusel-container">
+      <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
+    </div>
+
+    <!-- Лоадер карты -->
+    <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading"></ion-progress-bar>
+
+    <!-- Кнопка геопозиции -->
+    <div class="geo-container">
+      <div class="geo-button-container" (click)="getGeoPosition()">
+        <ion-icon class="geo-button" color="primary" name="locate-outline" size="large"></ion-icon>
+      </div>
+    </div>
+
+    <!-- Выбор отображения на карте -->
+    <div (click)="openModalSwitcher()" class="{{this.modalSwitcherClass}}">
+      <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" #event>
+        <ion-icon name="balloon" class="swither-icon" color="primary"></ion-icon>
+        <!-- <img src="/assets/icons/TablerTicket.svg" class="swither-icon"> -->
+      </div>
+      <div class="swither-bg" #buttonActive></div>
+      <div class="swither test" (click)="onSegmentChanged(sight, 2)" (click)="stateType='sights'" (click)="getEventsAndSights()" #sight>
+        <img src="/assets/icons/MakiMuseum.svg" class="swither-icon">
+        <!-- <ion-icon name="prism" class="swither-icon" color="primary"></ion-icon> -->
+      </div>
+      <!-- <div class="swither" (click)="onSegmentChanged(new, 3)" #new>
+        <ion-icon name="flame" class="swither-icon" color="primary"></ion-icon>
+      </div> -->
+    </div>
+
+    <!-- Фильтр радиуса -->
+    <div class="range-radius-main">
+      <p class="range-radius-custom-info" >{{radius}}км</p>
+      <div class="range-radius-custom" style="height: 11.5rem;">
+        <ion-icon (click)="radiusPlus()" name="add-outline" class="swither-icon-range" color="primary"></ion-icon>
+          <ngx-slider style="border:none"
+          [value]="radius"
+          [options]="options"
+          (userChange)="radiusChange($event)"
+          ></ngx-slider>
+          <ion-icon (click)="radiusMinus()" name="remove-outline" class="swither-icon-range " color="primary"></ion-icon>
+      </div>
+    </div>
+
+      <!-- Просмотр в радиусе -->
+    <div class="modalButton">
+      <ion-button (click)="openModalContent()" *ngIf="!modalButtonLoader && stateType == 'sights'" fill="solid" shape="round" [disabled]="modalButtonLoader">
+        Посмотреть {{sightsContentModalTotal}} достопримечателностей
+      </ion-button>
+      <ion-button (click)="openModalContent()" *ngIf="!modalButtonLoader && stateType == 'events'" fill="solid" shape="round" [disabled]="modalButtonLoader">
+        Посмотреть {{eventsContentModalTotal}} мероприятий
+      </ion-button>
+      <ion-button *ngIf="modalButtonLoader" fill="solid" shape="round" [disabled]="modalButtonLoader">
+        <ion-spinner name="dots"></ion-spinner>
+      </ion-button>
+    </div>
   </div>
 
   <!-- Модальное окно просмотр ивента / места при клике метки на карте -->
