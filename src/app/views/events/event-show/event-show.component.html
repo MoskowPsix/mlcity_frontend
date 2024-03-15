@@ -65,19 +65,19 @@
                     <div class="swiper-container-header-content">
                         <div>
                             <h1 class="title">{{ event.name }}</h1>
-                          
+
                             <!-- <div class="swiper-container-header-content-organizator_wrapper" >
                               <h2 class="swiper-container-header-content-organizator">Организатор: {{ event.sponsor }}</h2>
                             </div> -->
                             <h3 class="swiper-container-header-content-time">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
                             <!-- <div style="display: flex; align-items: center;">
                               <div style="display: flex; align-items: center;">
-                                <h3 class="swiper-container-header-content-time">{{event.types[0].name}}</h3> 
+                                <h3 class="swiper-container-header-content-time">{{event.types[0].name}}</h3>
                               </div>
                               <ion-img style="filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(12deg) brightness(105%) contrast(101%);"  alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>
                             </div> -->
                         </div>
-                        
+
                     </div>
                   </div>
                 </swiper-slide>
@@ -89,7 +89,7 @@
 
                         <div>
                             <h1 class="title">{{ event.name }}</h1>
-                          
+
                             <!-- <div class="swiper-container-header-content-organizator_wrapper" >
                               <h2 class="swiper-container-header-content-organizator">Организатор: {{ event.sponsor }}</h2>
                             </div> -->
@@ -97,12 +97,12 @@
                             <h3 class="swiper-container-header-content-time">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
                             <!-- <div style="display: flex; align-items: center;">
                               <div style="display: flex; align-items: center;">
-                                <h3 class="swiper-container-header-content-time">{{event.types[0].name}}</h3> 
+                                <h3 class="swiper-container-header-content-time">{{event.types[0].name}}</h3>
                               </div>
                               <ion-img style="filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(12deg) brightness(105%) contrast(101%);"  alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>
                             </div> -->
                         </div>
-                        
+
                     </div>
 
                   </div>
@@ -116,21 +116,21 @@
                     <div class="swiper-container-header-content">
                         <div>
                             <h1 class="title">{{ event.name }}</h1>
-                          
+
                             <!-- <div class="swiper-container-header-content-organizator_wrapper" >
                               <h2 class="swiper-container-header-content-organizator">Организатор: {{ event.sponsor }}</h2>
                             </div> -->
                             <h3 class="swiper-container-header-content-time">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
                             <!-- <div style="display: flex; align-items: center;">
                               <div style="display: flex; align-items: center;">
-                                <h3 class="swiper-container-header-content-time">{{event.types[0].name}}</h3> 
+                                <h3 class="swiper-container-header-content-time">{{event.types[0].name}}</h3>
                               </div>
                               <ion-img style="filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(12deg) brightness(105%) contrast(101%);"  alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>
                             </div> -->
                         </div>
-                        
+
                     </div>
-                    
+
                   </div>
                 </swiper-slide>
               </ng-container>
@@ -160,15 +160,15 @@
         <div class="likes_share">
           <ion-icon style="margin-left: 4px;" name="share-social-outline" class="ico share"></ion-icon>
         </div>
-        
+
       </div>
 
       <ion-row class="ion-justify-content-center">
-        
+
         <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
           <ion-row class="">
             <ion-col size-lg="12" size-md="12" size-xs="12" class="left-block">
-             
+
 
               <div class="content-main">
 
@@ -190,6 +190,16 @@
 
                 </ion-col>
 
+                <ion-col>
+                  <div style="font-family:'Montserrat-Bold';" class="title">
+                    Организатор
+                  </div>
+
+                  <div class="description">
+                    {{event.sponsor}}
+                  </div>
+                </ion-col>
+
 
                 <ion-col>
                   <div style="font-family:'Montserrat-Bold';" class="title">
@@ -198,36 +208,45 @@
                     <div class="tickets-grid_wrapper">
                       <ion-grid class="tickets-grid">
                         <div  *ngFor="let price of event.price"  class="ticket-main">
-                          <div class="price-information"> 
+                          <div class="price-information">
                             <div *ngIf="price.cost_rub > 0" class="ticket-main-price">
                               {{price.cost_rub}} ₽
                             </div>
                             <div *ngIf='price.cost_rub == 0' class="ticket-main-description">
                               Вход бесплатный
-                              
+
                             </div>
-  
-                            <div  class="ticket-main-description"> 
+
+                            <div  class="ticket-main-description">
                               {{price.descriptions}}
                             </div>
 
-                          
-                          </div>  
-                       
+
+                          </div>
+
                           <div class="circle">
 
                           </div>
                         </div>
-                        
+
                       </ion-grid>
                     </div>
-                 
+
+                </ion-col>
+
+                <ion-col>
+                  <div style="font-family:'Montserrat-Bold';" class="title">Типы мероприятия</div>
+
+                  <div *ngFor="let type of event.types">
+                      <img src="{{host + port}}{{type.ico}}">
+                      <span class="description">{{ type.name }}</span>
+                  </div>
                 </ion-col>
               </div>
 
-           
-             
-             
+
+
+
             </ion-col>
 
 
@@ -252,7 +271,7 @@
             </ion-col> -->
           </ion-row>
           <ion-row class="events-map-container">
-            
+
             <div style="margin-bottom: 1rem;" class="title">
               Расписание
             </div>
@@ -271,10 +290,10 @@
               <div style="background-color: #fff; border: 1px solid #E6E6E6; border-radius: 8px; margin-top: -1rem;" slot="content" class="ion-padding">
                 <app-place-info [place]="place" [place_date]="place.seanses"  *ngIf="place.active" [load_seances]="place.active"></app-place-info>
               </div>
-              
+
             </ion-accordion>
-          
-  
+
+
             <div *ngIf="loadPlace==true">
               <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
               <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
@@ -293,8 +312,8 @@
           <ion-row class="ion-justify-content-center">
             <ion-button (click)="getEventPlaces()" *ngIf="loadMore">Показать больше</ion-button>
           </ion-row>
-          
-       
+
+
           <ion-card style="margin-bottom: 2rem;"><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
 
 
@@ -302,7 +321,7 @@
             <ion-col size-lg="8" size-md="12" size-xs="12" >
               Материалы: {{ event.materials }}
             </ion-col>
-    
+
           </ion-col>
         </ion-col>
       </ion-row>

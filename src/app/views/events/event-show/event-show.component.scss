@@ -2,7 +2,7 @@
     width: 20px;
     height: 20px;
     margin: -4px 4px;
-  
+
 }
 
 .content-main{
@@ -65,20 +65,20 @@ swiper-slide:hover{
         .swiper-container-header-content-organizator_wrapper{
 
             .swiper-container-header-content-organizator{
-                font-size: calc(10px + 10*(100vh/1406)); 
+                font-size: calc(10px + 10*(100vh/1406));
                font-family: "Montserrat-Regular";
                text-align: start;
             }
         }
 
         .swiper-container-header-content-time{
-           
+
             color: #fff;
             font-family: "Montserrat-Regular";
             text-align: start;
-            font-size: 14px; 
+            font-size: 14px;
         }
-       
+
     }
 
 
@@ -86,7 +86,7 @@ swiper-slide:hover{
 
 
 .tickets-grid{
- 
+
 
 }
 .ticket-main{
@@ -96,7 +96,7 @@ swiper-slide:hover{
     min-height: 6rem;
     align-items: center;
     justify-content: space-between;
-    width: clamp(18.75rem, 14.205rem + 22.73vw, 31.25rem); 
+    width: clamp(18.75rem, 14.205rem + 22.73vw, 31.25rem);
     border-radius: 8px;
     display: flex;
     background-image: url('./tiketPC.png');
@@ -106,7 +106,7 @@ swiper-slide:hover{
         margin-right: -2rem;
         background-color: #fff;
         z-index: 1000;
- 
+
         border-radius: 50%;
         width: 40px;
         height: 40px;
@@ -117,13 +117,13 @@ swiper-slide:hover{
         max-width: 230px;
         background-color: #fff;
         border-radius: 8px;
-    
+
         .ticket-main-price{
             font-family: "Montserrat-SemiBold";
             font-size: calc( 20px + 4*(100vh/1406));
             font-weight: 500;
             max-width: 12rem;
-    
+
         }
         .ticket-main-description{
             font-family: "Montserrat-Light";
@@ -141,8 +141,8 @@ swiper-slide:hover{
 }
 
 .event-container{
-    background-color: white; 
-  
+    background-color: white;
+
 }
 
 .seance{
@@ -213,10 +213,10 @@ swiper-slide:hover{
 
 .description{
     margin-top: 1rem;
-   
+
     font-family: 'Montserrat-Light';
     line-height: 1.5;
- 
+
 }
 
 
@@ -226,7 +226,7 @@ ion-accordion-group{
 }
 .ico{
     cursor: pointer;
-    transition: all .2s ease-in-out;  
+    transition: all .2s ease-in-out;
 }
 
 .ico:hover{
@@ -299,7 +299,7 @@ ion-accordion-group{
 }
 
 @media screen and (min-width: 0px) and (max-width: 960px) {
-  
+
     .swiper-container-img_wrapper{
         .swiper-container-header-content{
             padding-left: 1rem;
@@ -308,11 +308,11 @@ ion-accordion-group{
     }
 
 
- 
+
 
     .event-container{
-        background-color: white; 
-        border-radius: 0; 
+        background-color: white;
+        border-radius: 0;
         margin: 0;
     }
     .place-skelet{
@@ -356,28 +356,28 @@ ion-accordion-group{
         }
     }
 }
-  
+
 @media screen and (min-width: 768px)  {
-  
+
     swiper-container{
         height: 30rem;
         --width: 100%;
         swiper-slide{
             height: 100%;
-        
+
             img {
                 border-radius: 6px;
                 max-width: 100%;
                 height: 100%;
                 object-fit: cover;
-               
+
             }
         }
     }
-    
-    
+
+
         .ico.share{
             display: none;
         }
-    
+
 }
