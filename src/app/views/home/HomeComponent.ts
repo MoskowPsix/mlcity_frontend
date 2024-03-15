@@ -25,11 +25,34 @@ import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
 import { LocationService } from 'src/app/services/location.service';
 import { ActivatedRoute } from '@angular/router';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  animations: [
+    trigger('panelInOut', [
+        transition('void => *', [
+            style({transform: 'translateY(-100%)'}),
+            animate(200)
+        ]),
+        transition('* => void', [
+            animate(200, style({transform: 'translateY(-100%)'}))
+        ]),
+        transition('* <=> *', [
+          style({height: '{{startHeight}}px', opacity: 0}),
+          animate('.2s ease'),
+        ], {params: {startHeight: 0}})
+    ]),
+    trigger('mapAnimate', [
+      transition('void <=> *', []),
+      transition('* <=> *', [
+        style({height: '{{startHeight}}px', opacity: 0}),
+        animate('.5s ease'),
+      ], {params: {startHeight: 0}})
+  ])
+  ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
@@ -634,12 +657,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     if(p==1)
     {
       this.buttonActive.nativeElement.style.transform = "translateY(0px)"
-      this.calendula.nativeElement.style.top = this.headerHeight.offsetHeight + "px"
+      // this.calendula.nativeElement.style.top = this.headerHeight.offsetHeight + "px"
     }
     else if(p==2)
     {
       this.buttonActive.nativeElement.style.transform = "translateY(44px)";
-      this.calendula.nativeElement.style.top = "-100px"
+      // this.calendula.nativeElement.style.top = "-100px"
     }
     else if(p==3)
     {
