@@ -1,4 +1,4 @@
-<ion-content> 
+<ion-content id="top"> 
   <ion-grid class="mb-6-5rem">
 
     <!-- <ion-row class="ion-justify-content-center">
@@ -141,7 +141,11 @@
           </div> -->
       
         </ion-col>
-      </ion-row>
-    </ion-grid>  
+      </ion-row> 
+    </ion-grid> 
+    
+    <a routerLink="." fragment="header-anchor" class="scroll-up" [hidden]="scrollUpState" (click)="scrollUp()">
+      <ion-icon size="large" name="chevron-up"></ion-icon>     
+    </a>
   </ion-content>
   

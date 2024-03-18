@@ -50,6 +50,8 @@ export class SightsComponent implements OnInit, OnDestroy {
 
   sightTypeId: any
 
+  scrollUpState: boolean = true
+
   constructor(
     private sightsService: SightsService,
     private toastService: ToastService,
@@ -90,6 +92,10 @@ export class SightsComponent implements OnInit, OnDestroy {
         });
         prevPath = newPath;
       });
+  }
+
+  scrollUp() {
+    document.getElementById('top')?.scrollTo({top:0,  behavior: 'smooth'})
   }
 
   getSightsCity(){
@@ -159,8 +165,14 @@ export class SightsComponent implements OnInit, OnDestroy {
   onSegmentChanged(event: any){
     this.segment = event.detail.value
   }
+  
+  scrollUpCheckState() {
+    const boundingClientRect = this.widgetsContent?.nativeElement.getBoundingClientRect()
+    boundingClientRect ? this.scrollUpState = boundingClientRect.y > 0 : this.scrollUpState = false
+  }
 
   scrollEvent = (): void => {
+    this.scrollUpCheckState()
 
     let viewElement: boolean = false
 
