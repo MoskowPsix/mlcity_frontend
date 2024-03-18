@@ -124,7 +124,7 @@
 
 .container-swither_open{
   position: absolute;
-	top: 32rem;
+	top: 77%;
 	margin-left: 10px;
 	padding: 5px;
   	z-index: 103;
@@ -269,7 +269,7 @@
 	}
 	.container-swither{
 
-		top:75%;
+		top:78%;
 
 
 	}
@@ -447,6 +447,10 @@ ion-spinner{
 		// margin-top: 56px;
 	}
 
+  .container-swither{
+    top:76%;
+  }
+
 
 
 	.filters{
@@ -480,6 +484,11 @@ ion-spinner{
 	}
 }
 
+@media screen and (min-width: 1060px) {
+  .container-swither{
+    top:78%;
+  }
+}
 
 @media(max-width:768px){
 	.container-swither:hover{

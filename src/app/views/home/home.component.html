@@ -157,16 +157,16 @@
 
  <!-- Выбор отображения на карте -->
 
- <div (click)="openModalSwitcher()" class="{{this.modalSwitcherClass}}">
+ <div (click)="openModalSwitcher()" class="container-swither">
   <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" #event>
     <ion-icon name="balloon" style="min-width: 28px; min-height: 28px" class="swither-icon" color="primary"></ion-icon>
-    <div class="swither-text">События</div>
+    <!-- <div class="swither-text">События</div> -->
     <!-- <img src="/assets/icons/TablerTicket.svg" class="swither-icon"> -->
   </div>
   <div class="swither-bg" #buttonActive></div>
   <div class="swither test" (click)="onSegmentChanged(sight, 2)" (click)="stateType='sights'" (click)="getEventsAndSights()" #sight>
     <img src="/assets/icons/MakiMuseum.svg" class="swither-icon">
-    <div class="swither-text">Места</div>
+    <!-- <div class="swither-text">Места</div> -->
     <!-- <ion-icon name="prism" class="swither-icon" color="primary"></ion-icon> -->
   </div>
   <!-- <div class="swither" (click)="onSegmentChanged(new, 3)" #new>

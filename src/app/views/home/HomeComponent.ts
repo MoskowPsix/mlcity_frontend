@@ -380,8 +380,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             ).subscribe(() => {
             });
             this.activePlacemark = e.get('target');
-
-
             e.get('target').options.set('iconContentLayout', ymaps.templateLayoutFactory.createClass(`<div class="marker active"><img src="${this.activeIcoLink}"/></div>`));
           }
         }
@@ -573,6 +571,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
         this.placemarks.push(placemark);
       } else {
+        let icoLink = this.host + ":" + this.port + item.ico
         placemark = new ymaps.Placemark(
           [item.latitude, item.longitude],
           {}, {
