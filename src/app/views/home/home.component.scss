@@ -1,42 +1,37 @@
-
 ::ng-deep {
-
-	.range-radius-custom{
-
-	}
-	.range-radius-custom .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
-			background-color: #ffffff;
-	}
-
-	.range-radius-custom .ngx-slider .ngx-slider-bubble {
-
-		display: none;
-	}
-
-
-	.range-radius-custom .ngx-slider .ngx-slider-active{
-		z-index: -2;
-		border: none;
-	}
+    .range-radius-custom {
+        /* Добавьте свои стили */
+    }
+    .range-radius-custom .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
+        background-color: #ffffff;
+    }
+    .range-radius-custom .ngx-slider .ngx-slider-bubble {
+        display: none;
+    }
+    .range-radius-custom .ngx-slider .ngx-slider-active {
+        z-index: -2;
+        border: none;
+    }
 }
+
 .map {
-	position: fixed;
-	z-index: -2;
-	width: 100%;
-  	height: 93.5vh;
-	ion-progress-bar {
-		position: relative;
-		z-index: 2;
-	}
-	.sight-carusel-container{
-		transition: 0.5;
-		position: relative;
-		margin-left: 0px;
-		margin-right: 0px;
-		top: 4rem;
-		width: 100%;
-		z-index: 1;
-	}
+    position: fixed;
+    z-index: -2;
+    width: 100%;
+    height: 93.5vh;
+}
+.map ion-progress-bar {
+    position: relative;
+    z-index: 2;
+}
+.map .sight-carusel-container {
+    transition: 0.5;
+    position: relative;
+    margin-left: 0px;
+    margin-right: 0px;
+    top: 4rem;
+    width: 100%;
+    z-index: 1;
 }
 
 .range-radius-main {
@@ -52,296 +47,262 @@
 }
 
 .range-radius-custom-info {
-	text-align: center;
-	height: 1rem;
-	width: 2rem;
-	font-size: 0.8rem;
-	margin-left: auto;
-	margin-right: auto;
-	font-weight: bold;
-	color: #0085ff;
+    text-align: center;
+    height: 1rem;
+    width: 2rem;
+    font-size: 0.8rem;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+    color: #0085ff;
 }
 
-.range-radius{
-	min-width: 100%;
-	transform: rotate(271deg);
+.range-radius {
+    min-width: 100%;
+    transform: rotate(271deg);
 }
 
 .loader {
-
-	position: absolute;
-	top: 15%;
+    position: absolute;
+    top: 15%;
 }
 
-.buttons-wrapper{
-	display: flex;
+.buttons-wrapper {
+    display: flex;
     position: absolute;
     top: 3.5rem;
     padding: 1rem;
     z-index: 99999;
-
 }
+
 .container-swither {
     position: absolute;
     cursor: pointer;
-	top: 60%;
-	margin-top: 1%;
-	margin-left: 10px;
-	padding: 5px;
-  	z-index: 103;
-  	width: 50px;
-	background-color: white;
-	border-radius: 16px;
-	display: flex;
-  	flex-direction: column;
-  	justify-content: space-around;
-	transition: 0.3s all;
-
-
-}
-
-.swither-text{
-  display: none;
-  font-family: "Montserrat-Medium";
-  text-align: center;
-  margin-left: 10px;
-  display: flex;
-  align-items: center;
-  opacity: 0;
-}
-
-.container-swither:hover{
-	transition: 0.3s all;
-	width: 140px;
-
-  .swither-text{
+    top: 60%;
+    margin-top: 1%;
+    margin-left: 10px;
+    padding: 5px;
+    z-index: 103;
+    width: 50px;
+    background-color: white;
+    border-radius: 16px;
     display: flex;
-    opacity: 100%;
+    flex-direction: column;
+    justify-content: space-around;
+    transition: 0.3s all;
+}
+
+.swither-text {
+    font-family: "Montserrat-Medium";
+    text-align: center;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    display: none;
+}
+
+.swither-text_open {
+    font-family: "Montserrat-Medium";
+    text-align: center;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    opacity: 1;
     transition: 0.65s all;
     cursor: pointer;
-  }
 }
 
-.container-swither_open{
-  position: absolute;
-	top: 77%;
-	margin-left: 10px;
-	padding: 5px;
-  	z-index: 103;
-  	width: 140px;
-	background-color: white;
-	border-radius: 16px;
-	display: flex;
-  	flex-direction: column;
-  	justify-content: space-around;
-	transition: 0.3s all;
+.container-swither:hover {
+    transition: 0.3s all;
+    width: 140px;
+    .swither-text {
+        display: flex;
+        opacity: 100%;
+        transition: 0.65s all;
+        cursor: pointer;
+    }
 }
 
-.geo-container{
-	position: fixed;
-	top: 75%;
-	margin-left: 90%;
-	z-index: 3;
+.container-swither_open {
+    position: absolute;
+    cursor: pointer;
+    top: 63%;
+    margin-top: 1%;
+    margin-left: 10px;
+    padding: 5px;
+    z-index: 103;
+    width: 140px;
+    background-color: white;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    transition: 0.3s all;
+}
+
+.geo-container {
+    position: fixed;
+    top: 75%;
+    margin-left: 90%;
+    z-index: 3;
 }
 
 .modalButton {
-	position: fixed;
-	padding: 4px;
-	bottom: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-	z-index: 3;
-}
-.geo-button-container{
-	width: 48px;
-	display: flex;
-	height: 48px;
-	box-shadow: 3px 3px 5px rgb(219, 218, 218);
-	background-color: #ffffff;
-	border-radius: 100%;
-	align-items: center;
+    position: fixed;
+    padding: 4px;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
 }
 
-@media only screen and (max-height: 768px) and (max-width: 768px){
-
-	.map{
-		height: 92vh;
-	  }
-		.geo-container{
-			position: fixed;
-			bottom: 4rem;
-			right: 0;
-			margin-right: 45px;
-
-			z-index: 3;
-		}
-		.container-swither{
-			top: 65%;
-		}
-		.range-radius-main {
-			height: 15rem;
-			margin-top: 21vh;
-			ngx-slider{
-				height: 8rem;
-			}
-		}
-		.range-radius-main{
-			max-height: 200px;
-		}
-		.range-radius-custom{
-			max-height: 175px;
-
-		}
-
-
+.geo-button-container {
+    width: 48px;
+    display: flex;
+    height: 48px;
+    box-shadow: 3px 3px 5px rgb(219, 218, 218);
+    background-color: #ffffff;
+    border-radius: 100%;
+    align-items: center;
 }
 
-
-@media only screen and (max-height: 768px) {
-	.map{
-		height: 92vh;
-	  }
-		.geo-container{
-			position: fixed;
-			bottom: 4rem;
-			right: 0;
-			margin-right: 45px;
-
-			z-index: 3;
-		}
-		.container-swither{
-			top: 65%;
-		}
-		.range-radius-main {
-			height: 15rem;
-			margin-top: 21vh;
-			ngx-slider{
-				height: 8rem;
-			}
-		}
-		.range-radius-main{
-			max-height: 200px;
-		}
-		.range-radius-custom{
-			max-height: 175px;
-
-		}
+@media only screen and (max-height: 768px) and (max-width: 768px) {
+    .map {
+        height: 92vh;
+    }
+    .geo-container {
+        position: fixed;
+        bottom: 4rem;
+        right: 0;
+        margin-right: 45px;
+        z-index: 3;
+    }
+    .container-swither {
+        top: 63%;
+    }
+    .range-radius-main {
+        height: 15rem;
+        margin-top: 21vh;
+    }
+    .range-radius-main ngx-slider {
+        height: 8rem;
+    }
+    .range-radius-main {
+        max-height: 200px;
+    }
 }
 
 @media only screen and (max-width: 768px) {
-  .map{
-    height: 92vh;
-  }
-	.geo-container{
-		position: fixed;
-		bottom: 4rem;
-		right: 0;
-		margin-right: 45px;
-
-		z-index: 3;
-	}
-	.container-swither{
-		top: 65%;
-	}
-	.range-radius-main {
-		height: 20rem;
-		margin-top: 11vh;
-		ngx-slider{
-			max-height: 4.5rem;
-		}
-	}
-	.range-radius-main{
-		max-height: 12rem;
-	}
-	.range-radius-custom{
-
-
-	}
+    .map {
+        height: 92vh;
+    }
+    .geo-container {
+        position: fixed;
+        bottom: 4rem;
+        right: 0;
+        margin-right: 45px;
+        z-index: 3;
+    }
+    .container-swither {
+        top: 63%
+    }
+    .range-radius-main {
+        height: 20rem;
+        margin-top: clamp(1rem, calc(27.176rem + -41.2vw), 4rem);
+    }
+    .range-radius-main ngx-slider {
+        max-height: clamp(5rem, -6rem + 57vw, 67rem);
+    }
+    .range-radius-main {
+        height: clamp(16rem, calc(2.564rem + 32.82vw), 24rem);
+    }
+    .range-radius-custom {
+        
+    }
 }
-@media only screen and (min-width: 1370px) and (max-width:1920px) {
-	.geo-container{
-		position: fixed;
-		top: 80%;
-		right: 0;
-		margin-right: 45px;
-
-		z-index: 3;
-	}
-	.container-swither{
-
-		top:78%;
-
-
-	}
-
+//iphone se
+@media only screen and (max-width: 380px){
+	.range-radius-main ngx-slider {
+		max-height:clamp(5rem, -6rem + 47vw, 67rem);
+    }
 
 }
 
-.geo-button-container:hover{
-	cursor: pointer;
+@media only screen and (min-width: 1370px) and (max-width: 1920px) {
+    .geo-container {
+        position: fixed;
+        top: 80%;
+        right: 0;
+        margin-right: 45px;
+        z-index: 3;
+    }
+    .container-swither {
+        top: 60%;
+    }
 }
 
-.geo-button{
-	margin-left: auto;
-	margin-right: auto;
+.geo-button-container:hover {
+    cursor: pointer;
 }
 
-
-.calendula-container{
-	position: relative;
-	width: 100%;
-	// top: -40px;
-	// transition: 0.5s ease-in-out;
-	z-index: 1;
-}
-.swither{
-	padding: 6px;
-	border-radius:24px;
-  display: inline-flex;
-
-	z-index: 2;
-	transition: .2s ease-in-out;
+.geo-button {
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.swither:hover{
-	background-color: rgba(181, 182, 187, 0.15);
-	border-radius:24px;
+.calendula-container {
+    position: relative;
+    width: 100%;
+    z-index: 1;
 }
 
-.swither-icon-range{
-	margin-left: 7px;
-	background-color: #fff;
-	width: 30px;
-	height: 30px;
-	border-radius: 16px;
+.swither {
+    padding: 6px;
+    border-radius: 24px;
+    display: inline-flex;
+    z-index: 2;
+    transition: .2s ease-in-out;
 }
 
-.swither-icon{
-	width: 28px;
-	height:28px;
-  filter: invert(45%) sepia(45%) saturate(7477%) hue-rotate(194deg) brightness(102%) contrast(108%);
+.swither:hover {
+    background-color: rgba(181, 182, 187, 0.15);
+    border-radius: 24px;
 }
 
-input[type="radio"]{
-	display: none;
-	width: 0;
-  }
-
-
-.swither-bg{
-	background-color: rgba(209, 210, 216, 0.548);
-	transition: transform .2s ease-in-out;
-	height: 40px;
-	width: 40px;
-	left: 5px;
-	z-index: 1;
-	position: absolute;
-	border-radius:24px;
-	top: 5px;
-
+.swither-icon-range {
+    margin-left: 7px;
+    background-color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 16px;
 }
-.events-counter{
-	background: rgba(0, 0, 0, 0.631372549);
+
+.swither-icon {
+    width: 28px;
+    height: 28px;
+    filter: invert(45%) sepia(45%) saturate(7477%) hue-rotate(194deg) brightness(102%) contrast(108%);
+}
+
+input[type="radio"] {
+    display: none;
+    width: 0;
+}
+
+.swither-bg {
+    background-color: rgba(209, 210, 216, 0.548);
+    transition: transform .2s ease-in-out;
+    height: 40px;
+    width: 40px;
+    left: 5px;
+    z-index: 1;
+    position: absolute;
+    border-radius: 24px;
+    top: 5px;
+}
+
+.events-counter {
+    background: rgba(0, 0, 0, 0.631372549);
     color: #fff;
     position: absolute;
     z-index: 999;
@@ -351,215 +312,161 @@ input[type="radio"]{
     display: flex;
     padding: 0.5rem;
     justify-content: center;
-	align-items: center;
+    align-items: center;
     border-radius: 20px;
-
-	span{
-		padding-left: 5px;
-	}
 }
 
-.px-5px{
-	padding-right: 5px;
+.px-5px {
+    padding-right: 5px;
 }
 
-.counter{
-	color: #fbff09;
+.counter {
+    color: #fbff09;
 }
 
-ion-spinner{
-	width: 13px;
-	height: 13px;
+ion-spinner {
+    width: 13px;
+    height: 13px;
 }
 
 .icon {
-	position: relative;
-	display: inline-block;
-	width: 40px;
-	height: 40px;
-	background-image: url('/assets/my_geo.svg');
-	background-repeat: no-repeat;
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-image: url('/assets/my_geo.svg');
+    background-repeat: no-repeat;
 }
 
-::ng-deep .balloon-title{
-	font-size: 1.5rem;
+::ng-deep .balloon-title {
+    font-size: 1.5rem;
     padding: 1rem;
 }
 
-::ng-deep .balloon-photos{
-	padding: 0 1rem 1rem;
-	display: flex;
+::ng-deep .balloon-photos {
+    padding: 0 1rem 1rem;
+    display: flex;
     position: relative;
     justify-items: stretch;
     flex-wrap: wrap;
     gap: 0.2rem;
-
-	img{
-		height: 80px;
-	}
+    img {
+        height: 80px;
+    }
 }
 
-::ng-deep .balloon-description{
-	padding: 1rem;
-	font-size: 1rem;
+::ng-deep .balloon-description {
+    padding: 1rem;
+    font-size: 1rem;
     line-height: 1.5;
-	font-style: italic;
-	color:#737373;
+    font-style: italic;
+    color: #737373;
 }
 
-::ng-deep .balloon-subtitle{
-	padding: 0.2rem 1rem;
-	font-size: 1rem;
-	font-style: italic;
-	color:#737373;
+::ng-deep .balloon-subtitle {
+    padding: 0.2rem 1rem;
+    font-size: 1rem;
+    font-style: italic;
+    color: #737373;
 }
 
 @media screen and (min-width: 0px) and (max-width: 1060px) {
-	.map {
-		ion-progress-bar {
-			top: 3.5rem;
-			position: absolute;
-			z-index: 2;
-		}
-		// app-sight-type-carusel{
-		// 	transition: 0.5;
-		// 	position: absolute;
-		// 	top: 3.5rem;
-		// 	width: 100%;
-		// 	height: 10px;
-		// 	z-index: 1;
-		// }
-		.sight-carusel-container{
-			transition: 0.5;
-			position: relative;
-			margin-left: 0px;
-			margin-right: 0px;
-			top: 3.5rem;
-			width: 100%;
-			z-index: 1;
-		}
-	}
-	.buttons-wrapper{
-		top: 2.8rem;
-	}
-
-	.calendula-container{
-		// margin-top: 56px;
-	}
-
-  .container-swither{
-    top:76%;
-  }
-
-
-
-	.filters{
-		position: fixed;
-		bottom: 5rem;
-		right: 1.5rem;
-		z-index: 9999;
-	}
-
-	ion-modal {
-		--border-radius: 8px!important;
-	}
-
-	ion-button.md.button-small{
-		--padding-start: 0.6em;
-		--padding-end: 0.6em;
-	}
-
-	.events-counter{
-		left: 15%;
-    	top: 7rem;
-	}
-  .modalButton{
-    bottom: 56px;
-  }
-
-	#modalEventShow {
-		ion-row{
-			margin-bottom: 6.5rem;
-		}
-	}
-}
-
-@media screen and (min-width: 1060px) {
-  .container-swither{
-    top:78%;
-  }
-}
-
-@media(max-width:768px){
-	.container-swither:hover{
-		transition: 0.3s all;
-		width: 50px;
-	}
-  .modalButton{
-    bottom: 56px;
-  }
-}
-
-
-
-@media(min-width: 1068px) {
-
-	#modalEventShow {
-		&::part(content){
-            // position: absolute;
-			// height: 32rem;
-			// bottom: 10%;
-    		// left: 0;
-			// padding: 1rem;
-			// background: transparent;
-    		// box-shadow: none;
-			--background: rgba(255, 255, 255, 0.4);
-			backdrop-filter: blur(5px);
-			height: 87%;
-			bottom: 10%;
-			left: 0;
+    .map ion-progress-bar {
+        top: 3.5rem;
+        position: absolute;
+        z-index: 2;
+    }
+    .map .sight-carusel-container {
+        transition: 0.5;
+        position: relative;
+        margin-left: 0px;
+        margin-right: 0px;
+        top: 3.5rem;
+        width: 100%;
+        z-index: 1;
+    }
+    .buttons-wrapper {
+        top: 2.8rem;
+    }
+    .calendula-container {
+        // margin-top: 56px;
+    }
+    .filters {
+        position: fixed;
+        bottom: 5rem;
+        right: 1.5rem;
+        z-index: 9999;
+    }
+    ion-modal {
+        --border-radius: 8px!important;
+    }
+    ion-button.md.button-small {
+        --padding-start: 0.6em;
+        --padding-end: 0.6em;
+    }
+    .events-counter {
+        left: 15%;
+        top: 7rem;
+    }
+    .modalButton {
+        bottom: 56px;
+    }
+    #modalEventShow {
+        ion-row {
+            margin-bottom: 6.5rem;
         }
-		ion-toolbar {
-			--background: rgba(255, 255, 255, 0);
-			 backdrop-filter: blur(5px);
-		}
+    }
+}
 
-	}
+@media screen and (min-width: 1060px) {}
+
+@media (max-width: 768px) {
+    .container-swither:hover {
+        transition: 0.3s all;
+        width: 50px;
+        .swither-text {
+            opacity: 0;
+            transition: 0.3s all;
+        }
+    }
+    .modalButton {
+        bottom: 56px;
+    }
+}
+
+@media (min-width: 1068px) {
+    #modalEventShow::part(content) {
+        --background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(5px);
+        height: 87%;
+        bottom: 10%;
+        left: 0;
+    }
+    #modalEventShow ion-toolbar {
+        --background: rgba(255, 255, 255, 0);
+        backdrop-filter: blur(5px);
+    }
 }
 
 @media screen and (min-width: 1060px) and (max-width: 1272px) {
-	.map {
-		ion-progress-bar {
-			top: 7.4rem;
-			position: absolute;
-			z-index: 2;
-		}
-		// app-sight-type-carusel{
-		// 	transition: 0.5;
-		// 	position: absolute;
-		// 	margin-left: 0px;
-		// 	margin-right: 0px;
-		// 	top: 7rem;
-		// 	width: 100%;
-		// 	height: 10px;
-		// 	z-index: 1;
-		// }
-		.sight-carusel-container{
-			transition: 0.5;
-			position: absolute;
-			margin-left: 0px;
-			margin-right: 0px;
-			top: 7rem;
-			width: 100%;
-			z-index: 1;
-		}
-	}
-	.buttons-wrapper{
-		top: 7rem;
-	}
-
-	.events-counter{
-		top: 8rem;
-	}
-
+    .map ion-progress-bar {
+        top: 7.4rem;
+        position: absolute;
+        z-index: 2;
+    }
+    .map .sight-carusel-container {
+        transition: 0.5;
+        position: absolute;
+        margin-left: 0px;
+        margin-right: 0px;
+        top: 7rem;
+        width: 100%;
+        z-index: 1;
+    }
+    .buttons-wrapper {
+        top: 7rem;
+    }
+    .events-counter {
+        top: 8rem;
+    }
 }
