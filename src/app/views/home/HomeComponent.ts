@@ -483,13 +483,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   nextPageModal() {
-    this.modalNewPageLoader = true
-    if(this.stateType =='sights') {
-      this.queryBuilderService.paginationPublicSightsModalRadiusPage.next(this.sightsModalNextPage)
-    } else if(this.stateType =='events') {
-      this.queryBuilderService.paginationPublicEventsModalRadiusPage.next(this.eventsModalNextPage)
+    if (this.sightsModalNextPage.length) {
+      this.modalNewPageLoader = true
+      if(this.stateType =='sights') {
+        this.queryBuilderService.paginationPublicSightsModalRadiusPage.next(this.sightsModalNextPage)
+      } else if(this.stateType =='events') {
+        this.queryBuilderService.paginationPublicEventsModalRadiusPage.next(this.eventsModalNextPage)
+      }
+      this.getEventsAndSightsForModal()
     }
-    this.getEventsAndSightsForModal()
   }
 
   setMapData() {
