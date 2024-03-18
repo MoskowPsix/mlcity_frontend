@@ -117,6 +117,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   eventsModalNextPage!: string
 
   modalSwitcherClass:string = 'container-swither'
+  modalSwitcherTextClass:string = 'swither-text'
   screenWidth: number = 0;
 
   modalEventShowOpen: boolean = false
@@ -201,13 +202,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         if(this.modalSwitcherClass == 'container-swither'){
           this.modalSwitcherClass = 'container-swither_open'
+          this.modalSwitcherTextClass = 'swither-text_open'
         }
         else
         {
           this.modalSwitcherClass = 'container-swither'
+          this.modalSwitcherTextClass = 'swither-text'
         }
     }else{
       this.modalSwitcherClass = 'container-swither'
+      this.modalSwitcherTextClass = 'swither-text'
     }
 
   }
