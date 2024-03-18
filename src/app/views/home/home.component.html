@@ -99,13 +99,13 @@
   <ion-modal id="modalEventShow" [isOpen]="modalEventRadiusShowOpen" (ionModalDidDismiss)="modalRadiusClose()" (ionBreakpointDidChange)="modalRadiusClose()" [initialBreakpoint]="0.9" >
     <div class="bg"></div>
     <ng-template>
-      <!-- <ion-header color="black">
+      <ion-header color="black">
         <ion-toolbar>
           <ion-buttons slot="end">
             <ion-button (click)="modalRadiusClose()">Закрыть</ion-button>
           </ion-buttons>
         </ion-toolbar>
-      </ion-header> -->
+      </ion-header>
       <ion-content>
         <ng-container *ngIf="stateType == 'events'">
           <ion-row class="ion-justify-content-start" *ngIf="eventsContentModal">
