@@ -454,9 +454,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     return new Observable((observer) => {
       this.eventsLoading = true;
       this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsModalRadiusForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        if (response.sights.next_cursor != null){
+          this.sightsModalNextPage = response.sights.next_cursor
+        }
         this.sightsContentModal.push(...response.sights.data);
         this.sightsContentModalTotal = response.total
-        this.sightsModalNextPage = response.sights.next_cursor
         // this.filterService.setEventsCount(response.total)
         //this.sightsLoading = false
         this.cdr.detectChanges();
@@ -470,9 +472,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     return new Observable((observer) => {
       this.eventsLoading = true;
       this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsModalRadiusForMap')).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+        if (response.events.next_cursor != null){
+          this.eventsModalNextPage = response.events.next_cursor
+        }
+        else{
+          this.eventsModalNextPage = ""
+        }
+
         this.eventsContentModal.push(...response.events.data)
+        console.log(this.eventsContentModal)
         this.eventsContentModalTotal = response.total
-        this.eventsModalNextPage = response.events.next_cursor
         // this.filterService.setEventsCount(response.total)
         //this.sightsLoading = false
         this.cdr.detectChanges();
