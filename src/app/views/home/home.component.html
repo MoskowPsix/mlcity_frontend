@@ -96,15 +96,16 @@
 
 
   <!-- Модальное окно просмотр ивента / места ленты в радиусе -->
-  <ion-modal id="modalEventShow" [isOpen]="modalEventRadiusShowOpen" (ionModalDidDismiss)="modalRadiusClose()" (ionBreakpointDidChange)="modalRadiusClose()" [initialBreakpoint]="0.9" [breakpoints]="[0, 0.9]" >
+  <ion-modal id="modalEventShow" [isOpen]="modalEventRadiusShowOpen" (ionModalDidDismiss)="modalRadiusClose()" (ionBreakpointDidChange)="modalRadiusClose()" [initialBreakpoint]="0.9" >
+    <div class="bg"></div>
     <ng-template>
-      <ion-header color="black">
+      <!-- <ion-header color="black">
         <ion-toolbar>
           <ion-buttons slot="end">
             <ion-button (click)="modalRadiusClose()">Закрыть</ion-button>
           </ion-buttons>
         </ion-toolbar>
-      </ion-header>
+      </ion-header> -->
       <ion-content>
         <ng-container *ngIf="stateType == 'events'">
           <ion-row class="ion-justify-content-start" *ngIf="eventsContentModal">
@@ -127,10 +128,13 @@
         </ng-container>
 
         <ng-container>
-          <ion-button *ngIf="!modalNewPageLoader && (sightsModalNextPage.length || eventsModalNextPage.length)" expand="block" (click)="nextPageModal()">загрузить ещё</ion-button>
-          <ion-button *ngIf="modalNewPageLoader" expand="block">
-            <ion-spinner name="dots"></ion-spinner>
-          </ion-button>
+          <div style="margin-bottom: 6rem;">
+            <ion-button *ngIf="!modalNewPageLoader && (sightsModalNextPage.length || eventsModalNextPage.length)" expand="block" (click)="nextPageModal()">загрузить ещё</ion-button>
+            <ion-button *ngIf="modalNewPageLoader" expand="block">
+              <ion-spinner name="dots"></ion-spinner>
+            </ion-button>
+          </div>
+
         </ng-container>
 
       </ion-content>
