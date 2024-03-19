@@ -26,10 +26,15 @@ export class TypesComponent  implements OnInit {
   @Input() buttonClicked:any
   @ViewChild('typeButton')
   typeButton!: ElementRef;
+  start!: Number
 
 
  addType(id:any){
- this.typeOutput.emit(id.id)
+  // this.types.forEach(value => {
+  //   if(checkIds(value))
+  // })
+    
+  this.typeOutput.emit(id.id)
  }
 
  addTypeHtml(element:HTMLElement){

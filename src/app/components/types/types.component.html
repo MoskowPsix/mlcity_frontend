@@ -1,4 +1,5 @@
 <div class="main-types-block">
+  {{start}}
   <div *ngFor="let type of types; let i = index" class="child-types-block" (click)="addType(type)">
     <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;" >
       <button
@@ -22,7 +23,10 @@
       </button>
 
       <ion-label *ngIf="!checkIds(type.id)" class="button-text">{{type.name}}</ion-label>
-      <ion-label *ngIf="checkIds(type.id)" class="button-text button-text_active">{{type.name}}</ion-label>
+      <ion-label *ngIf="checkIds(type.id)" class="button-text button-text_active">
+        <ion-icon *ngIf="start == type.id" name="star"></ion-icon>
+        {{type.name}}
+      </ion-label>
     </div>
 
   </div>
