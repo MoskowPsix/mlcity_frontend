@@ -42,7 +42,7 @@
     border-radius: 16px;
     background-color: none;
     position: absolute;
-    top: 22vh;
+    top: 20rem;
     z-index: 100000;
 }
 
@@ -78,7 +78,7 @@
 .container-swither {
     position: absolute;
     cursor: pointer;
-    top: 60%;
+    top: 70%;
     margin-top: 1%;
     margin-left: 10px;
     padding: 5px;
@@ -166,7 +166,11 @@
     border-radius: 100%;
     align-items: center;
 }
-
+@media only screen and (max-height:890px) {
+    .range-radius-main{
+        top:14rem;
+    }
+}
 @media only screen and (max-height: 768px) and (max-width: 768px) {
     .map {
         height: 92vh;
@@ -208,7 +212,7 @@
         top: 63%
     }
     .range-radius-main {
-        height: 20rem;
+        top: 13rem;
         margin-top: clamp(1rem, calc(27.176rem + -41.2vw), 4rem);
     }
     .range-radius-main ngx-slider {
@@ -225,7 +229,12 @@
 @media only screen and (max-width: 380px) {
     .range-radius-main ngx-slider {
         max-height: clamp(5rem, -6rem + 47vw, 67rem);
+        
     }
+    .range-radius-main{
+        top:10rem;
+    }
+
 }
 
 
@@ -261,7 +270,7 @@
         z-index: 3;
     }
     .container-swither {
-        top: 60%;
+        top: 70%;
     }
 }
 
