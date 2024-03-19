@@ -19,6 +19,11 @@ app-sight-type-carusel {
         padding-right: 5px;
     }	
 }
+.scroll-up {
+	position: fixed;
+	bottom: 4rem;
+	right: 4rem
+}
 
 .segment-box{
 	animation: fade-in 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;

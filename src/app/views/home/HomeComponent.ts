@@ -484,7 +484,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
 
         this.eventsContentModal.push(...response.events.data)
-        console.log(this.eventsContentModal)
         this.eventsContentModalTotal = response.total
         // this.filterService.setEventsCount(response.total)
         //this.sightsLoading = false
@@ -496,7 +495,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   nextPageModal() {
-    if (this.sightsModalNextPage.length) {
+    if (this.sightsModalNextPage.length || this.eventsModalNextPage.length) {
       this.modalNewPageLoader = true
       if(this.stateType =='sights') {
         this.queryBuilderService.paginationPublicSightsModalRadiusPage.next(this.sightsModalNextPage)

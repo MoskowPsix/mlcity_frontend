@@ -5,13 +5,11 @@
       [routerLink]="isSight ? ['/sights', event.id, slugName] : ['/events', event.id, slugName]"
       #swiper
       [modules]="swiperModules"
-
       autoplay-disableOnInteraction="false"
       [followFinger]="false"
-      [loop]="true"
       [initialSlide]="0"
     >
-
+<!-- [loop]="true" -->
       <ng-container *ngIf="event.files; else notFiles">
         <ng-container *ngFor="let file of event.files">
           <swiper-slide *ngIf="file.local === 1 && file.file_types[0].name === 'image'">
