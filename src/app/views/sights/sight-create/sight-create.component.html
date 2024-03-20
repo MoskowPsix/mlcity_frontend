@@ -101,7 +101,7 @@
             </ng-container>
           </ng-container>
 
-          <ion-row  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
+          <ion-row  *ngIf="typesLoaded"  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
             <ion-label><h2 style="color: #949494;">Первый выбранный вами тип станет основным, будет отображаться на карте и карточке мероприятия</h2></ion-label>
             <!-- <ion-label *ngIf="isNextButtonClicked == true && currentType == 0 " class="pick">Выберите тип, чтобы перейти на следующий шаг</ion-label> -->
             <app-types [buttonClicked]="currentType" [types]="types" (typeOutput)="receiveType($event)"></app-types>
