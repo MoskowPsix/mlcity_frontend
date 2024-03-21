@@ -22,7 +22,10 @@
       </button>
 
       <ion-label *ngIf="!checkIds(type.id)" class="button-text">{{type.name}}</ion-label>
-      <ion-label *ngIf="checkIds(type.id)" class="button-text button-text_active">{{type.name}}</ion-label>
+      <ion-label *ngIf="checkIds(type.id)" class="button-text button-text_active">
+        <ion-icon *ngIf="start == type.id" name="star"></ion-icon>
+        {{type.name}}
+      </ion-label>
     </div>
 
   </div>

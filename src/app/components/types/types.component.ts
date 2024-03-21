@@ -26,25 +26,31 @@ export class TypesComponent  implements OnInit {
   @Input() buttonClicked:any
   @ViewChild('typeButton')
   typeButton!: ElementRef;
+  start!: Number
 
-
- addType(id:any){
- this.typeOutput.emit(id.id)
- }
-
- addTypeHtml(element:HTMLElement){
-  // this.buttonClicked = element.id
- }
-
- checkIds(id: number) {
-  let type_id
-  this.buttonClicked.find((val:any) => {
-    if(id == val) {
-      type_id = true
+  addType(id:any){
+    let count: Number = 0
+    this.types.forEach(value => {
+      if(this.checkIds(value.id)) {
+        count =+ 1
+      }
+    })
+    if (count == 0) {
+      this.start = id.id
     }
-  })
-  return type_id
- }
+      
+    this.typeOutput.emit(id.id)
+  }
+
+  checkIds(id: number) {
+    let type_id
+    this.buttonClicked.find((val:any) => {
+      if(id == val) {
+        type_id = true
+      }
+    })
+    return type_id
+  }
 
   ngOnInit() {
 

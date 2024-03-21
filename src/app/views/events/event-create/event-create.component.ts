@@ -530,9 +530,23 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   //Удалить прею фотки
-  deleteFile(img: string){
-    this.imagesPreview = this.imagesPreview.filter((a) => a !== img);
-    this.uploadFiles = this.uploadFiles .filter((a) => a ! == img)
+  deleteFile(img: any){
+    if(typeof(img) == 'string'){
+      this.imagesPreview = this.imagesPreview.filter((a) => a !== img);
+      this.uploadFiles = this.uploadFiles .filter((a) => a ! == img)
+    }
+    else{
+      for(let i = 0; i < this.vkGroupPostSelected.attachments.length; i++){
+        if(this.vkGroupPostSelected.attachments[i].photo.id ==  img.photo.id){
+          this.vkGroupPostSelected.attachments.splice(i, 1);
+        }
+      }
+    }
+
+
+   
+  
+
   }
 
   // Заполняем превью фоток
@@ -662,21 +676,30 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           return false
         }
       case 2:
-        //шаг третий
-        if(this.uploadFiles.length !== 0 && this.createEventForm.controls['description'].invalid ||  this.createEventForm.hasError('dateInvalid')){
-          if( dataEnd <= dataEndPlus){
-            this.dataValid = false
-          }else{
-            this.dataValid = true
-          }
-          // console.log(dataStart)
-          // console.log(dataEnd)
-          return true
+        return false
+        // //шаг третий
+        // if(this.uploadFiles.length == 0 && this.createEventForm.controls['description'].invalid ||  this.createEventForm.hasError('dateInvalid')){
+        //   if( dataEnd <= dataEndPlus){
+        //     this.dataValid = false
+        //   }else{
+        //     this.dataValid = true
+        //   }
+        //   // console.log(dataStart)
+        //   // console.log(dataEnd)
+      
+        //   return true
 
-        }
-        else{
-          return false
-        }
+        // }
+        // else if(this.uploadFiles.length !== 0){
+        //   console.log('Можно')
+        //   return false
+        // }
+        // else if(this.vkGroupPostSelected.attachments.length >= 1){
+        //   return false
+        // }
+        // else{
+        //   return false
+        // }
       case 3:
         // let placeValid:boolean = false
         // let seansValid:boolean = false
