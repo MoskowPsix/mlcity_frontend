@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef} from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry, map } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -48,7 +48,7 @@ import { FilterService } from 'src/app/services/filter.service';
                 '500ms ease-in',
                 style({ opacity: 0 })
             ),
-      ]),   
+      ]),
     ]),
 
   ]
@@ -60,13 +60,17 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
-  
+
   inputValue: string = ""
   user: any
   currentType:any = []
   stepStart: number = 0
   stepCurrency: number = 0
   steps:number = 5
+
+  @ViewChild("sightName") sightNameElement!: any
+  @ViewChild("sightDescription") sightDescriptionElement!: any
+
   vkGroups: any
   //Создать переменную для постов со страницы
   vkGroupSelected: number | null = null
@@ -106,26 +110,26 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   placemark!: ymaps.Placemark
   map!:YaReadyEvent<ymaps.Map>
- 
+
   createSightForm: FormGroup = new FormGroup({})
 
   constructor(
     private locationServices: LocationService,
-    private filterService: FilterService, 
+    private filterService: FilterService,
     private locationSevices: LocationService,
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private sightsService: SightsService,
-    private loadingService: LoadingService, 
-    private toastService: ToastService, 
-    private userService: UserService, 
-    private vkService: VkService, 
-    private sightTypeService: SightTypeService, 
-    private statusesService: StatusesService, 
+    private loadingService: LoadingService,
+    private toastService: ToastService,
+    private userService: UserService,
+    private vkService: VkService,
+    private sightTypeService: SightTypeService,
+    private statusesService: StatusesService,
     private mapService: MapService,
-    private sanitizer:DomSanitizer, 
+    private sanitizer:DomSanitizer,
     private yaGeocoderService: YaGeocoderService) { }
-   
+
   // Получаем юзера и устанавливаем группы и шаги
   getUserWithSocialAccount(){
     this.userService.getUser().pipe(
@@ -139,38 +143,38 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       }),
       switchMap((user: any) => {
         if(!user?.social_account){
-          this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')   
+          this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')
         } else {
           // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
           return this.vkService.getGroups().pipe(
             switchMap((response: any) => {
               response?.response.items ? this.setVkGroups(response?.response.items) : this.setVkGroups([])
-              return of(EMPTY) 
+              return of(EMPTY)
             }),
             catchError((err) =>{
               //Выкидываем на логин если с ВК проблемы
               this.toastService.showToast(err.error?.message || err.error?.error_msg || MessagesErrors.vkTokenError, 'danger')
               this.loadingService.hideLoading()
               this.authService.logout()
-              return of(EMPTY) 
+              return of(EMPTY)
             })
           )
-        } 
-        return of(EMPTY) 
+        }
+        return of(EMPTY)
       }),
       tap(() => {
-        this.setSteps()  
+        this.setSteps()
       }),
       tap(() => {
-        this.loadingService.hideLoading()  
+        this.loadingService.hideLoading()
 
       }),
       catchError((err) =>{
         this.toastService.showToast(err.error?.message || err.error?.error_msg || MessagesErrors.default, 'danger')
         this.loadingService.hideLoading()
-        return of(EMPTY) 
+        return of(EMPTY)
       }),
-      takeUntil(this.destroy$)  
+      takeUntil(this.destroy$)
     ).subscribe();
   }
 
@@ -199,7 +203,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Выбираем группу
   selectedVkGroup(group_id: any){
     if (group_id.detail.value) {
-      this.vkGroupSelected = group_id.detail.value 
+      this.vkGroupSelected = group_id.detail.value
       this.setVkPostsByGroupID(group_id.detail.value )
     } else {
       this.vkGroupSelected =  null
@@ -208,12 +212,12 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   openModalPost(event:any = null){
-  
+
     if(this.vkGroupSelected == null){
       this.vkGroupSelected = this.vkGroupModalSelected
       this.setVkPostsByGroupID(this.vkGroupModalSelected)
     }
-      this.openModalPostValue = true    
+      this.openModalPostValue = true
  }
 
 
@@ -280,13 +284,13 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   //Получаем типы мероприятий
   getTypes(){
-    
+
     this.sightTypeService.getTypes().pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.types = response.types
       this.typesLoaded = true
     })
   }
-  
+
   //Выбор типа
   selectedType(type_id: any){
 
@@ -309,7 +313,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         this.statusesLoaded = true //для скелетной анимации
       } else {
         this.statusesLoaded = false
-      }  
+      }
     })
   }
 
@@ -361,7 +365,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     const { target, event } = e;
 
     this.setLocationForCoords([event.get('coords')[0], event.get('coords')[1]])
-    
+
     this.createSightForm.patchValue({coords: [event.get('coords')[0], event.get('coords')[1]] })
     // this.createEventForm.value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
     if (!Capacitor.isNativePlatform())  {
@@ -376,21 +380,21 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.map.target.setBounds(this.placemark.geometry?.getBounds()!, {checkZoomRange:false})
     this.map.target.setZoom(17)
   }
- 
+
    // Поиск по улицам
    onMapReady(e: YaReadyEvent<ymaps.Map>) {
     this.map = e;
-    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value){     
+    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value){
       const coords: number[] = [Number(this.filterService.getLocationLatitudeFromlocalStorage()), Number(this.filterService.getLocationLongitudeFromlocalStorage())]
       this.addPlacemark(coords)
     } else {
       this.mapService.geolocationMapNative(this.map);
     }
-    
-    const search = new ymaps.SuggestView('search-map');  
+
+    const search = new ymaps.SuggestView('search-map');
     // search.setApikeys({suggest: environment.apiKeyYandexSubject})
     // search.options = []
-    search.events.add('select', () => {     
+    search.events.add('select', () => {
       if (!Capacitor.isNativePlatform())  {
         this.ForwardGeocoder()
       } else {
@@ -426,7 +430,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     });
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0);
-      
+
       //this.city=firstGeoObject.getLocalities(0)[0]
       this.createSightForm.patchValue({address: firstGeoObject.getAddressLine()})
       //this.createSightForm.value.address = firstGeoObject.getAddressLine()
@@ -447,7 +451,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.city = response.location.name
       this.region = response.location.location_parent.name
       this.locationLoader = false
-    }) 
+    })
   }
 
   ForwardGeocoder(): void{
@@ -464,7 +468,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.setLocationForCoords(firstGeoObject.geometry.getCoordinates())
       // this.city=firstGeoObject.getLocalities(0)[0]
 
-    }) 
+    })
   }
 
   //очистка поиска на карте
@@ -472,7 +476,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     if (sight.detail.value == 0){
       this.createSightForm.patchValue({coords: []})
       this.placemark= new ymaps.Placemark([])
-      this.map.target.geoObjects.removeAll() 
+      this.map.target.geoObjects.removeAll()
     }
   }
 
@@ -485,7 +489,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     }
     this.createSightForm.patchValue({files: ''}) // Если не обнулять будет ошибка
 
-    this.createImagesPreview()  
+    this.createImagesPreview()
   }
 
 
@@ -503,7 +507,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.imagesPreview = this.imagesPreview.filter((a) => a !== img);
   }
 
-  // Заполняем превью фоток 
+  // Заполняем превью фоток
   createImagesPreview(){
     if(this.uploadFiles && !this.createSightForm.controls['files_img'].hasError('requiredFileType')){
       this.loadingService.showLoading()
@@ -511,9 +515,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         let reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = () => {
-          this.imagesPreview.push(reader.result as string) 
+          this.imagesPreview.push(reader.result as string)
         }
-      }) 
+      })
       this.loadingService.hideLoading()
     }
   }
@@ -541,7 +545,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       for (var i = 0; i < this.uploadFiles.length; i++) {
         this.formData.append('localFilesImg[]', this.uploadFiles[i])
       }
-    } 
+    }
 
     if(this.vkGroupPostSelected?.attachments.length){
       this.vkGroupPostSelected.attachments.forEach((attachment: any) => {
@@ -555,8 +559,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         if (attachment.link) {
           this.formData.append('vkFilesLink[]', attachment.link.url)
         }
-      }) 
-    } 
+      })
+    }
 
     this.formData.append('name', this.createSightForm.controls['name'].value)
     this.formData.append('sponsor', this.createSightForm.controls['sponsor'].value)
@@ -583,10 +587,23 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
     return this.formData
   }
-  
+
   //Клик по кнопке веперед
   stepNext(){
-   this.stepCurrency++ 
+   this.stepCurrency++
+   console.log(this.stepCurrency)
+   if(this.stepCurrency == 1){
+    setTimeout(() => {
+      this.sightNameElement.setFocus()
+       },500)
+   }
+   if(this.stepCurrency == 2){
+    setTimeout(() => {
+      this.sightDescriptionElement.setFocus()
+       },500)
+   }
+
+
 
   }
 
@@ -611,7 +628,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.currentType.push(Number(event));
       this.createSightForm.value.type.push(Number(event));
     }
-    console.log(this.currentType)  
+    console.log(this.currentType)
   }
 
   //Клик по шагу в баре
@@ -620,7 +637,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.stepCurrency = step
       //this.disabledNextButton()
       this.stepIsValid()
-    }   
+    }
   }
 
   //Блокировка шагов в баре
@@ -630,10 +647,10 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       case 0:
         if(this.currentType <= 0){
           return true
-         
+
         } else{
           return false
-   
+
         }
         case 1:
           //шаг второй
@@ -660,14 +677,14 @@ export class SightCreateComponent implements OnInit, OnDestroy {
               return false
             }
           case 4:
-            let priceValid:any 
+            let priceValid:any
             this.createSightForm.controls['price'].value.forEach((item: any, i: number) => {
-      
+
               if(this.createSightForm.controls['price'].value.length > 1){
                 priceValid = this.createSightForm.controls['price'].value.every((item: any) => item.controls['description'].value.length >= 3);
               }
-                
-        
+
+
               else if(this.createSightForm.controls['price'].value.length == 1){
                 priceValid =  true
                 console.log(this.createSightForm.controls['price'].value.length)
@@ -689,27 +706,27 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         return true
     }
 
-    
+
   }
 
 
 
-  
 
-  
+
+
   stepIsValid(step:number = this.stepStart){
     switch (step) {
-    
+
       case 1:
         return this.createSightForm.controls['name'].invalid  ?  false :  true
       case 2:
-        return this.createSightForm.controls['description'].invalid  ? false :  true 
+        return this.createSightForm.controls['description'].invalid  ? false :  true
       // case 7:
       //   return this.createSightForm.hasError('dateInvalid') ?  false :  true
       case 1:
         return this.createSightForm.controls['sponsor'].invalid  ?  false :  true
       case 3:
-        //freturn !this.createEventForm.controls['coords'].value.length ? false :  true  
+        //freturn !this.createEventForm.controls['coords'].value.length ? false :  true
         return this.createSightForm.controls['coords'].invalid ? false :  true
       default:
         return true
@@ -717,9 +734,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   //Отпрвка формы
-  
+
   onSubmit(){
-  
+
     let sight = this.createFormData() // собираем формдату
     this.createSightForm.disable()
     this.loadingService.showLoading()
@@ -742,19 +759,19 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         this.createSightForm.controls['materials'].reset()
         this.createSightForm.controls['locationId'].reset()
         this.createSightForm.enable()
-        this.stepCurrency =  this.stepStart 
+        this.stepCurrency =  this.stepStart
       }),
       catchError((err) =>{
         console.log(err)
         this.toastService.showToast(err.message || MessagesErrors.default, 'danger')
         this.createSightForm.enable()
         this.loadingService.hideLoading()
-        return of(EMPTY) 
+        return of(EMPTY)
       }),
       takeUntil(this.destroy$)
     ).subscribe()
 
-  
+
   }
 
   ngOnInit() {

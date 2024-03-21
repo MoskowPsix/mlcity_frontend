@@ -31,7 +31,7 @@
             <h3 [hidden]="stepCurrency != 1" class="mt-0 mainLabelAndBarText">Название достопримечательности</h3>
             <h3 [hidden]="stepCurrency != 2" class="mt-0 mainLabelAndBarText">Об достопримечательности</h3>
             <h3 [hidden]="stepCurrency != 3" class="mt-0 mainLabelAndBarText">Место достопримечательности</h3>
-            <h3 [hidden]="stepCurrency != 4" class="mt-0 mainLabelAndBarText">Цена и материалы</h3>
+            <h3 [hidden]="stepCurrency != 4" class="mt-0 mainLabelAndBarText">Стоимость посещения</h3>
 
           </div>
 
@@ -122,7 +122,7 @@
                   <ion-item style="max-width: 600px;" fill="outline">
                     <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Название достопримечательности</ion-label>
                     <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
-                    <ion-input style="max-width: 300px;" size="small" formControlName="name" type="text" name="name" required></ion-input>
+                    <ion-input #sightName  style="max-width: 300px;" size="small" formControlName="name" type="text" name="name" required></ion-input>
                   </ion-item>
 
                   <div *ngIf="createSightForm.controls['name'].invalid && createSightForm.controls['name'].dirty"  class="validation">
@@ -432,6 +432,7 @@
                               [autoGrow]="true"
                               required
                               style="padding-bottom: 8vh;"
+                              #sightDescription
                               >
 
                           </ion-textarea>
@@ -463,16 +464,16 @@
 
                                 <ion-col *ngIf="attachment.type == 'photo' ">
                                   <img class="imagesPreview" alt="ava" src="{{ attachment.photo.sizes[3].url }}" />
-                            
+
                                 </ion-col>
 
-                                
+
                                   <!-- <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
                                     <img class="imagesPreview" alt="ava" src="{{ photo.url }}" />
                                   </ion-col> -->
-                  
 
-                             
+
+
                               </ng-container>
                             </ion-row>
                           </div>
@@ -536,7 +537,7 @@
                   </div> -->
                   <ion-list>
                    <ion-item>
-                     
+
                     </ion-item>
                     <!-- <ion-item fill="outline">
                       <ion-label position="stacked">
@@ -657,7 +658,7 @@
                     <ion-chip style="margin-left: auto;" color="danger" (click)="deletePrice(i_p)">Удалить
                       <!-- <ion-icon name="close-outline"></ion-icon> -->
                     </ion-chip>
-                 
+
                 </ion-item>
                 <ion-item [disabled] = "pricesLock[i_p].locked" fill="">
 
@@ -676,9 +677,9 @@
                 </ion-item>
               </ng-container>
 
-               
 
-           
+
+
             </ion-card>
 
             <ion-chip style="margin-bottom: 2rem;" color="primary" class="ion-justify-item-center" (click)="addPrice()">
