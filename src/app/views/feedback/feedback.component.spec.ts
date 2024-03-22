@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-import { IonicModule } from '@ionic/angular'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { IonicModule } from '@ionic/angular';
 
-import { FeedbackComponent } from './feedback.component'
+import { FeedbackComponent } from './feedback.component';
 
 describe('FeedbackComponent', () => {
-  let component: FeedbackComponent
-  let fixture: ComponentFixture<FeedbackComponent>
+  let component: FeedbackComponent;
+  let fixture: ComponentFixture<FeedbackComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [FeedbackComponent],
       imports: [IonicModule.forRoot()],
-    }).compileComponents()
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(FeedbackComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  }))
+    fixture = TestBed.createComponent(FeedbackComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

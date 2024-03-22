@@ -1,18 +1,18 @@
-import { SightsComponent } from '../views/sights/sights.component'
-import { EventsComponent } from '../views/events/events.component'
-import { HomeComponent } from '../views/home/HomeComponent'
-import { AddEventComponent } from '../views/add-event/add-event.component'
-import { Routes } from '@angular/router'
-import { AboutComponent } from '../views/about/about.component'
-import { ContactsComponent } from '../views/contacts/contacts.component'
-import { FeedbackComponent } from '../views/feedback/feedback.component'
-import { SupportComponent } from '../views/support/support.component'
-import { CheckAuthCanActiveGuard } from '../guards/check-auth.can-active.guard'
-import { EventShowComponent } from '../views/events/event-show/event-show.component'
-import { SightShowComponent } from '../views/sights/sight-show/sight-show.component'
-import { FiltersNotButtonComponent } from '../components/filters_not_button/filters_not_button.component'
-import { CalendulaComponent } from '../components/calendula/calendula.component'
-import { NoPathComponent } from '../views/no-path/no-path.component'
+import { SightsComponent } from '../views/sights/sights.component';
+import { EventsComponent } from '../views/events/events.component';
+import { HomeComponent } from '../views/home/HomeComponent';
+import { AddEventComponent } from '../views/add-event/add-event.component';
+import { Routes } from '@angular/router';
+import { AboutComponent } from '../views/about/about.component';
+import { ContactsComponent } from '../views/contacts/contacts.component';
+import { FeedbackComponent } from '../views/feedback/feedback.component';
+import { SupportComponent } from '../views/support/support.component';
+import { CheckAuthCanActiveGuard } from '../guards/check-auth.can-active.guard';
+import { EventShowComponent } from '../views/events/event-show/event-show.component';
+import { SightShowComponent } from '../views/sights/sight-show/sight-show.component';
+import { FiltersNotButtonComponent } from '../components/filters_not_button/filters_not_button.component';
+import { CalendulaComponent } from '../components/calendula/calendula.component';
+import { NoPathComponent } from '../views/no-path/no-path.component';
 
 export const publicRoutes: Routes = [
   {
@@ -94,4 +94,4 @@ export const publicRoutes: Routes = [
       },
     ],
   },
-]
+];

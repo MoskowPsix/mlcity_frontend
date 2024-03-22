@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   EMPTY,
   Subject,
@@ -11,23 +11,23 @@ import {
   retry,
   takeUntil,
   tap,
-} from 'rxjs'
-import { MessagesErrors } from 'src/app/enums/messages-errors'
-import { AuthService } from 'src/app/services/auth.service'
-import { ToastService } from 'src/app/services/toast.service'
-import { MaskitoOptions, MaskitoElementPredicateAsync } from '@maskito/core'
-import { LoadingService } from 'src/app/services/loading.service'
-import { UserService } from 'src/app/services/user.service'
-import { TokenService } from 'src/app/services/token.service'
-import { NavigationEnd, Router } from '@angular/router'
-import { IonModal } from '@ionic/angular'
+} from 'rxjs';
+import { MessagesErrors } from 'src/app/enums/messages-errors';
+import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
+import { MaskitoOptions, MaskitoElementPredicateAsync } from '@maskito/core';
+import { LoadingService } from 'src/app/services/loading.service';
+import { UserService } from 'src/app/services/user.service';
+import { TokenService } from 'src/app/services/token.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { IonModal } from '@ionic/angular';
 // import { MessagesErrors } from 'src/app/enums/messages-register';
-import internal from 'stream'
-import { Location } from '@angular/common'
-import { Metrika } from 'ng-yandex-metrika'
-import { environment } from 'src/environments/environment'
-import { Title } from '@angular/platform-browser'
-import { Meta } from '@angular/platform-browser'
+import internal from 'stream';
+import { Location } from '@angular/common';
+import { Metrika } from 'ng-yandex-metrika';
+import { environment } from 'src/environments/environment';
+import { Title } from '@angular/platform-browser';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-registration',
@@ -35,27 +35,27 @@ import { Meta } from '@angular/platform-browser'
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
-  private readonly destroy$ = new Subject<void>()
-  registerForm!: FormGroup
-  modalForm!: FormGroup
-  nameBusy: boolean = true
-  emailBusy: boolean = true
-  passwordConfirm: boolean = true
-  busyName: string = ''
-  busyEmail: string = ''
-  busyPass: boolean = true
-  submitResponce: boolean = false
-  modalOpen: boolean = false
-  busyNumber: boolean = true
-  modalCount: number = 0
-  confirmCode: boolean = true
-  codeCount: number = 0
-  interval: any
-  timerRertyFormated: any = 0
-  timerRetryButton: boolean = false
-  vkontakteAuthUrl: string = environment.vkontakteAuthUrl
+  private readonly destroy$ = new Subject<void>();
+  registerForm!: FormGroup;
+  modalForm!: FormGroup;
+  nameBusy: boolean = true;
+  emailBusy: boolean = true;
+  passwordConfirm: boolean = true;
+  busyName: string = '';
+  busyEmail: string = '';
+  busyPass: boolean = true;
+  submitResponce: boolean = false;
+  modalOpen: boolean = false;
+  busyNumber: boolean = true;
+  modalCount: number = 0;
+  confirmCode: boolean = true;
+  codeCount: number = 0;
+  interval: any;
+  timerRertyFormated: any = 0;
+  timerRetryButton: boolean = false;
+  vkontakteAuthUrl: string = environment.vkontakteAuthUrl;
 
-  @ViewChild('modal') modal!: IonModal
+  @ViewChild('modal') modal!: IonModal;
 
   readonly phoneMask: MaskitoOptions = {
     mask: [
@@ -77,14 +77,14 @@ export class RegistrationComponent implements OnInit {
       /\d/,
       /\d/,
     ],
-  }
+  };
 
-  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
-    (el as HTMLIonInputElement).getInputElement()
+  readonly maskPredicate: MaskitoElementPredicateAsync = async el =>
+    (el as HTMLIonInputElement).getInputElement();
 
   readonly maskNumber: MaskitoOptions = {
     mask: [...Array(4).fill(/\d/)],
-  }
+  };
 
   constructor(
     private toastService: ToastService,
@@ -96,27 +96,27 @@ export class RegistrationComponent implements OnInit {
     private metrika: Metrika,
     private location: Location,
     private titleService: Title,
-    private metaService: Meta,
+    private metaService: Meta
   ) {
-    this.titleService.setTitle('Регистрация на сайте MLCity.')
+    this.titleService.setTitle('Регистрация на сайте MLCity.');
     this.metaService.updateTag({
       name: 'description',
       content: 'Регистрация на сайте.',
-    })
+    });
 
-    let prevPath = this.location.path()
+    let prevPath = this.location.path();
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
+      .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        const newPath = location.path()
+        const newPath = location.path();
         this.metrika.hit(newPath, {
           referer: prevPath,
           callback: () => {
-            console.log('hit end')
+            console.log('hit end');
           },
-        })
-        prevPath = newPath
-      })
+        });
+        prevPath = newPath;
+      });
   }
 
   ngOnInit() {
@@ -140,21 +140,21 @@ export class RegistrationComponent implements OnInit {
         Validators.minLength(10),
       ]),
       avatar: new FormControl(''),
-    })
+    });
 
     this.modalForm = new FormGroup({
       emailConfirmInput: new FormControl('', [
         Validators.required,
         Validators.minLength(4),
       ]),
-    })
+    });
 
-    this.OpenPassword('reg_password')
-    this.OpenPasswordConfirm('confirm_password', event)
+    this.OpenPassword('reg_password');
+    this.OpenPasswordConfirm('confirm_password', event);
   }
 
   checkName() {
-    this.busyName = this.registerForm.value.name
+    this.busyName = this.registerForm.value.name;
     if (
       this.registerForm.value.name.length != ' ' &&
       this.registerForm.value.name.length != ''
@@ -164,36 +164,36 @@ export class RegistrationComponent implements OnInit {
           .checkName(this.registerForm.value.name)
           .pipe(
             map((respons: any) => {
-              this.nameBusy = respons.user_name
+              this.nameBusy = respons.user_name;
             }),
-            catchError((err) => {
-              return of(EMPTY)
+            catchError(err => {
+              return of(EMPTY);
             }),
-            takeUntil(this.destroy$),
+            takeUntil(this.destroy$)
           )
-          .subscribe()
+          .subscribe();
       }
     }
   }
 
   cancel() {
-    this.modal.dismiss(null, 'cancel')
+    this.modal.dismiss(null, 'cancel');
   }
 
   checkEmail() {
-    this.busyEmail = this.registerForm.value.email
+    this.busyEmail = this.registerForm.value.email;
     if (!this.registerForm.controls['email'].invalid) {
       this.authservice
         .checkEmail(this.registerForm.value.email)
         .pipe(
           map((respons: any) => {
-            this.emailBusy = respons.user_email
+            this.emailBusy = respons.user_email;
           }),
-          catchError((err) => {
-            return of(EMPTY)
-          }),
+          catchError(err => {
+            return of(EMPTY);
+          })
         )
-        .subscribe()
+        .subscribe();
     }
   }
 
@@ -202,14 +202,14 @@ export class RegistrationComponent implements OnInit {
       .checkNumber(this.registerForm.value.number)
       .pipe(
         map((respons: any) => {
-          this.busyNumber = respons.user_number
+          this.busyNumber = respons.user_number;
         }),
-        catchError((err) => {
-          return of(EMPTY)
+        catchError(err => {
+          return of(EMPTY);
         }),
-        takeUntil(this.destroy$),
+        takeUntil(this.destroy$)
       )
-      .subscribe()
+      .subscribe();
   }
 
   checkPassword() {
@@ -217,39 +217,39 @@ export class RegistrationComponent implements OnInit {
       this.registerForm.value.password ==
       this.registerForm.value.password_confirmation
     ) {
-      this.busyPass = true
+      this.busyPass = true;
     } else {
-      this.busyPass = false
+      this.busyPass = false;
     }
   }
 
   OpenPassword(input: string) {
-    let passwordInput: any = document.getElementById('reg_password')
-    let img: any = document.getElementById('eye_img')
+    let passwordInput: any = document.getElementById('reg_password');
+    let img: any = document.getElementById('eye_img');
     if (passwordInput.type == 'password') {
-      img.src = '../assets/icons/eye_open.svg'
-      passwordInput.type = 'text'
+      img.src = '../assets/icons/eye_open.svg';
+      passwordInput.type = 'text';
     } else if (passwordInput.type == 'text') {
-      passwordInput.type = 'password'
-      img.src = '../assets/icons/eye_closed.svg'
+      passwordInput.type = 'password';
+      img.src = '../assets/icons/eye_closed.svg';
     }
   }
 
   SubmitPhone() {
-    let clearPhone: string = this.registerForm.value.number
-    let newStr = clearPhone.replace(/\+7|\s|\-|\(|\)/g, '')
-    this.registerForm.value.number = newStr
+    let clearPhone: string = this.registerForm.value.number;
+    let newStr = clearPhone.replace(/\+7|\s|\-|\(|\)/g, '');
+    this.registerForm.value.number = newStr;
   }
 
   OpenPasswordConfirm(input: string, event: any) {
-    let passwordInput: any = document.getElementById(input)
-    let img: any = document.getElementById('eye_img_confirm')
+    let passwordInput: any = document.getElementById(input);
+    let img: any = document.getElementById('eye_img_confirm');
     if (passwordInput.type === 'password') {
-      passwordInput.type = 'text'
-      img.src = '../assets/icons/eye_open.svg'
+      passwordInput.type = 'text';
+      img.src = '../assets/icons/eye_open.svg';
     } else if (passwordInput.type === 'text') {
-      passwordInput.type = 'password'
-      img.src = '../assets/icons/eye_closed.svg'
+      passwordInput.type = 'password';
+      img.src = '../assets/icons/eye_closed.svg';
     }
   }
 
@@ -260,25 +260,25 @@ export class RegistrationComponent implements OnInit {
         .pipe(
           delay(100),
           map((respons: any) => {
-            this.cancel()
+            this.cancel();
             if (respons.status === 'success') {
-              this.modal
-              this.router.navigate(['cabinet'])
-              this.registerForm.reset()
-              this.registerForm.enable()
+              this.modal;
+              this.router.navigate(['cabinet']);
+              this.registerForm.reset();
+              this.registerForm.enable();
             } else {
             }
           }),
-          catchError((err) => {
-            this.toastService.showToast(err.message, 'warning')
+          catchError(err => {
+            this.toastService.showToast(err.message, 'warning');
             if (err.status == 403 || err.status == 401) {
-              this.confirmCode = false
-              this.codeCount = 1
+              this.confirmCode = false;
+              this.codeCount = 1;
             }
-            return of(EMPTY)
-          }),
+            return of(EMPTY);
+          })
         )
-        .subscribe()
+        .subscribe();
     }
   }
 
@@ -287,45 +287,45 @@ export class RegistrationComponent implements OnInit {
       this.modalForm.value.emailConfirmInput.length >= 3 &&
       this.codeCount == 1
     ) {
-      this.confirmCode = true
-      this.codeCount = 0
+      this.confirmCode = true;
+      this.codeCount = 0;
     }
   }
 
   loginAfterSocial(token: any) {
     if (token.length >= 47) {
-      this.tokenService.setToken(token)
+      this.tokenService.setToken(token);
       // this.registerForm.disable()
-      this.loadingService.showLoading()
+      this.loadingService.showLoading();
       this.userService
         .getUserById()
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (data: any) => {
-            this.positiveResponseAfterLogin(data)
+            this.positiveResponseAfterLogin(data);
           },
-          error: (err) => {
-            this.loadingService.hideLoading()
+          error: err => {
+            this.loadingService.hideLoading();
           },
-        })
+        });
     }
   }
 
   positiveResponseAfterLogin(data: any) {
-    this.userService.setUser(data.user)
-    this.loadingService.hideLoading()
+    this.userService.setUser(data.user);
+    this.loadingService.hideLoading();
     // this.registerForm.reset()
     // this.registerForm.enable()
     // this.router.navigate(['cabinet']);
   }
 
   async onSubmitReg() {
-    this.loadingService.showLoading()
-    await this.checkPassword()
-    await this.checkEmail()
-    await this.checkName()
-    await this.SubmitPhone()
-    await this.checkNumber()
+    this.loadingService.showLoading();
+    await this.checkPassword();
+    await this.checkEmail();
+    await this.checkName();
+    await this.SubmitPhone();
+    await this.checkNumber();
 
     if (this.emailBusy && this.nameBusy && this.busyPass) {
       this.authservice
@@ -334,32 +334,32 @@ export class RegistrationComponent implements OnInit {
           delay(100),
           retry(3),
           map((respons: any) => {
-            this.RetryCode()
-            this.timerRetryButton = false
-            this.submitResponce = true
+            this.RetryCode();
+            this.timerRetryButton = false;
+            this.submitResponce = true;
             //this.confirmEmail();
             if (respons.status == 'success') {
               this.toastService.showToast(
                 'Вы успешно зарегестрировались!!!',
-                'success',
-              )
+                'success'
+              );
               respons.access_token
                 ? this.loginAfterSocial(respons.access_token)
-                : this.loginAfterSocial('no')
+                : this.loginAfterSocial('no');
             }
-            this.loadingService.hideLoading()
+            this.loadingService.hideLoading();
             // this.registerForm.disable();
           }),
 
           tap(() => {}),
-          catchError((err) => {
-            this.loadingService.hideLoading()
-            this.toastService.showToast(err.message, 'warning')
-            return of(EMPTY)
+          catchError(err => {
+            this.loadingService.hideLoading();
+            this.toastService.showToast(err.message, 'warning');
+            return of(EMPTY);
           }),
-          takeUntil(this.destroy$),
+          takeUntil(this.destroy$)
         )
-        .subscribe()
+        .subscribe();
     }
   }
 
@@ -388,44 +388,44 @@ export class RegistrationComponent implements OnInit {
     //   }
     // },1000)
 
-    let minutes: any = 0
-    let seconds: any = 15
-    let interval: any
+    let minutes: any = 0;
+    let seconds: any = 15;
+    let interval: any;
 
     interval = setInterval(() => {
       if (minutes >= 0) {
-        seconds--
+        seconds--;
 
         if (seconds < 0) {
-          seconds = 59
-          minutes--
+          seconds = 59;
+          minutes--;
         }
 
         let formattedTime =
           (minutes < 10 ? '0' + minutes : minutes) +
           ':' +
-          (seconds < 10 ? '0' + seconds : seconds)
-        this.timerRertyFormated = formattedTime
+          (seconds < 10 ? '0' + seconds : seconds);
+        this.timerRertyFormated = formattedTime;
 
         if (minutes === 0 && seconds === 0) {
-          clearInterval(interval)
-          this.timerRetryButton = true
+          clearInterval(interval);
+          this.timerRetryButton = true;
         }
       }
-    }, 1000)
+    }, 1000);
   }
 
   RertryCodeBtn() {
-    this.timerRetryButton = false
-    this.RetryCode()
+    this.timerRetryButton = false;
+    this.RetryCode();
     this.authservice
       .retryCode()
       .pipe(
         map((respons: any) => {}),
-        catchError((err) => {
-          return of(EMPTY)
-        }),
+        catchError(err => {
+          return of(EMPTY);
+        })
       )
-      .subscribe()
+      .subscribe();
   }
 }

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core'
-import { MetrikaModule } from 'ng-yandex-metrika'
+import { Injectable } from '@angular/core';
+import { MetrikaModule } from 'ng-yandex-metrika';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,6 +13,6 @@ export class YandexMetricService {
       trackLinks: true,
       accurateTrackBounce: true,
       webvisor: true,
-    })
+    });
   }
 }

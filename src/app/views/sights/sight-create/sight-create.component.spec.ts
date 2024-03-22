@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-import { IonicModule } from '@ionic/angular'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { IonicModule } from '@ionic/angular';
 
-import { SightCreateComponent } from './sight-create.component'
+import { SightCreateComponent } from './sight-create.component';
 
 describe('SightCreateComponent', () => {
-  let component: SightCreateComponent
-  let fixture: ComponentFixture<SightCreateComponent>
+  let component: SightCreateComponent;
+  let fixture: ComponentFixture<SightCreateComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SightCreateComponent],
       imports: [IonicModule.forRoot()],
-    }).compileComponents()
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(SightCreateComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  }))
+    fixture = TestBed.createComponent(SightCreateComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

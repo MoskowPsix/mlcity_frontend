@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing'
+import { TestBed } from '@angular/core/testing';
 
-import { HelpersService } from './helpers.service'
+import { HelpersService } from './helpers.service';
 
 describe('HelpersService', () => {
-  let service: HelpersService
+  let service: HelpersService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({})
-    service = TestBed.inject(HelpersService)
-  })
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(HelpersService);
+  });
 
   it('should be created', () => {
-    expect(service).toBeTruthy()
-  })
-})
+    expect(service).toBeTruthy();
+  });
+});

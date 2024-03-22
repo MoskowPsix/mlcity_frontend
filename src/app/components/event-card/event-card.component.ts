@@ -9,7 +9,7 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   NgZone,
-} from '@angular/core'
+} from '@angular/core';
 import {
   catchError,
   delay,
@@ -21,24 +21,24 @@ import {
   switchMap,
   takeUntil,
   tap,
-} from 'rxjs'
-import { MessagesErrors } from 'src/app/enums/messages-errors'
-import { MessagesAuth } from 'src/app/enums/messages-auth'
-import { AuthService } from 'src/app/services/auth.service'
-import { EventsService } from 'src/app/services/events.service'
-import { ToastService } from 'src/app/services/toast.service'
-import { environment } from 'src/environments/environment'
-import { VkService } from 'src/app/services/vk.service'
-import { IonicSlides } from '@ionic/angular'
-import { DomSanitizer } from '@angular/platform-browser'
+} from 'rxjs';
+import { MessagesErrors } from 'src/app/enums/messages-errors';
+import { MessagesAuth } from 'src/app/enums/messages-auth';
+import { AuthService } from 'src/app/services/auth.service';
+import { EventsService } from 'src/app/services/events.service';
+import { ToastService } from 'src/app/services/toast.service';
+import { environment } from 'src/environments/environment';
+import { VkService } from 'src/app/services/vk.service';
+import { IonicSlides } from '@ionic/angular';
+import { DomSanitizer } from '@angular/platform-browser';
 
-import { register } from 'swiper/element/bundle'
-import { Swiper } from 'swiper/types'
-import { SightsService } from 'src/app/services/sights.service'
-import { CommentsService } from 'src/app/services/comments.service'
-import numeral from 'numeral'
-import { HelpersService } from 'src/app/services/helpers.service'
-register()
+import { register } from 'swiper/element/bundle';
+import { Swiper } from 'swiper/types';
+import { SightsService } from 'src/app/services/sights.service';
+import { CommentsService } from 'src/app/services/comments.service';
+import numeral from 'numeral';
+import { HelpersService } from 'src/app/services/helpers.service';
+register();
 
 @Component({
   selector: 'app-event-card',
@@ -56,151 +56,151 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     private vkService: VkService,
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
-    private helpers: HelpersService,
+    private helpers: HelpersService
   ) {}
 
-  private readonly destroy$ = new Subject<void>()
+  private readonly destroy$ = new Subject<void>();
 
-  @Input() callFromCabinet: boolean = true
-  @Input() event!: any
-  @Input() isSight: boolean = false
-  comments: boolean = false
-  loadingComment: boolean = false
+  @Input() callFromCabinet: boolean = true;
+  @Input() event!: any;
+  @Input() isSight: boolean = false;
+  comments: boolean = false;
+  loadingComment: boolean = false;
 
   @ViewChild('swiper')
-  elementRef?: ElementRef
-  viewElement: boolean = false
-  viewElementTimeStart: number = 0
-  viewElementTimeEnd: number = 0
+  elementRef?: ElementRef;
+  viewElement: boolean = false;
+  viewElementTimeStart: number = 0;
+  viewElementTimeEnd: number = 0;
 
-  slugName?: string
+  slugName?: string;
 
-  swiperRef: ElementRef | undefined
-  swiper?: Swiper
-  swiperCurrentSlide?: number
-  swiperTotalSlids?: number
-  placeId: any
-  swiperModules = [IonicSlides]
+  swiperRef: ElementRef | undefined;
+  swiper?: Swiper;
+  swiperCurrentSlide?: number;
+  swiperTotalSlids?: number;
+  placeId: any;
+  swiperModules = [IonicSlides];
 
-  userAuth: boolean = false
+  userAuth: boolean = false;
 
-  host: string = environment.BACKEND_URL
-  port: string = environment.BACKEND_PORT
+  host: string = environment.BACKEND_URL;
+  port: string = environment.BACKEND_PORT;
 
-  favorite: boolean = false
-  loadingFavotire: boolean = false
+  favorite: boolean = false;
+  loadingFavotire: boolean = false;
 
-  like: boolean = false
-  loadingLike: boolean = false
-  startLikesCount: number = 0
-  vkLikesCount: number | null = null
+  like: boolean = false;
+  loadingLike: boolean = false;
+  startLikesCount: number = 0;
+  vkLikesCount: number | null = null;
   //windowComment: boolean = false
 
   toggleFavorite(event_id: number) {
     if (!this.userAuth) {
-      this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
+      this.toastService.showToast(MessagesAuth.notAutorize, 'warning');
     } else {
       if (!this.isSight) {
-        this.loadingFavotire = true // для отображения спинера
+        this.loadingFavotire = true; // для отображения спинера
         this.eventsService
           .toggleFavorite(event_id)
           .pipe(
             tap(() => {
-              this.favorite = !this.favorite
+              this.favorite = !this.favorite;
               this.favorite
                 ? this.event.favorites_users_count++
-                : this.event.favorites_users_count--
-              this.loadingFavotire = false
+                : this.event.favorites_users_count--;
+              this.loadingFavotire = false;
             }),
             tap(() => {
-              this.cdr.detectChanges()
+              this.cdr.detectChanges();
             }),
-            catchError((err) => {
-              this.toastService.showToast(MessagesErrors.default, 'danger')
-              return of(EMPTY)
+            catchError(err => {
+              this.toastService.showToast(MessagesErrors.default, 'danger');
+              return of(EMPTY);
             }),
-            takeUntil(this.destroy$),
+            takeUntil(this.destroy$)
           )
-          .subscribe()
+          .subscribe();
       } else {
-        this.loadingFavotire = true // для отображения спинера
+        this.loadingFavotire = true; // для отображения спинера
         this.sightsService
           .toggleFavorite(event_id)
           .pipe(
             tap(() => {
-              this.favorite = !this.favorite
+              this.favorite = !this.favorite;
               this.favorite
                 ? this.event.favorites_users_count++
-                : this.event.favorites_users_count--
+                : this.event.favorites_users_count--;
 
-              this.loadingFavotire = false
+              this.loadingFavotire = false;
             }),
             tap(() => {
-              this.cdr.detectChanges()
+              this.cdr.detectChanges();
             }),
-            catchError((err) => {
-              this.toastService.showToast(MessagesErrors.default, 'danger')
-              return of(EMPTY)
+            catchError(err => {
+              this.toastService.showToast(MessagesErrors.default, 'danger');
+              return of(EMPTY);
             }),
-            takeUntil(this.destroy$),
+            takeUntil(this.destroy$)
           )
-          .subscribe()
+          .subscribe();
       }
     }
   }
 
   getUrlFrame(url: string) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url)
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   toggleLike(event_id: number) {
     if (!this.userAuth) {
-      this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
+      this.toastService.showToast(MessagesAuth.notAutorize, 'warning');
     } else {
       if (!this.isSight) {
-        this.loadingLike = true // для отображения спинера
+        this.loadingLike = true; // для отображения спинера
         this.eventsService
           .toggleLike(event_id)
           .pipe(
             tap(() => {
-              this.like = !this.like
+              this.like = !this.like;
               this.like
                 ? this.event.liked_users_count++
-                : this.event.liked_users_count--
-              this.loadingLike = false
+                : this.event.liked_users_count--;
+              this.loadingLike = false;
             }),
             tap(() => {
-              this.cdr.detectChanges()
+              this.cdr.detectChanges();
             }),
-            catchError((err) => {
-              this.toastService.showToast(MessagesErrors.default, 'danger')
-              return of(EMPTY)
+            catchError(err => {
+              this.toastService.showToast(MessagesErrors.default, 'danger');
+              return of(EMPTY);
             }),
-            takeUntil(this.destroy$),
+            takeUntil(this.destroy$)
           )
-          .subscribe()
+          .subscribe();
       } else {
-        this.loadingLike = true // для отображения спинера
+        this.loadingLike = true; // для отображения спинера
         this.sightsService
           .toggleLike(event_id)
           .pipe(
             tap(() => {
-              this.like = !this.like
+              this.like = !this.like;
               this.like
                 ? this.event.liked_users_count++
-                : this.event.liked_users_count--
-              this.loadingLike = false
+                : this.event.liked_users_count--;
+              this.loadingLike = false;
             }),
             tap(() => {
-              this.cdr.detectChanges()
+              this.cdr.detectChanges();
             }),
-            catchError((err) => {
-              this.toastService.showToast(MessagesErrors.default, 'danger')
-              return of(EMPTY)
+            catchError(err => {
+              this.toastService.showToast(MessagesErrors.default, 'danger');
+              return of(EMPTY);
             }),
-            takeUntil(this.destroy$),
+            takeUntil(this.destroy$)
           )
-          .subscribe()
+          .subscribe();
       }
     }
   }
@@ -210,41 +210,41 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       .getPostGroup(vk_group_id, vk_post_id)
       .pipe(
         delay(100),
-        map((res) =>
-          res.response && res.response.length ? res.response[0].likes.count : 0,
+        map(res =>
+          res.response && res.response.length ? res.response[0].likes.count : 0
         ),
-        switchMap((count) => {
+        switchMap(count => {
           //if (count !== 0){
           this.eventsService
             .updateEventVkLIkes(this.event.id, count)
             .pipe(
               // обновляем на беке  кол-во вк лайков
-              catchError((err) => {
+              catchError(err => {
                 //console.log(err)
                 this.toastService.showToast(
                   MessagesErrors.vkLikesError,
-                  'secondary',
-                )
-                return of(EMPTY)
+                  'secondary'
+                );
+                return of(EMPTY);
               }),
-              takeUntil(this.destroy$),
+              takeUntil(this.destroy$)
             )
-            .subscribe()
+            .subscribe();
           //}
-          return of(count)
+          return of(count);
         }),
-        tap((count) => {
+        tap(count => {
           if (this.event.likes !== null)
-            this.startLikesCount = this.event.likes.local_count + count // обновляем лайки в представлении
+            this.startLikesCount = this.event.likes.local_count + count; // обновляем лайки в представлении
         }),
-        catchError((err) => {
+        catchError(err => {
           //console.log(err)
-          this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
-          return of(EMPTY)
+          this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary');
+          return of(EMPTY);
         }),
-        takeUntil(this.destroy$),
+        takeUntil(this.destroy$)
       )
-      .subscribe()
+      .subscribe();
   }
 
   //проверяем делал ли юзер лайк этого ивента в ВК
@@ -254,89 +254,89 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
         .isLikedUserVKEvent(group_id, post_id)
         .pipe(
           delay(100),
-          map((res) => res.response.liked),
-          switchMap((liked) => {
+          map(res => res.response.liked),
+          switchMap(liked => {
             if (liked === 1) {
               this.eventsService
                 .setEventUserLiked(this.event.id)
                 .pipe(
-                  tap((res) => {
+                  tap(res => {
                     if (res.likedUser) {
-                      this.like = true
+                      this.like = true;
                     }
                   }),
-                  catchError((err) => {
+                  catchError(err => {
                     //console.log(err)
-                    return of(EMPTY)
+                    return of(EMPTY);
                   }),
-                  takeUntil(this.destroy$),
+                  takeUntil(this.destroy$)
                 )
-                .subscribe()
+                .subscribe();
             }
-            return of(EMPTY)
+            return of(EMPTY);
           }),
-          catchError((err) => {
+          catchError(err => {
             //console.log(err)
-            return of(EMPTY)
+            return of(EMPTY);
           }),
-          takeUntil(this.destroy$),
+          takeUntil(this.destroy$)
         )
-        .subscribe()
+        .subscribe();
     }
   }
   getCurentNumber(numer: number) {
     if (numer <= 999) {
-      return numeral(numer).format('0')
+      return numeral(numer).format('0');
     } else {
-      return numeral(numer).format('0.0a')
+      return numeral(numer).format('0.0a');
     }
   }
 
   getMinPrice(prices: any[]) {
-    let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub)
-    return sort_prices[0].cost_rub
+    let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub);
+    return sort_prices[0].cost_rub;
   }
 
   getMaxPrice(prices: any[]) {
-    let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub)
-    return sort_prices[sort_prices.length - 1].cost_rub
+    let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub);
+    return sort_prices[sort_prices.length - 1].cost_rub;
   }
 
   ngOnInit() {
-    this.slugName = this.helpers.translit(this.event.name)
-    this.userAuth = this.authService.getAuthState()
+    this.slugName = this.helpers.translit(this.event.name);
+    this.userAuth = this.authService.getAuthState();
     this.startLikesCount = this.event.likes
       ? this.event.likes.vk_count + this.event.likes.local_count
-      : 0
-    this.favorite = this.event.favorites_users_exists!
-    this.like = this.event.liked_users_exists!
+      : 0;
+    this.favorite = this.event.favorites_users_exists!;
+    this.like = this.event.liked_users_exists!;
     // window.addEventListener('scrollend', this.scrollEvent, true);
 
     //КИдаем запрос в ВК чтобы обновить лайки и лайкнуть у нас если юзер лайкнул в ВК
     if (this.event.vk_group_id && this.event.vk_post_id) {
-      this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
-      this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
+      this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id);
+      this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id);
     }
   }
 
   ngAfterViewInit(): void {
-    this.swiper = this.swiperRef?.nativeElement.swiper
+    this.swiper = this.swiperRef?.nativeElement.swiper;
     setTimeout(() => {
-      this.swiperCurrentSlide = this.swiper?.realIndex! + 1
-      this.swiperTotalSlids = this.swiper?.slides.length
-      this.swiper?.autoplay.start(), 1000
-    }) // Без этого костыля автоплей работает только в первой карточке
+      this.swiperCurrentSlide = this.swiper?.realIndex! + 1;
+      this.swiperTotalSlids = this.swiper?.slides.length;
+      this.swiper?.autoplay.start(), 1000;
+    }); // Без этого костыля автоплей работает только в первой карточке
 
     this.swiper?.on('slideChange', () => {
-      this.swiperCurrentSlide = this.swiper?.realIndex! + 1
-    })
+      this.swiperCurrentSlide = this.swiper?.realIndex! + 1;
+    });
 
-    this.cdr.detectChanges()
+    this.cdr.detectChanges();
   }
 
   scrollEvent = (): void => {
     const boundingClientRect =
-      this.elementRef?.nativeElement.getBoundingClientRect()
+      this.elementRef?.nativeElement.getBoundingClientRect();
     if (
       boundingClientRect.top >
         (window.innerHeight - (window.innerHeight + window.innerHeight)) / 2 &&
@@ -346,7 +346,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       boundingClientRect.width !== 0
     ) {
       if (!this.viewElementTimeStart) {
-        this.viewElementTimeStart = new Date().getTime()
+        this.viewElementTimeStart = new Date().getTime();
       }
     } else if (
       (this.viewElementTimeStart && !this.viewElement) ||
@@ -355,9 +355,9 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
         boundingClientRect.width === 0 &&
         boundingClientRect.width === 0)
     ) {
-      this.viewElementTimeEnd = new Date().getTime()
-      let time: any
-      time = (new Date().getTime() - this.viewElementTimeStart) / 1000
+      this.viewElementTimeEnd = new Date().getTime();
+      let time: any;
+      time = (new Date().getTime() - this.viewElementTimeStart) / 1000;
       if (time > 3.141) {
         if (this.isSight) {
           this.sightsService
@@ -365,94 +365,94 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
             .pipe(
               delay(100),
               retry(3),
-              catchError((err) => {
-                return of(EMPTY)
+              catchError(err => {
+                return of(EMPTY);
               }),
-              takeUntil(this.destroy$),
+              takeUntil(this.destroy$)
             )
-            .subscribe()
+            .subscribe();
         } else {
           this.eventsService
             .addView(this.event.id, time)
             .pipe(
               delay(100),
               retry(3),
-              catchError((err) => {
-                return of(EMPTY)
+              catchError(err => {
+                return of(EMPTY);
               }),
-              takeUntil(this.destroy$),
+              takeUntil(this.destroy$)
             )
-            .subscribe()
+            .subscribe();
         }
-        this.viewElement = true
+        this.viewElement = true;
       }
-      this.viewElementTimeStart = 0
-      this.viewElementTimeEnd = 0
+      this.viewElementTimeStart = 0;
+      this.viewElementTimeEnd = 0;
     }
     //console.log(boundingClientRect)
-  }
+  };
 
   toggleComment() {
-    this.loadingComment = true
+    this.loadingComment = true;
     if (!this.comments && !this.event.comments && !this.isSight) {
       this.commentsServices
         .getCommentsEventsIds(this.event.id)
         .pipe(
           takeUntil(this.destroy$),
           tap(() => {
-            this.loadingComment = false
-            this.comments = true
+            this.loadingComment = false;
+            this.comments = true;
           }),
           map((response: any) => {
-            this.event.comments = response.comments
+            this.event.comments = response.comments;
           }),
           tap(() => {
-            this.cdr.detectChanges()
+            this.cdr.detectChanges();
           }),
-          catchError((err) => {
-            console.log(err)
-            return of(EMPTY)
-          }),
+          catchError(err => {
+            console.log(err);
+            return of(EMPTY);
+          })
         )
         .subscribe((response: any) => {
           // this.event['comments'] = response.comments
-        })
+        });
     } else if (!this.comments && !this.event.comments && this.isSight) {
       this.commentsServices
         .getCommentsSightsIds(this.event.id)
         .pipe(
           takeUntil(this.destroy$),
           tap(() => {
-            this.loadingComment = false
-            this.comments = true
+            this.loadingComment = false;
+            this.comments = true;
           }),
           map((response: any) => {
-            this.event.comments = response.comments
+            this.event.comments = response.comments;
           }),
           tap(() => {
-            this.cdr.detectChanges()
+            this.cdr.detectChanges();
           }),
-          catchError((err) => {
-            console.log(err)
-            return of(EMPTY)
-          }),
+          catchError(err => {
+            console.log(err);
+            return of(EMPTY);
+          })
         )
         .subscribe((response: any) => {
           // this.event['comments'] = response.comments
           // console.log(this.event)
-        })
+        });
     } else if (!this.comments && this.event.comments) {
-      this.comments = true
-      this.loadingComment = false
+      this.comments = true;
+      this.loadingComment = false;
     } else if (this.comments && this.event.comments) {
-      this.comments = false
-      this.loadingComment = false
+      this.comments = false;
+      this.loadingComment = false;
     }
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
     //console.log(this.event.id)
-    this.destroy$.next()
-    this.destroy$.complete()
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
