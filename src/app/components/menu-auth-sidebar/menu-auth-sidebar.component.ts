@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core'
+import { Subscription } from 'rxjs'
 import menuAuthData from '../../../assets/json/menu-auth.json'
-import { IMenu } from 'src/app/models/menu';
-import { AuthService } from 'src/app/services/auth.service';
-import { UserService } from 'src/app/services/user.service';
-import { Router } from '@angular/router';
+import { IMenu } from 'src/app/models/menu'
+import { AuthService } from 'src/app/services/auth.service'
+import { UserService } from 'src/app/services/user.service'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-menu-auth-sidebar',
@@ -12,37 +12,36 @@ import { Router } from '@angular/router';
   styleUrls: ['./menu-auth-sidebar.component.scss'],
 })
 export class MenuAuthSidebarComponent implements OnInit {
-
   menuAuth: IMenu[] = []
   isAuthenticated: boolean = false
   subscriptions: Subscription[] = []
-  subscription_1!: Subscription 
+  subscription_1!: Subscription
   subscription_2!: Subscription
   user: any
 
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private userService: UserService,
-    private router: Router
-    ) { }
+    private router: Router,
+  ) {}
 
   //Проверяем авторизован ли пользователь
-  checkAuthenticated(){
+  checkAuthenticated() {
     this.subscription_1 = this.authService.authenticationState.subscribe(
-      ((res: boolean) => {
-         this.isAuthenticated = res;
-      })
-    );
+      (res: boolean) => {
+        this.isAuthenticated = res
+      },
+    )
   }
 
-  getUser(){
-    this.subscription_2 =  this.userService.getUser().subscribe((user) => {
+  getUser() {
+    this.subscription_2 = this.userService.getUser().subscribe((user) => {
       this.user = user
     })
   }
 
   public isLChildLinkActive(route: string): boolean {
-    return this.router.isActive(route, true);
+    return this.router.isActive(route, true)
   }
 
   ngOnInit() {
@@ -55,16 +54,15 @@ export class MenuAuthSidebarComponent implements OnInit {
     this.subscriptions.push(this.subscription_2)
   }
 
+  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnDestroy() {
     // отписываемся от всех подписок
     if (this.subscriptions) {
       this.subscriptions.forEach((subscription) => {
-        if (subscription){
+        if (subscription) {
           subscription.unsubscribe()
-        }      
+        }
       })
-     }  
+    }
   }
-
-
 }

@@ -1,5 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { trigger, state, style, animate, transition, AUTO_STYLE } from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core'
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+  AUTO_STYLE,
+} from '@angular/animations'
 
 @Component({
   selector: 'app-read-more',
@@ -15,22 +22,19 @@ import { trigger, state, style, animate, transition, AUTO_STYLE } from '@angular
 
     trigger('collapse', [
       state('false', style({ height: '0px', overflow: 'hidden' })),
-      state('true', style({ height: AUTO_STYLE, overflow: 'hidden'})),
+      state('true', style({ height: AUTO_STYLE, overflow: 'hidden' })),
       transition('true <=> false', animate('500ms ease-in-out')),
     ]),
-    
-  ]
+  ],
 })
 export class ReadMoreComponent implements OnInit {
-
   readMore: boolean = false
   collapsed = false
   showToggle: boolean = false
-  @Input() text:string = ''
-  @Input() long:number  = 200
-  
+  @Input() text: string = ''
+  @Input() long: number = 200
 
-  constructor() { }
+  constructor() {}
 
   toggle() {
     this.collapsed = !this.collapsed
@@ -43,5 +47,4 @@ export class ReadMoreComponent implements OnInit {
       this.showToggle = false
     }
   }
-
 }

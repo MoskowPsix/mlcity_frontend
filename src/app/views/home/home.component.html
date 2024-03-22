@@ -24,13 +24,13 @@
   <div >
 
     <!-- Фильтры для ивентов -->
-    <div  *ngIf="stateType == 'events'" [@panelInOut] [style.height]="stateType != 'events' ? '0' : 'auto'" class="calendula-container" #calendula>
+    <div  *ngIf="stateType === 'events'" [@panelInOut] [style.height]="stateType !== 'events' ? '0' : 'auto'" class="calendula-container" #calendula>
       <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
       <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
     </div>
 
     <!-- Фильтры для мест -->
-    <div  *ngIf="stateType == 'sights'" [@panelInOut] [style.height]="stateType != 'sights' ? '0' : 'auto'" class="sight-carusel-container">
+    <div  *ngIf="stateType === 'sights'" [@panelInOut] [style.height]="stateType !== 'sights' ? '0' : 'auto'" class="sight-carusel-container">
       <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
     </div>
 
@@ -51,10 +51,10 @@
 
       <!-- Просмотр в радиусе -->
     <div class="modalButton">
-      <ion-button (click)="openModalContent()" *ngIf="!modalButtonLoader && stateType == 'sights'" fill="solid" shape="round" [disabled]="modalButtonLoader">
+      <ion-button (click)="openModalContent()" *ngIf="!modalButtonLoader && stateType === 'sights'" fill="solid" shape="round" [disabled]="modalButtonLoader">
         Посмотреть {{sightsContentModalTotal}} достопримечателностей
       </ion-button>
-      <ion-button (click)="openModalContent()" *ngIf="!modalButtonLoader && stateType == 'events'" fill="solid" shape="round" [disabled]="modalButtonLoader">
+      <ion-button (click)="openModalContent()" *ngIf="!modalButtonLoader && stateType === 'events'" fill="solid" shape="round" [disabled]="modalButtonLoader">
         Посмотреть {{eventsContentModalTotal}} мероприятий
       </ion-button>
       <ion-button *ngIf="modalButtonLoader" fill="solid" shape="round" [disabled]="modalButtonLoader">
@@ -107,7 +107,7 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <ng-container *ngIf="stateType == 'events'">
+        <ng-container *ngIf="stateType === 'events'">
           <ion-row class="ion-justify-content-start" *ngIf="eventsContentModal">
             <ion-col *ngFor="let item of eventsContentModal; let i = index" size="12">
               <app-event-card [event]="item" [isSight]="false"></app-event-card>
@@ -115,7 +115,7 @@
           </ion-row>
         </ng-container>
 
-        <ng-container *ngIf="stateType == 'sights'">
+        <ng-container *ngIf="stateType === 'sights'">
           <ion-row class="ion-justify-content-start" *ngIf="sightsContentModal">
             <ion-col *ngFor="let item of sightsContentModal; let i = index" size="12">
               <app-event-card [event]="item" [isSight]="true"></app-event-card>

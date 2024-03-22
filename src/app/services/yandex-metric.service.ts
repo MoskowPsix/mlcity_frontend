@@ -1,17 +1,18 @@
-import { Injectable } from '@angular/core';
-import { MetrikaModule } from 'ng-yandex-metrika';
+import { Injectable } from '@angular/core'
+import { MetrikaModule } from 'ng-yandex-metrika'
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class YandexMetricService {
+  constructor() {}
 
-  constructor() { }
-
-  metrica(){
+  metrica() {
     MetrikaModule.forRoot({
-      id:96112606, clickmap:true,
-      trackLinks:true,
-      accurateTrackBounce:true,
-      webvisor:true})
+      id: 96112606,
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor: true,
+    })
   }
 }

@@ -4,7 +4,7 @@
     <div class="buttons-desktop-wrapper">
 
       <div class="btnsWrapperBack">
-        <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency == stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+        <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
         <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
       </div>
 
@@ -24,11 +24,11 @@
 
       <ion-column class="mainLabelAndBar">
         <div class="ion-text-start">
-          <h3 [hidden]="stepCurrency != 0" class="mt-0 mainLabelAndBarText">Тип мероприятия</h3>
-          <h3 [hidden]="stepCurrency != 1" class="mt-0 mainLabelAndBarText">Название мероприятия</h3>
-          <h3 [hidden]="stepCurrency != 2" class="mt-0 mainLabelAndBarText">О мероприятие</h3>
-          <h3 [hidden]="stepCurrency != 3" class="mt-0 mainLabelAndBarText">Место проведения</h3>
-          <h3 [hidden]="stepCurrency != 4" class="mt-0 mainLabelAndBarText">Цена и билеты</h3>
+          <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип мероприятия</h3>
+          <h3 [hidden]="stepCurrency !== 1" class="mt-0 mainLabelAndBarText">Название мероприятия</h3>
+          <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">О мероприятие</h3>
+          <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Место проведения</h3>
+          <h3 [hidden]="stepCurrency !== 4" class="mt-0 mainLabelAndBarText">Цена и билеты</h3>
          
         </div>
 
@@ -108,7 +108,7 @@
 
       <!-- шаг 2 -->
       <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center">
-        <ion-label *ngIf="isNextButtonClicked == true && createEventForm.controls['name'].invalid || createEventForm.controls['sponsor'].invalid == true" class="pick">Введите данные, чтобы перейти на следующий шаг</ion-label>
+        <ion-label *ngIf="isNextButtonClicked === true && createEventForm.controls['name'].invalid || createEventForm.controls['sponsor'].invalid === true" class="pick">Введите данные, чтобы перейти на следующий шаг</ion-label>
 
         <ion-col *ngIf="stepCurrency === 1" @fade>
 
@@ -189,7 +189,7 @@
 
       <ion-row style="display: flex; justify-content: center;"  [hidden]="stepCurrency !== 2">
 
-        <ion-label *ngIf="isNextButtonClicked == true && createEventForm.controls['description'].invalid == true" class="pick">Введите информацию о мероприятии, чтобы перейти на следующий шаг</ion-label>
+        <ion-label *ngIf="isNextButtonClicked === true && createEventForm.controls['description'].invalid === true" class="pick">Введите информацию о мероприятии, чтобы перейти на следующий шаг</ion-label>
 
 
         <ion-modal class="modal" backdropDismiss="false" [isOpen] ="openModalGroupValue" [canDismiss]="openModalGroupValue">
@@ -479,13 +479,13 @@
                               <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
                                 <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
 
-                                  <ion-col *ngIf="attachment.type == 'video' ">
+                                  <ion-col *ngIf="attachment.type === 'video' ">
                                     <img class="imagesPreview" alt="ava" src="{{ attachment.video.image[0].url }}" />
                                     <div style="background-color: rgba(0, 0, 0, 0.568); color: #fff; border-radius: 4px; margin-top:-1.5rem; position: absolute; display: flex; justify-content: space-between;"><ion-icon name="play-outline"></ion-icon></div>
                                   </ion-col>
 
 
-                                  <ion-col *ngIf="attachment.type == 'photo' ">
+                                  <ion-col *ngIf="attachment.type === 'photo' ">
                                     <img class="imagesPreview" alt="ava" src="{{ attachment.photo.sizes[3].url }}" />
                                     <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(attachment)">
                                       <ion-icon name="trash-bin" slot="start"></ion-icon>
@@ -639,7 +639,7 @@
       <!-- шаг 4 -->
       <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
 
-        <ion-label *ngIf="isNextButtonClicked == true" class="pick">{{ getMessage() }}</ion-label>
+        <ion-label *ngIf="isNextButtonClicked === true" class="pick">{{ getMessage() }}</ion-label>
 
         <!-- <ion-button (click)="searchMinSeans()">test</ion-button> -->
         <ion-col *ngIf="stepCurrency === 3" @fade>
@@ -653,7 +653,7 @@
                     </ion-chip>
                     <ion-icon (click)="getPlaceId(place)" name="caret-down-outline" style="width: 2rem; height: 5rem; margin-left: auto; transition: 0.5s; cursor: pointer;"
                     [ngClass]="{
-                      'place-row_close': placesClose[i].open == false,
+                      'place-row_close': placesClose[i].open === false,
                      
                     }"
                     ></ion-icon> 
@@ -683,7 +683,7 @@
           
                 <ion-card class="" >
                 <div style=" transition: 0.5s ;" #place id="{{i}}" [ngClass]="{
-                  'place-wrapper_close': placesClose[i].open == false,
+                  'place-wrapper_close': placesClose[i].open === false,
                   'place-wrapper_open': placesClose[i].open
                 }">
             

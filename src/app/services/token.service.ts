@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenService {
-
-  constructor() { }
+  constructor() {}
 
   setToken(token: any) {
     //localStorage.setItem('X-XSRF-TOKEN', JSON.stringify(token))
@@ -16,7 +15,7 @@ export class TokenService {
     //return JSON.parse(localStorage.getItem('X-XSRF-TOKEN') || 'null')
     return localStorage.getItem('auth-token')
   }
-  
+
   // Remove token
   removeToken() {
     localStorage.removeItem('auth-token')

@@ -1,3 +1,3 @@
 export enum MessagesCityes {
-    setCitySuccess = 'Вы успешно сменили город',
+  setCitySuccess = 'Вы успешно сменили город',
 }

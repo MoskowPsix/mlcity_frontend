@@ -26,7 +26,7 @@
 
           <div *ngFor="let child of parent.value.children" >
                 <ion-item
-                *ngIf="child.title == 'Все' else otherPath"
+                *ngIf="child.title === 'Все' else otherPath"
                 lines="none"
                 [href]="backendUrl"
                 [routerLinkActive]="['active']"
@@ -38,7 +38,7 @@
               <ng-template #otherPath>
                 <ion-item
                 lines="none"
-                *ngIf="child.title == 'Обратная связь' else otherName"
+                *ngIf="child.title === 'Обратная связь' else otherName"
                 href = "mailto:support@mlcity.ru"
               >
                 <ion-icon name="{{ child.icon }}"  slot="start" color="primary"></ion-icon>

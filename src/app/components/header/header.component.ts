@@ -1,31 +1,29 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject, takeUntil, catchError, of, EMPTY } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Subject, takeUntil, catchError, of, EMPTY } from 'rxjs'
 import menuPublicData from '../../../assets/json/menu-public.json'
-import { IMenu } from 'src/app/models/menu';
-import { environment } from 'src/environments/environment';
-import { NavigationService } from 'src/app/services/navigation.service';
-import { MapService } from 'src/app/services/map.service';
-import { FormControl } from '@angular/forms';
-import { VkService } from 'src/app/services/vk.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { MessagesCityes } from 'src/app/enums/messages-cityes';
-import { EventsService } from 'src/app/services/events.service';
-import { IGetEventsAndSights } from 'src/app/models/getEventsAndSights';
-import { Statuses } from 'src/app/enums/statuses';
-import { SightsService } from 'src/app/services/sights.service';
-import { MessagesErrors } from 'src/app/enums/messages-errors';
-import { FilterService } from 'src/app/services/filter.service';
-import { LocationService } from 'src/app/services/location.service';
-import { QueryBuilderService } from 'src/app/services/query-builder.service';
+import { IMenu } from 'src/app/models/menu'
+import { environment } from 'src/environments/environment'
+import { NavigationService } from 'src/app/services/navigation.service'
+import { MapService } from 'src/app/services/map.service'
+import { FormControl } from '@angular/forms'
+import { VkService } from 'src/app/services/vk.service'
+import { ToastService } from 'src/app/services/toast.service'
+import { MessagesCityes } from 'src/app/enums/messages-cityes'
+import { EventsService } from 'src/app/services/events.service'
+import { IGetEventsAndSights } from 'src/app/models/getEventsAndSights'
+import { Statuses } from 'src/app/enums/statuses'
+import { SightsService } from 'src/app/services/sights.service'
+import { MessagesErrors } from 'src/app/enums/messages-errors'
+import { FilterService } from 'src/app/services/filter.service'
+import { LocationService } from 'src/app/services/location.service'
+import { QueryBuilderService } from 'src/app/services/query-builder.service'
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-
-export class HeaderComponent implements OnInit,OnDestroy {
-
+export class HeaderComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
 
   menuPublic: IMenu[] = []
@@ -36,27 +34,27 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
   showBackButton: boolean = true
 
-  locationId:number = 0
-  geolocationCity:string = ''
-  showChangeCityDialog:boolean = false
-  radius:number = 1
-  region:string = ''
-  city:string = ''
-  geolocationRegion:string = ''
+  locationId: number = 0
+  geolocationCity: string = ''
+  showChangeCityDialog: boolean = false
+  radius: number = 1
+  region: string = ''
+  city: string = ''
+  geolocationRegion: string = ''
 
-  minLengthCityesListError:boolean = false
-  minLengthEventsListError:boolean = false
+  minLengthCityesListError: boolean = false
+  minLengthEventsListError: boolean = false
 
-  segment:string = 'events'
+  segment: string = 'events'
 
-  cityesList: any[] = [];
-  cityesListLoading:boolean = false
-  searchCityes: FormControl =  new FormControl('')
-  eventsListLoading:boolean = false
-  eventsList: any[] = [];
-  sightsListLoading:boolean = false
-  sightsList: any[] = [];
-  searchEvents: FormControl =  new FormControl('')
+  cityesList: any[] = []
+  cityesListLoading: boolean = false
+  searchCityes: FormControl = new FormControl('')
+  eventsListLoading: boolean = false
+  eventsList: any[] = []
+  sightsListLoading: boolean = false
+  sightsList: any[] = []
+  searchEvents: FormControl = new FormControl('')
 
   queryParams?: IGetEventsAndSights
 
@@ -70,18 +68,18 @@ export class HeaderComponent implements OnInit,OnDestroy {
     private sightsService: SightsService,
     private filterService: FilterService,
     private locationService: LocationService,
-    ) { }
+  ) {}
 
-    getEventService() {
-      return  this.filterService.eventsCount.value
-    }
+  getEventService() {
+    return this.filterService.eventsCount.value
+  }
 
-    getSightService() {
-      return  this.filterService.sightsCount.value
-    }
+  getSightService() {
+    return this.filterService.sightsCount.value
+  }
 
   //Установить город из диалога, из геопозиции
-  setCityFromDialog(){
+  setCityFromDialog() {
     this.city = this.geolocationCity
     this.region = this.geolocationRegion
     this.mapService.setCoordsFromChangeCityDialog()
@@ -90,41 +88,44 @@ export class HeaderComponent implements OnInit,OnDestroy {
   }
 
   //Скрыть диалог подтверждения города
-  hideCityDialog(){
+  hideCityDialog() {
     this.mapService.hideChangeCityDialog()
     this.navigationService.modalSearchCityesOpen.next(true)
   }
 
   //Открытие модалки для поиска городов
-  isModalSearchCityesOpen(isOpen: boolean){
+  isModalSearchCityesOpen(isOpen: boolean) {
     this.onClearSearch()
     this.searchCityes.patchValue('')
     this.navigationService.modalSearchCityesOpen.next(isOpen)
   }
 
   //Открытие модалки для поиска ивентов и достопримечательностей
-  isModalSearchEventsOpen(isOpen: boolean){
+  isModalSearchEventsOpen(isOpen: boolean) {
     this.onClearSearch()
     this.searchEvents.patchValue('')
     this.navigationService.modalSearchEventsOpen.next(isOpen)
   }
 
   //Получаем города
-  getCityes(event: any){
-    if (event.target.value.length >= 3){
+  getCityes(event: any) {
+    if (event.target.value.length >= 3) {
       this.cityesListLoading = true
       this.minLengthCityesListError = false
-      this.locationService.getLocationsName(event.target.value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-        this.cityesList = response.locations
-        this.cityesListLoading = false
-      })
+      this.locationService
+        .getLocationsName(event.target.value)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: any) => {
+          this.cityesList = response.locations
+          this.cityesListLoading = false
+        })
     } else {
       this.minLengthCityesListError = true
     }
   }
 
   //Устанавливаем город, регион и координаты в локал сторадж и в сервис
-  onSelectedCity(item:any){
+  onSelectedCity(item: any) {
     this.city = item.name
     this.region = item.location_parent.name
     this.filterService.setLocationTolocalStorage(item.id)
@@ -132,8 +133,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
     // this.filterService.setRegionTolocalStorage(item.location_parent.name)
     //Получаем координаты по городу и записываем их
     // this.mapService.ForwardGeocoder(item.name + '' + item.location_parent.name).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
-      this.filterService.setLocationLatitudeTolocalStorage(item.latitude)
-      this.filterService.setLocationLongitudeTolocalStorage(item.longitude)
+    this.filterService.setLocationLatitudeTolocalStorage(item.latitude)
+    this.filterService.setLocationLongitudeTolocalStorage(item.longitude)
     // })
     this.filterService.changeFilter.next(true)
     this.filterService.changeCityFilter.next(true)
@@ -142,11 +143,11 @@ export class HeaderComponent implements OnInit,OnDestroy {
   }
 
   //Получить ивенты
-  getEventsAndSights(event: any){
-    if (event.target.value.length >= 3){
+  getEventsAndSights(event: any) {
+    if (event.target.value.length >= 3) {
       this.eventsListLoading = true
       this.minLengthEventsListError = false
-      this.queryParams =  {
+      this.queryParams = {
         pagination: true,
         limit: 50,
         favoriteUser: true,
@@ -154,45 +155,49 @@ export class HeaderComponent implements OnInit,OnDestroy {
         statuses: [Statuses.publish].join(','),
         statusLast: true,
         locationId: this.locationId,
-        searchText: event.target.value
+        searchText: event.target.value,
       }
 
-      this.eventsService.getEvents(this.queryParams).pipe(
-        catchError((err) =>{
+      this.eventsService
+        .getEvents(this.queryParams)
+        .pipe(
+          catchError((err) => {
+            this.eventsListLoading = false
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe((response: any) => {
+          this.eventsList = response.events.data
           this.eventsListLoading = false
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$)
-        ).subscribe((response:any) => {
-        this.eventsList = response.events.data
-        this.eventsListLoading = false
-      })
+        })
 
-      this.sightsService.getSights(this.queryParams).pipe(
-        catchError((err) =>{
+      this.sightsService
+        .getSights(this.queryParams)
+        .pipe(
+          catchError((err) => {
+            this.sightsListLoading = false
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe((response: any) => {
+          this.sightsList = response.sights.data
           this.sightsListLoading = false
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$)
-        ).subscribe((response:any) => {
-        this.sightsList = response.sights.data
-        this.sightsListLoading = false
-      })
+        })
     } else {
       this.minLengthEventsListError = true
     }
   }
 
-
-
-  onSegmentChanged(event:any){
+  onSegmentChanged(event: any) {
     this.segment = event.detail.value
   }
 
   //Очистить поля поисков в модалках поиска горда и выбора ивента
-  onClearSearch(){
+  onClearSearch() {
     this.minLengthCityesListError = false
     this.minLengthEventsListError = false
     this.cityesListLoading = false
@@ -203,70 +208,87 @@ export class HeaderComponent implements OnInit,OnDestroy {
     this.sightsList = []
   }
 
-  modalClose(){
+  modalClose() {
     this.navigationService.modalSearchCityesOpen.next(false)
     this.navigationService.modalSearchEventsOpen.next(false)
   }
 
   pinRadiusFormatter(value: number) {
-    return `${value} км.`;
-   }
+    return `${value} км.`
+  }
 
   //Меняем радиус
-  radiusChange(event:any){
+  radiusChange(event: any) {
     this.filterService.setRadiusTolocalStorage(event.detail.value)
-
   }
 
   ngOnInit() {
-
     //Смотрим состояние кнопки назад
-    this.navigationService.showBackButton.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.showBackButton = value
-    })
+    this.navigationService.showBackButton
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.showBackButton = value
+      })
 
-     //Подписываемся на состояние модалки поиска города
-     this.navigationService.modalSearchCityesOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.modalSearchCityesOpen = value
-    })
+    //Подписываемся на состояние модалки поиска города
+    this.navigationService.modalSearchCityesOpen
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.modalSearchCityesOpen = value
+      })
 
-     //Подписываемся на состояние модалки поиска ивентов и мест
-     this.navigationService.modalSearchEventsOpen.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.modalSearchEventsOpen = value
-    })
+    //Подписываемся на состояние модалки поиска ивентов и мест
+    this.navigationService.modalSearchEventsOpen
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.modalSearchEventsOpen = value
+      })
 
     //Подписываемся на город
-    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.locationId = value
-      // Запрашиваем локацию по ид если меняется
-      if(value){
-        this.locationService.getLocationsIds(value).pipe().subscribe( value =>{
-          this.city = value.location.name
-          this.region = value.location.location_parent.name
-        })
-      }
-    })
+    this.filterService.locationId
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.locationId = value
+        // Запрашиваем локацию по ид если меняется
+        if (value) {
+          this.locationService
+            .getLocationsIds(value)
+            .pipe()
+            .subscribe((value) => {
+              this.city = value.location.name
+              this.region = value.location.location_parent.name
+            })
+        }
+      })
 
     //Подписываемся на город из Геолокации
-    this.mapService.geolocationCity.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      //console.log('this.mapService.geolocationCity ',value)
-      this.geolocationCity = value
-    })
+    this.mapService.geolocationCity
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        //console.log('this.mapService.geolocationCity ',value)
+        this.geolocationCity = value
+      })
 
-     //Подписываемся на регион из Геолокации
-    this.mapService.geolocationRegion.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.geolocationRegion = value
-    })
+    //Подписываемся на регион из Геолокации
+    this.mapService.geolocationRegion
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.geolocationRegion = value
+      })
 
-     //Подписываемся на изменение радиуса
-    this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.radius = parseInt(value)
-    })
+    //Подписываемся на изменение радиуса
+    this.filterService.radius
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.radius = parseInt(value)
+      })
 
     //Показывать ли диалог о смене города
-    this.mapService.showChangeCityDialog.pipe(takeUntil(this.destroy$)).subscribe(value => {
-      this.showChangeCityDialog = value
-    })
+    this.mapService.showChangeCityDialog
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.showChangeCityDialog = value
+      })
 
     //Формируем меню из файла
     this.menuPublic = menuPublicData
@@ -274,10 +296,9 @@ export class HeaderComponent implements OnInit,OnDestroy {
     //Capacitor.isNativePlatform() ? console.log('ипользуется мобильная версия') : console.log('ипользуется веб версия')
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()
     this.destroy$.complete()
   }
-
 }

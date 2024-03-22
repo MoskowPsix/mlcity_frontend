@@ -1,24 +1,42 @@
-import { Component, OnInit,OnDestroy, AfterViewInit, ChangeDetectorRef, Output } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter} from 'rxjs';
-import { IEvent } from 'src/app/models/event';
-import { EventsService } from 'src/app/services/events.service';
-import { IonicSlides } from '@ionic/angular';
-import {register} from 'swiper/element/bundle';
-import { environment } from 'src/environments/environment';
-import { MessagesAuth } from 'src/app/enums/messages-auth';
-import { ToastService } from 'src/app/services/toast.service';
-import { MessagesErrors } from 'src/app/enums/messages-errors';
-import { AuthService } from 'src/app/services/auth.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { IPlace } from 'src/app/models/place';
-import { QueryBuilderService } from 'src/app/services/query-builder.service';
-import { PlaceService } from 'src/app/services/place.service';
-import { Location }  from '@angular/common';
-import { Metrika } from 'ng-yandex-metrika';
-import { HelpersService } from 'src/app/services/helpers.service';
-import { Title } from '@angular/platform-browser';
-import { Meta } from '@angular/platform-browser';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Output,
+} from '@angular/core'
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
+import {
+  Subject,
+  takeUntil,
+  tap,
+  retry,
+  catchError,
+  of,
+  EMPTY,
+  map,
+  delay,
+  filter,
+} from 'rxjs'
+import { IEvent } from 'src/app/models/event'
+import { EventsService } from 'src/app/services/events.service'
+import { IonicSlides } from '@ionic/angular'
+import { register } from 'swiper/element/bundle'
+import { environment } from 'src/environments/environment'
+import { MessagesAuth } from 'src/app/enums/messages-auth'
+import { ToastService } from 'src/app/services/toast.service'
+import { MessagesErrors } from 'src/app/enums/messages-errors'
+import { AuthService } from 'src/app/services/auth.service'
+import { DomSanitizer } from '@angular/platform-browser'
+import { IPlace } from 'src/app/models/place'
+import { QueryBuilderService } from 'src/app/services/query-builder.service'
+import { PlaceService } from 'src/app/services/place.service'
+import { Location } from '@angular/common'
+import { Metrika } from 'ng-yandex-metrika'
+import { HelpersService } from 'src/app/services/helpers.service'
+import { Title } from '@angular/platform-browser'
+import { Meta } from '@angular/platform-browser'
 
 // import { Swiper } from 'swiper/types';
 
@@ -30,7 +48,7 @@ import { Meta } from '@angular/platform-browser';
 export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>()
 
-  swiperModules = [IonicSlides];
+  swiperModules = [IonicSlides]
 
   userAuth: boolean = false
 
@@ -57,7 +75,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private toastService: ToastService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
-    private sanitizer:DomSanitizer,
+    private sanitizer: DomSanitizer,
     private queryBuilderService: QueryBuilderService,
     private placeService: PlaceService,
     private metrika: Metrika,
@@ -66,69 +84,76 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private titleService: Title,
     private metaService: Meta,
     private helpers: HelpersService,
-  )
-  {
-    let prevPath = this.location.path();
-    this.router
-    .events
-      .pipe(filter(event => (event instanceof NavigationEnd)))
+  ) {
+    let prevPath = this.location.path()
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        const newPath = location.path();
+        const newPath = location.path()
         this.metrika.hit(newPath, {
           referer: prevPath,
-        });
-        prevPath = newPath;
-      });
+        })
+        prevPath = newPath
+      })
   }
 
-
-  getEvent(){
-    this.eventsService.getEventById(this.eventId!).pipe(
-      retry(3),
-      tap(() => this.loadingEvent = false),
-      takeUntil(this.destroy$)
-    ).subscribe((event: any )=> {
-      console.log(event)
-      if(event)
-        this.event = event
+  getEvent() {
+    this.eventsService
+      .getEventById(this.eventId!)
+      .pipe(
+        retry(3),
+        tap(() => (this.loadingEvent = false)),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((event: any) => {
+        console.log(event)
+        if (event) this.event = event
         this.titleService.setTitle(event.name)
-        this.metaService.updateTag({name: "description", content: event.description})
-        this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
-    });
+        this.metaService.updateTag({
+          name: 'description',
+          content: event.description,
+        })
+        this.startLikesCount = this.event?.likes
+          ? this.event.likes.vk_count + this.event.likes.local_count
+          : 0
+      })
   }
 
-  getEventPlaces(){
-    if (this.loadMore)
-    {
+  getEventPlaces() {
+    if (this.loadMore) {
       this.loadPlace = true
-    this.eventsService.getEventPlaces(this.eventId, this.queryBuilderService.queryBuilder('eventPlaces')).pipe(
-      delay(100),
-      retry(3),
-      tap(() => this.loadPlace = false),
-      map((response:any) => {
-        this.places.push(...response.places.data)
+      this.eventsService
+        .getEventPlaces(
+          this.eventId,
+          this.queryBuilderService.queryBuilder('eventPlaces'),
+        )
+        .pipe(
+          delay(100),
+          retry(3),
+          tap(() => (this.loadPlace = false)),
+          map((response: any) => {
+            this.places.push(...response.places.data)
 
-        this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(response.places.next_cursor)
-        response.places.next_cursor ? this.loadMore = true : this.loadMore = false
-
-      }),
-      catchError((error) => {
-        this.toastService.showToast(MessagesErrors.default, 'danger')
-        return of(EMPTY)
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-
-    })
+            this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
+              response.places.next_cursor,
+            )
+            response.places.next_cursor
+              ? (this.loadMore = true)
+              : (this.loadMore = false)
+          }),
+          catchError((error) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe(() => {})
     }
-
   }
 
-  setActivePlace(i: number){
+  setActivePlace(i: number) {
     this.places[i].active = true
   }
-
-
 
   getMinPrice(prices: any[]) {
     let sort_prices = prices.sort((a, b) => a.cost_rub - b.cost_rub)
@@ -140,29 +165,28 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     return sort_prices[sort_prices.length - 1].cost_rub
   }
 
-  getUrlFrame(url:string)
-  {
+  getUrlFrame(url: string) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
-  checkLiked(){
+  checkLiked() {
     if (this.userAuth)
-      this.eventsService.checkLiked(this.eventId!).pipe(
-        retry(3),
-        takeUntil(this.destroy$)
-      ).subscribe((liked:boolean )=> {
-        this.like = liked
-      });
+      this.eventsService
+        .checkLiked(this.eventId!)
+        .pipe(retry(3), takeUntil(this.destroy$))
+        .subscribe((liked: boolean) => {
+          this.like = liked
+        })
   }
 
-  checFavorite(){
+  checFavorite() {
     if (this.userAuth)
-      this.eventsService.checkFavorite(this.eventId!).pipe(
-        retry(3),
-        takeUntil(this.destroy$)
-      ).subscribe((favorite:boolean )=> {
-        this.favorite = favorite
-      });
+      this.eventsService
+        .checkFavorite(this.eventId!)
+        .pipe(retry(3), takeUntil(this.destroy$))
+        .subscribe((favorite: boolean) => {
+          this.favorite = favorite
+        })
   }
 
   // onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
@@ -177,54 +201,60 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   //   )
   // }
 
-  toggleFavorite(event_id:number){
+  toggleFavorite(event_id: number) {
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
       this.loadingFavotire = true // для отображения спинера
-      this.eventsService.toggleFavorite(event_id).pipe(
-        tap(() => {
-          this.favorite = !this.favorite
-          this.loadingFavotire = false
-        }),
-        catchError((err) =>{
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe()
+      this.eventsService
+        .toggleFavorite(event_id)
+        .pipe(
+          tap(() => {
+            this.favorite = !this.favorite
+            this.loadingFavotire = false
+          }),
+          catchError((err) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe()
     }
   }
 
-  toggleLike(event_id:number){
+  toggleLike(event_id: number) {
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
       this.loadingLike = true // для отображения спинера
-      this.eventsService.toggleLike(event_id).pipe(
-        tap(() => {
-          this.like = !this.like
-          this.like
-            ? this.startLikesCount++
-            : this.startLikesCount !== 0
-              ? this.startLikesCount--
-              : 0
-          this.loadingLike = false
-        }),
-        catchError((err) =>{
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe()
+      this.eventsService
+        .toggleLike(event_id)
+        .pipe(
+          tap(() => {
+            this.like = !this.like
+            this.like
+              ? this.startLikesCount++
+              : this.startLikesCount !== 0
+                ? this.startLikesCount--
+                : 0
+            this.loadingLike = false
+          }),
+          catchError((err) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe()
     }
   }
 
   ngOnInit() {
     //Получаем ид ивента из параметра маршрута
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      this.eventId = params['id'];
-    });
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.eventId = params['id']
+    })
 
     console.log('')
 
@@ -234,7 +264,6 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.checkLiked()
     this.checFavorite()
-
   }
 
   ngAfterViewInit() {
@@ -250,9 +279,8 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-      // отписываемся от всех подписок
-    this.destroy$.next();
-    this.destroy$.complete();
+    // отписываемся от всех подписок
+    this.destroy$.next()
+    this.destroy$.complete()
   }
-
 }
