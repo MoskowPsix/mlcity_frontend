@@ -1,8 +1,14 @@
+.main-wrapper{
+    text-align: center;
+    background-color: #FFF;
+    height: 100vh;
+}
 .main-content-header{
     top: 8rem;
     text-align: center;
-    font-size: 42px;
+    font-size: clamp(2.625rem, 2.125rem + 2.5vw, 4rem);
     font-family: 'Montserrat-Medium' ;
+    margin-bottom: clamp(4rem, 5.091rem + -5.45vw, 1rem);
 }
 .main-content-wrapper{
     font-family: 'Montserrat-Medium' ;
@@ -12,8 +18,15 @@
     .main-content{
         text-align: center;
         max-width: 300px;
-        max-height: 300px;
+        max-height: 600px;
         margin-bottom: auto;
+        .main-content-contact{
+            font-size: clamp(1.125rem, 0.989rem + 0.68vw, 1.5rem);
+            border-bottom: 1px solid;
+        }
+        .main-content-contact-img{
+            margin-top: 4rem;
+        }
     }
  
 }
@@ -21,3 +34,4 @@
    margin-top: 2rem;
     max-height: 30px;
 }
+
