@@ -76,8 +76,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   count: number = 0;
   //@Input() type?: number
 
-  host: string = environment.BACKEND_URL;
-  port: string = environment.BACKEND_PORT;
+  host: string = environment.BACKEND_URL
+  port: string = environment.BACKEND_PORT
+
+  @ViewChild("eventName") eventNameElement!: any
+  @ViewChild("eventDescription") eventDescriptionElement!: any
+
 
   placesClose: any = [];
 
@@ -771,7 +775,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Клик по кнопке веперед
   stepNext() {
-    this.stepCurrency++;
+    this.stepCurrency++
+    if(this.stepCurrency == 1){
+      setTimeout(() => {
+        this.eventNameElement.setFocus()
+         },500)
+     }
+     if(this.stepCurrency == 2){
+      setTimeout(() => {
+        this.eventDescriptionElement.setFocus()
+         },500)
+     }
   }
 
   //Клик по нкопке назад

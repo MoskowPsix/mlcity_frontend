@@ -11,6 +11,7 @@
     >
 <!-- [loop]="true" -->
       <ng-container *ngIf="event.files; else notFiles">
+
         <ng-container *ngFor="let file of event.files">
           <swiper-slide *ngIf="file.local === 1 && file.file_types[0].name === 'image'">
             <ion-img style="background-image: url('{{host}}:{{port}}{{ file.link }}');"/>

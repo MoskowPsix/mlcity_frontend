@@ -334,63 +334,46 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.cdr.detectChanges();
   }
 
-  scrollEvent = (): void => {
-    const boundingClientRect =
-      this.elementRef?.nativeElement.getBoundingClientRect();
-    if (
-      boundingClientRect.top >
-        (window.innerHeight - (window.innerHeight + window.innerHeight)) / 2 &&
-      boundingClientRect.top < window.innerHeight / 2 &&
-      !this.viewElement &&
-      boundingClientRect.width !== 0 &&
-      boundingClientRect.width !== 0
-    ) {
-      if (!this.viewElementTimeStart) {
-        this.viewElementTimeStart = new Date().getTime();
-      }
-    } else if (
-      (this.viewElementTimeStart && !this.viewElement) ||
-      (this.viewElementTimeStart &&
-        !this.viewElement &&
-        boundingClientRect.width === 0 &&
-        boundingClientRect.width === 0)
-    ) {
-      this.viewElementTimeEnd = new Date().getTime();
-      let time: any;
-      time = (new Date().getTime() - this.viewElementTimeStart) / 1000;
-      if (time > 3.141) {
-        if (this.isSight) {
-          this.sightsService
-            .addView(this.event.id, time)
-            .pipe(
-              delay(100),
-              retry(3),
-              catchError(err => {
-                return of(EMPTY);
-              }),
-              takeUntil(this.destroy$)
-            )
-            .subscribe();
-        } else {
-          this.eventsService
-            .addView(this.event.id, time)
-            .pipe(
-              delay(100),
-              retry(3),
-              catchError(err => {
-                return of(EMPTY);
-              }),
-              takeUntil(this.destroy$)
-            )
-            .subscribe();
-        }
-        this.viewElement = true;
-      }
-      this.viewElementTimeStart = 0;
-      this.viewElementTimeEnd = 0;
-    }
-    //console.log(boundingClientRect)
-  };
+  // scrollEvent = (): void => {
+
+  //   const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
+  //   if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {
+  //     if (!this.viewElementTimeStart){
+  //       this.viewElementTimeStart = new Date().getTime()
+  //     }
+  //   } else if ((this.viewElementTimeStart && !this.viewElement) || ((this.viewElementTimeStart && !this.viewElement) && (boundingClientRect.width === 0 && boundingClientRect.width === 0))) {
+  //     this.viewElementTimeEnd = new Date().getTime()
+  //     let time: any
+  //     time = (new Date().getTime() - this.viewElementTimeStart)/1000
+  //     if (time > 3.141) {
+  //       if (this.isSight) {
+  //         this.sightsService.addView(this.event.id, time).pipe(
+  //           delay(100),
+  //           retry(3),
+  //           catchError((err) =>{
+  //             return of(EMPTY)
+  //           }),
+  //           takeUntil(this.destroy$)
+  //         ).subscribe()
+  //       } else {
+  //         this.eventsService.addView(this.event.id, time).pipe(
+  //           delay(100),
+  //           retry(3),
+  //           catchError((err) =>{
+  //             return of(EMPTY)
+  //           }),
+  //           takeUntil(this.destroy$)
+  //         ).subscribe()
+  //       }
+  //       this.viewElement = true
+  //     }
+  //     this.viewElementTimeStart = 0
+  //     this.viewElementTimeEnd = 0
+  //   }
+  //   //console.log(boundingClientRect)
+  // }
+
+
 
   toggleComment() {
     this.loadingComment = true;
