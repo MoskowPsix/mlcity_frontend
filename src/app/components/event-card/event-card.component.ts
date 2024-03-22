@@ -9,14 +9,12 @@ import { environment } from 'src/environments/environment'
 import { VkService } from 'src/app/services/vk.service'
 import { IonicSlides } from '@ionic/angular'
 import { DomSanitizer } from '@angular/platform-browser'
-
-import {register} from 'swiper/element/bundle'
 import {Swiper} from 'swiper/types'
 import { SightsService } from 'src/app/services/sights.service'
 import { CommentsService } from 'src/app/services/comments.service'
 import numeral from 'numeral'
 import { HelpersService } from 'src/app/services/helpers.service'
-register()
+
 
 @Component({
   selector: 'app-event-card',
@@ -276,44 +274,44 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit  {
   }
 
 
-  scrollEvent = (): void => {
+  // scrollEvent = (): void => {
 
-    const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
-    if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {
-      if (!this.viewElementTimeStart){
-        this.viewElementTimeStart = new Date().getTime()
-      }
-    } else if ((this.viewElementTimeStart && !this.viewElement) || ((this.viewElementTimeStart && !this.viewElement) && (boundingClientRect.width === 0 && boundingClientRect.width === 0))) {
-      this.viewElementTimeEnd = new Date().getTime()
-      let time: any
-      time = (new Date().getTime() - this.viewElementTimeStart)/1000
-      if (time > 3.141) {
-        if (this.isSight) {
-          this.sightsService.addView(this.event.id, time).pipe(
-            delay(100),
-            retry(3),
-            catchError((err) =>{
-              return of(EMPTY)
-            }),
-            takeUntil(this.destroy$)
-          ).subscribe()
-        } else {
-          this.eventsService.addView(this.event.id, time).pipe(
-            delay(100),
-            retry(3),
-            catchError((err) =>{
-              return of(EMPTY)
-            }),
-            takeUntil(this.destroy$)
-          ).subscribe()
-        }
-        this.viewElement = true
-      }
-      this.viewElementTimeStart = 0
-      this.viewElementTimeEnd = 0
-    }
-    //console.log(boundingClientRect)
-  }
+  //   const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
+  //   if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {
+  //     if (!this.viewElementTimeStart){
+  //       this.viewElementTimeStart = new Date().getTime()
+  //     }
+  //   } else if ((this.viewElementTimeStart && !this.viewElement) || ((this.viewElementTimeStart && !this.viewElement) && (boundingClientRect.width === 0 && boundingClientRect.width === 0))) {
+  //     this.viewElementTimeEnd = new Date().getTime()
+  //     let time: any
+  //     time = (new Date().getTime() - this.viewElementTimeStart)/1000
+  //     if (time > 3.141) {
+  //       if (this.isSight) {
+  //         this.sightsService.addView(this.event.id, time).pipe(
+  //           delay(100),
+  //           retry(3),
+  //           catchError((err) =>{
+  //             return of(EMPTY)
+  //           }),
+  //           takeUntil(this.destroy$)
+  //         ).subscribe()
+  //       } else {
+  //         this.eventsService.addView(this.event.id, time).pipe(
+  //           delay(100),
+  //           retry(3),
+  //           catchError((err) =>{
+  //             return of(EMPTY)
+  //           }),
+  //           takeUntil(this.destroy$)
+  //         ).subscribe()
+  //       }
+  //       this.viewElement = true
+  //     }
+  //     this.viewElementTimeStart = 0
+  //     this.viewElementTimeEnd = 0
+  //   }
+  //   //console.log(boundingClientRect)
+  // }
 
 
 

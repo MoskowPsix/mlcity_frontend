@@ -18,6 +18,7 @@ import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
 import { IonContent } from '@ionic/angular';
 import { ViewportScroller } from '@angular/common';
+import { Swiper } from 'swiper/types';
 
 register()
 
@@ -45,6 +46,7 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   cardContainer!: ElementRef
   @ViewChild('widgetsContent') widgetsContent!: ElementRef;
   @ViewChild('lent') lent!: ElementRef;
+  swiper?: Swiper
 
   loadingEventsCity: boolean = false
   loadingEventsGeolocation: boolean = false
@@ -137,6 +139,8 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
       retry(3),
       map((respons:any) => {
         this.eventsCity.push(...respons.events.data)
+        console.log(this.swiper)
+        this.swiper?.update()
         this.filterService.setEventsCount(respons.events.total)
         this.queryBuilderService.paginationPublicEventsCityCurrentPage.next(respons.events.next_cursor)
         respons.events.next_cursor ? this.nextPage = true : this.nextPage = false
@@ -199,8 +203,8 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    window.addEventListener('scroll', this.scrollPaginate, true);
-    window.addEventListener('scrollend',this.scrollEvent, true)
+    // window.addEventListener('scroll', this.scrollPaginate, true);
+    // window.addEventListener('scrollend',this.scrollEvent, true)
     this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value}
     //console.log(this.date)
     this.eventsCity = []

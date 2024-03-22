@@ -591,7 +591,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Клик по кнопке веперед
   stepNext(){
    this.stepCurrency++
-   console.log(this.stepCurrency)
    if(this.stepCurrency == 1){
     setTimeout(() => {
       this.sightNameElement.setFocus()
