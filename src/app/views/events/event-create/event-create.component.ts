@@ -8,6 +8,7 @@ import {
   Output,
   EventEmitter,
   ElementRef,
+  ViewChild
 } from '@angular/core'
 import { trigger, style, animate, transition } from '@angular/animations'
 import {
