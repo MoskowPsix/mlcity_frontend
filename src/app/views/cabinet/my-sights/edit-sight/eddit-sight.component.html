@@ -28,7 +28,7 @@
 <ion-content style="--display: flex; --flex-direction: row;" >
   <ion-column class="buttonNavigationParrent">
     <ion-button class="buttonNavigation" *ngIf="segment !==1" (click) = "backStage()">Назад</ion-button>
-    <ion-button class="buttonNavigation" disabled="true" *ngIf="segment ==1" (click) = "backStage()">Назад</ion-button>
+    <ion-button class="buttonNavigation" disabled="true" *ngIf="segment ===1" (click) = "backStage()">Назад</ion-button>
   </ion-column> 
 
   <ion-column>

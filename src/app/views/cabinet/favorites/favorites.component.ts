@@ -1,12 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs';
-import { MessagesErrors } from 'src/app/enums/messages-errors';
-import { IEvent } from 'src/app/models/event';
-import { ISight } from 'src/app/models/sight';
-import { EventsService } from 'src/app/services/events.service';
-import { QueryBuilderService } from 'src/app/services/query-builder.service';
-import { SightsService } from 'src/app/services/sights.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { Component, OnInit } from '@angular/core'
+import {
+  EMPTY,
+  Subject,
+  catchError,
+  delay,
+  map,
+  of,
+  retry,
+  takeUntil,
+  tap,
+} from 'rxjs'
+import { MessagesErrors } from 'src/app/enums/messages-errors'
+import { IEvent } from 'src/app/models/event'
+import { ISight } from 'src/app/models/sight'
+import { EventsService } from 'src/app/services/events.service'
+import { QueryBuilderService } from 'src/app/services/query-builder.service'
+import { SightsService } from 'src/app/services/sights.service'
+import { ToastService } from 'src/app/services/toast.service'
 
 @Component({
   selector: 'app-favorites',
@@ -25,7 +35,7 @@ export class FavoritesComponent implements OnInit {
   currentPageEvents: number = 1
   currentPageSights: number = 1
 
-  segment:string = 'events'
+  segment: string = 'events'
 
   loadingEvents: boolean = false
   loadingSights: boolean = false
@@ -33,71 +43,84 @@ export class FavoritesComponent implements OnInit {
   loadingMoreEvents: boolean = false
   loadingMoreSights: boolean = false
 
-
   constructor(
     private sightService: SightsService,
     private eventService: EventsService,
     private toastService: ToastService,
     private queryBuilderService: QueryBuilderService,
-    ) { }
+  ) {}
 
   getEvents() {
-    this.loadingMoreEvents ? this.loadingEvents = true : this.loadingEvents = false
-    this.eventService.getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites')).pipe(
-      delay(100),
-      retry(3),
-      tap(() => {
-        this.loadingEvents = true 
-        this.loadingMoreEvents = false
-      }),
-      catchError((err) =>{
-        //console.log(err)
-        this.toastService.showToast(MessagesErrors.default, 'danger')
-        return of(EMPTY) 
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe((response: any) =>{
-      this.totalPagesEvents = response.result.last_page
-      this.events.push(...response.result.data) 
-    })
-  }
-
-    getSights() {
-      this.loadingMoreSights ? this.loadingSights = true : this.loadingSights = false
-      this.sightService.getSightsFavorites(this.queryBuilderService.queryBuilder('sightsFavorites')).pipe(  
+    this.loadingMoreEvents
+      ? (this.loadingEvents = true)
+      : (this.loadingEvents = false)
+    this.eventService
+      .getEventsFavorites(
+        this.queryBuilderService.queryBuilder('eventsFavorites'),
+      )
+      .pipe(
         delay(100),
         retry(3),
         tap(() => {
-          this.loadingSights = true 
-          this.loadingMoreSights = false
+          this.loadingEvents = true
+          this.loadingMoreEvents = false
         }),
-        catchError((err) =>{
+        catchError((err) => {
           //console.log(err)
           this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY) 
+          return of(EMPTY)
         }),
-        takeUntil(this.destroy$)
-      ).subscribe((response: any) =>{
-        this.totalPagesSights = response.result.last_page
-        this.sights.push(...response.result.data)  
+        takeUntil(this.destroy$),
+      )
+      .subscribe((response: any) => {
+        this.totalPagesEvents = response.result.last_page
+        this.events.push(...response.result.data)
       })
-    }
+  }
 
-    eventsLoadingMore(){
-      this.loadingMoreEvents = true
-      this.currentPageEvents++
-      // this.queryBuilderService.paginationPublicEventsFavoritesCurrentPage.next(this.currentPageEvents)
-      this.getEvents()
-    }
+  getSights() {
+    this.loadingMoreSights
+      ? (this.loadingSights = true)
+      : (this.loadingSights = false)
+    this.sightService
+      .getSightsFavorites(
+        this.queryBuilderService.queryBuilder('sightsFavorites'),
+      )
+      .pipe(
+        delay(100),
+        retry(3),
+        tap(() => {
+          this.loadingSights = true
+          this.loadingMoreSights = false
+        }),
+        catchError((err) => {
+          //console.log(err)
+          this.toastService.showToast(MessagesErrors.default, 'danger')
+          return of(EMPTY)
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((response: any) => {
+        this.totalPagesSights = response.result.last_page
+        this.sights.push(...response.result.data)
+      })
+  }
 
-    sightsLoadingMore(){
-      this.loadingMoreSights = true
-      this.currentPageSights++
-      // this.queryBuilderService.paginationPublicSightsFavoritesCurrentPage.next(this.currentPageSights)
-      this.getSights()
-    }
+  eventsLoadingMore() {
+    this.loadingMoreEvents = true
+    this.currentPageEvents++
+    // this.queryBuilderService.paginationPublicEventsFavoritesCurrentPage.next(this.currentPageEvents)
+    this.getEvents()
+  }
 
-  onSegmentChanged(event: any){
+  sightsLoadingMore() {
+    this.loadingMoreSights = true
+    this.currentPageSights++
+    // this.queryBuilderService.paginationPublicSightsFavoritesCurrentPage.next(this.currentPageSights)
+    this.getSights()
+  }
+
+  onSegmentChanged(event: any) {
     this.segment = event.detail.value
   }
 
@@ -105,9 +128,9 @@ export class FavoritesComponent implements OnInit {
     this.getEvents()
     this.getSights()
   }
-  ngOnDestroy(){
+  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
+  ngOnDestroy() {
     this.destroy$.next()
     this.destroy$.complete()
   }
 }
-

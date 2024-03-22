@@ -1,23 +1,37 @@
-import { Component, OnInit,OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, filter} from 'rxjs';
-import { ISight } from 'src/app/models/sight';
-import { SightsService } from 'src/app/services/sights.service';
-import { IonicSlides } from '@ionic/angular';
-import {register} from 'swiper/element/bundle';
-import { environment } from 'src/environments/environment';
-import { YaReadyEvent } from 'angular8-yandex-maps';
-import { MessagesAuth } from 'src/app/enums/messages-auth';
-import { ToastService } from 'src/app/services/toast.service';
-import { MessagesErrors } from 'src/app/enums/messages-errors';
-import { AuthService } from 'src/app/services/auth.service';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core'
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
+import {
+  Subject,
+  takeUntil,
+  tap,
+  retry,
+  catchError,
+  of,
+  EMPTY,
+  filter,
+} from 'rxjs'
+import { ISight } from 'src/app/models/sight'
+import { SightsService } from 'src/app/services/sights.service'
+import { IonicSlides } from '@ionic/angular'
+import { register } from 'swiper/element/bundle'
+import { environment } from 'src/environments/environment'
+import { YaReadyEvent } from 'angular8-yandex-maps'
+import { MessagesAuth } from 'src/app/enums/messages-auth'
+import { ToastService } from 'src/app/services/toast.service'
+import { MessagesErrors } from 'src/app/enums/messages-errors'
+import { AuthService } from 'src/app/services/auth.service'
 // import { Swiper } from 'swiper/types';
-import { Location }  from '@angular/common';
-import { Metrika } from 'ng-yandex-metrika';
-import { Title } from '@angular/platform-browser';
-import { Meta } from '@angular/platform-browser';
-import { HelpersService } from 'src/app/services/helpers.service';
-
+import { Location } from '@angular/common'
+import { Metrika } from 'ng-yandex-metrika'
+import { Title } from '@angular/platform-browser'
+import { Meta } from '@angular/platform-browser'
+import { HelpersService } from 'src/app/services/helpers.service'
 
 @Component({
   selector: 'app-sight-show',
@@ -27,7 +41,7 @@ import { HelpersService } from 'src/app/services/helpers.service';
 export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>()
 
-  swiperModules = [IonicSlides];
+  swiperModules = [IonicSlides]
 
   userAuth: boolean = false
 
@@ -38,7 +52,7 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   sight?: any
   loadingSight: boolean = true
 
-  map!: YaReadyEvent<ymaps.Map>;
+  map!: YaReadyEvent<ymaps.Map>
 
   favorite: boolean = false
   loadingFavorite: boolean = false
@@ -59,118 +73,137 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private titleService: Title,
     private metaService: Meta,
     private helpers: HelpersService,
-  )
-  {
-    let prevPath = this.location.path();
-    this.router
-    .events
-      .pipe(filter(event => (event instanceof NavigationEnd)))
+  ) {
+    let prevPath = this.location.path()
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        const newPath = location.path();
+        const newPath = location.path()
         this.metrika.hit(newPath, {
           referer: prevPath,
-        });
-        prevPath = newPath;
-      });
+        })
+        prevPath = newPath
+      })
   }
 
-
-  getSight(){
-    this.sightsService.getSightById(this.sightId!).pipe(
-      retry(3),
-      tap(() => this.loadingSight = false),
-      takeUntil(this.destroy$)
-    ).subscribe((sight:any )=> {
-      if(sight)
-        this.sight = sight
+  getSight() {
+    this.sightsService
+      .getSightById(this.sightId!)
+      .pipe(
+        retry(3),
+        tap(() => (this.loadingSight = false)),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((sight: any) => {
+        if (sight) this.sight = sight
         this.titleService.setTitle(sight.name)
-        this.metaService.updateTag({name:"description",  content: sight.description})
-        this.startLikesCount = this.sight?.likes ? this.sight.likes.vk_count + this.sight.likes.local_count : 0
-    });
+        this.metaService.updateTag({
+          name: 'description',
+          content: sight.description,
+        })
+        this.startLikesCount = this.sight?.likes
+          ? this.sight.likes.vk_count + this.sight.likes.local_count
+          : 0
+      })
   }
 
-  checkLiked(){
+  checkLiked() {
     if (this.userAuth)
-      this.sightsService.checkLiked(this.sightId!).pipe(
-        retry(3),
-        takeUntil(this.destroy$)
-      ).subscribe((liked:boolean )=> {
-        this.like = liked
-      });
+      this.sightsService
+        .checkLiked(this.sightId!)
+        .pipe(retry(3), takeUntil(this.destroy$))
+        .subscribe((liked: boolean) => {
+          this.like = liked
+        })
   }
 
-  checkFavorite(){
+  checkFavorite() {
     if (this.userAuth)
-      this.sightsService.checkFavorite(this.sightId!).pipe(
-        retry(3),
-        takeUntil(this.destroy$)
-      ).subscribe((favorite:boolean )=> {
-        this.favorite = favorite
-      });
+      this.sightsService
+        .checkFavorite(this.sightId!)
+        .pipe(retry(3), takeUntil(this.destroy$))
+        .subscribe((favorite: boolean) => {
+          this.favorite = favorite
+        })
   }
 
-  onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
-    let icoLink = this.sight && this.sight.types && this.sight.types.length ? this.host + ':' + this.port + this.sight.types[0].ico : ''
-    this.map = { target, ymaps };
+  onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>): void {
+    let icoLink =
+      this.sight && this.sight.types && this.sight.types.length
+        ? this.host + ':' + this.port + this.sight.types[0].ico
+        : ''
+    this.map = { target, ymaps }
     //Создаем метку
     target.geoObjects.add(
-      new ymaps.Placemark([this.sight?.latitude,this.sight?.longitude],{}, {
-        iconLayout: 'default#imageWithContent',
-        iconContentLayout: ymaps.templateLayoutFactory.createClass(`'<div class="marker"><img src="${icoLink}"/></div>'`)
-      })
+      new ymaps.Placemark(
+        [this.sight?.latitude, this.sight?.longitude],
+        {},
+        {
+          iconLayout: 'default#imageWithContent',
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(
+            `'<div class="marker"><img src="${icoLink}"/></div>'`,
+          ),
+        },
+      ),
     )
-    this.map.target.controls.remove("zoomControl")
-    this.map.target.behaviors.disable("drag")
+    this.map.target.controls.remove('zoomControl')
+    this.map.target.behaviors.disable('drag')
   }
 
-  toggleFavorite(sight_id:number){
+  toggleFavorite(sight_id: number) {
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
       this.loadingFavorite = true // для отображения спинера
-      this.sightsService.toggleFavorite(sight_id).pipe(
-        tap(() => {
-          this.favorite = !this.favorite
-          this.loadingFavorite = false
-        }),
-        catchError((err) =>{
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe()
+      this.sightsService
+        .toggleFavorite(sight_id)
+        .pipe(
+          tap(() => {
+            this.favorite = !this.favorite
+            this.loadingFavorite = false
+          }),
+          catchError((err) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe()
     }
   }
 
-  toggleLike(sight_id:number){
+  toggleLike(sight_id: number) {
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
       this.loadingLike = true // для отображения спинера
-      this.sightsService.toggleLike(sight_id).pipe(
-        tap(() => {
-          this.like = !this.like
-          this.like
-            ? this.startLikesCount++
-            : this.startLikesCount !== 0
-              ? this.startLikesCount--
-              : 0
-          this.loadingLike = false
-        }),
-        catchError((err) =>{
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$)
-      ).subscribe()
+      this.sightsService
+        .toggleLike(sight_id)
+        .pipe(
+          tap(() => {
+            this.like = !this.like
+            this.like
+              ? this.startLikesCount++
+              : this.startLikesCount !== 0
+                ? this.startLikesCount--
+                : 0
+            this.loadingLike = false
+          }),
+          catchError((err) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe()
     }
   }
 
   ngOnInit() {
     //Получаем ид ивента из параметра маршрута
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      this.sightId = params['id'];
-    });
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.sightId = params['id']
+    })
 
     this.userAuth = this.authService.getAuthState()
 
@@ -192,9 +225,8 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-      // отписываемся от всех подписок
-    this.destroy$.next();
-    this.destroy$.complete();
+    // отписываемся от всех подписок
+    this.destroy$.next()
+    this.destroy$.complete()
   }
-
 }

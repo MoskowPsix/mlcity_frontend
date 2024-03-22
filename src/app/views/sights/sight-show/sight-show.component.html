@@ -68,7 +68,7 @@
                               <h1 class="title">{{ sight.name }}</h1>
 
                               <div class="swiper-container-header-content-organizator_wrapper" >
-                                <h2 *ngIf="sight.sponsor != ''" class="swiper-container-header-content-organizator">Организатор: {{ sight.sponsor}}</h2>
+                                <h2 *ngIf="sight.sponsor !== ''" class="swiper-container-header-content-organizator">Организатор: {{ sight.sponsor}}</h2>
                               </div>
 
                               <div style="display: flex; align-items: center; margin-top:2rem;">
@@ -122,7 +122,7 @@
                             <h1 class="title">{{ sight.name }}</h1>
 
                             <div class="swiper-container-header-content-organizator_wrapper" >
-                              <h2 *ngIf="sight.sponsor != ''" class="swiper-container-header-content-organizator">Организатор: {{ sight.sponsor}}</h2>
+                              <h2 *ngIf="sight.sponsor !== ''" class="swiper-container-header-content-organizator">Организатор: {{ sight.sponsor}}</h2>
                             </div>
 
                             <div style="display: flex; align-items: center; margin-top:2rem;">
@@ -149,7 +149,7 @@
                 <div class="social-buttons">
                   <div class="likes">
                     <ion-icon name="chatbox-outline" class="ico"></ion-icon>
-                    <span *ngIf="sight.comments.length !=0 " >{{ sight.comments.length }}</span>
+                    <span *ngIf="sight.comments.length !==0 " >{{ sight.comments.length }}</span>
                   </div>
                   <div class="likes">
                     <ion-icon *ngIf="!loadingLike" (click)="toggleLike(sight.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
@@ -201,7 +201,7 @@
                             <div *ngIf="price.cost_rub > 0" class="ticket-main-price">
                               {{price.cost_rub}} ₽
                             </div>
-                            <div *ngIf='price.cost_rub == 0' class="ticket-main-description">
+                            <div *ngIf='price.cost_rub === 0' class="ticket-main-description">
                               Вход бесплатный
 
                             </div>
@@ -228,7 +228,7 @@
                       {{sight.work_time}}
                     </div>
 
-                    <div style="padding: 0.1rem;" *ngIf=' sight.work_time == "" ' class="simple-text">
+                    <div style="padding: 0.1rem;" *ngIf='sight.work_time === ""' class="simple-text">
                         Не указано
                     </div>
                   </ion-col>

@@ -1,16 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
-import { environment } from 'src/environments/environment';
+import { Component, Input } from '@angular/core'
+import { Router } from '@angular/router'
+import { AuthService } from 'src/app/services/auth.service'
+import { environment } from 'src/environments/environment'
 @Component({
   selector: 'app-dropdown-popup',
   templateUrl: './dropdown-popup.component.html',
   styleUrls: ['./dropdown-popup.component.scss'],
 })
-export class DropdownPopupComponent implements OnInit {
-
+export class DropdownPopupComponent {
   @Input() id: string = ''
-  
+
   @Input() headerLeftIco: boolean = false
   @Input() headerLeftIcoName: string = ''
 
@@ -20,28 +19,29 @@ export class DropdownPopupComponent implements OnInit {
   @Input() headerRightIcoName: string = 'chevron-down'
 
   @Input() listItems: any[] = [
-              {
-                route: null,
-                icon: '',
-                title: 'item',
-                children: []
-              }
-            ]
+    {
+      route: null,
+      icon: '',
+      title: 'item',
+      children: [],
+    },
+  ]
   @Input() itemIco: boolean = false
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/login/${localStorage.getItem('auth-token')}`
 
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+  ) {}
 
-  onLogout(){
+  onLogout() {
     this.authService.logout()
   }
 
   public isLContactsChildLinkActive(): boolean {
-    return this.router.isActive('/contacts/support', true) || this.router.isActive('/contacts/feedback', true);
+    return (
+      this.router.isActive('/contacts/support', true) ||
+      this.router.isActive('/contacts/feedback', true)
+    )
   }
-
-  ngOnInit() {
-
-  }
-
 }

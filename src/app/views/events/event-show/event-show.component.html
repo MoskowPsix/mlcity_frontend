@@ -146,7 +146,7 @@
       <div class="social-buttons">
         <div class="likes">
           <ion-icon name="chatbox-outline" class="ico"></ion-icon>
-          <span *ngIf="event.comments.length !=0 " >{{ event.comments.length }}</span>
+          <span *ngIf="event.comments.length !==0 " >{{ event.comments.length }}</span>
         </div>
         <div class="likes">
           <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
@@ -212,7 +212,7 @@
                             <div *ngIf="price.cost_rub > 0" class="ticket-main-price">
                               {{price.cost_rub}} ₽
                             </div>
-                            <div *ngIf='price.cost_rub == 0' class="ticket-main-description">
+                            <div *ngIf='price.cost_rub === 0' class="ticket-main-description">
                               Вход бесплатный
 
                             </div>
@@ -279,7 +279,7 @@
           <ion-accordion-group>
             <ion-accordion style="background-color: #fff;" *ngFor="let place of places; let i= index" (click)="setActivePlace(i)" class="seance">
               <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
-                <ion-label *ngIf="!(place.location.location_parent.name=='РФ'); else otherAddress">
+                <ion-label *ngIf="!(place.location.location_parent.name==='РФ'); else otherAddress">
                   {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
                 </ion-label>
                 <ng-template #otherAddress>
@@ -294,7 +294,7 @@
             </ion-accordion>
 
 
-            <div *ngIf="loadPlace==true">
+            <div *ngIf="loadPlace===true">
               <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
               <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
               <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>

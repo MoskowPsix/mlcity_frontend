@@ -1,26 +1,30 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 import { tap, throwError } from 'rxjs'
-import { environment } from 'src/environments/environment';
-import { ISight } from '../models/sight';
-import { IGetEventsAndSights } from '../models/getEventsAndSights';
-import { UserService } from './user.service'; 
+import { environment } from 'src/environments/environment'
+import { ISight } from '../models/sight'
+import { IGetEventsAndSights } from '../models/getEventsAndSights'
+import { UserService } from './user.service'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SightsService {
-
-  constructor(private http: HttpClient, private userService: UserService) { this.getUserId() }
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+  ) {
+    this.getUserId()
+  }
 
   private user_id: number = 0
 
-  getUserId(){
+  getUserId() {
     const user = this.userService.getUserFromLocalStorage()
     if (user) {
       if (user.social_account) {
         this.user_id = user.id
-      } 
+      }
     }
     // this.userService.getUser().pipe(
     //   //take(1),
@@ -31,69 +35,104 @@ export class SightsService {
     //       this.getUserId()
     //     }
     //   })
-    // ).subscribe().unsubscribe();    
+    // ).subscribe().unsubscribe();
   }
 
-  getSights(params: IGetEventsAndSights) { //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)
-    return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights`, { params: {...params} } )
+  getSights(params: IGetEventsAndSights) {
+    //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)
+    return this.http.get<ISight[]>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights`,
+      { params: { ...params } },
+    )
   }
-  getSightsForMap(params: IGetEventsAndSights){
-    return this.http.get<any[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights-for-map`, {params: {...params}})
+  getSightsForMap(params: IGetEventsAndSights) {
+    return this.http.get<any[]>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights-for-map`,
+      { params: { ...params } },
+    )
   }
 
   getSightById(id: number) {
-    return this.http.get<ISight>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${id}`)
+    return this.http.get<ISight>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${id}`,
+    )
   }
-  
-  getSightsFavorites(params: any) { //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
+
+  getSightsFavorites(params: any) {
+    //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
     this.getUserId()
-    return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-sights`, { params: {...params} })
+    return this.http.get<ISight[]>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-sights`,
+      { params: { ...params } },
+    )
   }
-  getSightsForUser(params: IGetEventsAndSights) { //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)
-    return this.http.get<ISight[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights-for-author`, { params: {...params} } )
-  }
-
-
-  checkLiked(sight_id:number){
-    return this.http.get<boolean>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${sight_id}/check-user-liked`)
-  }
-
-  checkFavorite(sight_id:number){
-    return this.http.get<boolean>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${sight_id}/check-user-favorite`)
+  getSightsForUser(params: IGetEventsAndSights) {
+    //Получаем достопримечательности по заданным фильтрам (IGetEventsAndSights)
+    return this.http.get<ISight[]>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights-for-author`,
+      { params: { ...params } },
+    )
   }
 
-  toggleLike(sight_id:number) {
-    const params = {
-      sight_id:sight_id
-    } 
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/like-sight-toggle`, params)
+  checkLiked(sight_id: number) {
+    return this.http.get<boolean>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${sight_id}/check-user-liked`,
+    )
   }
 
-  toggleFavorite(sight_id:number) {
-    const params = {
-      sight_id:sight_id
-    } 
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/favorite-sight-toggle`, params)
+  checkFavorite(sight_id: number) {
+    return this.http.get<boolean>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${sight_id}/check-user-favorite`,
+    )
   }
 
-  updateSightVkLIkes(sight_id:number, likes_count:number){
+  toggleLike(sight_id: number) {
     const params = {
       sight_id: sight_id,
-      likes_count: likes_count
-    } 
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/update-vk-likes`, params)
+    }
+    return this.http.post<any>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/like-sight-toggle`,
+      params,
+    )
+  }
+
+  toggleFavorite(sight_id: number) {
+    const params = {
+      sight_id: sight_id,
+    }
+    return this.http.post<any>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/favorite-sight-toggle`,
+      params,
+    )
+  }
+
+  updateSightVkLIkes(sight_id: number, likes_count: number) {
+    const params = {
+      sight_id: sight_id,
+      likes_count: likes_count,
+    }
+    return this.http.post<any>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/update-vk-likes`,
+      params,
+    )
   }
 
   //Установить отношение, отмечаем что юзер лайкнул место
-  setSightUserLiked(sight_id:number){
+  setSightUserLiked(sight_id: number) {
     const params = {
       sight_id: sight_id,
-    } 
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/set-sight-user-liked`, params)
+    }
+    return this.http.post<any>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/set-sight-user-liked`,
+      params,
+    )
   }
 
   create(sight: FormData) {
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/create`, sight)
+    return this.http.post<any>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/create`,
+      sight,
+    )
   }
 
   addView(id: number, time: number) {
@@ -101,11 +140,13 @@ export class SightsService {
       sight_id: id,
       time: time,
     }
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/view`, params)
+    return this.http.post<any>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/view`,
+      params,
+    )
   }
 
   private errorHandler(error: HttpErrorResponse) {
     return throwError(() => error.message)
   }
-  
 }

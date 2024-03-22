@@ -15,12 +15,13 @@ export const environment = {
   BACKEND_PORT: '8000',
   DOMAIN: 'mlcity.ru',
   vkontakteAuthUrl: `http://localhost:8000/api/social-auth/vkontakte`,
-  vkontakteServiceKey: '7c6d50047c6d50047c6d5004647f7f17fc77c6d7c6d50041fa47869a3cc84a7c0bed429'
+  vkontakteServiceKey:
+    '7c6d50047c6d50047c6d5004647f7f17fc77c6d7c6d50041fa47869a3cc84a7c0bed429',
   // cityName: 'Заречный',
   // cityRegion: 'Свердловская область',
   // cityCoordsLatitude: 56.81497464978607,
   // cityCoordsLongitude: 61.32053375244141
-};
+}
 
 /*
  * For easier debugging in development mode, you can import the following file

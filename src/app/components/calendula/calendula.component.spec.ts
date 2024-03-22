@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { IonicModule } from '@ionic/angular'
 
-import { CalendulaComponent } from './calendula.component';
+import { CalendulaComponent } from './calendula.component'
 
 describe('CalendulaComponent', () => {
-  let component: CalendulaComponent;
-  let fixture: ComponentFixture<CalendulaComponent>;
+  let component: CalendulaComponent
+  let fixture: ComponentFixture<CalendulaComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CalendulaComponent ],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+      declarations: [CalendulaComponent],
+      imports: [IonicModule.forRoot()],
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(CalendulaComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    fixture = TestBed.createComponent(CalendulaComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

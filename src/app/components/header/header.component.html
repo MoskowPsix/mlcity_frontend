@@ -81,8 +81,8 @@
                     [routerLinkActive]="['active']"
                 >
 
-                    <img *ngIf="item.icon == 'prism'"  src="/assets/icons/MakiMuseum.svg" slot="start" class="icon">
-                    <ion-icon *ngIf="item.icon != 'prism'" name="{{ item.icon }}" slot="start" color="primary"></ion-icon>
+                    <img *ngIf="item.icon === 'prism'"  src="/assets/icons/MakiMuseum.svg" slot="start" class="icon">
+                    <ion-icon *ngIf="item.icon !== 'prism'" name="{{ item.icon }}" slot="start" color="primary"></ion-icon>
                     <ion-label slot="start">{{item.title}}</ion-label>
                     <!-- <ion-badge *ngIf="item.title === 'События'" slot="end" >{{ getEventService() }}</ion-badge>
                     <ion-badge *ngIf="item.title === 'Места'" slot="end" >{{ getSightService() }}</ion-badge> -->

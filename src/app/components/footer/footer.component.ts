@@ -1,19 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { EMPTY, Observable } from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
-import { FilterService } from 'src/app/services/filter.service';
-import { UserService } from 'src/app/services/user.service';
-import { environment } from 'src/environments/environment';
-
+import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
+import { EMPTY, Observable } from 'rxjs'
+import { AuthService } from 'src/app/services/auth.service'
+import { FilterService } from 'src/app/services/filter.service'
+import { UserService } from 'src/app/services/user.service'
+import { environment } from 'src/environments/environment'
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent implements OnInit, OnDestroy {
-
+export class FooterComponent implements OnInit {
   eventCount: any
   sightCount: any
 
@@ -27,7 +25,7 @@ export class FooterComponent implements OnInit, OnDestroy {
     private router: Router,
     private filterService: FilterService,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
     //private authService: AuthService,
   ) {}
 
@@ -36,28 +34,25 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   getSightService() {
-    return  this.filterService.sightsCount.value
-    }
+    return this.filterService.sightsCount.value
+  }
 
   getFavoritesService() {
     return this.filterService.favoritesCount.value
   }
-  checkAuthenticated(){
-    this.authService.authenticationState.subscribe(
-      ((res: boolean) => {
-         this.isAuth = res;
-      })
-    );
+  checkAuthenticated() {
+    this.authService.authenticationState.subscribe((res: boolean) => {
+      this.isAuth = res
+    })
   }
-  getUser(){
+  getUser() {
     this.userService.getUser().subscribe((user) => {
-      this.user =user
-      if(user){
-        if(user.avatar){
-          if(user.avatar.includes("https")){
+      this.user = user
+      if (user) {
+        if (user.avatar) {
+          if (user.avatar.includes('https')) {
             this.avatarUrl = user.avatar
-          }
-          else{
+          } else {
             this.avatarUrl = `${this.backendUrl}${user.avatar}`
           }
         }
@@ -82,11 +77,5 @@ export class FooterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getUser()
     this.checkAuthenticated()
-
   }
-
-  ngOnDestroy(){
-    //this.subscription_1.unsubscribe()
-  }
-
 }
