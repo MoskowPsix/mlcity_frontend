@@ -373,8 +373,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   //   //console.log(boundingClientRect)
   // }
 
-
-
   toggleComment() {
     this.loadingComment = true;
     if (!this.comments && !this.event.comments && !this.isSight) {
