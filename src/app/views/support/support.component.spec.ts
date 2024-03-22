@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-import { IonicModule } from '@ionic/angular'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { IonicModule } from '@ionic/angular';
 
-import { SupportComponent } from './support.component'
+import { SupportComponent } from './support.component';
 
 describe('SupportComponent', () => {
-  let component: SupportComponent
-  let fixture: ComponentFixture<SupportComponent>
+  let component: SupportComponent;
+  let fixture: ComponentFixture<SupportComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SupportComponent],
       imports: [IonicModule.forRoot()],
-    }).compileComponents()
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(SupportComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  }))
+    fixture = TestBed.createComponent(SupportComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

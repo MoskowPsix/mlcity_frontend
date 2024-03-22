@@ -1,43 +1,40 @@
-ion-segment{
-     margin-top: 30px;
-    --width: 100%;
-    --background: none;
-    margin-bottom: 10px;
-    max-height: 40px;
+ion-segment {
+  margin-top: 30px;
+  --width: 100%;
+  --background: none;
+  margin-bottom: 10px;
+  max-height: 40px;
 }
 
-
-ion-segment-button{
-    --background-color: red;
+ion-segment-button {
+  --background-color: red;
 }
 
-
-.inputLabel{
-    margin-top: 15px;
+.inputLabel {
+  margin-top: 15px;
 }
 
-
-ion-input{
-    background: #fff;
+ion-input {
+  background: #fff;
 }
-.custom{
-    --background: #E0E0E0;
-    border: 1px solid #E0E0E0;
-    border-radius: 12px;
-    width: 320px;
-    background: none;
-}
-
-.buttonNavigationParrent{
-    display: flex;
-    justify-content: center;
-}
-.buttonNavigation{
-    margin-top: 40px;
-    max-width: 100px;
+.custom {
+  --background: #e0e0e0;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  width: 320px;
+  background: none;
 }
 
-.map{
-    height: 500px;
-    width: 100%;
+.buttonNavigationParrent {
+  display: flex;
+  justify-content: center;
+}
+.buttonNavigation {
+  margin-top: 40px;
+  max-width: 100px;
+}
+
+.map {
+  height: 500px;
+  width: 100%;
 }

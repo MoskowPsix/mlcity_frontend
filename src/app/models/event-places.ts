@@ -1,3 +1,3 @@
 export interface IGetEventPlaces {
-  page: number
+  page: number;
 }

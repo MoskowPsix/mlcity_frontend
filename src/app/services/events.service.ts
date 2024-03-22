@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core'
-import { HttpClient, HttpErrorResponse } from '@angular/common/http'
-import { tap, throwError } from 'rxjs'
-import { IEvent } from '../models/event'
-import { environment } from 'src/environments/environment'
-import { IGetEventsAndSights } from '../models/getEventsAndSights'
-import { UserService } from './user.service'
-import { IPlace } from '../models/place'
-import { IGetEventPlaces } from '../models/event-places'
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { tap, throwError } from 'rxjs';
+import { IEvent } from '../models/event';
+import { environment } from 'src/environments/environment';
+import { IGetEventsAndSights } from '../models/getEventsAndSights';
+import { UserService } from './user.service';
+import { IPlace } from '../models/place';
+import { IGetEventPlaces } from '../models/event-places';
 
 @Injectable({
   providedIn: 'root',
@@ -16,18 +16,18 @@ export class EventsService {
 
   constructor(
     private http: HttpClient,
-    private userService: UserService,
+    private userService: UserService
   ) {
-    this.getUserId()
+    this.getUserId();
   }
 
-  private user_id: number = 0
+  private user_id: number = 0;
 
   getUserId() {
-    const user = this.userService.getUserFromLocalStorage()
+    const user = this.userService.getUserFromLocalStorage();
     if (user) {
       if (user.social_account) {
-        this.user_id = user.id
+        this.user_id = user.id;
       }
     }
     // this.userService.getUserFromLocalStorage().pipe(
@@ -61,78 +61,78 @@ export class EventsService {
     //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
     return this.http.get<IEvent[]>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`,
-      { params: { ...params } },
-    )
+      { params: { ...params } }
+    );
   }
 
   getEventPlaces(id?: number, params?: IGetEventsAndSights) {
     return this.http.get<IPlace[]>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}/places`,
-      { params: { ...params } },
-    )
+      { params: { ...params } }
+    );
   }
 
   getEventById(id: number) {
     return this.http.get<IEvent>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}`,
-    )
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}`
+    );
   }
 
   getEventsFavorites(params: any) {
-    this.getUserId()
+    this.getUserId();
     return this.http.get<IEvent[]>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${this.user_id}/favorite-events`,
-      { params: { ...params } },
-    )
+      { params: { ...params } }
+    );
   }
   getEventsForUser(params: IGetEventsAndSights) {
     return this.http.get<IEvent[]>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events-for-author`,
-      { params: { ...params } },
-    )
+      { params: { ...params } }
+    );
   }
 
   toggleFavorite(event_id: number) {
     const params = {
       event_id: event_id,
-    }
+    };
     return this.http.post<any>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/favorite-event-toggle`,
-      params,
-    )
+      params
+    );
   }
 
   checkFavorite(event_id: number) {
     return this.http.get<boolean>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${event_id}/check-user-favorite`,
-    )
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${event_id}/check-user-favorite`
+    );
   }
 
   toggleLike(event_id: number) {
     const params = {
       event_id: event_id,
-    }
+    };
     return this.http.post<any>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/like-event-toggle`,
-      params,
-    )
+      params
+    );
   }
 
   checkLiked(event_id: number) {
     return this.http.get<boolean>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${event_id}/check-user-liked`,
-    )
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${event_id}/check-user-liked`
+    );
   }
 
   updateEventVkLIkes(event_id: number, likes_count: number) {
     const params = {
       event_id: event_id,
       likes_count: likes_count,
-    }
+    };
     return this.http.post<any>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/update-vk-likes`,
-      params,
-    )
+      params
+    );
   }
 
   //Установить отношение, отмечаем что юзер лайкнул эвент
@@ -140,33 +140,33 @@ export class EventsService {
     const params = {
       event_id: event_id,
       //user_id: this.userId
-    }
+    };
     return this.http.post<any>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/set-event-user-liked`,
-      params,
-    )
+      params
+    );
   }
 
   create(event: FormData) {
     return this.http.post<any>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/create`,
-      event,
-    )
+      event
+    );
   }
 
   addView(id: number, time: number) {
     const params = {
       event_id: id,
       time: time,
-    }
+    };
     return this.http.post<any>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/view`,
-      params,
-    )
+      params
+    );
   }
 
   private errorHandler(error: HttpErrorResponse) {
     //this.errorService.handle(error.message)
-    return throwError(() => error.message)
+    return throwError(() => error.message);
   }
 }

@@ -1,7 +1,7 @@
-import { Component } from '@angular/core'
-import { FormControl, FormGroup } from '@angular/forms'
-import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps'
-import { MapService } from '../../services/map.service'
+import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps';
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-add-event',
@@ -9,36 +9,36 @@ import { MapService } from '../../services/map.service'
   styleUrls: ['./add-event.component.scss'],
 })
 export class AddEventComponent {
-  coords!: number[]
-  placemark!: ymaps.Placemark
-  search!: string
-  searchForm!: FormGroup
-  map!: YaReadyEvent<ymaps.Map>
-  placemarkStart!: ymaps.Placemark
-  placemarkStop!: ymaps.Placemark
-  typeSelected: number | null = null
-  pol: number[][] = []
+  coords!: number[];
+  placemark!: ymaps.Placemark;
+  search!: string;
+  searchForm!: FormGroup;
+  map!: YaReadyEvent<ymaps.Map>;
+  placemarkStart!: ymaps.Placemark;
+  placemarkStop!: ymaps.Placemark;
+  typeSelected: number | null = null;
+  pol: number[][] = [];
 
-  Polyline!: ymaps.Polyline
+  Polyline!: ymaps.Polyline;
 
   types = [
     { id: 1, name: 'Пешком' },
     { id: 2, name: 'Авто' },
     { id: 3, name: 'Полилинии' },
-  ]
+  ];
   selectedType(event: any) {
-    this.typeSelected = event.detail.value
-    console.log(this.typeSelected)
+    this.typeSelected = event.detail.value;
+    console.log(this.typeSelected);
   }
 
   constructor(
     private yaGeocoderService: YaGeocoderService,
-    private mapService: MapService,
+    private mapService: MapService
   ) {}
 
   //При клике ставим метку старта, если метка есть, то ставим метку стоп и создаем маршрут
   onMapClick(e: YaEvent<ymaps.Map>): void {
-    const { target, event } = e
+    const { target, event } = e;
     if (this.typeSelected == 1) {
       //Задание начальной и конечной точки для авто маршрута
       if (!this.placemarkStart) {
@@ -52,21 +52,21 @@ export class AddEventComponent {
             visible: true,
             preset: 'islands#greenStretchyIcon',
             draggable: false,
-          },
-        )
-        this.map.target.geoObjects.add(this.placemarkStart)
+          }
+        );
+        this.map.target.geoObjects.add(this.placemarkStart);
         this.pol.push([
           event.get('coords')[0].toPrecision(6),
           event.get('coords')[1].toPrecision(6),
-        ])
+        ]);
 
         // console.log("Метка старт не существует")
       } else if (!this.placemarkStop) {
         this.pol.push([
           event.get('coords')[0].toPrecision(6),
           event.get('coords')[1].toPrecision(6),
-        ])
-        this.createPedestrianRouteMap()
+        ]);
+        this.createPedestrianRouteMap();
       }
     } else if (this.typeSelected == 2) {
       //Задание начальной и конечной точки для авто маршрута
@@ -81,9 +81,9 @@ export class AddEventComponent {
             visible: true,
             preset: 'islands#greenStretchyIcon',
             draggable: false,
-          },
-        )
-        this.map.target.geoObjects.add(this.placemarkStart)
+          }
+        );
+        this.map.target.geoObjects.add(this.placemarkStart);
         // console.log("Метка старт не существует")
       } else if (!this.placemarkStop) {
         // console.log("Метка старт существует, метка стоп нет")
@@ -97,14 +97,14 @@ export class AddEventComponent {
             visible: true,
             preset: 'islands#redStretchyIcon',
             draggable: false,
-          },
-        )
-        this.map.target.geoObjects.add(this.placemarkStop)
+          }
+        );
+        this.map.target.geoObjects.add(this.placemarkStop);
         this.createAutoRouteMap(
           this.placemarkStart,
           this.placemarkStart.geometry?.getCoordinates()!,
-          this.placemarkStop.geometry?.getCoordinates()!,
-        )
+          this.placemarkStop.geometry?.getCoordinates()!
+        );
       }
     } else if (this.typeSelected == 3) {
       if (!this.placemarkStart) {
@@ -118,10 +118,10 @@ export class AddEventComponent {
             visible: true,
             preset: 'islands#greenStretchyIcon',
             draggable: false,
-          },
-        )
-        this.map.target.geoObjects.add(this.placemarkStart)
-        this.createPolylineRouteMap()
+          }
+        );
+        this.map.target.geoObjects.add(this.placemarkStart);
+        this.createPolylineRouteMap();
 
         //   // console.log("Метка старт не существует")
         // } else if (!this.placemarkStop){
@@ -135,36 +135,36 @@ export class AddEventComponent {
 
   // Поиск по улицам
   onMapReady(e: YaReadyEvent<ymaps.Map>): void {
-    this.map = e
+    this.map = e;
   }
 
   createPolylineRouteMap() {
     this.Polyline = new ymaps.Polyline(
       [this.placemarkStart.geometry?.getCoordinates()!],
       {},
-      { draggable: true, strokeColor: '#00000088', strokeWidth: 4 },
-    )
-    this.map.target.geoObjects.add(this.Polyline)
+      { draggable: true, strokeColor: '#00000088', strokeWidth: 4 }
+    );
+    this.map.target.geoObjects.add(this.Polyline);
 
-    this.Polyline.editor.startEditing()
+    this.Polyline.editor.startEditing();
 
-    this.Polyline.editor.events.add('drawing', (el) => {
-      console.log(el)
+    this.Polyline.editor.events.add('drawing', el => {
+      console.log(el);
 
       if (this.Polyline.editor.state.get('drawing') === false) {
-        console.log('стопэ')
+        console.log('стопэ');
       }
-    })
+    });
 
-    this.Polyline.editor.state.set('drawing', true)
+    this.Polyline.editor.state.set('drawing', true);
   }
 
   //Настройки пешеходного маршрута
   createPedestrianRouteMap() {
-    this.pol.forEach((el) => {
-      console.log(el)
-    })
-    this.map.target.geoObjects.removeAll()
+    this.pol.forEach(el => {
+      console.log(el);
+    });
+    this.map.target.geoObjects.removeAll();
 
     var multiRoute = new ymaps.multiRouter.MultiRoute(
       {
@@ -197,22 +197,22 @@ export class AddEventComponent {
         // editorDrawOver: false,
         balloonLayout: false,
         // wayPointVisible: false,
-      },
-    )
+      }
+    );
 
     multiRoute.editor.start({
       addMidPoints: true,
       addWayPoints: false,
       removeWayPoints: true,
-    })
-    this.map.target.geoObjects.add(multiRoute)
+    });
+    this.map.target.geoObjects.add(multiRoute);
   }
 
   //Настройки авто маршрута
   createAutoRouteMap(
     start: ymaps.Placemark,
     coordsStart: number[],
-    coordsStop: number[],
+    coordsStop: number[]
   ) {
     var multiRoute = new ymaps.multiRouter.MultiRoute(
       {
@@ -244,14 +244,14 @@ export class AddEventComponent {
         // editorDrawOver: false,
         balloonLayout: false,
         // wayPointVisible: false,
-      },
-    )
+      }
+    );
 
     multiRoute.editor.start({
       addMidPoints: true,
       addWayPoints: false,
       removeWayPoints: true,
-    })
-    this.map.target.geoObjects.add(multiRoute)
+    });
+    this.map.target.geoObjects.add(multiRoute);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core';
 import {
   trigger,
   state,
@@ -6,7 +6,7 @@ import {
   animate,
   transition,
   AUTO_STYLE,
-} from '@angular/animations'
+} from '@angular/animations';
 
 @Component({
   selector: 'app-read-more',
@@ -28,23 +28,23 @@ import {
   ],
 })
 export class ReadMoreComponent implements OnInit {
-  readMore: boolean = false
-  collapsed = false
-  showToggle: boolean = false
-  @Input() text: string = ''
-  @Input() long: number = 200
+  readMore: boolean = false;
+  collapsed = false;
+  showToggle: boolean = false;
+  @Input() text: string = '';
+  @Input() long: number = 200;
 
   constructor() {}
 
   toggle() {
-    this.collapsed = !this.collapsed
+    this.collapsed = !this.collapsed;
   }
 
   ngOnInit() {
     if (this.text.length > this.long) {
-      this.showToggle = true
+      this.showToggle = true;
     } else {
-      this.showToggle = false
+      this.showToggle = false;
     }
   }
 }

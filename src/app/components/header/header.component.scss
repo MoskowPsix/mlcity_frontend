@@ -1,349 +1,331 @@
-
 ion-modal {
-    --min-height: 20rem;
-    --height: auto;
-  }
+  --min-height: 20rem;
+  --height: auto;
+}
 
 .ion-justify-content-end {
-   --justify-content: center;
+  --justify-content: center;
 }
 
-.searchParrent{
-    padding-bottom: 1rem;
-    max-width: 131px;
-    min-height: 60px;
+.searchParrent {
+  padding-bottom: 1rem;
+  max-width: 131px;
+  min-height: 60px;
 }
 
-.icon{
+.icon {
   height: 1.15rem;
   width: 1.15rem;
   margin-right: 6px;
-  filter: invert(45%) sepia(45%) saturate(7477%) hue-rotate(194deg) brightness(102%) contrast(108%);
+  filter: invert(45%) sepia(45%) saturate(7477%) hue-rotate(194deg)
+    brightness(102%) contrast(108%);
 }
 
 .logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  img {
+    height: 2rem;
+    padding-right: 0.25rem;
+  }
+
+  span {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+}
+.header {
+  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+ion-title {
+  padding-inline-start: 0.5rem;
+  padding-inline-end: 0;
+  text-align: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.z-index-9999 {
+  z-index: 999999;
+}
+
+.city-popover {
+  padding: 0.5rem;
+
+  .title {
+    text-align: center;
+    padding: 0.5rem;
+  }
+
+  .buttons {
     display: flex;
+    justify-content: space-around;
+  }
+}
+.search-item {
+  cursor: pointer;
+}
+
+.search-item:hover {
+  --background: #f3f4f6;
+}
+
+ion-popover {
+  bottom: 70%;
+  right: 75%;
+
+  &::part(content) {
+    top: 3rem;
+    left: 12rem;
+  }
+}
+
+ion-modal ion-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+@media (min-width: 1060px) {
+  // @media(min-width: 991px) {
+  .header-mobile {
+    display: none;
+  }
+
+  .header {
+    .menu {
+      display: flex;
+
+      .active {
+        background-color: #f3f4f6;
+      }
+    }
+  }
+}
+
+@media (max-width: 1299px) {
+  .searchParrent {
+    max-width: 87px;
+  }
+}
+
+@media (max-width: 1470px) {
+  .logo {
     flex-direction: row;
     align-items: center;
 
     img {
-        height: 2rem;
-        padding-right: 0.25rem;
+      height: 2rem;
+      padding-right: 2px;
     }
 
     span {
-        font-weight: bold;
-        font-size: 1.5rem;
+      font-weight: bold;
+      font-size: 16px;
     }
-}
-.header{
-    margin-left: 10px;   display: flex; justify-content: center;
-}
+  }
 
-ion-title{
-    padding-inline-start: 0.5rem;
+  .button-inner {
+    font-size: 10px;
+    display: flex;
+    position: relative;
+    flex-flow: row;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  ion-badge {
+    font-size: 10px;
+  }
+  .ion-color-dark {
+    font-size: 12px;
+  }
+
+  ion-label {
+    font-size: 12px;
+  }
+
+  ion-title {
+    padding-inline-start: 8px;
     padding-inline-end: 0;
     text-align: center;
-}
+  }
 
-.flex{
+  .flex {
     display: flex;
-}
+  }
 
-.z-index-9999{
+  .z-index-9999 {
     z-index: 999999;
-}
+  }
 
-.city-popover{
-    padding: 0.5rem;
-
-    .title{
-        text-align: center;
-        padding: 0.5rem;
+  .city-popover {
+    .title {
+      text-align: center;
+      padding-left: 6px;
     }
 
-    .buttons{
-        display: flex;
-        justify-content: space-around;
+    .buttons {
+      display: flex;
+      justify-content: space-around;
     }
-}
-.search-item{
+  }
+  .search-item {
     cursor: pointer;
-}
+  }
 
-.search-item:hover{
+  .search-item:hover {
     --background: #f3f4f6;
-}
+  }
 
-ion-popover{
+  ion-popover {
     bottom: 70%;
     right: 75%;
 
-    &::part(content){
-        top: 3rem;
-        left: 12rem;
+    &::part(content) {
+      top: 3rem;
+      left: 12rem;
     }
-}
+  }
 
-ion-modal ion-content{
+  ion-modal ion-content {
     --padding-top: 0;
     --padding-bottom: 0;
-}
-
-@media(min-width: 1060px) {
-// @media(min-width: 991px) {
-    .header-mobile {
-      display: none;
-    }
-
-    .header {
-
-        .menu{
-            display: flex;
-
-            .active{
-                background-color: #f3f4f6;
-            }
-        }
-    }
-
   }
 
-  @media(max-width:1299px){
-    .searchParrent{
-        max-width: 87px;
+  .cityButton {
+    --padding: 0;
+    --margin-right: -10px;
+  }
+}
+
+@media (max-width: 1299px) {
+  .logo {
+    display: none;
+    img {
+      height: 2rem;
+      padding-right: 1.9px;
+    }
+
+    span {
+      font-weight: bold;
+      font-size: 11px;
     }
   }
 
-@media(max-width:1470px){
+  .button-inner {
+    font-size: 11px;
+    display: flex;
+    position: relative;
+    flex-flow: row;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
 
+  ion-badge {
+    font-size: 11px;
+  }
+  .ion-color-dark {
+    font-size: 11px;
+  }
 
-    .logo {
-        flex-direction: row;
-        align-items: center;
+  ion-label {
+    font-size: 11px;
+  }
 
-        img {
-            height: 2rem;
-            padding-right: 2px;
-        }
+  ion-title {
+    padding-inline-start: 10px;
+    padding-inline-end: 0;
+    text-align: center;
+  }
 
-        span {
-            font-weight: bold;
-            font-size: 16px;
-        }
+  .flex {
+    display: flex;
+  }
+
+  .z-index-9999 {
+    z-index: 999999;
+  }
+
+  .city-popover {
+    .title {
+      text-align: center;
+      padding-left: 4px;
     }
 
-    .button-inner {
-        font-size: 10px;
-        display: flex;
-        position: relative;
-        flex-flow: row;
-        flex-shrink: 0;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
+    .buttons {
+      display: flex;
+      justify-content: space-around;
     }
+  }
+  .search-item {
+    cursor: pointer;
+  }
 
-    ion-badge{
-       font-size: 10px;
+  .search-item:hover {
+    --background: #f3f4f6;
+  }
+
+  ion-popover {
+    bottom: 70%;
+    right: 75%;
+
+    &::part(content) {
+      top: 1.8rem;
+      left: 10rem;
     }
-    .ion-color-dark {
-        font-size: 12px;
-    }
+  }
 
-    ion-label{
-        font-size: 12px;
-    }
+  ion-modal ion-content {
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
 
-    ion-title{
-        padding-inline-start: 8px;
-        padding-inline-end: 0;
-        text-align: center;
-    }
+  .cityButton {
+    --padding: 0;
+    --margin-right: -8px;
+  }
+  .SearchInput {
+    border: none;
+    width: 30px;
+    margin-left: -25px;
 
-    .flex{
-        display: flex;
-    }
-
-
-
-
-    .z-index-9999{
-        z-index: 999999;
-    }
-
-    .city-popover{
-
-
-        .title{
-            text-align: center;
-            padding-left: 6px;
-        }
-
-        .buttons{
-            display: flex;
-            justify-content: space-around;
-        }
-    }
-    .search-item{
-        cursor: pointer;
-    }
-
-    .search-item:hover{
-        --background: #f3f4f6;
-    }
-
-    ion-popover{
-        bottom: 70%;
-        right: 75%;
-
-        &::part(content){
-            top: 3rem;
-            left: 12rem;
-        }
-    }
-
-    ion-modal ion-content{
-        --padding-top: 0;
-        --padding-bottom: 0;
-    }
-
-    .cityButton{
-        --padding: 0;
-        --margin-right: -10px;
-    }
-
+    max-width: 87px;
+  }
 }
-
-
-
-
-@media(max-width:1299px){
-
-
-    .logo {
-        display: none;
-        img {
-            height: 2rem;
-            padding-right: 1.9px;
-        }
-
-        span {
-            font-weight: bold;
-            font-size: 11px;
-        }
-    }
-
-    .button-inner {
-        font-size: 11px;
-        display: flex;
-        position: relative;
-        flex-flow: row;
-        flex-shrink: 0;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-    }
-
-    ion-badge{
-       font-size: 11px;
-    }
-    .ion-color-dark {
-        font-size: 11px;
-    }
-
-    ion-label{
-        font-size: 11px;
-    }
-
-    ion-title{
-        padding-inline-start: 10px;
-        padding-inline-end: 0;
-        text-align: center;
-    }
-
-    .flex{
-        display: flex;
-    }
-
-    .z-index-9999{
-        z-index: 999999;
-    }
-
-    .city-popover{
-
-
-        .title{
-            text-align: center;
-            padding-left: 4px;
-        }
-
-        .buttons{
-            display: flex;
-            justify-content: space-around;
-        }
-    }
-    .search-item{
-        cursor: pointer;
-    }
-
-    .search-item:hover{
-        --background: #f3f4f6;
-    }
-
-    ion-popover{
-        bottom: 70%;
-        right: 75%;
-
-        &::part(content){
-            top: 1.8rem;
-            left: 10rem;
-        }
-    }
-
-    ion-modal ion-content{
-        --padding-top: 0;
-        --padding-bottom: 0;
-    }
-
-    .cityButton{
-        --padding: 0;
-        --margin-right: -8px;
-    }
-    .SearchInput{
-        border: none;
-        width: 30px;
-        margin-left: -25px;
-
-        max-width: 87px;
-    }
-
-}
-
 
 @media screen and (min-width: 0px) and (max-width: 1060px) {
-//@media(max-width: 1060px) {
-// @media(max-width: 991px) {
-    .header-mobile {
-       --display: block;
-       max-height: 3rem;
+  //@media(max-width: 1060px) {
+  // @media(max-width: 991px) {
+  .header-mobile {
+    --display: block;
+    max-height: 3rem;
+  }
+
+  .header {
+    display: none;
+  }
+
+  ion-popover {
+    bottom: 75%;
+    right: 40%;
+
+    &::part(content) {
+      left: 1rem;
     }
-
-    .header {
-        display: none;
-    }
-
-    ion-popover{
-        bottom: 75%;
-        right: 40%;
-
-        &::part(content){
-            left: 1rem;
-        }
-    }
-
+  }
 }
