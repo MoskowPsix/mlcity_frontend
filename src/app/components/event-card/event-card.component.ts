@@ -332,6 +332,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.cdr.detectChanges();
+
+    this.swiper?.update()
   }
 
   // scrollEvent = (): void => {

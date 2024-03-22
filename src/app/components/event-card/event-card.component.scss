@@ -20,10 +20,9 @@ ion-card {
     background-origin: content-box;
     background-clip: content-box;
     background-attachment: fixed;
-    filter: blur(20px);
     position: absolute;
-    min-width: 107%;
-    min-height: 107%;
+    width: 100%;
+    height: 100%;
   }
   swiper-slide img {
     width: auto;

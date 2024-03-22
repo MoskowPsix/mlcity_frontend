@@ -190,7 +190,9 @@ export class EventsComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe();
+      .subscribe(() => {
+
+      });
   }
 
   // getEventsGeolocation(){
