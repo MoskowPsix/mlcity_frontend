@@ -54,6 +54,12 @@ ion-segment-button {
     z-index: 999999;
   }
 
+  .scroll-up{
+    right: 5px;
+    border-radius: 20px;
+    background-color: white;
+    padding: 0.5rem;
+  }
   .segments {
     display: grid;
     grid-template-columns: 1fr 1fr;
