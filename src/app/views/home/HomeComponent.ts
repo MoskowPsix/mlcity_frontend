@@ -183,8 +183,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private titleService: Title,
-    private metaService: Meta,
-    private route: ActivatedRoute
   ) {
     this.titleService.setTitle(
       'MLCity - Мероприятия и достопремечательности вокруг вас'

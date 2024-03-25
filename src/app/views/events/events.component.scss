@@ -55,10 +55,12 @@ ion-segment-button {
   }
 
   .scroll-up{
-    right: 5px;
+    bottom: 6rem;
+    right: 10px;
     border-radius: 20px;
     background-color: white;
     padding: 0.5rem;
+    box-shadow:  0 0 10px 5px rgba(221, 221, 221, 0.2);
   }
   .segments {
     display: grid;
