@@ -59,6 +59,14 @@ ion-segment-button {
     right: 1.5rem;
     z-index: 999999;
   }
+  .scroll-up{
+    bottom: 6rem;
+    right: 10px;
+    border-radius: 20px;
+    background-color: white;
+    padding: 0.5rem;
+    box-shadow:  0 0 10px 5px rgba(221, 221, 221, 0.2);
+  }
   .app-event-card {
     margin-left: 2%;
     margin-right: 2%;

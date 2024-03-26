@@ -238,7 +238,7 @@
                   <div style="font-family:'Montserrat-Bold';" class="title">Типы мероприятия</div>
 
                   <div *ngFor="let type of event.types">
-                      <img src="{{host + port}}{{type.ico}}">
+                      <img class="ico-small" src="{{host}}:{{port}}{{type.ico}}">
                       <span class="description">{{ type.name }}</span>
                   </div>
                 </ion-col>

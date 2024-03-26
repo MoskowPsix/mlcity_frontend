@@ -21,7 +21,7 @@
   </div>
 
   <!-- Управление картой -->
-  <div >
+  <div style="padding-top: var(--ion-safe-area-top, 0); margin-top: -0.5rem;" >
 
     <!-- Фильтры для ивентов -->
     <div  *ngIf="stateType === 'events'" [@panelInOut] [style.height]="stateType !== 'events' ? '0' : 'auto'" class="calendula-container" #calendula>
