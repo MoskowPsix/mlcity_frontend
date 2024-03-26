@@ -601,7 +601,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           } else {
             this.eventsModalNextPage = '';
           }
-
+          console.log(response.total)
           this.eventsContentModal.push(...response.events.data);
           this.eventsContentModalTotal = response.total;
           // this.filterService.setEventsCount(response.total)
