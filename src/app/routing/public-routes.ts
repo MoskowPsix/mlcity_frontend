@@ -13,6 +13,7 @@ import { SightShowComponent } from '../views/sights/sight-show/sight-show.compon
 import { FiltersNotButtonComponent } from '../components/filters_not_button/filters_not_button.component';
 import { CalendulaComponent } from '../components/calendula/calendula.component';
 import { NoPathComponent } from '../views/no-path/no-path.component';
+import { PrivacyComponent } from '../views/privacy/privacy.component';
 
 export const publicRoutes: Routes = [
   {
@@ -29,6 +30,10 @@ export const publicRoutes: Routes = [
     path: '',
     component: NoPathComponent,
     pathMatch: 'full',
+  },
+  {
+    path: "privacy",
+    component: PrivacyComponent
   },
   {
     path: 'events',

@@ -94,6 +94,7 @@ import { TypesComponent } from './components/types/types.component'
 import { MetrikaModule } from 'ng-yandex-metrika'
 import { NgxSliderModule } from '@angular-slider/ngx-slider'
 import { CollapsedTextComponent } from './components/collapsed-text/collapsed-text.component'
+import { PrivacyComponent } from './views/privacy/privacy.component'
 
 const mapConfig: YaConfig = {
   apikey:
@@ -166,6 +167,7 @@ registerLocaleData(localeRu, 'ru')
     TypesComponent,
     CollapsedTextComponent,
     ContactsComponent,
+    PrivacyComponent
   ],
   imports: [
     BrowserModule,
@@ -182,6 +184,7 @@ registerLocaleData(localeRu, 'ru')
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
+
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
