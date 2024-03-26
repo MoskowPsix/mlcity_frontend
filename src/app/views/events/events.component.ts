@@ -62,7 +62,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   @ViewChild('cardContainer')
   cardContainer!: ElementRef;
   @ViewChild('widgetsContent') widgetsContent!: ElementRef;
-  @ViewChild('lent') lent!: ElementRef;
+  @ViewChild('lentEvent') lent!: ElementRef;
 
   loadingEventsCity: boolean = false;
   loadingEventsGeolocation: boolean = false;
@@ -143,7 +143,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   scrollUp() {
-    document.getElementById('top')?.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('я работаю');
+    document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   scrollUpCheckState() {
@@ -190,9 +191,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe(() => {
-
-      });
+      .subscribe(() => {});
   }
 
   // getEventsGeolocation(){

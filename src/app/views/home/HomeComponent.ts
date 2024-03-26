@@ -183,6 +183,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private titleService: Title,
+    private locationService: LocationService
   ) {
     this.titleService.setTitle(
       'MLCity - Мероприятия и достопремечательности вокруг вас'
@@ -910,6 +911,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe((value: any) => {
         this.eventTypeId = value[0];
       });
+
     this.getEventsAndSights();
   }
   ngOnDestroy() {
