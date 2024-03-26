@@ -40,21 +40,7 @@
                       </ion-item>
 
                       <ion-note *ngIf="!nameBusy" style="text-align: center;" color="danger">{{busyName}} уже занято, попробуйте другое</ion-note>
-                      <ion-item>
-                        <ion-input formControlName = "number" class="Login_inputs emailclass InputDontButton"
-                         type = "tel" placeholder = "Телефон"
-                         [maskito]="phoneMask"
-                         [maskitoElement]="maskPredicate"
-                         required>
-
-                          <img src="/assets/icons/phone_reg.svg" class="Login_icon " alt="Описание изображения">
-
-
-                        </ion-input>
-
-
-                  </ion-item>
-                  <ion-note *ngIf="!busyNumber" style="text-align: center;" color="danger"> Ваш телефон уже зарегестрирован</ion-note>
+                      
                       <ion-item>
                             <ion-input formControlName="email" class="Login_inputs emailclass InputDontButton"  type="text" placeholder="E-mail" required>
                               <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
@@ -88,7 +74,7 @@
             </div>
 
             <ion-item>
-              <ion-checkbox id="check" [checked]="privacyCheck" slot="start"></ion-checkbox>
+              <ion-checkbox id="check" [value]="privacyCheck" (ionChange)="privacyCheck = !privacyCheck"  slot="start"></ion-checkbox>
               <label for="check">
                 <span>Я ознакомлен с <a href="{{host}}:{{port}}/storage/privacy/Соглашение 2024г.docx">политикой</a> конфиденциальности.</span>
               </label>
@@ -103,7 +89,7 @@
 
                 <ion-item>
 
-                      <ion-button  [disabled]="registerForm.invalid || registerForm.disabled && busyPass === false" type="submit" class="Login_btns">
+                      <ion-button  [disabled]="registerForm.invalid || registerForm.disabled && busyPass === false || privacyCheck==false" type="submit" class="Login_btns">
                           Зарегестрироваться
                       </ion-button>
 
