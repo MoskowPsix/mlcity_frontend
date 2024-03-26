@@ -206,9 +206,7 @@ export class QueryBuilderService {
       statusLast: true,
       latitude: this.latitude,
       longitude: this.longitude,
-      eventTypes: this.eventTypes,
-      dateStart: this.dateStart,
-      dateEnd: this.dateEnd,
+      sightTypes: this.sightTypes,
       radius: this.radius,
       page: this.paginationPublicSightsModalRadiusPage.value,
     };

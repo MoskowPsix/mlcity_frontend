@@ -20,6 +20,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { UserService } from 'src/app/services/user.service';
 import { TokenService } from 'src/app/services/token.service';
 import { NavigationEnd, Router } from '@angular/router';
+
 import { IonModal } from '@ionic/angular';
 // import { MessagesErrors } from 'src/app/enums/messages-register';
 import internal from 'stream';
@@ -29,6 +30,7 @@ import { environment } from 'src/environments/environment';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
 
+
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -36,6 +38,11 @@ import { Meta } from '@angular/platform-browser';
 })
 export class RegistrationComponent implements OnInit {
   private readonly destroy$ = new Subject<void>();
+
+  host: string = environment.BACKEND_URL;
+  port: string = environment.BACKEND_PORT;
+
+  privacyCheck: boolean = false
   registerForm!: FormGroup;
   modalForm!: FormGroup;
   nameBusy: boolean = true;
@@ -327,7 +334,7 @@ export class RegistrationComponent implements OnInit {
     await this.SubmitPhone();
     await this.checkNumber();
 
-    if (this.emailBusy && this.nameBusy && this.busyPass) {
+    if (this.emailBusy && this.nameBusy && this.busyPass && this.privacyCheck) {
       this.authservice
         .register(this.registerForm.value)
         .pipe(

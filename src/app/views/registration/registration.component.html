@@ -26,7 +26,7 @@
 
             </div>
 
-            <ion-div class="Login_inputs_main">
+            <div class="Login_inputs_main">
 
               <ion-list style="text-align: center;">
 
@@ -77,19 +77,23 @@
                       </ion-item>
                       <ion-note *ngIf="(registerForm.value.password.length < 8 && registerForm.value.password.length > 0) || (registerForm.value.password_confirmation.length < 8 && registerForm.value.password_confirmation.length > 0)" color="danger">Пароль должен содержать минимум 8 символов</ion-note>
 
-                      <ion-item>
-                        <ion-checkbox slot="start"></ion-checkbox>
-                        <ion-label>Я ознакомлен с политикой конфиденциальности.</ion-label>
-                      </ion-item>
                       <!-- <ion-note *ngIf="!busyPass" style="text-align: center;" color="danger">Пароли не совпадают</ion-note> -->
 
                   </ion-list>
 
 
 
-            </ion-div>
 
 
+            </div>
+
+            <ion-item>
+              <ion-checkbox id="check" [checked]="privacyCheck" slot="start"></ion-checkbox>
+              <label for="check">
+                <span>Я ознакомлен с <a href="{{host}}:{{port}}/storage/privacy/Соглашение 2024г.docx">политикой</a> конфиденциальности.</span>
+              </label>
+
+            </ion-item>
 
             <ion-div class="Login_btns_content">
 
