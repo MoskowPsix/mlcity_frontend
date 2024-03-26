@@ -193,7 +193,7 @@
     height: 8rem;
   }
   .range-radius-main {
-    max-height: 200px;
+    max-height: 239px;
   }
 }
 @media only screen and (max-height: 670px){
@@ -202,6 +202,13 @@
   
   }
 }
+
+@media only screen and (max-width: 768px) and (max-height: 705px){
+  .container-swither {
+    top: 80%;
+  }
+}
+
 @media only screen and (max-width: 768px) and (max-height: 890px)  {
   .map {
     height: 92vh;
@@ -214,7 +221,7 @@
     z-index: 3;
   }
   .container-swither {
-    top: 63%;
+    top: 70%;
   }
   .range-radius-main {
     top: 10rem;
@@ -235,11 +242,11 @@
     max-height: clamp(5rem, -6rem + 47vw, 67rem);
   }
   .range-radius-main {
-    top: 10rem;
+    top: 8rem;
   }
 }
 
-@media only screen and (max-height: 720px) {
+@media only screen and (max-height: 730px) {
   .range-radius-main {
     height: 12rem;
   }
@@ -248,12 +255,19 @@
   }
 }
 
-@media only screen and (max-height: 600px) {
+@media only screen and (max-height: 693px) {
   .range-radius-main {
     top: 18vh;
   }
   .container-swither {
-    top: 65%;
+    top: 72%;
+  }
+
+  .range-radius-main {
+    height: 18rem;
+  }
+  .range-radius-main ngx-slider {
+    max-height: 8rem;
   }
 }
 
