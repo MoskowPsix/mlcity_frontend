@@ -115,7 +115,8 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   scrollUp() {
-    document.getElementById('top')?.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('я работаю');
+    document.getElementById('topSi')?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   getSightsCity() {

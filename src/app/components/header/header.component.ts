@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject, takeUntil, catchError, of, EMPTY } from 'rxjs';
 import menuPublicData from '../../../assets/json/menu-public.json';
 import { IMenu } from 'src/app/models/menu';
@@ -67,7 +67,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private eventsService: EventsService,
     private sightsService: SightsService,
     private filterService: FilterService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   getEventService() {
@@ -254,9 +255,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.locationService
             .getLocationsIds(value)
             .pipe()
-            .subscribe(value => {
-              this.city = value.location.name;
-              this.region = value.location.location_parent.name;
+            .subscribe((response: any) => {
+              this.city = response.location.name;
+              this.region = response.location.location_parent.name;
+              this.filterService.setLocationLatitudeTolocalStorage(
+                response.latitude
+              );
+              this.filterService.setLocationLongitudeTolocalStorage(
+                response.longitude
+              );
+              this.cdr.detectChanges();
+              // this.filterService.changeFilter.next(true);
             });
         }
       });
