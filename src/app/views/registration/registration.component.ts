@@ -338,8 +338,6 @@ export class RegistrationComponent implements OnInit {
       this.authservice
         .register(this.registerForm.value)
         .pipe(
-          delay(100),
-          retry(3),
           map((respons: any) => {
             this.RetryCode();
             this.timerRetryButton = false;
@@ -360,8 +358,9 @@ export class RegistrationComponent implements OnInit {
 
           tap(() => {}),
           catchError(err => {
+            console.log(err)
             this.loadingService.hideLoading();
-            this.toastService.showToast(err.message, 'warning');
+            this.toastService.showToast(err.error.message, 'warning');
             return of(EMPTY);
           }),
           takeUntil(this.destroy$)

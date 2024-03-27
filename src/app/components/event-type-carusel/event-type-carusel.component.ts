@@ -87,6 +87,7 @@ export class EventTypeCaruselComponent implements OnInit {
     if (!this.type_id) {
       this.type_id = 'all';
     }
+    this.type_id.length ? this.clickAll = false : this.clickAll = true
     // this.fixCenterElement(this.type_id)
     setTimeout(() => {
       this.fixCenterElement(this.type_id);

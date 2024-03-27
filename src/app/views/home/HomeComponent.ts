@@ -323,6 +323,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.navigationService.appFirstLoading.value) {
       this.eventsLoading = true;
       this.sightsLoading = true;
+      this.modalButtonLoader = true;
       this.cdr.detectChanges();
       //this.getEvents()
       this.getEventsAndSights();
@@ -340,6 +341,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (!this.navigationService.appFirstLoading.value) {
         this.eventsLoading = true;
         this.sightsLoading = true;
+        this.modalButtonLoader = true
         this.CirclePoint.geometry?.setRadius(this.radius * 15);
         this.CirclePoint.options.set('fillOpacity', 0.7);
         this.CirclePoint.options.set('fillColor', '#474A51');
@@ -602,7 +604,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           } else {
             this.eventsModalNextPage = '';
           }
-          console.log(response.total)
           this.eventsContentModal.push(...response.events.data);
           this.eventsContentModalTotal = response.total;
           // this.filterService.setEventsCount(response.total)
@@ -649,6 +650,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.getEventsAndSights();
     } else {
       this.navigationService.appFirstLoading.next(false);
+      this.modalButtonLoader = true
       this.eventsLoading = false;
       this.sightsLoading = false;
     }
@@ -841,6 +843,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.radius
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
+        this.eventsContentModal = [];
+        this.sightsContentModal = [];
         this.radius = parseInt(value);
         if (this.map && this.map.target)
           this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
@@ -851,12 +855,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.locationLongitude
       .pipe(takeUntil(this.destroy$))
       .subscribe((value: any) => {
+        this.eventsContentModal = [];
+        this.sightsContentModal = [];
         this.mapService.circleCenterLongitude.next(value);
       });
 
     this.filterService.locationLatitude
       .pipe(takeUntil(this.destroy$))
       .subscribe((value: any) => {
+        this.eventsContentModal = [];
+        this.sightsContentModal = [];
         this.mapService.circleCenterLatitude.next(value);
       });
     //Подписываемся на состояние модалки показа ивентов и мест
@@ -894,6 +902,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
         if (value === true) {
+          this.eventsContentModal = [];
+          this.sightsContentModal = [];
           this.mapService.positionFilter(this.map, this.CirclePoint);
           this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
             checkZoomRange: true,
@@ -904,11 +914,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.sightTypes
       .pipe(takeUntil(this.destroy$))
       .subscribe((value: any) => {
+        this.eventsContentModal = [];
+        this.sightsContentModal = [];
         this.sightTypeId = value[0];
       });
     this.filterService.eventTypes
       .pipe(takeUntil(this.destroy$))
       .subscribe((value: any) => {
+        this.eventsContentModal = [];
+        this.sightsContentModal = [];
         this.eventTypeId = value[0];
       });
 
