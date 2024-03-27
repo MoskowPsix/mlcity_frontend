@@ -10,7 +10,7 @@
 </ion-button>
 
 
-<ion-popover  trigger="popover-button" [trigger]="id" triggerAction="click" [dismissOnSelect]="true" showBackdrop="false">
+<ion-popover mode="md"  trigger="popover-button" [trigger]="id" triggerAction="click" [dismissOnSelect]="true" showBackdrop="false">
   <ng-template>
     <ion-list lines="none">
       <div *ngFor="let parent of listItems | keyvalue">
@@ -20,7 +20,7 @@
             <ion-item-divider>
               <ion-label>
                 {{ parent.value.title }}
-              </ion-label>
+              </ion-label> 
             </ion-item-divider>
           </div>
 
