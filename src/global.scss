@@ -81,6 +81,10 @@ body {
 .mb-6-5rem{
     margin-bottom: 6.5rem;
 }
+ion-list {
+    font-family: 'Montserrat-regular';
+    font-size: 1rem;
+}
 
 ion-content {
     // overwrite inline styles
@@ -93,6 +97,12 @@ ion-content {
     }
 }
 
+ion-item-divider{
+    background-color: #fff;
+}
+ion-label{
+    background:none;
+}
 ion-toolbar {
     --padding-bottom: 0px !important;
     .toolbar-container {
