@@ -16,29 +16,49 @@
     font-family: 'Montserrat-Medium' ;
     margin-top: 10rem;
     display: flex;
-    justify-content: center;
+
     .main-content{
         text-align: center;
-        display: flex;
-        max-height: 600px;
-        margin-bottom: auto;
+        margin: auto;
+        
         .main-content-contact{
+            padding: 1rem;
+            background: #dedede;
+            border-radius: 16px;
+            max-width: 432px;
             font-size: clamp(1.125rem, 0.989rem + 0.68vw, 1.5rem);
-            max-width: 600px;
+            max-height: 425px;
             .contact-form{
+                margin: auto;
+                padding-left: 2.4rem;
+                padding-right: 2.4rem;
+                padding-top: 0.5rem;
+                padding-bottom: 1.5rem;
+            
+        
+                background-color: #FFF;
                 font-family: 'Montserrat-Medium' ;
-                padding: 1rem;
                 border-radius: 8px;
-                max-width: 400px;
-                min-height: 300px;
+                min-width: 400px;
+                max-width: 414px;
+                max-height: 404px;
                 .form-mail{
                     margin-top: 1rem;
-                    border: 1px solid rgba(183, 183, 183, 0.597);
                     border-radius: 6px;
+                    --background: #F7F7F7;
+                        .label{
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            .login-icons{
+                                margin-top:1rem;
+                            }
+                        }
+                       
                 }
                 .form-description{
                     margin-top: 1rem;
-                    border: 1px solid rgba(183, 183, 183, 0.597);
+                    --background: #F7F7F7;
                     border-radius: 8px;
                     .form-description-area{
                         padding-bottom: 8rem;
@@ -57,4 +77,3 @@
    margin-top: 2rem;
     max-height: 30px;
 }
-
