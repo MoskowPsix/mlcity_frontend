@@ -23,16 +23,19 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Add your description for requiring permission here</string>
+	<string>$(PRODUCT_NAME) needs access to geolocation to work correctly</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Add your description for requiring permission here</string>
+	<string>$(PRODUCT_NAME) needs access to geolocation to work correctly</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to camera to work correctly</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to photos to work correctly</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
-		<string>armv7</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
