@@ -256,16 +256,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
             .getLocationsIds(value)
             .pipe()
             .subscribe((response: any) => {
-              this.city = response.location.name;
-              this.region = response.location.location_parent.name;
-              this.filterService.setLocationLatitudeTolocalStorage(
-                response.latitude
-              );
-              this.filterService.setLocationLongitudeTolocalStorage(
-                response.longitude
-              );
-              this.cdr.detectChanges();
-              // this.filterService.changeFilter.next(true);
+              // if (this.mapService.geolocationCity.value !== response.location.name) {
+                this.city = response.location.name;
+                this.region = response.location.location_parent.name;
+                this.filterService.setLocationLatitudeTolocalStorage(
+                  response.latitude
+                );
+                this.filterService.setLocationLongitudeTolocalStorage(
+                  response.longitude
+                );
+                this.cdr.detectChanges();
+                // this.filterService.changeFilter.next(true);
+              // }
             });
         }
       });
@@ -296,6 +298,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.mapService.showChangeCityDialog
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
+        console.log(value)
         this.showChangeCityDialog = value;
       });
 

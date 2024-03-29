@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   vkontakteAuthUrl: string = environment.vkontakteAuthUrl;
+  appleAuthUrl: string = environment.appleAuthUrl;
   user_id!: number;
   loginForm!: FormGroup;
   responseData: any;
