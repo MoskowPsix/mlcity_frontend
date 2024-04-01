@@ -74,7 +74,7 @@ export class MapService {
 
     if (!Capacitor.isNativePlatform()) {
       //Запускаем поиск геопозиции в вебе
-      //console.log('ипользуется веб версия')
+      // console.log('ипользуется веб версия', CirclePoint)
       await this.setCenterMap(map, CirclePoint);
     } else {
       //Запускаем поиск геопозиции в мобилах
@@ -93,15 +93,17 @@ export class MapService {
           } else {
             //Если человек отказывается активировать GPS "нет,спасибо"
             let coords = await this.defaultCoords();
+            console.log("1, " + coords)
             this.setPlacemark(map, CirclePoint, coords!, false);
           }
         } else {
           //Если запрещен доступ GPS
           let coords = await this.defaultCoords();
+          // console.log("2, " + coords)
           this.setPlacemark(map, CirclePoint, coords!, false);
         }
       } catch (e) {
-        //console.log("Ошибка GPS " + e);
+        console.log("Ошибка GPS " + e);
       }
     }
   }
@@ -220,7 +222,7 @@ export class MapService {
           result[0].thoroughfare +
           ', ' +
           result[0].subThoroughfare;
-        //console.log('address' + address)
+        // console.log('address' + address)
         //this.searchCity(result[0].locality)
         this.searchCity(
           result[0].locality,
@@ -255,12 +257,13 @@ export class MapService {
     latitude: number,
     longitude: number
   ) {
+    console.log(`${city}, ${region}, ${latitude}, ${longitude}`)
     this.geolocationCity.next(city);
     this.geolocationRegion.next(region);
     this.geolocationLatitude.next(latitude);
     this.geolocationLongitude.next(longitude);
 
-    if (!this.filterService.getLocationFromlocalStorage()) {
+    if (!this.filterService.getLocationFromlocalStorage()?.length) {
       this.setCoordsFromChangeCityDialog();
       this.showChangeCityDialog.next(true);
     } else if (

@@ -50,6 +50,7 @@
 
       <div>
         <ion-button
+        [disabled] ="validForm()"
         (click)="onSubmit()"
         >Отправить</ion-button>
       </div>

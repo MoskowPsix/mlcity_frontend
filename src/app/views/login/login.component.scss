@@ -224,7 +224,6 @@ ion-modal {
 
   .vkPasswordModalNote {
     padding: 12px;
-
     color: #222427a3;
     font-weight: 500;
     font-size: 14px;
@@ -233,4 +232,21 @@ ion-modal {
   }
 }
 .vkPasswordModalHeader {
+}
+
+.apple-logo-circle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #F0F0F0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-left: 1rem;
+    .logo-apple-icon{
+      margin: auto;
+      color:black;
+      width: 30px;
+      height: 30px;
+    }
 }

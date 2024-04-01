@@ -22,7 +22,7 @@
         margin: auto;
 
         .main-content-contact{
-            padding: 1rem;
+            padding: 0.5rem;
             background: #dedede;
             border-radius: 16px;
             max-width: 432px;
@@ -76,4 +76,78 @@
 .main-content-header{
    margin-top: 2rem;
     max-height: 30px;
+}
+
+@media screen and (max-width: 450px) {
+    .main-content-header{
+        top: 5.6rem;
+        text-align: center;
+        font-size: clamp(1.8375rem, 1.4875rem + 1.75vw, 2.8rem);
+        font-family: 'Montserrat-Medium' ;
+        margin-bottom: clamp(2.8rem, 3.5637rem + -3.815vw, 0.7rem); 
+    }
+    .main-content-wrapper{
+        font-family: 'Montserrat-Medium' ;
+        margin-top: 7rem;
+        display: flex;
+    
+        .main-content{
+            text-align: center;
+            margin: auto;
+            
+            .main-content-contact{
+                padding: 0.5rem;
+                background: #dedede;
+                border-radius: 11.2px;
+                max-width: 302.4px; 
+                font-size: clamp(0.7875rem, 0.6923rem + 0.476vw, 1.05rem);
+                .contact-form{
+                    margin: auto;
+                    padding-left: 1.68rem; 
+                    padding-right: 1.68rem; 
+                    padding-top: 0.35rem; 
+                    padding-bottom: 1.05rem; 
+                
+            
+                    background-color: #FFF;
+                    font-family: 'Montserrat-Medium' ;
+                    border-radius: 5.6px; 
+                    min-width: 280px; 
+                    max-width: 289.8px; 
+                    max-height: 282.8px; 
+                    .form-mail{
+                        margin-top: 0.7rem; 
+                        border-radius: 4.2px; 
+                        --background: #F7F7F7;
+                            .label{
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                .login-icons{
+                                    margin-top: 0.7rem; 
+                                }
+                            }
+                           
+                    }
+                    .form-description{
+                        margin-top: 0.7rem;
+                        --background: #F7F7F7;
+                        border-radius: 5.6px; 
+                        .form-description-area{
+                           height: 8rem;
+                            padding-bottom: 0;
+                        }
+                    }
+                }
+            }
+            .main-content-contact-img{
+                margin-top: 2.8rem; /* 4rem - 30% */
+            }
+        }
+     
+    }
+    .main-content-header{
+       margin-top: 1.4rem; /* 2rem - 30% */
+        max-height: 21px; /* 30px - 30% */
+    }
 }
