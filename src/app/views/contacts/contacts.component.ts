@@ -19,7 +19,8 @@ export class ContactsComponent {
   private readonly destroy$ = new Subject<void>();
 
   constructor(
-    private supportService:SupportService
+    private supportService:SupportService,
+    private ToastService:ToastService
   ) {}
   contactForm!:FormGroup
 
@@ -34,6 +35,7 @@ export class ContactsComponent {
         })
       ).subscribe(ress =>{
         console.log(ress)
+        this.ToastService.showToast("Вы успешно отправили обращение к нам, ждите ответа на свою электронную почту в течении 2 дней","success")
       })
     } 
     else
