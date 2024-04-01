@@ -29,6 +29,7 @@ export class EventsService {
       if (user.social_account) {
         this.user_id = user.id;
       }
+      this.user_id = user.id;
     }
     // this.userService.getUserFromLocalStorage().pipe(
     //   //take(1),
