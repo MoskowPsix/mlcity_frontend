@@ -144,16 +144,18 @@
 </ion-content>
 
 <!-- Шкала радиуса -->
-<div class="range-radius-main">
-  <p class="range-radius-custom-info" >{{radius}}км</p>
-  <div class="range-radius-custom" style="height: 11.5rem;">
-    <ion-icon (click)="radiusPlus()" name="add-outline" class="swither-icon-range" color="primary"></ion-icon>
+<div class="">
+  
+  <div class="range-radius-main_2">
+    <p class="range-radius-custom-info" >{{radius}}км</p>
+    <ion-icon (click)="radiusPlus()" name="add-outline" class="range-radius-main-plus" color="primary"></ion-icon>
+
       <ngx-slider style="border:none"
       [value]="radius"
       [options]="options"
       (userChange)="radiusChange($event)"
       ></ngx-slider>
-      <ion-icon (click)="radiusMinus()" name="remove-outline" class="swither-icon-range " color="primary"></ion-icon>
+      <ion-icon (click)="radiusMinus()" name="remove-outline" class="range-radius-main-plus" color="primary"></ion-icon>
   </div>
 </div>
 

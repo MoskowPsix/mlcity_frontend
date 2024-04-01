@@ -1,18 +1,43 @@
+
+.range-radius-main_2 {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  margin-left: 10px;
+  top: 30%;
+  border-radius: 16px;
+  width: 40px;
+  background-color: rgb(255, 255, 255);
+  height:32%;
+}
+.range-radius-main_2 ngx-slider{
+  max-height:80%;
+}
+
 ::ng-deep {
   .range-radius-custom {
     /* Добавьте свои стили */
   }
-  .range-radius-custom .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
+  .range-radius-main_2  .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
     background-color: #ffffff;
   }
-  .range-radius-custom .ngx-slider .ngx-slider-bubble {
+  .range-radius-main_2  .ngx-slider .ngx-slider-bubble {
     display: none;
   }
-  .range-radius-custom .ngx-slider .ngx-slider-active {
+  .range-radius-main_2 .ngx-slider .ngx-slider-active {
     z-index: -2;
     border: none;
   }
 }
+
+.range-radius-main-plus{
+
+  font-size: 3rem;
+}
+
 
 .map {
   position: fixed;
@@ -55,6 +80,7 @@
   margin-right: auto;
   font-weight: bold;
   color: #0085ff;
+  margin-bottom: -0.1rem;
 }
 
 .range-radius {
