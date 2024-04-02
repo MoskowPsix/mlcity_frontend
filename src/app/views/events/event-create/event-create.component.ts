@@ -56,6 +56,7 @@ import { LocationService } from 'src/app/services/location.service';
 import { SightsService } from 'src/app/services/sights.service';
 import { SafeUrlPipe } from './event-create.pipe';
 import { Router } from '@angular/router';
+import { CreateRulesModalComponent } from 'src/app/components/create-rules-modal/create-rules-modal.component';
 
 @Component({
   selector: 'app-event-create',
