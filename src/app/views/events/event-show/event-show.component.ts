@@ -37,6 +37,7 @@ import { Metrika } from 'ng-yandex-metrika';
 import { HelpersService } from 'src/app/services/helpers.service';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
+import { UserService } from 'src/app/services/user.service';
 
 // import { Swiper } from 'swiper/types';
 
@@ -55,6 +56,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   host: string = environment.BACKEND_URL;
   port: string = environment.BACKEND_PORT;
 
+  user?: any
   eventId?: number;
   event?: any;
   places: any[] = [];
@@ -83,7 +85,8 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private titleService: Title,
     private metaService: Meta,
-    private helpers: HelpersService
+    private helpers: HelpersService,
+    private userService: UserService
   ) {
     let prevPath = this.location.path();
     this.router.events
@@ -261,7 +264,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     this.userAuth = this.authService.getAuthState();
     this.getEvent();
     this.getEventPlaces();
-
+    this.user = this.userService.user.value
     this.checkLiked();
     this.checFavorite();
   }

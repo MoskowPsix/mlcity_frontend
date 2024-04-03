@@ -195,7 +195,7 @@
                     Организатор
                   </div>
 
-                  <div class="description">
+                  <div class="description-org">
                     {{event.sponsor}}
                   </div>
                 </ion-col>
@@ -237,9 +237,9 @@
                 <ion-col>
                   <div style="font-family:'Montserrat-Bold';" class="title">Типы мероприятия</div>
 
-                  <div *ngFor="let type of event.types">
+                  <div *ngFor="let type of event.types" class="event-icons">
                       <img class="ico-small" src="{{host}}:{{port}}{{type.ico}}">
-                      <span class="description">{{ type.name }}</span>
+                      <p class="description-icon">{{ type.name }}</p>
                   </div>
                 </ion-col>
               </div>
@@ -314,15 +314,15 @@
           </ion-row>
 
 
-          <ion-card style="margin-bottom: 2rem;"><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
+          <ion-card *ngIf="user" style="margin-bottom: 2rem;"><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
 
 
-          <ion-col *ngIf="event.materials" class="">
+          <!-- <ion-col *ngIf="event.materials" class="">
             <ion-col size-lg="8" size-md="12" size-xs="12" >
               Материалы: {{ event.materials }}
             </ion-col>
 
-          </ion-col>
+          </ion-col> -->
         </ion-col>
       </ion-row>
 
