@@ -482,7 +482,13 @@ export class HomeComponent implements OnInit, OnDestroy {
                 takeUntil(this.destroy$)
               )
               .subscribe(() => {});
-            this.activePlacemark = e.get('target');
+              this.activePlacemark = e.get('target');
+              this.activeIcoLink =
+                this.host +
+                ':' +
+                this.port +
+                e.get('target').options._options.balloonContent.types[0].ico;
+
             e.get('target').options.set(
               'iconContentLayout',
               ymaps.templateLayoutFactory.createClass(
@@ -567,7 +573,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  getSights(): Observable<any> {
+  getSights(more?: boolean): Observable<any> {
     return new Observable(observer => {
       this.eventsLoading = true;
       this.sightsService
@@ -579,7 +585,13 @@ export class HomeComponent implements OnInit, OnDestroy {
           if (response.sights.next_cursor != null) {
             this.sightsModalNextPage = response.sights.next_cursor;
           }
-          this.sightsContentModal.push(...response.sights.data);
+          if(more){
+            this.eventsContentModal.push(...response.events.data);
+          }
+          else{
+            this.eventsContentModal = response.events.data;
+          }
+
           this.sightsContentModalTotal = response.total;
           // this.filterService.setEventsCount(response.total)
           //this.sightsLoading = false
@@ -590,7 +602,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  getEvents(): Observable<any> {
+  getEvents(more?: boolean): Observable<any> {
     return new Observable(observer => {
       this.eventsLoading = true;
       this.eventsService
@@ -604,7 +616,14 @@ export class HomeComponent implements OnInit, OnDestroy {
           } else {
             this.eventsModalNextPage = '';
           }
-          this.eventsContentModal.push(...response.events.data);
+
+          if(more){
+            this.eventsContentModal.push(...response.events.data);
+          }
+          else{
+            this.eventsContentModal = response.events.data;
+          }
+          console.log("getRESP")
           this.eventsContentModalTotal = response.total;
           // this.filterService.setEventsCount(response.total)
           //this.sightsLoading = false
@@ -615,7 +634,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  nextPageModal() {
+  nextPageModal(more?: boolean) {
     if (this.sightsModalNextPage.length || this.eventsModalNextPage.length) {
       this.modalNewPageLoader = true;
       if (this.stateType == 'sights') {
@@ -627,7 +646,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.eventsModalNextPage
         );
       }
-      this.getEventsAndSightsForModal();
+      this.getEventsAndSightsForModal(more);
     }
   }
 
@@ -704,21 +723,29 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         );
         this.placemarks.push(placemark);
-      } else {
-        let icoLink = this.host + ':' + this.port + item.ico;
-        placemark = new ymaps.Placemark(
-          [item.latitude, item.longitude],
-          {},
-          {
-            balloonContent: item,
-            balloonAutoPan: false,
-            // С иконкой
-            // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(
-              `<div style="border-color: #6574fc;" class="marker" ></div>`
-            ),
+      }
+      else {
+          let marker;
+          let icoLink = `${this.host}:${this.port}${item.types[0].ico}`;
+          if (item.types[0].ico.length > 0) {
+            marker = `<div style="border-color: #6574fc;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`;
           }
-        );
+          else {
+            marker = `<div style="border-color: #6574fc;" class="marker"></div>`;
+          }
+          placemark = new ymaps.Placemark(
+            [item.latitude, item.longitude],
+            {},
+            {
+              balloonContent: item,
+              balloonAutoPan: false,
+              // С иконкой
+              // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
+              iconContentLayout: ymaps.templateLayoutFactory.createClass(
+               marker
+              ),
+            }
+          );
         this.placemarks.push(placemark);
       }
     });
@@ -755,11 +782,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getEventsAndSightsForModal();
   }
 
-  getEventsAndSightsForModal() {
+  getEventsAndSightsForModal(more?:boolean) {
     this.modalButtonLoader = true;
     const sourceModal: any[] = [];
     if (this.stateType == 'events') {
-      sourceModal.push(this.getEvents());
+      sourceModal.push(this.getEvents(more));
     } else if (this.stateType == 'sights') {
       sourceModal.push(this.getSights());
     }
