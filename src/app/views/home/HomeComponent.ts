@@ -586,10 +586,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.sightsModalNextPage = response.sights.next_cursor;
           }
           if(more){
-            this.eventsContentModal.push(...response.events.data);
+            this.eventsContentModal.push(...response.sights.data);
           }
           else{
-            this.eventsContentModal = response.events.data;
+            this.eventsContentModal = response.sights.data;
           }
 
           this.sightsContentModalTotal = response.total;
@@ -802,6 +802,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
+        console.log("TEST")
         this.modalButtonLoader = false;
         this.modalNewPageLoader = false;
         this.cdr.detectChanges();
