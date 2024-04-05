@@ -52,6 +52,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 
 @Component({
   selector: 'app-home',
@@ -167,6 +168,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightsContentModal: ISight[] = [];
   eventsContentModal: IEvent[] = [];
   places: IPlace[] = [];
+  radiusTimeOut: any; 
 
   constructor(
     private mapService: MapService,
@@ -214,7 +216,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     return `${value} км.`;
   }
   radiusChange(event: any) {
-    this.filterService.setRadiusTolocalStorage(event.value);
+    if (this.radiusTimeOut) {
+      clearTimeout(this.radiusTimeOut)
+    }
+    this.radiusTimeOut = setTimeout(() => {
+      this.filterService.setRadiusTolocalStorage(event.value);
+    }, 1000);
   }
   radiusPlus() {
     let radius: number = Number(this.filterService.getRadiusFromlocalStorage());
