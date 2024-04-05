@@ -304,8 +304,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     target.geoObjects.add(this.CirclePoint);
 
     // Определяем местоположение пользователя
-    this.mapService.positionFilter(this.map, this.CirclePoint);
-
     //Создаем метку в центре круга, для перетаскивания
     this.myGeo = new ymaps.Placemark(
       [11, 11],
@@ -320,14 +318,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     target.geoObjects.add(this.myGeo);
 
-    if (this.navigationService.appFirstLoading.value) {
-      this.eventsLoading = true;
-      this.sightsLoading = true;
-      this.modalButtonLoader = true;
-      this.cdr.detectChanges();
-      //this.getEvents()
-      this.getEventsAndSights();
-    }
 
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin', e => {
@@ -380,6 +370,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     // if (!this.map) {
     //   this.onMapReady({target, ymaps});
     // }
+    await this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
+      console.log()
+      this.getEventsAndSights()
+    });
+
+    if (this.navigationService.appFirstLoading.value) {
+      this.eventsLoading = true;
+      this.sightsLoading = true;
+      this.modalButtonLoader = true;
+      this.cdr.detectChanges();
+      //this.getEvents()
+
+    }
+
+
+    // this.getEventsAndSights()
   }
 
   setBoundsCoordsToMapService() {
@@ -623,7 +629,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           else{
             this.eventsContentModal = response.events.data;
           }
-          console.log("getRESP")
           this.eventsContentModalTotal = response.total;
           // this.filterService.setEventsCount(response.total)
           //this.sightsLoading = false
@@ -751,7 +756,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  getEventsAndSights() {
+  async getEventsAndSights() {
     this.modalButtonLoader = true;
     this.eventsModalNextPage = '';
     this.sightsModalNextPage = '';
@@ -782,6 +787,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getEventsAndSightsForModal();
   }
 
+  getLoc(){
+    console.log("bang")
+  }
+
   getEventsAndSightsForModal(more?:boolean) {
     this.modalButtonLoader = true;
     const sourceModal: any[] = [];
@@ -802,7 +811,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        console.log("TEST")
         this.modalButtonLoader = false;
         this.modalNewPageLoader = false;
         this.cdr.detectChanges();
@@ -954,7 +962,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.eventTypeId = value[0];
       });
 
-    this.getEventsAndSights();
+    // this.getEventsAndSights();
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
