@@ -31,7 +31,6 @@ mobileOrNote(){
 
 }
 
-
 closeModalFunc(){
  
  let accept = {
