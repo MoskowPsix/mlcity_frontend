@@ -1,3 +1,130 @@
-<ion-modal mode="md">
 
+<ion-modal class="rules-modal" [isOpen]="openModal" backdropDismiss="false" mode="md">
+    <ng-template>
+        <ion-col *ngIf="!mobile" class="rules-modal-main mobile-hiden">
+            <ion-col class="main-header-block"> <h1 class="main-header-text"><span style="color: #4C81F7;">Свод правил</span> для размещения мероприятия и достопримечательности</h1></ion-col>
+            
+            <ion-col class="rules-modal-main-content-left">
+                    <ion-col class="text-content">
+                            <ion-img class="img" src="assets/imgs/thank_you.png">
+                            </ion-img>
+                            <ion-col class="text-content-main text-right">
+                                <h2 class="text-content-header">
+                                    Соблюдайте приличие
+                                </h2>
+                                Пожалуйста, избегайте размещения материалов с оскорблениями, насилием, матом и контентом сексуального характера. 
+                            </ion-col>
+                        </ion-col>
+            </ion-col>
+
+            <ion-col class="rules-modal-main-content-left">
+                <ion-col class="text-content">
+
+                    <ion-col class="text-content-main text-left" style="">
+                        <h2 class="text-content-header">
+                            Размещайте актуальную информацию
+                        </h2>
+                        Мы просим вас предоставлять актуальные данные, гарантируя их достоверность до последней минуты. Это обеспечивает эффективное взаимодействие и помогает избежать недоразумений.
+                    </ion-col>
+                    <ion-img style="max-width: 22%;" class="img" src="assets/imgs/clock.png">
+
+                    </ion-img>
+                </ion-col>
+            </ion-col>
+
+            <ion-col class="rules-modal-main-content-left">
+                <ion-col class="text-content">
+                        <ion-img class="img" src="assets/imgs/girlLaptop.png">
+                        </ion-img>
+                        <ion-col class="text-content-main text-right">
+                            <h2 class="text-content-header">
+                                Будьте информативны
+                            </h2>
+                            Чтобы ваше мероприятие было успешным и привлекательным для участников, рекомендуем предоставить максимально подробную информацию о нем. 
+                        </ion-col>
+                    </ion-col>
+                    
+            </ion-col>
+              
+              
+                  
+        <ion-col class="accept">
+                <ion-checkbox (click)="userReadRulesFnc($event)" style="margin-right: 1rem;" ></ion-checkbox> <div>
+                    <a style="margin-top: -3px;" href="">я прочитал пользовательское соглашение даю согласие на обработку данных</a>
+                </div>
+        </ion-col>     
+
+        <div class="accept-button-main">
+            <ion-button (click)="closeModalFunc()" [disabled]="!userReadRules" class="accept-button">Начать!</ion-button>
+        </div>
+  
+
+    </ion-col>
+
+    <ion-col *ngIf="mobile" class="rules-modal-main mobile-hiden">
+            <ion-col class="main-header-block"> <h1 class="main-header-text"><span style="color: #4C81F7;">Свод правил</span> для размещения мероприятия и достопримечательности</h1></ion-col>
+            
+            <ion-col class="rules-modal-main-content-left">
+                    <ion-col class="text-content">
+                           
+                            <ion-col class="text-content-main text-right">
+                                <h2 class="text-content-header">
+                                    Соблюдайте приличие
+                                </h2>
+                                Пожалуйста, избегайте размещения материалов с оскорблениями, насилием, матом и контентом сексуального характера. 
+                            </ion-col>
+                            <ion-img class="img" src="assets/imgs/thank_you.png">
+                            </ion-img>
+                        </ion-col>
+            </ion-col>
+
+            <ion-col class="rules-modal-main-content-left">
+                <ion-col class="text-content">
+                    
+                    <ion-col class="text-content-main text-left" style="">
+                        <h2 class="text-content-header">
+                            Размещайте актуальную информацию
+                        </h2>
+                        Мы просим вас предоставлять актуальные данные, гарантируя их достоверность до последней минуты. Это обеспечивает эффективное взаимодействие и помогает избежать недоразумений.
+                    </ion-col>
+                    <ion-img class="img" src="assets/imgs/clock.png">
+
+                    </ion-img>
+                 
+                </ion-col>
+            </ion-col>
+
+            <ion-col class="rules-modal-main-content-left">
+                <ion-col class="text-content">
+                        
+                        <ion-col class="text-content-main text-right">
+                            <h2 class="text-content-header">
+                                Будьте информативны
+                            </h2>
+                            Чтобы ваше мероприятие было успешным и привлекательным для участников, рекомендуем предоставить максимально подробную информацию о нем. 
+                        </ion-col>
+                    </ion-col>
+                    <ion-img class="img" src="assets/imgs/girlLaptop.png">
+                    </ion-img>
+                    
+            </ion-col>
+              
+              
+                  
+        <ion-col class="accept">
+                <div>
+                    <a style="margin-top: -3px;" href="">я прочитал пользовательское соглашение даю согласие на обработку данных</a>
+                </div>
+                <ion-checkbox (click)="userReadRulesFnc($event)" style="min-width: 1.2rem;" ></ion-checkbox>
+        </ion-col>     
+
+        <div class="accept-button-main">
+            <ion-button (click)="closeModalFunc()" [disabled]="!userReadRules" class="accept-button">Начать!</ion-button>
+        </div>
+  
+
+    </ion-col>
+      
+    </ng-template>
+  
 </ion-modal>
