@@ -96,7 +96,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { CollapsedTextComponent } from './components/collapsed-text/collapsed-text.component';
 import { PrivacyComponent } from './views/privacy/privacy.component';
 import { CreateRulesModalComponent } from './components/create-rules-modal/create-rules-modal.component';
-
+import { RulesModalCheckService } from './services/rules-modal-check.service';
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -206,6 +206,7 @@ registerLocaleData(localeRu, 'ru');
     NativeGeocoder,
     LocationAccuracy,
     DatePipe,
+    RulesModalCheckService,
     TruncatePipe,
   ],
   bootstrap: [AppComponent],
