@@ -588,14 +588,15 @@ export class HomeComponent implements OnInit, OnDestroy {
         )
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
+          console.log(more)
           if (response.sights.next_cursor != null) {
             this.sightsModalNextPage = response.sights.next_cursor;
           }
           if(more){
-            this.eventsContentModal.push(...response.sights.data);
+            this.sightsContentModal.push(...response.sights.data);
           }
           else{
-            this.eventsContentModal = response.sights.data;
+            this.sightsContentModal = response.sights.data;
           }
 
           this.sightsContentModalTotal = response.total;
@@ -611,6 +612,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getEvents(more?: boolean): Observable<any> {
     return new Observable(observer => {
       this.eventsLoading = true;
+      console.log(more)
       this.eventsService
         .getEvents(
           this.queryBuilderService.queryBuilder('eventsModalRadiusForMap')
@@ -797,7 +799,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.stateType == 'events') {
       sourceModal.push(this.getEvents(more));
     } else if (this.stateType == 'sights') {
-      sourceModal.push(this.getSights());
+      sourceModal.push(this.getSights(more));
     }
     forkJoin(sourceModal)
       .pipe(
