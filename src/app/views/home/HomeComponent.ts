@@ -304,8 +304,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     target.geoObjects.add(this.CirclePoint);
 
     // Определяем местоположение пользователя
-    this.mapService.positionFilter(this.map, this.CirclePoint);
-
     //Создаем метку в центре круга, для перетаскивания
     this.myGeo = new ymaps.Placemark(
       [11, 11],
@@ -320,14 +318,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     target.geoObjects.add(this.myGeo);
 
-    if (this.navigationService.appFirstLoading.value) {
-      this.eventsLoading = true;
-      this.sightsLoading = true;
-      this.modalButtonLoader = true;
-      this.cdr.detectChanges();
-      //this.getEvents()
-      this.getEventsAndSights();
-    }
 
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin', e => {
@@ -380,6 +370,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     // if (!this.map) {
     //   this.onMapReady({target, ymaps});
     // }
+    await this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
+      console.log()
+      this.getEventsAndSights()
+    });
+
+    if (this.navigationService.appFirstLoading.value) {
+      this.eventsLoading = true;
+      this.sightsLoading = true;
+      this.modalButtonLoader = true;
+      this.cdr.detectChanges();
+      //this.getEvents()
+
+    }
+
+
+    // this.getEventsAndSights()
   }
 
   setBoundsCoordsToMapService() {
@@ -482,7 +488,13 @@ export class HomeComponent implements OnInit, OnDestroy {
                 takeUntil(this.destroy$)
               )
               .subscribe(() => {});
-            this.activePlacemark = e.get('target');
+              this.activePlacemark = e.get('target');
+              this.activeIcoLink =
+                this.host +
+                ':' +
+                this.port +
+                e.get('target').options._options.balloonContent.types[0].ico;
+
             e.get('target').options.set(
               'iconContentLayout',
               ymaps.templateLayoutFactory.createClass(
@@ -567,7 +579,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  getSights(): Observable<any> {
+  getSights(more?: boolean): Observable<any> {
     return new Observable(observer => {
       this.eventsLoading = true;
       this.sightsService
@@ -579,7 +591,13 @@ export class HomeComponent implements OnInit, OnDestroy {
           if (response.sights.next_cursor != null) {
             this.sightsModalNextPage = response.sights.next_cursor;
           }
-          this.sightsContentModal.push(...response.sights.data);
+          if(more){
+            this.eventsContentModal.push(...response.sights.data);
+          }
+          else{
+            this.eventsContentModal = response.sights.data;
+          }
+
           this.sightsContentModalTotal = response.total;
           // this.filterService.setEventsCount(response.total)
           //this.sightsLoading = false
@@ -590,7 +608,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  getEvents(): Observable<any> {
+  getEvents(more?: boolean): Observable<any> {
     return new Observable(observer => {
       this.eventsLoading = true;
       this.eventsService
@@ -604,7 +622,13 @@ export class HomeComponent implements OnInit, OnDestroy {
           } else {
             this.eventsModalNextPage = '';
           }
-          this.eventsContentModal.push(...response.events.data);
+
+          if(more){
+            this.eventsContentModal.push(...response.events.data);
+          }
+          else{
+            this.eventsContentModal = response.events.data;
+          }
           this.eventsContentModalTotal = response.total;
           // this.filterService.setEventsCount(response.total)
           //this.sightsLoading = false
@@ -615,7 +639,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  nextPageModal() {
+  nextPageModal(more?: boolean) {
     if (this.sightsModalNextPage.length || this.eventsModalNextPage.length) {
       this.modalNewPageLoader = true;
       if (this.stateType == 'sights') {
@@ -627,7 +651,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.eventsModalNextPage
         );
       }
-      this.getEventsAndSightsForModal();
+      this.getEventsAndSightsForModal(more);
     }
   }
 
@@ -704,27 +728,35 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         );
         this.placemarks.push(placemark);
-      } else {
-        let icoLink = this.host + ':' + this.port + item.ico;
-        placemark = new ymaps.Placemark(
-          [item.latitude, item.longitude],
-          {},
-          {
-            balloonContent: item,
-            balloonAutoPan: false,
-            // С иконкой
-            // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(
-              `<div style="border-color: #6574fc;" class="marker" ></div>`
-            ),
+      }
+      else {
+          let marker;
+          let icoLink = `${this.host}:${this.port}${item.types[0].ico}`;
+          if (item.types[0].ico.length > 0) {
+            marker = `<div style="border-color: #6574fc;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`;
           }
-        );
+          else {
+            marker = `<div style="border-color: #6574fc;" class="marker"></div>`;
+          }
+          placemark = new ymaps.Placemark(
+            [item.latitude, item.longitude],
+            {},
+            {
+              balloonContent: item,
+              balloonAutoPan: false,
+              // С иконкой
+              // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
+              iconContentLayout: ymaps.templateLayoutFactory.createClass(
+               marker
+              ),
+            }
+          );
         this.placemarks.push(placemark);
       }
     });
   }
 
-  getEventsAndSights() {
+  async getEventsAndSights() {
     this.modalButtonLoader = true;
     this.eventsModalNextPage = '';
     this.sightsModalNextPage = '';
@@ -755,11 +787,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getEventsAndSightsForModal();
   }
 
-  getEventsAndSightsForModal() {
+  getLoc(){
+    console.log("bang")
+  }
+
+  getEventsAndSightsForModal(more?:boolean) {
     this.modalButtonLoader = true;
     const sourceModal: any[] = [];
     if (this.stateType == 'events') {
-      sourceModal.push(this.getEvents());
+      sourceModal.push(this.getEvents(more));
     } else if (this.stateType == 'sights') {
       sourceModal.push(this.getSights());
     }
@@ -926,7 +962,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.eventTypeId = value[0];
       });
 
-    this.getEventsAndSights();
+    // this.getEventsAndSights();
   }
   ngOnDestroy() {
     // отписываемся от всех подписок

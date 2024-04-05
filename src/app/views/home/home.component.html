@@ -1,9 +1,8 @@
 <meta name="description" content="Узнайте какие события и достопремечательности проходят рядом с вами и в вашем городе.">
 <ion-content>
-
   <!-- Карта -->
   <div class="map">
-    <ya-map [@mapAnimate] (ready)="onMapReady($event )"
+    <ya-map [@mapAnimate] (ready)="onMapReady($event)"
       id="map"
       [zoom]="15"
       [center]="[0,0]"
@@ -129,7 +128,7 @@
 
         <ng-container>
           <div style="margin-bottom: 6rem;">
-            <ion-button *ngIf="!modalNewPageLoader && (sightsModalNextPage.length || eventsModalNextPage.length)" expand="block" (click)="nextPageModal()">загрузить ещё</ion-button>
+            <ion-button *ngIf="!modalNewPageLoader && (sightsModalNextPage.length || eventsModalNextPage.length)" expand="block" (click)="nextPageModal(true)">загрузить ещё</ion-button>
             <ion-button *ngIf="modalNewPageLoader" expand="block">
               <ion-spinner name="dots"></ion-spinner>
             </ion-button>
@@ -145,7 +144,7 @@
 
 <!-- Шкала радиуса -->
 <div class="">
-  
+
   <div class="range-radius-main_2">
     <p class="range-radius-custom-info" >{{radius}}км</p>
     <ion-icon (click)="radiusPlus()" name="add-outline" class="range-radius-main-plus" color="primary"></ion-icon>
@@ -172,7 +171,7 @@
   <div class="swither-bg" #buttonActive></div>
   <div class="swither test" (click)="onSegmentChanged(sight, 2)" (click)="stateType='sights'" (click)="getEventsAndSights()" #sight>
     <img src="/assets/icons/MakiMuseum.svg" class="swither-icon">
-     <div  class="{{modalSwitcherTextClass}}">Места</div> 
+     <div  class="{{modalSwitcherTextClass}}">Места</div>
     <!-- <ion-icon name="prism" class="swither-icon" color="primary"></ion-icon>  -->
   </div>
   <!-- <div class="swither" (click)="onSegmentChanged(new, 3)" #new>

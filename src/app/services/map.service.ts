@@ -74,7 +74,6 @@ export class MapService {
 
     if (!Capacitor.isNativePlatform()) {
       //Запускаем поиск геопозиции в вебе
-      // console.log('ипользуется веб версия', CirclePoint)
       await this.setCenterMap(map, CirclePoint);
     } else {
       //Запускаем поиск геопозиции в мобилах
@@ -132,9 +131,12 @@ export class MapService {
     let coords;
     try {
       coords = await this.getCurrentLocation();
+      this.circleCenterLatitude.next(coords[0])
+      this.circleCenterLongitude.next(coords[1])
       this.setPlacemark(map, CirclePoint, coords!, true);
     } catch (error) {
       coords = await this.defaultCoords();
+      console.log(error)
       this.setPlacemark(map, CirclePoint, coords!, false);
     }
     return coords;
@@ -336,6 +338,7 @@ export class MapService {
     }
     // Было ещё в условии: this.filterService.changeCityFilter.value &&
     //Если не первый запуск и менялся фильтр города то перекидываем на город
+
     if (!this.navigationService.appFirstLoading.value) {
       await circlePoint.geometry?.setCoordinates([
         parseFloat(this.filterService.locationLatitude.value),

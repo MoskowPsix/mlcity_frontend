@@ -1,11 +1,25 @@
 .ico-small {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   margin: -4px 4px;
 }
 
 .content-main {
   margin-top: -1.5rem;
+}
+
+.description-icon{
+  font-family: 'Montserrat-Light';
+  line-height: 1.5;
+}
+.description-org{
+  font-family: 'Montserrat-Light';
+  line-height: 1.5;
+}
+
+.event-icons{
+  display: flex;
+  align-items: center;
 }
 
 .tikets-button {
