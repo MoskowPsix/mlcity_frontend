@@ -593,7 +593,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.sightsModalNextPage = response.sights.next_cursor;
           }
           if(more){
-            console.log(response.sights.data)
             this.sightsContentModal.push(...response.sights.data);
           }
           else{
@@ -797,7 +796,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   getEventsAndSightsForModal(more?:boolean) {
     this.modalButtonLoader = true;
     const sourceModal: any[] = [];
-    console.log(more)
     if (this.stateType == 'events') {
       sourceModal.push(this.getEvents(more));
     } else if (this.stateType == 'sights') {
