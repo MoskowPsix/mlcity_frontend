@@ -46,7 +46,7 @@ export class MapService {
     private yaGeocoderService: YaGeocoderService,
     private filterService: FilterService,
     private navigationService: NavigationService,
-    private locationService: LocationService
+    private locationService: LocationService,
   ) {}
 
   //Определение геопозиции с помощью яндекса (платно)
@@ -78,23 +78,11 @@ export class MapService {
     } else {
       //Запускаем поиск геопозиции в мобилах
       //console.log('ипользуется мобильная версия')
-      const requestPermission = await this.requestLocationPermission();
+      const status = await this.requestLocationPermission();
 
       try {
-        const canRequest: boolean = await this.locationAccuracy.canRequest();
-        //console.log('canrequest: ', canRequest);
-        if (canRequest) {
-          //Есть разрешение
-          const status = await this.enableLocation();
-          //console.log("стат " + status)
-          if (status) {
-            await this.setCenterMap(map, CirclePoint);
-          } else {
-            //Если человек отказывается активировать GPS "нет,спасибо"
-            let coords = await this.defaultCoords();
-            console.log("1, " + coords)
-            this.setPlacemark(map, CirclePoint, coords!, false);
-          }
+        if (status == "granted") {
+          await this.setCenterMap(map, CirclePoint);
         } else {
           //Если запрещен доступ GPS
           let coords = await this.defaultCoords();
@@ -136,7 +124,7 @@ export class MapService {
       this.setPlacemark(map, CirclePoint, coords!, true);
     } catch (error) {
       coords = await this.defaultCoords();
-      console.log(error)
+      console.log(error, 'ento error')
       this.setPlacemark(map, CirclePoint, coords!, false);
     }
     return coords;
@@ -184,13 +172,9 @@ export class MapService {
 
   //Проверка разрешений на GPS
   async requestLocationPermission() {
-    return Geolocation.requestPermissions()
-      .then(status => {
-        return status.location;
-      })
-      .catch(e => {
-        return 'prompt-with-rationale';
-      });
+    let status = await Geolocation.requestPermissions()
+    return status.location
+      
   }
 
   //поиск координат города или адреса через яндекс
@@ -259,7 +243,7 @@ export class MapService {
     latitude: number,
     longitude: number
   ) {
-    console.log(`${city}, ${region}, ${latitude}, ${longitude}`)
+    // console.log(`${city}, ${region}, ${latitude}, ${longitude}`)
     this.geolocationCity.next(city);
     this.geolocationRegion.next(region);
     this.geolocationLatitude.next(latitude);
@@ -287,10 +271,12 @@ export class MapService {
       ])
       .pipe()
       .subscribe((response: any) => {
+        this.geolocationCity.next(response.location.name);
         this.filterService.setLocationTolocalStorage(response.location.id);
+    // this.geolocationRegion.next(region);
       });
-    // this.filterService.setLocationTolocalStorage(this.geolocationCity.value)
-    // this.filterService.setLocationTolocalStorage(this.geolocationRegion.value)
+    this.filterService.setLocationTolocalStorage(this.geolocationCity.value)
+    this.filterService.setLocationTolocalStorage(this.geolocationRegion.value)
     this.filterService.setLocationLatitudeTolocalStorage(
       this.geolocationLatitude.value.toString()
     );

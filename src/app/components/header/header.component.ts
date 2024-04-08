@@ -278,6 +278,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe(value => {
         //console.log('this.mapService.geolocationCity ',value)
         this.geolocationCity = value;
+        this.cdr.detectChanges();
       });
 
     //Подписываемся на регион из Геолокации
@@ -285,6 +286,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
         this.geolocationRegion = value;
+        this.cdr.detectChanges();
       });
 
     //Подписываемся на изменение радиуса
@@ -298,7 +300,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.mapService.showChangeCityDialog
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
-        console.log(value)
         this.showChangeCityDialog = value;
       });
 
