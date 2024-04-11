@@ -23,11 +23,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to access your Location</string>
+	<string>$(PRODUCT_NAME) wants to access your geolocation</string>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to access your camera</string>
+	<string>$(PRODUCT_NAME) wants to access your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to access your photo</string>
+	<string>$(PRODUCT_NAME) wants to access your photo</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
