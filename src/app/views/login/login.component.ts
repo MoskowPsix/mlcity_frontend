@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Subject, filter, takeUntil } from 'rxjs';
+import { EMPTY, Subject, catchError, filter, of, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
@@ -15,6 +15,13 @@ import { Location } from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
+import {
+  SignInWithApple,
+  SignInWithAppleResponse,
+  SignInWithAppleOptions,
+} from '@capacitor-community/apple-sign-in';
+import { Capacitor } from '@capacitor/core';
+
 
 @Component({
   selector: 'app-login',
@@ -35,6 +42,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   modalPass: boolean = false;
   presentingElement: undefined;
   formSetPassword!: FormGroup;
+  appleState: Number = Math.floor(Math.random() * 21)
 
   constructor(
     private authService: AuthService,
@@ -244,6 +252,54 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // this.loginAfterSocial(this.user_id)
     this.MailOrName();
+  }
+  // async loginVK() {
+  //   VKAuth.initWithId({id: ''})
+  //   VKAuth.auth({ scope: ['offline', 'groups', 'stats', 'wall'] })
+  // //   VKAuth.addListener("vkAuthFinished", (info) => {
+  // //     console.log("vkAuthFinished was fired", JSON.stringify(info, null, 2));
+  // // });
+  //   // .then((res) => {
+  //   //   console.log(res)
+  //   // }).catch((err) => {
+  //   //   console.log(err)
+  //   // })
+  //   document.addEventListener("vkAuthFinished", (event: any) => {
+  //       const info = event.detail; // Получаем информацию из события
+  //       console.log("vkAuthFinished was fired", JSON.stringify(info, null, 2));
+  //   });
+  
+  // }
+
+  async loginApple() {
+    if (Capacitor.getPlatform() == 'ios') {
+      const options: SignInWithAppleOptions = {
+        clientId: 'mlcity.ru',
+        redirectURI: 'https://www.mlcity.ru:3443/api/social-auth/apple',
+        state: String(this.appleState),
+        nonce: 'nonce',
+      };
+      SignInWithApple.authorize(options)
+        .then((res: SignInWithAppleResponse) => {
+          console.log(res)
+          console.log(options)
+          this.authService.loginApple(res).pipe(
+            takeUntil(this.destroy$),
+            catchError(err => {
+              this.toastService.showToast('При авторизвции apple что-то пошло не так', 'warning')
+              return of(EMPTY)
+            })
+            ).subscribe(response => {
+            this.loginAfterSocial(response.user.token)
+          })
+        }).catch((e) => {
+          console.log(e);
+          this.toastService.showToast('При авторизвции apple что-то пошло не так', 'warning')
+          return of(EMPTY)
+        });
+    } else {
+      window.open('https://www.mlcity.ru:3443/api/social-auth/apple')
+    }
   }
 
   ngOnDestroy() {
