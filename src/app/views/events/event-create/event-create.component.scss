@@ -1,10 +1,38 @@
+.description_main{
+  padding-left: 10rem;
+  padding-right: 10rem;
+  width: 100%;
+}
+.description-item{
+  width: clamp(20rem, 12.727rem + 36.36vw, 30rem);
+}
+
+.description-text{
+  min-height: 8rem;
+}
+.second-step-input-wrapper{
+  margin-top: 2rem;
+}
+
+.second-step-main{
+  margin-top: -2rem;
+  max-width: 50%;
+}
+
 .pick {
+  display: none;
   align-items: center;
   position: absolute;
   margin-top: -25px;
   color: #949494;
 }
 ion-label {
+}
+
+.validation{
+  display: flex;
+  margin-top: 1rem;
+  margin-bottom: 0.2rem;
 }
 
 .place-header {
@@ -22,13 +50,14 @@ ion-label {
 }
 
 .place-wrapper_close {
-  transition: 0.5s;
-  max-height: 0vh;
+  transition: 0.5s all;
+  height: 0vh;
 }
 
 .place-wrapper_open {
-  transition: 0.5s height;
-  max-height: 100vh;
+  overflow-y: scroll;
+  transition: 0.5s all;
+  height: 90vh;
 }
 
 .place-row_open {
@@ -64,6 +93,7 @@ ion-label {
   //     border-radius: 4px;
   // }
   .list-seances {
+  width: 100%;
     background-color: rgba(108, 136, 245, 0.025);
     margin-top: 4px;
     margin-bottom: 4px;
@@ -183,7 +213,7 @@ ion-padding {
   justify-content: center;
 
   .mainChild {
-    width: 70%;
+    width: 80%;
 
     .mainLabelAndBar {
       margin-left: 10%;
@@ -191,8 +221,9 @@ ion-padding {
       margin-bottom: 10%;
 
       .mainLabelAndBarText {
+        margin-top: 4rem;
         color: #4c81f7;
-        font-size: 56px;
+        font-size: clamp(2.125rem, 1.625rem + 2.5vw, 3.5rem);
         text-align: center;
       }
     }
@@ -212,6 +243,8 @@ ion-padding {
       }
 
       .ion-text-start {
+        position: absolute;
+        width: 100%;
         text-align: center;
       }
       /* styles.css (или ваши собственные стили) */
@@ -333,6 +366,7 @@ ion-padding {
   }
 
   .stepSecond {
+    max-width: 80%;
     display: flex;
     justify-content: center;
   }
@@ -439,6 +473,41 @@ ion-padding {
   }
 }
 @media screen and (min-width: 0px) and (max-width: 992px) {
+
+  .map {
+    width: 100%;
+    height: 35vh;
+  }
+  .place-adress-input{
+    max-width: 80%;
+  }
+
+  .main{
+    width: 100%;
+    .mainChild{
+      width: 95%;
+    }
+  }
+  .second-step-main{
+    max-width: 100%;
+  }
+  .buttons-desktop-wrapper_mobile{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 4%;
+    position: fixed;
+    background-color: #fff;
+    max-height: 5rem;
+    z-index: 10000000;
+    .btns-wrapper{
+     
+    }
+  }
   .video_content {
     display: block;
     margin-left: auto;
@@ -457,9 +526,30 @@ ion-padding {
   ion-content {
     --padding-bottom: 6rem;
   }
+
+  .mainLabelAndBarText {
+    color: #4c81f7;
+    font-size: clamp(1.25rem, 0.432rem + 4.09vw, 3.5rem);
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 992px) {
+   
+
+
+
+  .place-header-text_mobile{
+    font-size: clamp(1.1rem, 0.784rem + 0.45vw, 1.125rem);
+  }
+
 }
 
 @media screen and (min-width: 992px) {
+
+  .buttons-desktop-wrapper_mobile{
+    display: none;
+  }
   .video_content {
     display: block;
     margin-left: auto;
@@ -494,3 +584,9 @@ ion-padding {
   min-width: 90%;
   margin-right: 5%;
 }
+
+
+
+
+
+
