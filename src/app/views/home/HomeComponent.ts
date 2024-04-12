@@ -168,7 +168,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightsContentModal: ISight[] = [];
   eventsContentModal: IEvent[] = [];
   places: IPlace[] = [];
-  radiusTimeOut: any; 
+  radiusTimeOut: any;
 
   constructor(
     private mapService: MapService,
@@ -221,7 +221,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.radiusTimeOut = setTimeout(() => {
       this.filterService.setRadiusTolocalStorage(event.value);
-    }, 1000);
+    }, 500);
   }
   radiusPlus() {
     let radius: number = Number(this.filterService.getRadiusFromlocalStorage());
@@ -619,7 +619,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   getEvents(more?: boolean): Observable<any> {
     return new Observable(observer => {
       this.eventsLoading = true;
-      console.log(more)
       this.eventsService
         .getEvents(
           this.queryBuilderService.queryBuilder('eventsModalRadiusForMap')
@@ -634,9 +633,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
           if(more){
             this.eventsContentModal.push(...response.events.data);
+            console.log(response)
           }
           else{
             this.eventsContentModal = response.events.data;
+            console.log(response)
           }
           this.eventsContentModalTotal = response.total;
           // this.filterService.setEventsCount(response.total)
