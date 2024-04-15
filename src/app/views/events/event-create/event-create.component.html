@@ -145,7 +145,7 @@
       <!-- шаг 3 -->
       <ion-row style="display: flex; justify-content: center;"  [hidden]="stepCurrency !== 2">
         <ion-label *ngIf="isNextButtonClicked === true && createEventForm.controls['description'].invalid === true" class="pick">Введите информацию о мероприятии, чтобы перейти на следующий шаг</ion-label>
-        <ion-modal mode="md" class="modal" backdropDismiss="false" [isOpen] ="openModalGroupValue" [canDismiss]="openModalGroupValue">
+        <ion-modal  class="modal" backdropDismiss="false" [isOpen] ="openModalGroupValue" [canDismiss]="openModalGroupValue">
           <ng-template>
             <ion-content>
                 <ion-list>
@@ -199,9 +199,7 @@
                         <ion-list-header>
                           <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
                         </ion-list-header>
-                        <ion-button class="modalBtnBottom" (click)="closeAllModals()">
-                          Закрыть
-                        </ion-button>
+              
                         <div *ngIf="vkGroupPosts; else notSelectedGroup">
                           <!-- Скелетна анимация -->
                           <ng-container *ngIf="!vkGroupPostsLoaded">
@@ -269,7 +267,9 @@
                                     <ng-container *ngIf="attachment.photo" >
                                       <ng-container *ngFor="let photo of attachment.photo.sizes">
                                         <swiper-slide *ngIf="photo.type === 'x'">
-                                          <a href="{{photo.url}}" target="_blank"><img alt="ava" [src]="photo.url"/></a>
+                                          <a href="{{photo.url}}" target="_blank">
+                                            <img class="swiper-img" alt="ava" [src]="photo.url"/>
+                                          </a>
                                         </swiper-slide>
 
                                       </ng-container>
@@ -364,37 +364,56 @@
 
                       </ion-textarea>
 
+                      <div class="main-preview">
+                        <div class="img-parent" *ngFor="let img of imagesPreview">
+                          <img class="imagesPreview" [src]="img" alt="preview">
+                          <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(img)">
+                              <ion-icon name="trash-bin" slot="start"></ion-icon>
+                          </ion-button>
+                        </div>
+                        <ng-container *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length">
+                       
+                            <div *ngFor="let attachment of vkGroupPostSelected.attachments" class="img-parent">
+                              <ng-conainer *ngIf="attachment.video">
+                                <img class="imagesPreview" alt="" src="{{ attachment.video.image[0].url }}" />
+                                <div style="background-color: rgba(0, 0, 0, 0.568); color: #fff; border-radius: 4px; margin-top:-1.5rem; position: absolute; display: flex; justify-content: space-between;"><ion-icon name="play-outline"></ion-icon></div>
+                              </ng-conainer>
+                              <ng-conainer *ngIf="attachment.photo">
+                                <img class="imagesPreview" alt="ava" src="{{ attachment.photo.sizes[3].url }}" />
+                                <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(attachment)">
+                                  <ion-icon name="trash-bin" slot="start"></ion-icon>
+                                </ion-button>
+                              </ng-conainer>
+                             
+                            </div>
+                          </ng-container>
+                          <ng-container >
+                           
+                          </ng-container>
+                          
+                        
 
-                            <div class="ion-margin-vertical">
+                      </div>
+
+                            <div class="">
                               <!-- Image Preview -->
-                              <ion-row  *ngIf="imagesPreview">
+                    
 
-                                <ng-container *ngFor="let img of imagesPreview">
-                                  <ion-col class="imagesPreviewParrent ion-justify-content-center">
-                                    <img class="imagesPreview" [src]="img" alt="preview">
-                                    <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(img)">
-                                      <ion-icon name="trash-bin" slot="start"></ion-icon>
-                                    </ion-button>
-                                  </ion-col>
-                                </ng-container>
-                              </ion-row>
+                              <ion-col  class="ion-padding-horizontal">
+                                <ng-container>
 
-                              <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
-                                <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
-
-                                  <ion-col *ngIf="attachment.type === 'video' ">
-                                    <img class="imagesPreview" alt="ava" src="{{ attachment.video.image[0].url }}" />
-                                    <div style="background-color: rgba(0, 0, 0, 0.568); color: #fff; border-radius: 4px; margin-top:-1.5rem; position: absolute; display: flex; justify-content: space-between;"><ion-icon name="play-outline"></ion-icon></div>
-                                  </ion-col>
+                                  <!-- <ion-col *ngIf="attachment.type === 'video' ">
+                                   
+                                  </ion-col> -->
 
 
-                                  <ion-col *ngIf="attachment.type === 'photo' ">
+                                  <!-- <ion-col *ngIf="attachment.type === 'photo' ">
                                     <img class="imagesPreview" alt="ava" src="{{ attachment.photo.sizes[3].url }}" />
                                     <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(attachment)">
                                       <ion-icon name="trash-bin" slot="start"></ion-icon>
                                     </ion-button>
 
-                                  </ion-col>
+                                  </ion-col> -->
 
 
                                     <!-- <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
@@ -404,7 +423,7 @@
 
 
                                 </ng-container>
-                              </ion-row>
+                              </ion-col>
                             </div>
 
 
@@ -747,8 +766,8 @@
                 </ion-card>
 
               </ng-container>
-              <ion-chip color="primary" class="ion-justify-item-center" (click)="addPlaceForm()">
-                <h2><ion-label>Добавить место проведения</ion-label></h2>
+              <ion-chip color="primary" class="" (click)="addPlaceForm()">
+                <ion-label>Добавить место проведения</ion-label>
                 <ion-icon name="add-outline"></ion-icon>
               </ion-chip>
             </ion-row>

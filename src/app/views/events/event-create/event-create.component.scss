@@ -1,3 +1,11 @@
+.main-preview{
+  display: grid;
+  margin-left: auto;
+  margin-right: auto;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap:2rem;
+  grid-row-gap:2rem;
+}
 .description_main{
   padding-left: 10rem;
   padding-right: 10rem;
@@ -204,6 +212,12 @@ ion-padding {
   }
 }
 
+.swiper-img{
+  width: 28rem;
+  height: 14rem;
+  object-fit:contain ;
+}
+
 .main {
   min-height: 100vh;
   width: 90%;
@@ -384,8 +398,8 @@ ion-padding {
 }
 
 .modal {
-  --border-radius: 12px;
-  --height: 60%;
+
+  
 }
 
 .modalLabel {
@@ -393,9 +407,11 @@ ion-padding {
   margin-bottom: 6%;
 }
 
+
 .modalBtnBottom {
-  margin-left: 79%;
-  margin-bottom: 3;
+  margin-left: 1rem;
+  margin-top: 1rem;
+  --margin:auto;
 }
 
 .stepThird {
@@ -420,10 +436,16 @@ ion-padding {
 
 .descriptionParrent {
 }
+
+.img-parent{
+  max-width: 7rem;
+}
+
 .imagesPreview {
-  width: 14vh;
+  width: 100%;
   height: 11vh;
   background-size: cover;
+  object-fit: cover;
   border-radius: 6px;
   -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
   -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
@@ -436,11 +458,10 @@ ion-padding {
 
 .imagesPreviewParrent {
   margin-top: 3vh;
-  margin-left: 1vh;
 }
 
 .deletPrewviewButton {
-  width: 14vh;
+  width: 100%;
 }
 
 .timeParrent {

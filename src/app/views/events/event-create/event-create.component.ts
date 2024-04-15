@@ -100,7 +100,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   user: any;
   placeOpen: any = 0;
   stepStart: number = 0;
-  stepCurrency: number = 0;
+  stepCurrency: number = 2;
   steps: number = 5;
   dataValid: boolean = true;
   openModalImgs: boolean = false;
