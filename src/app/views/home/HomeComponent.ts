@@ -649,21 +649,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  nextPageModal(more?: boolean) {
-    if (this.sightsModalNextPage.length || this.eventsModalNextPage.length) {
-      this.modalNewPageLoader = true;
-      if (this.stateType == 'sights') {
-        this.queryBuilderService.paginationPublicSightsModalRadiusPage.next(
-          this.sightsModalNextPage
-        );
-      } else if (this.stateType == 'events') {
-        this.queryBuilderService.paginationPublicEventsModalRadiusPage.next(
-          this.eventsModalNextPage
-        );
-      }
-      this.getEventsAndSightsForModal(more);
-    }
-  }
 
   setMapData() {
     if (this.objectsInsideCircle) {
@@ -793,38 +778,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.setMapData();
-      });
-    this.getEventsAndSightsForModal();
-  }
-
-  getLoc(){
-    console.log("bang")
-  }
-
-  getEventsAndSightsForModal(more?:boolean) {
-    this.modalButtonLoader = true;
-    const sourceModal: any[] = [];
-    if (this.stateType == 'events') {
-      sourceModal.push(this.getEvents(more));
-    } else if (this.stateType == 'sights') {
-      sourceModal.push(this.getSights(more));
-    }
-    forkJoin(sourceModal)
-      .pipe(
-        catchError(err => {
-          this.toastService.showToast(MessagesErrors.default, 'danger');
-          this.modalButtonLoader = false;
-          this.modalNewPageLoader = false;
-          this.cdr.detectChanges();
-          return of(EMPTY);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        this.modalButtonLoader = false;
-        this.modalNewPageLoader = false;
-        this.cdr.detectChanges();
-        // this.setMapData();
       });
   }
 
@@ -976,6 +929,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
+    console.log("map is destroy")
     this.destroy$.next();
     this.destroy$.complete();
   }

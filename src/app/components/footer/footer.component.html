@@ -1,13 +1,5 @@
 <!-- мобильный футтер -->
 <div class="footer-mobile">
-    <div
-        class="item"
-        [routerLink]="['home']"
-        [routerLinkActive]="['item-active']"
-    >
-        <ion-icon name="map" class="icon" [routerLinkActive]="['active']"></ion-icon>
-        <span class="title" [routerLinkActive]="['active']">Карта</span>
-    </div>
 
     <div
         class="item"
@@ -31,6 +23,15 @@
             <!-- <ion-badge>{{ getSightService() }}</ion-badge> -->
         </ion-row>
         <span class="title" [routerLinkActive]="['active']">Места</span>
+    </div>
+
+    <div
+        class="item"
+        [routerLink]="['home']"
+        [routerLinkActive]="['item-active']"
+    >
+        <ion-icon name="map" class="icon" [routerLinkActive]="['active']"></ion-icon>
+        <span class="title" [routerLinkActive]="['active']">Карта</span>
     </div>
 
     <div

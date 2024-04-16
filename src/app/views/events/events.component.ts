@@ -4,6 +4,8 @@ import {
   OnDestroy,
   ViewChild,
   ElementRef,
+  AfterViewInit,
+  AfterContentInit,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import {
@@ -37,6 +39,7 @@ import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
 import { IonContent } from '@ionic/angular';
 import { ViewportScroller } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
 
 register();
 
@@ -53,6 +56,7 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   city: string = '';
   segment: string = 'eventsCitySegment';
+  isFirstNavigation: any = new BehaviorSubject<boolean>(true);
 
   date: any;
 
@@ -98,13 +102,11 @@ export class EventsComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService,
     private locationService: LocationService,
-    private eventService: EventsService,
     private metrika: Metrika,
     private router: Router,
     private location: Location,
     private titleService: Title,
     private metaService: Meta,
-    private viewportScroller: ViewportScroller
   ) {
     this.filterService.locationId
       .pipe(takeUntil(this.destroy$))
@@ -121,18 +123,6 @@ export class EventsComponent implements OnInit, OnDestroy {
               content: 'Мероприятия вашего города тут',
             });
           });
-      });
-
-    let prevPath = this.location.path();
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const newPath = location.path();
-        this.metrika.hit(newPath, {
-          referer: prevPath,
-          callback: () => {},
-        });
-        prevPath = newPath;
       });
   }
 
@@ -162,21 +152,22 @@ export class EventsComponent implements OnInit, OnDestroy {
 
     this.eventsService
       .getEvents(
-        this.queryBuilderService.queryBuilder('eventsPublicForCityTab')
+        this.queryBuilderService.queryBuilder('eventsModalRadiusForMap')
       )
       .pipe(
         delay(100),
         retry(3),
-        map((respons: any) => {
-          this.eventsCity.push(...respons.events.data);
-          this.filterService.setEventsCount(respons.events.total);
-          this.queryBuilderService.paginationPublicEventsCityCurrentPage.next(
-            respons.events.next_cursor
+        map((response: any) => {
+          console.log(response)
+          this.eventsCity.push(...response.events.data);
+          this.filterService.setEventsCount(response.events.total);
+          this.queryBuilderService.paginationPublicEventsRadiusPage.next(
+            response.events.next_cursor
           );
-          respons.events.next_cursor
+          response.events.next_cursor
             ? (this.nextPage = true)
             : (this.nextPage = false);
-          respons.events.next_cursor
+          response.events.next_cursor
             ? (this.loadTrue = true)
             : (this.loadTrue = false);
         }),
@@ -236,46 +227,6 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.segment = event.detail.value;
   }
 
-  ngOnInit() {
-    window.addEventListener('scroll', this.scrollPaginate, true);
-    window.addEventListener('scrollend', this.scrollEvent, true);
-    this.date = {
-      dateStart: this.filterService.startDate.value,
-      dateEnd: this.filterService.endDate.value,
-    };
-    //console.log(this.date)
-    this.eventsCity = [];
-    this.eventsGeolocation = [];
-    this.getEventsCity();
-    // this.getEventsGeolocation()
-
-    //Подписываемся на изменение фильтра
-    this.filterService.changeFilter
-      .pipe(debounceTime(1000), takeUntil(this.destroy$))
-      .subscribe(value => {
-        if (value === true) {
-          this.eventsCity = [];
-          this.eventsGeolocation = [];
-          this.getEventsCity();
-          // this.getEventsGeolocation()
-        }
-        this.navigationService.appFirstLoading.next(false); // чтобы удалялся фильтр,
-      });
-
-    //Подписываемся на город
-    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-    //     this.city = response.location.name
-    //   })
-    // })
-    this.filterService.eventTypes
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.eventTypeId = value[0];
-      });
-
-    // console.log(this.cardContainer)
-  }
   scrollEvent = (): void => {
     this.scrollUpCheckState();
     let viewElement: boolean = false;
@@ -356,8 +307,51 @@ export class EventsComponent implements OnInit, OnDestroy {
     }
   };
 
+  ngOnInit() {
+    this.getEventsCity()
+    window.addEventListener('scroll', this.scrollPaginate, true);
+    window.addEventListener('scrollend', this.scrollEvent, true);
+    console.log("hi")
+    this.date = {
+      dateStart: this.filterService.startDate.value,
+      dateEnd: this.filterService.endDate.value,
+    };
+    //console.log(this.date)
+    this.eventsCity = [];
+    this.eventsGeolocation = [];
+    // this.getEventsGeolocation()
+
+    //Подписываемся на изменение фильтра
+    this.filterService.changeFilter
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
+      .subscribe(value => {
+        if (value === true) {
+          this.eventsCity = [];
+          this.eventsGeolocation = [];
+          this.getEventsCity();
+          // this.getEventsGeolocation()
+        }
+        this.navigationService.appFirstLoading.next(false); // чтобы удалялся фильтр,
+      });
+
+    //Подписываемся на город
+    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+    //     this.city = response.location.name
+    //   })
+    // })
+    this.filterService.eventTypes
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value: any) => {
+        this.eventTypeId = value[0];
+      });
+
+    // console.log(this.cardContainer)
+  }
+
   ngOnDestroy() {
     // отписываемся от всех подписок
+    console.log("is destroyed")
     this.destroy$.next();
     this.destroy$.complete();
   }
