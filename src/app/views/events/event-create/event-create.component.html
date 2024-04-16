@@ -951,8 +951,8 @@
 
 
 
-            <ion-col >
-              <ion-list>
+            <ion-col>
+              <ion-list style="padding-bottom: 4rem;">
                 <ion-radio-group formControlName="status" (ionChange)="selectedStatus($event)" [value]="statusSelected" required>
                   <ng-container *ngIf="!statusesLoaded">
                     <ng-container *ngFor="let key of [1,2,3,4,5]">

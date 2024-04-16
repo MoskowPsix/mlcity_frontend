@@ -237,7 +237,7 @@ ion-padding {
       .mainLabelAndBarText {
         margin-top: 4rem;
         color: #4c81f7;
-        font-size: clamp(2.125rem, 1.625rem + 2.5vw, 3.5rem);
+        font-size: clamp(0.3rem, 1.2rem + 2.5vw, 3.5rem);
         text-align: center;
       }
     }
@@ -380,8 +380,8 @@ ion-padding {
   }
 
   .stepSecond {
-    max-width: 80%;
-    display: flex;
+    max-width: 100%;
+
     justify-content: center;
   }
 
@@ -550,7 +550,6 @@ ion-padding {
 
   .mainLabelAndBarText {
     color: #4c81f7;
-    font-size: clamp(1.25rem, 0.432rem + 4.09vw, 3.5rem);
     text-align: center;
   }
 }
@@ -602,8 +601,8 @@ ion-padding {
 }
 
 .nameParrent {
-  min-width: 90%;
-  margin-right: 5%;
+
+
 }
 
 
