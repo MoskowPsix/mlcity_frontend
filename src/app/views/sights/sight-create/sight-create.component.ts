@@ -71,7 +71,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   user: any;
   currentType: any = [];
   stepStart: number = 0;
-  stepCurrency: number = 1;
+  stepCurrency: number = 0;
   steps: number = 5;
 
   @ViewChild('sightName') sightNameElement!: any;
@@ -588,8 +588,17 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   //Удалить прею фотки
-  deleteFile(img: string) {
-    this.imagesPreview = this.imagesPreview.filter(a => a !== img);
+  deleteFile(img: any) {
+    if (typeof img == 'string') {
+      this.imagesPreview = this.imagesPreview.filter(a => a !== img);
+      this.uploadFiles = this.uploadFiles.filter(a => a! == img);
+    } else {
+      for (let i = 0; i < this.vkGroupPostSelected.attachments.length; i++) {
+        if (this.vkGroupPostSelected.attachments[i].photo.id == img.photo.id) {
+          this.vkGroupPostSelected.attachments.splice(i, 1);
+        }
+      }
+    }
   }
 
   // Заполняем превью фоток

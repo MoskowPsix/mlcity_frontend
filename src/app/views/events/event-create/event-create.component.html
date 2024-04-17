@@ -384,68 +384,18 @@
                                   <ion-icon name="trash-bin" slot="start"></ion-icon>
                                 </ion-button>
                               </ng-conainer>
-                             
                             </div>
                           </ng-container>
-                          <ng-container >
-                           
-                          </ng-container>
-                          
-                        
-
-                      </div>
-
-                            <div class="">
-                              <!-- Image Preview -->
                     
-
-                              <ion-col  class="ion-padding-horizontal">
-                                <ng-container>
-
-                                  <!-- <ion-col *ngIf="attachment.type === 'video' ">
-                                   
-                                  </ion-col> -->
-
-
-                                  <!-- <ion-col *ngIf="attachment.type === 'photo' ">
-                                    <img class="imagesPreview" alt="ava" src="{{ attachment.photo.sizes[3].url }}" />
-                                    <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(attachment)">
-                                      <ion-icon name="trash-bin" slot="start"></ion-icon>
-                                    </ion-button>
-
-                                  </ion-col> -->
-
-
-                                    <!-- <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
-                                      <img class="imagesPreview" alt="ava" src="{{ photo.url }}" />
-                                    </ion-col> -->
-
-
-
-                                </ng-container>
-                              </ion-col>
-                            </div>
-
-
+                      </div>
                           <ion-item style="border-top: 1px solid rgba(85, 84, 84, 0.226);">
-
                             <ion-button  (click)="filesUpload.click()" style="--background: none; --box-shadow: none;" class="addPhoto">
                               <ion-icon class="addPhotoIcon" style="color: gray;" name="image-outline"></ion-icon>
                             </ion-button>
                           </ion-item>
-
                       </ion-item>
-
-
-
-
-
                         <input formControlName="files" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
                         <ion-note *ngIf="createEventForm.controls['files'].hasError('requiredFileType')" color="danger">Допустимые форматы *.png, *.jpeg</ion-note>
-
-
-
-
                       <div *ngIf="createEventForm.controls['description'].invalid && createEventForm.controls['description'].dirty"  class="validation">
                         <ion-note *ngIf="!createEventForm.controls['description'].hasError('minLength')" color="danger">поле "Об мероприятии" должно содержать минимум 10 символов</ion-note>
                       </div>
@@ -453,11 +403,7 @@
                         <ion-note *ngIf="!createEventForm.controls['description'].hasError('minLength')" color="danger">поле "Об мероприятии" должно содержать минимум 10 символа</ion-note>
                       </div> -->
                     </ion-col>
-
               </div>
-
-
-
             </ion-column>
 
 
@@ -900,7 +846,7 @@
       </ion-row>
 
       <!-- шаг 5 -->
-      <ion-row  [hidden]="stepCurrency !== 4" style="max-width: 80%; display: flex; margin: 0 auto;">
+      <ion-row class="tiket-main"  [hidden]="stepCurrency !== 4">
         <ion-col *ngIf="stepCurrency === 4" class="ion-justify-content-center" @fade>
           <ion-card class="test" *ngFor="let item of createEventForm.controls['price'].value; let i_p = index">
             <ng-container [formGroup]="createEventForm.controls['price'].value[i_p]">
