@@ -180,7 +180,7 @@
 <ion-content class="MainBlock">
   <!-- Обёртка для центрирования -->
     <ion-grid class="Login_wrapper">
-
+      
       <form [formGroup]="loginForm" (submit)="onSubmitLogin()" enctype="multipart/form-data">
 
 
@@ -294,7 +294,7 @@
 
 
 
-                <a href="{{ vkontakteAuthUrl }}" (click)="onLoading()">
+                <a href="{{vkontakteAuthUrl}}" (click)="onLoading();">
 
                   <ion-div class="vk_logo_circle">
                      <ion-div class="vk_logo_quad">
@@ -303,7 +303,7 @@
                   </ion-div>
                 </a>
 
-                <a href="{{ appleAuthUrl }}" (click)="onLoading()">
+                <a  (click)="onLoading(); loginApple()">
 
                   <ion-div class="apple-logo-circle">
                     

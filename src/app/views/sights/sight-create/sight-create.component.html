@@ -1,5 +1,5 @@
 <app-create-rules-modal [agreement_id]="2"></app-create-rules-modal>
-<ion-content>
+<ion-content mode="md">
 
   <div class="buttons-dekstop">
 
@@ -19,6 +19,24 @@
     </div>
   </div>
 
+  <div class="buttons-dekstop_mobile">
+
+    <div class="buttons-desktop-wrapper_mobile">
+
+      <div class="btns-wrapper">
+        <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+        <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+      </div>
+
+      <div class="btns-wrapper">
+        <div (click)="stepNext()">
+        <ion-button class="buttons-navigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        </div>
+        <ion-button class="buttons-navigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+      </div>
+
+    </div>
+  </div>
 
     <ion-grid class="main">
 
@@ -45,42 +63,20 @@
             <ion-col size-lg="4" size-md="8" size-xs="12">
               <div class="stepper-progress">
                 <ion-column class="stepsButtonsMain ">
-
-
-
                     <div *ngFor="let step of [].constructor(steps); let i = index" class=" " >
                       <div class="buttonWraper">
-
-
                         <ion-button  *ngIf="stepCurrency === i" (click)="goToStep(i)" class="buttonBarClicked animated fadeIn">
                             {{ i + 1 }}
                           </ion-button>
-
-
-
                           <ion-button [disabled]="true" *ngIf="!(stepCurrency === i)" (click)="goToStep(i)" class="buttonBarLight animated fadeIn">
                             {{ i + 1 }}
                           </ion-button>
-
-
-
-
-
-
                       </div>
                     </div>
-
-
-
-
                 </ion-column>
-
               </div>
-
             </ion-col>
           </ion-column>
-
-
         </ion-column>
 
 
@@ -101,9 +97,10 @@
               </ion-item>
             </ng-container>
           </ng-container>
-
+          <ion-label *ngIf="typesLoaded && stepCurrency == 0"><h2 style="color: #949494; text-align: center;">
+            <ion-icon name="star"></ion-icon> - Первый выбранный вами тип станет основным, будет отображаться на карте и карточке мероприятия</h2>
+          </ion-label>
           <ion-row  *ngIf="typesLoaded"  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
-            <ion-label><h2 style="color: #949494;">Первый выбранный вами тип станет основным, будет отображаться на карте и карточке мероприятия</h2></ion-label>
             <!-- <ion-label *ngIf="isNextButtonClicked == true && currentType == 0 " class="pick">Выберите тип, чтобы перейти на следующий шаг</ion-label> -->
             <app-types [buttonClicked]="currentType" [types]="types" (typeOutput)="receiveType($event)"></app-types>
 
@@ -112,38 +109,42 @@
         <!-- шаг 2 -->
         <ion-row  [hidden]="stepCurrency !== 1" class="ion-justify-content-center" >
 
-        <ion-col *ngIf="stepCurrency === 1" @fade>
+        <ion-col class="second-step-main" *ngIf="stepCurrency === 1" @fade>
 
           <ion-column class="stepSecond">
+              <ion-column class="">
+                    <ion-item class="second-step-input-wrapper" fill="outline">
+                      <ion-input #sightName fill="solid" style="" size="small" formControlName="name" type="text" name="name" placeholder="Название достопримечательности" required></ion-input>
+                    </ion-item>
 
-            <div>
-              <ion-column class="nameParrent">
+                    <div *ngIf="createSightForm.controls['name'].invalid && createSightForm.controls['name'].dirty"  class="validation">
+                      <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название достопримечательности должно содержать минимум 3 символа</ion-note>
+                    </div>
+                  
+                      <ion-item class="second-step-input-wrapper" fill="outline">
+                        <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
+                        <ion-input formControlName="sponsor"  type="text" name="sponsor" required  placeholder="Организатор достопримечательности"></ion-input>
+                      </ion-item>
+                     
+  
+                      <!-- <ion-item fill="outline">
+                        <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Название мероприятия</ion-label>
+                        <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
+                        <ion-input #eventName fill="solid" style="" size="small" class="nameEvent" formControlName="name" type="text" name="name" required></ion-input>
+                      </ion-item> -->
+      
+                      <!-- <ion-item class="" fill="outline">
+                          <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Организатор мероприятия</ion-label>
+                          <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
+                          <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
+                      </ion-item> -->
+                  <!-- Организатор -->
+              
+             
 
-                <div>
-
-                  <ion-item style="max-width: 600px;" fill="outline">
-                    <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Название достопримечательности</ion-label>
-                    <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
-                    <ion-input #sightName  style="max-width: 300px;" size="small" formControlName="name" type="text" name="name" required></ion-input>
-                  </ion-item>
-
-                  <div *ngIf="createSightForm.controls['name'].invalid && createSightForm.controls['name'].dirty"  class="validation">
-                    <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название достопримечательности должно содержать минимум 3 символа</ion-note>
-                  </div>
-                </div>
+             
 
               </ion-column>
-
-
-              <ion-row>
-                <ion-column class="organizaterParrent">
-                  <ion-item  class="organizerMain" fill="outline"
-                  >
-                    <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Организатор достопримечательности</ion-label>
-                    <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-                    <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
-                  </ion-item>
-                </ion-column>
 
                 <ion-column>
                   <div *ngIf="createSightForm.controls['sponsor'].invalid && createSightForm.controls['sponsor'].dirty"  class="validation">
@@ -151,34 +152,7 @@
                   </div>
                 </ion-column>
 
-              </ion-row>
-
-            </div>
-
-
-<!--
-            <ion-button (click)="openModalGroup()" class="selectGroup">
-
-              Загрузить пост
-
-            </ion-button> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </ion-column>
-
-
         </ion-col>
       </ion-row>
 
@@ -402,7 +376,7 @@
 
 
 
-          <ion-column class="stepThird ion-justify-content-center">
+          <ion-col class="stepThird ion-justify-content-center">
 
             <ion-col @fade>
 
@@ -413,19 +387,12 @@
                   <ion-icon style="margin-right: 1vh;"  name='logo-vk'></ion-icon>
                   Мои записи
                 </ion-button>
-
-                <div class="descriptionButton">
-                  вы можете загрузить описание и изображения из группы вконтакте
-                </div>
-
               </div>
 
-              <ion-colum class="timeAndDescription">
-                  <div class="descriptionParrent">
-
-                      <ion-col style="width: 80%;" *ngIf="stepCurrency === 2">
-
-                        <ion-item style="width: 60vh;" fill="outline"
+              <ion-colum class="description_main">
+                  <div class="">
+                      <ion-col *ngIf="stepCurrency === 2">
+                        <ion-item class="description-item" fill="outline"
                         >
                           <ion-label position="stacked">Об достопримечательности</ion-label>
                             <ion-textarea
@@ -433,68 +400,44 @@
                               placeholder="Введите информацию о достопримечательности..."
                               [autoGrow]="true"
                               required
-                              style="padding-bottom: 8vh;"
+                              class="description-text"
                               #sightDescription
                               >
 
                           </ion-textarea>
-
-                          <div class="ion-margin-vertical">
-                            <!-- Image Preview -->
-                            <ion-row  *ngIf="imagesPreview">
-
-                              <ng-container *ngFor="let img of imagesPreview">
-                                <ion-col class="imagesPreviewParrent ion-justify-content-center">
-                                  <img class="imagesPreview" [src]="img" alt="preview">
-
-                                  <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(img)">
-                                    <ion-icon name="trash-bin" slot="start"></ion-icon>
-                                  </ion-button>
-
-                                </ion-col>
+                          <div class="main-preview">
+                            <div class="img-parent" *ngFor="let img of imagesPreview">
+                              <img class="imagesPreview" [src]="img" alt="preview">
+                              <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(img)">
+                                  <ion-icon name="trash-bin" slot="start"></ion-icon>
+                              </ion-button>
+                            </div>
+                            <ng-container *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length">
+                                <div *ngFor="let attachment of vkGroupPostSelected.attachments" class="img-parent">
+                                  <ng-conainer *ngIf="attachment.video">
+                                    <img class="imagesPreview" alt="" src="{{ attachment.video.image[0].url }}" />
+                                    <div style="background-color: rgba(0, 0, 0, 0.568); color: #fff; border-radius: 4px; margin-top:-1.5rem; position: absolute; display: flex; justify-content: space-between;"><ion-icon name="play-outline"></ion-icon></div>
+                                  </ng-conainer>
+                                  <ng-conainer *ngIf="attachment.photo">
+                                    <img class="imagesPreview" alt="ava" src="{{ attachment.photo.sizes[3].url }}" />
+                                    <ion-button class="deletPrewviewButton" color="danger" expand="block" (click)="deleteFile(attachment)">
+                                      <ion-icon name="trash-bin" slot="start"></ion-icon>
+                                    </ion-button>
+                                  </ng-conainer>
+                                </div>
                               </ng-container>
-                            </ion-row>
-
-                            <ion-row *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length" class="ion-padding-horizontal">
-                              <ng-container  *ngFor="let attachment of vkGroupPostSelected.attachments">
-
-                                <ion-col *ngIf="attachment.type === 'video' ">
-                                  <img class="imagesPreview" alt="ava" src="{{ attachment.video.image[0].url }}" />
-                                  <div style="background-color: rgba(0, 0, 0, 0.568); color: #fff; border-radius: 4px; margin-top:-1.5rem; position: absolute; display: flex; justify-content: space-between;"><ion-icon name="play-outline"></ion-icon></div>
-                                </ion-col>
-
-
-                                <ion-col *ngIf="attachment.type === 'photo' ">
-                                  <img class="imagesPreview" alt="ava" src="{{ attachment.photo.sizes[3].url }}" />
-
-                                </ion-col>
-
-
-                                  <!-- <ion-col class="" *ngIf="photo.type === 'm'" size="4" class="ion-align-self-center ion-justify-content-center">
-                                    <img class="imagesPreview" alt="ava" src="{{ photo.url }}" />
-                                  </ion-col> -->
-
-
-
-                              </ng-container>
-                            </ion-row>
                           </div>
-
-
                         <ion-item style="border-top: 1px solid rgba(85, 84, 84, 0.226);">
-
                           <ion-button  (click)="filesUpload.click()" style="--background: none; --box-shadow: none;" class="addPhoto">
                             <ion-icon class="addPhotoIcon" style="color: gray;" name="image-outline"></ion-icon>
                           </ion-button>
                         </ion-item>
-
 
                         </ion-item>
 
                         <div *ngIf="createSightForm.controls['description'].invalid && createSightForm.controls['description'].dirty"  class="validation">
                           <ion-note *ngIf="!createSightForm.controls['description'].hasError('minLength')" color="danger">поле "Об Достопримечательности" должно содержать минимум 10 символа</ion-note>
                         </div>
-
 
                       </ion-col>
                   </div>
@@ -528,40 +471,9 @@
                 </ion-row> -->
               </ion-col>
 
-
-
-
-
-
-                <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
-                  <!-- <div *ngIf="createSightForm.hasError('dateInvalid')">
-                    <ion-note color="danger"> Время работы или время посещения.</ion-note>
-                  </div> -->
-                  <ion-list>
-                   <ion-item>
-
-                    </ion-item>
-                    <!-- <ion-item fill="outline">
-                      <ion-label position="stacked">
-                        Описание времени работы или времени посещения достопримечательности
-                      </ion-label>
-                      <ion-textarea
-                      value="test"
-                      formControlName="workTime"
-                      placeholder="Введите информацию о времени работы или времени посещения..."
-                      [autoGrow]="true"
-                      required
-                      >
-                      </ion-textarea>
-                    </ion-item> -->
-                  </ion-list>
-
-
-                </ion-col>
-
             </ion-col>
 
-          </ion-column>
+          </ion-col>
 
 
 
@@ -604,25 +516,20 @@
                   </ion-list>
               </div>
             </ion-list> -->
-            <ion-list-header>
-              <ion-label>На карте выберите место достопримечательности</ion-label>
-            </ion-list-header>
+              <ion-label style="width: 100%; ">На карте выберите место</ion-label>
             <ion-item style="z-index: 10" fill="outline" class="ion-margin-vertical">
-              <ion-label position="floating">Поиск по адресу</ion-label>
               <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
-              <ion-input formControlName="address" (ionChange)="clearSearche($event)" id="search-map" type="text" name="search" value="{{this.createSightForm.value.address}}" required></ion-input>
+              <ion-input placeholder="поиск по адресу"  formControlName="address" (ionChange)="clearSearche($event)" id="search-map" type="text" name="search" value="{{this.createSightForm.value.address}}" required></ion-input>
             </ion-item>
-
+          
             <ion-item style="z-index: 1" lines="none">
-              <ion-label *ngIf="!locationLoader"><p>Текущий город:</p><span style="width: 100%; ;">{{city}} ({{region}})</span></ion-label>
-
+              <ion-label *ngIf="!locationLoader">Текущий город: <span style="width: 100%; margin-bottom: -2rem;">{{city}} ({{region}})</span></ion-label>
               <ion-list style="width: 50%" *ngIf="locationLoader">
                 <ion-skeleton-text [animated]="true" style="width: 40%"></ion-skeleton-text>
                 <ion-skeleton-text [animated]="true" style="width: 100%; height: 1rem;"></ion-skeleton-text>
               </ion-list>
             </ion-item>
-
-            <div class="map">
+            <div style="padding-bottom: 4rem;" class="map">
               <ya-map (ready)="onMapReady($event)"
                 [zoom]="11"
                 (yaclick)=" onMapClick($event)"
@@ -645,11 +552,9 @@
         </ion-row>
 
         <!-- шаг 5 -->
-        <ion-row style="max-width: 60%; display: flex; margin: 0 auto;"  [hidden]="stepCurrency !== 4" class="ion-justify-content-center">
-
+        <ion-row class="tiket-main"  [hidden]="stepCurrency !== 4">
           <ion-col  @fade>
             <ion-card  *ngFor="let item of createSightForm.controls['price'].value; let i_p = index">
-
               <ng-container [formGroup]="createSightForm.controls['price'].value[i_p]" >
                 <ion-item fill="none">
                   <ion-icon name="pricetag-outline" color="primary"></ion-icon>

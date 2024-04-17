@@ -46,6 +46,7 @@ import { register } from 'swiper/element/bundle';
 import { LocationService } from 'src/app/services/location.service';
 import { Location } from 'src/app/models/location';
 import { FilterService } from 'src/app/services/filter.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sight-create',
@@ -134,7 +135,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     private statusesService: StatusesService,
     private mapService: MapService,
     private sanitizer: DomSanitizer,
-    private yaGeocoderService: YaGeocoderService
+    private yaGeocoderService: YaGeocoderService,
+    private router: Router,
   ) {}
 
   // Получаем юзера и устанавливаем группы и шаги
@@ -588,8 +590,17 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   //Удалить прею фотки
-  deleteFile(img: string) {
-    this.imagesPreview = this.imagesPreview.filter(a => a !== img);
+  deleteFile(img: any) {
+    if (typeof img == 'string') {
+      this.imagesPreview = this.imagesPreview.filter(a => a !== img);
+      this.uploadFiles = this.uploadFiles.filter(a => a! == img);
+    } else {
+      for (let i = 0; i < this.vkGroupPostSelected.attachments.length; i++) {
+        if (this.vkGroupPostSelected.attachments[i].photo.id == img.photo.id) {
+          this.vkGroupPostSelected.attachments.splice(i, 1);
+        }
+      }
+    }
   }
 
   // Заполняем превью фоток
@@ -892,6 +903,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           this.createSightForm.controls['locationId'].reset();
           this.createSightForm.enable();
           this.stepCurrency = this.stepStart;
+          this.router.navigate(['/home']);
         }),
         catchError(err => {
           console.log(err);

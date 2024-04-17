@@ -1,10 +1,46 @@
+.main-preview{
+  display: grid;
+  margin-left: auto;
+  margin-right: auto;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap:2rem;
+  grid-row-gap:2rem;
+}
+.description_main{
+  padding-left: 10rem;
+  padding-right: 10rem;
+  width: 100%;
+}
+.description-item{
+  width: clamp(20rem, 12.727rem + 36.36vw, 30rem);
+}
+
+.description-text{
+  min-height: 8rem;
+}
+.second-step-input-wrapper{
+  margin-top: 2rem;
+}
+
+.second-step-main{
+  margin-top: -2rem;
+  max-width: 50%;
+}
+
 .pick {
+  display: none;
   align-items: center;
   position: absolute;
   margin-top: -25px;
   color: #949494;
 }
 ion-label {
+}
+
+.validation{
+  display: flex;
+  margin-top: 1rem;
+  margin-bottom: 0.2rem;
 }
 
 .place-header {
@@ -22,13 +58,14 @@ ion-label {
 }
 
 .place-wrapper_close {
-  transition: 0.5s;
-  max-height: 0vh;
+  transition: 0.5s all;
+  height: 0vh;
 }
 
 .place-wrapper_open {
-  transition: 0.5s height;
-  max-height: 100vh;
+  overflow-y: scroll;
+  transition: 0.5s all;
+  height: 90vh;
 }
 
 .place-row_open {
@@ -64,6 +101,7 @@ ion-label {
   //     border-radius: 4px;
   // }
   .list-seances {
+  width: 100%;
     background-color: rgba(108, 136, 245, 0.025);
     margin-top: 4px;
     margin-bottom: 4px;
@@ -174,6 +212,12 @@ ion-padding {
   }
 }
 
+.swiper-img{
+  width: 28rem;
+  height: 14rem;
+  object-fit:contain ;
+}
+
 .main {
   min-height: 100vh;
   width: 90%;
@@ -183,7 +227,7 @@ ion-padding {
   justify-content: center;
 
   .mainChild {
-    width: 70%;
+    width: 80%;
 
     .mainLabelAndBar {
       margin-left: 10%;
@@ -191,8 +235,9 @@ ion-padding {
       margin-bottom: 10%;
 
       .mainLabelAndBarText {
+        margin-top: 4rem;
         color: #4c81f7;
-        font-size: 56px;
+        font-size: clamp(0.3rem, 1.2rem + 2.5vw, 3.5rem);
         text-align: center;
       }
     }
@@ -212,6 +257,8 @@ ion-padding {
       }
 
       .ion-text-start {
+        position: absolute;
+        width: 100%;
         text-align: center;
       }
       /* styles.css (или ваши собственные стили) */
@@ -333,7 +380,8 @@ ion-padding {
   }
 
   .stepSecond {
-    display: flex;
+    max-width: 100%;
+
     justify-content: center;
   }
 
@@ -350,18 +398,26 @@ ion-padding {
 }
 
 .modal {
-  --border-radius: 12px;
-  --height: 60%;
+
+  
 }
 
+.tiket-main{
+  max-width: 60%;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
 .modalLabel {
   font-size: 22px;
   margin-bottom: 6%;
 }
 
+
 .modalBtnBottom {
-  margin-left: 79%;
-  margin-bottom: 3;
+  margin-left: 1rem;
+  margin-top: 1rem;
+  --margin:auto;
 }
 
 .stepThird {
@@ -386,10 +442,17 @@ ion-padding {
 
 .descriptionParrent {
 }
+
+.img-parent{
+  max-width: 7rem;
+}
+
+
 .imagesPreview {
-  width: 14vh;
+  width: 100%;
   height: 11vh;
   background-size: cover;
+  object-fit: cover;
   border-radius: 6px;
   -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
   -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
@@ -402,11 +465,10 @@ ion-padding {
 
 .imagesPreviewParrent {
   margin-top: 3vh;
-  margin-left: 1vh;
 }
 
 .deletPrewviewButton {
-  width: 14vh;
+  width: 100%;
 }
 
 .timeParrent {
@@ -439,6 +501,41 @@ ion-padding {
   }
 }
 @media screen and (min-width: 0px) and (max-width: 992px) {
+  
+  .map {
+    width: 100%;
+    height: 35vh;
+  }
+  .place-adress-input{
+    max-width: 80%;
+  }
+
+  .main{
+    width: 100%;
+    .mainChild{
+      width: 95%;
+    }
+  }
+  .second-step-main{
+    max-width: 100%;
+  }
+  .buttons-desktop-wrapper_mobile{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 4%;
+    position: fixed;
+    background-color: #fff;
+    max-height: 5rem;
+    z-index: 10000000;
+    .btns-wrapper{
+     
+    }
+  }
   .video_content {
     display: block;
     margin-left: auto;
@@ -457,9 +554,31 @@ ion-padding {
   ion-content {
     --padding-bottom: 6rem;
   }
+
+  .mainLabelAndBarText {
+    color: #4c81f7;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .tiket-main{
+    max-width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+  }
+  .place-header-text_mobile{
+    font-size: clamp(1.1rem, 0.784rem + 0.45vw, 1.125rem);
+  }
+
 }
 
 @media screen and (min-width: 992px) {
+
+  .buttons-desktop-wrapper_mobile{
+    display: none;
+  }
   .video_content {
     display: block;
     margin-left: auto;
@@ -491,6 +610,12 @@ ion-padding {
 }
 
 .nameParrent {
-  min-width: 90%;
-  margin-right: 5%;
+
+
 }
+
+
+
+
+
+

@@ -18,17 +18,16 @@ userReadRules:boolean = false
 openModal:boolean = false
 @Input() agreement_id:any
 @HostListener('window:resize', ['$event'])
-
 mobileOrNote(){
   if(window.innerWidth < 900){
     this.mobile = true
+    
   } else if (window.innerWidth > 900){
     this.userReadRules = false
     this.mobile = false
   } else{
     this.mobile = false
   }
-
 }
 
 closeModalFunc(){
