@@ -46,6 +46,7 @@ import { register } from 'swiper/element/bundle';
 import { LocationService } from 'src/app/services/location.service';
 import { Location } from 'src/app/models/location';
 import { FilterService } from 'src/app/services/filter.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sight-create',
@@ -134,7 +135,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     private statusesService: StatusesService,
     private mapService: MapService,
     private sanitizer: DomSanitizer,
-    private yaGeocoderService: YaGeocoderService
+    private yaGeocoderService: YaGeocoderService,
+    private router: Router,
   ) {}
 
   // Получаем юзера и устанавливаем группы и шаги
@@ -901,6 +903,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           this.createSightForm.controls['locationId'].reset();
           this.createSightForm.enable();
           this.stepCurrency = this.stepStart;
+          this.router.navigate(['/home']);
         }),
         catchError(err => {
           console.log(err);
