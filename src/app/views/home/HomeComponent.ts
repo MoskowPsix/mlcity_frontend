@@ -121,7 +121,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   CirclePoint!: ymaps.Circle;
 
   myGeo!: ymaps.Placemark;
-  minZoom = 8;
+  minZoom = 10;
   clusterer!: ymaps.Clusterer;
   radius: number = 1;
   date: any = {
@@ -378,9 +378,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     //   this.onMapReady({target, ymaps});
     // }
     await this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
-      console.log()
       this.getEventsAndSights()
     });
+    console.log(this.map.target.getZoom())
+    console.log(this.map.target.zoomRange.getCurrent())
 
     if (this.navigationService.appFirstLoading.value) {
       this.eventsLoading = true;
@@ -851,21 +852,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
       });
 
-    this.filterService.locationLongitude
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.eventsContentModal = [];
-        this.sightsContentModal = [];
-        this.mapService.circleCenterLongitude.next(value);
-      });
 
-    this.filterService.locationLatitude
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.eventsContentModal = [];
-        this.sightsContentModal = [];
-        this.mapService.circleCenterLatitude.next(value);
-      });
     //Подписываемся на состояние модалки показа ивентов и мест
     this.navigationService.modalEventShowOpen
       .pipe(takeUntil(this.destroy$))

@@ -4,13 +4,12 @@
   <div class="map">
     <ya-map [@mapAnimate] (ready)="onMapReady($event)"
       id="map"
-      [zoom]="15"
+      [zoom]="4"
       [center]="[0,0]"
       [state]="{controls: ['zoomControl']}"
       [options]="{
         yandexMapDisablePoiInteractivity: true,
         minZoom:minZoom,
-        maxZoom:18,
         suppressMapOpenBlock: true,
         suppressObsoleteBrowserNotifier: true,
         autoFitToViewport: 'always'
