@@ -263,14 +263,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   //   //   console.log(res)
   //   // }).catch((err) => {
   //   //   console.log(err)
-  //   // })
-  //   document.addEventListener("vkAuthFinished", (event: any) => {
+  //   // })  
+  //   document.addEventListener("vkAuthFinis he                      d", (event: any) => {
   //       const info = event.detail; // Получаем информацию из события
   //       console.log("vkAuthFinished was fired", JSON.stringify(info, null, 2));
   //   });
   
   // }
-
+    
   async loginApple() {
     if (Capacitor.getPlatform() == 'ios') {
       const options: SignInWithAppleOptions = {
@@ -279,18 +279,19 @@ export class LoginComponent implements OnInit, OnDestroy {
         state: String(this.appleState),
         nonce: 'nonce',
       };
+
       SignInWithApple.authorize(options)
         .then((res: SignInWithAppleResponse) => {
           console.log(res)
           console.log(options)
-          this.authService.loginApple(res).pipe(
+          this.authService.loginApple(res.response).pipe(
             takeUntil(this.destroy$),
             catchError(err => {
               this.toastService.showToast('При авторизвции apple что-то пошло не так', 'warning')
               return of(EMPTY)
             })
             ).subscribe(response => {
-            this.loginAfterSocial(response.user.token)
+            this.loginAfterSocial(response.token)
           })
         }).catch((e) => {
           console.log(e);

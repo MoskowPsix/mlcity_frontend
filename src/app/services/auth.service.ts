@@ -74,7 +74,7 @@ export class AuthService {
   }
   loginApple(data: any) {
     return this.http.post<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/social-auth/apple`,
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/social-auth/apple`,
       data
     );
   }
