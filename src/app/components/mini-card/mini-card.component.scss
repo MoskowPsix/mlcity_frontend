@@ -1,13 +1,15 @@
 .mini-card-container{
-
-  max-width: 450px;
+  padding: 12px;
+  max-width: 500px;
 }
 
 .mini-card{
-  padding: 12px;
+  padding: 8px;
+  border-radius: 8px;
   background-color: white;
 }
 
 .mini-card-img{
   width: 200px;
+  border-radius: 6px;
 }
