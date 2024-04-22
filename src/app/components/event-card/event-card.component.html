@@ -18,7 +18,7 @@
             <img alt="{{file.name}}" src="{{host}}:{{port}}{{ file.link }}" style="z-index: 10;" />
           </swiper-slide>
           <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
-              <ion-img style="background-image: url('/assets/imgs/blur-image.jpg');"/>
+              <ion-img style="background-image: url('/assets/images/blur-image.jpg');"/>
               <img alt="{{file.name}}" src="{{ file.link }}" style="z-index: 10;"/>
           </swiper-slide>
           <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'video'">

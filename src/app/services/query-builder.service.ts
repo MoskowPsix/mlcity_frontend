@@ -26,9 +26,9 @@ export class QueryBuilderService {
     new BehaviorSubject<string>('');
   //public paginationPublicEventsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicSightsModalRadiusPage: BehaviorSubject<string> =
+  public paginationPublicSightsRadiusPage: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
-  public paginationPublicEventsModalRadiusPage: BehaviorSubject<string> =
+  public paginationPublicEventsRadiusPage: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
 
   // public paginationPublicEventsGeolocationCurrentPage!: BehaviorSubject<string>
@@ -196,7 +196,7 @@ export class QueryBuilderService {
       dateStart: this.dateStart,
       dateEnd: this.dateEnd,
       radius: this.radius,
-      page: this.paginationPublicEventsModalRadiusPage.value,
+      page: this.paginationPublicEventsRadiusPage.value,
     };
   }
 
@@ -208,7 +208,7 @@ export class QueryBuilderService {
       longitude: this.longitude,
       sightTypes: this.sightTypes,
       radius: this.radius,
-      page: this.paginationPublicSightsModalRadiusPage.value,
+      page: this.paginationPublicSightsRadiusPage.value,
     };
   }
 

@@ -248,27 +248,6 @@
 
 
             </ion-col>
-
-
-
-            <!-- <ion-col size-lg="6" size-md="12" size-xs="12">
-              <div class="map">
-                <ya-map
-                  (ready)="onMapReady($event)"
-                  [zoom]="15"
-                  [center]="[event.latitude, event.longitude]"
-                  [state]="{controls: ['zoomControl','fullscreenControl']}"
-                  [options]="{
-                    yandexMapDisablePoiInteractivity: true,
-                    minZoom:1,
-                    maxZoom:18,
-                    suppressMapOpenBlock: true,
-                    suppressObsoleteBrowserNotifier: true
-                  }"
-                >
-                </ya-map>
-              </div>
-            </ion-col> -->
           </ion-row>
           <ion-row class="events-map-container">
 
@@ -312,8 +291,6 @@
           <ion-row class="ion-justify-content-center">
             <ion-button (click)="getEventPlaces()" *ngIf="loadMore">Показать больше</ion-button>
           </ion-row>
-
-
           <ion-card *ngIf="user" style="margin-bottom: 2rem;"><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
 
 

@@ -125,6 +125,8 @@ export class MapService {
     } catch (error) {
       coords = await this.defaultCoords();
       console.log(error, 'ento error')
+      this.circleCenterLatitude.next(coords[0])
+      this.circleCenterLongitude.next(coords[1])
       this.setPlacemark(map, CirclePoint, coords!, false);
     }
     return coords;
@@ -155,7 +157,6 @@ export class MapService {
       map.target.setBounds(this.placemark.geometry?.getBounds()!, {
         checkZoomRange: false,
       });
-      map.target.setZoom(17);
     }
   }
 
@@ -174,7 +175,7 @@ export class MapService {
   async requestLocationPermission() {
     let status = await Geolocation.requestPermissions()
     return status.location
-      
+
   }
 
   //поиск координат города или адреса через яндекс
@@ -327,8 +328,8 @@ export class MapService {
 
     if (!this.navigationService.appFirstLoading.value) {
       await circlePoint.geometry?.setCoordinates([
-        parseFloat(this.filterService.locationLatitude.value),
-        parseFloat(this.filterService.locationLongitude.value),
+        this.circleCenterLatitude.value,
+        this.circleCenterLongitude.value,
       ]);
       map.target.setBounds(circlePoint.geometry?.getBounds()!, {
         checkZoomRange: true,

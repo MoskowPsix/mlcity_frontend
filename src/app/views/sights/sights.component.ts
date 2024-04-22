@@ -126,7 +126,7 @@ export class SightsComponent implements OnInit, OnDestroy {
 
     this.sightsService
       .getSights(
-        this.queryBuilderService.queryBuilder('sightsPublicForCityTab')
+        this.queryBuilderService.queryBuilder('sightsForMap')
       )
       .pipe(
         delay(100),
@@ -134,7 +134,7 @@ export class SightsComponent implements OnInit, OnDestroy {
         map((respons: any) => {
           this.sightsCity.push(...respons.sights.data);
           this.filterService.setSightsCount(respons.total);
-          this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(
+          this.queryBuilderService.paginationPublicSightsRadiusPage.next(
             respons.sights.next_cursor
           );
           respons.sights.next_cursor
