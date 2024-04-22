@@ -234,6 +234,78 @@
           </ion-col>
       </ion-row>
 
+
+      <ion-row class="ion-justify-content-center ">
+        <ion-col size-lg="4" size-md="8" size-xs="12">
+            <ion-accordion-group expand="inset">
+                <ion-accordion  value="first">
+                  <ion-item slot="header" color="light">
+                    <ion-icon name="add-circle" color="primary" slot="start"></ion-icon>
+                    <ion-label text-wrap>Мои мероприятия</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-item
+                        lines="none"
+                        [routerLink]="[ '/cabinet/events/create' ]"
+                    >
+                        <ion-icon name="add-circle" slot="start" color="medium"></ion-icon>
+                        <ion-label text-wrap>Создать мероприятие</ion-label>
+                    </ion-item>
+    
+                    <!-- <ion-item
+                        lines="none"
+                        [routerLink]="[ '/cabinet/settings/notifications' ]"
+                    >
+                        <ion-icon name="notifications" slot="start" color="medium"></ion-icon>
+                        <ion-label text-wrap>Уведомления</ion-label>
+                    </ion-item>
+                    <ion-item
+                        lines="none"
+                        [routerLink]="[ '/cabinet/settings/favorites' ]">
+                        <ion-icon name="star" slot="start" color="medium"></ion-icon>
+                        <ion-label text-wrap>Избранное</ion-label>
+                    </ion-item> -->
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
+        </ion-col>
+    </ion-row>
+
+      <ion-row class="ion-justify-content-center ">
+        <ion-col size-lg="4" size-md="8" size-xs="12">
+            <ion-accordion-group expand="inset">
+                <ion-accordion  value="first">
+                  <ion-item slot="header" color="light">
+                    <ion-icon name="add-circle" color="primary" slot="start"></ion-icon>
+                    <ion-label text-wrap>Мои достопримечательности</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-item
+                        lines="none"
+                        [routerLink]="[ '/cabinet/sights/create' ]"
+                    >
+                        <ion-icon name="add-circle" slot="start" color="medium"></ion-icon>
+                        <ion-label text-wrap>Создать достопримечательность</ion-label>
+                    </ion-item>
+    
+                    <!-- <ion-item
+                        lines="none"
+                        [routerLink]="[ '/cabinet/settings/notifications' ]"
+                    >
+                        <ion-icon name="notifications" slot="start" color="medium"></ion-icon>
+                        <ion-label text-wrap>Уведомления</ion-label>
+                    </ion-item>
+                    <ion-item
+                        lines="none"
+                        [routerLink]="[ '/cabinet/settings/favorites' ]">
+                        <ion-icon name="star" slot="start" color="medium"></ion-icon>
+                        <ion-label text-wrap>Избранное</ion-label>
+                    </ion-item> -->
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
+        </ion-col>
+    </ion-row>
         <!-- <ion-row class="ion-justify-content-center ">
             <ion-col size-lg="4" size-md="8" size-xs="12">
                 <ion-button size="large" expand="block" class="ion-margin-top" [routerLink]="[ '/contacts/support' ]">

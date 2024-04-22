@@ -9,6 +9,7 @@ import {
   EventEmitter,
   ElementRef,
   ViewChild,
+  HostListener,
 } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import {
@@ -77,13 +78,22 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   count: number = 0;
   //@Input() type?: number
-
+  mobile:boolean = false
   host: string = environment.BACKEND_URL;
   port: string = environment.BACKEND_PORT;
 
   @ViewChild('eventName') eventNameElement!: any;
   @ViewChild('eventDescription') eventDescriptionElement!: any;
-
+  @HostListener('window:resize', ['$event'])
+  mobileOrNote(){
+    if(window.innerWidth < 900){
+      this.mobile = true
+    } else if (window.innerWidth > 900){
+      this.mobile = false
+    } else{
+      this.mobile = false
+    }
+  }
   placesClose: any = [];
 
   inputValue: string = '';
@@ -1267,6 +1277,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.mobileOrNote()
     let locationId: any;
     this.filterService.locationId
       .pipe(takeUntil(this.destroy$))

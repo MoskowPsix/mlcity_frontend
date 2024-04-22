@@ -58,3 +58,23 @@
     }
   }
 }
+
+@media screen and (min-width: 0px) and (max-width: 500px) {
+  .main-types-block {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding-bottom: 4rem;
+  }
+
+  .child-types-block {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px;
+    height: 80px;
+    margin: 30px;
+  }
+
+}
