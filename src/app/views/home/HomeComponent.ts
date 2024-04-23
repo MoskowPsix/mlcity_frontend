@@ -6,6 +6,10 @@ import {
   ViewChild,
   ElementRef,
   NgZone,
+  AfterContentInit,
+  AfterViewInit,
+  AfterViewChecked,
+  DoCheck,
 } from '@angular/core';
 import { YaReadyEvent } from 'angular8-yandex-maps';
 import {
@@ -120,8 +124,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   CirclePoint!: ymaps.Circle;
 
+  doCheckState: boolean = true;
+
   myGeo!: ymaps.Placemark;
-  minZoom = 10;
+  minZoom = 4;
+  zoom: number = 4;
   clusterer!: ymaps.Clusterer;
   radius: number = 1;
   date: any = {
@@ -217,7 +224,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   radiusChange(event: any) {
     if (this.radiusTimeOut) {
-      clearTimeout(this.radiusTimeOut)
+      clearTimeout(this.radiusTimeOut);
     }
     this.radiusTimeOut = setTimeout(() => {
       this.filterService.setRadiusTolocalStorage(event.value);
@@ -325,7 +332,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     target.geoObjects.add(this.myGeo);
 
-
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin', e => {
       if (this.objectsInsideCircle) {
@@ -338,7 +344,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (!this.navigationService.appFirstLoading.value) {
         this.eventsLoading = true;
         this.sightsLoading = true;
-        this.modalButtonLoader = true
+        this.modalButtonLoader = true;
         this.CirclePoint.geometry?.setRadius(this.radius * 15);
         this.CirclePoint.options.set('fillOpacity', 0.7);
         this.CirclePoint.options.set('fillColor', '#474A51');
@@ -377,11 +383,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     // if (!this.map) {
     //   this.onMapReady({target, ymaps});
     // }
-    await this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
-      this.getEventsAndSights()
-    });
-    console.log(this.map.target.getZoom())
-    console.log(this.map.target.zoomRange.getCurrent())
+    await this.mapService
+      .positionFilter(this.map, this.CirclePoint)
+      .then(() => {
+        this.getEventsAndSights();
+      });
 
     if (this.navigationService.appFirstLoading.value) {
       this.eventsLoading = true;
@@ -389,10 +395,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.modalButtonLoader = true;
       this.cdr.detectChanges();
       //this.getEvents()
-
     }
-
-
+    // setTimeout(() => {
+    //   this.filterService.changeFilter.next(true);
+    // }, 1000);
     // this.getEventsAndSights()
   }
 
@@ -496,12 +502,12 @@ export class HomeComponent implements OnInit, OnDestroy {
                 takeUntil(this.destroy$)
               )
               .subscribe(() => {});
-              this.activePlacemark = e.get('target');
-              this.activeIcoLink =
-                this.host +
-                ':' +
-                this.port +
-                e.get('target').options._options.balloonContent.types[0].ico;
+            this.activePlacemark = e.get('target');
+            this.activeIcoLink =
+              this.host +
+              ':' +
+              this.port +
+              e.get('target').options._options.balloonContent.types[0].ico;
 
             e.get('target').options.set(
               'iconContentLayout',
@@ -596,14 +602,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         )
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
-          console.log(more)
           if (response.sights.next_cursor != null) {
             this.sightsModalNextPage = response.sights.next_cursor;
           }
-          if(more){
+          if (more) {
             this.sightsContentModal.push(...response.sights.data);
-          }
-          else{
+          } else {
             this.sightsContentModal = response.sights.data;
           }
 
@@ -632,13 +636,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.eventsModalNextPage = '';
           }
 
-          if(more){
+          if (more) {
             this.eventsContentModal.push(...response.events.data);
-            console.log(response)
-          }
-          else{
+          } else {
             this.eventsContentModal = response.events.data;
-            console.log(response)
           }
           this.eventsContentModalTotal = response.total;
           // this.filterService.setEventsCount(response.total)
@@ -650,8 +651,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-
   setMapData() {
+    if (this.doCheckState) {
+      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
+        checkZoomRange: true,
+      });
+      this.doCheckState = false;
+    }
     if (this.objectsInsideCircle) {
       this.map.target.geoObjects.remove(this.objectsInsideCircle);
 
@@ -670,7 +676,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.getEventsAndSights();
     } else {
       this.navigationService.appFirstLoading.next(false);
-      this.modalButtonLoader = true
+      this.modalButtonLoader = true;
       this.eventsLoading = false;
       this.sightsLoading = false;
     }
@@ -724,29 +730,25 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         );
         this.placemarks.push(placemark);
-      }
-      else {
-          let marker;
-          let icoLink = `${this.host}:${this.port}${item.types[0].ico}`;
-          if (item.types[0].ico.length > 0) {
-            marker = `<div style="border-color: #6574fc;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`;
+      } else {
+        let marker;
+        let icoLink = `${this.host}:${this.port}${item.types[0].ico}`;
+        if (item.types[0].ico.length > 0) {
+          marker = `<div style="border-color: #6574fc;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`;
+        } else {
+          marker = `<div style="border-color: #6574fc;" class="marker"></div>`;
+        }
+        placemark = new ymaps.Placemark(
+          [item.latitude, item.longitude],
+          {},
+          {
+            balloonContent: item,
+            balloonAutoPan: false,
+            // С иконкой
+            // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
+            iconContentLayout: ymaps.templateLayoutFactory.createClass(marker),
           }
-          else {
-            marker = `<div style="border-color: #6574fc;" class="marker"></div>`;
-          }
-          placemark = new ymaps.Placemark(
-            [item.latitude, item.longitude],
-            {},
-            {
-              balloonContent: item,
-              balloonAutoPan: false,
-              // С иконкой
-              // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
-              iconContentLayout: ymaps.templateLayoutFactory.createClass(
-               marker
-              ),
-            }
-          );
+        );
         this.placemarks.push(placemark);
       }
     });
@@ -838,6 +840,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  // ngAfterContentInit() {
+  //   setTimeout(() => {
+  //     this.filterService.changeFilter.next(true);
+  //   }, 3000);
+  // }
+
+  // ngAfterViewChecked() {
+  //   if (this.doCheckState == true) {
+  //     console.log('check');
+  //     this.doCheckState = false;
+  //   }
+  // }
+
   ngOnInit(): void {
     //Подписываемся на изменение радиуса
     this.filterService.radius
@@ -851,7 +866,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             checkZoomRange: true,
           });
       });
-
 
     //Подписываемся на состояние модалки показа ивентов и мест
     this.navigationService.modalEventShowOpen
@@ -911,12 +925,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.sightsContentModal = [];
         this.eventTypeId = value[0];
       });
-
+    // this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    //   this.filterService.changeFilter.next(true);
+    // });
     // this.getEventsAndSights();
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
-    console.log("map is destroy")
     this.destroy$.next();
     this.destroy$.complete();
   }
