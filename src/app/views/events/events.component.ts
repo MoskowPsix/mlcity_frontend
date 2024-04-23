@@ -101,7 +101,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   testScrol: any = 0;
 
   scrollUpState: boolean = true;
-  scrollCurent:any = this.viewportScroller.getScrollPosition()
+
 
   constructor(
     private eventsService: EventsService,
@@ -141,7 +141,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   scrollUp() {
-    console.log(this.scrollCurent);
+  
     document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -321,7 +321,6 @@ export class EventsComponent implements OnInit, OnDestroy {
       }
       if(boundingClientRect.y > this.testScrol){
         this.headerWrapper.nativeElement.style.transform = 'translateY(-10%)';
-        console.log("ScrollUp")
       }
       if(boundingClientRect.y < this.testScrol){
         this.headerWrapper.nativeElement.style.transform = 'translateY(-110%)';
@@ -332,7 +331,6 @@ export class EventsComponent implements OnInit, OnDestroy {
 
       this.testScrol = boundingClientRect.y
 
-      const lastScroll = boundingClientRect.bottom - 100
     // console.log(this.ContentCol.nativeElement.getBoundingClientRect().bottom, window.innerHeight)
     if (
       boundingClientRect.bottom <= window.innerHeight * 2 &&
@@ -345,48 +343,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     }
   };
 
-  ngOnInit() {
-    this.getEventsCity()
-    window.addEventListener('scroll', this.scrollPaginate, true);
-    window.addEventListener('scrollend', this.scrollEvent, true);
-    console.log("hi")
-    this.date = {
-      dateStart: this.filterService.startDate.value,
-      dateEnd: this.filterService.endDate.value,
-    };
-    //console.log(this.date)
-    this.eventsCity = [];
-    this.eventsGeolocation = [];
-    // this.getEventsGeolocation()
-
-    //Подписываемся на изменение фильтра
-    this.filterService.changeFilter
-      .pipe(debounceTime(1000), takeUntil(this.destroy$))
-      .subscribe(value => {
-        if (value === true) {
-          this.eventsCity = [];
-          this.eventsGeolocation = [];
-          this.getEventsCity();
-          // this.getEventsGeolocation()
-        }
-        this.navigationService.appFirstLoading.next(false); // чтобы удалялся фильтр,
-      });
-
-    //Подписываемся на город
-    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-    //     this.city = response.location.name
-    //   })
-    // })
-    this.filterService.eventTypes
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.eventTypeId = value[0];
-      });
-
-    // console.log(this.cardContainer)
-  }
-
+ 
 
 
   ngAfterViewInit(){
@@ -396,7 +353,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   ngOnInit() {
    
     window.addEventListener('scroll', this.scrollPaginate, true);
-    window.addEventListener('scrollend', this.scrollEvent, true);
 
     this.date = {
       dateStart: this.filterService.startDate.value,

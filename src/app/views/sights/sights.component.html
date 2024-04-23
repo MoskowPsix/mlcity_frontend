@@ -33,7 +33,7 @@
  
    
     
-      <ion-row class="ion-justify-content-center">
+      <ion-row class="ion-justify-content-center" style="margin-top: 4rem;">
         <ion-col size-lg="10" size-md="12" size-xs="12">
           <!-- <div [hidden]="segment !== 'sightsCitySegment'" class="segment-box"> -->
           <div class="segment-box"  #ContentCol>
@@ -70,9 +70,7 @@
                   <div #widgetsContent>
                     <app-event-card #cardContainer *ngFor="let sight of sightsCity; let i = index" [isSight]="true" [event]="sight"></app-event-card>
                   </div>
-                  <ng-container *ngIf="!sightsCity.length && loadingSightsCity">
-                    <app-no-data/>
-                  </ng-container>
+              
                 </ion-col>
               </ion-row>
             </ng-container>
@@ -151,7 +149,9 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-
+    <ng-container *ngIf="!sightsCity.length && loadingSightsCity">
+      <app-no-data/>
+    </ng-container>
     <a routerLink="." fragment="header-anchor" class="scroll-up" [hidden]="scrollUpState" (click)="scrollUp()">
       <ion-icon size="large" name="chevron-up"></ion-icon>
     </a>
