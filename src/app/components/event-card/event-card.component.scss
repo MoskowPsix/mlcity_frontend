@@ -176,3 +176,23 @@ ion-card:hover {
     display: none;
   }
 }
+
+.card-title{
+  padding-bottom: 0.5rem;
+  display: flex;
+}
+
+img{
+
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+}
+
+.text-wrapper{
+
+}
+
+ion-card-subtitle{
+  font-family:Montserrat-Regular;
+}

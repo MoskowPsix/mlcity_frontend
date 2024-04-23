@@ -72,7 +72,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   user: any;
   currentType: any = [];
   stepStart: number = 0;
-  stepCurrency: number = 0;
+  stepCurrency: number = 2;
   steps: number = 5;
 
   @ViewChild('sightName') sightNameElement!: any;
