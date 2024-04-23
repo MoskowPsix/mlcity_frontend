@@ -56,6 +56,12 @@ export class QueryBuilderService {
   public paginationPublicSightsFavoritesCurrentPage: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
 
+  public paginationPublicEventsForTapeCurrentPage: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
+
+  public paginationPublicSightsForTapeCurrentPage: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
+
   constructor(
     private mapService: MapService,
     private filterService: FilterService,
@@ -96,6 +102,12 @@ export class QueryBuilderService {
       case 'eventsForMap': //Главная страница - карта /home
         this.buildQueryEventsForMap();
         break;
+      case 'eventsForTape': //Лента ивентов - /events
+        this.buildQueryEventsForTape();
+        break;
+      case 'sightsForTape': // Лента мест - /sights
+        this.buildQuerySightsForTape();
+        break;
       case 'eventsFavorites': //Страница избранного -  /cabinet/favorites
         this.buildQueryEventsFavorites();
         break;
@@ -134,6 +146,32 @@ export class QueryBuilderService {
         break;
     }
     return this.queryParams;
+  }
+
+  buildQueryEventsForTape() {
+    this.queryParams = {
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      latitude: this.latitude,
+      longitude: this.longitude,
+      eventTypes: this.eventTypes,
+      dateStart: this.dateStart,
+      dateEnd: this.dateEnd,
+      radius: this.radius,
+      page: this.paginationPublicEventsForTapeCurrentPage.value,
+    };
+  }
+
+  buildQuerySightsForTape() {
+    this.queryParams = {
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      latitude: this.latitude,
+      longitude: this.longitude,
+      radius: this.radius,
+      sightTypes: this.sightTypes,
+      page: this.paginationPublicSightsForTapeCurrentPage.value,
+    };
   }
 
   buildQueryEventsPublicForAuthor() {

@@ -106,7 +106,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private titleService: Title,
-    private metaService: Meta,
+    private metaService: Meta
   ) {
     this.filterService.locationId
       .pipe(takeUntil(this.destroy$))
@@ -151,17 +151,14 @@ export class EventsComponent implements OnInit, OnDestroy {
       : (this.loadingEventsCity = false);
 
     this.eventsService
-      .getEvents(
-        this.queryBuilderService.queryBuilder('eventsModalRadiusForMap')
-      )
+      .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
       .pipe(
         delay(100),
         retry(3),
         map((response: any) => {
-          console.log(response)
           this.eventsCity.push(...response.events.data);
           this.filterService.setEventsCount(response.events.total);
-          this.queryBuilderService.paginationPublicEventsRadiusPage.next(
+          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(
             response.events.next_cursor
           );
           response.events.next_cursor
@@ -308,10 +305,10 @@ export class EventsComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit() {
-    this.getEventsCity()
+    this.getEventsCity();
     window.addEventListener('scroll', this.scrollPaginate, true);
     window.addEventListener('scrollend', this.scrollEvent, true);
-    console.log("hi")
+    console.log('hi');
     this.date = {
       dateStart: this.filterService.startDate.value,
       dateEnd: this.filterService.endDate.value,
@@ -351,7 +348,7 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // отписываемся от всех подписок
-    console.log("is destroyed")
+    console.log('is destroyed');
     this.destroy$.next();
     this.destroy$.complete();
   }
