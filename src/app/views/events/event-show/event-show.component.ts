@@ -38,6 +38,7 @@ import { HelpersService } from 'src/app/services/helpers.service';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
 import { UserService } from 'src/app/services/user.service';
+import { FilterService } from 'src/app/services/filter.service';
 
 // import { Swiper } from 'swiper/types';
 
@@ -56,7 +57,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   host: string = environment.BACKEND_URL;
   port: string = environment.BACKEND_PORT;
 
-  user?: any
+  user?: any;
   eventId?: number;
   event?: any;
   places: any[] = [];
@@ -70,6 +71,8 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   like: boolean = false;
   loadingLike: boolean = false;
   startLikesCount: number = 0;
+
+  locationId!: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -86,7 +89,8 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private titleService: Title,
     private metaService: Meta,
     private helpers: HelpersService,
-    private userService: UserService
+    private userService: UserService,
+    private filterService: FilterService
   ) {
     let prevPath = this.location.path();
     this.router.events
@@ -109,8 +113,10 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
         takeUntil(this.destroy$)
       )
       .subscribe((event: any) => {
-        console.log(event);
-        if (event) this.event = event;
+        if (event) {
+          this.event = event;
+          this.places = event.places_full;
+        }
         this.titleService.setTitle(event.name);
         this.metaService.updateTag({
           name: 'description',
@@ -258,13 +264,17 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.eventId = params['id'];
     });
-
-    console.log('');
-
+    this.filterService.locationId
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => {
+        if (value) {
+          this.locationId = Number(value);
+        }
+      });
     this.userAuth = this.authService.getAuthState();
     this.getEvent();
-    this.getEventPlaces();
-    this.user = this.userService.user.value
+    // this.getEventPlaces();
+    this.user = this.userService.user.value;
     this.checkLiked();
     this.checFavorite();
   }
