@@ -59,6 +59,7 @@ export class SightsComponent implements OnInit, OnDestroy {
 
   cardContainer!: ElementRef;
   @ViewChild('widgetsContent') widgetsContent!: ElementRef;
+  @ViewChild('headerWrapper') headerWrapper!:ElementRef
   viewId: number[] = [];
   timeStart: number = 0;
 
@@ -68,7 +69,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   sightTypeId: any;
 
   scrollUpState: boolean = true;
-
+  testScrol:any = 0
   constructor(
     private sightsService: SightsService,
     private toastService: ToastService,
@@ -322,6 +323,22 @@ export class SightsComponent implements OnInit, OnDestroy {
   scrollPaginate = (): void => {
     const boundingClientRect =
       this.ContentCol.nativeElement?.getBoundingClientRect();
+
+      if(this.testScrol == 0){
+        this.testScrol = boundingClientRect.y
+        this.headerWrapper.nativeElement.style.transform = 'translateY(-15%)';
+      }
+      if(boundingClientRect.y > this.testScrol){
+        this.headerWrapper.nativeElement.style.transform = 'translateY(-15%)';
+        console.log("ScrollUp")
+      }
+      if(boundingClientRect.y < this.testScrol){
+        this.headerWrapper.nativeElement.style.transform = 'translateY(-115%)';
+      }
+      else{
+        
+      }
+      this.testScrol = boundingClientRect.y
     // console.log(this.ContentCol.nativeElement.getBoundingClientRect().bottom, window.innerHeight)
     if (
       boundingClientRect.bottom <= window.innerHeight * 2 &&

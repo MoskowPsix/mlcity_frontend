@@ -5,6 +5,7 @@ import {
   ViewChild,
   ElementRef,
   ChangeDetectionStrategy,
+  HostListener,
 } from '@angular/core';
 import {
   catchError,
@@ -18,6 +19,7 @@ import {
   tap,
   debounceTime,
   filter,
+  last,
 } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { IEvent } from 'src/app/models/event';
@@ -48,8 +50,9 @@ register();
 })
 export class EventsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
-
+  
   @ViewChild('ContentCol') ContentCol!: ElementRef;
+  @ViewChild('headerWrapper') headerWrapper!:ElementRef
 
   city: string = '';
   segment: string = 'eventsCitySegment';
@@ -58,6 +61,8 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   eventsCity: IEvent[] = [];
   eventsGeolocation: IEvent[] = [];
+
+  scrollStart:any
 
   @ViewChild('cardContainer')
   cardContainer!: ElementRef;
@@ -89,7 +94,10 @@ export class EventsComponent implements OnInit, OnDestroy {
   eventTypeId: any;
   sightTypeId: any;
 
+  testScrol: any = 0;
+
   scrollUpState: boolean = true;
+  scrollCurent:any = this.viewportScroller.getScrollPosition()
 
   constructor(
     private eventsService: EventsService,
@@ -143,7 +151,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   scrollUp() {
-    console.log('я работаю');
+    console.log(this.scrollCurent);
     document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -236,46 +244,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.segment = event.detail.value;
   }
 
-  ngOnInit() {
-    window.addEventListener('scroll', this.scrollPaginate, true);
-    window.addEventListener('scrollend', this.scrollEvent, true);
-    this.date = {
-      dateStart: this.filterService.startDate.value,
-      dateEnd: this.filterService.endDate.value,
-    };
-    //console.log(this.date)
-    this.eventsCity = [];
-    this.eventsGeolocation = [];
-    this.getEventsCity();
-    // this.getEventsGeolocation()
-
-    //Подписываемся на изменение фильтра
-    this.filterService.changeFilter
-      .pipe(debounceTime(1000), takeUntil(this.destroy$))
-      .subscribe(value => {
-        if (value === true) {
-          this.eventsCity = [];
-          this.eventsGeolocation = [];
-          this.getEventsCity();
-          // this.getEventsGeolocation()
-        }
-        this.navigationService.appFirstLoading.next(false); // чтобы удалялся фильтр,
-      });
-
-    //Подписываемся на город
-    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-    //     this.city = response.location.name
-    //   })
-    // })
-    this.filterService.eventTypes
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.eventTypeId = value[0];
-      });
-
-    // console.log(this.cardContainer)
-  }
+  
   scrollEvent = (): void => {
     this.scrollUpCheckState();
     let viewElement: boolean = false;
@@ -328,6 +297,15 @@ export class EventsComponent implements OnInit, OnDestroy {
     viewElement = true;
   };
 
+  carusel(status:string){
+    if(status == 'hidden'){
+
+    }
+    else{
+
+    }
+  }
+
   timerReload() {
     this.timeStart = new Date().getTime();
   }
@@ -340,10 +318,30 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.filterService.changeFilter.next(true);
     }
   }
-
+//скролл
   scrollPaginate = (): void => {
     const boundingClientRect =
       this.ContentCol.nativeElement?.getBoundingClientRect();
+    
+
+      if(this.testScrol == 0){
+        this.testScrol = boundingClientRect.y
+        this.headerWrapper.nativeElement.style.transform = 'translateY(-10%)';
+      }
+      if(boundingClientRect.y > this.testScrol){
+        this.headerWrapper.nativeElement.style.transform = 'translateY(-10%)';
+        console.log("ScrollUp")
+      }
+      if(boundingClientRect.y < this.testScrol){
+        this.headerWrapper.nativeElement.style.transform = 'translateY(-110%)';
+      }
+      else{
+        
+      }
+
+      this.testScrol = boundingClientRect.y
+
+      const lastScroll = boundingClientRect.bottom - 100
     // console.log(this.ContentCol.nativeElement.getBoundingClientRect().bottom, window.innerHeight)
     if (
       boundingClientRect.bottom <= window.innerHeight * 2 &&
@@ -355,6 +353,56 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.eventsCityLoadingMore();
     }
   };
+
+
+
+  ngAfterViewInit(){
+    this.scrollStart = this.ContentCol.nativeElement?.getBoundingClientRect()
+    console.log(this.scrollStart)
+  }
+  ngOnInit() {
+   
+    window.addEventListener('scroll', this.scrollPaginate, true);
+    window.addEventListener('scrollend', this.scrollEvent, true);
+
+    this.date = {
+      dateStart: this.filterService.startDate.value,
+      dateEnd: this.filterService.endDate.value,
+    };
+    //console.log(this.date)
+    this.eventsCity = [];
+    this.eventsGeolocation = [];
+    this.getEventsCity();
+    // this.getEventsGeolocation()
+
+    //Подписываемся на изменение фильтра
+    this.filterService.changeFilter
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
+      .subscribe(value => {
+        if (value === true) {
+          this.eventsCity = [];
+          this.eventsGeolocation = [];
+          this.getEventsCity();
+          // this.getEventsGeolocation()
+        }
+        this.navigationService.appFirstLoading.next(false); // чтобы удалялся фильтр,
+      });
+
+    //Подписываемся на город
+    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+    //     this.city = response.location.name
+    //   })
+    // })
+    this.filterService.eventTypes
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value: any) => {
+        this.eventTypeId = value[0];
+      });
+
+    // console.log(this.cardContainer)
+
+  }
 
   ngOnDestroy() {
     // отписываемся от всех подписок

@@ -250,7 +250,13 @@ ion-item.photo-label {
     }
   }
 
-
+  .description-item{
+    width: clamp(20rem, 12.727rem + 36.36vw, 30rem);
+  }
+  .description-item-wrapper{
+    display: flex;
+    justify-content: center;
+  }
   .descriptionButton {
     transition: 1s;
     position: absolute;

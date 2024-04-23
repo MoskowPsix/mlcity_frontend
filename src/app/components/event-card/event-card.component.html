@@ -15,10 +15,9 @@
         <ng-container *ngFor="let file of event.files">
           <swiper-slide *ngIf="file.local === 1 && file.file_types[0].name === 'image'">
             <ion-img style="background-image: url('{{host}}:{{port}}{{ file.link }}');"/>
-            <img alt="{{file.name}}" src="{{host}}:{{port}}{{ file.link }}" style="z-index: 10;" />
+       
           </swiper-slide>
           <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
-              <ion-img style="background-image: url('/assets/imgs/blur-image.jpg');"/>
               <img alt="{{file.name}}" src="{{ file.link }}" style="z-index: 10;"/>
           </swiper-slide>
           <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
@@ -55,14 +54,18 @@
       <img alt="img" src="{{host}}:{{port}}{{ event.types[0].ico }}" />
     </div>
 
-    <ion-card-title class="text">{{ event.name | truncate:[60,'...'] }}</ion-card-title>
+    
 
     <ion-card-header [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
+      <ion-text class="last-header card-title">{{ event.name | truncate:[60,'...'] }}</ion-text>
       <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>
     </ion-card-header>
 
     <ion-card-content lines="none">
-      <app-read-more text="{{ event.description }}"></app-read-more>
+      <div class="text-wrapper">
+        <app-read-more text="{{ event.description }}"></app-read-more>
+      </div>
+
     </ion-card-content>
 
     <!-- Ссылки которые пока просто ссылки без превью. -->

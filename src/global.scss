@@ -308,3 +308,48 @@ swiper-slide {
     font-family: 'Montserrat-Light';
     line-height: 1.5;
 }
+.carusel-wrapper_flex{
+   transition: 0.5s;
+   transform: translateY(-10%);
+   width: 100%;
+   position: fixed;
+   z-index: 10000;
+}
+.carusel-wrapper_flex__type{
+   transition: 0.5s;
+   transform: translateY(-15%);
+   width: 100%;
+   position: fixed;
+   z-index: 10000;
+}
+
+.first-header{
+    font-family:Montserrat-SemiBold;
+    color: #000000;
+    font-size: 48px;
+}
+
+.second-header{
+    font-family:Montserrat-SemiBold;
+    color: #000000;
+    font-size: 36px;
+}
+.last-header{
+    font-family:Montserrat-SemiBold;
+    color: #000000;
+    font-size: 22px;
+}
+.last-header_regular{
+    font-family:Montserrat-Regular;
+    color: #000000;
+    font-size: 24px;
+}
+.last-header_regular_small{
+    font-family:Montserrat-Regular;
+    color: #000000;
+    font-size: 18px;
+}
+.last-header_small{
+    font-family:Montserrat-SemiBold;
+    font-size: 16px;
+}
