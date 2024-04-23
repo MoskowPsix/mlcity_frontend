@@ -5,7 +5,7 @@
     <ya-map [@mapAnimate] (ready)="onMapReady($event)"
       id="map"
       [zoom]="4"
-      [center]="[0,0]"
+      [center]="[defaultMapLatitude,defaultMapLongitude]"
       [state]="{controls: ['zoomControl']}"
       [options]="{
         yandexMapDisablePoiInteractivity: true,

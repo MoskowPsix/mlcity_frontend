@@ -233,12 +233,7 @@
                     </div>
                   </ion-col>
 
-                  <ion-col>
-                    <h1 class="title">События в этом месте</h1>
-                    <div style="background-color: #f1f2f3;">
-                      <app-mini-card [image]=sight.files[0].link [title]=sight.name></app-mini-card>
-                    </div>
-                  </ion-col>
+
 
                   <ion-col>
                     <h2 class="title">Адрес</h2>
@@ -261,6 +256,26 @@
                   >
                   </ya-map>
                   </div>
+
+                  <ion-col>
+                    <h1 class="title">События в этом месте</h1>
+                    <ion-grid class="mini-cards-container">
+                      <ion-row>
+                        <ion-col class="mini-card-item" size="1">
+                          <app-mini-card [image]=sight.files[0].link [title]=sight.name [description]="sight.description"></app-mini-card>
+                        </ion-col>
+                        <ion-col class="mini-card-item" size="1">
+                          <app-mini-card [image]=sight.files[0].link [title]=sight.name [description]="sight.description"></app-mini-card>
+                        </ion-col>
+                        <ion-col class="mini-card-item" size="1">
+                          <app-mini-card [image]=sight.files[0].link [title]=sight.name [description]="sight.description"></app-mini-card>
+                        </ion-col>
+                        <ion-col class="mini-card-item" size="1">
+                          <app-mini-card [image]=sight.files[0].link [title]=sight.name [description]="sight.description"></app-mini-card>
+                        </ion-col>
+                    </ion-row>
+                    </ion-grid>
+                  </ion-col>
                 </div>
               </ion-col>
             </ion-row>

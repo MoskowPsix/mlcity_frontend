@@ -1,13 +1,16 @@
 <div class="mini-card-container">
-  <div class="mini-card">
-    <ion-row>
-      <div>
+  <ion-col class="mini-card">
+      <ion-col>
         <img [src]="image" class="mini-card-img">
-      </div>
+      </ion-col>
 
-      <div>
-        <p>Информация о мероприятии</p>
-      </div>
-    </ion-row>
-  </div>
+      <ion-col class="mini-card-text-container">
+        <h4 class="mini-card-text-title">{{ title }}</h4>
+        <app-collapsed-text>
+          <ng-container>
+            <p style="max-height:100%;" class="mini-card-text-description">{{ description }}</p>
+          </ng-container>
+        </app-collapsed-text>
+      </ion-col>
+  </ion-col>
 </div>

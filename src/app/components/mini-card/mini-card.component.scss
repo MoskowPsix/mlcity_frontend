@@ -1,15 +1,32 @@
 .mini-card-container{
   padding: 12px;
-  max-width: 500px;
+  display: flex;
+  background-color: white;
+  border-radius: 8px;
 }
 
 .mini-card{
-  padding: 8px;
-  border-radius: 8px;
-  background-color: white;
 }
 
 .mini-card-img{
-  width: 200px;
+  min-width: 120px;
+  min-height: 80px;
   border-radius: 6px;
 }
+
+
+.mini-card-text-container{
+  margin-left: 20px;
+}
+
+.mini-card-text-title{
+  margin: 0;
+}
+
+@media (max-width: 768px){
+  .mini-card-img{
+    min-height: 120px;
+  }
+}
+
+

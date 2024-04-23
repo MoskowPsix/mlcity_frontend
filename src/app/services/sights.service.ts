@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { ISight } from '../models/sight';
 import { IGetEventsAndSights } from '../models/getEventsAndSights';
 import { UserService } from './user.service';
+import { IEvent } from '../models/event';
 
 @Injectable({
   providedIn: 'root',
@@ -57,6 +58,12 @@ export class SightsService {
     return this.http.get<ISight>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${id}`
     );
+  }
+
+  getEventInSight(id: number) {
+    return this.http.get<IEvent>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${id}/events}`
+    )
   }
 
   getSightsFavorites(params: any) {
