@@ -121,7 +121,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   CirclePoint!: ymaps.Circle;
 
   myGeo!: ymaps.Placemark;
-  minZoom = 8;
+  minZoom = 10;
   clusterer!: ymaps.Clusterer;
   radius: number = 1;
   date: any = {
@@ -168,7 +168,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightsContentModal: ISight[] = [];
   eventsContentModal: IEvent[] = [];
   places: IPlace[] = [];
-  radiusTimeOut: any; 
+  radiusTimeOut: any;
 
   constructor(
     private mapService: MapService,
@@ -221,7 +221,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.radiusTimeOut = setTimeout(() => {
       this.filterService.setRadiusTolocalStorage(event.value);
-    }, 1000);
+    }, 500);
   }
   radiusPlus() {
     let radius: number = Number(this.filterService.getRadiusFromlocalStorage());
@@ -378,9 +378,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     //   this.onMapReady({target, ymaps});
     // }
     await this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
-      console.log()
       this.getEventsAndSights()
     });
+    console.log(this.map.target.getZoom())
+    console.log(this.map.target.zoomRange.getCurrent())
 
     if (this.navigationService.appFirstLoading.value) {
       this.eventsLoading = true;
@@ -619,7 +620,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   getEvents(more?: boolean): Observable<any> {
     return new Observable(observer => {
       this.eventsLoading = true;
-      console.log(more)
       this.eventsService
         .getEvents(
           this.queryBuilderService.queryBuilder('eventsModalRadiusForMap')
@@ -634,9 +634,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
           if(more){
             this.eventsContentModal.push(...response.events.data);
+            console.log(response)
           }
           else{
             this.eventsContentModal = response.events.data;
+            console.log(response)
           }
           this.eventsContentModalTotal = response.total;
           // this.filterService.setEventsCount(response.total)
@@ -648,21 +650,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  nextPageModal(more?: boolean) {
-    if (this.sightsModalNextPage.length || this.eventsModalNextPage.length) {
-      this.modalNewPageLoader = true;
-      if (this.stateType == 'sights') {
-        this.queryBuilderService.paginationPublicSightsModalRadiusPage.next(
-          this.sightsModalNextPage
-        );
-      } else if (this.stateType == 'events') {
-        this.queryBuilderService.paginationPublicEventsModalRadiusPage.next(
-          this.eventsModalNextPage
-        );
-      }
-      this.getEventsAndSightsForModal(more);
-    }
-  }
 
   setMapData() {
     if (this.objectsInsideCircle) {
@@ -793,38 +780,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.setMapData();
       });
-    this.getEventsAndSightsForModal();
-  }
-
-  getLoc(){
-    console.log("bang")
-  }
-
-  getEventsAndSightsForModal(more?:boolean) {
-    this.modalButtonLoader = true;
-    const sourceModal: any[] = [];
-    if (this.stateType == 'events') {
-      sourceModal.push(this.getEvents(more));
-    } else if (this.stateType == 'sights') {
-      sourceModal.push(this.getSights(more));
-    }
-    forkJoin(sourceModal)
-      .pipe(
-        catchError(err => {
-          this.toastService.showToast(MessagesErrors.default, 'danger');
-          this.modalButtonLoader = false;
-          this.modalNewPageLoader = false;
-          this.cdr.detectChanges();
-          return of(EMPTY);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        this.modalButtonLoader = false;
-        this.modalNewPageLoader = false;
-        this.cdr.detectChanges();
-        // this.setMapData();
-      });
   }
 
   modalClose() {
@@ -897,21 +852,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
       });
 
-    this.filterService.locationLongitude
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.eventsContentModal = [];
-        this.sightsContentModal = [];
-        this.mapService.circleCenterLongitude.next(value);
-      });
 
-    this.filterService.locationLatitude
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.eventsContentModal = [];
-        this.sightsContentModal = [];
-        this.mapService.circleCenterLatitude.next(value);
-      });
     //Подписываемся на состояние модалки показа ивентов и мест
     this.navigationService.modalEventShowOpen
       .pipe(takeUntil(this.destroy$))
@@ -975,6 +916,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
+    console.log("map is destroy")
     this.destroy$.next();
     this.destroy$.complete();
   }

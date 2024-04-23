@@ -1,18 +1,11 @@
 <!-- мобильный футтер -->
 <div class="footer-mobile">
-    <div
-        class="item"
-        [routerLink]="['home']"
-        [routerLinkActive]="['item-active']"
-    >
-        <ion-icon name="map" class="icon" [routerLinkActive]="['active']"></ion-icon>
-        <span class="title" [routerLinkActive]="['active']">Карта</span>
-    </div>
 
     <div
         class="item"
         [routerLink]="['events']"
         [routerLinkActive]="['item-active']"
+        replaceUrl="true"
     >
         <ion-row>
             <ion-icon name="balloon" class="icon" [routerLinkActive]="['active']"></ion-icon>
@@ -25,6 +18,7 @@
         class="item"
         [routerLink]="['sights']"
         [routerLinkActive]="['item-active']"
+        replaceUrl="true"
     >
         <ion-row>
           <img src="/assets/icons/MakiMuseum.svg" class="svg-icon">
@@ -35,9 +29,20 @@
 
     <div
         class="item"
+        [routerLink]="['home']"
+        [routerLinkActive]="['item-active']"
+        replaceUrl="true"
+    >
+        <ion-icon name="map" class="icon" [routerLinkActive]="['active']"></ion-icon>
+        <span class="title" [routerLinkActive]="['active']">Карта</span>
+    </div>
+
+    <div
+        class="item"
         [routerLink]="['cabinet/favorites']"
         [routerLinkActive]="['item-active']"
         [routerLinkActiveOptions]="{exact: true}"
+        replaceUrl="true"
     >
         <ion-row>
             <ion-icon name="star" class="icon" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"></ion-icon>
@@ -51,6 +56,7 @@
         [routerLink]="['cabinet']"
         [routerLinkActive]="['item-active']"
         [routerLinkActiveOptions]="{exact: true}"
+        replaceUrl="true"
     >
 
           <ion-avatar class="user-avatar" *ngIf="isAuth">
