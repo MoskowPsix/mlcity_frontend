@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { AuthService } from 'src/app/services/auth.service';
@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './dropdown-popup.component.html',
   styleUrls: ['./dropdown-popup.component.scss'],
 })
-export class DropdownPopupComponent implements OnInit {
+export class DropdownPopupComponent {
   @Input() id: string = '';
 
   @Input() headerLeftIco: boolean = false;
@@ -36,9 +36,6 @@ export class DropdownPopupComponent implements OnInit {
     private router: Router,
     private authService: AuthService
   ) {}
-  ngOnInit() {
-    console.log(this.platformType);
-  }
 
   onLogout() {
     this.authService.logout();
