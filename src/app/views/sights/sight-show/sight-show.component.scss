@@ -14,6 +14,11 @@
   --ion-grid-columns: 3;
 }
 
+.mini-cards-loadMore {
+  display: flex;
+  justify-content: center;
+}
+
 @media (max-width: 768px){
   .mini-cards-container{
     --ion-grid-columns: 1;

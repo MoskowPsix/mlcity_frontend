@@ -56,6 +56,8 @@ export class QueryBuilderService {
   public paginationPublicSightsFavoritesCurrentPage: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
 
+  public paginationEventsInSightCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+
   constructor(
     private mapService: MapService,
     private filterService: FilterService,
@@ -129,6 +131,9 @@ export class QueryBuilderService {
       case 'sightsModalRadiusForMap': //Публичная страница мероприятий /events - вкладка по события городу
         this.buildQuerySightsModalRadiusForMap();
         break;
+      case "buildQueryEventsInSight":
+        this.buildQueryEventsInSight()
+        break
       default:
         this.buildQueryDefault();
         break;
@@ -140,6 +145,11 @@ export class QueryBuilderService {
     this.queryParams = {
       page: this.paginationPublicEventsForAuthorCurrentPage.value,
     };
+  }
+  buildQueryEventsInSight(){
+    this.queryParams = {
+      page: this.paginationEventsInSightCurrentPage.value
+    }
   }
   buildQuerySightsPublicForAuthor() {
     this.queryParams = {
@@ -172,7 +182,10 @@ export class QueryBuilderService {
       dateEnd: this.dateEnd,
       radius: this.radius,
     };
+
+
   }
+
   buildQueryEventsForMap() {
     this.queryParams = {
       statuses: [Statuses.publish].join(','),

@@ -257,23 +257,17 @@
                   </ya-map>
                   </div>
 
-                  <ion-col>
+                  <ion-col *ngIf="eventsInSight">
                     <h1 class="title">События в этом месте</h1>
                     <ion-grid class="mini-cards-container">
                       <ion-row>
-                        <ion-col class="mini-card-item" size="1">
-                          <app-mini-card [image]=sight.files[0].link [title]=sight.name [description]="sight.description"></app-mini-card>
-                        </ion-col>
-                        <ion-col class="mini-card-item" size="1">
-                          <app-mini-card [image]=sight.files[0].link [title]=sight.name [description]="sight.description"></app-mini-card>
-                        </ion-col>
-                        <ion-col class="mini-card-item" size="1">
-                          <app-mini-card [image]=sight.files[0].link [title]=sight.name [description]="sight.description"></app-mini-card>
-                        </ion-col>
-                        <ion-col class="mini-card-item" size="1">
-                          <app-mini-card [image]=sight.files[0].link [title]=sight.name [description]="sight.description"></app-mini-card>
+                        <ion-col *ngFor="let event of eventsInSight" class="mini-card-item" size="1">
+                          <app-mini-card [image]=event.files[0].link [title]=event.name [description]="event.description" [id]="event.id"></app-mini-card>
                         </ion-col>
                     </ion-row>
+                    <div class="mini-cards-loadMore">
+                      <ion-button (click)="loadMoreEventsInSight()" [disabled]="loadMoreEventsInSigthState" color="primary">Показать больше</ion-button>
+                    </div>
                     </ion-grid>
                   </ion-col>
                 </div>

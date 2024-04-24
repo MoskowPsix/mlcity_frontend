@@ -32,6 +32,8 @@ import { Metrika } from 'ng-yandex-metrika';
 import { Title } from '@angular/platform-browser';
 import { Meta } from '@angular/platform-browser';
 import { HelpersService } from 'src/app/services/helpers.service';
+import { ContentObserver } from '@angular/cdk/observers';
+import { QueryBuilderService } from 'src/app/services/query-builder.service';
 
 @Component({
   selector: 'app-sight-show',
@@ -50,7 +52,10 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   sightId?: number;
   sight?: any;
+  eventsInSight!: any
+  loadMoreEventsInSigthState: boolean = false
   loadingSight: boolean = true;
+
 
   map!: YaReadyEvent<ymaps.Map>;
 
@@ -72,7 +77,7 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private titleService: Title,
     private metaService: Meta,
-    private helpers: HelpersService
+    private queryBuilderService: QueryBuilderService
   ) {
     let prevPath = this.location.path();
     this.router.events
@@ -95,7 +100,17 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
         takeUntil(this.destroy$)
       )
       .subscribe((sight: any) => {
-        if (sight) this.sight = sight;
+        if (sight) {
+          console.log(sight)
+          this.sight = sight;
+          this.sightsService.getEventInSight(this.sight.id).subscribe((response: any) => {
+            console.log(response)
+            if(response.events.data.length > 0){
+              this.eventsInSight = response.events.data
+              this.queryBuilderService.paginationEventsInSightCurrentPage.next(response.events.next_cursor)
+            }
+          })
+        }
         this.titleService.setTitle(sight.name);
         this.metaService.updateTag({
           name: 'description',
@@ -105,6 +120,23 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
           ? this.sight.likes.vk_count + this.sight.likes.local_count
           : 0;
       });
+  }
+
+  loadMoreEventsInSight(){
+    this.loadMoreEventsInSigthState = true
+    this.sightsService.getEventInSight(this.sight.id, this.queryBuilderService.queryBuilder("buildQueryEventsInSight")).pipe(
+      tap(() => {
+        this.loadMoreEventsInSigthState = false
+      })
+    )
+    .subscribe((response: any) => {
+      this.eventsInSight.push(...response.events.data)
+      this.queryBuilderService.paginationEventsInSightCurrentPage.next(response.events.data.next_cursor)
+      if(response.events.data.next_cursor == null) {
+        this.loadMoreEventsInSigthState = true
+      }
+
+    })
   }
 
   checkLiked() {

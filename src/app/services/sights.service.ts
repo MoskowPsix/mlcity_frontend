@@ -60,9 +60,10 @@ export class SightsService {
     );
   }
 
-  getEventInSight(id: number) {
+  getEventInSight(id: number, params?: any) {
+    console.log(params)
     return this.http.get<IEvent>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${id}/events}`
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${id}/events`, {params: {...params}}
     )
   }
 

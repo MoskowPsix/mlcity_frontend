@@ -10,6 +10,7 @@ export class MiniCardComponent  implements OnInit {
   @Input() image!: string
   @Input() title!: string
   @Input() description!: string
+  @Input() id!: number
   constructor() { }
 
   ngOnInit() {}
