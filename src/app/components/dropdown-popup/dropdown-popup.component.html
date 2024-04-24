@@ -13,7 +13,7 @@
 <ion-popover mode="md"  trigger="popover-button" [trigger]="id" triggerAction="click" [dismissOnSelect]="true" showBackdrop="false">
   <ng-template>
     <ion-list lines="none">
-      <div *ngFor="let parent of listItems | keyvalue">
+      <div *ngFor="let parent of listItems | keyvalue" [hidden]="(parent.value.title === 'Мои мероприятия' || parent.value.title === 'Мои достопримечательности') && platformType === 'ios'">
         <div *ngIf="parent.value.children?.length > 0; else notChil">
 
           <div *ngIf="parent.value.title !== headertitle">
@@ -56,7 +56,7 @@
               </ng-template>
 
               </ng-template>
-              </div>
+            </div>
 
         </div>
 
