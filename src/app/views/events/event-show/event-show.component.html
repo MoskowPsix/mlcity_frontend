@@ -174,9 +174,9 @@
 
                 <ion-col class="content-main-description">
 
-                  <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
+                  <!-- <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
                     О мероприятии
-                  </div>
+                  </div> -->
 
                   <div>
                     <div class="description">{{ event.description }}</div>
@@ -190,15 +190,47 @@
 
                 </ion-col>
 
-                <ion-col>
-                  <div style="font-family:'Montserrat-Bold';" class="title">
-                    Организатор
+                <ion-row class="events-map-container">
+
+                  <div style="margin-bottom: 1rem;" class="title">
+                    Расписание
                   </div>
 
-                  <div class="description-org">
-                    {{event.sponsor}}
+                <ion-accordion-group>
+                  <ion-accordion style="background-color: #fff;" *ngFor="let place of places; let i= index" (click)="setActivePlace(i)" class="seance">
+                    <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
+                      <ion-label *ngIf="!(place.location.location_parent.name==='РФ'); else otherAddress">
+                        {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
+                      </ion-label>
+                      <ng-template #otherAddress>
+                       <h3 class="address">{{ place.address }}</h3>
+                      </ng-template>
+                    </ion-item>
+
+                    <div style="background-color: #fff; border: 1px solid #E6E6E6; border-radius: 8px; margin-top: -1rem;" slot="content" class="ion-padding">
+                      <app-place-info [place]="place" [place_date]="place.seanses"  *ngIf="place.active" [load_seances]="place.active"></app-place-info>
+                    </div>
+
+                  </ion-accordion>
+
+
+                  <div *ngIf="loadPlace===true">
+                    <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
+                    <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
+                    <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
+                    <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
+                    <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
                   </div>
-                </ion-col>
+
+                  </ion-accordion-group>
+
+                </ion-row>
+
+                <ion-row class="ion-justify-content-center">
+                  <ion-button (click)="getEventPlaces()" *ngIf="loadMore">Показать больше</ion-button>
+                </ion-row>
+
+
 
 
                 <ion-col>
@@ -235,13 +267,23 @@
                 </ion-col>
 
                 <ion-col>
-                  <div style="font-family:'Montserrat-Bold';" class="title">Типы мероприятия</div>
+                  <div style="font-family:'Montserrat-Bold';" class="title">
+                    Организатор
+                  </div>
 
-                  <div *ngFor="let type of event.types" class="event-icons">
-                      <img class="ico-small" src="{{host}}:{{port}}{{type.ico}}">
-                      <p class="description-icon">{{ type.name }}</p>
+                  <div class="description-org">
+                    {{event.sponsor}}
                   </div>
                 </ion-col>
+
+                  <!-- <ion-col>
+                    <div style="font-family:'Montserrat-Bold';" class="title">Типы мероприятия</div>
+
+                    <div *ngFor="let type of event.types" class="event-icons">
+                        <img class="ico-small" src="{{host}}:{{port}}{{type.ico}}">
+                        <p class="description-icon">{{ type.name }}</p>
+                    </div>
+                  </ion-col> -->
               </div>
 
 
@@ -249,48 +291,10 @@
 
             </ion-col>
           </ion-row>
-          <ion-row class="events-map-container">
-
-            <div style="margin-bottom: 1rem;" class="title">
-              Расписание
-            </div>
-
-          <ion-accordion-group>
-            <ion-accordion style="background-color: #fff;" *ngFor="let place of places; let i= index" [hidden]="place.location_id !== locationId" (click)="setActivePlace(i)" class="seance">
-              <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
-                <ion-label *ngIf="!(place.location.location_parent.name==='РФ'); else otherAddress">
-                  {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
-                </ion-label>
-                <ng-template #otherAddress>
-                 <h3 class="address">{{ place.address }}</h3>
-                </ng-template>
-              </ion-item>
-
-              <div style="background-color: #fff; border: 1px solid #E6E6E6; border-radius: 8px; margin-top: -1rem;" slot="content" class="ion-padding">
-                <app-place-info [place]="place" [place_date]="place.seanses"  *ngIf="place.active" [load_seances]="place.active"></app-place-info>
-              </div>
-
-            </ion-accordion>
-
-
-            <div *ngIf="loadPlace===true">
-              <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
-              <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
-              <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
-              <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
-              <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
-            </div>
-
-            </ion-accordion-group>
 
 
 
 
-          </ion-row>
-
-          <!-- <ion-row class="ion-justify-content-center">
-            <ion-button (click)="getEventPlaces()" *ngIf="loadMore">Показать больше</ion-button>
-          </ion-row> -->
           <ion-card *ngIf="user" style="margin-bottom: 2rem;"><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
 
 

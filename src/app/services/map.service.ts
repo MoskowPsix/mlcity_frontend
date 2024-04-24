@@ -12,6 +12,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { FilterService } from './filter.service';
 import { NavigationService } from './navigation.service';
 import { LocationService } from './location.service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +48,7 @@ export class MapService {
     private filterService: FilterService,
     private navigationService: NavigationService,
     private locationService: LocationService,
+    private toastService: ToastService
   ) {}
 
   //Определение геопозиции с помощью яндекса (платно)
@@ -68,7 +70,7 @@ export class MapService {
     CirclePoint?: ymaps.Circle
   ) {
     if (!Capacitor.isPluginAvailable('Geolocation')) {
-      //console.log('Plugin geolocation not available');
+      // await this.setCenterMap(map, CirclePoint);
       return;
     }
 
@@ -79,18 +81,18 @@ export class MapService {
       //Запускаем поиск геопозиции в мобилах
       //console.log('ипользуется мобильная версия')
       const status = await this.requestLocationPermission();
-
       try {
-        if (status == "granted") {
+        if (status == 'granted') {
           await this.setCenterMap(map, CirclePoint);
         } else {
           //Если запрещен доступ GPS
           let coords = await this.defaultCoords();
           // console.log("2, " + coords)
+          // await this.setCenterMap(map, CirclePoint);
           this.setPlacemark(map, CirclePoint, coords!, false);
         }
       } catch (e) {
-        console.log("Ошибка GPS " + e);
+        console.log('Ошибка GPS ' + e, 'warning');
       }
     }
   }
@@ -119,14 +121,17 @@ export class MapService {
     let coords;
     try {
       coords = await this.getCurrentLocation();
-      this.circleCenterLatitude.next(coords[0])
-      this.circleCenterLongitude.next(coords[1])
+      this.circleCenterLatitude.next(coords[0]);
+      this.circleCenterLongitude.next(coords[1]);
       this.setPlacemark(map, CirclePoint, coords!, true);
     } catch (error) {
+      if (!this.filterService.locationId.value) {
+        this.navigationService.modalSearchCityesOpen.next(true);
+        this.toastService.showToast('Нет доступа к геопозиции', 'warning');
+      }
       coords = await this.defaultCoords();
-      console.log(error, 'ento error')
-      this.circleCenterLatitude.next(coords[0])
-      this.circleCenterLongitude.next(coords[1])
+      this.circleCenterLatitude.next(coords[0]);
+      this.circleCenterLongitude.next(coords[1]);
       this.setPlacemark(map, CirclePoint, coords!, false);
     }
     return coords;
@@ -173,9 +178,12 @@ export class MapService {
 
   //Проверка разрешений на GPS
   async requestLocationPermission() {
-    let status = await Geolocation.requestPermissions()
-    return status.location
-
+    try {
+      let status = await Geolocation.requestPermissions();
+      return status.location;
+    } catch (e) {
+      return;
+    }
   }
 
   //поиск координат города или адреса через яндекс
@@ -258,7 +266,7 @@ export class MapService {
       this.filterService.getLocationFromlocalStorage() !==
         this.geolocationCity.value
     ) {
-      this.showChangeCityDialog.next(false);
+      // this.showChangeCityDialog.next(false);
     }
   }
 
@@ -274,10 +282,10 @@ export class MapService {
       .subscribe((response: any) => {
         this.geolocationCity.next(response.location.name);
         this.filterService.setLocationTolocalStorage(response.location.id);
-    // this.geolocationRegion.next(region);
+        // this.geolocationRegion.next(region);
       });
-    this.filterService.setLocationTolocalStorage(this.geolocationCity.value)
-    this.filterService.setLocationTolocalStorage(this.geolocationRegion.value)
+    // this.filterService.setLocationTolocalStorage(this.geolocationCity.value);
+    // this.filterService.setLocationTolocalStorage(this.geolocationRegion.value);
     this.filterService.setLocationLatitudeTolocalStorage(
       this.geolocationLatitude.value.toString()
     );
@@ -307,7 +315,7 @@ export class MapService {
         parseFloat(this.filterService.locationLongitude.value)
       );
     } else {
-      this.showChangeCityDialog.next(false);
+      // this.showChangeCityDialog.next(false);
       cityCoords.push(
         parseFloat(this.filterService.getLocationLatitudeFromlocalStorage()!),
         parseFloat(this.filterService.getLocationLongitudeFromlocalStorage()!)
@@ -331,10 +339,12 @@ export class MapService {
         this.circleCenterLatitude.value,
         this.circleCenterLongitude.value,
       ]);
+      await this.geolocationMapNative(map, circlePoint);
       map.target.setBounds(circlePoint.geometry?.getBounds()!, {
         checkZoomRange: true,
       });
     }
+    await this.geolocationMapNative(map, circlePoint);
     //ветка если юзать this.filterService.saveFilters.value === 1
     // else {
     //   await circlePoint.geometry?.setCoordinates(this.defaultCoords())

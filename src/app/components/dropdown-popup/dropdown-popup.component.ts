@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Capacitor } from '@capacitor/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 @Component({
@@ -7,7 +8,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './dropdown-popup.component.html',
   styleUrls: ['./dropdown-popup.component.scss'],
 })
-export class DropdownPopupComponent {
+export class DropdownPopupComponent implements OnInit {
   @Input() id: string = '';
 
   @Input() headerLeftIco: boolean = false;
@@ -29,10 +30,15 @@ export class DropdownPopupComponent {
   @Input() itemIco: boolean = false;
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/login/${localStorage.getItem('auth-token')}`;
 
+  platformType: any = Capacitor.getPlatform();
+
   constructor(
     private router: Router,
     private authService: AuthService
   ) {}
+  ngOnInit() {
+    console.log(this.platformType);
+  }
 
   onLogout() {
     this.authService.logout();
