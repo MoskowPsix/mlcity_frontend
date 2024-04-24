@@ -12,13 +12,13 @@ export class FilterService {
   // public city: BehaviorSubject<any> = new BehaviorSubject(this.setCityTolocalStorage())
   // public region: BehaviorSubject<any> = new BehaviorSubject(this.setRegionTolocalStorage())
   public locationId: BehaviorSubject<any> = new BehaviorSubject(
-    this.getLocationFromlocalStorage() || 0
+    this.getLocationFromlocalStorage() || ''
   );
   public locationLatitude: BehaviorSubject<string> = new BehaviorSubject(
-    this.getLocationLatitudeFromlocalStorage() || '56.81497464978607'
+    this.getLocationLatitudeFromlocalStorage() || '55.7522'
   );
   public locationLongitude: BehaviorSubject<string> = new BehaviorSubject(
-    this.getLocationLongitudeFromlocalStorage() || '61.32053375244141'
+    this.getLocationLongitudeFromlocalStorage() || '37.6156'
   );
   public radius: BehaviorSubject<string> = new BehaviorSubject(
     this.getRadiusFromlocalStorage() || '1'
