@@ -123,8 +123,8 @@ export class MapService {
 
   getLastMapCoordsFromLocalStorage(){
     let coords = [
-      parseFloat(localStorage.getItem("lastMapLatitude") || ""),
-      parseFloat(localStorage.getItem("lastMapLongitude") || "")
+      Number(localStorage.getItem("lastMapLatitude") || ""),
+      Number(localStorage.getItem("lastMapLongitude") || "")
     ]
 
     return coords
