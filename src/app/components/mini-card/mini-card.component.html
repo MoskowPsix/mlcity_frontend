@@ -6,11 +6,8 @@
 
       <ion-col class="mini-card-text-container">
         <h4 class="mini-card-text-title">{{ title }}</h4>
-        <app-collapsed-text>
-          <ng-container>
-            <p style="max-height:100%;" class="mini-card-text-description">{{ description }}</p>
-          </ng-container>
-        </app-collapsed-text>
+          <p class="mini-card-text-description">{{ description }}</p>
+          <p [routerLink]="['/events',id]" class="mini-card-text-readMore">Читать далее...</p>
       </ion-col>
   </ion-col>
 </div>
