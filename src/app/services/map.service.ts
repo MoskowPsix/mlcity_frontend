@@ -116,6 +116,20 @@ export class MapService {
     }
   }
 
+  setLastMapCoordsToLocalStorage(lat:any, long:any){
+    localStorage.setItem("lastMapLatitude",lat)
+    localStorage.setItem("lastMapLongitude",long)
+  }
+
+  getLastMapCoordsFromLocalStorage(){
+    let coords = [
+      parseFloat(localStorage.getItem("lastMapLatitude") || ""),
+      parseFloat(localStorage.getItem("lastMapLongitude") || "")
+    ]
+
+    return coords
+  }
+
   //Определяем местоположение и перемещаем карту
   async setCenterMap(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
     let coords;
@@ -335,16 +349,13 @@ export class MapService {
     //Если не первый запуск и менялся фильтр города то перекидываем на город
 
     if (!this.navigationService.appFirstLoading.value) {
-      await circlePoint.geometry?.setCoordinates([
-        this.circleCenterLatitude.value,
-        this.circleCenterLongitude.value,
-      ]);
-      await this.geolocationMapNative(map, circlePoint);
+      await circlePoint.geometry?.setCoordinates(this.getLastMapCoordsFromLocalStorage());
+      // await this.geolocationMapNative(map, circlePoint);
       map.target.setBounds(circlePoint.geometry?.getBounds()!, {
         checkZoomRange: true,
       });
     }
-    await this.geolocationMapNative(map, circlePoint);
+    // await this.geolocationMapNative(map, circlePoint);
     //ветка если юзать this.filterService.saveFilters.value === 1
     // else {
     //   await circlePoint.geometry?.setCoordinates(this.defaultCoords())

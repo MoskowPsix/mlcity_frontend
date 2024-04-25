@@ -348,6 +348,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.myGeo.geometry!.setCoordinates(coords);
       this.mapService.circleCenterLongitude.next(coords[1]);
       this.mapService.circleCenterLatitude.next(coords[0]);
+      this.mapService.setLastMapCoordsToLocalStorage(coords[0], coords[1])
     });
 
     // Вешаем на карту событие по окончинию перетаскивания

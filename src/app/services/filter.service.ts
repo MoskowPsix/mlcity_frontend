@@ -15,10 +15,10 @@ export class FilterService {
     this.getLocationFromlocalStorage() || ''
   );
   public locationLatitude: BehaviorSubject<string> = new BehaviorSubject(
-    this.getLocationLatitudeFromlocalStorage() || '55.7522'
+    this.getLocationLatitudeFromlocalStorage() || ''
   );
   public locationLongitude: BehaviorSubject<string> = new BehaviorSubject(
-    this.getLocationLongitudeFromlocalStorage() || '37.6156'
+    this.getLocationLongitudeFromlocalStorage() || ''
   );
   public radius: BehaviorSubject<string> = new BehaviorSubject(
     this.getRadiusFromlocalStorage() || '1'
