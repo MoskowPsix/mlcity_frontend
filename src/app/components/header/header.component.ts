@@ -127,6 +127,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   //Устанавливаем город, регион и координаты в локал сторадж и в сервис
   onSelectedCity(item: any) {
+    console.log(item);
     this.city = item.name;
     this.region = item.location_parent.name;
     this.filterService.setLocationTolocalStorage(item.id);
@@ -137,8 +138,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.filterService.setLocationLatitudeTolocalStorage(item.latitude);
     this.filterService.setLocationLongitudeTolocalStorage(item.longitude);
     // })
-    this.filterService.changeFilter.next(true);
-    this.filterService.changeCityFilter.next(true);
+    // this.mapService.geolocationCity.next(item.name);
+    // this.mapService.geolocationRegion.next(item.location_parent.name);
     this.modalClose();
     this.toastService.showToast(MessagesCityes.setCitySuccess, 'success');
   }
@@ -257,16 +258,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
             .pipe()
             .subscribe((response: any) => {
               // if (this.mapService.geolocationCity.value !== response.location.name) {
-                this.city = response.location.name;
-                this.region = response.location.location_parent.name;
-                this.filterService.setLocationLatitudeTolocalStorage(
-                  response.latitude
-                );
-                this.filterService.setLocationLongitudeTolocalStorage(
-                  response.longitude
-                );
-                this.cdr.detectChanges();
-                // this.filterService.changeFilter.next(true);
+              this.city = response.location.name;
+              this.region = response.location.location_parent.name;
+              this.filterService.setLocationLatitudeTolocalStorage(
+                response.latitude
+              );
+              this.filterService.setLocationLongitudeTolocalStorage(
+                response.longitude
+              );
+              this.cdr.detectChanges();
+              // this.filterService.changeFilter.next(true);
               // }
             });
         }

@@ -280,6 +280,7 @@ export class QueryBuilderService {
 
   buildQueryEventPlaces() {
     this.queryParams = {
+      locationId: Number(this.filterService.getLocationFromlocalStorage()),
       page: this.paginataionPublicEventPlacesCurrentPage.value,
     };
   }

@@ -115,7 +115,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((event: any) => {
         if (event) {
           this.event = event;
-          this.places = event.places_full;
+          // this.places = event.places_full;
         }
         this.titleService.setTitle(event.name);
         this.metaService.updateTag({
@@ -140,23 +140,22 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
           delay(100),
           retry(3),
           tap(() => (this.loadPlace = false)),
-          map((response: any) => {
-            this.places.push(...response.places.data);
-
-            this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
-              response.places.next_cursor
-            );
-            response.places.next_cursor
-              ? (this.loadMore = true)
-              : (this.loadMore = false);
-          }),
           catchError(error => {
             this.toastService.showToast(MessagesErrors.default, 'danger');
             return of(EMPTY);
           }),
           takeUntil(this.destroy$)
         )
-        .subscribe(() => {});
+        .subscribe((response: any) => {
+          this.places = response.places.data;
+          this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
+            response.places.next_cursor
+          );
+          response.places.next_cursor
+            ? (this.loadMore = true)
+            : (this.loadMore = false);
+          this.cdr.detectChanges();
+        });
     }
   }
 
@@ -267,13 +266,14 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
     this.filterService.locationId
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
-        if (value) {
-          this.locationId = Number(value);
-        }
+        this.loadMore = true;
+        this.locationId = Number(value);
+        this.places = [];
+        this.getEventPlaces();
       });
     this.userAuth = this.authService.getAuthState();
     this.getEvent();
-    // this.getEventPlaces();
+    this.getEventPlaces();
     this.user = this.userService.user.value;
     this.checkLiked();
     this.checFavorite();

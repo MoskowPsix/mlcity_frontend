@@ -132,6 +132,7 @@
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
+        <!-- <ion-content> -->
         <ion-note color="primary" class="ion-padding-horizontal ion-padding-top">Текущий город: {{ city }}, {{ region }}</ion-note>
 
         <!-- <div class="ion-padding-bottom" slot="content">
@@ -150,7 +151,6 @@
 
         <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchCityes" (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
         <ion-note *ngIf="minLengthCityesListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
-        <!-- <ion-content> -->
             <ng-container *ngIf="cityesListLoading">
                 <ion-list class="ion-padding-end">
                     <ion-item *ngFor="let key of [1,2,3]">
@@ -161,12 +161,12 @@
             <!-- <ng-container *ngIf="!cityesListLoading && !cityesList.length">
                 <app-no-data />
             </ng-container> -->
-            <ion-list  *ngIf="!cityesListLoading">
-              <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" class="search-item">
-                <ion-label>
-                    {{ item.name }}<p>{{ item.location_parent.name }}</p>
-                </ion-label>
-              </ion-item>
+            <ion-list *ngIf="!cityesListLoading">
+                <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)">
+                    <ion-label>
+                        {{ item.name }}<p>{{ item.location_parent.name }}</p>
+                    </ion-label>
+                </ion-item>
             </ion-list>
           <!-- </ion-content> -->
     </ng-template>
