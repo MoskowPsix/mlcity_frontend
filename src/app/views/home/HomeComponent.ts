@@ -840,6 +840,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             })
           ).subscribe((res:any)=>{
             if(res.location.latitude && res.location.longitude){
+              console.log("hui")
               this.mapService.circleCenterLatitude.next(res.location.latitude)
               this.mapService.circleCenterLongitude.next(res.location.longitude)
               this.filterService.changeFilter.next(true)
@@ -933,15 +934,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.changeFilter
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
+       
         if (value === true) {
           this.eventsContentModal = [];
           this.sightsContentModal = [];
           this.mapService.positionFilter(this.map, this.CirclePoint);
-          this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-            checkZoomRange: true,
-          });
+      
           this.getEventsAndSights();
+          this.loadingService.hideLoading()
         }
+       
       });
     this.filterService.sightTypes
       .pipe(takeUntil(this.destroy$))
