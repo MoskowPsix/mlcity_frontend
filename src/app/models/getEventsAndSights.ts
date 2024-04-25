@@ -20,6 +20,7 @@ export interface IGetEventsAndSights {
   radius?: number; // радиус круга в котором выводить ивент / места
 }
 
+
 //Пример
 // let queryParams = {
 //   pagination: true,

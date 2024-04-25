@@ -6,24 +6,16 @@ import {
   ViewChild,
   ElementRef,
   NgZone,
-  AfterContentInit,
-  AfterViewInit,
-  AfterViewChecked,
-  DoCheck,
 } from '@angular/core';
 import { YaReadyEvent } from 'angular8-yandex-maps';
 import {
   catchError,
   EMPTY,
   of,
-  BehaviorSubject,
   Subject,
   takeUntil,
   forkJoin,
   Observable,
-  debounceTime,
-  debounce,
-  timer,
 } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { EventsService } from 'src/app/services/events.service';
@@ -38,25 +30,18 @@ import { ISight } from 'src/app/models/sight';
 import { SightsService } from 'src/app/services/sights.service';
 import { PlaceService } from 'src/app/services/place.service';
 import { IPlace } from 'src/app/models/place';
-import { types } from 'util';
-import { YandexMetricService } from 'src/app/services/yandex-metric.service';
 import { Metrika } from 'ng-yandex-metrika';
 import { NavigationEnd, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
-import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
+import { Options } from '@angular-slider/ngx-slider';
 import { Title } from '@angular/platform-browser';
-import { Meta } from '@angular/platform-browser';
-import { LocationService } from 'src/app/services/location.service';
-import { ActivatedRoute } from '@angular/router';
 import {
   animate,
-  state,
   style,
   transition,
   trigger,
 } from '@angular/animations';
-import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 
 @Component({
   selector: 'app-home',
@@ -191,8 +176,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private metrika: Metrika,
     private router: Router,
     private location: Location,
-    private titleService: Title,
-    private locationService: LocationService
+    private titleService: Title
   ) {
     this.titleService.setTitle(
       'MLCity - Мероприятия и достопремечательности вокруг вас'
@@ -372,6 +356,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.myGeo.geometry!.setCoordinates(coords);
       this.mapService.circleCenterLongitude.next(coords[1]);
       this.mapService.circleCenterLatitude.next(coords[0]);
+      this.mapService.setLastMapCoordsToLocalStorage(coords[0], coords[1])
     });
 
     // Вешаем на карту событие по окончинию перетаскивания
