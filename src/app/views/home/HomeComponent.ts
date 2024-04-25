@@ -6,24 +6,16 @@ import {
   ViewChild,
   ElementRef,
   NgZone,
-  AfterContentInit,
-  AfterViewInit,
-  AfterViewChecked,
-  DoCheck,
 } from '@angular/core';
 import { YaReadyEvent } from 'angular8-yandex-maps';
 import {
   catchError,
   EMPTY,
   of,
-  BehaviorSubject,
   Subject,
   takeUntil,
   forkJoin,
   Observable,
-  debounceTime,
-  debounce,
-  timer,
 } from 'rxjs';
 import { MessagesErrors } from 'src/app/enums/messages-errors';
 import { EventsService } from 'src/app/services/events.service';
@@ -38,25 +30,18 @@ import { ISight } from 'src/app/models/sight';
 import { SightsService } from 'src/app/services/sights.service';
 import { PlaceService } from 'src/app/services/place.service';
 import { IPlace } from 'src/app/models/place';
-import { types } from 'util';
-import { YandexMetricService } from 'src/app/services/yandex-metric.service';
 import { Metrika } from 'ng-yandex-metrika';
 import { NavigationEnd, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
-import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
+import { Options } from '@angular-slider/ngx-slider';
 import { Title } from '@angular/platform-browser';
-import { Meta } from '@angular/platform-browser';
-import { LocationService } from 'src/app/services/location.service';
-import { ActivatedRoute } from '@angular/router';
 import {
   animate,
-  state,
   style,
   transition,
   trigger,
 } from '@angular/animations';
-import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 
 @Component({
   selector: 'app-home',
@@ -123,9 +108,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   };
 
   CirclePoint!: ymaps.Circle;
-
-  defaultMapLatitude!: any
-  defaultMapLongitude!: any
 
   doCheckState: boolean = true;
 
@@ -209,9 +191,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
         prevPath = newPath;
       });
-
-    this.defaultMapLatitude = this.filterService.locationLatitude.value
-    this.defaultMapLongitude = this.filterService.locationLongitude.value
   }
 
   // при клике по кнопке радиуча (5 10 15 20 25)
