@@ -332,6 +332,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     target.geoObjects.add(this.myGeo);
 
+    if (this.doCheckState) {
+      console.log(this.CirclePoint.geometry?.getBounds()!);
+      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
+        checkZoomRange: true,
+      });
+      this.doCheckState = false;
+    }
+
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin', e => {
       if (this.objectsInsideCircle) {
@@ -652,12 +660,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   setMapData() {
-    if (this.doCheckState) {
-      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-        checkZoomRange: true,
-      });
-      this.doCheckState = false;
-    }
     if (this.objectsInsideCircle) {
       this.map.target.geoObjects.remove(this.objectsInsideCircle);
 
@@ -755,6 +757,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async getEventsAndSights() {
+    if (this.doCheckState) {
+      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
+        checkZoomRange: true,
+      });
+      this.doCheckState = false;
+    }
     this.modalButtonLoader = true;
     this.eventsModalNextPage = '';
     this.sightsModalNextPage = '';
