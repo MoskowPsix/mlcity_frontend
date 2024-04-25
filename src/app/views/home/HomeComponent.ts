@@ -800,6 +800,51 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.changeFilter.next(true);
   }
 
+
+
+  dropButton(event:any){
+    switch(Number(event)){
+      case 1:
+        this.getGeoPosition()
+        break
+      case 2:
+        this.loadingService.showLoading()
+        if(this.filterService.locationId.value){
+          this.locationService.getLocationsIds(this.filterService.locationId.value).pipe(
+            takeUntil(this.destroy$),
+            catchError(err => {
+              this.toastService.showToast('Город не указан', 'primary')
+              this.loadingService.hideLoading()
+              console.log(err)
+              return of(EMPTY)
+            })
+          ).subscribe((res:any)=>{
+            if(res.location.latitude && res.location.longitude){
+              console.log("hui")
+              this.mapService.circleCenterLatitude.next(res.location.latitude)
+              this.mapService.circleCenterLongitude.next(res.location.longitude)
+              this.filterService.changeFilter.next(true)
+              this.loadingService.hideLoading()
+            }
+          })
+        }
+        else{
+          this.loadingService.hideLoading()
+          this.navigationService.modalSearchCityesOpen.next(true)
+
+        }
+        break
+      case 3:
+        this.navigationService.modalSearchCityesOpen.next(true)
+        break
+      default:
+        break
+
+    }
+  }
+
+
+
   getGeoPosition() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -881,6 +926,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.changeFilter
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
+
         if (value === true) {
           this.eventsContentModal = [];
           this.sightsContentModal = [];
@@ -889,7 +935,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           //   checkZoomRange: true,
           // });
           this.getEventsAndSights();
+          this.loadingService.hideLoading()
         }
+
       });
     this.filterService.sightTypes
       .pipe(takeUntil(this.destroy$))

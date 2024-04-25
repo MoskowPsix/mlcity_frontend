@@ -137,6 +137,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // this.mapService.ForwardGeocoder(item.name + '' + item.location_parent.name).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
     this.filterService.setLocationLatitudeTolocalStorage(item.latitude);
     this.filterService.setLocationLongitudeTolocalStorage(item.longitude);
+    this.mapService.circleCenterLatitude.next(item.latitude)
+    this.mapService.circleCenterLongitude.next(item.longitude)
     // })
     // this.mapService.geolocationCity.next(item.name);
     // this.mapService.geolocationRegion.next(item.location_parent.name);
@@ -303,6 +305,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe(value => {
         this.showChangeCityDialog = value;
       });
+
+    this.locationService.getLocationsIds(this.filterService.locationId.value).pipe().subscribe((res)=>{
+      
+      this.mapService.circleCenterLatitude.next(res.location.latitude)
+      this.mapService.circleCenterLongitude.next(res.location.longitude)
+      this.filterService.changeFilter.next(true)
+    })
+
+    this.filterService.changeFilter.subscribe(() => {
+      
+    })
 
     //Формируем меню из файла
     this.menuPublic = menuPublicData;
