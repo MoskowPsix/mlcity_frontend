@@ -124,6 +124,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   CirclePoint!: ymaps.Circle;
 
+  defaultMapLatitude!: any
+  defaultMapLongitude!: any
+
   doCheckState: boolean = true;
 
   myGeo!: ymaps.Placemark;
@@ -191,8 +194,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private metrika: Metrika,
     private router: Router,
     private location: Location,
-    private titleService: Title,
-    private locationService: LocationService
+    private titleService: Title
   ) {
     this.titleService.setTitle(
       'MLCity - Мероприятия и достопремечательности вокруг вас'
@@ -207,6 +209,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
         prevPath = newPath;
       });
+
+    this.defaultMapLatitude = this.filterService.locationLatitude.value
+    this.defaultMapLongitude = this.filterService.locationLongitude.value
   }
 
   // при клике по кнопке радиуча (5 10 15 20 25)

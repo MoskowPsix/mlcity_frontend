@@ -8,6 +8,23 @@
   margin-top: -1.5rem;
 }
 
+.mini-cards-container{
+  background-color: #f1f2f3;
+  border-radius: 6px;
+  --ion-grid-columns: 3;
+}
+
+.mini-cards-loadMore {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px){
+  .mini-cards-container{
+    --ion-grid-columns: 1;
+  }
+}
+
 .tikets-button {
   background-color: #6393ff;
   color: #fff;
@@ -138,7 +155,11 @@ swiper-slide:hover {
   font-size: calc(16px + 10 * (100vh / 1406));
 }
 .map {
-  height: 100%;
+  height: 550px;
+}
+
+.mini-card-item{
+  padding: 25px;
 }
 
 .left-block {
