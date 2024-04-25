@@ -36,12 +36,7 @@ import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { Options } from '@angular-slider/ngx-slider';
 import { Title } from '@angular/platform-browser';
-import {
-  animate,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
@@ -315,8 +310,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
 
     target.geoObjects.add(this.myGeo);
-
-    if (this.doCheckState) {
+    if (this.doCheckState && this.filterService.locationId.value) {
       console.log(this.CirclePoint.geometry?.getBounds()!);
       this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
         checkZoomRange: true,
@@ -351,12 +345,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       const { globalPixelCenter, zoom } = e.get('tick');
       const projection = this.map.target.options.get('projection');
       const coords = projection.fromGlobalPixels(globalPixelCenter, zoom);
-
       this.CirclePoint.geometry!.setCoordinates(coords);
       this.myGeo.geometry!.setCoordinates(coords);
       this.mapService.circleCenterLongitude.next(coords[1]);
       this.mapService.circleCenterLatitude.next(coords[0]);
-      this.mapService.setLastMapCoordsToLocalStorage(coords[0], coords[1])
+      this.mapService.setLastMapCoordsToLocalStorage(coords[0], coords[1]);
     });
 
     // Вешаем на карту событие по окончинию перетаскивания
@@ -742,12 +735,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async getEventsAndSights() {
-    if (this.doCheckState) {
-      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-        checkZoomRange: true,
-      });
-      this.doCheckState = false;
-    }
     this.modalButtonLoader = true;
     this.eventsModalNextPage = '';
     this.sightsModalNextPage = '';
@@ -898,9 +885,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.eventsContentModal = [];
           this.sightsContentModal = [];
           this.mapService.positionFilter(this.map, this.CirclePoint);
-          this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-            checkZoomRange: true,
-          });
+          // this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
+          //   checkZoomRange: true,
+          // });
           this.getEventsAndSights();
         }
       });

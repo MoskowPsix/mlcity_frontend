@@ -116,18 +116,18 @@ export class MapService {
     }
   }
 
-  setLastMapCoordsToLocalStorage(lat:any, long:any){
-    localStorage.setItem("lastMapLatitude",lat)
-    localStorage.setItem("lastMapLongitude",long)
+  setLastMapCoordsToLocalStorage(lat: any, long: any) {
+    localStorage.setItem('lastMapLatitude', lat);
+    localStorage.setItem('lastMapLongitude', long);
   }
 
-  getLastMapCoordsFromLocalStorage(){
+  getLastMapCoordsFromLocalStorage() {
     let coords = [
-      Number(localStorage.getItem("lastMapLatitude") || ""),
-      Number(localStorage.getItem("lastMapLongitude") || "")
-    ]
+      Number(localStorage.getItem('lastMapLatitude') || ''),
+      Number(localStorage.getItem('lastMapLongitude') || ''),
+    ];
 
-    return coords
+    return coords;
   }
 
   //Определяем местоположение и перемещаем карту
@@ -349,7 +349,9 @@ export class MapService {
     //Если не первый запуск и менялся фильтр города то перекидываем на город
 
     if (!this.navigationService.appFirstLoading.value) {
-      await circlePoint.geometry?.setCoordinates(this.getLastMapCoordsFromLocalStorage());
+      await circlePoint.geometry?.setCoordinates(
+        this.getLastMapCoordsFromLocalStorage()
+      );
       // await this.geolocationMapNative(map, circlePoint);
       map.target.setBounds(circlePoint.geometry?.getBounds()!, {
         checkZoomRange: true,
