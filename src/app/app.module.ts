@@ -172,7 +172,7 @@ registerLocaleData(localeRu, 'ru');
     CollapsedTextComponent,
     ContactsComponent,
     PrivacyComponent,
-    MiniCardComponent
+    MiniCardComponent,
     DropDownButtonComponent
   ],
   imports: [
