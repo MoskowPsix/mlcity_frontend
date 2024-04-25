@@ -37,6 +37,8 @@ import { filter } from 'rxjs/operators';
 import { Options } from '@angular-slider/ngx-slider';
 import { Title } from '@angular/platform-browser';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { LocationService } from 'src/app/services/location.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-home',
@@ -171,7 +173,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     private metrika: Metrika,
     private router: Router,
     private location: Location,
-    private titleService: Title
+    private titleService: Title,
+    private locationService: LocationService,
+    private loadingService: LoadingService
   ) {
     this.titleService.setTitle(
       'MLCity - Мероприятия и достопремечательности вокруг вас'
@@ -931,9 +935,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.eventsContentModal = [];
           this.sightsContentModal = [];
           this.mapService.positionFilter(this.map, this.CirclePoint);
-          // this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-          //   checkZoomRange: true,
-          // });
+          this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
+            checkZoomRange: true,
+          });
           this.getEventsAndSights();
           this.loadingService.hideLoading()
         }
