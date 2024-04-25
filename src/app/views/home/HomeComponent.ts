@@ -824,7 +824,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             })
           ).subscribe((res:any)=>{
             if(res.location.latitude && res.location.longitude){
-              console.log("hui")
               this.mapService.circleCenterLatitude.next(res.location.latitude)
               this.mapService.circleCenterLongitude.next(res.location.longitude)
               this.filterService.changeFilter.next(true)
