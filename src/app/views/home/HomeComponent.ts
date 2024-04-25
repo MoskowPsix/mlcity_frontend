@@ -53,6 +53,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-home',
@@ -185,7 +186,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private titleService: Title,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private loadingService: LoadingService,
   ) {
     this.titleService.setTitle(
       'MLCity - Мероприятия и достопремечательности вокруг вас'
@@ -817,6 +819,50 @@ export class HomeComponent implements OnInit, OnDestroy {
     // this.queryBuilderService.updateParams()
     this.filterService.changeFilter.next(true);
   }
+
+
+
+  dropButton(event:any){
+    switch(Number(event)){
+      case 1:
+        this.getGeoPosition()
+        break
+      case 2:
+        this.loadingService.showLoading()
+        if(this.filterService.locationId.value){
+          this.locationService.getLocationsIds(this.filterService.locationId.value).pipe(
+            takeUntil(this.destroy$),
+            catchError(err => {
+              this.toastService.showToast('Город не указан', 'primary')
+              this.loadingService.hideLoading()
+              console.log(err)
+              return of(EMPTY)
+            })
+          ).subscribe((res:any)=>{
+            if(res.location.latitude && res.location.longitude){
+              this.mapService.circleCenterLatitude.next(res.location.latitude)
+              this.mapService.circleCenterLongitude.next(res.location.longitude)
+              this.filterService.changeFilter.next(true)
+              this.loadingService.hideLoading()
+            }
+          })
+        }
+        else{
+          this.loadingService.hideLoading()
+          this.navigationService.modalSearchCityesOpen.next(true)
+          
+        }
+        break
+      case 3:
+        this.navigationService.modalSearchCityesOpen.next(true)
+        break
+      default:
+        break
+
+    }
+  }
+
+  
 
   getGeoPosition() {
     if (navigator.geolocation) {

@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContactsComponent } from './views/contacts/contacts.component';
+import { DropDownButtonComponent } from './components/drop-down-button/drop-down-button.component';
 import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
@@ -170,6 +171,7 @@ registerLocaleData(localeRu, 'ru');
     CollapsedTextComponent,
     ContactsComponent,
     PrivacyComponent,
+    DropDownButtonComponent
   ],
   imports: [
     BrowserModule,

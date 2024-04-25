@@ -37,9 +37,10 @@
 
     <!-- Кнопка геопозиции -->
     <div class="geo-container">
-      <div class="geo-button-container" (click)="getGeoPosition()">
+      <app-drop-down-button [iconsPathArray]="['assets/icons/map-button.svg','assets/icons/geo-button.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']" (emmitter)="dropButton($event)"></app-drop-down-button>
+      <!-- <div class="geo-button-container" (click)="getGeoPosition()">
         <ion-icon class="geo-button" color="primary" name="locate-outline" size="large"></ion-icon>
-      </div>
+      </div> -->
     </div>
 
 

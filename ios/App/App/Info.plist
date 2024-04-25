@@ -23,7 +23,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) wants to access your geolocation</string>
+	<string>$(PRODUCT_NAME) wants to access your location</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) wants to access your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>

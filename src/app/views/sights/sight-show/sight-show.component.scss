@@ -305,8 +305,11 @@ ion-accordion-group {
 }
 @media screen and (min-width: 1324px) {
   .ion-justify-content-center {
-    max-width: 96%;
+    max-width: 80%;
     margin: auto;
+  }
+  .main{
+    max-width: 80%;
   }
 }
 

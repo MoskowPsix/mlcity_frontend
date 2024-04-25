@@ -2,7 +2,7 @@
     <!-- skeleton animation -->
     <div class="pb-2rem" style="background: #fff;" >
       <ng-container *ngIf="loadingSight">
-        <ion-row class="ion-justify-content-center">
+        <ion-row class="ion-justify-content-center main">
           <ion-col size-lg="10" size-md="12" size-xs="12">
             <ion-row class="ion-justify-content-center">
               <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
@@ -141,7 +141,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-row class="ion-justify-content-center">
+        <ion-row class="ion-justify-content-center" style="max-width: 100% ;">
           <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
             <ion-row class="ion-justify-content-center">
               <ion-col size-lg="12" size-md="12" size-xs="12" class="left-block">
@@ -172,9 +172,6 @@
 
                   <ion-col class="content-main-description">
 
-                    <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
-                      О достопримечательности
-                    </div>
 
                     <div>
                       <div class="description">{{ sight.description }}</div>
