@@ -104,3 +104,20 @@ ion-segment-button {
     margin-right: 35%;
   }
 }
+
+.events-grid{
+  --ion-grid-columns: 3;
+}
+
+
+@media (max-width: 1300px){
+  .events-grid{
+    --ion-grid-columns: 2;
+  }
+}
+
+@media (max-width: 768px){
+  .events-grid{
+    --ion-grid-columns: 1;
+  }
+}

@@ -175,7 +175,8 @@
 .geo-container {
   position: fixed;
   top: 75%;
-  margin-left: 90%;
+  right: 0;
+  margin-right: 5rem;
   z-index: 3;
 }
 
@@ -206,13 +207,7 @@
   .map {
     height: 92vh;
   }
-  .geo-container {
-    position: fixed;
-    bottom: 4rem;
-    right: 0;
-    margin-right: 45px;
-    z-index: 3;
-  }
+
   .container-swither {
     top: 63%;
   }
@@ -244,13 +239,7 @@
   .map {
     height: 92vh;
   }
-  .geo-container {
-    position: fixed;
-    bottom: 4rem;
-    right: 0;
-    margin-right: 45px;
-    z-index: 3;
-  }
+ 
   .container-swither {
     top: 70%;
   }
@@ -303,13 +292,7 @@
 }
 
 @media only screen and (min-width: 1370px) and (max-width: 1920px) {
-  .geo-container {
-    position: fixed;
-    top: 80%;
-    right: 0;
-    margin-right: 45px;
-    z-index: 3;
-  }
+
   .container-swither {
     top: 70%;
   }

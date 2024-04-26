@@ -37,6 +37,8 @@ import { filter } from 'rxjs/operators';
 import { Options } from '@angular-slider/ngx-slider';
 import { Title } from '@angular/platform-browser';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { LoadingService } from 'src/app/services/loading.service';
+import { LocationService } from 'src/app/services/location.service';
 
 @Component({
   selector: 'app-home',
@@ -171,7 +173,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     private metrika: Metrika,
     private router: Router,
     private location: Location,
-    private titleService: Title
+    private titleService: Title,
+    private loadingService: LoadingService,
+    private locationService: LocationService
   ) {
     this.titleService.setTitle(
       'MLCity - Мероприятия и достопремечательности вокруг вас'
@@ -310,13 +314,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
 
     target.geoObjects.add(this.myGeo);
-    if (this.doCheckState && this.filterService.locationId.value) {
-      console.log(this.CirclePoint.geometry?.getBounds()!);
-      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-        checkZoomRange: true,
-      });
-      this.doCheckState = false;
-    }
 
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin', e => {
@@ -760,6 +757,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
+        if (this.doCheckState) {
+          this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
+            checkZoomRange: true,
+          });
+          this.doCheckState = false;
+        }
         this.setMapData();
       });
   }
@@ -798,6 +801,64 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
     // this.queryBuilderService.updateParams()
     this.filterService.changeFilter.next(true);
+  }
+
+  dropButton(event: any) {
+    switch (Number(event)) {
+      case 1:
+        this.getGeoPosition();
+        break;
+      case 2:
+        this.loadingService.showLoading();
+        if (this.filterService.locationId.value) {
+          this.locationService
+            .getLocationsIds(this.filterService.locationId.value)
+            .pipe(
+              takeUntil(this.destroy$),
+              catchError(err => {
+                this.toastService.showToast('Город не указан', 'primary');
+                this.loadingService.hideLoading();
+                console.log(err);
+                return of(EMPTY);
+              })
+            )
+            .subscribe((res: any) => {
+              if (res.location.latitude && res.location.longitude) {
+                this.mapService.circleCenterLatitude.next(
+                  res.location.latitude
+                );
+                this.mapService.circleCenterLongitude.next(
+                  res.location.longitude
+                );
+                this.mapService.geolocationLatitude.next(res.location.latitude);
+                this.mapService.geolocationLongitude.next(
+                  res.location.longitude
+                );
+                this.mapService.setLastMapCoordsToLocalStorage(
+                  res.location.latitude,
+                  res.location.longitude
+                );
+                // this.map.target.setCenter([
+                //   res.location.latitude,
+                //   res.location.longitude,
+                // ]);
+                this.filterService.changeFilter.next(true);
+                this.filterService.changeCityFilter.next(true);
+                this.loadingService.hideLoading();
+                this.cdr.detectChanges();
+              }
+            });
+        } else {
+          this.loadingService.hideLoading();
+          this.navigationService.modalSearchCityesOpen.next(true);
+        }
+        break;
+      case 3:
+        this.navigationService.modalSearchCityesOpen.next(true);
+        break;
+      default:
+        break;
+    }
   }
 
   getGeoPosition() {
@@ -885,10 +946,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.eventsContentModal = [];
           this.sightsContentModal = [];
           this.mapService.positionFilter(this.map, this.CirclePoint);
-          // this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-          //   checkZoomRange: true,
-          // });
+
           this.getEventsAndSights();
+          this.loadingService.hideLoading();
         }
       });
     this.filterService.sightTypes

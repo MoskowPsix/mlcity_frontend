@@ -1,0 +1,70 @@
+<!-- 
+РУКОВОДСТВО ПО ИСПОЛЬЗОВАНИЮ КОМПОНЕНТА
+
+Компонент имеет три встроенных кнопки
+Кнопка 0 - главная стартовая ..(функции не предусматривает)..
+Кнопка 1 - имеет id 1 
+Кнопка 2 - имеет id 2 
+Кнопка 3 - имеет id 3
+
+Для передачи иконок в компонент нужно передать массив картинок ввиде путей в переменную iconsPathArray
+
+[iconsPathArray]="['assets/icons/map-button.svg','assets/icons/geo-button.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']"
+Пример:
+
+   <app-drop-down-button [iconsPathArray]="['assets/icons/map-button.svg','assets/icons/geo-button.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']" (emmitter)="dropButton($event)"></app-drop-down-button>
+
+Функционал компонента применяется следующим образом 
+(emmitter)="dropButton($event)"> что видно в примере выше
+
+При нажатии на кнопку в родительский компонент будет отправлен id нажатой кнопки - тип string
+
+и при получении этих данных мы вызываем вашу функцию и передаем аргумент $event.
+
+Функцию нужно создать в родительском компоненте 
+
+Пример функции:
+
+//Родительский компонент.ts
+
+ dropButton(event:any){
+    switch(Number(event)){
+      case 1:
+        console.log('first button')
+        break
+      case 2:
+        console.log('second button')
+        break
+      case 3:
+        console.log('third button')
+        break
+      default:
+        break
+
+    }
+  }
+
+
+-->
+
+<div (click)="menuDrop()" class="main-container">
+  <div class="geo-button">
+    <img class="button-img" src="{{iconsPathArray[0]}}" alt="">
+  </div>
+  
+  <div [ngClass]="firstCircleClass" class="main-container-button-item ">
+    <div (click)="sendButtonId($event)" id="1" class="geo-button">
+      <img class="button-img" id="1" src="{{iconsPathArray[1]}}" alt="">
+    </div>
+  </div>
+  <div  [ngClass]="secondCircleClass" class="main-container-button-item">
+    <div (click)="sendButtonId($event)" id="2" class="geo-button"> 
+      <img class="button-img" id="2" src="{{iconsPathArray[2]}}" alt="">
+    </div>
+  </div>
+  <div  [ngClass]="thirdCircleClass" class="main-container-button-item ">
+    <div (click)="sendButtonId($event)" id="3" class="geo-button">
+      <img class="button-img" id="3" src="{{iconsPathArray[3]}}" alt="">
+    </div>
+  </div>
+</div>
