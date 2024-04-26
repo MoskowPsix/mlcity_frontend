@@ -172,8 +172,8 @@ registerLocaleData(localeRu, 'ru');
     CollapsedTextComponent,
     ContactsComponent,
     PrivacyComponent,
+    DropDownButtonComponent,
     MiniCardComponent,
-    DropDownButtonComponent
   ],
   imports: [
     BrowserModule,
