@@ -19,7 +19,7 @@ import { ToastService } from './toast.service';
 })
 export class MapService {
   private readonly destroy$ = new Subject<void>();
-  placemark!: ymaps.Placemark;
+  placemark?: ymaps.Placemark;
 
   public circleCenterLatitude: BehaviorSubject<number> = new BehaviorSubject(0);
   public circleCenterLongitude: BehaviorSubject<number> = new BehaviorSubject(
@@ -89,7 +89,7 @@ export class MapService {
           let coords = await this.defaultCoords();
           // console.log("2, " + coords)
           // await this.setCenterMap(map, CirclePoint);
-          this.setPlacemark(map, CirclePoint, coords!, false);
+          await this.setPlacemark(map, CirclePoint, coords!, false);
         }
       } catch (e) {
         console.log('Ошибка GPS ' + e, 'warning');
@@ -119,6 +119,8 @@ export class MapService {
   setLastMapCoordsToLocalStorage(lat: any, long: any) {
     localStorage.setItem('lastMapLatitude', lat);
     localStorage.setItem('lastMapLongitude', long);
+    this.geolocationLatitude.next(lat);
+    this.geolocationLongitude.next(long);
   }
 
   getLastMapCoordsFromLocalStorage() {
@@ -157,7 +159,10 @@ export class MapService {
     coords?: any,
     gps?: boolean
   ) {
-    this.placemark = new ymaps.Placemark(coords, {}, { visible: false });
+    // console.log(CirclePoint);
+    // await setTimeout(() => {
+    //   this.placemark = new ymaps.Placemark(coords, {}, { visible: false });
+    // }, 100);
 
     if (CirclePoint) {
       CirclePoint.geometry?.setCoordinates(coords);
@@ -173,9 +178,18 @@ export class MapService {
         }
       }
     } else {
-      map.target.setBounds(this.placemark.geometry?.getBounds()!, {
-        checkZoomRange: false,
-      });
+      // Вызывает ошибку, пока убрал(работает и без этого)
+      // setTimeout(async () => {
+      //   const placemark = await new ymaps.Placemark(
+      //     coords,
+      //     {},
+      //     { visible: false }
+      //   );
+      //   this.placemark = placemark;
+      //   // await map.target.setBounds(placemark?.geometry?.getBounds()!, {
+      //   //   checkZoomRange: false,
+      //   // });
+      // }, 30);
     }
   }
 
@@ -349,9 +363,9 @@ export class MapService {
     //Если не первый запуск и менялся фильтр города то перекидываем на город
 
     if (!this.navigationService.appFirstLoading.value) {
-      await circlePoint.geometry?.setCoordinates(
-        this.getLastMapCoordsFromLocalStorage()
-      );
+      // console.log('load coord');
+      const coords = await this.getLastMapCoordsFromLocalStorage();
+      await circlePoint.geometry?.setCoordinates(coords);
       // await this.geolocationMapNative(map, circlePoint);
       map.target.setBounds(circlePoint.geometry?.getBounds()!, {
         checkZoomRange: true,
