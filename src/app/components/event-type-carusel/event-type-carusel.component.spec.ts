@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { IonicModule } from '@ionic/angular'
 
-import { EventTypeCaruselComponent } from './event-type-carusel.component';
+import { EventTypeCaruselComponent } from './event-type-carusel.component'
 
 describe('EventTypeCaruselComponent', () => {
-  let component: EventTypeCaruselComponent;
-  let fixture: ComponentFixture<EventTypeCaruselComponent>;
+  let component: EventTypeCaruselComponent
+  let fixture: ComponentFixture<EventTypeCaruselComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [EventTypeCaruselComponent],
       imports: [IonicModule.forRoot()],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(EventTypeCaruselComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    fixture = TestBed.createComponent(EventTypeCaruselComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

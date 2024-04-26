@@ -1,4 +1,4 @@
-.mini-card-container{
+.mini-card-container {
   padding: 12px;
   display: flex;
   background-color: white;
@@ -6,25 +6,25 @@
   height: 100%;
 }
 
-.mini-card{
+.mini-card {
 }
 
-.mini-card-img{
+.mini-card-img {
   min-width: 120px;
   min-height: 80px;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.mini-card-text-readMore{
+.mini-card-text-readMore {
   font-family: 'Montserrat-Regular';
   cursor: pointer;
   background: none;
   color: #0066ff;
 }
 
-.mini-card-text-description{
-  max-height:100%;
+.mini-card-text-description {
+  max-height: 100%;
   font-family: 'Montserrat-Light';
   line-height: 1.5;
   display: -webkit-box;
@@ -33,18 +33,16 @@
   overflow: hidden;
 }
 
-.mini-card-text-container{
+.mini-card-text-container {
   margin-left: 20px;
 }
 
-.mini-card-text-title{
+.mini-card-text-title {
   margin: 0;
 }
 
-@media (max-width: 768px){
-  .mini-card-img{
+@media (max-width: 768px) {
+  .mini-card-img {
     min-height: 120px;
   }
 }
-
-

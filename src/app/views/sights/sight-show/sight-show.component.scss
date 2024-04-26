@@ -8,7 +8,7 @@
   margin-top: -1.5rem;
 }
 
-.mini-cards-container{
+.mini-cards-container {
   background-color: #f1f2f3;
   border-radius: 6px;
   --ion-grid-columns: 3;
@@ -19,8 +19,8 @@
   justify-content: center;
 }
 
-@media (max-width: 768px){
-  .mini-cards-container{
+@media (max-width: 768px) {
+  .mini-cards-container {
     --ion-grid-columns: 1;
   }
 }
@@ -158,7 +158,7 @@ swiper-slide:hover {
   height: 550px;
 }
 
-.mini-card-item{
+.mini-card-item {
   padding: 25px;
 }
 
@@ -329,7 +329,7 @@ ion-accordion-group {
     max-width: 80%;
     margin: auto;
   }
-  .main{
+  .main {
     max-width: 80%;
   }
 }

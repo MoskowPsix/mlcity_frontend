@@ -1,20 +1,20 @@
 @import '../../events/event-create/event-create.component.scss';
-.main-preview{
+.main-preview {
   display: grid;
   margin-left: auto;
   margin-right: auto;
   grid-template-columns: repeat(3, 1fr);
-  grid-column-gap:2rem;
-  grid-row-gap:2rem;
+  grid-column-gap: 2rem;
+  grid-row-gap: 2rem;
 }
 
-.tiket-main{
+.tiket-main {
   max-width: 60%;
   justify-content: center;
   align-items: center;
   margin: auto;
 }
-.img-parent{
+.img-parent {
   max-width: 7rem;
 }
 
@@ -250,10 +250,10 @@ ion-item.photo-label {
     }
   }
 
-  .description-item{
+  .description-item {
     width: clamp(20rem, 12.727rem + 36.36vw, 30rem);
   }
-  .description-item-wrapper{
+  .description-item-wrapper {
     display: flex;
     justify-content: center;
   }
@@ -275,21 +275,12 @@ ion-item.photo-label {
     margin-top: -2vh;
   }
 
-  
-
   .nameEvent {
     --border-radius: 12px;
     --border: 1px solid black;
     width: 300px;
   }
-
-
-
-
 }
-
-
-
 
 .stepThird {
   display: flex;
@@ -330,8 +321,6 @@ ion-item.photo-label {
   margin-left: 1vh;
 }
 
-
-
 .timeParrent {
   margin-top: -10%;
   display: flex;
@@ -358,11 +347,8 @@ ion-item.photo-label {
   }
 }
 
-
-
 @media screen and (min-width: 0px) and (max-width: 992px) {
-
-  .tiket-main{
+  .tiket-main {
     max-width: 100%;
     justify-content: center;
     align-items: center;
@@ -373,20 +359,20 @@ ion-item.photo-label {
     width: 100%;
     height: 35vh;
   }
-  .place-adress-input{
+  .place-adress-input {
     max-width: 80%;
   }
 
-  .main{
+  .main {
     width: 100%;
-    .mainChild{
+    .mainChild {
       width: 95%;
     }
   }
-  .second-step-main{
+  .second-step-main {
     max-width: 100%;
   }
-  .buttons-desktop-wrapper_mobile{
+  .buttons-desktop-wrapper_mobile {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -399,8 +385,7 @@ ion-item.photo-label {
     background-color: #fff;
     max-height: 5rem;
     z-index: 10000000;
-    .btns-wrapper{
-     
+    .btns-wrapper {
     }
   }
   .video_content {
@@ -430,36 +415,30 @@ ion-item.photo-label {
 }
 
 @media screen and (max-width: 992px) {
-   
-
-
-
-  .place-header-text_mobile{
+  .place-header-text_mobile {
     font-size: clamp(1.1rem, 0.784rem + 0.45vw, 1.125rem);
   }
-
 }
 
 @media screen and (min-width: 0px) and (max-width: 992px) {
-
   .map {
     width: 100%;
     height: 35vh;
   }
-  .place-adress-input{
+  .place-adress-input {
     max-width: 80%;
   }
 
-  .main{
+  .main {
     width: 100%;
-    .mainChild{
+    .mainChild {
       width: 95%;
     }
   }
-  .second-step-main{
+  .second-step-main {
     max-width: 100%;
   }
-  .buttons-desktop-wrapper_mobile{
+  .buttons-desktop-wrapper_mobile {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -472,8 +451,7 @@ ion-item.photo-label {
     background-color: #fff;
     max-height: 5rem;
     z-index: 10000000;
-    .btns-wrapper{
-     
+    .btns-wrapper {
     }
   }
   .video_content {
@@ -502,16 +480,9 @@ ion-item.photo-label {
 }
 
 @media screen and (max-width: 992px) {
-   
-
-
-
-  .place-header-text_mobile{
+  .place-header-text_mobile {
     font-size: clamp(1.1rem, 0.784rem + 0.45vw, 1.125rem);
   }
-
 }
 .nameParrent {
-
-
 }
