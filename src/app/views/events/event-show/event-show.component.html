@@ -198,7 +198,7 @@
 
                 <ion-accordion-group>
                   <ion-accordion style="background-color: #fff;" *ngFor="let place of places; let i= index" (click)="setActivePlace(i)" class="seance">
-                    <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
+                    <ion-item *ngIf="place.location"style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
                       <ion-label *ngIf="!(place.location.location_parent.name==='РФ'); else otherAddress">
                         {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
                       </ion-label>

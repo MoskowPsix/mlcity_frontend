@@ -47,7 +47,7 @@ import { FilterService } from 'src/app/services/filter.service';
   templateUrl: './event-show.component.html',
   styleUrls: ['./event-show.component.scss'],
 })
-export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
+export class EventShowComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   swiperModules = [IonicSlides];
@@ -60,7 +60,7 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   user?: any;
   eventId?: number;
   event?: any;
-  places: any[] = [];
+  places!: any[];
   loadingEvent: boolean = true;
   loadPlace: boolean = false;
   loadMore: boolean = true;
@@ -147,10 +147,11 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
           takeUntil(this.destroy$)
         )
         .subscribe((response: any) => {
-          this.places = response.places.data;
+          this.places.push(...response.places.data);
           this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
             response.places.next_cursor
           );
+          console.log(this.places);
           response.places.next_cursor
             ? (this.loadMore = true)
             : (this.loadMore = false);
@@ -273,23 +274,22 @@ export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     this.userAuth = this.authService.getAuthState();
     this.getEvent();
-    this.getEventPlaces();
+    // this.getEventPlaces();
     this.user = this.userService.user.value;
     this.checkLiked();
     this.checFavorite();
   }
 
-  ngAfterViewInit() {
-    register();
-    this.cdr.detectChanges();
-    // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
-    //   this.swiper = res.first.nativeElement.swiper
-    //   console.log(res.first.nativeElement.swiper)
-    // });
-
-    // this.swiper?.update()
-    // console.log(this.swiper)
-  }
+  // ngAfterViewInit() {
+  //   // register();
+  //   // this.cdr.detectChanges();
+  //   // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
+  //   //   this.swiper = res.first.nativeElement.swiper
+  //   //   console.log(res.first.nativeElement.swiper)
+  //   // });
+  //   // this.swiper?.update()
+  //   // console.log(this.swiper)
+  // }
 
   ngOnDestroy() {
     // отписываемся от всех подписок
