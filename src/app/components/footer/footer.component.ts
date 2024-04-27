@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { EMPTY, Observable } from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
-import { FilterService } from 'src/app/services/filter.service';
-import { UserService } from 'src/app/services/user.service';
-import { environment } from 'src/environments/environment';
+import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
+import { EMPTY, Observable } from 'rxjs'
+import { AuthService } from 'src/app/services/auth.service'
+import { FilterService } from 'src/app/services/filter.service'
+import { UserService } from 'src/app/services/user.service'
+import { environment } from 'src/environments/environment'
 
 @Component({
   selector: 'app-footer',
@@ -12,52 +12,52 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  eventCount: any;
-  sightCount: any;
+  eventCount: any
+  sightCount: any
 
-  backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`;
+  backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
 
-  isAuth: boolean = false;
-  avatarUrl!: string;
-  user!: any;
+  isAuth: boolean = false
+  avatarUrl!: string
+  user!: any
 
   constructor(
     private router: Router,
     private filterService: FilterService,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
     //private authService: AuthService,
   ) {}
 
   getEventService() {
-    return this.filterService.eventsCount.value;
+    return this.filterService.eventsCount.value
   }
 
   getSightService() {
-    return this.filterService.sightsCount.value;
+    return this.filterService.sightsCount.value
   }
 
   getFavoritesService() {
-    return this.filterService.favoritesCount.value;
+    return this.filterService.favoritesCount.value
   }
   checkAuthenticated() {
     this.authService.authenticationState.subscribe((res: boolean) => {
-      this.isAuth = res;
-    });
+      this.isAuth = res
+    })
   }
   getUser() {
-    this.userService.getUser().subscribe(user => {
-      this.user = user;
+    this.userService.getUser().subscribe((user) => {
+      this.user = user
       if (user) {
         if (user.avatar) {
           if (user.avatar.includes('https')) {
-            this.avatarUrl = user.avatar;
+            this.avatarUrl = user.avatar
           } else {
-            this.avatarUrl = `${this.backendUrl}${user.avatar}`;
+            this.avatarUrl = `${this.backendUrl}${user.avatar}`
           }
         }
       }
-    });
+    })
   }
 
   // currentYear = new Date().getFullYear();
@@ -75,7 +75,7 @@ export class FooterComponent implements OnInit {
   // }
 
   ngOnInit() {
-    this.getUser();
-    this.checkAuthenticated();
+    this.getUser()
+    this.checkAuthenticated()
   }
 }

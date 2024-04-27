@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing'
 
-import { CheckAuthCanActiveGuard } from './check-auth.can-active.guard';
+import { CheckAuthCanActiveGuard } from './check-auth.can-active.guard'
 
 describe('CheckAuthCanactiveGuard', () => {
-  let guard: CheckAuthCanActiveGuard;
+  let guard: CheckAuthCanActiveGuard
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    guard = TestBed.inject(CheckAuthCanActiveGuard);
-  });
+    TestBed.configureTestingModule({})
+    guard = TestBed.inject(CheckAuthCanActiveGuard)
+  })
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
-  });
-});
+    expect(guard).toBeTruthy()
+  })
+})

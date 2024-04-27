@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-support',
@@ -9,6 +9,6 @@ export class SupportComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    return null;
+    return null
   }
 }

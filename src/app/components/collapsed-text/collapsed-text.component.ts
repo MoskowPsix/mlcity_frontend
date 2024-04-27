@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-collapsed-text',
@@ -6,21 +6,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./collapsed-text.component.scss'],
 })
 export class CollapsedTextComponent implements OnInit {
-  textOpen: boolean = true;
-  textClass: string = '';
+  textOpen: boolean = true
+  textClass: string = ''
   constructor() {}
 
   textOpenVariable() {
-    this.textOpen = !this.textOpen;
+    this.textOpen = !this.textOpen
 
     if (this.textOpen) {
-      this.textClass = 'main-conteiner';
+      this.textClass = 'main-conteiner'
     } else {
-      this.textClass = 'main-conteiner_collapsed';
+      this.textClass = 'main-conteiner_collapsed'
     }
   }
 
   ngOnInit() {
-    this.textOpenVariable();
+    this.textOpenVariable()
   }
 }

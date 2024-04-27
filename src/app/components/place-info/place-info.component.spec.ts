@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { IonicModule } from '@ionic/angular'
 
-import { PlaceInfoComponent } from './place-info.component';
+import { PlaceInfoComponent } from './place-info.component'
 
 describe('PlaceInfoComponent', () => {
-  let component: PlaceInfoComponent;
-  let fixture: ComponentFixture<PlaceInfoComponent>;
+  let component: PlaceInfoComponent
+  let fixture: ComponentFixture<PlaceInfoComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PlaceInfoComponent],
       imports: [IonicModule.forRoot()],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(PlaceInfoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    fixture = TestBed.createComponent(PlaceInfoComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

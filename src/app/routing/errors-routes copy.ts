@@ -1,8 +1,8 @@
-import { Routes } from '@angular/router';
-import { CheckAuthCanActiveGuard } from '../guards/check-auth.can-active.guard';
-import { ForbiddenComponent } from '../views/errors/forbidden/forbidden.component';
-import { NotFoundComponent } from '../views/errors/not-found/not-found.component';
-import { ServerErrorComponent } from '../views/errors/server-error/server-error.component';
+import { Routes } from '@angular/router'
+import { CheckAuthCanActiveGuard } from '../guards/check-auth.can-active.guard'
+import { ForbiddenComponent } from '../views/errors/forbidden/forbidden.component'
+import { NotFoundComponent } from '../views/errors/not-found/not-found.component'
+import { ServerErrorComponent } from '../views/errors/server-error/server-error.component'
 
 export const errorsRoutes: Routes = [
   {
@@ -20,4 +20,4 @@ export const errorsRoutes: Routes = [
     component: NotFoundComponent,
     canActivate: [CheckAuthCanActiveGuard],
   },
-];
+]

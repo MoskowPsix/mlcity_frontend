@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +7,7 @@ export class HelpersService {
   constructor() {}
 
   translit(word: string) {
-    let answer: string = '';
+    let answer: string = ''
     const converter: any = {
       а: 'a',
       б: 'b',
@@ -88,16 +88,16 @@ export class HelpersService {
       '8': '8',
       '9': '9',
       '0': '0',
-    };
+    }
 
     for (var i = 0; i < word.length; ++i) {
       if (converter[word[i]] == undefined) {
         // answer += word[i];
       } else {
-        answer += converter[word[i]];
+        answer += converter[word[i]]
       }
     }
 
-    return answer.toLowerCase();
+    return answer.toLowerCase()
   }
 }

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { Injectable } from '@angular/core'
+import { ToastController } from '@ionic/angular'
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +19,9 @@ export class ToastService {
           role: 'cancel',
         },
       ],
-    });
+    })
 
-    await toast.present();
+    await toast.present()
   }
 }
 

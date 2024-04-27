@@ -47,7 +47,7 @@ import { FilterService } from 'src/app/services/filter.service';
   templateUrl: './event-show.component.html',
   styleUrls: ['./event-show.component.scss'],
 })
-export class EventShowComponent implements OnInit, OnDestroy {
+export class EventShowComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>();
 
   swiperModules = [IonicSlides];
@@ -60,7 +60,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   user?: any;
   eventId?: number;
   event?: any;
-  places!: any[];
+  places: any[] = [];
   loadingEvent: boolean = true;
   loadPlace: boolean = false;
   loadMore: boolean = true;
@@ -151,7 +151,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
           this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
             response.places.next_cursor
           );
-          console.log(this.places);
           response.places.next_cursor
             ? (this.loadMore = true)
             : (this.loadMore = false);

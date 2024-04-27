@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { IonicModule } from '@ionic/angular'
 
-import { ReadMoreComponent } from './read-more.component';
+import { ReadMoreComponent } from './read-more.component'
 
 describe('ReadMoreComponent', () => {
-  let component: ReadMoreComponent;
-  let fixture: ComponentFixture<ReadMoreComponent>;
+  let component: ReadMoreComponent
+  let fixture: ComponentFixture<ReadMoreComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ReadMoreComponent],
       imports: [IonicModule.forRoot()],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(ReadMoreComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    fixture = TestBed.createComponent(ReadMoreComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

@@ -54,13 +54,13 @@ ion-segment-button {
     z-index: 999999;
   }
 
-  .scroll-up{
+  .scroll-up {
     bottom: 6rem;
     right: 10px;
     border-radius: 20px;
     background-color: white;
     padding: 0.5rem;
-    box-shadow:  0 0 10px 5px rgba(221, 221, 221, 0.2);
+    box-shadow: 0 0 10px 5px rgba(221, 221, 221, 0.2);
   }
   .segments {
     display: grid;
@@ -104,19 +104,18 @@ ion-segment-button {
   background-color: #edeef0;
 }
 
-.events-grid{
+.events-grid {
   --ion-grid-columns: 3;
 }
 
-
-@media (max-width: 1300px){
-  .events-grid{
+@media (max-width: 1300px) {
+  .events-grid {
     --ion-grid-columns: 2;
   }
 }
 
-@media (max-width: 768px){
-  .events-grid{
+@media (max-width: 768px) {
+  .events-grid {
     --ion-grid-columns: 1;
   }
 }
