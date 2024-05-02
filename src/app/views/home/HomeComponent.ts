@@ -344,6 +344,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       const coords = projection.fromGlobalPixels(globalPixelCenter, zoom)
       this.CirclePoint.geometry!.setCoordinates(coords)
       this.myGeo.geometry!.setCoordinates(coords)
+      console.log(this.map.target.getBounds())
       this.mapService.circleCenterLongitude.next(coords[1])
       this.mapService.circleCenterLatitude.next(coords[0])
       this.mapService.setLastMapCoordsToLocalStorage(coords[0], coords[1])

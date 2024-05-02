@@ -42,6 +42,7 @@ import { Meta } from '@angular/platform-browser'
 import { IonContent } from '@ionic/angular'
 import { ViewportScroller } from '@angular/common'
 import { BehaviorSubject } from 'rxjs'
+import { MapService } from 'src/app/services/map.service'
 
 register()
 
@@ -114,6 +115,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     private location: Location,
     private titleService: Title,
     private metaService: Meta,
+    private mapService: MapService,
   ) {
     this.filterService.locationId
       .pipe(takeUntil(this.destroy$))
@@ -336,6 +338,13 @@ export class EventsComponent implements OnInit, OnDestroy {
     console.log(this.scrollStart)
   }
   ngOnInit() {
+    this.router.events
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value: any) => {
+        if (value.url === '/event') {
+          // this.filterService.changeFilter.next(true)
+        }
+      })
     window.addEventListener('scroll', this.scrollPaginate, true)
 
     this.date = {
