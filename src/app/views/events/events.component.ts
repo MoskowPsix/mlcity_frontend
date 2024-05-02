@@ -304,6 +304,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
   //скролл
   scrollPaginate = (): void => {
+    this.scrollUpCheckState()
     const boundingClientRect =
       this.ContentCol.nativeElement?.getBoundingClientRect()
 
@@ -346,6 +347,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         }
       })
     window.addEventListener('scroll', this.scrollPaginate, true)
+    // window.addEventListener("scrollend", this.scrollEvent, true)
 
     this.date = {
       dateStart: this.filterService.startDate.value,
@@ -354,7 +356,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     //console.log(this.date)
     this.eventsCity = []
     this.eventsGeolocation = []
-    this.getEventsCity()
+    // this.getEventsCity()
     // this.getEventsGeolocation()
 
     //Подписываемся на изменение фильтра

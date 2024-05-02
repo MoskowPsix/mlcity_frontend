@@ -3,8 +3,8 @@
         <ion-list>
             <ion-item lines="light">
                 <ion-avatar slot="start">
-                    <ion-img *ngIf="user_avatar.includes('https') === false" src="{{backendUrl + this.user_avatar}}" />
-                    <ion-img *ngIf="user_avatar.includes('https') === true" src="{{this.user_avatar}}" />
+                    <ion-img *ngIf="user_avatar.includes('https') === false" src="{{ backendUrl + comment.user.avatar }}" />
+                    <ion-img *ngIf="user_avatar.includes('https') === true" src="{{ comment.user.avatar }}" />
                     <ion-img *ngIf="!comment.user.avatar" color="light" src="/svg/person-circle-outline.svg"/>
                 </ion-avatar>
                 <ion-label >
