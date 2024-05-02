@@ -350,6 +350,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()
+    this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next('')
     this.destroy$.complete()
   }
 }

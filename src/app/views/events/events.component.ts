@@ -391,6 +391,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     // отписываемся от всех подписок
     console.log('is destroyed')
     this.destroy$.next()
+    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
     this.destroy$.complete()
   }
 }
