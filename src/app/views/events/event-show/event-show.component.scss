@@ -3,7 +3,18 @@
   height: 30px;
   margin: -4px 4px;
 }
+.event-name{
 
+}
+
+.event-name-header{
+  max-width: 83%;
+  margin: auto;
+  font-family: 'Montserrat-Bold';
+  font-size:clamp(1.6rem, 0.682rem + 3.09vw, 3rem);
+  font-weight: 500;
+  display: flex;
+}
 .content-main {
   margin-top: -1.5rem;
 }
@@ -31,31 +42,14 @@
   border-radius: 6px;
 }
 
-swiper-slide:hover {
-  .swiper-container-img_wrapper {
-    transition: 0.5s opacity;
-    opacity: 0;
-    display: flex;
-    align-items: center;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgb(63, 94, 251);
-    background: linear-gradient(
-      180deg,
-      rgba(63, 94, 251, 0) 0%,
-      rgba(0, 0, 0, 0.7483368347338936) 60%,
-      rgba(0, 0, 0, 0.7511379551820728) 61%
-    );
-  }
-}
+
 
 .description_mobile {
   display: none;
 }
 
 .swiper-container {
-  min-height: 38rem;
+  height: 24rem;
 }
 
 .swiper-container-img_wrapper {
@@ -66,19 +60,13 @@ swiper-slide:hover {
   width: 100%;
   pointer-events: none;
   height: 100%;
-  background: rgb(63, 94, 251);
-  background: linear-gradient(
-    180deg,
-    rgba(63, 94, 251, 0) 0%,
-    rgba(0, 0, 0, 0.7483368347338936) 60%,
-    rgba(0, 0, 0, 0.7511379551820728) 61%
-  );
 
   .swiper-container-header-content {
-    margin-top: auto;
+    max-width: 80%;
     color: #fff;
     padding-left: 2rem;
     padding-bottom: 4rem;
+    margin: auto;
     .swiper-container-header-content-organizator_wrapper {
       .swiper-container-header-content-organizator {
         font-size: calc(10px + 10 * (100vh / 1406));
@@ -233,13 +221,13 @@ ion-accordion-group {
 }
 
 .social-buttons {
+ 
   font-family: 'Montserrat-Medium';
   display: flex;
   margin: auto;
   left: 1.8%;
   gap: 1rem;
   padding: 0.5rem;
-  margin-top: -1rem;
   color: #999ca1;
   font-size: 1rem;
   transition: all 0.2s ease-in-out;
@@ -295,6 +283,9 @@ ion-accordion-group {
 }
 
 @media screen and (min-width: 0px) and (max-width: 960px) {
+  .swiper-container {
+    height: 19rem;
+  }
   .swiper-container-img_wrapper {
     .swiper-container-header-content {
       padding-left: 1rem;
@@ -341,6 +332,9 @@ ion-accordion-group {
 }
 
 @media screen and (max-width: 768px) {
+  .event-name-header{
+    max-width: 92%;
+  }
   .social-buttons {
     .likes_share {
       display: block;
@@ -349,8 +343,8 @@ ion-accordion-group {
 }
 
 @media screen and (min-width: 768px) {
+ 
   swiper-container {
-    height: 30rem;
     --width: 100%;
     swiper-slide {
       height: 100%;
