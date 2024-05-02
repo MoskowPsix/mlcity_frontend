@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core'
+import { environment } from 'src/environments/environment'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-no-path',
@@ -13,7 +13,7 @@ export class NoPathComponent implements OnInit {
   ngOnInit() {
     // window.open('/home', '_self');
     this.router.navigateByUrl('/home').then(() => {
-      window.location.href = 'home';
-    });
+      window.location.href = 'home'
+    })
   }
 }

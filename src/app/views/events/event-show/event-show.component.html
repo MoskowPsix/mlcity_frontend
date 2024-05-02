@@ -3,9 +3,9 @@
   <div class="pb-2rem" class="event-container">
     <ng-container *ngIf="loadingEvent">
       <ion-row class="ion-justify-content-center">
-        <ion-col size-lg="8" size-md="12" size-xs="12">
+        <ion-col size-lg="12" size-md="12" size-xs="12">
           <ion-row class="ion-justify-content-center">
-            <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
+            <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
               <ion-skeleton-text [animated]="true" style="height: 30rem;" />
             </ion-col>
           </ion-row>
@@ -198,7 +198,7 @@
 
                 <ion-accordion-group>
                   <ion-accordion style="background-color: #fff;" *ngFor="let place of places; let i= index" (click)="setActivePlace(i)" class="seance">
-                    <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
+                    <ion-item *ngIf="place.location"style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
                       <ion-label *ngIf="!(place.location.location_parent.name==='РФ'); else otherAddress">
                         {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
                       </ion-label>

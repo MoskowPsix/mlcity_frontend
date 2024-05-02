@@ -1,8 +1,8 @@
-import { Routes } from '@angular/router';
-import { AuthGuard } from '../guards/auth.guard';
-import { LoginComponent } from '../views/login/login.component';
-import { LoggedInAuthGuard } from '../guards/logged-in-auth.guard';
-import { RegistrationComponent } from '../views/registration/registration.component';
+import { Routes } from '@angular/router'
+import { AuthGuard } from '../guards/auth.guard'
+import { LoginComponent } from '../views/login/login.component'
+import { LoggedInAuthGuard } from '../guards/logged-in-auth.guard'
+import { RegistrationComponent } from '../views/registration/registration.component'
 
 export const authRoutes: Routes = [
   {
@@ -20,4 +20,4 @@ export const authRoutes: Routes = [
     component: RegistrationComponent,
     canActivate: [LoggedInAuthGuard],
   },
-];
+]

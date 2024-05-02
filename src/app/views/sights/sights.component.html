@@ -61,17 +61,19 @@
 
             <ng-container *ngIf="loadingSightsCity">
               <ion-row class="ion-justify-content-start">
-                <ion-col size-xl="4" size-lg="4" size-md="4">
-                  <div class="ion-align-item-center">
-                    <!-- <app-filters-not-button></app-filters-not-button> -->
-                  </div>
-                </ion-col>
-                <ion-col size-xl="4" size-lg="6" size-md="6" size-xs="12">
-                  <div #widgetsContent>
+               
+                <ion-grid  #cardContainer  class="events-grid ion-align-content-start">
+                  <!-- <div #widgetsContent>
                     <app-event-card #cardContainer *ngFor="let sight of sightsCity; let i = index" [isSight]="true" [event]="sight"></app-event-card>
-                  </div>
+                  </div> -->
+                  <ion-row>
+                    <ion-col size="1" *ngFor="let sight of sightsCity; let i = index">
+                    <app-event-card [isSight]="true" [event]="sight" id="{{sight.id}}"></app-event-card>
+                  </ion-col>
+                </ion-row>
+               
               
-                </ion-col>
+                </ion-grid>
               </ion-row>
             </ng-container>
 

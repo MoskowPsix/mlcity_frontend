@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
-import { AuthService } from 'src/app/services/auth.service';
+import { Component } from '@angular/core'
+import { Capacitor } from '@capacitor/core'
+import { AuthService } from 'src/app/services/auth.service'
 @Component({
   selector: 'app-cabinet',
   templateUrl: './cabinet.component.html',
@@ -9,9 +9,9 @@ import { AuthService } from 'src/app/services/auth.service';
 export class CabinetComponent {
   constructor(private authService: AuthService) {}
 
-  platformType: any = Capacitor.getPlatform();
+  platformType: any = Capacitor.getPlatform()
 
   onLogout() {
-    this.authService.logout();
+    this.authService.logout()
   }
 }

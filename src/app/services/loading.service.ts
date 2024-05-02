@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
-import { MessagesLoading } from 'src/app/enums/messages-loading';
+import { Injectable } from '@angular/core'
+import { LoadingController } from '@ionic/angular'
+import { MessagesLoading } from 'src/app/enums/messages-loading'
 
 @Injectable({
   providedIn: 'root',
@@ -12,23 +12,23 @@ export class LoadingService {
     const loader = await this.loadingController.create({
       message: message,
       spinner: 'circular',
-    });
+    })
 
-    await loader.present();
+    await loader.present()
   }
 
   async hideLoading() {
-    this.checkAndCloseLoader();
+    this.checkAndCloseLoader()
     // console.log(this.loadingController.getTop())
     // setTimeout(() => this.checkAndCloseLoader(), 500);
   }
 
   async checkAndCloseLoader() {
-    const loader = await this.loadingController.getTop();
+    const loader = await this.loadingController.getTop()
     if (loader !== undefined) {
-      await this.loadingController.dismiss();
+      await this.loadingController.dismiss()
     } else {
-      setTimeout(() => this.checkAndCloseLoader(), 1000);
+      setTimeout(() => this.checkAndCloseLoader(), 1000)
     }
   }
 }

@@ -8,16 +8,16 @@
   margin-top: -1.5rem;
 }
 
-.description-icon{
+.description-icon {
   font-family: 'Montserrat-Light';
   line-height: 1.5;
 }
-.description-org{
+.description-org {
   font-family: 'Montserrat-Light';
   line-height: 1.5;
 }
 
-.event-icons{
+.event-icons {
   display: flex;
   align-items: center;
 }
@@ -245,7 +245,7 @@ ion-accordion-group {
   transition: all 0.2s ease-in-out;
   z-index: 99999;
   justify-content: flex-start;
-  max-width: 80%;
+  max-width: 68%;
   border-radius: 10rem;
 
   .likes {
@@ -335,7 +335,7 @@ ion-accordion-group {
 }
 @media screen and (min-width: 1324px) {
   .ion-justify-content-center {
-    max-width: 96%;
+    max-width: 80%;
     margin: auto;
   }
 }

@@ -6,57 +6,39 @@ import {
   ViewChild,
   ElementRef,
   NgZone,
-  AfterContentInit,
-  AfterViewInit,
-  AfterViewChecked,
-  DoCheck,
-} from '@angular/core';
-import { YaReadyEvent } from 'angular8-yandex-maps';
+} from '@angular/core'
+import { YaReadyEvent } from 'angular8-yandex-maps'
 import {
   catchError,
   EMPTY,
   of,
-  BehaviorSubject,
   Subject,
   takeUntil,
   forkJoin,
   Observable,
-  debounceTime,
-  debounce,
-  timer,
-} from 'rxjs';
-import { MessagesErrors } from 'src/app/enums/messages-errors';
-import { EventsService } from 'src/app/services/events.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { MapService } from '../../services/map.service';
-import { environment } from '../../../environments/environment';
-import { IEvent } from 'src/app/models/event';
-import { NavigationService } from 'src/app/services/navigation.service';
-import { FilterService } from 'src/app/services/filter.service';
-import { QueryBuilderService } from 'src/app/services/query-builder.service';
-import { ISight } from 'src/app/models/sight';
-import { SightsService } from 'src/app/services/sights.service';
-import { PlaceService } from 'src/app/services/place.service';
-import { IPlace } from 'src/app/models/place';
-import { types } from 'util';
-import { YandexMetricService } from 'src/app/services/yandex-metric.service';
-import { Metrika } from 'ng-yandex-metrika';
-import { NavigationEnd, Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { filter } from 'rxjs/operators';
-import { NgxSliderModule, Options } from '@angular-slider/ngx-slider';
-import { Title } from '@angular/platform-browser';
-import { Meta } from '@angular/platform-browser';
-import { LocationService } from 'src/app/services/location.service';
-import { ActivatedRoute } from '@angular/router';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
+} from 'rxjs'
+import { MessagesErrors } from 'src/app/enums/messages-errors'
+import { EventsService } from 'src/app/services/events.service'
+import { ToastService } from 'src/app/services/toast.service'
+import { MapService } from '../../services/map.service'
+import { environment } from '../../../environments/environment'
+import { IEvent } from 'src/app/models/event'
+import { NavigationService } from 'src/app/services/navigation.service'
+import { FilterService } from 'src/app/services/filter.service'
+import { QueryBuilderService } from 'src/app/services/query-builder.service'
+import { ISight } from 'src/app/models/sight'
+import { SightsService } from 'src/app/services/sights.service'
+import { PlaceService } from 'src/app/services/place.service'
+import { IPlace } from 'src/app/models/place'
+import { Metrika } from 'ng-yandex-metrika'
+import { NavigationEnd, Router } from '@angular/router'
+import { Location } from '@angular/common'
+import { filter } from 'rxjs/operators'
+import { Options } from '@angular-slider/ngx-slider'
+import { Title } from '@angular/platform-browser'
+import { animate, style, transition, trigger } from '@angular/animations'
+import { LoadingService } from 'src/app/services/loading.service'
+import { LocationService } from 'src/app/services/location.service'
 
 @Component({
   selector: 'app-home',
@@ -77,7 +59,7 @@ import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
           style({ height: '{{startHeight}}px', opacity: 0 }),
           animate('.2s ease'),
         ],
-        { params: { startHeight: 0 } }
+        { params: { startHeight: 0 } },
       ),
     ]),
     trigger('mapAnimate', [
@@ -88,28 +70,28 @@ import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
           style({ height: '{{startHeight}}px', opacity: 0 }),
           animate('.5s ease'),
         ],
-        { params: { startHeight: 0 } }
+        { params: { startHeight: 0 } },
       ),
     ]),
   ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>()
 
-  @ViewChild('buttonActive') buttonActive!: ElementRef;
-  @ViewChild('calendula') calendula!: ElementRef;
+  @ViewChild('buttonActive') buttonActive!: ElementRef
+  @ViewChild('calendula') calendula!: ElementRef
 
-  host: string = environment.BACKEND_URL;
-  port: string = environment.BACKEND_PORT;
+  host: string = environment.BACKEND_URL
+  port: string = environment.BACKEND_PORT
 
-  map!: YaReadyEvent<ymaps.Map>;
-  placemarks: ymaps.Placemark[] = [];
-  placemarks_sights: ymaps.Placemark[] = [];
-  placemarks_now: ymaps.Placemark[] = [];
-  placemarks_today: ymaps.Placemark[] = [];
-  placemarks_tomorrow: ymaps.Placemark[] = [];
-  placemarks_week: ymaps.Placemark[] = [];
-  placemarks_month: ymaps.Placemark[] = [];
+  map!: YaReadyEvent<ymaps.Map>
+  placemarks: ymaps.Placemark[] = []
+  placemarks_sights: ymaps.Placemark[] = []
+  placemarks_now: ymaps.Placemark[] = []
+  placemarks_today: ymaps.Placemark[] = []
+  placemarks_tomorrow: ymaps.Placemark[] = []
+  placemarks_week: ymaps.Placemark[] = []
+  placemarks_month: ymaps.Placemark[] = []
 
   //настройки ползунка радиуса
   options: Options = {
@@ -118,64 +100,64 @@ export class HomeComponent implements OnInit, OnDestroy {
     vertical: true,
 
     getPointerColor: (value: number) => {
-      return '#0085FF';
+      return '#0085FF'
     },
-  };
+  }
 
-  CirclePoint!: ymaps.Circle;
+  CirclePoint!: ymaps.Circle
 
-  doCheckState: boolean = true;
+  doCheckState: boolean = true
 
-  myGeo!: ymaps.Placemark;
-  minZoom = 4;
-  zoom: number = 4;
-  clusterer!: ymaps.Clusterer;
-  radius: number = 1;
+  myGeo!: ymaps.Placemark
+  minZoom = 4
+  zoom: number = 4
+  clusterer!: ymaps.Clusterer
+  radius: number = 1
   date: any = {
     dateStart: new Date().toISOString(),
     dateEnd: new Date(
-      new Date().getTime() + 1000 * 60 * 60 * 24 * 7
+      new Date().getTime() + 1000 * 60 * 60 * 24 * 7,
     ).toISOString(),
-  };
-  headerHeight: any = document.getElementById('header');
-  headerHeightM: any = document.getElementById('header-m');
+  }
+  headerHeight: any = document.getElementById('header')
+  headerHeightM: any = document.getElementById('header-m')
 
-  objectsInsideCircle!: any;
-  pixelCenter: any;
+  objectsInsideCircle!: any
+  pixelCenter: any
 
-  isFilterChanged: boolean = false;
+  isFilterChanged: boolean = false
 
-  eventsLoading: boolean = false;
-  sightsLoading: boolean = false;
-  stateType: string = 'events';
+  eventsLoading: boolean = false
+  sightsLoading: boolean = false
+  stateType: string = 'events'
 
-  sightTypeId: any;
-  eventTypeId: any;
+  sightTypeId: any
+  eventTypeId: any
 
-  sightsContentModalTotal: number = 0;
-  eventsContentModalTotal: number = 0;
+  sightsContentModalTotal: number = 0
+  eventsContentModalTotal: number = 0
 
-  sightsModalNextPage!: string;
-  eventsModalNextPage!: string;
+  sightsModalNextPage!: string
+  eventsModalNextPage!: string
 
-  modalSwitcherClass: string = 'container-swither';
-  modalSwitcherTextClass: string = 'swither-text';
-  screenWidth: number = 0;
+  modalSwitcherClass: string = 'container-swither'
+  modalSwitcherTextClass: string = 'swither-text'
+  screenWidth: number = 0
 
-  modalEventShowOpen: boolean = false;
-  modalEventRadiusShowOpen: boolean = false;
-  modalButtonLoader: boolean = false;
-  modalNewPageLoader: boolean = false;
-  modalContent: any[] = [];
-  activePlacemark?: any;
-  activeClaster?: any;
-  activeIcoLink: string = '';
-  events: IEvent[] = [];
-  sights: ISight[] = [];
-  sightsContentModal: ISight[] = [];
-  eventsContentModal: IEvent[] = [];
-  places: IPlace[] = [];
-  radiusTimeOut: any;
+  modalEventShowOpen: boolean = false
+  modalEventRadiusShowOpen: boolean = false
+  modalButtonLoader: boolean = false
+  modalNewPageLoader: boolean = false
+  modalContent: any[] = []
+  activePlacemark?: any
+  activeClaster?: any
+  activeIcoLink: string = ''
+  events: IEvent[] = []
+  sights: ISight[] = []
+  sightsContentModal: ISight[] = []
+  eventsContentModal: IEvent[] = []
+  places: IPlace[] = []
+  radiusTimeOut: any
 
   constructor(
     private mapService: MapService,
@@ -192,192 +174,194 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private titleService: Title,
-    private locationService: LocationService
+    private loadingService: LoadingService,
+    private locationService: LocationService,
   ) {
     this.titleService.setTitle(
-      'MLCity - Мероприятия и достопремечательности вокруг вас'
-    );
-    let prevPath = this.location.path();
+      'MLCity - Мероприятия и достопремечательности вокруг вас',
+    )
+    let prevPath = this.location.path()
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        const newPath = location.path();
+        const newPath = location.path()
         this.metrika.hit(newPath, {
           referer: prevPath,
-        });
-        prevPath = newPath;
-      });
+        })
+        prevPath = newPath
+      })
   }
 
   // при клике по кнопке радиуча (5 10 15 20 25)
   setRadius(radius: number) {
-    this.CirclePoint.geometry?.setRadius(1000 * radius);
-    this.filterService.setRadiusTolocalStorage(radius.toString());
+    this.CirclePoint.geometry?.setRadius(1000 * radius)
+    this.filterService.setRadiusTolocalStorage(radius.toString())
   }
 
   setDir() {
-    return null;
+    return null
   }
 
   pinRadiusFormatter(value: number) {
-    return `${value} км.`;
+    return `${value} км.`
   }
   radiusChange(event: any) {
     if (this.radiusTimeOut) {
-      clearTimeout(this.radiusTimeOut);
+      clearTimeout(this.radiusTimeOut)
     }
     this.radiusTimeOut = setTimeout(() => {
-      this.filterService.setRadiusTolocalStorage(event.value);
-    }, 500);
+      this.filterService.setRadiusTolocalStorage(event.value)
+    }, 500)
   }
   radiusPlus() {
-    let radius: number = Number(this.filterService.getRadiusFromlocalStorage());
+    let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
     if (radius + 1 <= 25) {
-      this.filterService.setRadiusTolocalStorage(`${radius + 1}`);
+      this.filterService.setRadiusTolocalStorage(`${radius + 1}`)
     }
   }
   radiusMinus() {
-    let radius: number = Number(this.filterService.getRadiusFromlocalStorage());
+    let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
     if (radius - 1 >= 1) {
-      this.filterService.setRadiusTolocalStorage(`${radius - 1}`);
+      this.filterService.setRadiusTolocalStorage(`${radius - 1}`)
     }
   }
 
   openModalSwitcher() {
-    this.screenWidth = window.innerWidth;
+    this.screenWidth = window.innerWidth
     if (this.screenWidth < 768) {
       if (this.modalSwitcherClass == 'container-swither') {
-        this.modalSwitcherClass = 'container-swither_open';
-        this.modalSwitcherTextClass = 'swither-text_open';
+        this.modalSwitcherClass = 'container-swither_open'
+        this.modalSwitcherTextClass = 'swither-text_open'
       } else {
-        this.modalSwitcherClass = 'container-swither';
-        this.modalSwitcherTextClass = 'swither-text';
+        this.modalSwitcherClass = 'container-swither'
+        this.modalSwitcherTextClass = 'swither-text'
       }
     } else {
-      this.modalSwitcherClass = 'container-swither';
-      this.modalSwitcherTextClass = 'swither-text';
+      this.modalSwitcherClass = 'container-swither'
+      this.modalSwitcherTextClass = 'swither-text'
     }
   }
 
   openModalContent() {
-    this.navigationService.modalEventRadiusShowOpen.next(true);
+    this.navigationService.modalEventRadiusShowOpen.next(true)
   }
 
   sightTypesChange(typeId: any) {
     if (typeId !== 'all') {
-      this.filterService.setSightTypesTolocalStorage([typeId]);
+      this.filterService.setSightTypesTolocalStorage([typeId])
       this.filterService.setLocationLatitudeTolocalStorage(
-        this.mapService.circleCenterLatitude.value.toString()
-      );
+        this.mapService.circleCenterLatitude.value.toString(),
+      )
       this.filterService.setLocationLongitudeTolocalStorage(
-        this.mapService.circleCenterLongitude.value.toString()
-      );
-      this.filterService.changeFilter.next(true);
+        this.mapService.circleCenterLongitude.value.toString(),
+      )
+      this.filterService.changeFilter.next(true)
     } else {
-      this.filterService.setSightTypesTolocalStorage([]);
+      this.filterService.setSightTypesTolocalStorage([])
       this.filterService.setLocationLatitudeTolocalStorage(
-        this.mapService.circleCenterLatitude.value.toString()
-      );
+        this.mapService.circleCenterLatitude.value.toString(),
+      )
       this.filterService.setLocationLongitudeTolocalStorage(
-        this.mapService.circleCenterLongitude.value.toString()
-      );
-      this.filterService.changeFilter.next(true);
+        this.mapService.circleCenterLongitude.value.toString(),
+      )
+      this.filterService.changeFilter.next(true)
     }
   }
   eventTypesChange(typeId: any) {
     if (typeId !== 'all') {
-      this.filterService.setEventTypesTolocalStorage([typeId]);
+      this.filterService.setEventTypesTolocalStorage([typeId])
       this.filterService.setLocationLatitudeTolocalStorage(
-        this.mapService.circleCenterLatitude.value.toString()
-      );
+        this.mapService.circleCenterLatitude.value.toString(),
+      )
       this.filterService.setLocationLongitudeTolocalStorage(
-        this.mapService.circleCenterLongitude.value.toString()
-      );
-      this.filterService.changeFilter.next(true);
+        this.mapService.circleCenterLongitude.value.toString(),
+      )
+      this.filterService.changeFilter.next(true)
     } else {
-      this.filterService.setEventTypesTolocalStorage([]);
+      this.filterService.setEventTypesTolocalStorage([])
       this.filterService.setLocationLatitudeTolocalStorage(
-        this.mapService.circleCenterLatitude.value.toString()
-      );
+        this.mapService.circleCenterLatitude.value.toString(),
+      )
       this.filterService.setLocationLongitudeTolocalStorage(
-        this.mapService.circleCenterLongitude.value.toString()
-      );
-      this.filterService.changeFilter.next(true);
+        this.mapService.circleCenterLongitude.value.toString(),
+      )
+      this.filterService.changeFilter.next(true)
     }
   }
 
   async onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>): Promise<void> {
-    this.map = { target, ymaps };
+    this.map = { target, ymaps }
 
     // Создаем и добавляем круг
     this.CirclePoint = new ymaps.Circle(
       [[11, 11], 1000 * this.radius],
       {},
-      { fillOpacity: 0.15, draggable: false }
-    );
-    target.geoObjects.add(this.CirclePoint);
+      { fillOpacity: 0.15, draggable: false },
+    )
+    target.geoObjects.add(this.CirclePoint)
 
     // Определяем местоположение пользователя
     //Создаем метку в центре круга, для перетаскивания
     this.myGeo = new ymaps.Placemark(
-      [11, 11],
+      [0, 0],
       {},
       {
         iconLayout: 'default#image',
-        iconImageHref: '/assets/my_geo.svg',
+        iconImageHref: '',
+        // iconImageHref: '/assets/my_geo.svg',
         iconImageSize: [60, 60],
         iconImageOffset: [-30, -55],
-      }
-    );
+      },
+    )
 
-    target.geoObjects.add(this.myGeo);
+    target.geoObjects.add(this.myGeo)
 
     // Вешаем на карту событие начала перетаскивания
-    this.map.target.events.add('actionbegin', e => {
+    this.map.target.events.add('actionbegin', (e) => {
       if (this.objectsInsideCircle) {
-        this.map.target.geoObjects.remove(this.objectsInsideCircle);
+        this.map.target.geoObjects.remove(this.objectsInsideCircle)
 
-        this.objectsInsideCircle.remove(this.placemarks);
-        this.placemarks = [];
+        this.objectsInsideCircle.remove(this.placemarks)
+        this.placemarks = []
       }
 
       if (!this.navigationService.appFirstLoading.value) {
-        this.eventsLoading = true;
-        this.sightsLoading = true;
-        this.modalButtonLoader = true;
-        this.CirclePoint.geometry?.setRadius(this.radius * 15);
-        this.CirclePoint.options.set('fillOpacity', 0.7);
-        this.CirclePoint.options.set('fillColor', '#474A51');
-        this.CirclePoint.options.set('strokeWidth', 0);
-        this.myGeo.options.set('iconImageOffset', [-30, -62]);
+        this.eventsLoading = true
+        this.sightsLoading = true
+        this.modalButtonLoader = true
+        this.CirclePoint.geometry?.setRadius(this.radius * 15)
+        this.CirclePoint.options.set('fillOpacity', 0.7)
+        this.CirclePoint.options.set('fillColor', '#474A51')
+        this.CirclePoint.options.set('strokeWidth', 0)
+        this.myGeo.options.set('iconImageOffset', [-30, -62])
       }
-      this.cdr.detectChanges();
-    });
+      this.cdr.detectChanges()
+    })
 
     // Вешаем на карту событие по перетаскиванию круга и отображения меток в круге
-    this.map.target.events.add('actiontick', e => {
-      const { globalPixelCenter, zoom } = e.get('tick');
-      const projection = this.map.target.options.get('projection');
-      const coords = projection.fromGlobalPixels(globalPixelCenter, zoom);
-
-      this.CirclePoint.geometry!.setCoordinates(coords);
-      this.myGeo.geometry!.setCoordinates(coords);
-      this.mapService.circleCenterLongitude.next(coords[1]);
-      this.mapService.circleCenterLatitude.next(coords[0]);
-    });
+    this.map.target.events.add('actiontick', (e) => {
+      const { globalPixelCenter, zoom } = e.get('tick')
+      const projection = this.map.target.options.get('projection')
+      const coords = projection.fromGlobalPixels(globalPixelCenter, zoom)
+      this.CirclePoint.geometry!.setCoordinates(coords)
+      this.myGeo.geometry!.setCoordinates(coords)
+      this.mapService.circleCenterLongitude.next(coords[1])
+      this.mapService.circleCenterLatitude.next(coords[0])
+      this.mapService.setLastMapCoordsToLocalStorage(coords[0], coords[1])
+    })
 
     // Вешаем на карту событие по окончинию перетаскивания
-    this.map.target.events.add('actionend', async e => {
+    this.map.target.events.add('actionend', async (e) => {
       if (!this.navigationService.appFirstLoading.value) {
-        this.CirclePoint.geometry?.setRadius(this.radius * 1000);
-        this.myGeo.options.set('iconImageOffset', [-30, -55]);
-        this.CirclePoint.options.set('fillColor');
-        this.CirclePoint.options.set('fillOpacity', 0.15);
-        this.CirclePoint.options.set('strokeWidth');
-        this.getEventsAndSights();
+        this.CirclePoint.geometry?.setRadius(this.radius * 1000)
+        this.myGeo.options.set('iconImageOffset', [-30, -55])
+        this.CirclePoint.options.set('fillColor')
+        this.CirclePoint.options.set('fillOpacity', 0.15)
+        this.CirclePoint.options.set('strokeWidth')
+        this.getEventsAndSights()
       }
-    });
-    this.map.target.controls.remove('zoomControl');
+    })
+    this.map.target.controls.remove('zoomControl')
     // this.map.target.controls.add('geolocationControl',{size:"large",position: {left:'50% ',bottom:0, right:0, top:"-150px",width:"150px"}})
 
     // if (!this.map) {
@@ -386,14 +370,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     await this.mapService
       .positionFilter(this.map, this.CirclePoint)
       .then(() => {
-        this.getEventsAndSights();
-      });
+        this.getEventsAndSights()
+      })
 
     if (this.navigationService.appFirstLoading.value) {
-      this.eventsLoading = true;
-      this.sightsLoading = true;
-      this.modalButtonLoader = true;
-      this.cdr.detectChanges();
+      this.eventsLoading = true
+      this.sightsLoading = true
+      this.modalButtonLoader = true
+      this.cdr.detectChanges()
       //this.getEvents()
     }
     // setTimeout(() => {
@@ -404,11 +388,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   setBoundsCoordsToMapService() {
     this.mapService.circleCenterLatitude.next(
-      this.CirclePoint.geometry?.getCoordinates()![0]!
-    );
+      this.CirclePoint.geometry?.getCoordinates()![0]!,
+    )
     this.mapService.circleCenterLongitude.next(
-      this.CirclePoint.geometry?.getCoordinates()![1]!
-    );
+      this.CirclePoint.geometry?.getCoordinates()![1]!,
+    )
   }
 
   async setPlacemarksAndClusters() {
@@ -420,11 +404,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         hasBalloon: false,
         clusterBalloonPanelMaxMapArea: 0,
         clusterOpenBalloonOnClick: true,
-      });
-    this.map.target.geoObjects.add(this.objectsInsideCircle);
+      })
+    this.map.target.geoObjects.add(this.objectsInsideCircle)
 
     this.objectsInsideCircle.events.add('click', (e: any) => {
-      this.modalContent = [];
+      this.modalContent = []
 
       if (!e.get('target')._clusterBounds) {
         if (e.get('target').properties.get('geoObjects') !== undefined) {
@@ -435,31 +419,31 @@ export class HomeComponent implements OnInit, OnDestroy {
                 forkJoin([
                   this.getPlacesIds(
                     element.options._options.balloonContent.id,
-                    'event'
+                    'event',
                   ),
                 ])
                   .pipe(
-                    catchError(err => {
-                      return of(EMPTY);
+                    catchError((err) => {
+                      return of(EMPTY)
                     }),
-                    takeUntil(this.destroy$)
+                    takeUntil(this.destroy$),
                   )
-                  .subscribe();
+                  .subscribe()
 
-                this.activeClaster = e.get('target');
+                this.activeClaster = e.get('target')
                 e.get('target').options.set(
                   'preset',
-                  'islands#invertedPinkClusterIcons'
-                );
+                  'islands#invertedPinkClusterIcons',
+                )
               } else {
-                this.modalContent.push(element.options._options.balloonContent);
-                this.activeClaster = e.get('target');
+                this.modalContent.push(element.options._options.balloonContent)
+                this.activeClaster = e.get('target')
                 e.get('target').options.set(
                   'preset',
-                  'islands#invertedPinkClusterIcons'
-                );
+                  'islands#invertedPinkClusterIcons',
+                )
               }
-            });
+            })
         } else {
           if (
             e.get('target').options._options.balloonContent.type === 'event'
@@ -467,202 +451,196 @@ export class HomeComponent implements OnInit, OnDestroy {
             forkJoin([
               this.getPlacesIds(
                 e.get('target').options._options.balloonContent.id,
-                'event'
+                'event',
               ),
             ])
               .pipe(
-                catchError(err => {
-                  return of(EMPTY);
+                catchError((err) => {
+                  return of(EMPTY)
                 }),
-                takeUntil(this.destroy$)
+                takeUntil(this.destroy$),
               )
-              .subscribe();
-            this.activePlacemark = e.get('target');
+              .subscribe()
+            this.activePlacemark = e.get('target')
             this.activeIcoLink =
               this.host +
               ':' +
               this.port +
-              e.get('target').options._options.balloonContent.ico;
+              e.get('target').options._options.balloonContent.ico
             e.get('target').options.set(
               'iconContentLayout',
               ymaps.templateLayoutFactory.createClass(
-                `<div class="marker active"><img src="${this.activeIcoLink}"/></div>`
-              )
-            );
+                `<div class="marker active"><img src="${this.activeIcoLink}"/></div>`,
+              ),
+            )
           } else {
             forkJoin([
               this.getSightsIds(
-                e.get('target').options._options.balloonContent.id
+                e.get('target').options._options.balloonContent.id,
               ),
             ])
               .pipe(
-                catchError(err => {
-                  return of(EMPTY);
+                catchError((err) => {
+                  return of(EMPTY)
                 }),
-                takeUntil(this.destroy$)
+                takeUntil(this.destroy$),
               )
-              .subscribe(() => {});
-            this.activePlacemark = e.get('target');
+              .subscribe(() => {})
+            this.activePlacemark = e.get('target')
             this.activeIcoLink =
               this.host +
               ':' +
               this.port +
-              e.get('target').options._options.balloonContent.types[0].ico;
+              e.get('target').options._options.balloonContent.types[0].ico
 
             e.get('target').options.set(
               'iconContentLayout',
               ymaps.templateLayoutFactory.createClass(
-                `<div class="marker active"><img src="${this.activeIcoLink}"/></div>`
-              )
-            );
+                `<div class="marker active"><img src="${this.activeIcoLink}"/></div>`,
+              ),
+            )
           }
         }
 
-        this.navigationService.modalEventShowOpen.next(true);
+        this.navigationService.modalEventShowOpen.next(true)
       }
-    });
+    })
   }
 
   getPlacesIds(id: number, type: string): Observable<any> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       this.placeService
         .getPlaceById(id)
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
           if (type == 'event') {
             this.ngZone.run(() => {
-              response.places.event.type = 'events';
-              this.modalContent.push(response.places.event);
-            });
+              response.places.event.type = 'events'
+              this.modalContent.push(response.places.event)
+            })
           }
-          this.cdr.detectChanges();
-          observer.next(EMPTY);
-          observer.complete();
-        });
-    });
+          this.cdr.detectChanges()
+          observer.next(EMPTY)
+          observer.complete()
+        })
+    })
   }
 
   getSightsIds(id: number): Observable<any> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       this.sightsService
         .getSightById(id)
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
           this.ngZone.run(() => {
-            response.type = 'sights';
-            this.modalContent.push(response);
-          });
-        });
-    });
+            response.type = 'sights'
+            this.modalContent.push(response)
+          })
+        })
+    })
   }
 
   getPlaces(): Observable<any> {
-    return new Observable(observer => {
-      this.eventsLoading = true;
+    return new Observable((observer) => {
+      this.eventsLoading = true
       this.placeService
         .getPlaces(this.queryBuilderService.queryBuilder('placesForMap'))
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
-          this.places = response.places;
+          this.places = response.places
           // console.log(this.filterService.locationLatitude.value, this.filterService.locationLongitude.value)
           // let events: any[] = []
           // if (response.places.length) {
 
           // }
-          this.cdr.detectChanges();
-          observer.next(EMPTY);
-          observer.complete();
-        });
-    });
+          this.cdr.detectChanges()
+          observer.next(EMPTY)
+          observer.complete()
+        })
+    })
   }
 
   getSightsForMap(): Observable<any> {
-    return new Observable(observer => {
-      this.sightsLoading = true;
+    return new Observable((observer) => {
+      this.sightsLoading = true
       this.sightsService
         .getSightsForMap(this.queryBuilderService.queryBuilder('sightsForMap'))
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
-          this.sights = response.sights;
-          this.filterService.setSightsCount(response.sights.length);
+          this.sights = response.sights
+          this.filterService.setSightsCount(response.sights.length)
           //this.sightsLoading = false
-          this.cdr.detectChanges();
-          observer.next(EMPTY);
-          observer.complete();
-        });
-    });
+          this.cdr.detectChanges()
+          observer.next(EMPTY)
+          observer.complete()
+        })
+    })
   }
 
   getSights(more?: boolean): Observable<any> {
-    return new Observable(observer => {
-      this.eventsLoading = true;
+    return new Observable((observer) => {
+      this.eventsLoading = true
       this.sightsService
         .getSights(
-          this.queryBuilderService.queryBuilder('sightsModalRadiusForMap')
+          this.queryBuilderService.queryBuilder('sightsModalRadiusForMap'),
         )
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
           if (response.sights.next_cursor != null) {
-            this.sightsModalNextPage = response.sights.next_cursor;
+            this.sightsModalNextPage = response.sights.next_cursor
           }
           if (more) {
-            this.sightsContentModal.push(...response.sights.data);
+            this.sightsContentModal.push(...response.sights.data)
           } else {
-            this.sightsContentModal = response.sights.data;
+            this.sightsContentModal = response.sights.data
           }
 
-          this.sightsContentModalTotal = response.total;
+          this.sightsContentModalTotal = response.total
           // this.filterService.setEventsCount(response.total)
           //this.sightsLoading = false
-          this.cdr.detectChanges();
-          observer.next(EMPTY);
-          observer.complete();
-        });
-    });
+          this.cdr.detectChanges()
+          observer.next(EMPTY)
+          observer.complete()
+        })
+    })
   }
 
   getEvents(more?: boolean): Observable<any> {
-    return new Observable(observer => {
-      this.eventsLoading = true;
+    return new Observable((observer) => {
+      this.eventsLoading = true
       this.eventsService
         .getEvents(
-          this.queryBuilderService.queryBuilder('eventsModalRadiusForMap')
+          this.queryBuilderService.queryBuilder('eventsModalRadiusForMap'),
         )
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
           if (response.events.next_cursor != null) {
-            this.eventsModalNextPage = response.events.next_cursor;
+            this.eventsModalNextPage = response.events.next_cursor
           } else {
-            this.eventsModalNextPage = '';
+            this.eventsModalNextPage = ''
           }
 
           if (more) {
-            this.eventsContentModal.push(...response.events.data);
+            this.eventsContentModal.push(...response.events.data)
           } else {
-            this.eventsContentModal = response.events.data;
+            this.eventsContentModal = response.events.data
           }
-          this.eventsContentModalTotal = response.total;
+          this.eventsContentModalTotal = response.total
           // this.filterService.setEventsCount(response.total)
           //this.sightsLoading = false
-          this.cdr.detectChanges();
-          observer.next(EMPTY);
-          observer.complete();
-        });
-    });
+          this.cdr.detectChanges()
+          observer.next(EMPTY)
+          observer.complete()
+        })
+    })
   }
 
   setMapData() {
-    if (this.doCheckState) {
-      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-        checkZoomRange: true,
-      });
-      this.doCheckState = false;
-    }
     if (this.objectsInsideCircle) {
-      this.map.target.geoObjects.remove(this.objectsInsideCircle);
+      this.map.target.geoObjects.remove(this.objectsInsideCircle)
 
-      this.objectsInsideCircle.remove(this.placemarks);
-      this.placemarks = [];
+      this.objectsInsideCircle.remove(this.placemarks)
+      this.placemarks = []
     }
     //добавить в if - && this.navigationService.appFirstLoading.value - если не требуется увеличивать радиус после первого запуска
     if (
@@ -671,51 +649,51 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.radius < 25 &&
       this.navigationService.appFirstLoading.value
     ) {
-      this.filterService.setRadiusTolocalStorage((++this.radius).toString());
-      this.CirclePoint.geometry?.setRadius(this.radius * 1000);
-      this.getEventsAndSights();
+      this.filterService.setRadiusTolocalStorage((++this.radius).toString())
+      this.CirclePoint.geometry?.setRadius(this.radius * 1000)
+      this.getEventsAndSights()
     } else {
-      this.navigationService.appFirstLoading.next(false);
-      this.modalButtonLoader = true;
-      this.eventsLoading = false;
-      this.sightsLoading = false;
+      this.navigationService.appFirstLoading.next(false)
+      this.modalButtonLoader = true
+      this.eventsLoading = false
+      this.sightsLoading = false
     }
 
     //this.setPlacemarks(this.events, 'events');
 
     if (this.stateType == 'events') {
-      this.setPlacemarks(this.places, 'event');
+      this.setPlacemarks(this.places, 'event')
     } else if (this.stateType == 'sights') {
-      this.setPlacemarks(this.sights, 'sights');
+      this.setPlacemarks(this.sights, 'sights')
     } else if (this.stateType == 'all') {
-      this.setPlacemarks(this.places, 'event');
-      this.setPlacemarks(this.sights, 'sights');
+      this.setPlacemarks(this.places, 'event')
+      this.setPlacemarks(this.sights, 'sights')
     }
 
-    this.setPlacemarksAndClusters();
-    this.setBoundsCoordsToMapService();
-    this.cdr.detectChanges();
+    this.setPlacemarksAndClusters()
+    this.setBoundsCoordsToMapService()
+    this.cdr.detectChanges()
   }
 
   setPlacemarks(collection: any, type: string) {
     collection.map((item: any) => {
-      let time_event = Math.ceil(new Date(item.date_start).getTime() / 1000);
-      let time_now = Math.ceil(new Date().getTime() / 1000);
-      let time_deff = time_event - time_now;
+      let time_event = Math.ceil(new Date(item.date_start).getTime() / 1000)
+      let time_now = Math.ceil(new Date().getTime() / 1000)
+      let time_deff = time_event - time_now
 
-      item['type'] = type;
+      item['type'] = type
       //let icoLink = item && item.types && item.types.length ? this.host + ':' + this.port + item.types[0].ico : '';
-      let icoLink = 0;
-      let placemark;
+      let icoLink = 0
+      let placemark
       // console.log(item.ico)
       if (item.type === 'event') {
-        let icoLink = this.host + ':' + this.port + item.ico;
-        let marker;
+        let icoLink = this.host + ':' + this.port + item.ico
+        let marker
 
         if (icoLink.length > 0) {
-          marker = `<div style="border-color: #7df088;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`;
+          marker = `<div style="border-color: #7df088;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`
         } else {
-          marker = `<div style="border-color: #7df088;" class="marker"><img style="color:#008aed;"/></div>`;
+          marker = `<div style="border-color: #7df088;" class="marker"><img style="color:#008aed;"/></div>`
         }
 
         placemark = new ymaps.Placemark(
@@ -727,16 +705,16 @@ export class HomeComponent implements OnInit, OnDestroy {
             // С иконкой
             // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"><img src="${icoLink}"/></div>`)
             iconContentLayout: ymaps.templateLayoutFactory.createClass(marker),
-          }
-        );
-        this.placemarks.push(placemark);
+          },
+        )
+        this.placemarks.push(placemark)
       } else {
-        let marker;
-        let icoLink = `${this.host}:${this.port}${item.types[0].ico}`;
+        let marker
+        let icoLink = `${this.host}:${this.port}${item.types[0].ico}`
         if (item.types[0].ico.length > 0) {
-          marker = `<div style="border-color: #6574fc;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`;
+          marker = `<div style="border-color: #6574fc;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`
         } else {
-          marker = `<div style="border-color: #6574fc;" class="marker"></div>`;
+          marker = `<div style="border-color: #6574fc;" class="marker"></div>`
         }
         placemark = new ymaps.Placemark(
           [item.latitude, item.longitude],
@@ -747,96 +725,158 @@ export class HomeComponent implements OnInit, OnDestroy {
             // С иконкой
             // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
             iconContentLayout: ymaps.templateLayoutFactory.createClass(marker),
-          }
-        );
-        this.placemarks.push(placemark);
+          },
+        )
+        this.placemarks.push(placemark)
       }
-    });
+    })
   }
 
   async getEventsAndSights() {
-    this.modalButtonLoader = true;
-    this.eventsModalNextPage = '';
-    this.sightsModalNextPage = '';
-    this.eventsContentModal = [];
-    this.sightsContentModal = [];
-    const sources: any[] = [];
+    this.modalButtonLoader = true
+    this.eventsModalNextPage = ''
+    this.sightsModalNextPage = ''
+    this.eventsContentModal = []
+    this.sightsContentModal = []
+    const sources: any[] = []
     if (this.stateType == 'events') {
-      sources.push(this.getPlaces());
+      sources.push(this.getPlaces())
     } else if (this.stateType == 'sights') {
-      sources.push(this.getSightsForMap());
+      sources.push(this.getSightsForMap())
     }
 
     forkJoin(sources)
       .pipe(
-        catchError(err => {
-          this.toastService.showToast(MessagesErrors.default, 'danger');
-          this.navigationService.appFirstLoading.next(false);
-          this.eventsLoading = false;
-          this.sightsLoading = false;
-          this.cdr.detectChanges();
-          return of(EMPTY);
+        catchError((err) => {
+          this.toastService.showToast(MessagesErrors.default, 'danger')
+          this.navigationService.appFirstLoading.next(false)
+          this.eventsLoading = false
+          this.sightsLoading = false
+          this.cdr.detectChanges()
+          return of(EMPTY)
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
-        this.setMapData();
-      });
+        if (this.doCheckState) {
+          this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
+            checkZoomRange: true,
+          })
+          this.doCheckState = false
+        }
+        this.setMapData()
+      })
   }
 
   modalClose() {
-    this.navigationService.modalEventShowOpen.next(false);
+    this.navigationService.modalEventShowOpen.next(false)
   }
 
   modalRadiusClose() {
-    this.navigationService.modalEventRadiusShowOpen.next(false);
+    this.navigationService.modalEventRadiusShowOpen.next(false)
   }
 
   onSegmentChanged(event: any, p: number) {
     if (p == 1) {
-      this.buttonActive.nativeElement.style.transform = 'translateY(0px)';
+      this.buttonActive.nativeElement.style.transform = 'translateY(0px)'
       // this.calendula.nativeElement.style.top = this.headerHeight.offsetHeight + "px"
     } else if (p == 2) {
-      this.buttonActive.nativeElement.style.transform = 'translateY(40px)';
+      this.buttonActive.nativeElement.style.transform = 'translateY(40px)'
       // this.calendula.nativeElement.style.top = "-100px"
     } else if (p == 3) {
-      this.buttonActive.nativeElement.style.transform = 'translateY(92px)';
+      this.buttonActive.nativeElement.style.transform = 'translateY(92px)'
     }
   }
   changeDateRange(event: any) {
-    this.date.dateStart = event.dateStart;
-    this.date.dateEnd = event.dateEnd;
+    this.date.dateStart = event.dateStart
+    this.date.dateEnd = event.dateEnd
   }
   setDate(event: any) {
-    this.filterService.setStartDateTolocalStorage(event.dateStart.toString());
-    this.filterService.setEndDateTolocalStorage(event.dateEnd.toString());
+    this.filterService.setStartDateTolocalStorage(event.dateStart.toString())
+    this.filterService.setEndDateTolocalStorage(event.dateEnd.toString())
     this.filterService.setLocationLatitudeTolocalStorage(
-      this.mapService.circleCenterLatitude.value.toString()
-    );
+      this.mapService.circleCenterLatitude.value.toString(),
+    )
     this.filterService.setLocationLongitudeTolocalStorage(
-      this.mapService.circleCenterLongitude.value.toString()
-    );
+      this.mapService.circleCenterLongitude.value.toString(),
+    )
     // this.queryBuilderService.updateParams()
-    this.filterService.changeFilter.next(true);
+    this.filterService.changeFilter.next(true)
+  }
+
+  dropButton(event: any) {
+    switch (Number(event)) {
+      case 1:
+        this.getGeoPosition()
+        break
+      case 2:
+        this.loadingService.showLoading()
+        if (this.filterService.locationId.value) {
+          this.locationService
+            .getLocationsIds(this.filterService.locationId.value)
+            .pipe(
+              takeUntil(this.destroy$),
+              catchError((err) => {
+                this.toastService.showToast('Город не указан', 'primary')
+                this.loadingService.hideLoading()
+                console.log(err)
+                return of(EMPTY)
+              }),
+            )
+            .subscribe((res: any) => {
+              if (res.location.latitude && res.location.longitude) {
+                this.mapService.circleCenterLatitude.next(res.location.latitude)
+                this.mapService.circleCenterLongitude.next(
+                  res.location.longitude,
+                )
+                this.mapService.geolocationLatitude.next(res.location.latitude)
+                this.mapService.geolocationLongitude.next(
+                  res.location.longitude,
+                )
+                this.mapService.setLastMapCoordsToLocalStorage(
+                  res.location.latitude,
+                  res.location.longitude,
+                )
+                // this.map.target.setCenter([
+                //   res.location.latitude,
+                //   res.location.longitude,
+                // ]);
+                this.filterService.changeFilter.next(true)
+                this.filterService.changeCityFilter.next(true)
+                this.loadingService.hideLoading()
+                this.cdr.detectChanges()
+              }
+            })
+        } else {
+          this.loadingService.hideLoading()
+          this.navigationService.modalSearchCityesOpen.next(true)
+        }
+        break
+      case 3:
+        this.navigationService.modalSearchCityesOpen.next(true)
+        break
+      default:
+        break
+    }
   }
 
   getGeoPosition() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        position => {
+        (position) => {
           const coordinates = [
             position.coords.latitude,
             position.coords.longitude,
-          ];
-          this.map.target.setCenter(coordinates);
+          ]
+          this.map.target.setCenter(coordinates)
         },
-        error => {
+        (error) => {
           this.toastService.showToast(
             'Убедитесь что доступ к геолокации предоставлен',
-            'warning'
-          );
-        }
-      );
+            'warning',
+          )
+        },
+      )
     }
   }
 
@@ -857,74 +897,73 @@ export class HomeComponent implements OnInit, OnDestroy {
     //Подписываемся на изменение радиуса
     this.filterService.radius
       .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        this.eventsContentModal = [];
-        this.sightsContentModal = [];
-        this.radius = parseInt(value);
+      .subscribe((value) => {
+        this.eventsContentModal = []
+        this.sightsContentModal = []
+        this.radius = parseInt(value)
         if (this.map && this.map.target)
           this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
             checkZoomRange: true,
-          });
-      });
+          })
+      })
 
     //Подписываемся на состояние модалки показа ивентов и мест
     this.navigationService.modalEventShowOpen
       .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        this.modalEventShowOpen = value;
+      .subscribe((value) => {
+        this.modalEventShowOpen = value
         if (!value && this.activePlacemark) {
           // убираем активный класс у кастомного маркера при закрытие модалки
           this.activePlacemark.options.set(
             'iconContentLayout',
             ymaps.templateLayoutFactory.createClass(
-              `<div class="marker"><img src="${this.activeIcoLink}"/></div>`
-            )
-          );
-          this.setMapData();
+              `<div class="marker"><img src="${this.activeIcoLink}"/></div>`,
+            ),
+          )
+          this.setMapData()
         }
         if (!value && this.activeClaster) {
           // убираем активный класс у кластера при закрытие модалки
-          this.activeClaster.options.set('preset', '');
-          this.setMapData();
+          this.activeClaster.options.set('preset', '')
+          this.setMapData()
         }
-        this.cdr.detectChanges();
-      });
+        this.cdr.detectChanges()
+      })
 
     this.navigationService.modalEventRadiusShowOpen
       .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        this.modalEventRadiusShowOpen = value;
-        this.cdr.detectChanges();
-      });
+      .subscribe((value) => {
+        this.modalEventRadiusShowOpen = value
+        this.cdr.detectChanges()
+      })
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
     this.filterService.changeFilter
       .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
+      .subscribe((value) => {
         if (value === true) {
-          this.eventsContentModal = [];
-          this.sightsContentModal = [];
-          this.mapService.positionFilter(this.map, this.CirclePoint);
-          this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-            checkZoomRange: true,
-          });
-          this.getEventsAndSights();
+          this.eventsContentModal = []
+          this.sightsContentModal = []
+          this.mapService.positionFilter(this.map, this.CirclePoint)
+
+          this.getEventsAndSights()
+          this.loadingService.hideLoading()
         }
-      });
+      })
     this.filterService.sightTypes
       .pipe(takeUntil(this.destroy$))
       .subscribe((value: any) => {
-        this.eventsContentModal = [];
-        this.sightsContentModal = [];
-        this.sightTypeId = value[0];
-      });
+        this.eventsContentModal = []
+        this.sightsContentModal = []
+        this.sightTypeId = value[0]
+      })
     this.filterService.eventTypes
       .pipe(takeUntil(this.destroy$))
       .subscribe((value: any) => {
-        this.eventsContentModal = [];
-        this.sightsContentModal = [];
-        this.eventTypeId = value[0];
-      });
+        this.eventsContentModal = []
+        this.sightsContentModal = []
+        this.eventTypeId = value[0]
+      })
     // this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
     //   this.filterService.changeFilter.next(true);
     // });
@@ -932,7 +971,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

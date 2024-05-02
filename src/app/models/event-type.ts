@@ -1,5 +1,5 @@
 export interface IEventType {
-  id: number;
-  name: string;
-  ico: string;
+  id: number
+  name: string
+  ico: string
 }

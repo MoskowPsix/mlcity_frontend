@@ -1,6 +1,4 @@
-
 .range-radius-main_2 {
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,20 +9,20 @@
   border-radius: 16px;
   width: 40px;
   background-color: rgb(255, 255, 255);
-  height:32%;
+  height: 32%;
 }
-.range-radius-main_2 ngx-slider{
-  max-height:80%;
+.range-radius-main_2 ngx-slider {
+  max-height: 80%;
 }
 
 ::ng-deep {
   .range-radius-custom {
     /* Добавьте свои стили */
   }
-  .range-radius-main_2  .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
+  .range-radius-main_2 .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
     background-color: #ffffff;
   }
-  .range-radius-main_2  .ngx-slider .ngx-slider-bubble {
+  .range-radius-main_2 .ngx-slider .ngx-slider-bubble {
     display: none;
   }
   .range-radius-main_2 .ngx-slider .ngx-slider-active {
@@ -33,11 +31,9 @@
   }
 }
 
-.range-radius-main-plus{
-
+.range-radius-main-plus {
   font-size: 3rem;
 }
-
 
 .map {
   position: fixed;
@@ -80,7 +76,6 @@
   margin-right: auto;
   font-weight: bold;
   color: #0085ff;
-
 }
 
 .range-radius {
@@ -175,7 +170,8 @@
 .geo-container {
   position: fixed;
   top: 75%;
-  margin-left: 90%;
+  right: 0;
+  margin-right: 5rem;
   z-index: 3;
 }
 
@@ -206,13 +202,7 @@
   .map {
     height: 92vh;
   }
-  .geo-container {
-    position: fixed;
-    bottom: 4rem;
-    right: 0;
-    margin-right: 45px;
-    z-index: 3;
-  }
+
   .container-swither {
     top: 63%;
   }
@@ -227,30 +217,23 @@
     max-height: 239px;
   }
 }
-@media only screen and (max-height: 670px){
+@media only screen and (max-height: 670px) {
   .range-radius-main {
     top: 6rem;
-  
   }
 }
 
-@media only screen and (max-width: 768px) and (max-height: 705px){
+@media only screen and (max-width: 768px) and (max-height: 705px) {
   .container-swither {
     top: 80%;
   }
 }
 
-@media only screen and (max-width: 768px) and (max-height: 890px)  {
+@media only screen and (max-width: 768px) and (max-height: 890px) {
   .map {
     height: 92vh;
   }
-  .geo-container {
-    position: fixed;
-    bottom: 4rem;
-    right: 0;
-    margin-right: 45px;
-    z-index: 3;
-  }
+
   .container-swither {
     top: 70%;
   }
@@ -303,13 +286,6 @@
 }
 
 @media only screen and (min-width: 1370px) and (max-width: 1920px) {
-  .geo-container {
-    position: fixed;
-    top: 80%;
-    right: 0;
-    margin-right: 45px;
-    z-index: 3;
-  }
   .container-swither {
     top: 70%;
   }

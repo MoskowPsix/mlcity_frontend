@@ -1,0 +1,75 @@
+.main-container {
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  position: absolute;
+  cursor: pointer;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  z-index: 1000;
+}
+
+.geo-button {
+  border-radius: 50%;
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.main-container-button-item {
+  transition: 0.3s all;
+  position: absolute;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+}
+.first {
+  visibility: hidden;
+  transition: 0.3s all;
+  transform: translateY(0%);
+  z-index: -10;
+}
+.second {
+  visibility: hidden;
+  transition: 0.3s all;
+  transform: translateY(0%);
+  z-index: -10;
+}
+.third {
+  visibility: hidden;
+  transition: 0.3s all;
+  transform: translateY(0%);
+  z-index: -10;
+}
+
+.first_active {
+  z-index: 10;
+  transition: 0.3s all;
+  transform: translateY(-130%) translateX(-90%);
+}
+.second_active {
+  z-index: 10;
+  transition: 0.3s all;
+  transform: translateX(-180%);
+}
+.third_active {
+  z-index: 10;
+  transition: 0.3s all;
+  transform: translateY(130%) translateX(-90%);
+}
+
+.button-img {
+  width: 2rem;
+  height: 2rem;
+  filter: invert(45%) sepia(45%) saturate(7477%) hue-rotate(194deg)
+    brightness(102%) contrast(108%);
+}

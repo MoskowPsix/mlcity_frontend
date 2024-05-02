@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { IonicModule } from '@ionic/angular'
 
-import { SettingsFavoriteComponent } from './settings-favorite.component';
+import { SettingsFavoriteComponent } from './settings-favorite.component'
 
 describe('SettingsFavoriteComponent', () => {
-  let component: SettingsFavoriteComponent;
-  let fixture: ComponentFixture<SettingsFavoriteComponent>;
+  let component: SettingsFavoriteComponent
+  let fixture: ComponentFixture<SettingsFavoriteComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SettingsFavoriteComponent],
       imports: [IonicModule.forRoot()],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(SettingsFavoriteComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    fixture = TestBed.createComponent(SettingsFavoriteComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

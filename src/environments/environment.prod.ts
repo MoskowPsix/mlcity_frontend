@@ -18,4 +18,4 @@ export const environment = {
   // cityRegion: 'Свердловская область',
   // cityCoordsLatitude: 56.81497464978607,
   // cityCoordsLongitude: 61.32053375244141
-};
+}

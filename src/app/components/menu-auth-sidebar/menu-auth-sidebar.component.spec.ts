@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { IonicModule } from '@ionic/angular'
 
-import { MenuAuthSidebarComponent } from './menu-auth-sidebar.component';
+import { MenuAuthSidebarComponent } from './menu-auth-sidebar.component'
 
 describe('MenuAuthSidebarComponent', () => {
-  let component: MenuAuthSidebarComponent;
-  let fixture: ComponentFixture<MenuAuthSidebarComponent>;
+  let component: MenuAuthSidebarComponent
+  let fixture: ComponentFixture<MenuAuthSidebarComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MenuAuthSidebarComponent],
       imports: [IonicModule.forRoot()],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(MenuAuthSidebarComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    fixture = TestBed.createComponent(MenuAuthSidebarComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})
