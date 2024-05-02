@@ -303,11 +303,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Определяем местоположение пользователя
     //Создаем метку в центре круга, для перетаскивания
     this.myGeo = new ymaps.Placemark(
-      [11, 11],
+      [0, 0],
       {},
       {
         iconLayout: 'default#image',
-        iconImageHref: '/assets/my_geo.svg',
+        iconImageHref: '',
+        // iconImageHref: '/assets/my_geo.svg',
         iconImageSize: [60, 60],
         iconImageOffset: [-30, -55],
       },
