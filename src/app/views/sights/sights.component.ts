@@ -328,7 +328,6 @@ export class SightsComponent implements OnInit, OnDestroy {
     }
     if (boundingClientRect.y > this.testScrol) {
       this.headerWrapper.nativeElement.style.transform = 'translateY(-15%)'
-      console.log('ScrollUp')
     }
     if (boundingClientRect.y < this.testScrol) {
       this.headerWrapper.nativeElement.style.transform = 'translateY(-115%)'
@@ -350,6 +349,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()
+    this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next('')
     this.destroy$.complete()
   }
 }

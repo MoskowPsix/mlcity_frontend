@@ -347,6 +347,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         }
       })
     window.addEventListener('scroll', this.scrollPaginate, true)
+    // window.addEventListener("scrollend", this.scrollEvent, true)
 
     this.date = {
       dateStart: this.filterService.startDate.value,
@@ -355,7 +356,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     //console.log(this.date)
     this.eventsCity = []
     this.eventsGeolocation = []
-    this.getEventsCity()
+    // this.getEventsCity()
     // this.getEventsGeolocation()
 
     //Подписываемся на изменение фильтра
@@ -389,6 +390,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()
+    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
     this.destroy$.complete()
   }
 }
