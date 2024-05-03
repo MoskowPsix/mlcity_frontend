@@ -224,7 +224,8 @@
                     <ion-grid class="mini-cards-container">
                       <ion-row>
                         <ion-col *ngFor="let event of eventsInSight" class="mini-card-item" size="1">
-                          <app-mini-card [image]=event.files[0]!.link [title]=event.name [description]="event.description" [id]="event.id"></app-mini-card>
+                          <app-mini-card *ngIf="event.files[0]" [image]="event.files[0].link" [title]=event.name [description]="event.description" [id]="event.id"></app-mini-card>
+                          <app-mini-card *ngIf="!event.files[0]" [title]=event.name [description]="event.description" [id]="event.id"></app-mini-card>
                         </ion-col>
                     </ion-row>
                     <div class="mini-cards-loadMore">
