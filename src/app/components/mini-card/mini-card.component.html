@@ -1,7 +1,7 @@
 <div class="mini-card-container">
   <ion-col class="mini-card">
       <ion-col [routerLink]="['/events',id]">
-        <img [src]="image" class="mini-card-img">
+        <img *ngIf="image" [src]="image" class="mini-card-img">
       </ion-col>
 
       <ion-col class="mini-card-text-container">

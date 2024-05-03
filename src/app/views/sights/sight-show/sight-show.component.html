@@ -73,7 +73,7 @@
                   <swiper-slide style="min-height: 19rem;" *ngIf="file.local === 0">
                     <img alt="img" src="{{ file.link }}" />
                     <div class="swiper-container-img_wrapper">
-                  
+
                     </div>
                   </swiper-slide>
                 </ng-container>
@@ -105,12 +105,12 @@
           <ion-col size-lg="10" size-md="12" size-xs="12" class="ion-margin">
             <ion-row class="ion-justify-content-center">
               <ion-col size-lg="12" size-md="12" size-xs="12" class="left-block">
-              
+
                 <div class="sight-name-header">
                   {{sight.name}}
                 </div>
 
-             
+
                 <div class="social-buttons">
                   <div class="likes">
                     <ion-icon name="chatbox-outline" class="ico"></ion-icon>
@@ -224,7 +224,7 @@
                     <ion-grid class="mini-cards-container">
                       <ion-row>
                         <ion-col *ngFor="let event of eventsInSight" class="mini-card-item" size="1">
-                          <app-mini-card [image]=event.files[0].link [title]=event.name [description]="event.description" [id]="event.id"></app-mini-card>
+                          <app-mini-card [image]=event.files[0]!.link [title]=event.name [description]="event.description" [id]="event.id"></app-mini-card>
                         </ion-col>
                     </ion-row>
                     <div class="mini-cards-loadMore">
