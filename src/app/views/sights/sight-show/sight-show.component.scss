@@ -3,15 +3,15 @@
   height: 20px;
   margin: -4px 4px;
 }
-.sight-name-header{
+.sight-name-header {
   margin-top: -0.8rem;
   font-family: 'Montserrat-Bold';
-  font-size:clamp(1.6rem, 0.682rem + 3.09vw, 3rem);
+  font-size: clamp(1.6rem, 0.682rem + 3.09vw, 3rem);
   font-weight: 500;
   margin-bottom: 0.5rem;
 }
 
-.simple-text_size{
+.simple-text_size {
   margin-top: -0.3rem;
   font-size: 1rem;
 }
@@ -45,8 +45,6 @@
   border-radius: 6px;
 }
 
-
-
 .description_mobile {
   display: none;
 }
@@ -63,8 +61,6 @@
   width: 100%;
   pointer-events: none;
   height: 100%;
-
-
 
   .swiper-container-header-content {
     margin-top: auto;
@@ -333,12 +329,11 @@ ion-accordion-group {
 }
 
 @media screen and (min-width: 768px) {
-
   swiper-container {
     --width: 100%;
     swiper-slide {
       height: 100%;
-    
+
       img {
         border-radius: 6px;
         width: 100%;
