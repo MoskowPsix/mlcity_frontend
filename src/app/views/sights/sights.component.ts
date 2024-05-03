@@ -201,7 +201,7 @@ export class SightsComponent implements OnInit, OnDestroy {
 
   scrollUpCheckState() {
     const boundingClientRect =
-      this.widgetsContent?.nativeElement.getBoundingClientRect()
+      this.ContentCol?.nativeElement.getBoundingClientRect()
     boundingClientRect
       ? (this.scrollUpState = boundingClientRect.y > 0)
       : (this.scrollUpState = false)

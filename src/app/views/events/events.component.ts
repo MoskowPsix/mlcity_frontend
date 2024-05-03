@@ -147,7 +147,7 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   scrollUpCheckState() {
     const boundingClientRect =
-      this.widgetsContent?.nativeElement.getBoundingClientRect()
+      this.ContentCol?.nativeElement.getBoundingClientRect()
     boundingClientRect
       ? (this.scrollUpState = boundingClientRect.y > 0)
       : (this.scrollUpState = false)
@@ -304,6 +304,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
   //скролл
   scrollPaginate = (): void => {
+    this.scrollUpCheckState()
     const boundingClientRect =
       this.ContentCol.nativeElement?.getBoundingClientRect()
 
@@ -387,7 +388,6 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // отписываемся от всех подписок
-    console.log('is destroyed')
     this.destroy$.next()
     this.destroy$.complete()
   }
