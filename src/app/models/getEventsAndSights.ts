@@ -18,6 +18,8 @@ export interface IGetEventsAndSights {
   eventTypes?: string // массив типвов событий
   sightTypes?: string // массив типвов мест
   radius?: number // радиус круга в котором выводить ивент / места
+  eventIds?: string
+  sightIds?: string
 }
 
 //Пример

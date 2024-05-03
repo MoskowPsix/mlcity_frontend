@@ -378,12 +378,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sightsLoading = true
       this.modalButtonLoader = true
       this.cdr.detectChanges()
-      //this.getEvents()
     }
-    // setTimeout(() => {
-    //   this.filterService.changeFilter.next(true);
-    // }, 1000);
-    // this.getEventsAndSights()
   }
 
   setBoundsCoordsToMapService() {
@@ -396,6 +391,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async setPlacemarksAndClusters() {
+    let eventsIds: any[] = []
+    let sightIds: any[] = []
     //При изменении радиуса проверяем метки для показа/скрытия
     this.objectsInsideCircle = ymaps
       .geoQuery(this.placemarks)
@@ -416,95 +413,82 @@ export class HomeComponent implements OnInit, OnDestroy {
             .properties.get('geoObjects')
             .forEach((element: any) => {
               if (element.options._options.balloonContent.type === 'event') {
-                forkJoin([
-                  this.getPlacesIds(
-                    element.options._options.balloonContent.id,
-                    'event',
-                  ),
-                ])
-                  .pipe(
-                    catchError((err) => {
-                      return of(EMPTY)
-                    }),
-                    takeUntil(this.destroy$),
-                  )
-                  .subscribe()
-
-                this.activeClaster = e.get('target')
-                e.get('target').options.set(
-                  'preset',
-                  'islands#invertedPinkClusterIcons',
-                )
+                eventsIds.push(element.options._options.balloonContent.id)
               } else {
-                this.modalContent.push(element.options._options.balloonContent)
-                this.activeClaster = e.get('target')
-                e.get('target').options.set(
-                  'preset',
-                  'islands#invertedPinkClusterIcons',
-                )
+                sightIds.push(element.options._options.balloonContent)
               }
+              this.activeClaster = e.get('target')
+              e.get('target').options.set(
+                'preset',
+                'islands#invertedPinkClusterIcons',
+              )
             })
         } else {
           if (
             e.get('target').options._options.balloonContent.type === 'event'
           ) {
-            forkJoin([
-              this.getPlacesIds(
-                e.get('target').options._options.balloonContent.id,
-                'event',
-              ),
-            ])
-              .pipe(
-                catchError((err) => {
-                  return of(EMPTY)
-                }),
-                takeUntil(this.destroy$),
-              )
-              .subscribe()
-            this.activePlacemark = e.get('target')
-            this.activeIcoLink =
-              this.host +
-              ':' +
-              this.port +
-              e.get('target').options._options.balloonContent.ico
-            e.get('target').options.set(
-              'iconContentLayout',
-              ymaps.templateLayoutFactory.createClass(
-                `<div class="marker active"><img src="${this.activeIcoLink}"/></div>`,
-              ),
-            )
+            eventsIds = e.get('target').options._options.balloonContent.id
           } else {
-            forkJoin([
-              this.getSightsIds(
-                e.get('target').options._options.balloonContent.id,
-              ),
-            ])
-              .pipe(
-                catchError((err) => {
-                  return of(EMPTY)
-                }),
-                takeUntil(this.destroy$),
-              )
-              .subscribe(() => {})
-            this.activePlacemark = e.get('target')
-            this.activeIcoLink =
-              this.host +
-              ':' +
-              this.port +
-              e.get('target').options._options.balloonContent.types[0].ico
-
-            e.get('target').options.set(
-              'iconContentLayout',
-              ymaps.templateLayoutFactory.createClass(
-                `<div class="marker active"><img src="${this.activeIcoLink}"/></div>`,
-              ),
-            )
+            sightIds = e.get('target').options._options.balloonContent.id
           }
+          this.activePlacemark = e.get('target')
+          this.activeIcoLink =
+            this.host +
+            ':' +
+            this.port +
+            e.get('target').options._options.balloonContent.types[0].ico
+
+          e.get('target').options.set(
+            'iconContentLayout',
+            ymaps.templateLayoutFactory.createClass(
+              `<div class="marker active"><img src="${this.activeIcoLink}"/></div>`,
+            ),
+          )
+        }
+        this.navigationService.modalEventShowOpen.next(true)
+        this.queryBuilderService.eventIds.next(eventsIds.toString())
+        this.queryBuilderService.paginationModalEventsCurrentPage.next('')
+        if (eventsIds.length) {
+          this.getEventsForIdsForModal()
         }
 
-        this.navigationService.modalEventShowOpen.next(true)
+        if (sightIds.length) {
+          this.queryBuilderService.sightIds.next(sightIds.toString())
+          this.queryBuilderService.paginationModalSightsCurrentPage.next('')
+          this.getEventsForIdsForModal()
+        }
       }
     })
+  }
+
+  getEventsForIdsForModal() {
+    this.eventsService
+      .getEvents(this.queryBuilderService.queryBuilder('eventsForMapModal'))
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          console.log(err)
+          return of(EMPTY)
+        }),
+      )
+      .subscribe((response: any) => {
+        console.log(response)
+      })
+  }
+
+  getSightsForIdsForModal() {
+    this.sightsService
+      .getSights(this.queryBuilderService.queryBuilder('sightsForMapModal'))
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          console.log(err)
+          return of(EMPTY)
+        }),
+      )
+      .subscribe((response: any) => {
+        console.log(response)
+      })
   }
 
   getPlacesIds(id: number, type: string): Observable<any> {

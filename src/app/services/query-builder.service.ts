@@ -22,6 +22,16 @@ export class QueryBuilderService {
   locationId?: number
   radius?: number
 
+  public sightIds: BehaviorSubject<string> = new BehaviorSubject<string>('')
+
+  public eventIds: BehaviorSubject<string> = new BehaviorSubject<string>('')
+
+  public paginationModalEventsCurrentPage: BehaviorSubject<string> =
+    new BehaviorSubject<string>('')
+
+  public paginationModalSightsCurrentPage: BehaviorSubject<string> =
+    new BehaviorSubject<string>('')
+
   public paginationPublicEventsCityCurrentPage: BehaviorSubject<string> =
     new BehaviorSubject<string>('')
   //public paginationPublicEventsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
@@ -123,6 +133,9 @@ export class QueryBuilderService {
       case 'eventsModalRadiusForMap': //Публичная страница мероприятий /events - вкладка по события городу
         this.buildQueryEventsModalRadiusForMap()
         break
+      case 'eventsForMapModal': // Модальное окно на карте
+        this.buildQueryEventsForMapModal()
+        break
       // case 'eventsPublicForGeolocationTab': //Публичная страница мероприятий /events - вкладка события рядом
       //   this.buildQueryEventsPublicForGeolocationTab()
       //   break;
@@ -150,6 +163,9 @@ export class QueryBuilderService {
       case 'buildQueryEventsInSight':
         this.buildQueryEventsInSight()
         break
+      case 'sightsForMapModal': // Модальное окно на карте
+        this.buildQuerySightsForMapModal()
+        break
       default:
         this.buildQueryDefault()
         break
@@ -157,6 +173,19 @@ export class QueryBuilderService {
     return this.queryParams
   }
 
+  buildQuerySightsForMapModal() {
+    this.queryParams = {
+      sightIds: this.sightIds.value,
+      page: this.paginationModalSightsCurrentPage.value,
+    }
+  }
+
+  buildQueryEventsForMapModal() {
+    this.queryParams = {
+      eventIds: this.eventIds.value,
+      page: this.paginationModalEventsCurrentPage.value,
+    }
+  }
   buildQueryEventsForTape() {
     this.queryParams = {
       statuses: [Statuses.publish].join(','),
