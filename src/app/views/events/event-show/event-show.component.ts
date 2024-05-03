@@ -39,6 +39,8 @@ import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
 import { UserService } from 'src/app/services/user.service'
 import { FilterService } from 'src/app/services/filter.service'
+import { LocationService } from 'src/app/services/location.service'
+import { MapService } from 'src/app/services/map.service'
 
 // import { Swiper } from 'swiper/types';
 
@@ -82,15 +84,15 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
     private queryBuilderService: QueryBuilderService,
-    private placeService: PlaceService,
     private metrika: Metrika,
     private location: Location,
     private router: Router,
     private titleService: Title,
     private metaService: Meta,
-    private helpers: HelpersService,
     private userService: UserService,
     private filterService: FilterService,
+    private locationService: LocationService,
+    private mapService: MapService,
   ) {
     let prevPath = this.location.path()
     this.router.events
@@ -125,6 +127,28 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.startLikesCount = this.event?.likes
           ? this.event.likes.vk_count + this.event.likes.local_count
           : 0
+      })
+  }
+
+  setLocationForPlaces() {
+    this.loadPlace = true
+    const coords = this.mapService.getLastMapCoordsFromLocalStorage()
+    console.log(coords)
+    this.locationService
+      .getLocationByCoords(coords)
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          console.log(err)
+          return of(EMPTY)
+        }),
+      )
+      .subscribe(async (response: any) => {
+        console.log(response)
+        await this.queryBuilderService.locationIdForEventShow.next(
+          response.location.id,
+        )
+        this.getEventPlaces()
       })
   }
 
@@ -269,7 +293,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.loadMore = true
         this.locationId = Number(value)
         this.places = []
-        this.getEventPlaces()
+        this.setLocationForPlaces()
       })
     this.userAuth = this.authService.getAuthState()
     this.getEvent()
@@ -277,6 +301,14 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.user = this.userService.user.value
     this.checkLiked()
     this.checFavorite()
+    this.router.events
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value: any) => {
+        this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
+          '',
+        )
+        // this.queryBuilderService.locationIdForEventShow.next(0)
+      })
   }
 
   // ngAfterViewInit() {

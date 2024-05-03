@@ -65,6 +65,9 @@ export class QueryBuilderService {
   public paginationPublicSightsForTapeCurrentPage: BehaviorSubject<string> =
     new BehaviorSubject<string>('')
 
+  public locationIdForEventShow: BehaviorSubject<number> =
+    new BehaviorSubject<number>(0)
+
   constructor(
     private mapService: MapService,
     private filterService: FilterService,
@@ -279,7 +282,7 @@ export class QueryBuilderService {
 
   buildQueryEventPlaces() {
     this.queryParams = {
-      locationId: Number(this.filterService.getLocationFromlocalStorage()),
+      locationId: this.locationIdForEventShow.value,
       page: this.paginataionPublicEventPlacesCurrentPage.value,
     }
   }

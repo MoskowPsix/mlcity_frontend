@@ -8,7 +8,14 @@ import {
 import { Capacitor } from '@capacitor/core'
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx'
 import { Geolocation } from '@capacitor/geolocation'
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs'
+import {
+  BehaviorSubject,
+  catchError,
+  EMPTY,
+  of,
+  Subject,
+  takeUntil,
+} from 'rxjs'
 import { FilterService } from './filter.service'
 import { NavigationService } from './navigation.service'
 import { LocationService } from './location.service'
@@ -134,10 +141,34 @@ export class MapService {
   async setCenterMap(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
     let coords
     try {
-      coords = await this.getCurrentLocation()
-      this.circleCenterLatitude.next(coords[0])
-      this.circleCenterLongitude.next(coords[1])
-      this.setPlacemark(map, CirclePoint, coords!, true)
+      if (this.filterService.getLocationFromlocalStorage()) {
+        this.locationService
+          .getLocationsIds(
+            Number(this.filterService.getLocationFromlocalStorage()),
+          )
+          .pipe(
+            takeUntil(this.destroy$),
+            catchError((err) => {
+              console.log(err)
+              return of(EMPTY)
+            }),
+          )
+          .subscribe((response) => {
+            coords = [response.location.latitude, response.location.longitude]
+            this.circleCenterLatitude.next(coords[0])
+            this.circleCenterLongitude.next(coords[1])
+            this.setPlacemark(map, CirclePoint, coords!, true)
+          })
+      } else {
+        coords = await this.getCurrentLocation()
+        this.circleCenterLatitude.next(coords[0])
+        this.circleCenterLongitude.next(coords[1])
+        this.setPlacemark(map, CirclePoint, coords!, true)
+      }
+      // coords = await this.getCurrentLocation()
+      // this.circleCenterLatitude.next(coords[0])
+      // this.circleCenterLongitude.next(coords[1])
+      // this.setPlacemark(map, CirclePoint, coords!, true)
     } catch (error) {
       if (!this.filterService.locationId.value) {
         this.navigationService.modalSearchCityesOpen.next(true)
@@ -361,7 +392,29 @@ export class MapService {
     //Если не первый запуск и менялся фильтр города то перекидываем на город
 
     if (!this.navigationService.appFirstLoading.value) {
-      // console.log('load coord');
+      // if (this.filterService.getLocationFromlocalStorage()) {
+      //   const coords: any[] = [0, 0]
+      //   this.locationService
+      //     .getLocationsIds(
+      //       Number(this.filterService.getLocationFromlocalStorage()),
+      //     )
+      //     .pipe(
+      //       takeUntil(this.destroy$),
+      //       catchError((err) => {
+      //         console.log(err)
+      //         return of(EMPTY)
+      //       }),
+      //     )
+      //     .subscribe((response) => {
+      //       console.log(response)
+      //       coords[0] = response.latitude
+      //       coords[1] = response.longitude
+      //     })
+      //   await circlePoint.geometry?.setCoordinates(coords)
+      // } else {
+      //   const coords = await this.getLastMapCoordsFromLocalStorage()
+      //   await circlePoint.geometry?.setCoordinates(coords)
+      // }
       const coords = await this.getLastMapCoordsFromLocalStorage()
       await circlePoint.geometry?.setCoordinates(coords)
       // await this.geolocationMapNative(map, circlePoint);

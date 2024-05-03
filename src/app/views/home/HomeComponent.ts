@@ -313,7 +313,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         iconImageOffset: [-30, -55],
       },
     )
-
     target.geoObjects.add(this.myGeo)
 
     // Вешаем на карту событие начала перетаскивания
@@ -345,7 +344,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       const coords = projection.fromGlobalPixels(globalPixelCenter, zoom)
       this.CirclePoint.geometry!.setCoordinates(coords)
       this.myGeo.geometry!.setCoordinates(coords)
-      console.log(this.map.target.getBounds())
       this.mapService.circleCenterLongitude.next(coords[1])
       this.mapService.circleCenterLatitude.next(coords[0])
       this.mapService.setLastMapCoordsToLocalStorage(coords[0], coords[1])
@@ -368,6 +366,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // if (!this.map) {
     //   this.onMapReady({target, ymaps});
     // }
+
     await this.mapService
       .positionFilter(this.map, this.CirclePoint)
       .then(() => {
