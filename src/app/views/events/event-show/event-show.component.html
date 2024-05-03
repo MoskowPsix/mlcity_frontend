@@ -83,20 +83,7 @@
                   <iframe class="video_content" [src]="getUrlFrame(file.link)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
                   <div class="swiper-container-img_wrapper">
                     <div class="swiper-container-header-content">
-                        <div>
-                            <h1 class="title">{{ event.name }}</h1>
-
-                            <!-- <div class="swiper-container-header-content-organizator_wrapper" >
-                              <h2 class="swiper-container-header-content-organizator">Организатор: {{ event.sponsor }}</h2>
-                            </div> -->
-                            <h3 class="swiper-container-header-content-time">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
-                            <!-- <div style="display: flex; align-items: center;">
-                              <div style="display: flex; align-items: center;">
-                                <h3 class="swiper-container-header-content-time">{{event.types[0].name}}</h3>
-                              </div>
-                              <ion-img style="filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(12deg) brightness(105%) contrast(101%);"  alt="ava" src="{{host}}:{{port}}{{event.types[0].ico}}" class="ico-small"/>
-                            </div> -->
-                        </div>
+              
 
                     </div>
 
@@ -113,8 +100,9 @@
         </ion-col>
         <div class="event-name-header">
           {{ event.name }}
-      
+          <h3 class="swiper-container-header-content-time title" style="font-size: 16px;">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
         </div>
+
       </ion-row>
      
      
@@ -209,7 +197,7 @@
 
 
                 <ion-col>
-                  <div style="font-family:'Montserrat-Bold';" class="title">
+                  <div style="" class="title">
                     Билеты
                   </div>
                     <div class="tickets-grid_wrapper">
@@ -242,7 +230,7 @@
                 </ion-col>
 
                 <ion-col>
-                  <div style="font-family:'Montserrat-Bold';" class="title">
+                  <div class="title">
                     Организатор
                   </div>
 

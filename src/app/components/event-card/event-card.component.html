@@ -15,7 +15,6 @@
         <ng-container *ngFor="let file of event.files">
           <swiper-slide *ngIf="file.local === 1 && file.file_types[0].name === 'image'">
             <ion-img style="background-image: url('{{host}}:{{port}}{{ file.link }}');"/>
-       
           </swiper-slide>
           <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
               <img alt="{{file.name}}" src="{{ file.link }}" style="z-index: 10;"/>
@@ -58,6 +57,11 @@
 
     <ion-card-header [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
       <ion-text class="last-header card-title">{{ event.name | truncate:[60,'...'] }}</ion-text>
+      <ng-container *ngIf="!isSight">
+        <div *ngIf="minPrice !== 0" class="price">от {{minPrice}}₽</div>
+        <div *ngIf="minPrice === 0" class="price">Вход свободный</div>
+      </ng-container>
+   
       <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>
     </ion-card-header>
 
