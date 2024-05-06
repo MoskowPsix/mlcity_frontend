@@ -47,24 +47,24 @@
 
 -->
 
-<div (click)="menuDrop()" class="main-container">
-  <div class="geo-button">
-    <img class="button-img" src="{{iconsPathArray[0]}}" alt="">
+<div name="dropButton"  (click)="menuDrop()" class="main-container">
+  <div name="dropButton" class="geo-button">
+    <img name="dropButton" class="button-img" src="{{iconsPathArray[0]}}" alt="">
   </div>
   
-  <div [ngClass]="firstCircleClass" class="main-container-button-item ">
-    <div (click)="sendButtonId($event)" id="1" class="geo-button">
-      <img class="button-img" id="1" src="{{iconsPathArray[1]}}" alt="">
+  <div name="dropButton" [ngClass]="firstCircleClass" class="main-container-button-item ">
+    <div name="dropButton" (click)="sendButtonId($event)" id="1" class="geo-button">
+      <img name="dropButton" class="button-img" id="1" src="{{iconsPathArray[1]}}" alt="">
     </div>
   </div>
-  <div  [ngClass]="secondCircleClass" class="main-container-button-item">
-    <div (click)="sendButtonId($event)" id="2" class="geo-button"> 
-      <img class="button-img" id="2" src="{{iconsPathArray[2]}}" alt="">
+  <div name="dropButton"  [ngClass]="secondCircleClass" class="main-container-button-item">
+    <div name="dropButton" (click)="sendButtonId($event)" id="2" class="geo-button"> 
+      <img name="dropButton" class="button-img" id="2" src="{{iconsPathArray[2]}}" alt="">
     </div>
   </div>
-  <div  [ngClass]="thirdCircleClass" class="main-container-button-item ">
-    <div (click)="sendButtonId($event)" id="3" class="geo-button">
-      <img class="button-img" id="3" src="{{iconsPathArray[3]}}" alt="">
+  <div name="dropButton" [ngClass]="thirdCircleClass" class="main-container-button-item ">
+    <div name="dropButton" (click)="sendButtonId($event)" id="3" class="geo-button">
+      <img name="dropButton" class="button-img" id="3" src="{{iconsPathArray[3]}}" alt="">
     </div>
   </div>
 </div>

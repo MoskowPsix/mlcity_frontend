@@ -96,6 +96,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   vkLikesCount: number | null = null
   //windowComment: boolean = false
 
+  prices: number[] = []
+  minPrice: number = 0
+  maxPrice: number = 0
+
   toggleFavorite(event_id: number) {
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
@@ -302,7 +306,16 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     return sort_prices[sort_prices.length - 1].cost_rub
   }
 
+  findPrice() {
+    for (let i = 0; i < this.event.price.length; i++) {
+      this.prices.push(Number(this.event.price[i].cost_rub))
+    }
+    this.minPrice = Math.min(...this.prices)
+    this.maxPrice = Math.max(...this.prices)
+  }
+
   ngOnInit() {
+    this.findPrice()
     this.slugName = this.helpers.translit(this.event.name)
     this.userAuth = this.authService.getAuthState()
     this.startLikesCount = this.event.likes

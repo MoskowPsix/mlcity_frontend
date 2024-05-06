@@ -6,6 +6,8 @@ import {
   ViewChild,
   ElementRef,
   NgZone,
+  Output,
+  EventEmitter,
 } from '@angular/core'
 import { YaReadyEvent } from 'angular8-yandex-maps'
 import {
@@ -81,7 +83,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('buttonActive') buttonActive!: ElementRef
   @ViewChild('calendula') calendula!: ElementRef
   @ViewChild('ContentModal') ContentModal!: ElementRef
-
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
 
@@ -162,7 +163,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   loadModal: boolean = false
   loadModalMore: boolean = false
   isWorkingScroll: boolean = false
-
+  mapClick: boolean = false
   constructor(
     private mapService: MapService,
     private eventsService: EventsService,
@@ -200,6 +201,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   setRadius(radius: number) {
     this.CirclePoint.geometry?.setRadius(1000 * radius)
     this.filterService.setRadiusTolocalStorage(radius.toString())
+  }
+
+  mapOnClick() {
+    console.log('Клик на карту из родительского компонента')
+    this.mapClick = !this.mapClick
   }
 
   setDir() {

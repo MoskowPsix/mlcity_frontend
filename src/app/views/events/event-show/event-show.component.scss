@@ -6,13 +6,14 @@
 .event-name {
 }
 
-.event-name-header {
-  max-width: 83%;
-  margin: auto;
+.event-name-header{
+  margin-left: 1%;
+  padding-left: 8%;
+  padding-right: 2%;
+  width: 100%;
   font-family: 'Montserrat-Bold';
   font-size: clamp(1.6rem, 0.682rem + 3.09vw, 3rem);
   font-weight: 500;
-  display: flex;
 }
 .content-main {
   margin-top: -1.5rem;
@@ -218,18 +219,18 @@ ion-accordion-group {
 }
 
 .social-buttons {
+
   font-family: 'Montserrat-Medium';
   display: flex;
   margin: auto;
-  left: 1.8%;
+
   gap: 1rem;
-  padding: 0.5rem;
   color: #999ca1;
   font-size: 1rem;
   transition: all 0.2s ease-in-out;
   z-index: 99999;
   justify-content: flex-start;
-  max-width: 68%;
+  max-width: 80%;
   border-radius: 10rem;
 
   .likes {
@@ -274,6 +275,7 @@ ion-accordion-group {
   }
 
   .social-buttons {
+    padding-left: 0;
     max-width: 100%;
   }
 }
@@ -302,7 +304,7 @@ ion-accordion-group {
   }
   .title {
     min-width: 80%;
-    font-size: 30px;
+    font-size: 20px;
   }
   .address {
     font-size: calc(14px + (2 + 2 * 0.7) * ((100vw - 320px) / 1406));
@@ -328,10 +330,12 @@ ion-accordion-group {
 }
 
 @media screen and (max-width: 768px) {
-  .event-name-header {
+  .event-name-header{
+    padding-left: 0;
     max-width: 92%;
   }
   .social-buttons {
+    padding-left: 3%;
     .likes_share {
       display: block;
     }

@@ -1,7 +1,7 @@
 <meta name="description" content="Узнайте какие события и достопремечательности проходят рядом с вами и в вашем городе.">
-<ion-content>
+<ion-content >
   <!-- Карта -->
-  <div class="map">
+  <div (click)="mapOnClick()" class="map">
     <ya-map [@mapAnimate] (ready)="onMapReady($event)"
       id="map"
       [zoom]="zoom"
@@ -37,7 +37,11 @@
 
     <!-- Кнопка геопозиции -->
     <div class="geo-container">
-      <app-drop-down-button [iconsPathArray]="['assets/icons/map-button.svg','assets/icons/geo-button.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']" (emmitter)="dropButton($event)"></app-drop-down-button>
+      <app-drop-down-button
+      [mapClick] = "mapClick"
+       [iconsPathArray]="['assets/icons/map-button.svg','assets/icons/geo-button.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']"
+      (emmitter)="dropButton($event)">
+      </app-drop-down-button>
       <!-- <div class="geo-button-container" (click)="getGeoPosition()">
         <ion-icon class="geo-button" color="primary" name="locate-outline" size="large"></ion-icon>
       </div> -->
@@ -115,7 +119,7 @@
 <!-- Шкала радиуса -->
 <div class="">
 
-  <div class="range-radius-main_2">
+  <div class="range-radius-main_2" (click)="mapOnClick()">
     <p class="range-radius-custom-info" >{{radius}}км</p>
     <ion-icon (click)="radiusPlus()" name="add-outline" class="range-radius-main-plus" color="primary"></ion-icon>
 

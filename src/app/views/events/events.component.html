@@ -1,7 +1,7 @@
 <ion-content id="topEv" #lentEvent>
   <!-- <div id="header-anchor">35454</div> -->
   <div id="header-anchor" style="height: 10px; width: 10px; padding-top: var(--ion-safe-area-top,0);"></div>
- 
+
   <ion-grid class="mb-6-5rem">
     <!-- <ion-row class="ion-justify-content-center">
       <ion-col size-lg="8" size-md="12" size-xs="12">
@@ -9,7 +9,7 @@
           <ion-segment-button value="eventsCitySegment">
             <ion-label class="segment-title">
               <ion-icon name="balloon" color="primary"></ion-icon>
-              События           
+              События
             </ion-label>
             <span class="note">Город: {{ city }}</span>
 
@@ -17,14 +17,14 @@
           <ion-segment-button value="eventsGeolocationSegment">
             <ion-label class="segment-title">
               <ion-icon name="location" color="primary"></ion-icon>
-              События      
+              События
             </ion-label>
             <span class="note">рядом с вами</span>
           </ion-segment-button>
         </ion-segment>
       </ion-col>
     </ion-row> -->
-    
+
       <!-- <div class="ion-padding" slot="content"> -->
         <div class="carusel-wrapper_flex" #headerWrapper>
           <div >
@@ -34,14 +34,14 @@
             <ng-container>
               <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
             </ng-container>
-       
+
           </div>
         </div>
-    
-     
+
+
       <!-- </div> -->
-    
-    
+
+
       <div>
     <ion-row class="ion-justify-content-center" style="margin-top: 8rem;">
       <ion-col size-lg="10" size-md="12" size-xs="12">
@@ -54,16 +54,15 @@
                 <ion-col size="1" *ngFor="let event of eventsCity; let i = index">
                   <app-event-card  [event]="event" id="{{event.id}}"></app-event-card>
                 </ion-col>
-                  
-  
-                    <!-- <div #widgetsContent>
-                    </div> -->
-                  
+
+                    <div #widgetsContent>
+                    </div>
+
               </ion-row>
-             
+
             </ion-grid>
           </ng-container>
-          
+
           <ng-container *ngIf="!loadingEventsCity">
             <ion-row class="ion-justify-content-center">
               <ion-col size-lg="4" size-md="6" size-xs="12">
@@ -73,7 +72,7 @@
                     <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
                     <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text></ion-card-subtitle>
                   </ion-card-header>
-                
+
                   <ion-card-content>
                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
@@ -81,11 +80,11 @@
                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                     <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
                   </ion-card-content>
-                </ion-card>      
+                </ion-card>
               </ion-col>
             </ion-row>
-          </ng-container> 
-          
+          </ng-container>
+
           <ng-container *ngIf="!loadingMoreEventsCity">
             <div *ngIf="nextPage" class="ion-margin-horizontal">
               <ion-button expand="block" (click)="eventsCityLoadingMore()" [disabled]="loadingMoreEventsCity">
@@ -94,7 +93,7 @@
               </ion-button>
             </div>
           </ng-container>
-  
+
           <ng-container *ngIf="loadingMoreEventsCity">
             <ion-row class="ion-justify-content-center">
               <ion-spinner class="ion-margin-vertical"></ion-spinner>
@@ -112,7 +111,7 @@
                     <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
                     <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text></ion-card-subtitle>
                   </ion-card-header>
-                
+
                   <ion-card-content>
                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
@@ -120,11 +119,11 @@
                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                     <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
                   </ion-card-content>
-                </ion-card>      
+                </ion-card>
               </ion-col>
             </ion-row>
           </ng-container>
-  
+
           <ng-container *ngIf="loadingEventsGeolocation">
             <ion-col class="ion-justify-content-start">
               <ion-row>
@@ -132,7 +131,7 @@
                     <div class="ion-align-item-center">
                       <app-filters-not-button></app-filters-not-button>
                     </div>
-                  </ion-col> 
+                  </ion-col>
                 <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card">
                   <app-event-card *ngFor="let event of eventsGeolocation; let i = index" [event]="event"></app-event-card>
                   <ng-container *ngIf="!eventsGeolocation.length && loadingEventsGeolocation">
@@ -142,7 +141,7 @@
               </ion-row>
             </ion-col>
           </ng-container>
-          
+
           <ng-container *ngIf="!loadingMoreEventsGeolocation">
             <div *ngIf="currentPageEventsGeolocation !== totalPagesEventsGeolocation" class="ion-margin-horizontal">
               <ion-button expand="block" (click)="eventsGeolocationLoadingMore()" [disabled]="loadingMoreEventsGeolocation">
@@ -151,7 +150,7 @@
               </ion-button>
             </div>
           </ng-container>
-  
+
           <ng-container *ngIf="loadingMoreEventsGeolocation">
             <ion-row class="ion-justify-content-center">
               <ion-spinner class="ion-margin-vertical"></ion-spinner>
@@ -168,9 +167,9 @@
   </ng-container>
 
     <a routerLink="." fragment="header-anchor" class="scroll-up" [hidden]="scrollUpState" (click)="scrollUp()">
-        <ion-icon size="large" name="chevron-up"></ion-icon>     
-    </a> 
-  
- 
+        <ion-icon size="large" name="chevron-up"></ion-icon>
+    </a>
+
+
 
 </ion-content>
