@@ -204,7 +204,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   mapOnClick() {
-    console.log('Клик на карту из родительского компонента')
     this.mapClick = !this.mapClick
   }
 
@@ -424,9 +423,9 @@ export class HomeComponent implements OnInit, OnDestroy {
             .properties.get('geoObjects')
             .forEach((element: any) => {
               if (element.options._options.balloonContent.type == 'event') {
-                eventsIds.push(element.options._options.balloonContent.id)
+                eventsIds.push(element.options._options.balloonContent.event_id)
               } else {
-                sightIds.push(element.options._options.balloonContent)
+                sightIds.push(element.options._options.balloonContent.id)
               }
               this.activeClaster = e.get('target')
               e.get('target').options.set(
@@ -436,8 +435,9 @@ export class HomeComponent implements OnInit, OnDestroy {
             })
         } else {
           if (e.get('target').options._options.balloonContent.type == 'event') {
-            eventsIds.push(e.get('target').options._options.balloonContent.id)
-            console.log(e.get('target').options._options.balloonContent)
+            eventsIds.push(
+              e.get('target').options._options.balloonContent.event_id,
+            )
           } else {
             sightIds.push(e.get('target').options._options.balloonContent.id)
           }
@@ -926,10 +926,17 @@ export class HomeComponent implements OnInit, OnDestroy {
         !this.loadModalMore &&
         this.modalContent.length
       ) {
-        this.loadModalMore = true
-        if (this.stateType == 'events') {
+        if (
+          this.stateType == 'events' &&
+          this.queryBuilderService.paginationModalEventsCurrentPage.value
+        ) {
+          this.loadModalMore = true
           this.getEventsForIdsForModal()
-        } else {
+        } else if (
+          this.queryBuilderService.paginationModalSightsCurrentPage.value &&
+          this.stateType == 'sights'
+        ) {
+          this.loadModalMore = true
           this.getSightsForIdsForModal()
         }
       }
