@@ -80,6 +80,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   @ViewChild('buttonActive') buttonActive!: ElementRef
   @ViewChild('calendula') calendula!: ElementRef
+  @ViewChild('ContentModal') ContentModal!: ElementRef
 
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
@@ -391,8 +392,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async setPlacemarksAndClusters() {
-    let eventsIds: any[] = []
-    let sightIds: any[] = []
+    let eventsIds: any[] 
+    let sightIds: any[] 
     //При изменении радиуса проверяем метки для показа/скрытия
     this.objectsInsideCircle = ymaps
       .geoQuery(this.placemarks)
@@ -445,20 +446,37 @@ export class HomeComponent implements OnInit, OnDestroy {
             ),
           )
         }
+        console.log(eventsIds, sightIds)
         this.navigationService.modalEventShowOpen.next(true)
-        this.queryBuilderService.eventIds.next(eventsIds.toString())
-        this.queryBuilderService.paginationModalEventsCurrentPage.next('')
-        if (eventsIds.length) {
+        if (eventsIds) {
+          this.queryBuilderService.eventIds.next(eventsIds.toString())
+          this.queryBuilderService.paginationModalEventsCurrentPage.next('')
           this.getEventsForIdsForModal()
         }
 
-        if (sightIds.length) {
+        if (sightIds) {
           this.queryBuilderService.sightIds.next(sightIds.toString())
           this.queryBuilderService.paginationModalSightsCurrentPage.next('')
-          this.getEventsForIdsForModal()
+          this.getSightsForIdsForModal()
         }
       }
     })
+  }
+
+  nextPageModal() {
+    const boundingClientRect =
+    this.ContentModal.nativeElement?.getBoundingClientRect()
+
+    if (
+      boundingClientRect.bottom <= window.innerHeight * 2 &&
+      !(boundingClientRect.bottom <= window.innerHeight)
+    ) {
+      if(this.stateType == 'event') {
+        this.getEventsForIdsForModal()
+      } else {
+        this.getSightsForIdsForModal()
+      }
+    }
   }
 
   getEventsForIdsForModal() {
@@ -473,6 +491,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       )
       .subscribe((response: any) => {
         console.log(response)
+        response.events.next_cursor ? this.queryBuilderService.paginationModalEventsCurrentPage.next(response.events.next_cursor) : null
+        this.modalContent.push(...response.events.data)
       })
   }
 
@@ -488,6 +508,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       )
       .subscribe((response: any) => {
         console.log(response)
+        response.sights.next_cursor ? this.queryBuilderService.paginationModalSightsCurrentPage.next(response.sights.next_cursor) : null
+        this.modalContent.push(...response.sights.data)
       })
   }
 
@@ -952,6 +974,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     //   this.filterService.changeFilter.next(true);
     // });
     // this.getEventsAndSights();
+    window.addEventListener('scroll', this.nextPageModal, true)
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
