@@ -43,6 +43,7 @@ import { IonContent } from '@ionic/angular'
 import { ViewportScroller } from '@angular/common'
 import { BehaviorSubject } from 'rxjs'
 import { MapService } from 'src/app/services/map.service'
+import { Capacitor } from '@capacitor/core'
 
 register()
 
@@ -102,6 +103,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   testScrol: any = 0
 
   scrollUpState: boolean = true
+
+  platformType: any = Capacitor.getPlatform()
 
   constructor(
     private eventsService: EventsService,
@@ -306,7 +309,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   scrollPaginate = (): void => {
     const boundingClientRect =
       this.ContentCol.nativeElement?.getBoundingClientRect()
-
+    
     if (this.testScrol == 0) {
       this.testScrol = boundingClientRect.y
       this.headerWrapper.nativeElement.style.transform = 'translateY(-10%)'
@@ -315,7 +318,7 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.headerWrapper.nativeElement.style.transform = 'translateY(-10%)'
     }
     if (boundingClientRect.y < this.testScrol) {
-      this.headerWrapper.nativeElement.style.transform = 'translateY(-110%)'
+      this.headerWrapper.nativeElement.style.transform = 'translateY(-150%)'
     } else {
     }
 
