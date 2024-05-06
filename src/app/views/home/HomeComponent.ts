@@ -159,6 +159,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   eventsContentModal: IEvent[] = []
   places: IPlace[] = []
   radiusTimeOut: any
+  loadModal: boolean = false
+  loadModalMore: boolean = false
+  isWorkingScroll: boolean = false
 
   constructor(
     private mapService: MapService,
@@ -392,13 +395,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async setPlacemarksAndClusters() {
-    let eventsIds: any[] 
-    let sightIds: any[] 
+    let eventsIds: any[] = []
+    let sightIds: any[] = []
     //При изменении радиуса проверяем метки для показа/скрытия
     this.objectsInsideCircle = ymaps
       .geoQuery(this.placemarks)
       .searchInside(this.CirclePoint)
       .clusterize({
+        clusterDisableClickZoom: true,
         hasBalloon: false,
         clusterBalloonPanelMaxMapArea: 0,
         clusterOpenBalloonOnClick: true,
@@ -413,7 +417,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           e.get('target')
             .properties.get('geoObjects')
             .forEach((element: any) => {
-              if (element.options._options.balloonContent.type === 'event') {
+              if (element.options._options.balloonContent.type == 'event') {
                 eventsIds.push(element.options._options.balloonContent.id)
               } else {
                 sightIds.push(element.options._options.balloonContent)
@@ -425,19 +429,24 @@ export class HomeComponent implements OnInit, OnDestroy {
               )
             })
         } else {
-          if (
-            e.get('target').options._options.balloonContent.type === 'event'
-          ) {
-            eventsIds = e.get('target').options._options.balloonContent.id
+          if (e.get('target').options._options.balloonContent.type == 'event') {
+            eventsIds.push(e.get('target').options._options.balloonContent.id)
+            console.log(e.get('target').options._options.balloonContent)
           } else {
-            sightIds = e.get('target').options._options.balloonContent.id
+            sightIds.push(e.get('target').options._options.balloonContent.id)
           }
           this.activePlacemark = e.get('target')
-          this.activeIcoLink =
-            this.host +
-            ':' +
-            this.port +
-            e.get('target').options._options.balloonContent.types[0].ico
+          e.get('target').options._options.balloonContent.type == 'event'
+            ? (this.activeIcoLink =
+                this.host +
+                ':' +
+                this.port +
+                e.get('target').options._options.balloonContent.ico)
+            : (this.activeIcoLink =
+                this.host +
+                ':' +
+                this.port +
+                e.get('target').options._options.balloonContent.types[0].ico)
 
           e.get('target').options.set(
             'iconContentLayout',
@@ -446,69 +455,70 @@ export class HomeComponent implements OnInit, OnDestroy {
             ),
           )
         }
-        console.log(eventsIds, sightIds)
         this.navigationService.modalEventShowOpen.next(true)
-        if (eventsIds) {
+        if (eventsIds.length) {
           this.queryBuilderService.eventIds.next(eventsIds.toString())
           this.queryBuilderService.paginationModalEventsCurrentPage.next('')
           this.getEventsForIdsForModal()
+          this.stateType = 'events'
         }
 
-        if (sightIds) {
+        if (sightIds.length) {
           this.queryBuilderService.sightIds.next(sightIds.toString())
           this.queryBuilderService.paginationModalSightsCurrentPage.next('')
           this.getSightsForIdsForModal()
+          this.stateType = 'sights'
         }
       }
     })
   }
 
-  nextPageModal() {
-    const boundingClientRect =
-    this.ContentModal.nativeElement?.getBoundingClientRect()
-
-    if (
-      boundingClientRect.bottom <= window.innerHeight * 2 &&
-      !(boundingClientRect.bottom <= window.innerHeight)
-    ) {
-      if(this.stateType == 'event') {
-        this.getEventsForIdsForModal()
-      } else {
-        this.getSightsForIdsForModal()
-      }
-    }
-  }
-
   getEventsForIdsForModal() {
+    this.loadModal = true
     this.eventsService
       .getEvents(this.queryBuilderService.queryBuilder('eventsForMapModal'))
       .pipe(
         takeUntil(this.destroy$),
         catchError((err) => {
+          this.loadModal = false
+          this.loadModalMore = false
           console.log(err)
           return of(EMPTY)
         }),
       )
       .subscribe((response: any) => {
-        console.log(response)
-        response.events.next_cursor ? this.queryBuilderService.paginationModalEventsCurrentPage.next(response.events.next_cursor) : null
+        this.loadModal = false
+        this.loadModalMore = false
+        response.events.next_cursor
+          ? this.queryBuilderService.paginationModalEventsCurrentPage.next(
+              response.events.next_cursor,
+            )
+          : null
         this.modalContent.push(...response.events.data)
       })
   }
 
   getSightsForIdsForModal() {
+    this.loadModal = true
     this.sightsService
       .getSights(this.queryBuilderService.queryBuilder('sightsForMapModal'))
       .pipe(
         takeUntil(this.destroy$),
         catchError((err) => {
+          this.loadModal = false
+          this.loadModalMore = false
           console.log(err)
           return of(EMPTY)
         }),
       )
       .subscribe((response: any) => {
-        console.log(response)
-        response.sights.next_cursor ? this.queryBuilderService.paginationModalSightsCurrentPage.next(response.sights.next_cursor) : null
+        this.loadModal = false
+        this.loadModalMore = false
+        response.sights.next_cursor
+          ? this.queryBuilderService.paginationModalSightsCurrentPage.next(
+              response.sights.next_cursor,
+            )
+          : null
         this.modalContent.push(...response.sights.data)
       })
   }
@@ -898,6 +908,30 @@ export class HomeComponent implements OnInit, OnDestroy {
   //     this.doCheckState = false;
   //   }
   // }
+
+  nextPageModal = (): void => {
+    if (!this.isWorkingScroll) {
+      const boundingClientRect = document
+        .getElementById('modalShowContent')!
+        .getBoundingClientRect()
+      if (
+        boundingClientRect.bottom <= window.innerHeight * 1.5 &&
+        !(boundingClientRect.bottom <= window.innerHeight) &&
+        !this.loadModalMore &&
+        this.modalContent.length
+      ) {
+        this.loadModalMore = true
+        if (this.stateType == 'events') {
+          this.getEventsForIdsForModal()
+        } else {
+          this.getSightsForIdsForModal()
+        }
+      }
+      setTimeout(() => {
+        this.isWorkingScroll = false
+      }, 300)
+    }
+  }
 
   ngOnInit(): void {
     //Подписываемся на изменение радиуса

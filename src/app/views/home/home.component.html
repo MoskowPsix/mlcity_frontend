@@ -52,9 +52,9 @@
   </div>
 
   <!-- Модальное окно просмотр ивента / места при клике метки на карте -->
-  <ion-modal #ContentModal id="modalEventShow" [isOpen]="modalEventShowOpen" (ionModalDidDismiss)="modalClose()" (ionBreakpointDidChange)="modalClose()" [initialBreakpoint]="0.9" [breakpoints]="[0, 0.9]" >
+  <ion-modal id="modalEventShow" [isOpen]="modalEventShowOpen" (ionModalDidDismiss)="modalClose()" (ionBreakpointDidChange)="modalClose()" [initialBreakpoint]="0.9" [breakpoints]="[0, 0.9]" >
     <div class="bg"></div>
-    <ng-template>
+    <ng-template #ContentModal>
       <!-- <ion-header color="black">
         <ion-toolbar>
           <ion-buttons slot="end">
@@ -63,16 +63,44 @@
         </ion-toolbar>
       </ion-header> -->
       <ion-content>
-        <ng-container *ngIf="modalContent">
-          <ion-row class="ion-justify-content-start">
-            <ion-col *ngFor="let item of modalContent; let i = index" size="12">
-              <app-event-card [event]="item" [isSight]="item.type === 'sights' ? true : false"></app-event-card>
+        <ng-container *ngIf="loadModal">
+          <ion-row class="ion-justify-content-center">
+            <ion-col>
+              <ion-card *ngFor="let key of [1,2]" style="border-radius: 0.8rem;">
+                <ion-skeleton-text [animated]="true" style="height: 25rem;"></ion-skeleton-text>
+                <ion-card-header>
+                  <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
+                  <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text></ion-card-subtitle>
+                </ion-card-header>
+              
+                <ion-card-content>
+                  <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                  <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                  <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                  <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                  <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+                </ion-card-content>
+              </ion-card>      
             </ion-col>
-            <!-- <ion-col size="12">
-              <app-event-card [event]="modalContent"></app-event-card>
-            </ion-col> -->
           </ion-row>
-        </ng-container>
+        </ng-container> 
+
+          <ng-container *ngIf="modalContent || !loadModal">
+            <ion-row class="ion-justify-content-start" id="modalShowContent">
+              <ion-col *ngFor="let item of modalContent; let i = index" size="12">
+                <app-event-card [event]="item" [isSight]="item.type === 'sights' ? true : false"></app-event-card>
+              </ion-col>
+              <!-- <ion-col size="12">
+                <app-event-card [event]="modalContent"></app-event-card>
+              </ion-col> -->
+            </ion-row>
+            
+            <ng-container *ngIf="loadModalMore">
+              <ion-row class="ion-justify-content-center">
+                <ion-spinner class="ion-margin-vertical"></ion-spinner>
+              </ion-row>
+            </ng-container>
+          </ng-container>
 
         <ng-container *ngIf="!modalContent">
           <app-no-data/>
