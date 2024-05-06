@@ -30,7 +30,11 @@
                 "input": "src/assets",
                 "output": "assets"
               },
-              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/prod_files",
+                "output": "."
+              },
               {
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
