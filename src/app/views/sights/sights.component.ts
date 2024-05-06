@@ -324,10 +324,10 @@ export class SightsComponent implements OnInit, OnDestroy {
 
     if (this.testScrol == 0) {
       this.testScrol = boundingClientRect.y
-      this.headerWrapper.nativeElement.style.transform = 'translateY(-15%)'
+      this.headerWrapper.nativeElement.style.transform = 'translateY(-0%)'
     }
     if (boundingClientRect.y > this.testScrol) {
-      this.headerWrapper.nativeElement.style.transform = 'translateY(-15%)'
+      this.headerWrapper.nativeElement.style.transform = 'translateY(-0%)'
       console.log('ScrollUp')
     }
     if (boundingClientRect.y < this.testScrol) {

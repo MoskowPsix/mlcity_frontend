@@ -108,6 +108,9 @@ ion-segment-button {
 .events-grid {
   --ion-grid-columns: 3;
 }
+.carusel-wrapper_flex{
+  transform:translateY(0%)
+ }
 
 @media (max-width: 1300px) {
   .events-grid {
@@ -120,3 +123,4 @@ ion-segment-button {
     --ion-grid-columns: 1;
   }
 }
+

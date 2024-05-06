@@ -309,13 +309,12 @@ export class EventsComponent implements OnInit, OnDestroy {
   scrollPaginate = (): void => {
     const boundingClientRect =
       this.ContentCol.nativeElement?.getBoundingClientRect()
-    
     if (this.testScrol == 0) {
       this.testScrol = boundingClientRect.y
-      this.headerWrapper.nativeElement.style.transform = 'translateY(-10%)'
+      this.headerWrapper.nativeElement.style.transform = 'translateY(-2%)'
     }
     if (boundingClientRect.y > this.testScrol) {
-      this.headerWrapper.nativeElement.style.transform = 'translateY(-10%)'
+      this.headerWrapper.nativeElement.style.transform = 'translateY(-2%)'
     }
     if (boundingClientRect.y < this.testScrol) {
       this.headerWrapper.nativeElement.style.transform = 'translateY(-150%)'
