@@ -9,6 +9,8 @@ import {
   HostListener,
 } from '@angular/core'
 
+import { timer } from 'rxjs'
+
 @Component({
   selector: 'app-drop-down-button',
   templateUrl: './drop-down-button.component.html',
@@ -19,6 +21,8 @@ export class DropDownButtonComponent implements OnInit {
   firstCircleClass: string = 'first'
   secondCircleClass: string = 'second'
   thirdCircleClass: string = 'third'
+  timerRun: boolean = false
+  timerId: any = ''
   @Output() emmitter = new EventEmitter()
   @Input() iconsPathArray: string[] = []
   @Input() mapClick: boolean = false
@@ -39,10 +43,13 @@ export class DropDownButtonComponent implements OnInit {
       this.firstCircleClass = 'first_active'
       this.secondCircleClass = 'second_active'
       this.thirdCircleClass = 'third_active'
+      this.timerBtn()
     } else {
       this.firstCircleClass = 'first'
       this.secondCircleClass = 'second'
       this.thirdCircleClass = 'third'
+      clearTimeout(this.timerId)
+      this.timerRun = false
     }
   }
 
@@ -52,5 +59,16 @@ export class DropDownButtonComponent implements OnInit {
     this.thirdCircleClass = 'third'
   }
 
+  timerBtn() {
+    if (!this.timerRun) {
+      this.timerRun = true
+      this.timerId = setTimeout(() => {
+        this.firstCircleClass = 'first'
+        this.secondCircleClass = 'second'
+        this.thirdCircleClass = 'third'
+        this.timerRun = false
+      }, 3000)
+    }
+  }
   ngOnInit() {}
 }
