@@ -111,7 +111,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   doCheckState: boolean = true
 
   myGeo!: ymaps.Placemark
-  minZoom = 4
+  minZoom = 10
   zoom: number = 4
   clusterer!: ymaps.Clusterer
   radius: number = 1
