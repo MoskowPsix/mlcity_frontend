@@ -54,17 +54,17 @@
 .first_active {
   z-index: 10;
   transition: 0.3s all;
-  transform: translateY(-130%) translateX(-90%);
+  transform: translateY(-128%) translateX(-94%);
 }
 .second_active {
   z-index: 10;
   transition: 0.3s all;
-  transform: translateX(-180%);
+  transform: translateX(-176%);
 }
 .third_active {
   z-index: 10;
   transition: 0.3s all;
-  transform: translateY(130%) translateX(-90%);
+  transform: translateY(132%) translateX(-86%);
 }
 
 .button-img {

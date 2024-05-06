@@ -1,4 +1,13 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  SimpleChange,
+  SimpleChanges,
+  HostListener,
+} from '@angular/core'
 
 @Component({
   selector: 'app-drop-down-button',
@@ -12,7 +21,14 @@ export class DropDownButtonComponent implements OnInit {
   thirdCircleClass: string = 'third'
   @Output() emmitter = new EventEmitter()
   @Input() iconsPathArray: string[] = []
-
+  @Input() mapClick: boolean = false
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent): void {
+    let target = event.target as HTMLElement
+    if (target.getAttribute('name') !== 'dropButton') {
+      this.close()
+    }
+  }
   sendButtonId(event: any) {
     this.emmitter.emit(event.target.id)
   }
@@ -28,5 +44,12 @@ export class DropDownButtonComponent implements OnInit {
       this.thirdCircleClass = 'third'
     }
   }
+
+  close() {
+    this.firstCircleClass = 'first'
+    this.secondCircleClass = 'second'
+    this.thirdCircleClass = 'third'
+  }
+
   ngOnInit() {}
 }

@@ -85,22 +85,7 @@ ion-card {
     transition: all 0.2s ease-in-out;
   }
 
-  .price {
-    position: absolute;
-    top: 18.3rem;
-    right: 0;
-    background: #3880ff;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.5rem;
-    border-top-left-radius: 0.5rem;
-    transition: all 0.2s ease-in-out;
-    z-index: 99999;
-  }
+ 
 
   .type {
     object-fit: contain;
@@ -159,14 +144,7 @@ ion-card {
   }
 }
 
-ion-card:hover {
-  ion-card-title,
-  .date,
-  .price,
-  .type {
-    opacity: 0;
-  }
-}
+
 
 @media screen and (min-width: 0px) and (max-width: 768px) {
 }
@@ -192,5 +170,10 @@ img {
 }
 
 ion-card-subtitle {
+  font-family: Montserrat-Regular;
+}
+
+.price{
+  font-size: 18px;
   font-family: Montserrat-Regular;
 }
