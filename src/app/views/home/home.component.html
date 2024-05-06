@@ -1,8 +1,8 @@
 <meta name="description" content="Узнайте какие события и достопремечательности проходят рядом с вами и в вашем городе.">
 <ion-content >
   <!-- Карта -->
-  <div (click)="mapOnClick()" class="map">
-    <ya-map [@mapAnimate] (ready)="onMapReady($event)"
+  <div name="map" class="map">
+    <ya-map name="map" [@mapAnimate] (ready)="onMapReady($event)"
       id="map"
       [zoom]="zoom"
       [center]="[0,0]"
