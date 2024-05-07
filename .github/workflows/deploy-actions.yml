@@ -28,12 +28,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '18'
-      - name: Install dependencies
-        run: npm install
-      - name: Build web app
-        run: npm run build
       - name: create ssh key
         run: touch $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem && cd www
       - name: Deploy to server
         if: success()
-        run: cd www && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . root@1323900-cn37575.tw1.ru:/var/wwww/mlcity_front
+        run: cd www && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
