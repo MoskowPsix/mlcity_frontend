@@ -32,8 +32,10 @@ jobs:
         run: npm install
       - name: Build web app
         run: npm run build
+      - name: install rcync
+        run: apt-get instal rsync
+      - name: create ssh key
+        run: touch $HOME/key.pem && chmod 700 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && cd www
       - name: Deploy to server
         if: success()
-        run:
-          touch $HOME/key.pem && chmod 700 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && cd www && rsync -e "ssh -p 22
-          -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
+        run: cd www && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
