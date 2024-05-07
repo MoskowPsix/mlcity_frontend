@@ -255,7 +255,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   eventSightHeader() {
     if (this.stateType == 'sights') {
-      this.calendulaWrapper.nativeElement.style.transform = 'translateY(-200%)'
+      this.calendulaWrapper.nativeElement.style.transform = 'translateY(-300%)'
     } else {
       this.calendulaWrapper.nativeElement.style.transform = 'translateY(-0%)'
     }
