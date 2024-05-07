@@ -1,5 +1,5 @@
 PODS:
-  - Capacitor (5.7.3):
+  - Capacitor (5.7.4):
     - CapacitorCordova
   - CapacitorApp (5.0.7):
     - Capacitor
@@ -7,7 +7,7 @@ PODS:
     - Capacitor
   - CapacitorCommunityAppleSignIn (5.0.0):
     - Capacitor
-  - CapacitorCordova (5.7.3)
+  - CapacitorCordova (5.7.4)
   - CapacitorGeolocation (5.0.7):
     - Capacitor
   - CapacitorHaptics (5.0.7):
@@ -16,7 +16,7 @@ PODS:
     - Capacitor
   - CapacitorStatusBar (5.0.7):
     - Capacitor
-  - CordovaPlugins (5.0.0):
+  - CordovaPlugins (5.7.4):
     - CapacitorCordova
 
 DEPENDENCIES:
@@ -54,16 +54,16 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: 7b5eb47c6125e9b58a3e3cd02fe366fc58adc89c
+  Capacitor: 4fe9adf012caceb4c71ffea2f1f4d005cdcbeea7
   CapacitorApp: 17fecd0e6cb23feafac7eb0939417389038b0979
   CapacitorBrowser: a6deae9e5bf87f62b62a753cff7992c5def9e771
   CapacitorCommunityAppleSignIn: eafdd59b18b38161fa5cceee7b0e31312b122958
-  CapacitorCordova: a377c52a28dbb3b895c0f71187f7b1777fee69db
+  CapacitorCordova: a6e87fccc0307dee7aec1560ec9398485f2b0ce7
   CapacitorGeolocation: 918a292459542bcce98433f9e7c7909f8c72838a
   CapacitorHaptics: 7c7c206f0c96a628fed073830c96d28c4b2e772e
   CapacitorKeyboard: aec619a578235c6ce279075009a2689c2cf5c42c
   CapacitorStatusBar: f390fbb49b82ffb754ea4b3cf71dc8b048baf3e7
-  CordovaPlugins: 80c3a499e05116ac9d54cc8619a9ef7c47cf9cf1
+  CordovaPlugins: 4b4db6cc2017ad4f6e009eaeb609f7ec57d3277c
 
 PODFILE CHECKSUM: a884d26da8c45174187cb15b51721c12b4d90de6
 
