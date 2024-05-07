@@ -6,7 +6,7 @@
 .event-name {
 }
 
-.event-name-header{
+.event-name-header {
   margin-left: 1%;
   padding-left: 8%;
   padding-right: 2%;
@@ -219,7 +219,6 @@ ion-accordion-group {
 }
 
 .social-buttons {
-
   font-family: 'Montserrat-Medium';
   display: flex;
   margin: auto;
@@ -330,7 +329,7 @@ ion-accordion-group {
 }
 
 @media screen and (max-width: 768px) {
-  .event-name-header{
+  .event-name-header {
     padding-left: 0;
     max-width: 92%;
   }

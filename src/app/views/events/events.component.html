@@ -1,7 +1,8 @@
+<div style="padding-top: var(--ion-safe-area-top,10rem); z-index: 1000;"></div>
 <ion-content id="topEv" #lentEvent>
+  
   <!-- <div id="header-anchor">35454</div> -->
-  <div id="header-anchor" style="height: 10px; width: 10px; padding-top: var(--ion-safe-area-top,0);"></div>
-
+ 
   <ion-grid class="mb-6-5rem">
     <!-- <ion-row class="ion-justify-content-center">
       <ion-col size-lg="8" size-md="12" size-xs="12">
@@ -40,10 +41,11 @@
 
 
       <!-- </div> -->
-
-
-      <div>
-    <ion-row class="ion-justify-content-center" style="margin-top: 8rem;">
+    
+    
+      <div #test >
+   
+    <ion-row class="ion-justify-content-center" style="padding-top: var(--ion-safe-area-top,0);">
       <ion-col size-lg="10" size-md="12" size-xs="12">
         <!-- <div [hidden]="segment !== 'eventsCitySegment'" class="segment-box"> -->
         <div class="segment-box" #ContentCol>
@@ -64,7 +66,7 @@
           </ng-container>
 
           <ng-container *ngIf="!loadingEventsCity">
-            <ion-row class="ion-justify-content-center">
+            <ion-row style="padding-top: var(--ion-safe-area-top,0);" class="ion-justify-content-center">
               <ion-col size-lg="4" size-md="6" size-xs="12">
                 <ion-card *ngFor="let key of [1,2]" style="border-radius: 0.8rem;">
                   <ion-skeleton-text [animated]="true" style="height: 25rem;"></ion-skeleton-text>

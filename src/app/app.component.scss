@@ -5,7 +5,15 @@
 }
 
 @media (min-width: 1060px) {
+  .header {
+    display: block;
+  }
   ion-footer {
     display: none;
   } /* hide it elsewhere */
+}
+@media (max-width: 1060px) {
+  .header {
+    display: none;
+  }
 }

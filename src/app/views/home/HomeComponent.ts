@@ -82,7 +82,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   @ViewChild('buttonActive') buttonActive!: ElementRef
   @ViewChild('calendula') calendula!: ElementRef
-  @ViewChild('ContentModal') ContentModal!: ElementRef
+  @ViewChild('calendulaWrapper') calendulaWrapper!: ElementRef
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
 
@@ -253,6 +253,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   openModalContent() {
     this.navigationService.modalEventRadiusShowOpen.next(true)
+  }
+
+  eventSightHeader() {
+    if (this.stateType == 'sights') {
+      this.calendulaWrapper.nativeElement.style.transform = 'translateY(-300%)'
+    } else {
+      this.calendulaWrapper.nativeElement.style.transform = 'translateY(-0%)'
+    }
   }
 
   sightTypesChange(typeId: any) {

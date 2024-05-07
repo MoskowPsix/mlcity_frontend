@@ -1,5 +1,5 @@
 <!-- Мобильное меню -->
-    <div class="header-mobile">
+    <!-- <div class="header-mobile"> -->
         <!-- <ion-buttons slot="end">
             <ion-menu-toggle>
                 <ion-button>
@@ -7,7 +7,7 @@
                 </ion-button>
             </ion-menu-toggle>
         </ion-buttons> -->
-        <ion-row class="header-mobile">
+        <!-- <ion-row class="header-mobile"> -->
             <!-- <ion-col>
                 <ion-title *ngIf="!showBackButton">
                     <div class="logo">
@@ -16,25 +16,17 @@
                     </div>
                 </ion-title>
             </ion-col> -->
-            <ion-col *ngIf="showBackButton" size="auto">
+            <!-- <ion-col *ngIf="showBackButton" size="auto">
                 <ion-icon  name="chevron-back" size="large" color="primary" appBackButton></ion-icon>
-            </ion-col>
+            </ion-col> -->
 
-            <ion-col class="ion-align-self-start">
-                <ion-button fill="clear" size="small" color="dark" (click)="isModalSearchCityesOpen(true)">
-                    {{ city| truncate:[20,'']}}...
-                    <!-- <ion-icon name="location" color="primary"></ion-icon> -->
-                    <!-- <ion-label>+{{ radius }}км</ion-label> -->
-                    <ion-icon slot="end" name="chevron-down"></ion-icon>
-                </ion-button>
-            </ion-col>
-
-            <ion-col class="flex ion-justify-content-end z-index-9999">
+         
+            <!-- <ion-col class="flex ion-justify-content-end z-index-9999"> -->
                 <!-- <ion-searchbar animated="true" placeholder="Поиск"></ion-searchbar> -->
-                <ion-icon name="search" color="medium" size="large" class="ico" (click)="isModalSearchEventsOpen(true)"></ion-icon>
-            </ion-col>
+                <!-- <ion-icon name="search" color="medium" size="large" class="ico" (click)="isModalSearchEventsOpen(true)"></ion-icon> -->
+            <!-- </ion-col>
         </ion-row>
-    </div>
+    </div> -->
 
 
 <!-- Декстопное меню -->

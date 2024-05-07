@@ -85,8 +85,6 @@ ion-card {
     transition: all 0.2s ease-in-out;
   }
 
- 
-
   .type {
     object-fit: contain;
     position: absolute;
@@ -144,8 +142,6 @@ ion-card {
   }
 }
 
-
-
 @media screen and (min-width: 0px) and (max-width: 768px) {
 }
 
@@ -173,7 +169,7 @@ ion-card-subtitle {
   font-family: Montserrat-Regular;
 }
 
-.price{
+.price {
   font-size: 18px;
   font-family: Montserrat-Regular;
 }

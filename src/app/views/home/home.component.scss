@@ -4,8 +4,9 @@
   align-items: center;
   flex-direction: column;
   position: absolute;
-  margin-left: 10px;
-  top: 30%;
+  right: 0;
+  margin-right: 1.5rem;
+  top: 40%;
   border-radius: 16px;
   width: 40px;
   background-color: rgb(255, 255, 255);
@@ -13,6 +14,20 @@
 }
 .range-radius-main_2 ngx-slider {
   max-height: 80%;
+}
+
+.calendula-wrapper {
+  transform: translateY(0%);
+  transition: 0.6s all;
+  opacity: 1;
+}
+
+.type-wrapper_toolbar {
+  background-color: none;
+  --background: none;
+  --margin: 0;
+  --padding: 0;
+  --min-height: auto;
 }
 
 ::ng-deep {
@@ -30,7 +45,9 @@
     border: none;
   }
 }
-
+.test {
+  display: none;
+}
 .range-radius-main-plus {
   font-size: 3rem;
 }
@@ -99,37 +116,30 @@
 .container-swither {
   position: absolute;
   cursor: pointer;
-  top: 72%;
+  top: 26%;
   margin-top: 1%;
-  margin-left: 10px;
+  margin-right: 1.1rem;
   padding: 5px;
+  right: 0;
   z-index: 103;
   width: 50px;
   background-color: white;
   border-radius: 16px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   transition: 0.3s all;
 }
 
 .swither-text {
-  font-family: 'Montserrat-Medium';
-  text-align: center;
-  margin-left: 10px;
-  display: flex;
-  align-items: center;
+  position: absolute;
   opacity: 0;
-  display: none;
-  transition: 2s;
+  font-family: 'Montserrat-Medium';
+  transition: 0.1s all;
 }
 
 .swither-text_open {
+  position: absolute;
   font-family: 'Montserrat-Medium';
-  text-align: center;
-  margin-left: 10px;
-  display: flex;
-  align-items: center;
   opacity: 1;
   transition: 1s all;
   cursor: pointer;
@@ -140,10 +150,6 @@
   width: 140px;
   .swither-text {
     font-family: 'Montserrat-Medium';
-    text-align: center;
-    margin-left: 10px;
-    display: flex;
-    align-items: center;
     opacity: 1;
     transition: 1s all;
     cursor: pointer;
@@ -151,11 +157,13 @@
 }
 
 .container-swither_open {
+  right: 0;
   position: absolute;
   cursor: pointer;
-  top: 72%;
+  top: 22%;
   margin-top: 1%;
-  margin-left: 10px;
+  margin-right: 1.1rem;
+  margin-left: auto;
   padding: 5px;
   z-index: 103;
   width: 140px;
@@ -171,7 +179,7 @@
   position: fixed;
   top: 75%;
   right: 0;
-  margin-right: 5rem;
+  margin-right: 4.5rem;
   z-index: 3;
 }
 
@@ -193,6 +201,7 @@
   border-radius: 100%;
   align-items: center;
 }
+
 @media only screen and (max-height: 890px) {
   .range-radius-main {
     top: 14rem;
@@ -204,7 +213,7 @@
   }
 
   .container-swither {
-    top: 63%;
+    top: 28%;
   }
   .range-radius-main {
     height: 15rem;
@@ -225,7 +234,7 @@
 
 @media only screen and (max-width: 768px) and (max-height: 705px) {
   .container-swither {
-    top: 80%;
+    top: 28%;
   }
 }
 
@@ -235,7 +244,7 @@
   }
 
   .container-swither {
-    top: 70%;
+    top: 26%;
   }
   .range-radius-main {
     top: 10rem;
@@ -274,7 +283,7 @@
     top: 18vh;
   }
   .container-swither {
-    top: 72%;
+    top: 23%;
   }
 
   .range-radius-main {
@@ -287,7 +296,7 @@
 
 @media only screen and (min-width: 1370px) and (max-width: 1920px) {
   .container-swither {
-    top: 70%;
+    top: 22%;
   }
 }
 
@@ -309,7 +318,8 @@
 .swither {
   padding: 6px;
   border-radius: 24px;
-  display: inline-flex;
+  display: flex;
+  justify-content: space-between;
   z-index: 2;
   transition: 0.2s ease-in-out;
 }
@@ -320,7 +330,7 @@
 }
 
 .swither-icon-range {
-  margin-left: 7px;
+  margin-left: 70px;
   background-color: #fff;
   width: 30px;
   height: 30px;
@@ -328,6 +338,8 @@
 }
 
 .swither-icon {
+  z-index: 5;
+  margin-left: auto;
   width: 28px;
   height: 28px;
   filter: invert(45%) sepia(45%) saturate(7477%) hue-rotate(194deg)
@@ -344,8 +356,8 @@ input[type='radio'] {
   transition: transform 0.2s ease-in-out;
   height: 40px;
   width: 40px;
-  left: 5px;
-  z-index: 1;
+  right: 0;
+  margin-right: 5px;
   position: absolute;
   border-radius: 24px;
   top: 5px;
@@ -441,6 +453,7 @@ ion-spinner {
   .calendula-container {
     // margin-top: 56px;
   }
+
   .filters {
     position: fixed;
     bottom: 5rem;
@@ -477,7 +490,7 @@ ion-spinner {
     width: 50px;
     .swither-text {
       opacity: 0;
-      transition: 0.3s all;
+      transition: 0.1s all;
     }
   }
   .modalButton {

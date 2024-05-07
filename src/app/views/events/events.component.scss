@@ -2,6 +2,9 @@
   position: relative;
   z-index: 1;
 }
+.carusel-wrapper_flex {
+  transform: translateY(-2%);
+}
 app-event-type-carusel {
   z-index: 4;
 }
