@@ -24,18 +24,26 @@
   <div >
 
     <!-- Фильтры для ивентов -->
-    <div  *ngIf="stateType === 'events'" [@panelInOut] [style.height]="stateType !== 'events' ? '0' : 'auto'" class="calendula-container" #calendula>
-      <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
-      <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
+    <div class="calendula-container" #calendula>
+     <ion-toolbar class="type-wrapper_toolbar">
+      <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
+      <app-event-type-carusel *ngIf="stateType !== 'sights'" (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
+     </ion-toolbar>
+     <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType === 'sights'"></ion-progress-bar>
+      <div #calendulaWrapper class="calendula-wrapper">
+        <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
+      </div>
+      <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType !== 'sights'"></ion-progress-bar>
+     
     </div>
 
     <!-- Фильтры для мест -->
-    <div  *ngIf="stateType === 'sights'" [@panelInOut] [style.height]="stateType !== 'sights' ? '0' : 'auto'" class="sight-carusel-container">
-      <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
+    <div class="sight-carusel-container">
+      
     </div>
 
     <!-- Лоадер карты -->
-    <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading"></ion-progress-bar>
+ 
 
     <!-- Кнопка геопозиции -->
     <div class="geo-container">
@@ -111,15 +119,17 @@
  <!-- Выбор отображения на карте -->
 
  <div (click)="openModalSwitcher()" class="{{modalSwitcherClass}}">
-  <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" #event>
-    <ion-icon name="balloon" style="min-width: 28px; min-height: 28px" class="swither-icon" color="primary"></ion-icon>
+  <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" (click)="eventSightHeader()" #event>
     <div class="{{modalSwitcherTextClass}}">События</div>
+    <ion-icon name="balloon" style="min-width: 28px; min-height: 28px" class="swither-icon" color="primary"></ion-icon>
+  
     <!-- <img src="/assets/icons/TablerTicket.svg" class="swither-icon"> -->
   </div>
   <div class="swither-bg" #buttonActive></div>
-  <div class="swither test" (click)="onSegmentChanged(sight, 2)" (click)="stateType='sights'" (click)="getEventsAndSights()" #sight>
+  <div class="swither" (click)="onSegmentChanged(sight, 2)" (click)="stateType='sights'" (click)="getEventsAndSights()" (click)="eventSightHeader()" #sight>
+    <div class="{{modalSwitcherTextClass}}">Места</div>
     <img src="/assets/icons/MakiMuseum.svg" class="swither-icon">
-     <div  class="{{modalSwitcherTextClass}}">Места</div>
+     
     <!-- <ion-icon name="prism" class="swither-icon" color="primary"></ion-icon>  -->
   </div>
   <!-- <div class="swither" (click)="onSegmentChanged(new, 3)" #new>
