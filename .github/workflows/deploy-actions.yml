@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: '18'
       - name: create ssh key
-        run: touch $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem && cd www
+        run: touch $HOME/key.pem && chmod 600 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem && cd www
       - name: Deploy to server
         if: success()
         run: cd www && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
