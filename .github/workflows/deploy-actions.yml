@@ -10,7 +10,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout code```
         uses: actions/checkout@v3
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -34,4 +34,4 @@ jobs:
         run: npm run build
       - name: Deploy to server
         if: success()
-        run: ls -a
+        run: printf "${{secrets.SSH_PRIVATE_KEY}}" 1 > $HOME/.ssh/key && cd www && rsync -e "ssh -p 22 -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
