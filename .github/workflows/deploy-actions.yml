@@ -28,12 +28,12 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '18'
+      - name: install rcync
+        run: apt update && apt-get instal rsync
       - name: Install dependencies
         run: npm install
       - name: Build web app
         run: npm run build
-      - name: install rcync
-        run: apt-get instal rsync
       - name: create ssh key
         run: touch $HOME/key.pem && chmod 700 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && cd www
       - name: Deploy to server
