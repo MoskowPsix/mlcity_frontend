@@ -21,23 +21,6 @@ jobs:
       - name: Start prettier
         run: npm run prettier:fix
 
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '18'
-      - name: Install dependencies
-        run: npm install
-      - name: Build web app
-        run: npm run build
-      - name: create ssh key
-        run: touch $HOME/key.pem && chmod 600 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
-      - name: Deploy to server
-        if: success()
-        run: cd www && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
-
   build-android:
     runs-on: ubuntu-latest
     steps:
@@ -63,11 +46,11 @@ jobs:
         run: npm install
 
       - name: Build npx
-        run: npx ng build  --configuration=production && npx cap copy
+        run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
 
       - name: Copy key
         run: cp android/MLCity_key_v2.jks ~/ && chmod ugo+rwx ~/MLCity_key_v2.jks
 
       - name: Grable build
         if: success()
-        run: sh ./gradlew assembleRelease -Pandroid.injected.signing.store.file=~/MLCity_key_v2.jks -Pandroid.injected.signing.store.password=${{secrets.ANDROID_PASSWORD}} -Pandroid.injected.signing.key.alias=${{secrets.ANDROID_ALIAS}} -Pandroid.injected.signing.key.password=${{secrets.ANDROID_PASSWORD}}
+        run: cd android && sh ./gradlew assembleRelease -Pandroid.injected.signing.store.file=~/MLCity_key_v2.jks -Pandroid.injected.signing.store.password=${{secrets.ANDROID_PASSWORD}} -Pandroid.injected.signing.key.alias=${{secrets.ANDROID_ALIAS}} -Pandroid.injected.signing.key.password=${{secrets.ANDROID_PASSWORD}}
