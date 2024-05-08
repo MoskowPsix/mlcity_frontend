@@ -27,6 +27,7 @@ export class LocationService {
     //Получаем по имени город или регион
     return this.http.get<Location[]>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/location/name/${name}`,
+      { params: { display: true } },
     )
   }
 
