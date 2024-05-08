@@ -58,8 +58,9 @@
     <ion-card-header [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
       <ion-text class="last-header card-title">{{ event.name | truncate:[60,'...'] }}</ion-text>
       <ng-container *ngIf="!isSight">
-        <div *ngIf="minPrice !== 0" class="price">от {{minPrice}}₽ до {{maxPrice}}₽</div>
+        <div *ngIf="minPrice !== 0 && minPrice !== maxPrice" class="price">от {{minPrice}}₽ до {{maxPrice}}₽</div>
         <div *ngIf="minPrice === 0 && maxPrice === 0" class="price">Вход свободный</div>
+        <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price">Вход {{minPrice}}₽</div>
       </ng-container>
    
       <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>

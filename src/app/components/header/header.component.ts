@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  HostListener,
+} from '@angular/core'
 import { Subject, takeUntil, catchError, of, EMPTY } from 'rxjs'
 import menuPublicData from '../../../assets/json/menu-public.json'
 import { IMenu } from 'src/app/models/menu'
@@ -57,6 +63,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   searchEvents: FormControl = new FormControl('')
 
   queryParams?: IGetEventsAndSights
+  mobile: boolean = false
+  @HostListener('window:resize', ['$event'])
+  mobileOrNote() {
+    if (window.innerWidth < 900) {
+      this.mobile = true
+    } else if (window.innerWidth > 900) {
+      this.mobile = false
+    } else {
+      this.mobile = false
+    }
+    console.log(this.mobile)
+  }
 
   constructor(
     private queryBuilderService: QueryBuilderService,
@@ -229,6 +247,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.mobileOrNote()
     //Смотрим состояние кнопки назад
     this.navigationService.showBackButton
       .pipe(takeUntil(this.destroy$))

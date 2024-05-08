@@ -113,18 +113,26 @@
 
 
   <!-- Модальное окно для выбора города -->
-<ion-modal [isOpen]="modalSearchCityesOpen" (ionModalDidDismiss)="modalClose()">
+  <!-- мобильная версия -->
+<ion-modal *ngIf="mobile"
+ class="modal-mobile"
+ [isOpen]="modalSearchCityesOpen"
+ (ionModalDidDismiss)="modalClose()"
+ [initialBreakpoint]="1" [breakpoints]="[0, 1]"
+ [backdropDismiss]="true"
+ mode="ios"
+ >
     <ng-template>
         <ion-header>
             <ion-toolbar>
-                <ion-title>Выбор города</ion-title>
+                <ion-title class="city-header">Текущий город: {{ city }}</ion-title>
                 <ion-buttons slot="end">
                     <ion-button (click)="isModalSearchCityesOpen(false)"><ion-icon name="close"></ion-icon></ion-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
         <!-- <ion-content> -->
-        <ion-note color="primary" class="ion-padding-horizontal ion-padding-top">Текущий город: {{ city }}, {{ region }}</ion-note>
+        <ion-note color="primary" class="ion-padding-horizontal ion-padding-top"></ion-note>
 
         <!-- <div class="ion-padding-bottom" slot="content">
             <ion-range
@@ -152,7 +160,7 @@
             <!-- <ng-container *ngIf="!cityesListLoading && !cityesList.length">
                 <app-no-data />
             </ng-container> -->
-            <ion-list *ngIf="!cityesListLoading">
+            <ion-list class="city-list" *ngIf="!cityesListLoading">
                 <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)">
                     <ion-label>
                         {{ item.name }}<p>{{ item.location_parent.name }}</p>
@@ -162,6 +170,65 @@
           <!-- </ion-content> -->
     </ng-template>
 </ion-modal>
+
+<!-- пк версия -->
+<ion-modal *ngIf="!mobile"
+ class="modal-desktop"
+ [isOpen]="modalSearchCityesOpen"
+ (ionModalDidDismiss)="modalClose()"
+ [backdropDismiss]="true"
+mode="ios"
+ >
+    <ng-template>
+        <ion-header>
+            <ion-toolbar>
+                <ion-title class="city-header">Текущий город: {{ city }}</ion-title>
+                <ion-buttons slot="end">
+                    <ion-button (click)="isModalSearchCityesOpen(false)"><ion-icon name="close"></ion-icon></ion-button>
+                </ion-buttons>
+            </ion-toolbar>
+        </ion-header>
+        <!-- <ion-content> -->
+        <ion-note color="primary" class="ion-padding-horizontal ion-padding-top"></ion-note>
+
+        <!-- <div class="ion-padding-bottom" slot="content">
+            <ion-range
+             [ticks]="true"
+             [snaps]="true"
+             [min]="1"
+             [max]="25"
+             [pin]="true"
+             [value]="radius"
+             [pinFormatter]="pinRadiusFormatter"
+             (ionKnobMoveEnd)="radiusChange($event)"
+            ></ion-range>
+            <ion-label class="ion-padding-horizontal">Радиус поиска: {{ radius }} км.</ion-label>
+        </div> -->
+
+        <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchCityes" (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
+        <ion-note *ngIf="minLengthCityesListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
+            <ng-container *ngIf="cityesListLoading">
+                <ion-list class="ion-padding-end">
+                    <ion-item *ngFor="let key of [1,2,3]">
+                        <ion-skeleton-text [animated]="true" style="height: 1rem;" />
+                    </ion-item>
+                </ion-list>
+            </ng-container>
+            <!-- <ng-container *ngIf="!cityesListLoading && !cityesList.length">
+                <app-no-data />
+            </ng-container> -->
+            <ion-list class="city-list" *ngIf="!cityesListLoading">
+                <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)">
+                    <ion-label>
+                        {{ item.name }}<p>{{ item.location_parent.name }}</p>
+                    </ion-label>
+                </ion-item>
+            </ion-list>
+          <!-- </ion-content> -->
+    </ng-template>
+</ion-modal>
+
+
 
   <!-- Модальное окно для поиска ивентов -->
   <ion-modal [isOpen]="modalSearchEventsOpen" (ionModalDidDismiss)="modalClose()">

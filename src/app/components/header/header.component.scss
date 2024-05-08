@@ -322,6 +322,8 @@ ion-modal ion-content {
   .header {
     display: none;
   }
+  
+
 
   ion-modal {
     --min-height: 20rem;
@@ -338,4 +340,15 @@ ion-modal ion-content {
       left: 1rem;
     }
   }
+}
+
+
+
+.city-list{
+  height: 25rem;
+  overflow-y: auto;
+}
+
+.city-header{
+  font-family: 'Montserrat-Regular';
 }
