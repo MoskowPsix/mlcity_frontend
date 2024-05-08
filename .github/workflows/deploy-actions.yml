@@ -53,10 +53,22 @@ jobs:
         run: cd android && sh ./gradlew  bundleRelease
 
       - name: Add key in .aad
-        run: jarsigner -keystore /android/MLCity_key_v2.jks -storepass ${{secrets.ANDROID_PASSWORD}} -keypass ${{secrets.ANDROID_PASSWORD}} /androind/app/build/outputs/bundle/relese/app-relese.aab ${{secrets.ANDROID_ALIAS}}
+        run: jarsigner -keystore /android/MLCity_key_v2.jks -storepass ${{secrets.ANDROID_PASSWORD}} -keypass ${{secrets.ANDROID_PASSWORD}} /androind/app/build/outputs/bundle/relese/app-release.aab ${{secrets.ANDROID_ALIAS}}
 
       - name: create ssh key
         run: touch $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
 
       - name: deploy to server
         run: cd /android/app/build/outputs/bundle/relese/ && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:/var/wwww/
+
+      - name: Upload Android App to Play Store
+        uses: bbjoern/upload-google-play@v0.0.6
+        with:
+          serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: mlcity.ru
+          releaseFiles: /android/app/build/outputs/bundle/relese/*.aab
+          track: production
+          inAppUpdatePriority: 2
+          userFraction: 0.33
+          whatsNewDirectory: distribution/whatsnew
+          mappingFile: app/build/outputs/mapping/release/mapping.txt
