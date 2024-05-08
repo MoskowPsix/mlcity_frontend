@@ -49,7 +49,7 @@ jobs:
         run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
 
       - name: Copy key
-        run: cp android/MLCity_key_v2.jks /home/runner/.gradle/daemon/8.2.1/ && chmod ugo+rwx /home/runner/.gradle/daemon/8.2.1/MLCity_key_v2.jks
+        run: cp android/MLCity_key_v2.jks ./home/runner/.gradle/daemon/8.2.1/ && chmod ugo+rwx ./home/runner/.gradle/daemon/8.2.1/MLCity_key_v2.jks
 
       - name: Grable build
         if: success()
