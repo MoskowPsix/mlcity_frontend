@@ -61,6 +61,12 @@ jobs:
       - name: cd app/build/ && ls
         run: cd android/app/ && ls
 
+      - name: cd app/build/outputs && ls
+        run: cd android/app/build/outputs && ls
+
+      - name: cd android/app/build/outputs/bundle/ && ls
+        run: cd android/app/build/outputs/bundle/ && ls
+
       - name: cd app/build/outputs/bundle/relese/ && ls
         run: cd android/app/build/outputs/bundle/relese/ && ls
 
