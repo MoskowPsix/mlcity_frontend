@@ -58,8 +58,11 @@ jobs:
       - name: cd android && ls
         run: cd android && ls
 
+      - name: cd app/build/ && ls
+        run: cd android/app/ && ls
+
       - name: cd app/build/outputs/bundle/relese/ && ls
-        run: cd app/ && ls
+        run: cd android/app/build/outputs/bundle/relese/ && ls
 
       - name: Add key in .aad
         run: cd android && jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore MLCity_key_v2.jks -storepass ${{secrets.ANDROID_PASSWORD}} -keypass ${{secrets.ANDROID_PASSWORD}} app/build/outputs/bundle/relese/app-release.aab ${{secrets.ANDROID_ALIAS}}
