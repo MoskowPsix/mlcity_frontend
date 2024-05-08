@@ -6,7 +6,7 @@
   position: absolute;
   right: 0;
   margin-right: 1.5rem;
-  top: 40%;
+  top: 38%;
   border-radius: 16px;
   width: 40px;
   background-color: rgb(255, 255, 255);
@@ -202,11 +202,18 @@
   align-items: center;
 }
 
+@media only screen and (min-height:726px){
+  .range-radius-main_2{
+    top:40%;
+  }
+}
+
 @media only screen and (max-height: 890px) {
   .range-radius-main {
     top: 14rem;
   }
 }
+
 @media only screen and (max-height: 768px) and (max-width: 768px) {
   .map {
     height: 92vh;
@@ -244,7 +251,7 @@
   }
 
   .container-swither {
-    top: 26%;
+    top: 21%;
   }
   .range-radius-main {
     top: 10rem;
@@ -278,27 +285,8 @@
   }
 }
 
-@media only screen and (max-height: 715px) {
-  .range-radius-main {
-    top: 18vh;
-  }
-  .container-swither {
-    top: 23%;
-  }
 
-  .range-radius-main {
-    height: 18rem;
-  }
-  .range-radius-main ngx-slider {
-    max-height: 8rem;
-  }
-}
 
-@media only screen and (min-width: 1370px) and (max-width: 1920px) {
-  .container-swither {
-    top: 22%;
-  }
-}
 
 .geo-button-container:hover {
   cursor: pointer;
@@ -430,6 +418,16 @@ ion-spinner {
   font-size: 1rem;
   font-style: italic;
   color: #737373;
+}
+
+
+@media screen and (min-width:1060px) and (max-height:710px){
+  .range-radius-main_2{
+    top: 45%;
+  }
+  .geo-container{
+    top:80%;
+  }
 }
 
 @media screen and (min-width: 0px) and (max-width: 1060px) {
