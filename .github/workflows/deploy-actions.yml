@@ -77,7 +77,7 @@ jobs:
         run: touch $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
 
       - name: deploy to server
-        run: cd android/app/build/outputs/bundle/relese/ && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:/var/wwww/
+        run: cd android/app/build/outputs/bundle/release/ && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:/var/wwww/
 
       - name: Upload Android App to Play Store
         uses: bbjoern/upload-google-play@v0.0.6
