@@ -52,32 +52,11 @@ jobs:
         if: success()
         run: cd android && sh ./gradlew  bundleRelease
 
-      - name: ls
-        run: ls 
-
-      - name: cd android && ls
-        run: cd android && ls
-
-      - name: cd app/build/ && ls
-        run: cd android/app/ && ls
-
-      - name: cd app/build/outputs && ls
-        run: cd android/app/build/outputs && ls
-
-      - name: cd android/app/build/outputs/bundle/ && ls
-        run: cd android/app/build/outputs/bundle/ && ls
-
-      - name: cd app/build/outputs/bundle/release/ && ls
-        run: cd android/app/build/outputs/bundle/release/ && ls
-
       - name: Add key in .aad
         run: cd android && jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore MLCity_key_v2.jks -storepass ${{secrets.ANDROID_PASSWORD}} -keypass ${{secrets.ANDROID_PASSWORD}} app/build/outputs/bundle/release/app-release.aab ${{secrets.ANDROID_ALIAS}}
 
       - name: create ssh key
         run: touch $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
-
-      - name: deploy to server
-        run: rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:/var/wwww/
 
       - name: Upload Android App to Play Store
         uses: bbjoern/upload-google-play@v0.0.6
