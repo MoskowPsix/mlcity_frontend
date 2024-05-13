@@ -21,65 +21,65 @@ jobs:
 #       - name: Start prettier
 #         run: npm run prettier:fix
 
-#   build-deploy-web:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: actions/setup-node@v1
-#         with:
-#           node-version: '18'
-#       - name: Install dependencies
-#         run: npm install
-#       - name: Build web app
-#         run: npm run build
-#       - name: create ssh key
-#         run: touch $HOME/key.pem && chmod 600 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
-#       - name: Deploy to server
-#         if: success()
-#         run: cd www && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
+  build-deploy-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm install
+      - name: Build web app
+        run: npm run build
+      - name: create ssh key
+        run: touch $HOME/key.pem && chmod 600 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
+      - name: Deploy to server
+        if: success()
+        run: cd www && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
 
-#   build-deploy-android:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: actions/setup-java@v4
-#         with:
-#           java-version: '17'
-#           distribution: 'temurin'
-#           node-version: '18'
+  build-deploy-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          node-version: '18'
 
-#       - name: Install androidsdk
-#         run: sudo snap install androidsdk
+      - name: Install androidsdk
+        run: sudo snap install androidsdk
 
-#       - name: Set path androidsdk
-#         run: export ANDROID_HOME=$HOME/cmdline-tools && export PATH=$PATH:$ANDROID_HOME/tools/bin && export PATH=$PATH:$ANDROID_HOME/platform-tools
+      - name: Set path androidsdk
+        run: export ANDROID_HOME=$HOME/cmdline-tools && export PATH=$PATH:$ANDROID_HOME/tools/bin && export PATH=$PATH:$ANDROID_HOME/platform-tools
 
-#       - name: Install dependencies
-#         run: npm install
+      - name: Install dependencies
+        run: npm install
 
-#       - name: Build npx
-#         run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
+      - name: Build npx
+        run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
 
-#       - name: Grable build
-#         if: success()
-#         run: cd android && sh ./gradlew  bundleRelease
+      - name: Grable build
+        if: success()
+        run: cd android && sh ./gradlew  bundleRelease
 
-#       - name: Add key in .aad
-#         run: cd android && jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore MLCity_key_v2.jks -storepass ${{secrets.ANDROID_PASSWORD}} -keypass ${{secrets.ANDROID_PASSWORD}} app/build/outputs/bundle/release/app-release.aab ${{secrets.ANDROID_ALIAS}}
+      - name: Add key in .aad
+        run: cd android && jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore MLCity_key_v2.jks -storepass ${{secrets.ANDROID_PASSWORD}} -keypass ${{secrets.ANDROID_PASSWORD}} app/build/outputs/bundle/release/app-release.aab ${{secrets.ANDROID_ALIAS}}
 
-#       - name: create ssh key
-#         run: touch $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
+      - name: create ssh key
+        run: touch $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
 
-#       - name: Upload Android App to Play Store
-#         uses: bbjoern/upload-google-play@v0.0.6
-#         with:
-#           serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-#           packageName: mlcity.ru
-#           releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
-#           track: production
-#           inAppUpdatePriority: 2
-#           userFraction: 0.33   - name: Setup Gradle
-#         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+      - name: Upload Android App to Play Store
+        uses: bbjoern/upload-google-play@v0.0.6
+        with:
+          serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: mlcity.ru
+          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+          track: production
+          inAppUpdatePriority: 2
+          userFraction: 0.33   - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
 #       - uses: actions/setup-node@v1
 #         with:
@@ -132,7 +132,7 @@ jobs:
       - name: build archive
         run: |    
           xcodebuild clean archive \
-            -archivePath $RUNNER_TEMP/App.xcarchive \
+            -archivePath App.xcarchive \
             -workspace ./ios/App/App.xcworkspace \
             -scheme App \
             -sdk iphoneos \
@@ -163,4 +163,3 @@ jobs:
         run: |
           app-store-connect publish \
           --path "${{ runner.temp }}/build/App.ipa"
-      
