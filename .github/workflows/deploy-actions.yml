@@ -143,13 +143,17 @@ jobs:
         env:
           EXPORT_OPTIONS_PLIST: ${{ secrets.EXPORT_OPTIONS_PLIST }}
         run: | 
-          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/iamgroot.xcarchive -exportPath $RUNNER_TEMP/build 
+          xcodebuild -exportArchive -archivePath -exportOptionsPlist ios/App/App/info.plist $RUNNER_TEMP/iamgroot.xcarchive -exportPath $RUNNER_TEMP/build 
+
+      - name: ls build
+        run: cd ${{ runner.temp }}/build && ls
+
 
       - name: Upload application
         uses: actions/upload-artifact@v3
         with:
           name: app
-          path: ${{ runner.temp }}/build/mlcity
+          path: ${{ runner.temp }}/build/App
           # you can also archive the entire directory 
           # path: ${{ runner.temp }}/build
           retention-days: 3
