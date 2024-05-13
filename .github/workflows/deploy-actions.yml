@@ -96,16 +96,12 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '18'
-      - name: Install dependencies
-        run: npm install
-      - name: Build npx
-        run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_IOS_BUILD }}
-          P12_PASSWORD: ${{ secrets.IOS_BUILD_PASSWORD }}
+          # P12_PASSWORD: ${{ secrets.IOS_BUILD_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.PROFILE_IOS_BASE64 }}
-          KEYCHAIN_PASSWORD: ${{ secrets.IOS_BUILD_PASSWORD }}
+          # KEYCHAIN_PASSWORD: ${{ secrets.IOS_BUILD_PASSWORD }}
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
@@ -127,7 +123,11 @@ jobs:
 
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles          
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles 
+          - name: Install dependencies
+          run: npm install
+      - name: Build npx
+        run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline         
 
       - name: build archive
         run: |
