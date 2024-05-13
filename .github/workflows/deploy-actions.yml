@@ -96,6 +96,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '18'
+      - name: Install dependencies
+        run: npm install
+      - name: Build npx
+        run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_IOS_BUILD }}
