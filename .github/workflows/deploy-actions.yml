@@ -2,7 +2,7 @@ name: 'MLCityDeploy'
 
 on:
   push:
-    branches: ['main']
+    branches: ['main', 'android-and-ios-deploy']
   pull_request:
     branches: ['main']
 
