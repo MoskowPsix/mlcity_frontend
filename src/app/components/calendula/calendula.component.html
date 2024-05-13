@@ -6,14 +6,20 @@
           <ion-icon size="large" name="chevron-back-outline" class="ico_left" (click)="scrollLeft()" ></ion-icon>
         </button>
         <ng-container >
-          <mat-date-range-input style="height: 0px; width: 0px;" [rangePicker]="pickerArh" [formGroup]="range">
-            <input  style="height: 0px; width: 0px;" matStartDate required formControlName="start" >
-            <input  style="height: 0px; width: 0px;" matEndDate required formControlName="end">
-          </mat-date-range-input>
-          <mat-datepicker-toggle  [for]="pickerArh"></mat-datepicker-toggle>            
-          <mat-date-range-picker #pickerArh></mat-date-range-picker>
+          <div class="cal-wrapper">
+            <mat-date-range-input style="height: 0px; width: 0px;" [rangePicker]="pickerArh" [formGroup]="range">
+              <input  style="height: 0px; width: 0px;" matStartDate required formControlName="start" >
+              <input  style="height: 0px; width: 0px;" matEndDate required formControlName="end">
+            </mat-date-range-input>
+            <mat-datepicker-toggle  [for]="pickerArh"></mat-datepicker-toggle>            
+            <mat-date-range-picker #pickerArh></mat-date-range-picker>
+          </div>
+         
         </ng-container>
         <!-- <p class="year_name">{{date_full_year.now_year.year}}</p> -->
+        <div class="calendula-wrapper">
+          
+        </div>
         <div class="home-month" *ngFor="let month_now of date_full_year.now_year.now_months"  [hidden]="month_now.data.length === 0" >
           <span *ngIf="month_now.data.length" class="home-mothname">{{month_now.name}}</span>
           <div *ngIf="month_now.data.length" class="home-monthdata">
