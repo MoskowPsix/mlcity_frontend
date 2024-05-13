@@ -137,7 +137,7 @@ jobs:
             -scheme App \
             -sdk iphoneos \
             -configuration Release \
-            -allowProvisioningUpdatesxcodebuild -scheme App \
+            -allowProvisioningUpdates
 
       # - name: export ipa
       #   env:
