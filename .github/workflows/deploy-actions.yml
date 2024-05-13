@@ -21,22 +21,22 @@ jobs:
 #       - name: Start prettier
 #         run: npm run prettier:fix
 
-  # build-deploy-web:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: '18'
-  #     - name: Install dependencies
-  #       run: npm install
-  #     - name: Build web app
-  #       run: npm run build
-  #     - name: create ssh key
-  #       run: touch $HOME/key.pem && chmod 600 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
-  #     - name: Deploy to server
-  #       if: success()
-  #       run: cd www && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
+  build-deploy-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm install
+      - name: Build web app
+        run: npm run build
+      - name: create ssh key
+        run: touch $HOME/key.pem && chmod 600 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
+      - name: Deploy to server
+        if: success()
+        run: cd www && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
 
   build-deploy-android:
     runs-on: ubuntu-latest
