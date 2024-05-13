@@ -154,7 +154,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app
-          path: ${{ runner.temp }}/build/App
+          path: ${{ runner.temp }}/build/App.ipa
           # you can also archive the entire directory 
           # path: ${{ runner.temp }}/build
           retention-days: 3
