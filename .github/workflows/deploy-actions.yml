@@ -158,3 +158,9 @@ jobs:
           # you can also archive the entire directory 
           # path: ${{ runner.temp }}/build
           retention-days: 3
+          
+      - name: Publish the app to App Store Connect
+        run: |
+          app-store-connect publish \
+          --path "${{ runner.temp }}/build/App.ipa 
+      
