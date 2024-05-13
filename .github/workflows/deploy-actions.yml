@@ -162,5 +162,5 @@ jobs:
       - name: Publish the app to App Store Connect
         run: |
           app-store-connect publish \
-          --path "${{ runner.temp }}/build/App.ipa 
+          --path "${{ runner.temp }}/build/App.ipa"
       
