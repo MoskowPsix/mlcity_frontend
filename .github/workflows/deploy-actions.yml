@@ -130,13 +130,14 @@ jobs:
         run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline         
 
       - name: build archive
-        run: |
-          xcodebuild -scheme App \
-          -archivePath $RUNNER_TEMP/iamgroot.xcarchive \
-          -sdk iphoneos \
-          -configuration Release \
-          -destination generic/platform=iOS \
-          clean archive          
+        run: |    
+          xcodebuild clean archive \
+            -archivePath $RUNNER_TEMP/App.xcarchive \
+            -workspace ./ios/App/App.xcworkspace \
+            -scheme App \
+            -sdk iphoneos \
+            -configuration Release \
+            -allowProvisioningUpdatesxcodebuild -scheme App \
 
       # - name: export ipa
       #   env:
