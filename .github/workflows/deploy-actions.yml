@@ -131,7 +131,7 @@ jobs:
 
       - name: build archive
         run: |
-          cd ios && xcodebuild -scheme "App" \
+          cd ios/App && xcodebuild -scheme "App" \
           -archivePath $RUNNER_TEMP/iamgroot.xcarchive \
           -sdk iphoneos \
           -configuration Debug \
