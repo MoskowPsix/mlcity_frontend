@@ -1,3 +1,12 @@
+.day-container{
+  display: flex;
+  justify-content: space-between;
+  max-width: 50%;
+  margin-top: 10px;
+}
+.day-time{
+  width: 8rem;
+}
 .ico-small {
   width: 20px;
   height: 20px;
@@ -33,6 +42,9 @@
 @media (max-width: 768px) {
   .mini-cards-container {
     --ion-grid-columns: 1;
+  }
+  .day-container{
+    min-width: 100%;
   }
 }
 

@@ -64,7 +64,9 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   like: boolean = false
   loadingLike: boolean = false
   startLikesCount: number = 0
-
+  workTimeCult: string = ''
+  workTimeCultValue: number = 0
+  workTimeCultOb: any = {}
   constructor(
     private route: ActivatedRoute,
     private sightsService: SightsService,
@@ -90,6 +92,35 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
       })
   }
 
+  formatingTime() {
+    let daysTime = this.workTimeCult
+    let text = this.workTimeCult.match(/\((.*?)\)/g)
+    if (text) {
+      daysTime = this.workTimeCult.replace(text![0], '')
+    }
+    let dayArray = daysTime.split(',')
+    for (let i = 0; i < dayArray.length; i++) {
+      dayArray[i] = dayArray[i].slice(4)
+      dayArray[i] = dayArray[i].replace(/^\s+/, '')
+      console.log(dayArray[i])
+      if (dayArray[i].length > 15) {
+        this.workTimeCultValue++
+        break
+      }
+    }
+    console.log(this.workTimeCult)
+    this.workTimeCultOb = {
+      monday: dayArray[0],
+      tuesday: dayArray[1],
+      wednesday: dayArray[2],
+      thursday: dayArray[3],
+      Friday: dayArray[4],
+      saturday: dayArray[5],
+      sunday: dayArray[6],
+      text: text,
+    }
+  }
+
   getSight() {
     this.sightsService
       .getSightById(this.sightId!)
@@ -100,12 +131,14 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe((sight: any) => {
         if (sight) {
-          console.log(sight)
           this.sight = sight
+          if (sight.cult_id != 0) {
+            this.workTimeCult = sight.work_time
+            this.formatingTime()
+          }
           this.sightsService
             .getEventInSight(this.sight.id)
             .subscribe((response: any) => {
-              console.log(response)
               if (response.events.data.length > 0) {
                 this.eventsInSight = response.events.data
                 this.queryBuilderService.paginationEventsInSightCurrentPage.next(

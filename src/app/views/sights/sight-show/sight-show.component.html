@@ -186,9 +186,40 @@
                       Время работы
                     </div>
 
-                    <div *ngIf=' sight.work_time !== "" ' class="simple-text">
-                      {{sight.work_time}}
+                    <div *ngIf=' sight.work_time !== "" && workTimeCultValue === 0 ' class="simple-text">
+                      <div class="day-container">
+                          <div>Понедельник</div>
+                          <span class="day-time">{{workTimeCultOb.monday}}</span>
+                      </div>
+                      <div class="day-container">
+                          <div>Вторник</div>
+                          <span class="day-time">{{workTimeCultOb.tuesday}}</span>
+                      </div>
+                      <div class="day-container">
+                          <div>Среда</div>
+                          <span class="day-time">{{workTimeCultOb.wednesday}}</span>
+                      </div>
+                      <div class="day-container">
+                          <div>Четверг</div>
+                          <span class="day-time">{{workTimeCultOb.thursday}}</span>
+                      </div>
+                      <div class="day-container">
+                          <div>Пятница</div>
+                          <span class="day-time">{{workTimeCultOb.Friday}}</span>
+                      </div>
+                      <div class="day-container">
+                          <div>Суббота</div>
+                          <span class="day-time">{{workTimeCultOb.saturday}}</span>
+                      </div>
+                      <div class="day-container">
+                          <div>Воскресенье</div>
+                          <span class="day-time">{{workTimeCultOb.sunday}}</span>
+                      </div>
                     </div>
+                    <div *ngIf=' sight.work_time !== "" && workTimeCultValue > 0 ' class="simple-text">
+                        {{sight.work_time}}
+                    </div>
+
 
                     <div style="padding: 0.1rem;" *ngIf='sight.work_time === ""' class="simple-text">
                         Не указано

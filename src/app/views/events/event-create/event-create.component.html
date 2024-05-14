@@ -96,7 +96,7 @@
             </ion-item>
           </ng-container>
         </ng-container>
-        <ion-label *ngIf="typesLoaded && stepCurrency == 0"><h2 style="color: #949494; text-align: center;">
+        <ion-label *ngIf="typesLoaded && stepCurrency === 0"><h2 style="color: #949494; text-align: center;">
           <ion-icon name="star"></ion-icon> - Первый выбранный вами тип станет основным, будет отображаться на карте и карточке мероприятия</h2>
         </ion-label>
         <ion-row  *ngIf="typesLoaded"  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
@@ -918,7 +918,7 @@
                       <ion-item *ngIf="status.name === 'На модерации'">
                         <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
                         <ion-label>Отправить на модерацию</ion-label>
-                        <ion-radio slot="end" [value]="status.id"></ion-radio>
+                        <ion-radio slot="end" [value]="status.id" checked></ion-radio>
                       </ion-item>
 
                       <ion-item *ngIf="status.name === 'Черновик'">
@@ -938,7 +938,6 @@
 
 
        <!-- Десктопный блок кнопок -->
-
 
       <!-- Фиксированный блок кнопок для мобилы-->
       <div class="buttons-mobile">

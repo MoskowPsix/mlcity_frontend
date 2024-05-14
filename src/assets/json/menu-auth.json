@@ -28,23 +28,7 @@
             }
         ]
     },
-    {
-        "title": "Мои достопримечательности",       
-        "icon": "prism",
-        "route": "/cabinet/sights",
-        "children":[
-            {
-                "title": "Все",              
-                "icon": "list",
-                "route": "/cabinet/sights"
-            },
-            {
-                "title": "Создать",              
-                "icon": "add-circle",
-                "route": "/cabinet/sights/create"
-            }
-        ]
-    },
+
     {
         
         "title": "Выход",       
