@@ -130,21 +130,21 @@ jobs:
       - name: Build npx
         run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline   
 
-      - name: Deploy
-        uses: vfrascello/xcode-deploy@v1.5
-        with:
-          xcode-version: '14.0'
-          configuration: 'Release'
-          path-to-export-options: ${{ secrets.EXPORT_OPTIONS_PLIST }}
-          install-pods: true
-          resolve-package-dependencies: true
-          distribution-certificate-p12: ${{ secrets.CERTIFICATE_IOS_BUILD }}
-          distribution-certificate-password: ${{ secrets.IOS_BUILD_PASSWORD }}
-          app-store-provisioning-profile: ${{ secrets.PROFILE_IOS_BASE64}}
-          auth-key-id: ${{ secrets.IOS_AUTH_KEY_ID }}
-          auth-key-issuer-id: ${{ secrets.IOS_AUTH_KEY_ISSUER_ID }}
-          auth-key-p8: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
-          cache-dependency-path: /ios
+      # - name: Deploy
+      #   uses: vfrascello/xcode-deploy@v1.5
+      #   with:
+      #     xcode-version: '14.0'
+      #     configuration: 'Release'
+      #     path-to-export-options: ${{ secrets.EXPORT_OPTIONS_PLIST }}
+      #     install-pods: true
+      #     resolve-package-dependencies: true
+      #     distribution-certificate-p12: ${{ secrets.CERTIFICATE_IOS_BUILD }}
+      #     distribution-certificate-password: ${{ secrets.IOS_BUILD_PASSWORD }}
+      #     app-store-provisioning-profile: ${{ secrets.PROFILE_IOS_BASE64}}
+      #     auth-key-id: ${{ secrets.IOS_AUTH_KEY_ID }}
+      #     auth-key-issuer-id: ${{ secrets.IOS_AUTH_KEY_ISSUER_ID }}
+      #     auth-key-p8: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
+      #     cache-dependency-path: /ios
 
       - name: build archive
         run: |    
