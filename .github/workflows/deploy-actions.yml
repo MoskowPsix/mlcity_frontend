@@ -7,6 +7,7 @@ on:
     branches: ['main']
 
 jobs:
+
   # lint:
   #   runs-on: ubuntu-latest
   #   steps:
@@ -132,7 +133,6 @@ jobs:
       - name: Deploy
         uses: vfrascello/xcode-deploy@v1.5
         with:
-          path: ios/
           xcode-version: '14.0'
           configuration: 'Release'
           path-to-export-options: ${{ secrets.EXPORT_OPTIONS_PLIST }}
@@ -144,6 +144,7 @@ jobs:
           auth-key-id: ${{ secrets.IOS_AUTH_KEY_ID }}
           auth-key-issuer-id: ${{ secrets.IOS_AUTH_KEY_ISSUER_ID }}
           auth-key-p8: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
+          cache-dependency-path: /ios
 
       # - name: build archive
       #   run: |    
