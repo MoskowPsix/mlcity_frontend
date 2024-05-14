@@ -149,12 +149,12 @@ jobs:
       - name: build archive
         run: |    
           xcodebuild clean archive \
-            -archivePath App.xcarchive \
-            -workspace ./ios/App/App.xcworkspace \
-            -scheme App \
-            -sdk iphoneos \
-            -configuration Release \
-            -allowProvisioningUpdates
+          -archivePath $RUNNER_TEMP/App.xcarchive \
+          -workspace ./ios/App/App.xcworkspace \
+          -scheme App \
+          -sdk iphoneos \
+          -configuration Release \
+          -allowProvisioningUpdates
 
       - name: export ipa
         env:
