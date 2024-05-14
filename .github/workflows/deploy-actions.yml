@@ -125,6 +125,16 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles 
+      - name: Get App Store Connect API Key 
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileName: AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
+          fileDir: ${{ github.workspace }}/ios/private_keys
+          encodedString: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
+      - name: ls
+        run: cd ios/private_keys && ls
+      - name: ls mkdir
+        run: mkdir -p ios/private_keys && cd ios && ls
       - name: npm install    
         run: npm install
       - name: Build npx
@@ -173,13 +183,13 @@ jobs:
           # path: ${{ runner.temp }}/build
           retention-days: 3
     
-      - name: load key
-        env:
-          PRIVATE_API_KEY_BASE64: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
-          API_KEY: ${{ secrets.IOS_AUTH_KEY_ID }}
-        run: | 
-          mkdir -p ios/private_keys
-          echo -n "$PRIVATE_API_KEY_BASE64" | base64 --decode --output ios/private_keys/AuthKey_$API_KEY.p8
+      # - name: load key
+      #   env:
+      #     PRIVATE_API_KEY_BASE64: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
+      #     API_KEY: ${{ secrets.IOS_AUTH_KEY_ID }}
+      #   run: | 
+      #     mkdir -p ios/private_keys
+      #     echo -n "$PRIVATE_API_KEY_BASE64" | base64 --decode --output ios/private_keys/AuthKey_$API_KEY.p8
           
       - name: Publish the app to App Store Connect
         run: |
