@@ -8,6 +8,10 @@
 *.tmp.*
 UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
+AuthKey_878PB5R3JH.p8
+App.ipa
+ApiKey_IW1LZ3EOO9HC.p8
+App.xcarchive
 
 *.log
 log.txt
