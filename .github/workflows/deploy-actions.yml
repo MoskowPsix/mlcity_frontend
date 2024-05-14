@@ -134,13 +134,11 @@ jobs:
         run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline   
       - name: Deploy
         uses: vfrascello/xcode-deploy@v1.5
-        env:
-          PROJECT_PATH: ./ios
         with:
           xcode-version: '14.0'
           configuration: 'Release'
           scheme: 'App'
-          path-to-export-options: 'App/info.plist'
+          path-to-export-options: 'App/App/info.plist'
           update-build: true
           install-pods: true
           resolve-package-dependencies: true
