@@ -173,6 +173,13 @@ jobs:
           # path: ${{ runner.temp }}/build
           retention-days: 3
     
+      - name: load key
+        env:
+          PRIVATE_API_KEY_BASE64: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
+          API_KEY: ${{ secrets.IOS_AUTH_KEY_ID }}
+        run: | 
+          mkdir -p ios/private_keys
+          echo -n "$PRIVATE_API_KEY_BASE64" | base64 --decode --output ios/private_keys/AuthKey_$API_KEY.p8
           
       - name: Publish the app to App Store Connect
         run: |
