@@ -132,10 +132,10 @@ jobs:
         run: npm install
       - name: Build npx
         run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline   
-      - name: Set dir ios
-        run: echo ::set-env name=PROJECT_DIR::"$GITHUB_WORKSPACE/ios"
       - name: Deploy
         uses: vfrascello/xcode-deploy@v1.5
+        env:
+          PROJECT_PATH: ./ios
         with:
           xcode-version: '14.0'
           configuration: 'Release'
