@@ -193,5 +193,5 @@ jobs:
           
       - name: Publish the app to App Store Connect
         run: |
-          cd ios && xcrun altool --upload-app -f ${{ runner.temp }}/build/App.ipa -t iOS \
+          xcrun altool --upload-app -f ${{ runner.temp }}/build/App.ipa -t iOS \
           --apiIssuer ${{ secrets.IOS_AUTH_KEY_ISSUER_ID }} --apiKey ${{ secrets.IOS_AUTH_KEY_ID }}
