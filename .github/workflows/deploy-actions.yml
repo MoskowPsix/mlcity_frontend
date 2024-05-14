@@ -7,19 +7,19 @@ on:
     branches: ['main']
 
 jobs:
-#   lint:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code```
-#         uses: actions/checkout@v4
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: 18
-#       - name: Install dependencies
-#         run: npm install
-#       - name: Start prettier
-#         run: npm run prettier:fix
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code```
+  #       uses: actions/checkout@v3
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18
+  #     - name: Install dependencies
+  #       run: npm install
+  #     - name: Start prettier
+  #       run: npm run prettier:fix
 
   # build-deploy-web:
   #   runs-on: ubuntu-latest
@@ -46,7 +46,17 @@ jobs:
   #       with:
   #         java-version: '17'
   #         distribution: 'temurin'
+  #     - uses: actions/setup-node@v1
+  #       with:
   #         node-version: '18'
+
+  #     - name: Install androidsdk
+  #       run: sudo snap install androidsdk
+
+  #     - name: Set path androidsdk
+  #       run: export ANDROID_HOME=$HOME/cmdline-tools && export PATH=$PATH:$ANDROID_HOME/tools/bin && export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+  #     - name: Install dependencies
 
   #     - name: Install androidsdk
   #       run: sudo snap install androidsdk
@@ -57,8 +67,9 @@ jobs:
   #     - name: Install dependencies
   #       run: npm install
 
+
   #     - name: Build npx
-  #       run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
+  #       run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline         
 
   #     - name: Grable build
   #       if: success()
