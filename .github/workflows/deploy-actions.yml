@@ -141,8 +141,8 @@ jobs:
       #     fileName: AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
       #     fileDir: ${{ github.workspace }}/ios/private_keys
       #     encodedString: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
-      - name: ls
-        run: cd ios/private_keys && ls
+      # - name: ls
+      #   run: cd ios/private_keys && ls
       - name: ls mkdir
         run: mkdir -p ios/private_keys && cd ios && ls
       - name: npm install    
