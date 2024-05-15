@@ -141,10 +141,6 @@ jobs:
           fileName: AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
           fileDir: ${{ github.workspace }}/ios/private_keys
           encodedString: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
-      - name: ls
-        run: cd ios/private_keys && ls
-      - name: ls mkdir
-        run: mkdir -p ios/private_keys && cd ios && ls
       - name: npm install    
         run: npm install
       - name: Build npx
@@ -170,7 +166,7 @@ jobs:
         run: |    
           xcodebuild clean archive \
           -archivePath $RUNNER_TEMP/App.xcarchive \
-          -workspace ./ios/App/App.xcworkspace \
+          -project ./ios/App/App.xcodeproj \
           -scheme App \
           -sdk iphoneos \
           -configuration Release \
