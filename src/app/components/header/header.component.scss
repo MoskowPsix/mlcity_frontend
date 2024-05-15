@@ -322,7 +322,7 @@ ion-modal ion-content {
   .header {
     display: none;
   }
-  
+
 
 
   ion-modal {
@@ -347,8 +347,21 @@ ion-modal ion-content {
 .city-list{
   height: 25rem;
   overflow-y: auto;
+  --ion-grid-columns:2;
+}
+.city-list-col{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+.city-list-col-info{
+  width: 10rem;
 }
 
+.city-list-col-info-label{
+  font-size: 16px;
+  font-family: 'Montserrat-regular';
+}
 .city-header{
   font-family: 'Montserrat-Regular';
 }

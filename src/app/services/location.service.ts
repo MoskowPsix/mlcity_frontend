@@ -23,6 +23,12 @@ export class LocationService {
     )
   }
 
+  getFavoriteCities() {
+    return this.http.get<any>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/locations/favorities`,
+    )
+  }
+
   getLocationsName(name: string) {
     //Получаем по имени город или регион
     return this.http.get<Location[]>(

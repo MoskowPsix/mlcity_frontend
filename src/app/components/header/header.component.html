@@ -20,7 +20,7 @@
                 <ion-icon  name="chevron-back" size="large" color="primary" appBackButton></ion-icon>
             </ion-col> -->
 
-         
+
             <!-- <ion-col class="flex ion-justify-content-end z-index-9999"> -->
                 <!-- <ion-searchbar animated="true" placeholder="Поиск"></ion-searchbar> -->
                 <!-- <ion-icon name="search" color="medium" size="large" class="ico" (click)="isModalSearchEventsOpen(true)"></ion-icon> -->
@@ -160,13 +160,27 @@
             <!-- <ng-container *ngIf="!cityesListLoading && !cityesList.length">
                 <app-no-data />
             </ng-container> -->
-            <ion-list class="city-list" *ngIf="!cityesListLoading">
+            <ion-list class="city-list" *ngIf="!cityesListLoading && cityesList.length !== 0">
                 <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)">
                     <ion-label>
                         {{ item.name }}<p>{{ item.location_parent.name }}</p>
                     </ion-label>
                 </ion-item>
             </ion-list>
+
+            <ion-grid class="city-list" *ngIf="!cityesListLoading && cityesList.length === 0">
+              <ion-row>
+                <ion-col class="city-list-col" size="1" *ngFor="let city of favoriteCities" (click)="onSelectedCity(city)">
+                  <div class="city-list-col-info">
+                    <ion-label class="city-list-col-info-label">
+                      {{ city.name }}<p>{{ city.location_parent.name }}</p>
+                    </ion-label>
+                  </div>
+
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
           <!-- </ion-content> -->
     </ng-template>
 </ion-modal>
@@ -217,13 +231,26 @@ mode="ios"
             <!-- <ng-container *ngIf="!cityesListLoading && !cityesList.length">
                 <app-no-data />
             </ng-container> -->
-            <ion-list class="city-list" *ngIf="!cityesListLoading">
+            <ion-list class="city-list" *ngIf="!cityesListLoading && cityesList.length !== 0">
                 <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)">
                     <ion-label>
                         {{ item.name }}<p>{{ item.location_parent.name }}</p>
                     </ion-label>
                 </ion-item>
             </ion-list>
+
+            <ion-grid class="city-list" *ngIf="!cityesListLoading && cityesList.length === 0">
+              <ion-row>
+                <ion-col class="city-list-col" size="1" *ngFor="let city of favoriteCities" (click)="onSelectedCity(city)">
+                  <div class="city-list-col-info">
+                    <ion-label>
+                      {{ city.name }}<p>{{ city.location_parent.name }}</p>
+                    </ion-label>
+                  </div>
+
+                </ion-col>
+              </ion-row>
+          </ion-grid>
           <!-- </ion-content> -->
     </ng-template>
 </ion-modal>

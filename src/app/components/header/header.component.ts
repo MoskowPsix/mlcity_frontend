@@ -53,6 +53,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   segment: string = 'events'
 
+  favoriteCities!: any[]
+
   cityesList: any[] = []
   cityesListLoading: boolean = false
   searchCityes: FormControl = new FormControl('')
@@ -138,6 +140,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.cityesList = response.locations
           this.cityesListLoading = false
         })
+    } else if (event.target.value.length === 0) {
+      this.onClearSearch()
     } else {
       this.minLengthCityesListError = true
     }
@@ -254,6 +258,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe((value) => {
         this.showBackButton = value
       })
+
+    this.locationService.getFavoriteCities().subscribe((response: any) => {
+      this.favoriteCities = response.cities
+      console.log(this.favoriteCities)
+    })
 
     //Подписываемся на состояние модалки поиска города
     this.navigationService.modalSearchCityesOpen
