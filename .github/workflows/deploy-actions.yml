@@ -152,16 +152,16 @@ jobs:
       - name: set env fastlane
         run: | 
           touch ios/App/fastlane/.env
-          echo FASTLANE_KEI_ID=${{secrets.secrets.IOS_AUTH_KEY_ID}} >> ios/App/fastlane/.env
-          echo FASTLANE_ISSUER_ID=${{secrets.secrets.IOS_AUTH_KEY_ISSUER_ID}} >> ios/App/fastlane/.env
+          echo FASTLANE_KEI_ID=${{secrets.IOS_AUTH_KEY_ID}} >> ios/App/fastlane/.env
+          echo FASTLANE_ISSUER_ID=${{secrets.IOS_AUTH_KEY_ISSUER_ID}} >> ios/App/fastlane/.env
           cat ios/App/fastlane/.env
       - name: build and deploy app
         run: | 
           cd ios/App && fastlane testflight
       - name: rm files
         run: | 
-          rm ios/App/fastlane/.env
-          ${{ github.workspace }}/ios/private_keys/AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
+          sudo rm ios/App/fastlane/.env
+          sudo rm ${{ github.workspace }}/ios/private_keys/AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
 
       # - name: Deploy
       #   uses: vfrascello/xcode-deploy@v1.5
