@@ -24,9 +24,10 @@ platform :ios do
   end
   desc "Push a new release build to the App Store"
   lane :testflight do
-    # key_barear = ENV['GIT_TOKEN']
-    # authorization_token_str = ENV['GIT_TOKEN']
-    # basic_authorization_token = Base64.strict_encode64(authorization_token_str)
+    git_url = ENV['GIT_URL']
+    git_branch = ENV['GIT_BRANCH']
+    git_username = ENV['GIT_USERNAME']
+
     key_filepath = "private_keys/AuthKey_" + ENV['FASTLANE_KEI_ID'] + ".p8"
     key_id = ENV['FASTLANE_KEI_ID']
     issuer_id = ENV['FASTLANE_ISSUER_ID']
@@ -35,6 +36,13 @@ platform :ios do
       key_id: key_id,
       issuer_id: issuer_id,
       key_filepath: key_filepath
+    )
+    match(
+      git_private_key: "git_key",
+      git_url: "https://github.com/MoskowPsix/mlcity_frontend.git",
+      git_branch: "master",
+      username: "MoskowPsix",
+      type: "appstore",
     )
     sync_code_signing
     # update_code_signing_settings(

@@ -110,6 +110,12 @@ jobs:
           fileName: AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
           fileDir: ${{ github.workspace }}/ios/private_keys
           encodedString: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
+      - name: Get App Store Connect API Key 
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileName: git_key
+          fileDir: ${{ github.workspace }}/ios/App/fastlane
+          encodedString: ${{ secrets.GIT_SSH_PRIVATE_KEY_BASE64 }}
       - name: Install the Apple certificate and provisioning profile
         env:
           # BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BUILD }}
@@ -146,7 +152,10 @@ jobs:
           echo FASTLANE_KEI_ID=${{secrets.IOS_AUTH_KEY_ID}} >> ios/App/fastlane/.env
           echo FASTLANE_ISSUER_ID=${{secrets.secrets.IOS_AUTH_KEY_ISSUER_ID}} >> ios/App/fastlane/.env
           echo MATCH_PASSWORD=${{secrets.IOS_BUILD_PASSWORD}} >> ios/App/fastlane/.env
-          cat ios/App/fastlane/.env
+          echo GIT_URL=${{secrets.IOS_GIT_URL_REPO}} >> ios/App/fastlane/.env
+          echo GIT_BRANCH=${{secrets.IOS_GIT_BRANCH_REPO}} >> ios/App/fastlane/.env
+          echo GIT_USERNAME=${{secrets.IOS_GIT_USERNAME_REPO}} >> ios/App/fastlane/.env
+          echo cat ios/App/fastlane/.env
       - name: build and deploy app
         run: | 
           cd ios/App && fastlane testflight
@@ -154,3 +163,4 @@ jobs:
         run: | 
           sudo rm ios/App/fastlane/.env
           sudo rm ${{ github.workspace }}/ios/private_keys/AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
+          sudo rm ${{ github.workspace }}/ios/App/git_key
