@@ -102,13 +102,11 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
     for (let i = 0; i < dayArray.length; i++) {
       dayArray[i] = dayArray[i].slice(4)
       dayArray[i] = dayArray[i].replace(/^\s+/, '')
-      console.log(dayArray[i])
       if (dayArray[i].length > 15) {
         this.workTimeCultValue++
         break
       }
     }
-    console.log(this.workTimeCult)
     this.workTimeCultOb = {
       monday: dayArray[0],
       tuesday: dayArray[1],
@@ -144,6 +142,9 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.queryBuilderService.paginationEventsInSightCurrentPage.next(
                   response.events.next_cursor,
                 )
+                if (response.events.next_cursor == null) {
+                  this.loadMoreEventsInSigthState = true
+                }
               }
             })
         }
