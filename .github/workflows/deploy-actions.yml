@@ -98,6 +98,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '18'
+      - name: install brew
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      - name: install fastline
+        run: brew install fastlane
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BUILD }}
@@ -145,8 +149,6 @@ jobs:
         run: npm install
       - name: Build npx
         run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline   
-      - name: install fastline
-        run: brew cask install fastlane
       - name: set env fastlane
         env: 
           KEY_ID: ${{secrets.secrets.IOS_AUTH_KEY_ID}}
