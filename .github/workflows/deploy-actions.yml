@@ -146,6 +146,7 @@ jobs:
           echo FASTLANE_KEI_ID=${{secrets.IOS_AUTH_KEY_ID}} >> ios/App/fastlane/.env
           echo FASTLANE_ISSUER_ID=${{secrets.secrets.IOS_AUTH_KEY_ISSUER_ID}} >> ios/App/fastlane/.env
           echo MATCH_PASSWORD=${{secrets.IOS_BUILD_PASSWORD}}
+          export MATCH_PASSWORD=${{secrets.IOS_BUILD_PASSWORD}}
           cat ios/App/fastlane/.env
       - name: build and deploy app
         run: | 

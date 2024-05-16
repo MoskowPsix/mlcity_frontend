@@ -24,6 +24,9 @@ platform :ios do
   end
   desc "Push a new release build to the App Store"
   lane :testflight do
+    key_barear = ENV['GIT_TOKEN']
+    authorization_token_str = ENV['GIT_TOKEN']
+    basic_authorization_token = Base64.strict_encode64(authorization_token_str)
     key_filepath = "private_keys/AuthKey_" + ENV['FASTLANE_KEI_ID'] + ".p8"
     key_id = ENV['FASTLANE_KEI_ID']
     issuer_id = ENV['FASTLANE_ISSUER_ID']
