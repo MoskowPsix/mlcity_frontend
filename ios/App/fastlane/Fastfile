@@ -37,14 +37,20 @@ platform :ios do
       issuer_id: issuer_id,
       key_filepath: key_filepath
     )
-    match(
+    # match(
+    #   git_private_key: "git_key",
+    #   git_url: "https://github.com/MoskowPsix/mlcity_frontend.git",
+    #   git_branch: "master",
+    #   username: "MoskowPsix",
+    #   type: "appstore",
+    # )
+    sync_code_signing(
       git_private_key: "git_key",
       git_url: "https://github.com/MoskowPsix/mlcity_frontend.git",
       git_branch: "master",
       username: "MoskowPsix",
       type: "appstore",
     )
-    sync_code_signing
     # update_code_signing_settings(
     #   use_automatic_signing: false,
     #   bundle_identifier: "mlcity.ru"
