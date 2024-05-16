@@ -58,6 +58,6 @@ platform :ios do
     #   bundle_identifier: "mlcity.ru"
     # )
     build_app(workspace: "App.xcworkspace", scheme: "App")
-    upload_to_testflight(app_identifier: "mlcity.ru")
+    upload_to_testflight(api_key: api_key)
   end
 end
