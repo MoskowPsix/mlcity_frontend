@@ -161,6 +161,8 @@ jobs:
           echo GIT_URL=${{secrets.IOS_GIT_URL_REPO}} >> ios/App/fastlane/.env
           echo GIT_BRANCH=${{secrets.IOS_GIT_BRANCH_REPO}} >> ios/App/fastlane/.env
           echo GIT_USERNAME=${{secrets.IOS_GIT_USERNAME_REPO}} >> ios/App/fastlane/.env
+          echo IOS_APP_IDENTIFIER=${{secrets.IOS_APP_IDENTIFIER}} >> ios/App/fastlane/.env
+          echo IOS_APP_ID=${{secrets.IOS_APP_ID}} >> ios/App/fastlane/.env
           echo cat ios/App/fastlane/.env
       - name: build and deploy app
         run: | 
