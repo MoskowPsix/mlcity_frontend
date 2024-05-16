@@ -154,7 +154,7 @@ jobs:
           KEY_ID: ${{secrets.secrets.IOS_AUTH_KEY_ID}}
           ISSUER_ID: ${{secrets.secrets.IOS_AUTH_ISSUER_ID}}
         run: | 
-          touch ios/App/fastlane/.env.default
+          touch ios/App/fastlane/.env
           echo FASTLANE_KEI_ID="$KEY_ID" >> ios/App/fastlane/.env.default
           echo FASTLANE_ISSUER_ID="$ISSUER_ID" >> ios/App/fastlane/.env.default
       - name: build and deploy app
