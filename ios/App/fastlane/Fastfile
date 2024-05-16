@@ -53,12 +53,18 @@ platform :ios do
     #   use_automatic_signing: false,
     #   bundle_identifier: "mlcity.ru"
     # )
-    build_app(workspace: "App.xcworkspace", scheme: "App")
+    build_app(
+      workspace: "App.xcworkspace", 
+      scheme: "App",
+      output_directory: "~/",
+      output_name: "App.ipa"
+      )
     upload_to_testflight(
       username: 'ixbit1@gmail.com',
       api_key: api_key,
-      app_identifier: app_identifier
+      app_identifier: app_identifier,
       apple_id: apple_id,
+      ipa: '~/App.ipa',
       skip_waiting_for_build_processing: true
     )
   end
