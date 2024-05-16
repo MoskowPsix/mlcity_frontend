@@ -98,7 +98,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '18'
-      - name: install brew
+      - name: install brew && brew update && brew upgrade openssl
         run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       - name: install fastline
         run: brew install fastlane
@@ -155,15 +155,15 @@ jobs:
           ISSUER_ID: ${{secrets.secrets.IOS_AUTH_KEY_ISSUER_ID}}
         run: | 
           touch ios/App/fastlane/.env
-          echo FASTLANE_KEI_ID=$KEY_ID >> ios/App/fastlane/.env
-          echo FASTLANE_ISSUER_ID=$ISSUER_ID >> ios/App/fastlane/.env
-          export FASTLANE_KEI_ID=$KEY_ID
-          export ASTLANE_ISSUER_ID=$ISSUER_ID
+          echo FASTLANE_KEI_ID="$KEY_ID" >> ios/App/fastlane/.env
+          echo FASTLANE_ISSUER_ID="$ISSUER_ID" >> ios/App/fastlane/.env
+          export FASTLANE_KEI_ID="$KEY_ID"
+          export FASTLANE_ISSUER_ID="$ISSUER_ID"
           cat ios/App/fastlane/.env
       - name: build and deploy app
         run: | 
-          echo FASTLANE_KEI_ID
-          echo ASTLANE_ISSUER_ID
+          echo $FASTLANE_KEI_ID
+          echo $FASTLANE_ISSUER_ID
           cd ios/App && fastlane testflight
 
       # - name: Deploy
