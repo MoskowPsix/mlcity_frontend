@@ -15,6 +15,7 @@ App.xcarchive
 
 *.log
 log.txt
+ios/App/fastlane/.env
 
 
 /.sourcemaps

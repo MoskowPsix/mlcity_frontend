@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000183">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: app_store_connect_api_key" time="0.002302">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: increment_build_number" time="0.18105">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: build_app" time="73.602496">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: upload_to_testflight" time="38.525944">
+        
+          <failure message="/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/actions/actions_helper.rb:67:in `execute_action&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/runner.rb:229:in `chdir&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/runner.rb:229:in `execute_action&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing&apos;&#10;Fastfile:37:in `block (2 levels) in parsing_binding&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/lane.rb:41:in `call&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/runner.rb:45:in `chdir&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/runner.rb:45:in `execute&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/lane_manager.rb:46:in `cruise_lane&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/command_line_handler.rb:34:in `handle&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/commands_generator.rb:110:in `block (2 levels) in run&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/commander-4.6.0/lib/commander/command.rb:187:in `call&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/commander-4.6.0/lib/commander/command.rb:157:in `run&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/commands_generator.rb:363:in `run&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/commands_generator.rb:43:in `start&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/fastlane/lib/fastlane/cli_tools_distributor.rb:123:in `take_off&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/gems/fastlane-2.220.0/bin/fastlane:23:in `&lt;top (required)&gt;&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/bin/fastlane:25:in `load&apos;&#10;/opt/homebrew/Cellar/fastlane/2.220.0/libexec/bin/fastlane:25:in `&lt;main&gt;&apos;&#10;&#10;Error uploading ipa file: &#10; [Application Loader Error Output]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90478) Invalid Version. The build with the version “1.4.8” can’t be imported because a later version has been closed for new build submissions. Choose a different version number. (ID: bf0f5cf0-4785-459c-a388-e67e4366cb26)&#10;[Application Loader Error Output]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90186) Invalid Pre-Release Train. The train version &apos;1.4.7&apos; is closed for new build submissions (ID: 9be790f6-7bca-4d24-9340-c435ddc306a6)&#10;[Application Loader Error Output]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90062) This bundle is invalid. The value for key CFBundleShortVersionString [1.4.7] in the Info.plist file must contain a higher version than that of the previously approved version [1.4.8]. Please find more information about CFBundleShortVersionString at https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring (ID: 6c0a5efb-db65-4199-af32-0793a7f865fd)&#10;[Application Loader Error Output]: Error uploading &apos;/var/folders/lb/9v5yjqwn1sl2kd2kxdr6bmdm0000gn/T/26a77dda-3f38-4ddf-85ee-e2d85b1105aa.ipa&apos;.&#10;[Application Loader Error Output]: Asset validation failed Invalid Version. The build with the version “1.4.8” can’t be imported because a later version has been closed for new build submissions. Choose a different version number. (ID: bf0f5cf0-4785-459c-a388-e67e4366cb26) (90478)&#10;[Application Loader Error Output]: Asset validation failed Invalid Pre-Release Train. The train version &apos;1.4.7&apos; is closed for new build submissions (ID: 9be790f6-7bca-4d24-9340-c435ddc306a6) (90186)&#10;[Application Loader Error Output]: Asset validation failed This bundle is invalid. The value for key CFBundleShortVersionString [1.4.7] in the Info.plist file must contain a higher version than that of the previously approved version [1.4.8]. Please find more information about CFBundleShortVersionString at https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring (ID: 6c0a5efb-db65-4199-af32-0793a7f865fd) (90062)&#10;[Application Loader Error Output]: The call to the altool completed with a non-zero exit status: 1. This indicates a failure." />
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
