@@ -32,10 +32,6 @@ platform :ios do
       issuer_id: issuer_id,
       key_filepath: key_filepath
     )
-    match({
-      type: 'appstore'
-    })
-    increment_build_number(xcodeproj: "App.xcodeproj")
     build_app(workspace: "App.xcworkspace", scheme: "App")
     upload_to_testflight
   end
