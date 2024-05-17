@@ -33,7 +33,8 @@ platform :ios do
     issuer_id = ENV['FASTLANE_ISSUER_ID']
 
     app_identifier = ENV['IOS_APP_IDENTIFIER']
-    apple_id = ENV['IOS_APP_ID']
+    apple_id = ENV['IOS_APPLE_ID']
+    team_id = ENV['IOS_TEAM_ID']
 
     api_key_sync = app_store_connect_api_key(
       key_id: key_id,
@@ -68,6 +69,7 @@ platform :ios do
       api_key: api_key_upload,
       # app_identifier: app_identifier,
       apple_id: apple_id,
+      team_id: team_id,
       ipa: '~/App.ipa',
       app_platform: 'ios',
       skip_waiting_for_build_processing: true
