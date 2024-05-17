@@ -76,7 +76,7 @@ platform :ios do
       apple_id: apple_id,
       team_id: team_id,
       ipa: '~/App.ipa',
-      app_platform: 'ios',
+      app_platform: 'ios --type ios',
       skip_waiting_for_build_processing: true
     )
   end
