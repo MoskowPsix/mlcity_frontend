@@ -35,6 +35,7 @@ platform :ios do
     app_identifier = ENV['IOS_APP_IDENTIFIER']
     apple_id = ENV['IOS_APPLE_ID']
     team_id = ENV['IOS_TEAM_ID']
+    itc_team_id = ENV['IOS_ITC_TEAM_ID']
 
     api_key_sync = app_store_connect_api_key(
       key_id: key_id,
@@ -67,7 +68,8 @@ platform :ios do
     )
     pilot(
       api_key: api_key_upload,
-      # app_identifier: app_identifier,
+      app_identifier: app_identifier,
+      itc_team_id: itc_team_id,
       apple_id: apple_id,
       team_id: team_id,
       ipa: '~/App.ipa',
