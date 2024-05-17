@@ -7,7 +7,6 @@ on:
     branches: ['main']
 
 jobs:
-
   # lint:
   #   runs-on: ubuntu-latest
   #   steps:
@@ -67,7 +66,7 @@ jobs:
         run: npm install
 
       - name: Build npx
-        run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline         
+        run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
 
       - name: Grable build
         if: success()
@@ -77,20 +76,18 @@ jobs:
         run: cd android && jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore MLCity_key_v2.jks -storepass ${{secrets.ANDROID_PASSWORD}} -keypass ${{secrets.ANDROID_PASSWORD}} app/build/outputs/bundle/release/app-release.aab ${{secrets.ANDROID_ALIAS}}
 
       - name: Upload Android App to Play Store
-        uses: bbjoern/upload-google-play@v0.0.6
+        uses: joutvhu/publish-android@v1
         with:
           serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: mlcity.ru
-          releaseFiles: android/app/build/outputs/bundle/release/*.aab
+          releaseFile: android/app/build/outputs/bundle/release/*.aab
           track: production
           inAppUpdatePriority: 2
           userFraction: 0.33
 
-   
-
   # build-deploy-ios:
   #   runs-on: macos-latest
-  #   steps:              
+  #   steps:
   #     - uses: actions/checkout@v4
   #     - uses: actions/setup-node@v1
   #       with:
@@ -101,19 +98,19 @@ jobs:
   #       run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   #     - name: install fastline
   #       run: brew install fastlane
-  #     - name: Get App Store Connect API Key 
+  #     - name: Get App Store Connect API Key
   #       uses: timheuer/base64-to-file@v1.1
   #       with:
   #         fileName: AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
   #         fileDir: ${{ github.workspace }}/ios/private_keys
   #         encodedString: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
-  #     - name: Set private key github 
+  #     - name: Set private key github
   #       uses: timheuer/base64-to-file@v1.1
   #       with:
   #         fileName: git_key
   #         fileDir: ${{ github.workspace }}/ios/App/fastlane
   #         encodedString: ${{ secrets.GIT_SSH_PRIVATE_KEY_BASE64 }}
-  #     - name: Set user cookie apple 
+  #     - name: Set user cookie apple
   #       uses: timheuer/base64-to-file@v1.1
   #       with:
   #         fileName: cookie
@@ -144,13 +141,13 @@ jobs:
   #         security list-keychain -d user -s $KEYCHAIN_PATH
   #         # apply provisioning profile
   #         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-  #         cp $PP_PATH_DISTRIBUTE ~/Library/MobileDevice/Provisioning\ Profiles 
-  #     - name: npm install    
+  #         cp $PP_PATH_DISTRIBUTE ~/Library/MobileDevice/Provisioning\ Profiles
+  #     - name: npm install
   #       run: npm install
   #     - name: Build npx
-  #       run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline   
+  #       run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
   #     - name: set env fastlane
-  #       run: | 
+  #       run: |
   #         touch ios/App/fastlane/.env
   #         echo FASTLANE_KEI_ID=${{secrets.IOS_AUTH_KEY_ID}} >> ios/App/fastlane/.env
   #         echo FASTLANE_ISSUER_ID=${{secrets.secrets.IOS_AUTH_KEY_ISSUER_ID}} >> ios/App/fastlane/.env
@@ -165,14 +162,14 @@ jobs:
   #         echo FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{secrets.IOS_APP_PASSWORD}}
   #         echo cat ios/App/fastlane/.env
   #     - name: build and deploy app
-  #       run: | 
+  #       run: |
   #         cd ios/App && fastlane testflight
   #     - name: Publish the app to App Store Connect
   #       run: |
   #         cd ios && xcrun altool --upload-app -f ~/App.ipa -t iOS \
   #         --apiIssuer ${{ secrets.IOS_AUTH_KEY_ISSUER_ID }} --apiKey ${{ secrets.IOS_AUTH_KEY_ID }}
   #     - name: rm files
-  #       run: | 
+  #       run: |
   #         sudo rm -r ios/App/fastlane/.env
   #         sudo rm -r ${{ github.workspace }}/ios/private_keys/AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
   #         sudo rm -r ${{ github.workspace }}/ios/App/git_key
