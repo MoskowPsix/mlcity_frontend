@@ -83,7 +83,6 @@ jobs:
           releaseFile: android/app/build/outputs/bundle/release/*.aab
           track: production
           inAppUpdatePriority: 2
-          userFraction: 0.33
 
   # build-deploy-ios:
   #   runs-on: macos-latest
