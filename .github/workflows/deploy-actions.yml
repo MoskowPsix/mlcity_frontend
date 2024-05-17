@@ -171,4 +171,4 @@ jobs:
         run: |
           sudo rm -r ios/App/fastlane/.env
           sudo rm -r ios/private_keys/AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
-          sudo rm -r ios/App/git_key
+          sudo rm -r ios/App/fastlane/git_key
