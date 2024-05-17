@@ -554,6 +554,15 @@ ion-padding {
     text-align: center;
   }
 }
+.time-input{
+  max-width: 6rem;
+  background-color:#EDEEF0;
+  border: none;
+  border-radius: 6px;
+  color: #000000;
+  text-align: center;
+  outline: #a3a3a3;
+}
 
 @media screen and (max-width: 992px) {
   .tiket-main {

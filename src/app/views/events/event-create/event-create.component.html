@@ -648,23 +648,28 @@
                         </ion-card-header>
 
                           <ion-col style="display: flex; justify-content: space-between;">
-
+      <!-- пк версия датайм -->
                             <ion-row class="date-start">
                               <ion-list-header style="text-align: center;"><ion-label>Начало сеанса: </ion-label></ion-list-header>
                               <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 100%;"
                                 datetime="{{'eventStart-'+i+'-'+i_s}}"
                                 class="ion-margin-vertical"
                               ></ion-datetime-button>
+                              <input (input) = "testTime($event,i,i_s,'start')" class="time-input" [maskito]="maskTime" type="text" value="12:00">
                               <ion-modal [keepContentsMounted]="true">
                                 <ng-template>
                                   <ion-datetime
+                                    value="{{this.dateTomorrow.toISOString()}}"
+                                    (ionChange)="testDate($event,i,i_s,'start')"
+                                    presentation="date"
                                     id="{{'eventStart-'+i+'-'+i_s}}"
                                     [firstDayOfWeek]="1"
                                     [showDefaultButtons]="true"
+                                    [displayFormat]="'MM/YYYY'" 
+                                    [pickerFormat]="'MMMM YYYY'"
                                     doneText="Ok"
                                     cancelText="Отмена"
                                     locale="ru-RU"
-                                    formControlName="dateStart"
                                     ></ion-datetime>
                                 </ng-template>
                               </ion-modal>
@@ -677,16 +682,19 @@
                                     datetime="{{'eventEnd-'+i+'-'+i_s}}"
                                     class="ion-margin-vertical"
                                   ></ion-datetime-button>
+                                  <input (input) = "testTime($event,i,i_s,'end')" class="time-input" [maskito]="maskTime" type="text" value="15:00">
                                   <ion-modal [keepContentsMounted]="true">
                                     <ng-template>
                                       <ion-datetime
+                                        value="{{this.dateTomorrow.toISOString()}}"
+                                        (ionChange)="testDate($event,i,i_s,'end')"
                                         id="{{'eventEnd-'+i+'-'+i_s}}"
                                         [firstDayOfWeek]="1"
                                         [showDefaultButtons]="true"
+                                        presentation="date"
                                         doneText="Ok"
                                         cancelText="Отмена"
                                         locale="ru-RU"
-                                        formControlName="dateEnd"
                                       ></ion-datetime>
                                     </ng-template>
                                   </ion-modal>
@@ -783,7 +791,7 @@
                           <ion-chip color="danger"(click)="deleteSeanceForm(i, i_s)">Удалить</ion-chip>
                         </ion-item>
                         <ion-col style="display: flex; justify-content: center; align-items: center;" >Начало сеанса</ion-col>
-                        <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 100%;"
+                        <ion-datetime-button  style="display: flex; justify-content: center; align-items: center; width: 100%;"
                                 datetime="{{'eventStart-'+i+'-'+i_s}}"
                                 class="ion-margin-vertical"
                               ></ion-datetime-button>
@@ -791,6 +799,7 @@
                                 <ng-template>
                                   <ion-datetime
                                     id="{{'eventStart-'+i+'-'+i_s}}"
+                                    
                                     [firstDayOfWeek]="1"
                                     [showDefaultButtons]="true"
                                     doneText="Ok"
