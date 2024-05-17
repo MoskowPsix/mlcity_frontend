@@ -81,98 +81,98 @@ jobs:
         with:
           serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: mlcity.ru
-          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+          releaseFiles: android/app/build/outputs/bundle/release/*.aab
           track: production
           inAppUpdatePriority: 2
           userFraction: 0.33
 
    
 
-  build-deploy-ios:
-    runs-on: macos-latest
-    steps:              
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '18'
-      - name: set git
-        run: git config --global user.email "${{secrets.GIT_EMAIL}}" && git config --global user.name "${{secrets.GIT_USERNAME}}"
-      - name: install brew && brew update && brew upgrade openssl
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      - name: install fastline
-        run: brew install fastlane
-      - name: Get App Store Connect API Key 
-        uses: timheuer/base64-to-file@v1.1
-        with:
-          fileName: AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
-          fileDir: ${{ github.workspace }}/ios/private_keys
-          encodedString: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
-      - name: Set private key github 
-        uses: timheuer/base64-to-file@v1.1
-        with:
-          fileName: git_key
-          fileDir: ${{ github.workspace }}/ios/App/fastlane
-          encodedString: ${{ secrets.GIT_SSH_PRIVATE_KEY_BASE64 }}
-      - name: Set user cookie apple 
-        uses: timheuer/base64-to-file@v1.1
-        with:
-          fileName: cookie
-          fileDir: ~/.fastlane/spaceship/ixbit1@gmail.com
-          encodedString: ${{ secrets.IOS_USER_COOKIE }}
-      - name: Install the Apple certificate and provisioning profile
-        env:
-          # BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BUILD }}
-          P12_PASSWORD: ${{ secrets.IOS_BUILD_PASSWORD }}
-          DISTRIBUTEPROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_DISTRIBUTE }}
-          # BUILD_PROVISION_PROFILE_BASE64: ${{secrets.PROFILE_IOS_BASE64}}
-          DISTRIBUTE_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_DISTRIBUTE }}
-          KEYCHAIN_PASSWORD: ${{ secrets.IOS_BUILD_PASSWORD }}
-        run: |
-          # create variables
-          CERTIFICATE_PATH_DISTRIBUTE=$RUNNER_TEMP/distribute_certificate.p12
-          PP_PATH_DISTRIBUTE=$RUNNER_TEMP/distribute_pp.mobileprovision
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-          # import certificates and provisioning profile from secrets
-          echo -n "$DISTRIBUTE_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH_DISTRIBUTE
-          echo -n "$DISTRIBUTE_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH_DISTRIBUTE
-          # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          # import certificate to keychain
-          security import $CERTIFICATE_PATH_DISTRIBUTE -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
-          # apply provisioning profile
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_PATH_DISTRIBUTE ~/Library/MobileDevice/Provisioning\ Profiles 
-      - name: npm install    
-        run: npm install
-      - name: Build npx
-        run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline   
-      - name: set env fastlane
-        run: | 
-          touch ios/App/fastlane/.env
-          echo FASTLANE_KEI_ID=${{secrets.IOS_AUTH_KEY_ID}} >> ios/App/fastlane/.env
-          echo FASTLANE_ISSUER_ID=${{secrets.secrets.IOS_AUTH_KEY_ISSUER_ID}} >> ios/App/fastlane/.env
-          echo MATCH_PASSWORD=${{secrets.IOS_BUILD_PASSWORD}} >> ios/App/fastlane/.env
-          echo GIT_URL=${{secrets.IOS_GIT_URL_REPO}} >> ios/App/fastlane/.env
-          echo GIT_BRANCH=${{secrets.IOS_GIT_BRANCH_REPO}} >> ios/App/fastlane/.env
-          echo GIT_USERNAME=${{secrets.IOS_GIT_USERNAME_REPO}} >> ios/App/fastlane/.env
-          echo IOS_APP_IDENTIFIER=${{secrets.IOS_APP_IDENTIFIER}} >> ios/App/fastlane/.env
-          echo IOS_TEAM_ID=${{secrets.IOS_TEAM_ID}} >> ios/App/fastlane/.env
-          echo IOS_APPLE_ID=${{secrets.IOS_APPLE_ID}} >> ios/App/fastlane/.env
-          echo IOS_ITC_TEAM_ID=${{secrets.IOS_ITC_TEAM_ID}} >> ios/App/fastlane/.env
-          echo FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{secrets.IOS_APP_PASSWORD}}
-          echo cat ios/App/fastlane/.env
-      - name: build and deploy app
-        run: | 
-          cd ios/App && fastlane testflight
-      - name: Publish the app to App Store Connect
-        run: |
-          cd ios && xcrun altool --upload-app -f ~/App.ipa -t iOS \
-          --apiIssuer ${{ secrets.IOS_AUTH_KEY_ISSUER_ID }} --apiKey ${{ secrets.IOS_AUTH_KEY_ID }}
-      - name: rm files
-        run: | 
-          sudo rm -r ios/App/fastlane/.env
-          sudo rm -r ${{ github.workspace }}/ios/private_keys/AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
-          sudo rm -r ${{ github.workspace }}/ios/App/git_key
+  # build-deploy-ios:
+  #   runs-on: macos-latest
+  #   steps:              
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: '18'
+  #     - name: set git
+  #       run: git config --global user.email "${{secrets.GIT_EMAIL}}" && git config --global user.name "${{secrets.GIT_USERNAME}}"
+  #     - name: install brew && brew update && brew upgrade openssl
+  #       run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  #     - name: install fastline
+  #       run: brew install fastlane
+  #     - name: Get App Store Connect API Key 
+  #       uses: timheuer/base64-to-file@v1.1
+  #       with:
+  #         fileName: AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
+  #         fileDir: ${{ github.workspace }}/ios/private_keys
+  #         encodedString: ${{ secrets.IOS_AUTH_KEY_BASE64 }}
+  #     - name: Set private key github 
+  #       uses: timheuer/base64-to-file@v1.1
+  #       with:
+  #         fileName: git_key
+  #         fileDir: ${{ github.workspace }}/ios/App/fastlane
+  #         encodedString: ${{ secrets.GIT_SSH_PRIVATE_KEY_BASE64 }}
+  #     - name: Set user cookie apple 
+  #       uses: timheuer/base64-to-file@v1.1
+  #       with:
+  #         fileName: cookie
+  #         fileDir: ~/.fastlane/spaceship/ixbit1@gmail.com
+  #         encodedString: ${{ secrets.IOS_USER_COOKIE }}
+  #     - name: Install the Apple certificate and provisioning profile
+  #       env:
+  #         # BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BUILD }}
+  #         P12_PASSWORD: ${{ secrets.IOS_BUILD_PASSWORD }}
+  #         DISTRIBUTEPROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_DISTRIBUTE }}
+  #         # BUILD_PROVISION_PROFILE_BASE64: ${{secrets.PROFILE_IOS_BASE64}}
+  #         DISTRIBUTE_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_DISTRIBUTE }}
+  #         KEYCHAIN_PASSWORD: ${{ secrets.IOS_BUILD_PASSWORD }}
+  #       run: |
+  #         # create variables
+  #         CERTIFICATE_PATH_DISTRIBUTE=$RUNNER_TEMP/distribute_certificate.p12
+  #         PP_PATH_DISTRIBUTE=$RUNNER_TEMP/distribute_pp.mobileprovision
+  #         KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+  #         # import certificates and provisioning profile from secrets
+  #         echo -n "$DISTRIBUTE_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH_DISTRIBUTE
+  #         echo -n "$DISTRIBUTE_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH_DISTRIBUTE
+  #         # create temporary keychain
+  #         security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+  #         security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+  #         security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+  #         # import certificate to keychain
+  #         security import $CERTIFICATE_PATH_DISTRIBUTE -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+  #         security list-keychain -d user -s $KEYCHAIN_PATH
+  #         # apply provisioning profile
+  #         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+  #         cp $PP_PATH_DISTRIBUTE ~/Library/MobileDevice/Provisioning\ Profiles 
+  #     - name: npm install    
+  #       run: npm install
+  #     - name: Build npx
+  #       run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline   
+  #     - name: set env fastlane
+  #       run: | 
+  #         touch ios/App/fastlane/.env
+  #         echo FASTLANE_KEI_ID=${{secrets.IOS_AUTH_KEY_ID}} >> ios/App/fastlane/.env
+  #         echo FASTLANE_ISSUER_ID=${{secrets.secrets.IOS_AUTH_KEY_ISSUER_ID}} >> ios/App/fastlane/.env
+  #         echo MATCH_PASSWORD=${{secrets.IOS_BUILD_PASSWORD}} >> ios/App/fastlane/.env
+  #         echo GIT_URL=${{secrets.IOS_GIT_URL_REPO}} >> ios/App/fastlane/.env
+  #         echo GIT_BRANCH=${{secrets.IOS_GIT_BRANCH_REPO}} >> ios/App/fastlane/.env
+  #         echo GIT_USERNAME=${{secrets.IOS_GIT_USERNAME_REPO}} >> ios/App/fastlane/.env
+  #         echo IOS_APP_IDENTIFIER=${{secrets.IOS_APP_IDENTIFIER}} >> ios/App/fastlane/.env
+  #         echo IOS_TEAM_ID=${{secrets.IOS_TEAM_ID}} >> ios/App/fastlane/.env
+  #         echo IOS_APPLE_ID=${{secrets.IOS_APPLE_ID}} >> ios/App/fastlane/.env
+  #         echo IOS_ITC_TEAM_ID=${{secrets.IOS_ITC_TEAM_ID}} >> ios/App/fastlane/.env
+  #         echo FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=${{secrets.IOS_APP_PASSWORD}}
+  #         echo cat ios/App/fastlane/.env
+  #     - name: build and deploy app
+  #       run: | 
+  #         cd ios/App && fastlane testflight
+  #     - name: Publish the app to App Store Connect
+  #       run: |
+  #         cd ios && xcrun altool --upload-app -f ~/App.ipa -t iOS \
+  #         --apiIssuer ${{ secrets.IOS_AUTH_KEY_ISSUER_ID }} --apiKey ${{ secrets.IOS_AUTH_KEY_ID }}
+  #     - name: rm files
+  #       run: | 
+  #         sudo rm -r ios/App/fastlane/.env
+  #         sudo rm -r ${{ github.workspace }}/ios/private_keys/AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
+  #         sudo rm -r ${{ github.workspace }}/ios/App/git_key
