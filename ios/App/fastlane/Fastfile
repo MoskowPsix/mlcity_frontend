@@ -55,7 +55,7 @@ platform :ios do
     #   use_automatic_signing: false,
     #   bundle_identifier: "mlcity.ru"
     # )
-    gym(
+    build_app(
       workspace: "App.xcworkspace", 
       scheme: "App",
       output_directory: "~/",
