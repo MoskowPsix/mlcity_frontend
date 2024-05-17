@@ -69,7 +69,6 @@ platform :ios do
     pilot(
       api_key: api_key_upload,
       app_identifier: app_identifier,
-      itc_team_id: itc_team_id,
       apple_id: apple_id,
       team_id: team_id,
       ipa: '~/App.ipa',
