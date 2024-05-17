@@ -56,8 +56,8 @@ platform :ios do
     build_app(
       workspace: "App.xcworkspace", 
       scheme: "App",
-      # output_directory: "~/",
-      # output_name: "App.ipa"
+      output_directory: "~/",
+      output_name: "App.ipa"
       )
     api_key_upload = app_store_connect_api_key(
       key_id: key_id,
@@ -68,8 +68,8 @@ platform :ios do
       api_key: api_key_upload,
       app_identifier: app_identifier,
       apple_id: apple_id,
-      # ipa: '~/App.ipa',
-      # skip_waiting_for_build_processing: true
+      ipa: '~/App.ipa',
+      skip_waiting_for_build_processing: true
     )
   end
 end
