@@ -64,11 +64,12 @@ platform :ios do
       issuer_id: issuer_id,
       key_filepath: key_filepath
     )
-    upload_to_testflight(
+    pilot(
       api_key: api_key_upload,
       app_identifier: app_identifier,
       apple_id: apple_id,
       ipa: '~/App.ipa',
+      app_platform: 'ios',
       skip_waiting_for_build_processing: true
     )
   end
