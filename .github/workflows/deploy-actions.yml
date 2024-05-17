@@ -170,5 +170,5 @@ jobs:
       - name: rm files
         run: |
           sudo rm -r ios/App/fastlane/.env
-          sudo rm -r ${{ github.workspace }}/ios/private_keys/AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
-          sudo rm -r ${{ github.workspace }}/ios/App/git_key
+          sudo rm -r /ios/private_keys/AuthKey_${{ secrets.IOS_AUTH_KEY_ID }}.p8
+          sudo rm -r /ios/App/git_key
