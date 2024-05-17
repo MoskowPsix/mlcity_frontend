@@ -58,12 +58,12 @@ platform :ios do
     gym(
       workspace: "App.xcworkspace", 
       scheme: "App",
-      output_directory: "~/",
-      output_name: "App.ipa",
+      # output_directory: "~/",
+      # output_name: "App.ipa",
       export_method: "app-store",
       clean: true,
-      configuration: 'Release'
-
+      configuration: 'Release',
+      # xcodebuild_command: "",
       )
     api_key_upload = app_store_connect_api_key(
       key_id: key_id,
@@ -75,7 +75,7 @@ platform :ios do
       app_identifier: app_identifier,
       apple_id: apple_id,
       team_id: team_id,
-      ipa: '~/App.ipa',
+      # ipa: '~/App.ipa',
       app_platform: 'ios',
       skip_waiting_for_build_processing: true
     )
