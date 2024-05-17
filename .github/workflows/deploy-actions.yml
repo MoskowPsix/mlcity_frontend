@@ -170,6 +170,10 @@ jobs:
       - name: build and deploy app
         run: | 
           cd ios/App && fastlane testflight
+      - name: Publish the app to App Store Connect
+        run: |
+          cd ios && xcrun altool --upload-app -f ~/App.ipa -t iOS \
+          --apiIssuer ${{ secrets.IOS_AUTH_KEY_ISSUER_ID }} --apiKey ${{ secrets.IOS_AUTH_KEY_ID }}
       - name: rm files
         run: | 
           sudo rm ios/App/fastlane/.env

@@ -65,19 +65,19 @@ platform :ios do
       configuration: 'Release',
       # xcodebuild_command: "",
       )
-    api_key_upload = app_store_connect_api_key(
-      key_id: key_id,
-      issuer_id: issuer_id,
-      key_filepath: key_filepath
-    )
-    pilot(
-      api_key: api_key_upload,
-      app_identifier: app_identifier,
-      apple_id: apple_id,
-      team_id: team_id,
-      ipa: '~/App.ipa',
-      app_platform: 'ios --type ios',
-      skip_waiting_for_build_processing: true
-    )
+    # api_key_upload = app_store_connect_api_key(
+    #   key_id: key_id,
+    #   issuer_id: issuer_id,
+    #   key_filepath: key_filepath
+    # )
+    # pilot(
+    #   api_key: api_key_upload,
+    #   app_identifier: app_identifier,
+    #   apple_id: apple_id,
+    #   team_id: team_id,
+    #   ipa: '~/App.ipa',
+    #   app_platform: 'ios',
+    #   skip_waiting_for_build_processing: true
+    # )
   end
 end
