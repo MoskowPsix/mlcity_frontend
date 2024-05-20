@@ -5,19 +5,9 @@
         "route": "/cabinet",
         "children":[
             {
-                "title": "Избранное",              
-                "icon": "star",
-                "route": "/cabinet/favorites"
-            },
-            {
-                "title": "Уведомления",               
-                "icon": "notifications",
-                "route": "/cabinet/notifications"
-            },
-            {
                 "title": "Настройки",               
                 "icon": "settings",
-                "route": "/cabinet/settings"
+                "route": "/cabinet/settings/profile"
             }
         ]
     },
@@ -38,23 +28,7 @@
             }
         ]
     },
-    {
-        "title": "Мои достопримечательности",       
-        "icon": "prism",
-        "route": "/cabinet/sights",
-        "children":[
-            {
-                "title": "Все",              
-                "icon": "list",
-                "route": "/cabinet/sights"
-            },
-            {
-                "title": "Создать",              
-                "icon": "add-circle",
-                "route": "/cabinet/sights/create"
-            }
-        ]
-    },
+
     {
         
         "title": "Выход",       

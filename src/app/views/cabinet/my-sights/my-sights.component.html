@@ -12,7 +12,71 @@
                   </div>
                 </ion-col> 
                 <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card">
-                  <app-event-card *ngFor="let sight of sights; let i = index" [event]="sight"></app-event-card>
+                  <!-- цикл создания карточек -->
+                  <ion-div #widgetsContent *ngFor="let sight of sights; let i = index"> 
+                    
+                    <ion-button class="edditButton" id="editModal" (click)="openModal(sight)" expand="block"><ion-icon name="pencil-outline"></ion-icon></ion-button>
+                    <app-event-card [event]="sight" [isSight]="true"></app-event-card>
+                  </ion-div>
+
+                  <ion-modal backdropDismiss="false" [isOpen] = "edditModalOpen">
+                  
+                   
+                      <ng-template #name>
+                        <ion-button (click) = "closeModal()">
+                          закрыть
+                      </ion-button>
+                      <div style="overflow-y: scroll;">
+                       <form action="">
+                        
+
+                          <h2>Название достопримечтаельности</h2>
+                          <ion-input value="{{sightModal.name}}" ></ion-input>
+                          <ion-column>
+                                
+                              <div style="display: flex; justify-content: center;">
+                                  <img class="mainImgBlock" src = "{{this.sightModalArray[0].link}}">
+  
+                              </div>
+    
+                                <ion-list  class="ImglIist">
+                                  <ion-col>
+                                    <ion-col style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px; flex-direction: column;">
+
+                                      <div *ngFor="let file of sightModalArray">
+                                        <img class="imgblock" src="{{file.link}}" (click)="mainImg($event)">
+                                        <button (click) = "deleteImg($event)" style="background-color: blue; color: white; margin-top: -20px; margin-bottom: 20px;" type="button">удалить</button>
+                                      </div>
+                                    
+                                      <div class="VissibilityImg" *ngFor="let img of imagesPreview" >
+                                        <div *ngIf="addNewFile">
+                                          <img class="imgblock" src="{{img.url}}" [attr.data-filename]="img.name" (click)="mainImg($event, img)" style="z-index: 1;">
+                                          <button (click) = "deleteImgNew($event)" style="background-color: blue; color: white; margin-top: -20px; margin-bottom: 20px;" type="button">удалить</button>
+                                        </div>
+                                      </div>
+                                    
+                                    </ion-col>
+                                    
+
+
+
+                                      
+
+                                      <input type="file" (change) = "changeFile($event)" accept="image/*" #file [hidden] = "true">
+                                      <ion-button (click)="file.click()" (click) = "UserAddNewImgs()" style="margin-bottom: 10px;" class="imgblock">Добавить</ion-button>
+                                </ion-col>
+    
+                             
+                            </ion-list>
+                          </ion-column>
+    
+                       </form>
+                       </div>
+                      </ng-template>
+                  
+                    
+                  </ion-modal>
+
                   <ng-container *ngIf="!sights.length && loadSights">
                     <app-no-data/>
                   </ng-container>
@@ -21,10 +85,14 @@
             </ion-col>
           </ng-container>
           
+          
           <ng-container *ngIf="!loadSights">
+            
             <ion-row class="ion-justify-content-center">
+             
               <ion-col size-lg="4" size-md="6" size-xs="12">
                 <ion-card *ngFor="let key of [1,2]" style="border-radius: 0.8rem;">
+                 
                   <ion-skeleton-text [animated]="true" style="height: 25rem;"></ion-skeleton-text>
                   <ion-card-header>
                     <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
@@ -32,6 +100,7 @@
                   </ion-card-header>
                 
                   <ion-card-content>
+                   
                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                     <ion-skeleton-text [animated]="true"></ion-skeleton-text>
@@ -61,4 +130,10 @@
       </ion-col>
     </ion-row>
   </ion-grid>  
+
+
+
+
 </ion-content>
+
+ 

@@ -1,91 +1,125 @@
-.filters{
-    position: relative;
-    z-index: 1;
+.filters {
+  position: relative;
+  z-index: 1;
 }
-app-event-type-carusel{
-	z-index: 4;
+.carusel-wrapper_flex {
+  transform: translateY(-2%);
+}
+app-event-type-carusel {
+  z-index: 4;
 }
 .segments {
-	background-color:#ced4e0;
+  background-color: #ced4e0;
 }
 
-.segment-title{
+.segment-title {
+  color: black;
+
+  ion-icon {
     color: black;
-
-    ion-icon{
-		color: black;
-        padding-right: 5px;
-    }	
+    padding-right: 5px;
+  }
 }
 
-.segment-box{
-	animation: fade-in 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+.segment-box {
+  animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
 
-ion-segment-button{
-	--border-width: 0;
-} 
+.scroll-up {
+  position: fixed;
+  bottom: 4rem;
+  right: 4rem;
+}
 
-.note{
-	color: #9c9ea5;
-	//margin-top: 5px;
+ion-segment-button {
+  --border-width: 0;
+}
+
+.note {
+  color: #9c9ea5;
+  //margin-top: 5px;
 }
 
 @keyframes fade-in {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @media screen and (min-width: 0px) and (max-width: 768px) {
-	.filters{
-		position: fixed;
-		bottom: 5rem;
-		right: 1.5rem;
-		z-index: 999999;
-	}
-	
-	.segments{
-		display: grid;
-    	grid-template-columns: 1fr 1fr;
-		gap: 0.5rem;
-	}
-	.app-event-card {
-		//margin-left: 2%;
-		//margin-right: 2%;
-	}
+  .filters {
+    position: fixed;
+    bottom: 5rem;
+    right: 1.5rem;
+    z-index: 999999;
+  }
+
+  .scroll-up {
+    bottom: 6rem;
+    right: 10px;
+    border-radius: 20px;
+    background-color: white;
+    padding: 0.5rem;
+    box-shadow: 0 0 10px 5px rgba(221, 221, 221, 0.2);
+  }
+  .segments {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .app-event-card {
+    //margin-left: 2%;
+    //margin-right: 2%;
+  }
 }
 
 @media (min-width: 768px) {
-	.filters{
-		// position: fixed;
-		// bottom: 5rem;
-		// right: 1.5rem;
-		// z-index: 9999;
-	}
-	.app-event-card {
-		//margin-left: 30%;
-		//margin-right: 30%;
-	}
+  .filters {
+    // position: fixed;
+    // bottom: 5rem;
+    // right: 1.5rem;
+    // z-index: 9999;
+  }
+  .app-event-card {
+    //margin-left: 30%;
+    //margin-right: 30%;
+  }
 
-	.segments{
-		margin-top: 5px;
-	}
+  .segments {
+    margin-top: 5px;
+  }
 }
 
 @media screen and (min-width: 769px) and (max-width: 1313px) {
-	.segments{
-		margin-top: 60px;
-	}
-	.app-event-card {
-		//margin-left: 35%;
-		//margin-right: 35%;
-	}
+  .segments {
+    margin-top: 60px;
+  }
+  .app-event-card {
+    //margin-left: 35%;
+    //margin-right: 35%;
+  }
 }
 
-.test{
-	background-color: #edeef0;
+.test {
+  background-color: #edeef0;
+}
+
+.events-grid {
+  --ion-grid-columns: 3;
+  padding-top: 8rem;
+}
+
+@media (max-width: 1300px) {
+  .events-grid {
+    --ion-grid-columns: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .events-grid {
+    --ion-grid-columns: 1;
+  }
 }

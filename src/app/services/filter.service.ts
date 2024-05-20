@@ -1,36 +1,72 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { BehaviorSubject } from 'rxjs'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FilterService {
-
-  private nowDate: Date = new Date()
+  private nowDateStart: Date = new Date()
+  private nowDateEnd: Date = new Date(
+    new Date().getTime() + 1000 * 60 * 60 * 24 * 7,
+  )
   // public city: BehaviorSubject<any> = new BehaviorSubject(this.setCityTolocalStorage())
   // public region: BehaviorSubject<any> = new BehaviorSubject(this.setRegionTolocalStorage())
-  public locationId: BehaviorSubject<any> = new BehaviorSubject(this.getLocationFromlocalStorage() || 0)
-  public locationLatitude: BehaviorSubject<string> = new BehaviorSubject(this.getLocationLatitudeFromlocalStorage() || '56.81497464978607')
-  public locationLongitude: BehaviorSubject<string> = new BehaviorSubject(this.getLocationLongitudeFromlocalStorage() || '61.32053375244141')
-  public radius: BehaviorSubject<string> = new BehaviorSubject(this.getRadiusFromlocalStorage() || '1')
+  public locationId: BehaviorSubject<any> = new BehaviorSubject(
+    this.getLocationFromlocalStorage() || '',
+  )
+  public locationLatitude: BehaviorSubject<string> = new BehaviorSubject(
+    this.getLocationLatitudeFromlocalStorage() || '55.7522',
+  )
+  public locationLongitude: BehaviorSubject<string> = new BehaviorSubject(
+    this.getLocationLongitudeFromlocalStorage() || '37.6156',
+  )
+  public radius: BehaviorSubject<string> = new BehaviorSubject(
+    this.getRadiusFromlocalStorage() || '1',
+  )
   // public startDate: BehaviorSubject<string> = new BehaviorSubject(this.getStartDateFromlocalStorage() || '')
   // public endDate: BehaviorSubject<string> = new BehaviorSubject(this.getEndDateFromlocalStorage() || '') // Ставим + неделю
-  public startDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDate.toISOString())
-  public endDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDate.toISOString()) // Ставим + 2 месяцев
+  public startDate: BehaviorSubject<string> = new BehaviorSubject(
+    this.nowDateStart.toISOString(),
+  )
+  public endDate: BehaviorSubject<string> = new BehaviorSubject(
+    this.nowDateEnd.toISOString(),
+  ) // Ставим + 2 месяцев
 
-  public dateFiltersSelected:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
-  
-  public eventTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>(this.getEventTypesFromlocalStorage()?.split(',').map(Number).filter(Boolean) || []) 
-  public sightTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>(this.getSightTypesFromlocalStorage()?.split(',').map(Number).filter(Boolean) || []) 
+  public dateFiltersSelected: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false)
 
-  public countFilters: BehaviorSubject<number> = new BehaviorSubject<number>(parseInt(this.getCountFiltersFromlocalStorage() || '0')) 
-  //public saveFilters: BehaviorSubject<number> = new BehaviorSubject<number>(parseInt(this.getSaveFiltersFromlocalStorage() || '1')) 
-  public changeFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
-  public changeCityFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false) 
+  public eventTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<
+    Array<number>
+  >(
+    this.getEventTypesFromlocalStorage()
+      ?.split(',')
+      .map(Number)
+      .filter(Boolean) || [],
+  )
+  public sightTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<
+    Array<number>
+  >(
+    this.getSightTypesFromlocalStorage()
+      ?.split(',')
+      .map(Number)
+      .filter(Boolean) || [],
+  )
+
+  public countFilters: BehaviorSubject<number> = new BehaviorSubject<number>(
+    parseInt(this.getCountFiltersFromlocalStorage() || '0'),
+  )
+  //public saveFilters: BehaviorSubject<number> = new BehaviorSubject<number>(parseInt(this.getSaveFiltersFromlocalStorage() || '1'))
+  public changeFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false,
+  )
+  public changeCityFilter: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false)
 
   public eventsCount: BehaviorSubject<number> = new BehaviorSubject<number>(0)
   public sightsCount: BehaviorSubject<number> = new BehaviorSubject<number>(0)
-  public favoritesCount: BehaviorSubject<number> = new BehaviorSubject<number>(0)
+  public favoritesCount: BehaviorSubject<number> = new BehaviorSubject<number>(
+    0,
+  )
 
   constructor() {}
 
@@ -61,12 +97,12 @@ export class FilterService {
     return this.sightsCount.value
   }
 
-  setLocationTolocalStorage(locationId: any = this.locationId.value){
+  setLocationTolocalStorage(locationId: any = this.locationId.value) {
     localStorage.setItem('locationId', locationId)
     this.locationId.next(locationId)
   }
 
-  getLocationFromlocalStorage(){
+  getLocationFromlocalStorage() {
     return localStorage.getItem('locationId')
   }
 
@@ -79,34 +115,38 @@ export class FilterService {
   //   return localStorage.getItem('circleCenter')
   // }
 
-  setLocationLatitudeTolocalStorage(locationLatitude:string = this.locationLatitude.value){
+  setLocationLatitudeTolocalStorage(
+    locationLatitude: string = this.locationLatitude.value,
+  ) {
     localStorage.setItem('locationLatitude', locationLatitude)
     this.locationLatitude.next(locationLatitude)
   }
 
-  getLocationLatitudeFromlocalStorage(){
+  getLocationLatitudeFromlocalStorage() {
     return localStorage.getItem('locationLatitude')
   }
 
-  setlocationLongitudeTolocalStorage(locationLongitude:string = this.locationLongitude.value){
+  setLocationLongitudeTolocalStorage(
+    locationLongitude: string = this.locationLongitude.value,
+  ) {
     localStorage.setItem('locationLongitude', locationLongitude)
     this.locationLongitude.next(locationLongitude)
   }
 
-  getLocationLongitudeFromlocalStorage(){
+  getLocationLongitudeFromlocalStorage() {
     return localStorage.getItem('locationLongitude')
   }
 
-  setRadiusTolocalStorage(radius:string = this.radius.value){
-    localStorage.setItem('radius',radius)
+  setRadiusTolocalStorage(radius: string = this.radius.value) {
+    localStorage.setItem('radius', radius)
     this.radius.next(radius)
   }
 
-  getRadiusFromlocalStorage(){
+  getRadiusFromlocalStorage() {
     return localStorage.getItem('radius')
   }
 
-  setStartDateTolocalStorage(startDate:string = this.startDate.value){
+  setStartDateTolocalStorage(startDate: string = this.startDate.value) {
     //localStorage.setItem('startDateFilter',startDate)
     this.startDate.next(startDate)
   }
@@ -115,7 +155,7 @@ export class FilterService {
   //   return localStorage.getItem('startDateFilter')
   // }
 
-  setEndDateTolocalStorage(endDate:string = this.endDate.value){
+  setEndDateTolocalStorage(endDate: string = this.endDate.value) {
     //localStorage.setItem('endDateFilter',endDate)
     this.endDate.next(endDate)
   }
@@ -124,30 +164,32 @@ export class FilterService {
   //   return localStorage.getItem('endDateFilter')
   // }
 
-  setEventTypesTolocalStorage(eventTypes:number[] = this.eventTypes.value){
-    localStorage.setItem('eventTypesFilter',eventTypes.toString())
+  setEventTypesTolocalStorage(eventTypes: number[] = this.eventTypes.value) {
+    localStorage.setItem('eventTypesFilter', eventTypes.toString())
     this.eventTypes.next(eventTypes)
   }
 
-  getEventTypesFromlocalStorage(){
+  getEventTypesFromlocalStorage() {
     return localStorage.getItem('eventTypesFilter')
   }
 
-  setSightTypesTolocalStorage(sightTypes:number[] = this.sightTypes.value){
-    localStorage.setItem('sightTypesFIlter',sightTypes.toString())
+  setSightTypesTolocalStorage(sightTypes: number[] = this.sightTypes.value) {
+    localStorage.setItem('sightTypesFIlter', sightTypes.toString())
     this.sightTypes.next(sightTypes)
   }
 
-  getSightTypesFromlocalStorage(){
+  getSightTypesFromlocalStorage() {
     return localStorage.getItem('sightTypesFIlter')
   }
 
-  setCountFiltersTolocalStorage(countFilters:number = this.countFilters.value){
-    localStorage.setItem('countFilters',countFilters.toString())
+  setCountFiltersTolocalStorage(
+    countFilters: number = this.countFilters.value,
+  ) {
+    localStorage.setItem('countFilters', countFilters.toString())
     this.countFilters.next(countFilters)
   }
 
-  getCountFiltersFromlocalStorage(){
+  getCountFiltersFromlocalStorage() {
     return localStorage.getItem('countFilters')
   }
 

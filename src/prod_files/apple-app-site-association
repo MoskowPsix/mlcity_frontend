@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+    {
+      "appID": "L3GYA8KNK5.mlcity.ru",
+      "paths": ["*"]
+    }
+    ]
+  },
+  "webcredentials": {
+          "apps": [ "L3GYA8KNK5.mlcity.ru" ]
+  }
+}

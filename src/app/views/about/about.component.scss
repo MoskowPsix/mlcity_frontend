@@ -1,272 +1,101 @@
-@media screen and (min-width: 0px) and (max-width: 768px) {
-	.about-container {
-        width: 100%;
-        display: flex;
-        overflow: auto;
-        min-height: 100vh;
-        align-items: center;
-        padding-left: 2%;
-        padding-right: 2%;
-        margin-top: 5%;
-        margin-bottom: 15%;
-        flex-direction: column;
-      }
+.list-item {
+  --display: flex;
+  --justify-content: space-between;
 }
 
-@media (min-width: 768px) {
-	.about-container {
-        width: 100%;
-        display: flex;
-        overflow: auto;
-        min-height: 100vh;
-        align-items: center;
-        padding-left: 10%;
-        padding-right: 10%;
-        margin-top: 2%;
-        margin-bottom: 1%;
-        flex-direction: column;
-      }
+.about-container-mobail {
+  display: none;
 }
-@media screen and (min-width: 769px) and (max-width: 1339px) {
-	.about-container {
-        width: 100%;
-        display: flex;
-        overflow: auto;
-        min-height: 100vh;
-        align-items: center;
-        padding-left: 5%;
-        padding-right: 5%;
-        margin-top: 13%;
-        margin-bottom: 1%;
-        flex-direction: column;
-      }
+
+ion-item {
 }
-  .about-contenet {
-    flex: 1;
-    width: 90%;
-    height: 100%;
+
+.main-title {
+  font-size: 4rem;
+  font-family: 'Montserrat-Bold';
+}
+
+.about-container {
+  padding-left: 3.5rem;
+  padding-right: 3.5rem;
+  .mainList {
+    .main-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6rem;
+      .main-list-item-description {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+        max-width: 50%;
+      }
+    }
+
+    .description {
+      font-family: 'Montserrat-Regular';
+    }
+
+    .imageDescription {
+      margin-left: 2rem;
+      margin-right: 2rem;
+      border-color: #fff;
+      border-radius: 48.4px;
+      width: 22rem;
+      height: 18rem;
+      min-width: 254px;
+      -webkit-box-shadow: 0px 5.5px 11px 2.2px rgba(34, 60, 80, 0.2);
+      -moz-box-shadow: 0px 5.5px 11px 2.2px rgba(34, 60, 80, 0.2);
+      --box-shadow: 0px 5.5px 11px 2.2px rgba(34, 60, 80, 0.2);
+      background-position: center;
+      background-size: 347px 300px;
+    }
+  }
+}
+@media screen and (min-width: 0px) and (max-width: 1121px) {
+}
+
+@media screen and (min-width: 0px) and (max-width: 992px) {
+  .main-list-item {
     display: flex;
-    align-self: center;
-    align-items: flex-start;
     flex-direction: column;
+    align-items: center;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    padding: 1rem;
   }
-  .about-header {
-    flex: 0,5;
-    width: 100%;
-    height: auto;
-    display: flex;
-    position: relative;
-    align-items: flex-start;
-    justify-content: center;
+  .mainHeading {
   }
-  .about-loco {
-    width: 50px;
-    align-self: center;
-    object-fit: cover;
+  .main-title {
+    font-size: calc(36px + (28 + 28 * 0.7) * ((100vw - 320px) / 1406));
   }
-  .about-logo {
-    font-size: 21px;
-    align-self: center;
-    font-family: Arial;
-    font-weight: 700;
+
+  .about-container {
+    display: none;
   }
-  .about-text1 {
-    font-size: 21px;
-    font-family: Arial;
+  .about-container-mobail {
+    display: block;
   }
-  .about-description {
-    flex: 1;
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: center;
+
+  .description {
+    font-family: 'Montserrat-Regular';
+    font-size: calc(14px + (14 + 14 * 0.7) * ((100vw - 320px) / 1406));
+    margin-bottom: 2rem;
   }
-  .about-logo-description {
-    font-size: 21px;
-    align-self: flex-start;
-    margin-top: 2.5%;
-    font-family: Arial;
-    font-weight: 700;
-    margin-bottom: 2.5%;
+
+  .imageDescription_mobile {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    border-color: #fff;
+    border-radius: 48.4px;
+    width: 22rem;
+    height: 18rem;
+    min-width: 254px;
+    -webkit-box-shadow: 0px 5.5px 11px 2.2px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 5.5px 11px 2.2px rgba(34, 60, 80, 0.2);
+    --box-shadow: 0px 5.5px 11px 2.2px rgba(34, 60, 80, 0.2);
+    background-position: center;
+    background-size: 347px 300px;
   }
-  .about-description1 {
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-  }
-  .about-porpose {
-    flex: 1;
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .about-logo-porpose {
-    font-size: 21px;
-    align-self: flex-start;
-    margin-top: 2.5%;
-    font-family: Arial;
-    font-weight: 700;
-    margin-bottom: 2.5%;
-  }
-  .about-porpose-1 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  .about-porpose-2 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  .about-porpose-3 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  .about-simplicity {
-    flex: 1;
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .about-logo-simpl {
-    font-size: 21px;
-    align-self: flex-start;
-    margin-top: 2.5%;
-    font-family: Arial;
-    font-weight: 700;
-    margin-bottom: 2.5%;
-  }
-  .about-simpl-1 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  .about-simpl-2 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  .about-simpl-3 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  .about-simpl-4 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  .about-availability {
-    flex: 1;
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .about-logo-avail {
-    font-size: 21px;
-    align-self: flex-start;
-    margin-top: 2.5%;
-    font-family: Arial;
-    font-weight: 700;
-    margin-bottom: 2.5%;
-  }
-  .about-avail-1 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  .about-avail-2 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  .about-authrnticity {
-    flex: 2;
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .about-logo-auth {
-    font-size: 21px;
-    align-self: flex-start;
-    margin-top: 2.5%;
-    font-family: Arial;
-    font-weight: 700;
-    margin-bottom: 2.5%;
-  }
-  .about-auth-1 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  .about-auth-2 {
-    margin-top: 1%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-    margin-bottom: 1%;
-  }
-  @media(max-width: 479px) {
-    .about-description1 {
-      text-align: left;
-      font-family: Arial;
-    }
-    .about-porpose-1 {
-      font-family: Arial;
-    }
-    .about-porpose-2 {
-      font-family: Arial;
-    }
-    .about-porpose-3 {
-      font-family: Arial;
-    }
-    .about-simpl-1 {
-      font-family: Arial;
-    }
-    .about-simpl-2 {
-      font-family: Arial;
-    }
-    .about-simpl-3 {
-      font-family: Arial;
-    }
-    .about-simpl-4 {
-      font-family: Arial;
-    }
-    .about-logo-avail {
-      font-size: 21px;
-      font-family: Arial;
-      font-weight: 700;
-    }
-    .about-avail-1 {
-      font-family: Arial;
-    }
-    .about-avail-2 {
-      font-family: Arial;
-    }
-    .about-auth-1 {
-      font-family: Arial;
-    }
-    .about-auth-2 {
-      font-family: Arial;
-    }
-  }
+}

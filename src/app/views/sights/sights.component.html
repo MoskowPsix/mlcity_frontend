@@ -1,4 +1,14 @@
-<ion-content> 
+
+<div style="padding-top: var(--ion-safe-area-top,0); z-index: 1000;"></div>
+<ion-content id="topSi">
+  <div id="header-anchor"></div>
+  <div class="carusel-wrapper_flex" #headerWrapper>
+    <div >
+      <ng-container>
+        <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" [type_id]="sightTypeId"></app-sight-type-carusel>
+      </ng-container>
+    </div>
+  </div>
   <ion-grid class="mb-6-5rem">
 
     <!-- <ion-row class="ion-justify-content-center">
@@ -17,15 +27,14 @@
               Места
             </ion-label>
             <span class="note">рядом с вами</span>
-          </ion-segment-button> 
+          </ion-segment-button>
         </ion-segment>
       </ion-col>
     </ion-row> -->
-    <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" [type_id]="sightTypeId"></app-sight-type-carusel>
 
 
-    
-      <ion-row class="ion-justify-content-center">
+
+      <ion-row class="ion-justify-content-center" style="margin-top: 4rem;">
         <ion-col size-lg="10" size-md="12" size-xs="12">
           <!-- <div [hidden]="segment !== 'sightsCitySegment'" class="segment-box"> -->
           <div class="segment-box"  #ContentCol>
@@ -38,7 +47,7 @@
                       <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
                       <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text></ion-card-subtitle>
                     </ion-card-header>
-                  
+
                     <ion-card-content>
                       <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                       <ion-skeleton-text [animated]="true"></ion-skeleton-text>
@@ -46,29 +55,28 @@
                       <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                       <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
                     </ion-card-content>
-                  </ion-card>      
+                  </ion-card>
                 </ion-col>
               </ion-row>
             </ng-container>
-    
+
             <ng-container *ngIf="loadingSightsCity">
               <ion-row class="ion-justify-content-start">
-                <ion-col size-xl="4" size-lg="4" size-md="4">
-                  <div class="ion-align-item-center">
-                    <!-- <app-filters-not-button></app-filters-not-button> -->
-                  </div>
-                </ion-col> 
-                <ion-col size-xl="4" size-lg="6" size-md="6" size-xs="12">
+
+                <ion-grid  #cardContainer  class="events-grid ion-align-content-start">
                   <div #widgetsContent>
-                    <app-event-card #cardContainer *ngFor="let sight of sightsCity; let i = index" [isSight]="true" [event]="sight"></app-event-card>
                   </div>
-                  <ng-container *ngIf="!sightsCity.length && loadingSightsCity">
-                    <app-no-data/>
-                  </ng-container>
-                </ion-col>
+                  <ion-row>
+                    <ion-col size="1" *ngFor="let sight of sightsCity; let i = index">
+                    <app-event-card [isSight]="true" [event]="sight" id="{{sight.id}}"></app-event-card>
+                  </ion-col>
+                </ion-row>
+
+
+                </ion-grid>
               </ion-row>
             </ng-container>
-            
+
             <ng-container *ngIf="!loadingMoreSightsCity">
               <div *ngIf="nextPage" class="ion-margin-horizontal">
                 <ion-button expand="block" (click)="sightsCityLoadingMore()" [disabled]="loadingMoreSightsCity">
@@ -77,14 +85,14 @@
                 </ion-button>
               </div>
             </ng-container>
-    
+
             <ng-container *ngIf="loadingMoreSightsCity">
               <ion-row class="ion-justify-content-center">
                 <ion-spinner class="ion-margin-vertical"></ion-spinner>
               </ion-row>
             </ng-container>
           </div>
-  
+
           <!-- <div [hidden]="segment !== 'sightsGeolocationSegment'" class="segment-box">
             <ng-container *ngIf="!loadingSightsGeolocation">
               <ion-row class="ion-justify-content-center">
@@ -95,7 +103,7 @@
                       <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
                       <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text></ion-card-subtitle>
                     </ion-card-header>
-                  
+
                     <ion-card-content>
                       <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                       <ion-skeleton-text [animated]="true"></ion-skeleton-text>
@@ -103,18 +111,18 @@
                       <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                       <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
                     </ion-card-content>
-                  </ion-card>      
+                  </ion-card>
                 </ion-col>
               </ion-row>
             </ng-container>
-    
+
             <ng-container *ngIf="loadingSightsGeolocation">
               <ion-row class="ion-justify-content-start">
                   <ion-col size-xl="4" size-lg="4" size-md="4">
                     <div class="ion-align-item-center">
                       <app-filters-not-button></app-filters-not-button>
                     </div>
-                  </ion-col> 
+                  </ion-col>
                 <ion-col size-xl="4" size-lg="6" size-md="6" size-xs="12">
                   <div *ngFor="let sight of sightsGeolocation; let i = index" class="app-event-card"><app-event-card [isSight]="true" [event]="sight"></app-event-card></div>
                   <ng-container *ngIf="!sightsGeolocation.length && loadingSightsGeolocation">
@@ -123,7 +131,7 @@
                 </ion-col>
               </ion-row>
             </ng-container>
-            
+
             <ng-container *ngIf="!loadingMoreSightsGeolocation">
               <div *ngIf="currentPageSightsGeolocation !== totalPagesSightsGeolocation" class="ion-margin-horizontal">
                 <ion-button expand="block" (click)="sightsGeolocationLoadingMore()" [disabled]="loadingMoreSightsGeolocation">
@@ -132,16 +140,21 @@
                 </ion-button>
               </div>
             </ng-container>
-    
+
             <ng-container *ngIf="loadingMoreSightsGeolocation">
               <ion-row class="ion-justify-content-center">
                 <ion-spinner class="ion-margin-vertical"></ion-spinner>
               </ion-row>
             </ng-container>
           </div> -->
-      
+
         </ion-col>
       </ion-row>
-    </ion-grid>  
+    </ion-grid>
+    <ng-container *ngIf="!sightsCity.length && loadingSightsCity">
+      <app-no-data/>
+    </ng-container>
+    <a routerLink="." fragment="header-anchor" class="scroll-up" [hidden]="scrollUpState" (click)="scrollUp()">
+      <ion-icon size="large" name="chevron-up"></ion-icon>
+    </a>
   </ion-content>
-  

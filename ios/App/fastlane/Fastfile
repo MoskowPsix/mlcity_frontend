@@ -1,0 +1,83 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new release build to the App Store"
+  lane :release do
+    increment_build_number(xcodeproj: "App.xcodeproj")
+    build_app(workspace: "App.xcworkspace", scheme: "App")
+    upload_to_app_store
+  end
+  desc "Push a new release build to the App Store"
+  lane :testflight do
+    git_url = ENV['GIT_URL']
+    git_branch = ENV['GIT_BRANCH']
+    git_username = ENV['GIT_USERNAME']
+
+    key_filepath = "private_keys/AuthKey_" + ENV['FASTLANE_KEI_ID'] + ".p8"
+    key_id = ENV['FASTLANE_KEI_ID']
+    issuer_id = ENV['FASTLANE_ISSUER_ID']
+
+    app_identifier = ENV['IOS_APP_IDENTIFIER']
+    apple_id = ENV['IOS_APPLE_ID']
+    team_id = ENV['IOS_TEAM_ID']
+    itc_team_id = ENV['IOS_ITC_TEAM_ID']
+
+    api_key_sync = app_store_connect_api_key(
+      key_id: key_id,
+      issuer_id: issuer_id,
+      key_filepath: key_filepath
+    )
+    sync_code_signing(
+      git_private_key: "git_key",
+      git_url: "https://github.com/MoskowPsix/mlcity_frontend.git",
+      git_branch: git_branch,
+      username: git_username,
+      type: "appstore",
+      api_key: api_key_sync,
+      readonly: true
+    )
+    # update_code_signing_settings(
+    #   use_automatic_signing: false,
+    #   bundle_identifier: "mlcity.ru"
+    # )
+    build_app(
+      workspace: "App.xcworkspace", 
+      scheme: "App",
+      output_directory: "~/",
+      output_name: "App.ipa",
+      export_method: "app-store",
+      clean: true,
+      configuration: 'Release',
+      # xcodebuild_command: "",
+      )
+    # api_key_upload = app_store_connect_api_key(
+    #   key_id: key_id,
+    #   issuer_id: issuer_id,
+    #   key_filepath: key_filepath
+    # )
+    # pilot(
+    #   api_key: api_key_upload,
+    #   app_identifier: app_identifier,
+    #   apple_id: apple_id,
+    #   team_id: team_id,
+    #   ipa: '~/App.ipa',
+    #   app_platform: 'ios',
+    #   skip_waiting_for_build_processing: true
+    # )
+  end
+end

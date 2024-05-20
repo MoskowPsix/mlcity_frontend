@@ -1,83 +1,82 @@
 ion-card {
-    border-radius: 0.8rem;
-    border: 0.5px solid #c6c6c7;    
+  border-radius: 0.8rem;
+  border: 0.5px solid #c6c6c7;
 }
-.filters-modal{
-	--padding-top: 15px !important;
-	--padding-bottom: 15px !important;
-}
-
-.segment-title{
-    //color: black;
-
-    ion-icon{
-        padding-right: 5px;
-    }
+.filters-modal {
+  --padding-top: 15px !important;
+  --padding-bottom: 15px !important;
 }
 
-.segment-calendar{
-    animation: fade-in 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+.segment-title {
+  //color: black;
+
+  ion-icon {
+    padding-right: 5px;
+  }
 }
 
-ion-title{
-    padding-right: 5rem;
-    text-align: center;
+.segment-calendar {
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
 
-.filter-title{
-    font-weight: bold;
+ion-title {
+  padding-right: 5rem;
+  text-align: center;
 }
 
-.info-filters{
-    display: flex;
-    justify-content: space-between;
-    margin: 0 1.5rem;
-    align-items: center;
+.filter-title {
+  font-weight: bold;
 }
 
-.selected-filters{
-    display: flex;
-    gap: 0.5rem;
+.info-filters {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 1.5rem;
+  align-items: center;
 }
 
-.save-filters{
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 1rem;
-    color: #9c9eaa;
-    font-style: italic;
+.selected-filters {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.save-filters {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  color: #9c9eaa;
+  font-style: italic;
 }
 
 ion-datetime {
-    --background: #f4f5f8;
-    border-radius: 10px;
-    box-shadow: rgba(var(--ion-color-rose-rgb), 0.3) 0px 10px 15px -3px;
+  --background: #f4f5f8;
+  border-radius: 10px;
+  box-shadow: rgba(var(--ion-color-rose-rgb), 0.3) 0px 10px 15px -3px;
 }
 
-.mx-5px{
-    margin-left: 5px;
+.mx-5px {
+  margin-left: 5px;
 }
 
-.date-note{
-    color:#9c9ea5;
-    margin-top: 5px;
+.date-note {
+  color: #9c9ea5;
+  margin-top: 5px;
 }
 
-.search-item{
-    cursor: pointer;
+.search-item {
+  cursor: pointer;
 }
 
-.search-item:hover{
-    --background: #f3f4f6;
+.search-item:hover {
+  --background: #f3f4f6;
 }
 
 @keyframes fade-in {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
-  

@@ -1,102 +1,124 @@
 .content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: white;
+  border-radius: 12px;
+  border: 0.5px solid #c6c6c7;
+  height: 3rem;
+
+  ion-icon {
+    height: 1rem;
+    width: 1rem;
+  }
+  .ico_left {
+    flex: 0.5;
+    height: 2.5rem;
+    margin-right: 0px;
+    margin-top: auto;
+    margin-bottom: auto;
+    position: relative;
+    color: rgba(92, 90, 90, 0.7);
+  }
+  .container {
+    text-align: center;
+    max-width: 100%;
+    max-height: 44px;
     display: flex;
-    width: 100%;
-    background-color: white;
-    border-radius:12px;
-    border: 0.5px solid #c6c6c7;
-    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: row;
+    overflow-y: hidden;
+    overflow-x: overlay;
+    position: relative;
+    white-space: nowrap;
 
-    ion-icon{
-        height: 1rem;
-        width: 1rem;
+    .item:hover {
+      background-color: rgba(143, 183, 240, 0.5);
     }
-    .ico_left {
-        flex: 0.5;
-        height: 2.5rem;
-        margin-right: 0px;
-        margin-top: auto;
-        margin-bottom: auto;
-        position: relative;
+    .item {
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 4vh;
+      padding-left: 1vh;
+      padding-right: 1vh;
+      min-width: auto + 2vh;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s;
+      margin-left: 1rem;
+      margin-right: 1rem;
     }
-    .container{
-        display: flex;
-        align-items: center;
-        align-content: center;
-        flex-direction: row;
-        overflow-y: hidden;
-        overflow-x: overlay;
-        flex: 11;
-        position:relative;
-        white-space: nowrap;
+    .item.active {
+      background-color: #4c81f7;
+      text-align: center;
+      color: #ffffff;
+    }
+  }
+  .container::-webkit-scrollbar {
+    display: none;
+  }
 
-        .item:hover {
-            border-radius: 12px;
-            background-color: rgb(74, 146, 247,0.5);
-        }
-        .item {
-            transition:0.2s;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            padding-top: 0.1rem;
-            padding-bottom: 0.1rem;
-        }
-        .item.active{
-            border-radius: 12px;
-            background-color: rgb(74, 146, 247,0.5);
-        }
-    }
-    .container::-webkit-scrollbar {
-        display: none;
-      }
-    
-      .container-webkit-scrollbar-thumb {
-        cursor: pointer;
-        background-color: #ffffff;
-        border-radius: 25px;
-        /*outline: 1px solid slategrey;*/
-    }
-    .ico_right {
-        flex: 0.5;
-        height: 2.5rem;
-        margin-left: 0px;
-        margin-top: auto;
-        margin-bottom: auto;
-        position: relative;
-    }
+  .container-webkit-scrollbar-thumb {
+    cursor: pointer;
+    background-color: #ffffff;
+    border-radius: 25px;
+    /*outline: 1px solid slategrey;*/
+  }
+  .ico_right {
+    color: rgba(92, 90, 90, 0.7);
+    flex: 0.5;
+    height: 2.5rem;
+    margin-left: 0px;
+    margin-top: auto;
+    margin-bottom: auto;
+    position: relative;
+  }
 }
 
-@media screen and (min-width: 0px) and (max-width: 768px) {
-    .content {
-        .ico_right {
-        flex: 0;
-        width: 0px;
-        background: none;
-        margin-left: 86%;
-        }
-
-        .ico_left {
-        width: 0;
-        flex: 0;
-        }
-
-        .container{
-            display: flex;
-            align-items: center;
-            align-content: center;
-            flex-direction: row;
-            overflow-y: hidden;
-            overflow-x: overlay;
-            min-width: 100%;
-            position:relative;
-            white-space: nowrap;
-    
-            .item {
-                margin-left: 4rem;
-            }
-            .item-active{
-                background-color: aquamarine;
-            }
-        }
-        
+@media screen and (min-width: 0px) and (max-width: 1017px) {
+  .content {
+    justify-content: center;
+    .ico_right {
+      display: none;
+      flex: 0;
+      width: 0px;
+      background: none;
+      margin-left: 86%;
     }
+
+    .ico_left {
+      width: 0;
+      flex: 0;
+    }
+
+    .container {
+      justify-content: start;
+      max-width: 80%;
+      display: flex;
+      align-items: center;
+      align-content: center;
+      flex-direction: row;
+      overflow-y: hidden;
+      overflow-x: overlay;
+      position: relative;
+      white-space: nowrap;
+
+      .item {
+        cursor: pointer;
+        transition: 0.2s;
+        margin-left: 1rem;
+        margin-right: 0, 1rem;
+      }
+
+      .item-active {
+        background-color: #7c94c8;
+        text-align: center;
+      }
+    }
+  }
 }

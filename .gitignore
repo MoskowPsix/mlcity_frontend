@@ -8,9 +8,15 @@
 *.tmp.*
 UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
+App.ipa
+App.xcarchive
 
 *.log
 log.txt
+
+ios/App/fastlane/.env
+ios/App/fastlane/git_key
+ios/App/private_keys
 
 
 /.sourcemaps
@@ -67,3 +73,9 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+src/google63613b1f850086ce.html
+src/robots.txt
+src/sitemap.xml
+
+resources/ios/**/*
+resources/android/**/*

@@ -14,6 +14,13 @@
         "icon": "prism",
         "route": "/sights"
     },
+
+    {
+        "title":"Избранное",
+        "icon":"star",
+        "route":"cabinet/favorites"
+    },
+
     {
         "title": "Контакты",
         "icon": "call",
@@ -25,15 +32,13 @@
                 "route": "/contacts/feedback"
             },
             {
-                "title": "Поддержка",
-                "icon": "chatbox-ellipses",
-                "route": "/contacts/support"
-            },
-            {
                 "title": "О проекте",
                 "icon": "information-circle",
                 "route": "/about"
             }
         ]
     }
+
+
+
 ]

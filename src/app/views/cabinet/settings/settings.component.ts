@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
+import { Platform } from '@ionic/angular'
 
 @Component({
   selector: 'app-settings',
@@ -8,18 +8,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit {
-
+  isMobile!: boolean
 
   constructor(
-    private router: Router
-  ) { }
+    private router: Router,
+    private platform: Platform,
+  ) {}
 
-  component: string = "Profile"
-
-  loadComponent(name: string){
-    this.component = name;
+  ngOnInit() {
+    this.isMobile = this.platform.is('mobile')
   }
-
-  ngOnInit() {}
-
 }

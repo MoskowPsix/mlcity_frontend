@@ -3,22 +3,25 @@
     <ion-menu side="start" content-id="main-content">
       <app-sidebar></app-sidebar>
     </ion-menu> -->
-    
-    <div class="ion-page" id="main-content">
-      <ion-header>
-        <ion-toolbar>
+
+    <!-- <div class="ion-page" id="main-content"> -->
+      <div style="padding-top: var(--ion-safe-area-top,0);"></div>
+      <ion-header mode="md">
+        <ion-toolbar class="header">
           <app-header></app-header>
         </ion-toolbar>
       </ion-header>
+      
+          
 
-      <ion-router-outlet></ion-router-outlet>
-    
+        <ion-router-outlet></ion-router-outlet>
+
       <ion-footer>
         <ion-toolbar>
             <app-footer></app-footer>
         </ion-toolbar>
       </ion-footer>
-    
-    </div>
+
+    <!-- </div> -->
   <!-- </ion-split-pane> -->
 </ion-app>

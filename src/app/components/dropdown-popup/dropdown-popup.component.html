@@ -1,5 +1,5 @@
-<ion-button 
-  fill="clear" 
+<ion-button
+  fill="clear"
   color="dark"
   [ngClass]="isLContactsChildLinkActive() ? 'active' : ''"
   [id]="id"
@@ -10,45 +10,69 @@
 </ion-button>
 
 
-<ion-popover trigger="popover-button" [trigger]="id" triggerAction="click" [dismissOnSelect]="true" showBackdrop="false">
+<ion-popover mode="md"  trigger="popover-button" [trigger]="id" triggerAction="click" [dismissOnSelect]="true" showBackdrop="false">
   <ng-template>
     <ion-list lines="none">
-      <div *ngFor="let parent of listItems | keyvalue">   
+      <div *ngFor="let parent of listItems | keyvalue" [hidden]="(parent.value.title === 'Мои мероприятия' || parent.value.title === 'Мои достопримечательности') && platformType === 'ios'">
         <div *ngIf="parent.value.children?.length > 0; else notChil">
-          
+
           <div *ngIf="parent.value.title !== headertitle">
             <ion-item-divider>
               <ion-label>
                 {{ parent.value.title }}
-              </ion-label>
+              </ion-label> 
             </ion-item-divider>
           </div>
-                
-          <ion-item 
-            *ngFor="let child of parent.value.children"
-            [routerLink]="[ child.route ]"
-          >
-            <ion-icon *ngIf="itemIco" [name]="child.icon" slot="start"  color="primary"></ion-icon> 
-            <ion-label>
-              {{ child.title }}
-            </ion-label>
-          </ion-item>
 
-        </div>   
-        
+          <div *ngFor="let child of parent.value.children" >
+                <ion-item
+                *ngIf="child.title === 'Все' else otherPath"
+                lines="none"
+                [href]="backendUrl"
+                [routerLinkActive]="['active']"
+              >
+                <ion-icon name="{{ child.icon }}"  slot="start" color="primary"></ion-icon>
+                <ion-label>{{ child.title }}</ion-label>
+              </ion-item>
+
+              <ng-template #otherPath>
+                <ion-item
+                lines="none"
+                *ngIf="child.title === 'Обратная связь' else otherName"
+                href = "/contacts"
+              >
+                <ion-icon name="{{ child.icon }}"  slot="start" color="primary"></ion-icon>
+                <ion-label>{{ child.title }}</ion-label>
+              </ion-item>
+
+              <ng-template #otherName>
+                <ion-item
+                lines="none"
+                [routerLink]="child.route"
+              >
+                <ion-icon name="{{ child.icon }}"  slot="start" color="primary"></ion-icon>
+                <ion-label>{{ child.title }}</ion-label>
+              </ion-item>
+              </ng-template>
+
+              </ng-template>
+            </div>
+
+        </div>
+
         <ng-template #notChil>
             <ion-item-divider>
               <ion-label>
                 Аккаунт
               </ion-label>
             </ion-item-divider>
-            <ion-item 
+            <ion-item
               *ngIf="parent.value.route === '/logout'; else notLogout"
               (click)="onLogout()"
               class="logout"
             >
-              <ion-icon *ngIf="itemIco" [name]="parent.value.icon" slot="start"  color="primary"></ion-icon> 
-              <ion-label>
+              <ion-icon *ngIf="itemIco" [name]="parent.value.icon" slot="start"  color="primary"></ion-icon>
+              <ion-label >
                 {{ parent.value.title }}
               </ion-label>
             </ion-item>
@@ -59,10 +83,10 @@
                 Другое
               </ion-label>
             </ion-item-divider>
-            <ion-item 
+            <ion-item
               [routerLink]="[ parent.value.route ]"
             >
-              <ion-icon *ngIf="itemIco" [name]="parent.value.icon" slot="start"  color="primary"></ion-icon> 
+              <ion-icon *ngIf="itemIco" [name]="parent.value.icon" slot="start"  color="primary"></ion-icon>
               <ion-label>
                 {{ parent.value.title }}
               </ion-label>
@@ -70,7 +94,7 @@
           </ng-template>
 
         </ng-template>
-      </div>  
+      </div>
     </ion-list>
   </ng-template>
 </ion-popover>

@@ -1,25 +1,22 @@
 <ion-card>
   <!-- ['/sights', event.id] - было лень переделывать поэтому тут event.id подразумевает ид места, так как компонент универсальный и можно передать место -->
   <div class=" ripple-parent rectangle" >
-    <swiper-container 
-      [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]"
+    <swiper-container
+      [routerLink]="isSight ? ['/sights', event.id, slugName] : ['/events', event.id, slugName]"
       #swiper
-      [modules]="swiperModules" 
-      
+      [modules]="swiperModules"
       autoplay-disableOnInteraction="false"
-      [followFinger]="false" 
-      [loop]="true" 
-      [initialSlide]="0" 
-    > 
-
+      [followFinger]="false"
+      [initialSlide]="0"
+    >
+<!-- [loop]="true" -->
       <ng-container *ngIf="event.files; else notFiles">
+
         <ng-container *ngFor="let file of event.files">
           <swiper-slide *ngIf="file.local === 1 && file.file_types[0].name === 'image'">
             <ion-img style="background-image: url('{{host}}:{{port}}{{ file.link }}');"/>
-            <img alt="{{file.name}}" src="{{host}}:{{port}}{{ file.link }}" style="z-index: 10;" />
           </swiper-slide>
           <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
-              <ion-img  style="background-image: url('{{ file.link }}');"/>
               <img alt="{{file.name}}" src="{{ file.link }}" style="z-index: 10;"/>
           </swiper-slide>
           <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
@@ -30,14 +27,14 @@
 
       <ng-template #notFiles>
         <swiper-slide><img alt="default img" src="/svg/no-photo.svg" /></swiper-slide>
-      </ng-template>     
+      </ng-template>
     </swiper-container>
 
     <ng-container *ngIf="swiperTotalSlids && swiperTotalSlids > 1">
       <div class="slids-pagination">
         {{ swiperCurrentSlide }} / {{ swiperTotalSlids }}
       </div>
-    </ng-container>      
+    </ng-container>
 
     <div class="date" *ngIf="event.date_start && event.date_end">
       <span>НАЧАЛО: {{ event.date_start | date:'d MMM в HH:mm' }}</span>
@@ -52,18 +49,28 @@
       <span>Бесплатно</span>
     </div> -->
 
-    <!-- <div *ngIf="event.types && event.types.length" class="type">
+    <div *ngIf="event.types && event.types.length" class="type">
       <img alt="img" src="{{host}}:{{port}}{{ event.types[0].ico }}" />
-    </div> -->
+    </div>
 
-    <ion-card-title>{{ event.name | truncate:[48,'...'] }}</ion-card-title>
     
+
     <ion-card-header [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
+      <ion-text class="last-header card-title">{{ event.name | truncate:[60,'...'] }}</ion-text>
+      <ng-container *ngIf="!isSight">
+        <div *ngIf="minPrice !== 0 && minPrice !== maxPrice" class="price">от {{minPrice}}₽ до {{maxPrice}}₽</div>
+        <div *ngIf="minPrice === 0 && maxPrice === 0" class="price">Вход свободный</div>
+        <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price">Вход {{minPrice}}₽</div>
+      </ng-container>
+   
       <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>
     </ion-card-header>
-    
+
     <ion-card-content lines="none">
-      <app-read-more text="{{ event.description }}"></app-read-more>
+      <div [routerLink]="isSight ? ['/sights', event.id, slugName] : ['/events', event.id, slugName]" class="text-wrapper">
+        <app-read-more text="{{ event.description }}"></app-read-more>
+      </div>
+
     </ion-card-content>
 
     <!-- Ссылки которые пока просто ссылки без превью. -->
@@ -74,35 +81,36 @@
         </ion-card>
       </ng-container>
     </ng-container> -->
-    
-    
+
+
   </div>
-  
+
   <ion-item class="footer" lines="none">
     <ion-row slot="start">
       <ion-chip (click)="toggleLike(event.id)" [color]="like ? 'danger' : ''" >
         <ion-icon *ngIf="!loadingLike" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'danger' : ''" class="ico"></ion-icon>
         <ion-spinner name="crescent" *ngIf="loadingLike" class="load_spinner"></ion-spinner>
-        <ion-label *ngIf="event.liked_users_count !== 0 && event.liked_users_count">{{ event.liked_users_count }}</ion-label>
+        <ion-label *ngIf="event.liked_users_count !== 0 && event.liked_users_count">{{ getCurentNumber(event.liked_users_count) }}</ion-label>
       </ion-chip>
       <ion-chip (click)="toggleComment()">
-        <ion-icon name="chatbox-outline" class="ico"></ion-icon>
-        <ion-label *ngIf="event.comments_count !== 0 && event.comments_count">{{ event.comments_count }}</ion-label>
+        <ion-icon *ngIf="!loadingComment" name="chatbox-outline" class="ico"></ion-icon>
+        <ion-spinner name="crescent" *ngIf="loadingComment" class="load_spinner"></ion-spinner>
+        <ion-label *ngIf="event.comments_count !== 0 && event.comments_count && !loadingComment">{{ event.comments_count }}</ion-label>
       </ion-chip>
       <ion-chip [color]="favorite ? 'warning' : ''" (click)="toggleFavorite(event.id)">
         <ion-icon *ngIf="!loadingFavotire" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''"  class="ico"></ion-icon>
         <ion-spinner name="crescent" *ngIf="loadingFavotire" class="load_spinner"></ion-spinner>
-        <ion-label *ngIf="event.favorites_users_count !== 0 && event.favorites_users_count">{{ event.favorites_users_count }}</ion-label>
+        <ion-label *ngIf="event.favorites_users_count !== 0 && event.favorites_users_count">{{ getCurentNumber(event.favorites_users_count) }}</ion-label>
         <!-- <ion-icon name="share-social-outline" class="ico share"></ion-icon> -->
       </ion-chip>
     </ion-row>
-    <ion-chip [disabled]="true" color="dark" slot="end">
+    <ion-chip *ngIf="event.views_users_count" [disabled]="true" color="dark" slot="end">
       <ion-icon name="eye-outline"></ion-icon>
-      <ion-label>{{event.views_users_count}}</ion-label>
+      <ion-label>{{ getCurentNumber(event.views_users_count) }}</ion-label>
     </ion-chip>
   </ion-item>
   <div class="comment-container" class="comments" *ngIf="comments">
-    <app-comments-list [comments]="comments" [isSight]="isSight" [event_id]="event.id"></app-comments-list>
+    <app-comments-list [comments]="event.comments" [isSight]="isSight" [event_id]="event.id"></app-comments-list>
   </div>
 
 </ion-card>

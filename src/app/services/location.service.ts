@@ -1,32 +1,63 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
-import { environment } from 'src/environments/environment';
-import { Location } from '@angular/common';
+import { environment } from 'src/environments/environment'
+import { Location } from '@angular/common'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LocationService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient,) { }
-
-  getLocationsAll() { //Получаем все города и регионы
-    return this.http.get<Location[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/locations`)
+  getLocationsAll() {
+    //Получаем все города и регионы
+    return this.http.get<Location[]>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/locations`,
+    )
   }
 
-  getLocationsIds(id: number) { //Получаем регио или город по id
-    return this.http.get<Location[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/location/${id}`)
+  //test
+
+  getLocationsIds(id: number) {
+    //Получаем регио или город по id
+    return this.http.get<any>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/location/${id}`,
+    )
   }
 
-  getLocationsName(name: string) { //Получаем по имени город или регион
-    return this.http.get<Location[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/location/name/${name}`)
+  getFavoriteCities() {
+    return this.http.get<any>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/locations/favorities`,
+    )
   }
 
-  getLocationsWithRegion(name: string, parentName: string) { //Получаем по имени город или регион
+  getLocationsName(name: string) {
+    //Получаем по имени город или регион
+    return this.http.get<Location[]>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/location/name/${name}`,
+      { params: { display: true } },
+    )
+  }
+
+  getLocationsWithRegion(name: string, parentName: string) {
+    //Получаем по имени город или регион
     const params = {
       name: name,
-      parentName: parentName
+      parentName: parentName,
     }
-    return this.http.get<Location[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/locationWithRegion`, { params: {...params} } )
+    return this.http.get<Location[]>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/locationWithRegion`,
+      { params: { ...params } },
+    )
+  }
+  getLocationByCoords(coords: number[]) {
+    const params = {
+      latitude: coords[0],
+      longitude: coords[1],
+    }
+    return this.http.get<Location>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/locations/search/coords`,
+      { params: { ...params } },
+    )
   }
 }

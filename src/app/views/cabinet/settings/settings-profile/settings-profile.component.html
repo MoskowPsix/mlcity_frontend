@@ -1,22 +1,22 @@
 <ng-container>
   <div class="form-container">
     <ion-card>
-  
+      <ion-row class="ion-justify-content-center">
     <form class="form" [formGroup]="resetForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
       <ion-col>
         <ion-list>
         <ion-row class="ion-justify-content-center">
           <ion-skeleton-text animated *ngIf="!avatarLoad"></ion-skeleton-text>
-          <img [src]="avatar_url" class="image_avatar" [hidden]="!avatarLoad" *ngIf="!previewPhotoUrl else prevPhoto">
-
+          <ion-avatar class="image_avatar">
+            <img [src]="avatarUrl" [hidden]="!avatarLoad" *ngIf="user.avatar && !previewPhotoUrl else prevPhoto">
+          </ion-avatar>
+          
           <ng-template #prevPhoto>
-            <img [src]="previewPhotoUrl" class="image_avatar">
+            <ion-icon *ngIf="!user.avatar && !previewPhotoUrl" name="person-circle" class="image_avatar"></ion-icon>
+            <img *ngIf="previewPhotoUrl" [src]="previewPhotoUrl" class="image_avatar">
           </ng-template>
 
         </ion-row>
-
-       
-
         <ion-row class="ion-justify-content-center" style="margin-top:1rem;">
           <ion-item lines="none">
             <ion-button  (click)="f.click()" size="default" fill="solid">
@@ -38,10 +38,33 @@
         <ion-row class="ion-justify-content-center" slot="end">
             <ion-button class="form-button" type="submit">Сохранить</ion-button>
         </ion-row>
+        <ion-row class="ion-justify-content-center" slot="end">
+          <ion-button id="open-modal" expand="block" color="danger">Удалить профиль</ion-button>
+        </ion-row>
         </ion-list>
       </ion-col>
         
     </form>
+  </ion-row>
   </ion-card>
   </div>
 </ng-container>
+
+
+<!-- Модальное окно удаления профиля -->
+
+<ion-modal #modal style="--height: auto;" trigger="open-modal" [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title >Удалить свой профиль?</ion-title>
+        <!-- <ion-buttons slot="end">
+          <ion-button (click)="modal.dismiss()">Close</ion-button>
+        </ion-buttons> -->
+      </ion-toolbar>
+    </ion-header>
+      <ion-button (click)="deleteUser(); modal.dismiss()" color="danger" fill="solid">Удалить профиль</ion-button>
+      <ion-button (click)="modal.dismiss()">Отмена</ion-button>
+  </ng-template>
+</ion-modal>
+

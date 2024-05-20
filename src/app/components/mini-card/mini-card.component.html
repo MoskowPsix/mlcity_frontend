@@ -1,0 +1,13 @@
+<div class="mini-card-container">
+  <ion-col class="mini-card">
+      <ion-col [routerLink]="['/events',id]">
+        <img *ngIf="image" [src]="image" class="mini-card-img">
+      </ion-col>
+
+      <ion-col class="mini-card-text-container">
+        <h4 class="mini-card-text-title">{{ title }}</h4>
+          <p class="mini-card-text-description">{{ description }}</p>
+          <p [routerLink]="['/events',id]" class="mini-card-text-readMore">Читать далее...</p>
+      </ion-col>
+  </ion-col>
+</div>

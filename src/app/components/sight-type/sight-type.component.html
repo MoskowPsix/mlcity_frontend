@@ -12,17 +12,18 @@
   </ng-container>
 </ng-container>
 
-<ion-accordion-group *ngIf="typesLoaded && isSight" >
-  <ion-accordion *ngFor="let type of types" toggleIcon="{{type.stypes.length ? 'chevron-down-outline' : 'none'}}">
+<ion-accordion-group *ngIf="typesLoaded && isSight" [multiple]="true" [value]="1">
+  <ion-accordion [open]="true"  *ngFor="let type of types; let i = index"  toggleIcon="{{type.stypes.length ? 'chevron-down-outline' : 'none'}}">
     <ion-item slot="header">
       <!-- Пока нет иконок для типо, они отключены -->
       <!-- <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/> -->
       <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-      <ion-radio *ngIf="!type.stypes.length" slot="end" value="{{ type.id }}"></ion-radio>
+      
+      <ion-checkbox (ionChange) = "test($event)" *ngIf="!type.stypes.length" slot="end" value="{{ type.id }}" [checked]="ckeckTypeCkeckbox(type)"></ion-checkbox>
     </ion-item>
-    <div class="ion-padding" slot="content" *ngIf="type.stypes || type.etypes">
-      <app-sight-type [types]="type.stypes" [isSight]="isSight"></app-sight-type>
-    </div>
+    <div class="ion-padding" slot="content" [hidden]="type.stypes.length < 1 ">
+      <app-sight-type [typesNow]="typesNow" [types]="type.stypes" [isSight]="isSight" (typeOutput)="outType($event)"></app-sight-type>
+    </div> 
   </ion-accordion>
 </ion-accordion-group>
 
@@ -32,10 +33,10 @@
       <!-- Пока нет иконок для типо, они отключены -->
       <!-- <img alt="ava" src="{{host}}:{{port}}{{type.ico}}" width="40px" height="40px"/> -->
       <ion-label class="ion-padding-start">{{ type.name }}</ion-label>
-      <ion-radio *ngIf="!type.etypes.length" slot="end" value="{{ type.id }}"></ion-radio>
+      <ion-checkbox *ngIf="!type.etypes.length" slot="end" value="{{ type.id }}"></ion-checkbox>
     </ion-item>
-    <div class="ion-padding" slot="content" *ngIf="type.stypes || type.etypes">
-      <app-sight-type [types]="type.etypes" [isSight]="isSight"></app-sight-type>
+    <div class="ion-padding" slot="content" [hidden]="type.etypes.length < 1">
+      <app-sight-type [typesNow]="typesNow" [types]="type.etypes" [isSight]="isSight"></app-sight-type>
     </div>
   </ion-accordion>
 </ion-accordion-group>

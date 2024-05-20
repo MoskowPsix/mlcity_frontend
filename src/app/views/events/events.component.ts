@@ -1,16 +1,49 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
-import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime } from 'rxjs';
-import { MessagesErrors } from 'src/app/enums/messages-errors';
-import { IEvent } from 'src/app/models/event';
-import { EventsService } from 'src/app/services/events.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { FilterService } from 'src/app/services/filter.service';
-import { QueryBuilderService } from 'src/app/services/query-builder.service';
-import { NavigationService } from 'src/app/services/navigation.service';
-import { LocationService } from 'src/app/services/location.service';
-import { register } from 'swiper/element';
-import { time } from 'console';
-import { throws } from 'assert';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  HostListener,
+} from '@angular/core'
+import {
+  catchError,
+  delay,
+  EMPTY,
+  map,
+  of,
+  retry,
+  Subject,
+  takeUntil,
+  tap,
+  debounceTime,
+  filter,
+  last,
+} from 'rxjs'
+import { MessagesErrors } from 'src/app/enums/messages-errors'
+import { IEvent } from 'src/app/models/event'
+import { EventsService } from 'src/app/services/events.service'
+import { ToastService } from 'src/app/services/toast.service'
+import { FilterService } from 'src/app/services/filter.service'
+import { QueryBuilderService } from 'src/app/services/query-builder.service'
+import { NavigationService } from 'src/app/services/navigation.service'
+import { LocationService } from 'src/app/services/location.service'
+import { register } from 'swiper/element'
+import { time } from 'console'
+import { throws } from 'assert'
+import { Metrika } from 'ng-yandex-metrika'
+import { NavigationEnd, Router } from '@angular/router'
+import { Location } from '@angular/common'
+import { Title } from '@angular/platform-browser'
+import { Meta } from '@angular/platform-browser'
+import { IonContent } from '@ionic/angular'
+import { ViewportScroller } from '@angular/common'
+import { BehaviorSubject } from 'rxjs'
+import { MapService } from 'src/app/services/map.service'
+import { Capacitor } from '@capacitor/core'
 
 register()
 
@@ -20,23 +53,27 @@ register()
   styleUrls: ['./events.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
+export class EventsComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
 
-  @ViewChild('ContentCol') ContentCol!: ElementRef;
-  
+  @ViewChild('ContentCol') ContentCol!: ElementRef
+  @ViewChild('headerWrapper') headerWrapper!: ElementRef
+
   city: string = ''
-  segment:string = 'eventsCitySegment'
+  segment: string = 'eventsCitySegment'
+  isFirstNavigation: any = new BehaviorSubject<boolean>(true)
 
   date: any
 
-  
   eventsCity: IEvent[] = []
   eventsGeolocation: IEvent[] = []
 
-  @ViewChild('cardContainer') 
+  scrollStart: any
+
+  @ViewChild('cardContainer')
   cardContainer!: ElementRef
-  @ViewChild('widgetsContent') widgetsContent!: ElementRef;
+  @ViewChild('widgetsContent') widgetsContent!: ElementRef
+  @ViewChild('lentEvent') lent!: ElementRef
 
   loadingEventsCity: boolean = false
   loadingEventsGeolocation: boolean = false
@@ -63,6 +100,12 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   eventTypeId: any
   sightTypeId: any
 
+  testScrol: any = 0
+
+  scrollUpState: boolean = true
+
+  platformType: any = Capacitor.getPlatform()
+
   constructor(
     private eventsService: EventsService,
     private toastService: ToastService,
@@ -70,42 +113,84 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
     private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService,
     private locationService: LocationService,
-    private eventService: EventsService
-  ) { }
-  
+    private metrika: Metrika,
+    private router: Router,
+    private location: Location,
+    private titleService: Title,
+    private metaService: Meta,
+    private mapService: MapService,
+  ) {
+    this.filterService.locationId
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.locationService
+          .getLocationsIds(value)
+          .pipe(delay(100), retry(3), takeUntil(this.destroy$))
+          .subscribe((response) => {
+            this.titleService.setTitle(
+              'Мероприятия в городе ' + response.location.name,
+            )
+            this.metaService.updateTag({
+              name: 'description',
+              content: 'Мероприятия вашего города тут',
+            })
+          })
+      })
+  }
+
   setDate(event: any) {
     this.filterService.setStartDateTolocalStorage(event.dateStart)
     this.filterService.setEndDateTolocalStorage(event.dateEnd)
-    this.filterService.changeFilter.next(true)   
+    this.filterService.changeFilter.next(true)
   }
 
-  
- 
-  getEventsCity(){
-    this.loadingMoreEventsCity ? this.loadingEventsCity = true : this.loadingEventsCity = false
+  scrollUp() {
+    document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
-    this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsPublicForCityTab')).pipe(
-      delay(100),
-      retry(3),
-      map((respons:any) => {
-        this.eventsCity.push(...respons.events.data)
-        this.filterService.setEventsCount(respons.events.total)
-        this.queryBuilderService.paginationPublicEventsCityCurrentPage.next(respons.events.next_cursor)
-        respons.events.next_cursor ? this.nextPage = true : this.nextPage = false
-        respons.events.next_cursor ? this.loadTrue = true : this.loadTrue = false
-      }),
-      tap(() => {
-        this.loadingEventsCity = true  
-        this.loadingMoreEventsCity = false
-       
-      }),
-      catchError((err) =>{
-        this.toastService.showToast(MessagesErrors.default, 'danger')
-        this.loadingEventsCity = false
-        return of(EMPTY) 
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe()
+  scrollUpCheckState() {
+    const boundingClientRect =
+      this.ContentCol?.nativeElement.getBoundingClientRect()
+    boundingClientRect
+      ? (this.scrollUpState = boundingClientRect.y > 0)
+      : (this.scrollUpState = false)
+  }
+
+  getEventsCity() {
+    this.loadingMoreEventsCity
+      ? (this.loadingEventsCity = true)
+      : (this.loadingEventsCity = false)
+
+    this.eventsService
+      .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
+      .pipe(
+        delay(100),
+        retry(3),
+        map((response: any) => {
+          this.eventsCity.push(...response.events.data)
+          this.filterService.setEventsCount(response.events.total)
+          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(
+            response.events.next_cursor,
+          )
+          response.events.next_cursor
+            ? (this.nextPage = true)
+            : (this.nextPage = false)
+          response.events.next_cursor
+            ? (this.loadTrue = true)
+            : (this.loadTrue = false)
+        }),
+        tap(() => {
+          this.loadingEventsCity = true
+          this.loadingMoreEventsCity = false
+        }),
+        catchError((err) => {
+          this.toastService.showToast(MessagesErrors.default, 'danger')
+          this.loadingEventsCity = false
+          return of(EMPTY)
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {})
   }
 
   // getEventsGeolocation(){
@@ -120,19 +205,19 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   //       //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
   //     }),
   //     tap(() => {
-  //       this.loadingEventsGeolocation = true  
+  //       this.loadingEventsGeolocation = true
   //       this.loadingMoreEventsGeolocation = false
   //     }),
   //     catchError((err) =>{
   //       this.toastService.showToast(MessagesErrors.default, 'danger')
   //       this.loadingEventsGeolocation = false
-  //       return of(EMPTY) 
+  //       return of(EMPTY)
   //     }),
   //     takeUntil(this.destroy$)
   //   ).subscribe()
   // }
 
-  eventsCityLoadingMore(){
+  eventsCityLoadingMore() {
     this.loadingMoreEventsCity = true
     this.currentPageEventsCity++
     // this.queryBuilderService.paginationPublicEventsCityCurrentPage.next(this.currentPageEventsCity)
@@ -146,94 +231,72 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   //   this.getEventsGeolocation()
   // }
 
-  onSegmentChanged(event: any){
+  onSegmentChanged(event: any) {
     this.segment = event.detail.value
   }
 
-  ngOnInit() {
-    window.addEventListener('scroll', this.scrollPaginate, true);
-    window.addEventListener('scrollend',this.scrollEvent, true)
-    this.date = {dateStart: this.filterService.startDate.value, dateEnd: this.filterService.endDate.value}
-    //console.log(this.date)
-    this.eventsCity = []
-    this.eventsGeolocation = []
-    this.getEventsCity()
-    // this.getEventsGeolocation()
-
-    //Подписываемся на изменение фильтра 
-    this.filterService.changeFilter.pipe(debounceTime(1000),takeUntil(this.destroy$)).subscribe((value) => {
-      if (value === true){
-        this.eventsCity = []
-        this.eventsGeolocation = []
-        this.getEventsCity()
-        // this.getEventsGeolocation()
-      }
-      this.navigationService.appFirstLoading.next(false)// чтобы удалялся фильтр,
-    })
-
-    //Подписываемся на город
-    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-    //     this.city = response.location.name
-    //   })
-    // })
-    this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
-      this.eventTypeId = value[0]
-    });
-
-    // console.log(this.cardContainer)
-   
-
-  }
   scrollEvent = (): void => {
+    this.scrollUpCheckState()
     let viewElement: boolean = false
 
-    for(let i = 0; i<this.widgetsContent.nativeElement.children.length; i++){
-  
-      const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
+    for (
+      let i = 0;
+      i < this.widgetsContent.nativeElement.children.length;
+      i++
+    ) {
+      const boundingClientRect =
+        this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
 
-      
-
-      if(boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0){
+      if (
+        boundingClientRect.top >
+          (window.innerHeight - (window.innerHeight + window.innerHeight)) /
+            2 &&
+        boundingClientRect.top < window.innerHeight / 2 &&
+        !viewElement &&
+        boundingClientRect.width !== 0 &&
+        boundingClientRect.width !== 0
+      ) {
         this.viewId.push(this.widgetsContent.nativeElement.children[i].id)
-     
 
-        if (this.timeStart==0){
+        if (this.timeStart == 0) {
           this.timeStart = new Date().getTime()
-        } 
+        } else {
+          let time = (new Date().getTime() - this.timeStart) / 1000
 
-        else{
-      
-          let time = (new Date().getTime() - this.timeStart)/1000
-
-          if(time>=3.14){
-            let id = this.viewId[this.viewId.length-2]
-            this.eventsService.addView(id, time).pipe(
-              delay(100),
-              retry(1),
-              catchError((err) =>{
-                return of(EMPTY) 
-              }),
-              takeUntil(this.destroy$)
-            ).subscribe()
+          if (time >= 3.14) {
+            let id = this.viewId[this.viewId.length - 2]
+            this.eventsService
+              .addView(id, time)
+              .pipe(
+                delay(100),
+                retry(1),
+                catchError((err) => {
+                  return of(EMPTY)
+                }),
+                takeUntil(this.destroy$),
+              )
+              .subscribe()
           }
-          
-          this.timeStart = 0
-       
-          this.timerReload()
-        }  
 
-      } 
-      
-      
-    } 
+          this.timeStart = 0
+
+          this.timerReload()
+        }
+      }
+    }
     viewElement = true
   }
 
-  timerReload(){
+  carusel(status: string) {
+    if (status == 'hidden') {
+    } else {
+    }
+  }
+
+  timerReload() {
     this.timeStart = new Date().getTime()
   }
-  eventTypesChange(typeId: any){
+  eventTypesChange(typeId: any) {
     if (typeId !== 'all') {
       this.filterService.setEventTypesTolocalStorage([typeId])
       this.filterService.changeFilter.next(true)
@@ -242,25 +305,94 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
       this.filterService.changeFilter.next(true)
     }
   }
-
+  //скролл
   scrollPaginate = (): void => {
-    const boundingClientRect = this.ContentCol.nativeElement?.getBoundingClientRect();
+    this.scrollUpCheckState()
+    const boundingClientRect =
+      this.ContentCol.nativeElement?.getBoundingClientRect()
+    if (this.testScrol == 0) {
+      this.testScrol = boundingClientRect.y
+      this.headerWrapper.nativeElement.style.transform = 'translateY(-2%)'
+    }
+    if (boundingClientRect.y > this.testScrol) {
+      this.headerWrapper.nativeElement.style.transform = 'translateY(-2%)'
+    }
+    if (boundingClientRect.y < this.testScrol) {
+      this.headerWrapper.nativeElement.style.transform = 'translateY(-150%)'
+    } else {
+    }
+
+    this.testScrol = boundingClientRect.y
+
     // console.log(this.ContentCol.nativeElement.getBoundingClientRect().bottom, window.innerHeight)
-    if ((boundingClientRect.bottom <= (window.innerHeight * 2)) && !(boundingClientRect.bottom <= window.innerHeight) && this.eventsCity && this.loadTrue) {
+    if (
+      boundingClientRect.bottom <= window.innerHeight * 2 &&
+      !(boundingClientRect.bottom <= window.innerHeight) &&
+      this.eventsCity &&
+      this.loadTrue
+    ) {
       this.loadTrue = false
       this.eventsCityLoadingMore()
     }
   }
 
-  ngOnDestroy(){
+  ngAfterViewInit() {
+    this.scrollStart = this.ContentCol.nativeElement?.getBoundingClientRect()
+    console.log(this.scrollStart)
+  }
+  ngOnInit() {
+    this.router.events
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value: any) => {
+        if (value.url === '/event') {
+          // this.filterService.changeFilter.next(true)
+        }
+      })
+    window.addEventListener('scroll', this.scrollPaginate, true)
+    // window.addEventListener("scrollend", this.scrollEvent, true)
+
+    this.date = {
+      dateStart: this.filterService.startDate.value,
+      dateEnd: this.filterService.endDate.value,
+    }
+    //console.log(this.date)
+    this.eventsCity = []
+    this.eventsGeolocation = []
+    // this.getEventsCity()
+    // this.getEventsGeolocation()
+
+    //Подписываемся на изменение фильтра
+    this.filterService.changeFilter
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
+      .subscribe((value) => {
+        if (value === true) {
+          this.eventsCity = []
+          this.eventsGeolocation = []
+          this.getEventsCity()
+          // this.getEventsGeolocation()
+        }
+        this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+      })
+
+    //Подписываемся на город
+    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
+    //     this.city = response.location.name
+    //   })
+    // })
+    this.filterService.eventTypes
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value: any) => {
+        this.eventTypeId = value[0]
+      })
+
+    // console.log(this.cardContainer)
+  }
+
+  ngOnDestroy() {
     // отписываемся от всех подписок
-    this.destroy$.next();
-    this.destroy$.complete();
-    
+    this.destroy$.next()
+    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
+    this.destroy$.complete()
   }
-
-  ngAfterViewInit(): void {
-    
-  }
-
 }

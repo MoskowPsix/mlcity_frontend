@@ -1,44 +1,68 @@
-.footer-mobile{
+.footer-mobile {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+
+  .user-avatar {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .svg-icon {
+    filter: invert(65%) sepia(11%) saturate(10%) hue-rotate(15deg)
+      brightness(93%) contrast(82%);
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+
+  .item {
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    width: 5rem;
+    color: #999;
+    font-weight: bold;
+    cursor: pointer;
 
-    .item{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 5px;
-        width: 5rem;
-        color: #999;
-        font-weight: bold;
-        cursor: pointer;
-
-        .icon{
-            font-size: 1.5rem;
-        }
-        
-        .title{
-            font-size: 0.7rem;
-            margin-top: 0.25rem;
-        }
+    .icon {
+      font-size: 1.5rem;
     }
+
+    .title {
+      font-size: 0.7rem;
+      margin-top: 0.25rem;
+    }
+    .user-name {
+      max-width: 55px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
-.item-active{
-    background-color: #3b82f6;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+.item-active {
+  background-color: #3b82f6;
+  border-radius: 10px;
+  box-shadow:
+    rgba(0, 0, 0, 0.12) 0px 1px 3px,
+    rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
-.active{
-    // color:#3b82f6;
-    color:#fff;
+.active {
+  // color:#3b82f6;
+  color: #fff;
 }
 
-// @media screen and (min-width: 0px) and (max-width: 768px) {
-//     .footer-mobile{ display: flex; }  /* show it on small screens */
-//   }
-  
-//   @media (min-width: 768px)  {
-//    .footer-mobile{ display: none; }   /* hide it elsewhere */
-//   }
+@media screen and (min-width: 0px) and (max-width: 1060px) {
+  .footer-mobile {
+    display: flex;
+  } /* show it on small screens */
+}
+
+@media (min-width: 1060px) {
+  .footer-mobile {
+    display: none;
+  } /* hide it elsewhere */
+}

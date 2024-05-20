@@ -1,0 +1,8 @@
+app_identifier("mlcity.ru") # The bundle identifier of your app
+apple_id("ixbit1@gmail.com") # Your Apple Developer Portal username
+
+itc_team_id("126891278") # App Store Connect Team ID
+team_id("L3GYA8KNK5") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

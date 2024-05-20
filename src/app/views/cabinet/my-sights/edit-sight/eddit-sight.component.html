@@ -1,0 +1,163 @@
+
+<ion-segment #ionSegment style="padding: 60px;" value="{{segment}}">
+  <ion-segment-button (click) = "segmentClick($event)" value="1">
+    <ion-label>1</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button style="transition:linear;" (click) = "segmentClick($event)" value="2">
+    <ion-label>2</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button (click) = "segmentClick($event)" value="3">
+    <ion-label>3</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button (click) = "segmentClick($event)" value="4">
+    <ion-label>4</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button (click) = "segmentClick($event)" value="5">
+    <ion-label>5</ion-label>
+  </ion-segment-button>
+  
+ 
+</ion-segment>
+
+
+
+<ion-content style="--display: flex; --flex-direction: row;" >
+  <ion-column class="buttonNavigationParrent">
+    <ion-button class="buttonNavigation" *ngIf="segment !==1" (click) = "backStage()">Назад</ion-button>
+    <ion-button class="buttonNavigation" disabled="true" *ngIf="segment ===1" (click) = "backStage()">Назад</ion-button>
+  </ion-column> 
+
+  <ion-column>
+
+    
+  <ion-column style="display: flex; justify-content: center; width: 100%;" *ngIf="loadSight">
+   
+
+        <form [formGroup] = "edditForm">
+          <!-- Шаг первый -->
+          <ion-column [hidden] = "segment !== 1">
+
+          
+            <div>
+              <ion-label class="inputLabel">Организатор</ion-label>
+            </div>
+
+            <ion-input style="background: #fff;" class="custom" disabled="true" value="{{sight.sponsor}}"></ion-input>
+
+            <div class="inputLabel">
+              <ion-label class="inputLabel">Название достопримечательности</ion-label>
+            </div>
+      
+            <ion-input class="custom"  style="background: #fff;" formControlName="nameSight"  value="{{sight.name}}"></ion-input>
+            
+            <div class="inputLabel">
+              <ion-label class="inputLabel">Об достопримечательности</ion-label>
+            </div>
+            
+            <ion-textarea class="custom"  style="background: #fff; min-height: 150px;" formControlName = "descriptionSight" value="{{sight.description}}"></ion-textarea>
+          </ion-column>
+          <!-- Шаг второй -->
+          <ion-column style="display: flex;">
+
+            <ion-radio-group formControlName="types">
+
+              <ion-column style="display: flex;" [hidden] = "segment !== 2">
+                <app-sight-type [typesNow]="typesNow"  [types]="types" [isSight]="true" (typeOutput)="getType($event)"></app-sight-type>
+
+                
+                  <div style="margin-left: 20px;">
+                    
+                    <div>
+                      Выбраны категории:
+                    </div>
+                    <ion-column style="flex-direction: column;">
+                      <ion-column *ngFor="let item of typesNow">
+                        <span>{{item.name}}</span>
+                        <ion-button>удалить</ion-button>
+                      </ion-column>
+
+                      <ion-column *ngFor="let item of addetTypesName">
+                        <span>{{item}}</span>
+                        <ion-button>удалить</ion-button>
+                      </ion-column>
+                    </ion-column>
+                  </div>
+               
+
+             
+
+                
+    
+                 
+               
+              </ion-column>
+              
+             
+
+
+            </ion-radio-group>
+         
+
+          </ion-column>
+
+          <!-- Шаг третий -->
+
+          <ion-column  [hidden] = "segment !== 3">
+
+            <app-sight-gallery *ngIf="sightFiles" [files]="sightFiles"></app-sight-gallery>
+           
+          </ion-column>
+          <!-- Шаг четвёртый -->
+
+          <ion-column [hidden] = "segment !== 4">
+            <ion-label>Описание времени работы</ion-label>
+            <ion-input disabled="false" value="{{sight.work_time}}" style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-input>
+
+              <ion-label>Выбрано {{sight.address}}</ion-label>
+              <div class="map">
+                cggfg
+                <ya-map 
+                    (ready)="onMapReady($event)"
+                    [zoom]="15"  
+                    [center]="[place.latitude, place.longitude]"
+                    [state]="{controls: ['zoomControl','fullscreenControl']}"
+                    [options]="{
+                      yandexMapDisablePoiInteractivity: true,
+                      minZoom:1,
+                      maxZoom:18,
+                      suppressMapOpenBlock: true,
+                      suppressObsoleteBrowserNotifier: true
+                    }">
+                </ya-map>
+              </div>
+          </ion-column>
+
+          <!-- Шаг пятый -->
+
+          <ion-column [hidden] = "segment !== 5">
+
+            <ion-label>Шаг 5</ion-label>
+            <ion-input style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-input>
+    
+            <ion-label>Об достопримечательности</ion-label>
+            <ion-textarea style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-textarea>
+          </ion-column>
+
+
+        </form>
+
+
+
+      </ion-column>
+      
+        <ion-column class="buttonNavigationParrent">
+          <ion-button class="buttonNavigation" (click) = "nextStage()">Далее</ion-button>
+        </ion-column>
+  </ion-column>
+
+
+</ion-content>

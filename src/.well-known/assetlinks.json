@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "mlcity.ru",
+      "sha256_cert_fingerprints": [
+        "29:49:50:DF:0E:4C:0F:EF:6D:62:78:D0:9F:CF:01:2B:BA:1F:62:F6:B6:19:BF:17:B0:9F:CC:11:D8:7F:F6:EE",
+        "9C:7B:0C:76:CF:2B:65:E8:48:B4:B9:82:58:05:60:8A:CE:70:7B:D3:75:19:3E:F7:FE:0C:D5:76:5C:02:5D:68"
+      ]
+    }
+  }
+]

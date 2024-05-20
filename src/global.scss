@@ -26,6 +26,39 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+
+
+@font-face {
+	font-family: 'Montserrat-Thin'; 
+	src: url('./assets/fonts/Montserrat-Thin.ttf'); 
+}
+
+@font-face {
+	font-family: 'Montserrat-SemiBold'; 
+	src: url('./assets/fonts/Montserrat-SemiBold.ttf'); 
+}
+@font-face {
+	font-family: 'Montserrat-Bold'; 
+	src: url('./assets/fonts/Montserrat-Bold.ttf'); 
+}
+
+@font-face {
+	font-family: 'Montserrat-Regular'; 
+	src: url('./assets/fonts/Montserrat-Regular.ttf'); 
+}
+
+@font-face {
+	font-family: 'Montserrat-Medium'; 
+	src: url('./assets/fonts/Montserrat-Medium.ttf'); 
+}
+
+@font-face {
+	font-family: 'Montserrat-Light'; 
+	src: url('./assets/fonts/Montserrat-Light.ttf'); 
+}
+
+
+
 // ion-content{
 //     --padding-top: 110px !important;
 //     --padding-bottom: 65px !important;
@@ -48,6 +81,10 @@ body {
 .mb-6-5rem{
     margin-bottom: 6.5rem;
 }
+ion-list {
+    font-family: 'Montserrat-regular';
+    font-size: 1rem;
+}
 
 ion-content {
     // overwrite inline styles
@@ -60,6 +97,12 @@ ion-content {
     }
 }
 
+ion-item-divider{
+    background-color: #fff;
+}
+ion-label{
+    background:none;
+}
 ion-toolbar {
     --padding-bottom: 0px !important;
     .toolbar-container {
@@ -70,9 +113,14 @@ ion-toolbar {
 .alert-radio-label.sc-ion-alert-md {
     white-space: pre-line !important;
  }
- 
+
 .alert-radio-label.sc-ion-alert-ios {
      white-space: pre-line !important;
+}
+
+.marker-ico {
+  margin:auto;
+  transform: rotate(0);
 }
 
 .marker {
@@ -115,8 +163,13 @@ ion-toolbar {
     animation-delay: 1.1s;
 }
 .marker.now > img {
-    transform: rotate(45deg);
-    padding: 7px 0 0 7px;
+  width: 75%;
+  height: 75%;
+  position: absolute;
+  top: 50%;
+  left: 53%;
+  filter: invert(63%) sepia(65%) saturate(6812%) hue-rotate(205deg) brightness(100%) contrast(103%);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .marker.active {
@@ -127,7 +180,13 @@ ion-toolbar {
 }
 
 .marker.active > img {
-    padding: 14px 0 0 10px;
+  width: 75%;
+  height: 75%;
+  position: absolute;
+  top: 50%;
+  left: 53%;
+  filter: invert(63%) sepia(65%) saturate(6812%) hue-rotate(205deg) brightness(100%) contrast(103%);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .marker:after{
@@ -146,10 +205,17 @@ ion-toolbar {
     animation-delay: 1.1s;
 }
 .marker > img {
-    transform: rotate(45deg);
-    padding: 7px 0 0 7px;
+    width: 75%;
+    height: 75%;
+    position: absolute;
+    top: 50%;
+    left: 53%;
+    filter: invert(63%) sepia(65%) saturate(6812%) hue-rotate(205deg) brightness(100%) contrast(103%);
+    transform: translate(-50%, -50%) rotate(45deg);
+    // padding: 7px 0 0 7px;
 }
- 
+
+
 swiper-container {
     --swiper-pagination-bullet-inactive-color: var(--ion-color-step-200, #cccccc);
     --swiper-pagination-color: var(--ion-color-primary, #ffaf38);
@@ -174,10 +240,14 @@ swiper-slide {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 2%;  
+        border-radius: 2%;
     }
 }
 
+.inner-scroll{
+    background-color: red;
+    padding: 0;
+  }
 @keyframes pulsate{
     0% {
         transform: scale(0.1, 0.1);
@@ -193,10 +263,7 @@ swiper-slide {
 }
 
 @media screen and (min-width: 0px) and (max-width: 768px) {
-    ion-content{
-        --padding-top: 3.3em;
-        --padding-bottom: 3.5rem;   
-    }
+   
 
     // ion-content.md{
     //     --padding-top: 6rem;
@@ -213,10 +280,10 @@ swiper-slide {
     ion-label{
         white-space: pre-line !important;
     }
-   
+
 }
-  
-@media screen and (min-width: 768px)  {
+
+@media screen and (min-width: 1060px)  {
     ion-content{
         --padding-top: 4rem;
         --padding-bottom: 1rem;
@@ -232,4 +299,58 @@ swiper-slide {
     //         // --min-width: 80vh;
     //     }
     // }
+}
+
+//Стили для проекта от Weqil
+
+
+//Стиль для стандратного текста
+.simple-text{
+    font-family: 'Montserrat-Light';
+    line-height: 1.5;
+}
+.carusel-wrapper_flex{
+   transition: 0.5s;
+   transform: translateY(-10%);
+   width: 100%;
+   position: fixed;
+   z-index: 10000;
+}
+.carusel-wrapper_flex__type{
+   transition: 0.5s;
+   transform: translateY(-15%);
+   width: 100%;
+   position: fixed;
+   z-index: 10000;
+}
+
+.first-header{
+    font-family:Montserrat-SemiBold;
+    color: #000000;
+    font-size: 48px;
+}
+
+.second-header{
+    font-family:Montserrat-SemiBold;
+    color: #000000;
+    font-size: 36px;
+}
+.last-header{
+    font-family:Montserrat-SemiBold;
+    color: #000000;
+    font-size: 22px;
+}
+.last-header_regular{
+    font-family:Montserrat-Regular;
+    color: #000000;
+    font-size: 24px;
+}
+.last-header_regular_small{
+    font-family:Montserrat-Regular;
+    color: #000000;
+    font-size: 18px;
+}
+.last-header_small{
+    font-family:Montserrat-SemiBold;
+    font-size: 16px;
 }

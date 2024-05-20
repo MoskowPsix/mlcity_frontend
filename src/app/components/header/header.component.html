@@ -1,5 +1,5 @@
-<ion-header class="header-mobile" id="header-m">
-    <ion-toolbar>
+<!-- Мобильное меню -->
+    <!-- <div class="header-mobile"> -->
         <!-- <ion-buttons slot="end">
             <ion-menu-toggle>
                 <ion-button>
@@ -7,63 +7,55 @@
                 </ion-button>
             </ion-menu-toggle>
         </ion-buttons> -->
-        <ion-row>
+        <!-- <ion-row class="header-mobile"> -->
             <!-- <ion-col>
                 <ion-title *ngIf="!showBackButton">
                     <div class="logo">
                         <img src="assets/icons/favicon.png">
                         <span>{{ appName }}</span>
                     </div>
-                </ion-title> 
+                </ion-title>
             </ion-col> -->
-            <ion-col *ngIf="showBackButton" size="auto">
+            <!-- <ion-col *ngIf="showBackButton" size="auto">
                 <ion-icon  name="chevron-back" size="large" color="primary" appBackButton></ion-icon>
-            </ion-col>
+            </ion-col> -->
 
-            <ion-col class="ion-align-self-start">
-                <ion-button fill="clear" size="small" color="dark" (click)="isModalSearchCityesOpen(true)">
-                    <!-- {{ city| truncate:[20,'']}}... -->
-                    <ion-icon name="location" color="primary"></ion-icon>
-                    <ion-label>+{{ radius }}км</ion-label>
-                    <ion-icon slot="end" name="chevron-down"></ion-icon>
-                </ion-button>
-            </ion-col>
 
-            <ion-col class="flex ion-justify-content-end ion-padding-horizontal z-index-9999">
+            <!-- <ion-col class="flex ion-justify-content-end z-index-9999"> -->
                 <!-- <ion-searchbar animated="true" placeholder="Поиск"></ion-searchbar> -->
-                <ion-icon name="search" color="medium" size="large" class="ico" (click)="isModalSearchEventsOpen(true)"></ion-icon>
-            </ion-col>
+                <!-- <ion-icon name="search" color="medium" size="large" class="ico" (click)="isModalSearchEventsOpen(true)"></ion-icon> -->
+            <!-- </ion-col>
         </ion-row>
-    </ion-toolbar>
-</ion-header>
+    </div> -->
+
 
 <!-- Декстопное меню -->
-<ion-row class="header ion-justify-content-end ion-align-items-center ion-margin-horizontal" id="header">
+<div class="header ion-align-items-center" id="header">
     <ion-router-link color="dark" routerLink="/home">
         <ion-col size="auto" class="logo">
             <img  src="assets/icons/favicon.png">
             <span >{{ appName }}</span>
         </ion-col>
     </ion-router-link>
-    
-    <ion-col size="auto" class="ion-padding-horizontal ion-align-self-center">
+
+    <ion-col style="margin-left: 3px;" size="auto" class="cityButton ion-padding-horizontal ion-align-self-center">
         <ion-button fill="clear" size="small" color="dark" (click)="isModalSearchCityesOpen(true)">
             {{ city| truncate:[20,'']}}...
-            <ion-icon name="location" color="primary"></ion-icon>
-            <ion-label>+{{ radius }}км</ion-label>
+            <!-- <ion-icon name="location" color="primary"></ion-icon> -->
+            <!-- <ion-label>+{{ radius }}км</ion-label> -->
             <ion-icon slot="end" name="chevron-down"></ion-icon>
         </ion-button>
     </ion-col>
 
-    <ion-col class="ion-padding-horizontal">
+     <ion-col style="padding-right: 3px;" class="searchParrent ion-padding-horizontal">
         <!-- <ion-searchbar placeholder="Поиск" color="light" (click)="isModalSearchEventsOpen(true)"></ion-searchbar> -->
-        <ion-button fill="outline" expand="block" (click)="isModalSearchEventsOpen(true)"><ion-icon name="search" slot="start"></ion-icon>Поиск</ion-button>
+         <ion-button style="min-width: 80px; display: flex; justify-content: center; "  fill="outline" expand="block" (click)="isModalSearchEventsOpen(true)" class="SearchInput"><ion-icon style="width: 20px; height: 20px; --font-size: 20px;" name="search" slot="start"></ion-icon>поиск</ion-button>
     </ion-col>
 
-    <ion-col size="auto" class="menu ion-align-items-center">
+    <ion-col  size="auto" class="menu ion-align-items-center">
         <div *ngFor="let item of menuPublic">
-            <app-dropdown-popup 
-                *ngIf="item.children?.length > 0;  else itemMenu" 
+            <app-dropdown-popup
+                *ngIf="item.children?.length > 0;  else itemMenu"
                 [id]="'publicMenu'"
                 [headerLeftIco]="true"
                 [headerLeftIcoName]="'call'"
@@ -72,21 +64,23 @@
                 [itemIco]="true"
             >
             </app-dropdown-popup>
-        
+
             <ng-template #itemMenu>
                 <ion-button
-                    fill="clear" 
+                    fill="clear"
                     color="dark"
                     [routerLink]="[item.route]"
                     [routerLinkActive]="['active']"
                 >
-                    <ion-icon name="{{ item.icon }}" slot="start" color="primary"></ion-icon>
+
+                    <img *ngIf="item.icon === 'prism'"  src="/assets/icons/MakiMuseum.svg" slot="start" class="icon">
+                    <ion-icon *ngIf="item.icon !== 'prism'" name="{{ item.icon }}" slot="start" color="primary"></ion-icon>
                     <ion-label slot="start">{{item.title}}</ion-label>
-                    <ion-badge *ngIf="item.title === 'События'" slot="end" >{{ getEventService() }}</ion-badge>
-                    <ion-badge *ngIf="item.title === 'Места'" slot="end" >{{ getSightService() }}</ion-badge>
+                    <!-- <ion-badge *ngIf="item.title === 'События'" slot="end" >{{ getEventService() }}</ion-badge>
+                    <ion-badge *ngIf="item.title === 'Места'" slot="end" >{{ getSightService() }}</ion-badge> -->
                 </ion-button>
-                
-            </ng-template>     
+
+            </ng-template>
         </div>
         <app-menu-auth></app-menu-auth>
     </ion-col>
@@ -94,7 +88,7 @@
     <!-- <ion-col class="auth">
         <app-menu-auth></app-menu-auth>
     </ion-col> -->
-</ion-row>
+</div>
 
 
 <!-- Диалог подтверждения города -->
@@ -119,55 +113,149 @@
 
 
   <!-- Модальное окно для выбора города -->
-<ion-modal [isOpen]="modalSearchCityesOpen" (ionModalDidDismiss)="modalClose()">
+  <!-- мобильная версия -->
+<ion-modal *ngIf="mobile"
+ class="modal-mobile"
+ [isOpen]="modalSearchCityesOpen"
+ (ionModalDidDismiss)="modalClose()"
+ [initialBreakpoint]="1" [breakpoints]="[0, 1]"
+ [backdropDismiss]="true"
+ mode="ios"
+ >
     <ng-template>
         <ion-header>
             <ion-toolbar>
-                <ion-title>Выбор города</ion-title>
+                <ion-title class="city-header">Текущий город: {{ city }}</ion-title>
                 <ion-buttons slot="end">
                     <ion-button (click)="isModalSearchCityesOpen(false)"><ion-icon name="close"></ion-icon></ion-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
-        <ion-note color="primary" class="ion-padding-horizontal ion-padding-top">Текущий город: {{ city }}, {{ region }}</ion-note>
+        <!-- <ion-content> -->
+        <ion-note color="primary" class="ion-padding-horizontal ion-padding-top"></ion-note>
 
-        <div class="ion-padding-bottom" slot="content">
-            <ion-range 
-             [ticks]="true" 
-             [snaps]="true" 
-             [min]="1" 
-             [max]="25" 
-             [pin]="true" 
+        <!-- <div class="ion-padding-bottom" slot="content">
+            <ion-range
+             [ticks]="true"
+             [snaps]="true"
+             [min]="1"
+             [max]="25"
+             [pin]="true"
              [value]="radius"
              [pinFormatter]="pinRadiusFormatter"
              (ionKnobMoveEnd)="radiusChange($event)"
             ></ion-range>
             <ion-label class="ion-padding-horizontal">Радиус поиска: {{ radius }} км.</ion-label>
-        </div>
+        </div> -->
 
         <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchCityes" (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
         <ion-note *ngIf="minLengthCityesListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
-        <ion-content>
             <ng-container *ngIf="cityesListLoading">
                 <ion-list class="ion-padding-end">
-                    <ion-item *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
+                    <ion-item *ngFor="let key of [1,2,3]">
                         <ion-skeleton-text [animated]="true" style="height: 1rem;" />
                     </ion-item>
                 </ion-list>
             </ng-container>
-            <ng-container *ngIf="!cityesListLoading && !cityesList.length">
+            <!-- <ng-container *ngIf="!cityesListLoading && !cityesList.length">
                 <app-no-data />
-            </ng-container>
-            <ion-list>
-              <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)" [hidden]="item.location_parent.name === 'РФ'" class="search-item">
-                <ion-label>
-                    {{ item.name }}<p>{{ item.location_parent.name }}</p>
-                </ion-label>
-              </ion-item>
+            </ng-container> -->
+            <ion-list class="city-list" *ngIf="!cityesListLoading && cityesList.length !== 0">
+                <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)">
+                    <ion-label>
+                        {{ item.name }}<p>{{ item.location_parent.name }}</p>
+                    </ion-label>
+                </ion-item>
             </ion-list>
-          </ion-content>
+
+            <ion-grid class="city-list" *ngIf="!cityesListLoading && cityesList.length === 0">
+              <ion-row>
+                <ion-col class="city-list-col" size="1" *ngFor="let city of favoriteCities" (click)="onSelectedCity(city)">
+                  <div class="city-list-col-info">
+                    <ion-label class="city-list-col-info-label">
+                      {{ city.name }}
+                    </ion-label>
+                  </div>
+
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          <!-- </ion-content> -->
     </ng-template>
 </ion-modal>
+
+<!-- пк версия -->
+<ion-modal *ngIf="!mobile"
+ class="modal-desktop"
+ [isOpen]="modalSearchCityesOpen"
+ (ionModalDidDismiss)="modalClose()"
+ [backdropDismiss]="true"
+mode="ios"
+ >
+    <ng-template>
+        <ion-header>
+            <ion-toolbar>
+                <ion-title class="city-header">Текущий город: {{ city }}</ion-title>
+                <ion-buttons slot="end">
+                    <ion-button (click)="isModalSearchCityesOpen(false)"><ion-icon name="close"></ion-icon></ion-button>
+                </ion-buttons>
+            </ion-toolbar>
+        </ion-header>
+        <!-- <ion-content> -->
+        <ion-note color="primary" class="ion-padding-horizontal ion-padding-top"></ion-note>
+
+        <!-- <div class="ion-padding-bottom" slot="content">
+            <ion-range
+             [ticks]="true"
+             [snaps]="true"
+             [min]="1"
+             [max]="25"
+             [pin]="true"
+             [value]="radius"
+             [pinFormatter]="pinRadiusFormatter"
+             (ionKnobMoveEnd)="radiusChange($event)"
+            ></ion-range>
+            <ion-label class="ion-padding-horizontal">Радиус поиска: {{ radius }} км.</ion-label>
+        </div> -->
+
+        <ion-searchbar animated="true" placeholder="Введите текст..." [formControl]="searchCityes" (ionChange)="getCityes($event)" (ionClear)="onClearSearch()"  debounce="500" #cityesSearchbar></ion-searchbar>
+        <ion-note *ngIf="minLengthCityesListError" color="danger" class="ion-padding-horizontal">минимум 3 символа</ion-note>
+            <ng-container *ngIf="cityesListLoading">
+                <ion-list class="ion-padding-end">
+                    <ion-item *ngFor="let key of [1,2,3]">
+                        <ion-skeleton-text [animated]="true" style="height: 1rem;" />
+                    </ion-item>
+                </ion-list>
+            </ng-container>
+            <!-- <ng-container *ngIf="!cityesListLoading && !cityesList.length">
+                <app-no-data />
+            </ng-container> -->
+            <ion-list class="city-list" *ngIf="!cityesListLoading && cityesList.length !== 0">
+                <ion-item *ngFor="let item of cityesList; let i = index" (click)="onSelectedCity(item)">
+                    <ion-label>
+                        {{ item.name }}<p>{{ item.location_parent.name }}</p>
+                    </ion-label>
+                </ion-item>
+            </ion-list>
+
+            <ion-grid class="city-list" *ngIf="!cityesListLoading && cityesList.length === 0">
+              <ion-row>
+                <ion-col class="city-list-col" size="1" *ngFor="let city of favoriteCities" (click)="onSelectedCity(city)">
+                  <div class="city-list-col-info">
+                    <ion-label>
+                      {{ city.name }}
+                    </ion-label>
+                  </div>
+
+                </ion-col>
+              </ion-row>
+          </ion-grid>
+          <!-- </ion-content> -->
+    </ng-template>
+</ion-modal>
+
+
 
   <!-- Модальное окно для поиска ивентов -->
   <ion-modal [isOpen]="modalSearchEventsOpen" (ionModalDidDismiss)="modalClose()">
@@ -212,12 +300,12 @@
                 <app-no-data />
             </ng-container>
 
-            <ng-container *ngIf="!eventsListLoading  && !sightsListLoading && (eventsList.length || sightsList.length)">             
+            <ng-container *ngIf="!eventsListLoading  && !sightsListLoading && (eventsList.length || sightsList.length)">
                 <ng-container *ngIf="segment === 'events'">
                     <ng-container *ngIf="eventsList.length">
                         <ion-row class="ion-justify-content-start">
                             <ion-col *ngFor="let event of eventsList; let i = index" size-md="6" size-xs="12">
-                              <app-event-card [event]="event"></app-event-card>
+                              <app-event-card [event]="event" [isSight]="false"></app-event-card>
                             </ion-col>
                         </ion-row>
                     </ng-container>
@@ -228,7 +316,11 @@
 
                 <ng-container *ngIf="segment === 'sights'">
                     <ng-container *ngIf="sightsList.length">
-                        достопримечательности
+                        <ion-row class="ion-justify-content-start">
+                            <ion-col *ngFor="let sight of sightsList; let i = index" size-md="6" size-xs="12">
+                              <app-event-card [event]="sight" [isSight]="true"></app-event-card>
+                            </ion-col>
+                        </ion-row>
                     </ng-container>
                     <ng-container *ngIf="!sightsList.length">
                         <app-no-data />
@@ -239,7 +331,7 @@
                 </ng-container> -->
             </ng-container>
 
-            
+
 
           </ion-content>
     </ng-template>

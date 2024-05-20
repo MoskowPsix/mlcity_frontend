@@ -25,250 +25,229 @@
 // --height: 30%;
 // }
 
-// @font-face 
+// @font-face
 //     font-family: 'Montserrat', sans-serif;
 //     src: url(./assets/fonts/Montserrat-Bold.ttf) format('truetype');
 // }
 
-
-ion-item{
-    --border-style: none;
-    --background:none;
+ion-list {
+  background: none;
+}
+ion-input {
+  margin-top: 10px;
+  background-color: #fff;
+  --padding-left: 20px;
 }
 
-ion-list{
-   background:none;
+* {
 }
-ion-input{
-    background-color: #FFF;
-    --padding-left: 20px;
-}
-
-
-
-
 
 .MainBlock {
-background:none;
-border: none;
+  overflow: auto;
+  --min-height: 80vh;
+  background: none;
+  border: none;
 
-    .Login_wrapper{
-        margin-top: 42px;
+  .Login_wrapper {
+    ion-item {
+      --border-style: none;
+      --background: none;
+    }
+    margin-top: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+    margin-bottom: 10rem;
+    .LoginMainBlock {
+      --webkit-appearance: none;
+      background-color: #fff;
+      width: 366px;
+      border: 1px solid #cdcdcd;
+      border-radius: 17px;
+
+      .header-md::after {
+        left: 0;
+        bottom: -5px;
+        background-position: left 0 top -2px;
+        position: absolute;
+        width: 100%;
+        height: 5px;
+        background-image: none;
+        background-repeat: repeat-x;
+        content: '';
+      }
+
+      .LoginMainBlock_header {
+        margin-top: 18px;
+        display: flex;
+        max-height: 99px;
+        justify-content: center;
+
+        .Login_main_link {
+          max-height: 99px;
+        }
+
+        .Login_main_link {
+        }
+
+        .Login_logo {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-width: 85px;
+          min-height: 85px;
+
+          .Login_logo_wrapper {
+            display: flex;
+            img {
+              max-width: 100px;
+              max-height: 100px;
+            }
+
+            .Login_logo_text {
+              text-transform: uppercase;
+              margin-top: 3px;
+
+              font-weight: 800;
+              font-size: 45.4pt;
+              color: #007bbe;
+              margin-top: 10px;
+            }
+          }
+        }
+      }
+
+      .Login_inputs_main {
+        .Login_inputs {
+          border: 1px solid #e0e0e0;
+          border-radius: 3px;
+          width: 320px;
+          background: none;
+
+          .Login_icon {
+            background: none;
+            margin-left: 10px;
+            margin-right: 10px;
+            width: 25px;
+            height: 25px;
+            fill: #007bbe;
+          }
+        }
+
+        ion-item.sc-ion-input-md-h:not(.item-label),
+        ion-item:not(.item-label) .sc-ion-input-md-h {
+          --padding-start: 15px;
+        }
+      }
+
+      .Login_btns_content {
+        .Login_btns {
+          width: 320px;
+          --background: #007bbe;
+        }
+
+        .CreateAcc_btn {
+          --background: #056193;
+        }
+      }
+    }
+
+    .LoginWith_list {
+      display: flex;
+      padding-bottom: 10px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      flex-direction: column;
+
+      .LoginWith_list_text {
+        color: #007bbe;
+      }
+
+      .logo-vk {
+        color: #2787f5;
+      }
+
+      .vk_logo_circle {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 75vh;
+        background-color: #2787f5;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
 
-        .LoginMainBlock{
-            background-color: #FFF;
-            max-width: 366px;
-            border: 1px solid #cdcdcd;
-            border-radius: 17px;
+        .vk_logo_quad {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 8px;
+          width: 30px;
+          height: 30px;
+          background-color: #fff;
 
-
-
-            .header-md::after {
-                left: 0;
-                bottom: -5px;
-                background-position: left 0 top -2px;
-                position: absolute;
-                width: 100%;
-                height: 5px;
-                background-image: none;
-                background-repeat: repeat-x;
-                content: "";
-            }
-
-            .LoginMainBlock_header{
-
-                margin-top: 18px;
-                display:flex;
-                max-height:99px;
-                justify-content: center;
-
-
-               
-
-                .Login_main_link{
-                    max-height:99px;
-                }
-
-            .Login_main_link{}
-
-
-                .Login_logo{
-                    display: flex; 
-                    justify-content: center;
-                    align-items: center;
-                    min-width: 85px;
-                    min-height: 85px;
-
-                    .Login_logo_wrapper{
-                        display: flex;
-                         img{
-                            max-width: 100px;
-                            max-height: 100px;
-                    }
-                    
-                        .Login_logo_text {
-                            text-transform: uppercase;
-                            margin-top: 3px;
-                            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-                            font-weight: 800;
-                            font-size: 45.4pt;
-                            color: #007BBE;
-                            margin-top: 10px;
-                        }
-                    
-
-                    }
-
-                   
-                }
-            }
-
-
-
-            .Login_inputs_main{
-
-                
-                
-                .Login_inputs{
-                    border: 1px solid #E0E0E0;
-                    border-radius: 3px;
-                    width: 320px;
-                    background: none;
-                    
-                    .Login_icon{
-                        position: absolute;
-                        margin-left: 10px;
-                        width: 25px;
-                        height: 25px;
-                        fill: #007BBE;
-
-                    }
-
-                      
-
-
-                    
-                }
-
-                
-
-                
-
-
-                
-                ion-item.sc-ion-input-md-h:not(.item-label), ion-item:not(.item-label) .sc-ion-input-md-h {
-                    --padding-start: 45px;
-                }
-
-
-            }
-
-            .Login_btns_content{
-
-
-                .Login_btns{
-                    width: 320px;
-                   --background:#007BBE;
-
-                }
-
-
-
-                .CreateAcc_btn{
-                    --background:#056193;
-                }
-
-
-            }
-            
+          .logo-vk {
+            width: 22px;
+            height: 22px;
+          }
         }
-        
-
-
-        .LoginWith_list{
-
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            flex-direction: column;
-
-
-            .LoginWith_list_text{
-                color:#007BBE ;
-            }
-
-            .logo-vk{
-                color: #2787F5;
-               
-            }
-    
-    
-    
-            .vk_logo_circle{
-                display:flex;
-                justify-content: center;
-                align-items: center;
-                background-color: #2787F5;
-                width: 56px;
-                height: 56px;
-                border-radius: 50%;
-
-
-                .vk_logo_quad{
-                    display:flex;
-                    justify-content: center;
-                    align-items: center;
-                    border-radius: 8px;
-                    width: 30px;
-                    height: 30px;
-                    background-color: #FFF;
-
-
-                    .logo-vk{
-                        width: 22px;
-                        height: 22px;
-                    }
-
-
-
-                }
-
-            }
-    
-           
-    
-    
-            
-
-
-
-
-        }
-
-
-
-       
+      }
     }
+  }
 
-
-    .InputDontButton{
-     
-    }
-
+  .InputDontButton {
+  }
 }
-
-
 
 ion-modal {
---display:flex;
---border-radius: 17px;
---max-width: 386px;
---height: 630px;
+  --display: flex;
+  --border-radius: 17px;
+  --max-width: 386px;
+  --height: 630px;
 }
 
+.vkPasswordModal {
+  --max-width: 80rem;
+  --height: 480px;
+  ion-item {
+    margin-bottom: 1rem;
+    --padding: 0;
+  }
+
+  .vkPasswordModalMainWrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .vkPasswordModalMain {
+  }
+
+  .vkPasswordModalNote {
+    padding: 12px;
+    color: #222427a3;
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 2vh;
+    border-radius: 6px 6px 0px 6px;
+  }
+}
+.vkPasswordModalHeader {
+}
+
+.apple-logo-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-left: 1rem;
+  .logo-apple-icon {
+    margin: auto;
+    color: black;
+    width: 30px;
+    height: 30px;
+  }
+}

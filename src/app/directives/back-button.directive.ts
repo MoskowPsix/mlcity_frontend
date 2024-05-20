@@ -1,17 +1,14 @@
-
-import { Directive, HostListener } from "@angular/core";
-import { NavigationService } from "../services/navigation.service";
+import { Directive, HostListener } from '@angular/core'
+import { NavigationService } from '../services/navigation.service'
 
 @Directive({
-  selector: '[appBackButton]'
+  selector: '[appBackButton]',
 })
 export class BackButtonDirective {
-
   constructor(private navigation: NavigationService) {}
- 
-  @HostListener("click")
+
+  @HostListener('click')
   onClick(): void {
     this.navigation.back()
   }
-
 }

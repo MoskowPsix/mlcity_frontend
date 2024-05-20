@@ -1,0 +1,47 @@
+
+
+<div style="overflow-y: scroll;">
+ <form action="">
+  
+
+    <h2>Название достопримечтаельности</h2>
+    <ion-column>
+          
+        <div style="display: flex; justify-content: center;">
+            <img class="mainImgBlock" src = "{{this.sightModalArray[0].link}}">
+
+        </div>
+
+          <ion-list  class="ImglIist">
+            <ion-col>
+              <ion-col style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px; flex-direction: column;">
+
+                <div *ngFor="let file of sightModalArray">
+                  <img class="imgblock" src="{{file.link}}" (click)="mainImg($event)">
+                  <button (click) = "deleteImg($event)" style="background-color: blue; color: white; margin-top: -20px; margin-bottom: 20px;" type="button">удалить</button>
+                </div>
+              
+                <div class="VissibilityImg" *ngFor="let img of imagesPreview" >
+                  <div *ngIf="addNewFile">
+                    <img class="imgblock" src="{{img.url}}" [attr.data-filename]="img.name" (click)="mainImg($event, img)" style="z-index: 1;">
+                    <button (click) = "deleteImgNew($event)" style="background-color: blue; color: white; margin-top: -20px; margin-bottom: 20px;" type="button">удалить</button>
+                  </div>
+                </div>
+              
+              </ion-col>
+              
+
+
+
+                
+
+                <input type="file" (change) = "changeFile($event)" accept="image/*" #file [hidden] = "true">
+                <ion-button (click)="file.click()" (click) = "UserAddNewImgs()" style="margin-bottom: 10px;" class="imgblock">Добавить</ion-button>
+          </ion-col>
+
+       
+      </ion-list>
+    </ion-column>
+
+ </form>
+ </div>

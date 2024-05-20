@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { IonicModule } from '@ionic/angular'
 
-import { NotificationsComponent } from './notifications.component';
+import { NotificationsComponent } from './notifications.component'
 
 describe('NotificationsComponent', () => {
-  let component: NotificationsComponent;
-  let fixture: ComponentFixture<NotificationsComponent>;
+  let component: NotificationsComponent
+  let fixture: ComponentFixture<NotificationsComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NotificationsComponent ],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+      declarations: [NotificationsComponent],
+      imports: [IonicModule.forRoot()],
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(NotificationsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    fixture = TestBed.createComponent(NotificationsComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})
