@@ -55,7 +55,7 @@
   display: flex;
   align-items: center;
   position: absolute;
-  width: 100%;
+  width: auto;
   pointer-events: none;
   height: 100%;
 
@@ -269,6 +269,9 @@ ion-accordion-group {
 }
 
 @media screen and (min-width: 0px) and (max-width: 991px) {
+  .event-name-header{
+    padding-left: 0;
+  }
   .map {
     height: 15rem;
   }
@@ -277,9 +280,6 @@ ion-accordion-group {
     padding-left: 0;
     max-width: 100%;
   }
-}
-
-@media screen and (min-width: 0px) and (max-width: 960px) {
   .swiper-container {
     height: 19rem;
   }
@@ -321,6 +321,10 @@ ion-accordion-group {
     }
   }
 }
+
+@media screen and (min-width: 0px) and (max-width: 960px) {
+  
+}
 @media screen and (min-width: 1324px) {
   .ion-justify-content-center {
     max-width: 80%;
@@ -349,7 +353,7 @@ ion-accordion-group {
 
       img {
         border-radius: 6px;
-        max-width: 100%;
+        width: auto;
         height: 100%;
         object-fit: cover;
       }

@@ -422,6 +422,13 @@ ion-padding {
   justify-content: center;
 }
 
+.date-start{
+  margin-top: 4rem;
+}
+.date-end{
+  margin-top: 4rem;
+}
+
 .backToGroupBtn {
   margin-left: 1vh;
   margin-top: -10%;
@@ -431,7 +438,11 @@ ion-padding {
   padding-left: 10%;
   padding-right: 10%;
 }
-
+.time-input-wrapper{
+  max-width: 18rem;
+  margin: auto;
+  display: flex;
+}
 .timeAndDescription {
   display: flex;
   justify-content: center;
@@ -553,6 +564,18 @@ ion-padding {
     color: #4c81f7;
     text-align: center;
   }
+}
+.time-input{
+  height: 2rem;
+  margin-top: auto;
+  margin-bottom: auto;
+  max-width: 6rem;
+  background-color:#EDEEF0;
+  border: none;
+  border-radius: 6px;
+  color: #000000;
+  text-align: center;
+  outline: #a3a3a3;
 }
 
 @media screen and (max-width: 992px) {
