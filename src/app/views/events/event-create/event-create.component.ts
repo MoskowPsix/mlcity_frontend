@@ -104,8 +104,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   user: any
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 3
-  steps: number = 5
+  stepCurrency: number = 5
+  steps: number = 6
   dataValid: boolean = true
   openModalImgs: boolean = false
   openModalPostValue: boolean = false
@@ -998,13 +998,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             }
           },
         )
-
+        
         if (this.createEventForm.disabled || !priceValid) {
           return true
         } else {
           return false
         }
-
+        case 5:
+          return false
       default:
         return true
     }

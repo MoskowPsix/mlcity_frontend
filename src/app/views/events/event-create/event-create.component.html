@@ -51,6 +51,7 @@
           <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">О мероприятие</h3>
           <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Место проведения</h3>
           <h3 [hidden]="stepCurrency !== 4" class="mt-0 mainLabelAndBarText">Цена и билеты</h3>
+          <h3 [hidden]="stepCurrency !== 5" class="mt-0 mainLabelAndBarText">Предпросмотр</h3>
 
         </div>
 
@@ -485,34 +486,17 @@
 
               </div>
 
-
-
             </ion-column> -->
-
             <div  style="max-width: 60vh;" *ngIf="createEventForm.hasError('dateInvalid')">
               <ion-note color="danger">Дата начала не может быть позднее даты конца, а дата конца не может быть раньше даты начала.</ion-note>
             </div>
-
-
-
           </ion-col>
-
-
-
-
-
-
         </ion-column>
-
-
-
       </ion-row>
 
       <!-- шаг 4 -->
       <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
-
         <ion-label *ngIf="isNextButtonClicked === true" class="pick">{{ getMessage() }}</ion-label>
-
         <!-- <ion-button (click)="searchMinSeans()">test</ion-button> -->
         <ion-col *ngIf="stepCurrency === 3" @fade>
             <ion-row *ngIf="!mobile" class="place-list">
@@ -529,12 +513,10 @@
                     }"
                     ></ion-icon>
                   </div>
-
                   <ion-item lines="none">
                     <ion-col style="display: flex; width: 100%;">
                       <span style="margin-right: 1rem; min-width: 2rem; display: flex; align-items: center;">Текущий город:</span>
                       <ion-label style="display: flex; justify-content: center; align-items: center;" *ngIf="!locationLoader"><span>{{placeArrayForm[i].city}} ({{placeArrayForm[i].region}})</span></ion-label>
-
                       <!-- сворачиваем плейс -->
                     </ion-col>
                     <ion-list style="width: 50%" *ngIf="locationLoader">
@@ -549,7 +531,6 @@
                     </ion-item>
                   </ion-column>
                 </ion-col>
-
 
                 <ion-card class="" >
                 <div style=" transition: 0.5s ;" #place id="{{i}}" [ngClass]="{
@@ -609,7 +590,6 @@
                           </ion-list>
                       </div>
                       </ion-col> -->
-
                     <!-- Поиск не работает, сломан -->
                     <ion-item lines="none" style="margin-bottom: 2rem;" >
                       <div class="map ">
@@ -650,7 +630,6 @@
                             </ion-row>
                           </ion-item>
                         </ion-card-header>
-
                           <ion-col style="display: flex; justify-content: space-between;">
       <!-- пк версия датайм -->
                             <ion-row class="date-start">
@@ -677,9 +656,7 @@
                                     ></ion-datetime>
                                 </ng-template>
                               </ion-modal>
-
                             </ion-row>
-
                             <ion-row class="date-end">
                                   <ion-list-header style="text-align: center;"><ion-label>Конец сеанса: </ion-label></ion-list-header>
                                   <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 50%;"
@@ -713,13 +690,8 @@
                       <ion-label>Добавить сеанс</ion-label>
                       <ion-icon name="add-outline"></ion-icon>
                     </ion-chip>
-
                   </ion-list>
                   </ion-card-content>
-
-                  <!-- <ion-card-footer>
-
-                  </ion-card-footer> -->
                 </div>
                 </ion-card>
 
@@ -729,7 +701,6 @@
                 <ion-icon name="add-outline"></ion-icon>
               </ion-chip>
             </ion-row>
-
             <ion-col *ngIf="mobile" class="place-list_mobile">
               <!-- мобильный плейс -->
               <ion-list style="width: 50%" *ngIf="locationLoader">
@@ -801,7 +772,6 @@
                           class="ion-margin-vertical"></ion-datetime-button>
                           <input (input) = "testTime($event,i,i_s,'start')" class="time-input" [maskito]="maskTime" type="text" value="12:00" #startSeansInput{{i_s}}>
                         </div>
-                 
                               <ion-modal [keepContentsMounted]="true">
                                 <ng-template>
                                   <ion-datetime
@@ -819,7 +789,6 @@
                                     ></ion-datetime>
                                 </ng-template>
                               </ion-modal>
-
                         <ion-col style="margin-top: -1rem;">
                           <ion-col style="display: flex; justify-content: center; align-items: center;" >Конец сеанса</ion-col>
                           <div class="time-input-wrapper">
@@ -829,7 +798,6 @@
                             ></ion-datetime-button>
                             <input (input) = "testTime($event,i,i_s,'end')" class="time-input" [maskito]="maskTime" type="text" value="15:00">
                           </div>
-                        
                                   <ion-modal [keepContentsMounted]="true">
                                     <ng-template>
                                       <ion-datetime
@@ -880,17 +848,12 @@
                   <ion-label style="color:black">
                     <h1> Цена {{i_p+1}}</h1>
                   </ion-label>
-
-  
                     <ion-chip color="danger" (click)="deletePrice(i_p)">Удалить
                       <!-- <ion-icon name="close-outline"></ion-icon> -->
                     </ion-chip>
-
                 </ion-item>
               </ion-card-hider>
-
               <ion-item>
-
                 <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                 <ion-input  formControlName="cors_rub" type="number" name="price" placeholder="Бесплатно"></ion-input>
               </ion-item>
@@ -900,27 +863,17 @@
                 <ion-textarea formControlName="description" type="text" name="price"></ion-textarea>
               </ion-item>
             </ng-container>
-
           </ion-card>
-
-
-
           <ion-chip style="margin-bottom: 2rem;" color="primary" class="ion-justify-item-center" (click)="addPrice()">
             <ion-label>Добавить цену</ion-label>
             <ion-icon name="add-outline"></ion-icon>
           </ion-chip>
-
-
-
           <ion-col style="margin-top: 15px;" size-lg="4" size-md="8" size-xs="12" @fade>
             <ion-item fill="outline">
 
               <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
             </ion-item>
           </ion-col>
-
-
-
             <ion-col>
               <ion-list style="padding-bottom: 4rem;">
                 <ion-radio-group formControlName="status" (ionChange)="selectedStatus($event)" [value]="statusSelected" required>
@@ -958,8 +911,12 @@
             </ion-col>
         </ion-col>
       </ion-row>
-
-
+      <!-- предпросмотр -->
+      <ion-row class="tiket-main"  [hidden]="stepCurrency !== 5">
+        <ion-col>
+            
+        </ion-col>
+      </ion-row>
 
        <!-- Десктопный блок кнопок -->
 
