@@ -7,7 +7,7 @@ export const environment = {
   APP_NAME: 'MyLittleCity',
   BASE_URL: 'http://localhost',
   PORT: '8100',
-  BACKEND_URL: 'http://localhost',
+  BACKEND_URL: 'http://dev.mlcity.ru',
   BACKEND_PORT: '8000',
   DOMAIN: 'mlcity.ru',
   appleAuthUrl: 'https://www.mlcity.ru:3443/api/social-auth/apple',
