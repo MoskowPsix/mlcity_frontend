@@ -30,6 +30,7 @@ import {
   Validators,
 } from '@angular/forms'
 import { UserService } from 'src/app/services/user.service'
+import { MaskitoOptions } from '@maskito/core'
 import { EventTypeService } from 'src/app/services/event-type.service'
 import { IEventType } from 'src/app/models/event-type'
 import { IStatus } from 'src/app/models/status'
@@ -58,6 +59,7 @@ import { SightsService } from 'src/app/services/sights.service'
 import { SafeUrlPipe } from './event-create.pipe'
 import { Router } from '@angular/router'
 import { CreateRulesModalComponent } from 'src/app/components/create-rules-modal/create-rules-modal.component'
+import { maskitoTimeOptionsGenerator } from '@maskito/kit'
 
 @Component({
   selector: 'app-event-create',
@@ -81,7 +83,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   mobile: boolean = false
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
-
+  currentTime = new Date()
   @ViewChild('eventName') eventNameElement!: any
   @ViewChild('eventDescription') eventDescriptionElement!: any
   @HostListener('window:resize', ['$event'])
@@ -95,12 +97,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
   placesClose: any = []
-
+  maskTime: MaskitoOptions = maskitoTimeOptionsGenerator({
+    mode: 'HH:MM',
+  })
   inputValue: string = ''
   user: any
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 0
+  stepCurrency: number = 3
   steps: number = 5
   dataValid: boolean = true
   openModalImgs: boolean = false
@@ -119,6 +123,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   typesLoaded: boolean = false
   typeSelected: number | null = null
   currentType: any = []
+  dateTomorrow = new Date()
   statuses: IStatus[] = []
   statusesLoaded: boolean = false
   statusSelected: number | null = null
@@ -142,7 +147,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   isNextButtonClicked: boolean = false
   placeValid: boolean = false
   seansValid: boolean = false
+  startTime: any = '12, 0, 0, 0'
+  startEnd: any = ''
+  DateTimeFormatOptions: any = new Intl.DateTimeFormat('ru', {
+    dateStyle: 'short',
+  })
 
+  formatingTimeStart: string = ''
+  formatingTimeEnd: string = ''
   //nextButtonDisable: boolean = false
 
   placemark!: ymaps.Placemark
@@ -810,7 +822,72 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  //Блокировка шагов в баре
+  testTime(event: any, place: any, seans: any, param: any) {
+    if (param === 'start') {
+      this.formatingTimeStart = this.createEventForm.value.places[
+        place
+      ].value.seances[seans].value.dateStart.slice(0, 11)
+      if (event.target.value.length == 5) {
+        this.formatingTimeStart =
+          this.formatingTimeStart + event.target.value + ':00' + '+00:00'
+        this.createEventForm.value.places[place].value.seances[
+          seans
+        ].patchValue({
+          dateStart: this.formatingTimeStart,
+        })
+        this.startTime = event.target.value
+        console.log(
+          this.createEventForm.value.places[place].value.seances[seans],
+        )
+      }
+    } else if (param === 'end') {
+      this.formatingTimeEnd = this.createEventForm.value.places[
+        place
+      ].value.seances[seans].value.dateEnd.slice(0, 11)
+      if (event.target.value.length == 5) {
+        this.formatingTimeEnd =
+          this.formatingTimeEnd + event.target.value + ':00' + '+00:00'
+        this.createEventForm.value.places[place].value.seances[
+          seans
+        ].patchValue({
+          dateEnd: this.formatingTimeEnd,
+        })
+        this.startTime = event.target.value
+        console.log(
+          this.createEventForm.value.places[place].value.seances[seans],
+        )
+      }
+    }
+  }
+
+  testDate(event: any, place: any, seans: any, param: any) {
+    let thisSeansTimeStart =
+      this.createEventForm.value.places[place].value.seances[
+        seans
+      ].value.dateStart.split('T')[1]
+    let thisSeansTimeEnd =
+      this.createEventForm.value.places[place].value.seances[
+        seans
+      ].value.dateEnd.split('T')[1]
+
+    if (param === 'start') {
+      let str = event.target.value
+      let index = str.indexOf('T')
+      this.formatingTimeStart = str.slice(0, index) + 'T' + thisSeansTimeStart
+      this.createEventForm.value.places[place].value.seances[seans].patchValue({
+        dateStart: this.formatingTimeStart,
+      })
+    } else if (param === 'end') {
+      let str = event.target.value
+      let index = str.indexOf('T')
+      this.formatingTimeEnd = str.slice(0, index) + 'T' + thisSeansTimeEnd
+      this.createEventForm.value.places[place].value.seances[seans].patchValue({
+        dateEnd: this.formatingTimeEnd,
+      })
+    }
+
+    console.log(this.createEventForm.value.places[place].value.seances[seans])
+  }
 
   detectedDataInvalid() {
     let dataStart: any = new Date(
@@ -1005,6 +1082,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     let event = this.createFormData() // собираем формдату
     this.createEventForm.disable()
     this.loadingService.showLoading()
+
     this.eventsService
       .create(event)
       .pipe(
@@ -1098,12 +1176,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         seances: new FormControl(
           [
             new FormGroup({
+              //заметка
               dateStart: new FormControl(
-                new Date().toISOString().slice(0, 19) + 'Z',
+                this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00',
                 [Validators.required],
               ),
               dateEnd: new FormControl(
-                new Date().toISOString().slice(0, 19) + 'Z',
+                this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00',
                 [Validators.required],
               ),
             }),
@@ -1149,12 +1228,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     ].controls.seances.value.push(
       new FormGroup({
         dateStart: new FormControl(
-          new Date().toISOString().slice(0, 19) + 'Z',
+          this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00',
           [Validators.required],
         ),
-        dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [
-          Validators.required,
-        ]),
+        dateEnd: new FormControl(
+          this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00',
+          [Validators.required],
+        ),
       }),
     )
   }
@@ -1232,16 +1312,25 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //ищем минимальный и максимальный плейс
 
   searchMinSeans() {
+    let dateStart =
+      this.createEventForm.value.places[0].value.seances[0].value.dateStart.split(
+        '+',
+      )[0]
+    let dateEnd =
+      this.createEventForm.value.places[0].value.seances[0].value.dateEnd.split(
+        '+',
+      )[0]
+
     let minSeans: any = {
       value: {
-        dateStart: new Date().toISOString(),
-        dateEnd: new Date().toISOString(),
+        dateStart: new Date(dateStart).toISOString(),
+        dateEnd: new Date(dateEnd).toISOString(),
       },
     }
     let maxSeans: any = {
       value: {
-        dateStart: new Date().toISOString(),
-        dateEnd: new Date().toISOString(),
+        dateStart: new Date(dateStart).toISOString(),
+        dateEnd: new Date(dateEnd).toISOString(),
       },
     }
     // minSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
@@ -1269,7 +1358,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     )
   }
 
+  setValueDateDefault() {
+    this.dateTomorrow.setDate(this.dateTomorrow.getDate() + 1)
+  }
   ngOnInit() {
+    console.log(this.router.url)
+    this.setValueDateDefault()
     this.mobileOrNote()
     let locationId: any
     this.filterService.locationId
@@ -1302,12 +1396,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         price: new FormControl([], [Validators.required]),
         materials: new FormControl('', [Validators.minLength(1)]),
         dateStart: new FormControl(
-          new Date().toISOString().slice(0, 19) + 'Z',
+          this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00',
           [Validators.required],
         ),
-        dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [
-          Validators.required,
-        ]),
+        dateEnd: new FormControl(
+          this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00',
+          [Validators.required],
+        ),
       },
       [dateRangeValidator],
     )

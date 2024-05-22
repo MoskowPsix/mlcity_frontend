@@ -29,7 +29,6 @@ export class DropDownButtonComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent): void {
     let target = event.target as HTMLElement
-    console.log(event.target)
     if (target.getAttribute('name') !== 'dropButton') {
       this.close()
     }
