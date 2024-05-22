@@ -1,0 +1,10 @@
+services:
+  build-frontend:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile
+    ports:
+      - "80:80"
+
+
+
