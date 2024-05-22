@@ -35,7 +35,6 @@ import { HelpersService } from 'src/app/services/helpers.service'
 import { ContentObserver } from '@angular/cdk/observers'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 
-
 register()
 @Component({
   selector: 'app-sight-show',

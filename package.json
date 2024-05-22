@@ -11,9 +11,11 @@
     "test": "ng test",
     "lint": "ng lint",
     "format": "ng lint --fix",
-    "prettier:check": "prettier --config ./.prettierrc --list-different \"src/{app,environments}/**/*{.ts,.js,.json,.css,.scss}\"",
+    "prettier:check": "prettier --config ./.prettierrc --list-different \"src/{app,environments}/**/*{.ts,.js,.json,.css,.scss,.html}\"",
     "prettier:fix": "prettier --config ./.prettierrc --write \"src/{app,environments}/**/*{.ts,.js,.json,.css,.scss}\"",
-    "generate-sitemap": "sitemap-generator https://mlcity.ru/"
+    "generate-sitemap": "sitemap-generator https://mlcity.ru/",
+    "lint-css": "stylelint src/**/*.scss"
+
   },
   "private": true,
   "dependencies": {

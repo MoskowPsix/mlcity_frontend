@@ -20,14 +20,12 @@
                 <ion-icon  name="chevron-back" size="large" color="primary" appBackButton></ion-icon>
             </ion-col> -->
 
-
             <!-- <ion-col class="flex ion-justify-content-end z-index-9999"> -->
                 <!-- <ion-searchbar animated="true" placeholder="Поиск"></ion-searchbar> -->
                 <!-- <ion-icon name="search" color="medium" size="large" class="ico" (click)="isModalSearchEventsOpen(true)"></ion-icon> -->
             <!-- </ion-col>
         </ion-row>
     </div> -->
-
 
 <!-- Декстопное меню -->
 <div class="header ion-align-items-center" id="header">
@@ -90,7 +88,6 @@
     </ion-col> -->
 </div>
 
-
 <!-- Диалог подтверждения города -->
 <ion-popover [isOpen]="showChangeCityDialog" (didDismiss)="!showChangeCityDialog" showBackdrop="false" arrow="true">
     <ng-template>
@@ -110,7 +107,6 @@
         </div>
     </ng-template>
 </ion-popover>
-
 
   <!-- Модальное окно для выбора города -->
   <!-- мобильная версия -->
@@ -255,8 +251,6 @@ mode="ios"
     </ng-template>
 </ion-modal>
 
-
-
   <!-- Модальное окно для поиска ивентов -->
   <ion-modal [isOpen]="modalSearchEventsOpen" (ionModalDidDismiss)="modalClose()">
     <ng-template>
@@ -330,8 +324,6 @@ mode="ios"
                     <app-no-data />
                 </ng-container> -->
             </ng-container>
-
-
 
           </ion-content>
     </ng-template>

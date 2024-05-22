@@ -323,8 +323,6 @@ ion-modal ion-content {
     display: none;
   }
 
-
-
   ion-modal {
     --min-height: 20rem;
     --height: auto;
@@ -342,27 +340,25 @@ ion-modal ion-content {
   }
 }
 
-
-
-.city-list{
+.city-list {
   height: 25rem;
   overflow-y: auto;
-  --ion-grid-columns:2;
+  --ion-grid-columns: 2;
 }
-.city-list-col{
+.city-list-col {
   display: flex;
   justify-content: center;
   margin-bottom: 8px;
 }
-.city-list-col-info{
+.city-list-col-info {
   cursor: pointer;
   width: 10rem;
 }
 
-.city-list-col-info-label{
+.city-list-col-info-label {
   font-size: 16px;
   font-family: 'Montserrat-regular';
 }
-.city-header{
+.city-header {
   font-family: 'Montserrat-Regular';
 }

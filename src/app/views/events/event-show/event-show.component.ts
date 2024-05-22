@@ -44,7 +44,6 @@ import { MapService } from 'src/app/services/map.service'
 
 // import { Swiper } from 'swiper/types';
 
-
 register()
 @Component({
   selector: 'app-event-show',
