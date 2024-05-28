@@ -421,7 +421,12 @@ ion-padding {
   display: flex;
   justify-content: center;
 }
-
+.view-main{
+  max-width: 90%;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
 .date-start {
   margin-top: 4rem;
 }

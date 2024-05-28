@@ -197,6 +197,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>, place: any) {
     //Создаем метку
     this.map = { target, ymaps }
+    console.log(place.value.seances[0].value.dateStart)
     target.geoObjects.add(
       new ymaps.Placemark(
         [place.controls.coords.value[0], place.controls.coords.value[1]],

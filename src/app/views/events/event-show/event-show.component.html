@@ -148,7 +148,7 @@
                   </ion-col>
   
                   <ion-row class="events-map-container">
-  
+                    
                     <div style="margin-bottom: 1rem;" class="title">
                       Расписание
                     </div>
@@ -275,44 +275,69 @@
       <div class="description_mobile">
           <app-collapsed-text>{{ createObj.description }}</app-collapsed-text>     
       </div>
+      <div class="social-buttons_prev">
+        <div class="likes">
+          <ion-icon name="heart-outline" class="ico"></ion-icon>
+        </div>
+        <div class="likes">
+          <ion-icon name="chatbox-outline" class="ico"></ion-icon>
+          
+        </div>
+        <div class="likes" style="">
+          <ion-icon name="star-outline" class="ico"></ion-icon>
+       
+        </div>
+      </div>
       <div style="margin-bottom: 1rem;" class="title">
         Расписание
       </div>
       <ion-accordion-group>
-        <ion-accordion style="background-color: #fff;" *ngFor="let place of createObj.places; let i= index"  class="seance">
-          <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
-            <ion-label>
-             <br> <p class="address">{{ place.value.address }}</p>
-            </ion-label>
-            <ng-template #otherAddress>
-             <h3 class="address">{{ place.address }}</h3>
-            </ng-template>
+        <ion-accordion  style="background-color: #fff;" *ngFor="let place of createObj.places; let i= index" class="">
+          <ion-item slot="header" style="border: 1px solid #E6E6E6; border-radius: 8px;">
+            <p class="address">{{ place.value.address }}</p>
           </ion-item>
-            
-          <div style="background-color: #fff; border: 1px solid #E6E6E6; border-radius: 8px; min-height: 15rem;" slot="content" class="ion-padding">
-              <div *ngIf="place.controls.coords.value" class="map">
-                <ya-map 
-                [zoom]="15"  
-                [center]="[place.controls.coords.value[0], place.controls.coords.value[1]]"
-                (ready)="onMapReady($event,place)"
-                [state]="{controls: ['zoomControl','fullscreenControl']}"
-                [options]="{
-                  yandexMapDisablePoiInteractivity: true,
-                  minZoom:1,
-                  maxZoom:18,
-                  suppressMapOpenBlock: true,
-                  suppressObsoleteBrowserNotifier: true
-                }">
-                
-                >
-              
-                </ya-map>
-              
+          <div class="accordion-content ion-padding" slot="content">
+            <div *ngIf="place.controls.coords.value" class="map_prew">
+              <ya-map 
+              [zoom]="15"  
+              [center]="[place.controls.coords.value[0], place.controls.coords.value[1]]"
+              (ready)="onMapReady($event,place)"
+              [state]="{controls: ['zoomControl','fullscreenControl']}"
+              [options]="{
+                yandexMapDisablePoiInteractivity: true,
+                minZoom:1,
+                maxZoom:18,
+                suppressMapOpenBlock: true,
+                suppressObsoleteBrowserNotifier: true
+              }">
+              </ya-map>
+            </div>
+            <div class="seances">
+              <div class="seance-time-container ion-justify-content-center">
+                <div class="seance-time-c1">
+                  <div class="seance-wrapper" *ngFor="let seance of place.value.seances">
+                    <ion-col style="max-width:90px;">
+                      <div style="display: flex;">
+                        <div class="vertical-text">
+                          {{ seance.value.dateStart.split('+')[0]|date:'EE' }}
+                        </div>
+                        <div>
+                          <p class="seance-time-day" >{{ seance.value.dateStart.split('+')[0]|date:'d' }}</p>
+                        </div>
+                      </div>
+                      <div class="seance-time-month">
+                        {{ seance.value.dateStart.split('+')[0]|date:'MMMM' }}
+                      </div>
+                    </ion-col>
+    
+                    <div class="seance-time-hour-container">
+                      <div>{{seance.value.dateStart.split('+')[0]|date:'H:mm'}} - {{seance.value.dateEnd.split('+')[0]|date:'H:mm'}}</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <app-place-info [place]="place.value" [place_date]="place.seanses"  *ngIf="place.active" [load_seances]="true"></app-place-info>
-              
+            </div>
           </div>
-
         </ion-accordion>
 
       </ion-accordion-group>
