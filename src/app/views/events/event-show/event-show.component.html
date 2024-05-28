@@ -1,260 +1,354 @@
-<ion-content>
-  <!-- skeleton animation -->
-  <div class="pb-2rem" class="event-container">
-    <ng-container *ngIf="loadingEvent">
-      <ion-row class="ion-justify-content-center">
-        <ion-col size-lg="12" size-md="12" size-xs="12">
-          <ion-row class="ion-justify-content-center">
-            <ion-col size-lg="10" size-md="12" size-xs="12" class="">
-              <ion-skeleton-text [animated]="true" style="height: 30rem;" />
-            </ion-col>
-          </ion-row>
 
-          <ion-row class="ion-justify-content-center">
-            <ion-col size-md="4" size-xs="12" class="">
-                <ion-skeleton-text [animated]="true" />
-            </ion-col>
-          </ion-row>
-
-          <ion-row class="ion-justify-content-center">
-            <ion-col size-lg="8" size-md="12" size-xs="12" class="">
-
-              <ion-row class="ion-justify-content-center">
-                <ion-col size-lg="6" size-md="12" size-xs="12">
-                  <ion-skeleton-text [animated]="true" style="height: 20rem;" />
-                </ion-col>
-
-                <ion-col size-lg="6" size-md="12" size-xs="12">
-                  <ion-skeleton-text  *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]" [animated]="true" />
-                  <ion-skeleton-text [animated]="true" style="height: 11rem;" />
-                </ion-col>
-              </ion-row>
-
-            </ion-col>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-    </ng-container>
-
-    <!-- content -->
-    <ng-container *ngIf="event && !loadingEvent">
-      <ion-row class="ion-justify-content-center">
-        <ion-col size-lg="10" size-md="12" size-xs="12" class="">
-
-          <swiper-container
-          class="swiper-container"
-            #swiper
-            [modules]="swiperModules"
-            autoplay="true"
-            autoplay-delay="5000"
-            autoplay-disableOnInteraction="false"
-            navigation="false"
-            [pagination]="true"
-            [grabCursor]="true"
-            [zoom]="true"
-            [slidesPerView]="1"
-            [centeredSlides]="true"
-            [followFinger]="false"
-            [loop]="true"
-            [initialSlide]="0"
-          >
-            <ng-container *ngIf="event.files && event.files.length; else notFiles">
-              <ng-container *ngFor="let file of event.files">
-                <swiper-slide style="height: 19rem;" class="" *ngIf="file.local === 1">
-                  <img alt="img" src="{{host}}:{{port}}{{ file.link }}" />
-                  <div class="swiper-container-img_wrapper">
-                    <div class="swiper-container-header-content">
-                    </div>
-                  </div>
-                </swiper-slide>
-
-                <swiper-slide  style="min-height: 19rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
-                  <img alt="img" src="{{ file.link }}" />
-                  <div class="swiper-container-img_wrapper">
-                  </div>
-                </swiper-slide>
-
-                <!-- видео -->
-                <swiper-slide  style="min-height: 19rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
-                  <iframe class="video_content" [src]="getUrlFrame(file.link)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
-                  <div class="swiper-container-img_wrapper">
-                    <div class="swiper-container-header-content">
-
-                    </div>
-
-                  </div>
-                </swiper-slide>
-              </ng-container>
-            </ng-container>
-
-            <ng-template #notFiles>
-              <swiper-slide><img alt="default img" src="/svg/no-photo.svg" /></swiper-slide>
-            </ng-template>
-          </swiper-container>
-          
-        </ion-col>
-        <div class="event-name-header">
-          {{ event.name }}
-          <h3 class="swiper-container-header-content-time title" style="font-size: 16px;">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
-        </div>
-
-      </ion-row>
-     
-      <div class="social-buttons">
-        <div class="likes">
-          <ion-icon name="chatbox-outline" class="ico"></ion-icon>
-          <span *ngIf="event.comments.length !==0 " >{{ event.comments.length }}</span>
-        </div>
-        <div class="likes">
-          <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
-          <ion-spinner *ngIf="loadingLike"></ion-spinner>
-          <span>{{ startLikesCount }}</span>
-        </div>
-        <div class="likes_star">
-          <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
-          <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
-        </div>
-        <div class="likes_share">
-          <ion-icon style="margin-left: 4px;" name="share-social-outline" class="ico share"></ion-icon>
-        </div>
-
-      </div>
-
-      <ion-row class="ion-justify-content-center">
-
-        <ion-col size-lg="10" size-md="12" size-xs="12" class="">
-          <ion-row class="">
-            <ion-col size-lg="12" size-md="12" size-xs="12" class="left-block">
-
-              <div class="content-main">
-
-                <ion-col class="content-main-description">
-
-                  <!-- <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
-                    О мероприятии
-                  </div> -->
-
-                  <div>
-                    <div class="description">{{ event.description }}</div>
-                    <div class="description_mobile">
-                      <app-collapsed-text>
-                        {{ event.description }}
-                      </app-collapsed-text>
-                    </div>
-                  </div>
-
-                </ion-col>
-
-                <ion-row class="events-map-container">
-
-                  <div style="margin-bottom: 1rem;" class="title">
-                    Расписание
-                  </div>
-
-                <ion-accordion-group>
-                  <ion-accordion style="background-color: #fff;" *ngFor="let place of places; let i= index" (click)="setActivePlace(i)" class="seance">
-                    <ion-item *ngIf="place.location"style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
-                      <ion-label *ngIf="!(place.location.location_parent.name==='РФ'); else otherAddress">
-                        {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
-                      </ion-label>
-                      <ng-template #otherAddress>
-                       <h3 class="address">{{ place.address }}</h3>
-                      </ng-template>
-                    </ion-item>
-
-                    <div style="background-color: #fff; border: 1px solid #E6E6E6; border-radius: 8px; margin-top: -1rem;" slot="content" class="ion-padding">
-                      <app-place-info [place]="place" [place_date]="place.seanses"  *ngIf="place.active" [load_seances]="place.active"></app-place-info>
-                    </div>
-
-                  </ion-accordion>
-
-                  <div *ngIf="loadPlace===true">
-                    <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
-                    <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
-                    <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
-                    <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
-                    <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
-                  </div>
-
-                  </ion-accordion-group>
-
-                </ion-row>
-
+<ng-container *ngIf="url !== '/cabinet/events/create'">
+  <ion-content>
+    <!-- skeleton animation -->
+    <div class="pb-2rem" class="event-container">
+      <ng-container *ngIf="loadingEvent">
+        <ion-row class="ion-justify-content-center">
+          <ion-col size-lg="12" size-md="12" size-xs="12">
+            <ion-row class="ion-justify-content-center">
+              <ion-col size-lg="10" size-md="12" size-xs="12" class="">
+                <ion-skeleton-text [animated]="true" style="height: 30rem;" />
+              </ion-col>
+            </ion-row>
+  
+            <ion-row class="ion-justify-content-center">
+              <ion-col size-md="4" size-xs="12" class="">
+                  <ion-skeleton-text [animated]="true" />
+              </ion-col>
+            </ion-row>
+  
+            <ion-row class="ion-justify-content-center">
+              <ion-col size-lg="8" size-md="12" size-xs="12" class="">
+  
                 <ion-row class="ion-justify-content-center">
-                  <ion-button (click)="getEventPlaces()" *ngIf="loadMore">Показать больше</ion-button>
+                  <ion-col size-lg="6" size-md="12" size-xs="12">
+                    <ion-skeleton-text [animated]="true" style="height: 20rem;" />
+                  </ion-col>
+  
+                  <ion-col size-lg="6" size-md="12" size-xs="12">
+                    <ion-skeleton-text  *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]" [animated]="true" />
+                    <ion-skeleton-text [animated]="true" style="height: 11rem;" />
+                  </ion-col>
                 </ion-row>
-
-                <ion-col>
-                  <div style="" class="title">
-                    Билеты
-                  </div>
-                    <div class="tickets-grid_wrapper">
-                      <ion-grid class="tickets-grid">
-                        <div  *ngFor="let price of event.price"  class="ticket-main">
-                          <div class="price-information">
-                            <div *ngIf="price.cost_rub > 0" class="ticket-main-price">
-                              {{price.cost_rub}} ₽
-                            </div>
-                            <div *ngIf='price.cost_rub === 0' class="ticket-main-description">
-                              Вход бесплатный
-
-                            </div>
-
-                            <div  class="ticket-main-description">
-                              {{price.descriptions}}
-                            </div>
-
-                          </div>
-
-                          <div class="circle">
-
-                          </div>
-                        </div>
-
-                      </ion-grid>
+  
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+  
+      <!-- content -->
+      <ng-container *ngIf="event && !loadingEvent">
+        <ion-row class="ion-justify-content-center">
+          <ion-col size-lg="10" size-md="12" size-xs="12" class="">
+  
+            <swiper-container
+            class="swiper-container"
+              #swiper
+              [modules]="swiperModules"
+              autoplay="true"
+              autoplay-delay="5000"
+              autoplay-disableOnInteraction="false"
+              navigation="false"
+              [pagination]="true"
+              [grabCursor]="true"
+              [zoom]="true"
+              [slidesPerView]="1"
+              [centeredSlides]="true"
+              [followFinger]="false"
+              [loop]="true"
+              [initialSlide]="0"
+            >
+              <ng-container *ngIf="event.files && event.files.length; else notFiles">
+                <ng-container *ngFor="let file of event.files">
+                  <swiper-slide style="height: 19rem;" class="" *ngIf="file.local === 1">
+                    <img alt="img" src="{{host}}:{{port}}{{ file.link }}" />
+                    <div class="swiper-container-img_wrapper">
+                      <div class="swiper-container-header-content">
+                      </div>
                     </div>
-
-                </ion-col>
-
-                <ion-col>
-                  <div class="title">
-                    Организатор
-                  </div>
-
-                  <div class="description-org">
-                    {{event.sponsor}}
-                  </div>
-                </ion-col>
-
-                  <!-- <ion-col>
-                    <div style="font-family:'Montserrat-Bold';" class="title">Типы мероприятия</div>
-
-                    <div *ngFor="let type of event.types" class="event-icons">
-                        <img class="ico-small" src="{{host}}:{{port}}{{type.ico}}">
-                        <p class="description-icon">{{ type.name }}</p>
+                  </swiper-slide>
+  
+                  <swiper-slide  style="min-height: 19rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
+                    <img alt="img" src="{{ file.link }}" />
+                    <div class="swiper-container-img_wrapper">
                     </div>
-                  </ion-col> -->
+                  </swiper-slide>
+  
+                  <!-- видео -->
+                  <swiper-slide  style="min-height: 19rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
+                    <iframe class="video_content" [src]="getUrlFrame(file.link)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+                    <div class="swiper-container-img_wrapper">
+                      <div class="swiper-container-header-content">
+  
+                      </div>
+  
+                    </div>
+                  </swiper-slide>
+                </ng-container>
+              </ng-container>
+  
+              <ng-template #notFiles>
+                <swiper-slide><img alt="default img" src="/svg/no-photo.svg" /></swiper-slide>
+              </ng-template>
+            </swiper-container>
+            
+          </ion-col>
+          <div class="event-name-header">
+            {{ event.name }}
+            <h3 class="swiper-container-header-content-time title" style="font-size: 16px;">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
+          </div>
+  
+        </ion-row>
+       
+        <div class="social-buttons">
+          <div class="likes">
+            <ion-icon name="chatbox-outline" class="ico"></ion-icon>
+            <span *ngIf="event.comments.length !==0 " >{{ event.comments.length }}</span>
+          </div>
+          <div class="likes">
+            <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
+            <ion-spinner *ngIf="loadingLike"></ion-spinner>
+            <span>{{ startLikesCount }}</span>
+          </div>
+          <div class="likes_star">
+            <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
+            <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
+          </div>
+          <div class="likes_share">
+            <ion-icon style="margin-left: 4px;" name="share-social-outline" class="ico share"></ion-icon>
+          </div>
+  
+        </div>
+  
+        <ion-row class="ion-justify-content-center">
+  
+          <ion-col size-lg="10" size-md="12" size-xs="12" class="">
+            <ion-row class="">
+              <ion-col size-lg="12" size-md="12" size-xs="12" class="left-block">
+  
+                <div class="content-main">
+  
+                  <ion-col class="content-main-description">
+  
+                    <!-- <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
+                      О мероприятии
+                    </div> -->
+  
+                    <div>
+                      <div class="description">{{ event.description }}</div>
+                      <div class="description_mobile">
+                        <app-collapsed-text>
+                          {{ event.description }}
+                        </app-collapsed-text>
+                      </div>
+                    </div>
+  
+                  </ion-col>
+  
+                  <ion-row class="events-map-container">
+  
+                    <div style="margin-bottom: 1rem;" class="title">
+                      Расписание
+                    </div>
+  
+                  <ion-accordion-group>
+                    <ion-accordion style="background-color: #fff;" *ngFor="let place of places; let i= index" (click)="setActivePlace(i)" class="seance">
+                      <ion-item *ngIf="place.location"style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
+                        <ion-label *ngIf="!(place.location.location_parent.name==='РФ'); else otherAddress">
+                          {{ place.location.location_parent.name }} <br> <p class="address">{{ place.address }}</p>
+                        </ion-label>
+                        <ng-template #otherAddress>
+                         <h3 class="address">{{ place.address }}</h3>
+                        </ng-template>
+                      </ion-item>
+  
+                      <div style="background-color: #fff; border: 1px solid #E6E6E6; border-radius: 8px; margin-top: -1rem;" slot="content" class="ion-padding">
+                        <app-place-info [place]="place" [place_date]="place.seanses"  *ngIf="place.active" [load_seances]="place.active"></app-place-info>
+                      </div>
+  
+                    </ion-accordion>
+  
+                    <div *ngIf="loadPlace===true">
+                      <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
+                      <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
+                      <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
+                      <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
+                      <ion-skeleton-text animated="true" class="place-skelet"></ion-skeleton-text>
+                    </div>
+  
+                  </ion-accordion-group>
+  
+                  </ion-row>
+  
+                  <ion-row class="ion-justify-content-center">
+                    <ion-button (click)="getEventPlaces()" *ngIf="loadMore">Показать больше</ion-button>
+                  </ion-row>
+  
+                  <ion-col>
+                    <div style="" class="title">
+                      Билеты
+                    </div>
+                      <div class="tickets-grid_wrapper">
+                        <ion-grid class="tickets-grid">
+                          <div  *ngFor="let price of event.price"  class="ticket-main">
+                            <div class="price-information">
+                              <div *ngIf="price.cost_rub > 0" class="ticket-main-price">
+                                {{price.cost_rub}} ₽
+                              </div>
+                              <div *ngIf='price.cost_rub === 0' class="ticket-main-description">
+                                Вход бесплатный
+  
+                              </div>
+  
+                              <div  class="ticket-main-description">
+                                {{price.descriptions}}
+                              </div>
+  
+                            </div>
+  
+                            <div class="circle">
+  
+                            </div>
+                          </div>
+  
+                        </ion-grid>
+                      </div>
+  
+                  </ion-col>
+  
+                  <ion-col>
+                    <div class="title">
+                      Организатор
+                    </div>
+  
+                    <div class="description-org">
+                      {{event.sponsor}}
+                    </div>
+                  </ion-col>
+  
+                    <!-- <ion-col>
+                      <div style="font-family:'Montserrat-Bold';" class="title">Типы мероприятия</div>
+  
+                      <div *ngFor="let type of event.types" class="event-icons">
+                          <img class="ico-small" src="{{host}}:{{port}}{{type.ico}}">
+                          <p class="description-icon">{{ type.name }}</p>
+                      </div>
+                    </ion-col> -->
+                </div>
+  
+              </ion-col>
+            </ion-row>
+  
+            <ion-card *ngIf="user" style="margin-bottom: 2rem;"><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
+  
+            <!-- <ion-col *ngIf="event.materials" class="">
+              <ion-col size-lg="8" size-md="12" size-xs="12" >
+                Материалы: {{ event.materials }}
+              </ion-col>
+  
+            </ion-col> -->
+          </ion-col>
+        </ion-row>
+  
+      </ng-container>
+  
+      <ng-container *ngIf="!event && !loadingEvent">
+        <app-no-data/>
+      </ng-container>
+    </div>
+  
+  </ion-content>
+  
+</ng-container>
+
+<ng-container *ngIf="router.url === '/cabinet/events/create'">
+
+   <!-- {{createObj.name}} -->
+   <ion-col>
+    <div class="event-name-header" style="padding-left: 0;">
+      {{ createObj.name }}
+      <h3 class="swiper-container-header-content-time title" style="font-size: 16px;">{{createObj.date_start  | date:'d MMM в HH:mm' }} - {{ createObj.date_end | date:'d MMM в HH:mm'}}</h3>
+    </div>
+    <div class="description">{{ createObj.description }}</div>
+      <div class="description_mobile">
+          <app-collapsed-text>{{ createObj.description }}</app-collapsed-text>     
+      </div>
+      <div style="margin-bottom: 1rem;" class="title">
+        Расписание
+      </div>
+      <ion-accordion-group>
+        <ion-accordion style="background-color: #fff;" *ngFor="let place of createObj.places; let i= index"  class="seance">
+          <ion-item style="border: 1px solid #E6E6E6; border-radius: 8px;" slot="header">
+            <ion-label>
+             <br> <p class="address">{{ place.value.address }}</p>
+            </ion-label>
+            <ng-template #otherAddress>
+             <h3 class="address">{{ place.address }}</h3>
+            </ng-template>
+          </ion-item>
+            
+          <div style="background-color: #fff; border: 1px solid #E6E6E6; border-radius: 8px; min-height: 15rem;" slot="content" class="ion-padding">
+              <div *ngIf="place.controls.coords.value" class="map">
+                <ya-map 
+                [zoom]="15"  
+                [center]="[place.controls.coords.value[0], place.controls.coords.value[1]]"
+                (ready)="onMapReady($event,place)"
+                [state]="{controls: ['zoomControl','fullscreenControl']}"
+                [options]="{
+                  yandexMapDisablePoiInteractivity: true,
+                  minZoom:1,
+                  maxZoom:18,
+                  suppressMapOpenBlock: true,
+                  suppressObsoleteBrowserNotifier: true
+                }">
+                
+                >
+              
+                </ya-map>
+              
+              </div>
+              <app-place-info [place]="place.value" [place_date]="place.seanses"  *ngIf="place.active" [load_seances]="true"></app-place-info>
+              
+          </div>
+
+        </ion-accordion>
+
+      </ion-accordion-group>
+      <div style="margin-bottom: 1rem;" class="title">
+        Билеты
+      </div>
+      <div class="tickets-grid_wrapper">
+        <ion-grid class="tickets-grid">
+          <div  *ngFor="let price of createObj.price"  class="ticket-main">
+            <div class="price-information">
+              <div *ngIf="price.controls.cors_rub.value > 0" class="ticket-main-price">
+                {{price.controls.cors_rub.value}} ₽
+              </div>
+              <div *ngIf='price.controls.cors_rub.value === 0 || price.controls.cors_rub.value === ""' class="ticket-main-description">
+                Вход бесплатный
+
               </div>
 
-            </ion-col>
-          </ion-row>
+              <div  class="ticket-main-description">
+                {{price.controls.description.value}}
+              </div>
 
-          <ion-card *ngIf="user" style="margin-bottom: 2rem;"><app-comments-list [comments]="event.comments" [isSight]="false" [event_id]="event.id" ></app-comments-list></ion-card>
+            </div>
 
-          <!-- <ion-col *ngIf="event.materials" class="">
-            <ion-col size-lg="8" size-md="12" size-xs="12" >
-              Материалы: {{ event.materials }}
-            </ion-col>
+            <div class="circle">
 
-          </ion-col> -->
-        </ion-col>
-      </ion-row>
+            </div>
+          </div>
 
-    </ng-container>
-
-    <ng-container *ngIf="!event && !loadingEvent">
-      <app-no-data/>
-    </ng-container>
-  </div>
-
-</ion-content>
+        </ion-grid>
+      </div>
+      <div style="margin-bottom: 1rem;" class="title">
+        Организатор
+      </div>
+      <div class="description-org">
+        {{createObj.sponsor}}
+      </div>
+   </ion-col>
+</ng-container>

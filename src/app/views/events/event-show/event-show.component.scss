@@ -192,7 +192,11 @@
   display: flex;
   align-items: center;
 }
-
+.map{
+  height: 15rem;
+  width: 50%;
+  position: absolute;
+}
 .sub-title {
   line-height: 1.5;
   color: #737373;

@@ -102,9 +102,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   })
   inputValue: string = ''
   user: any
+  createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
   stepCurrency: number = 5
+  test: any = {}
   steps: number = 6
   dataValid: boolean = true
   openModalImgs: boolean = false
@@ -809,6 +811,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Клик по нкопке назад
   stepPrev() {
+    this.createFormCount == 0
     this.stepCurrency--
   }
 
@@ -981,6 +984,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }
 
       case 4:
+        this.createFormCount = 0
         let priceValid = false
         let validValidPrice = false
         this.createEventForm.controls['price'].value.forEach(
@@ -1005,11 +1009,38 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           return false
         }
       case 5:
+        if (this.createFormCount == 0) {
+          this.createFormCount++
+          console.log()
+          console.log(this.imagesPreview)
+
+          this.test = {
+            name: this.createEventForm.value.name,
+            date_start:
+              this.createEventForm.value.dateStart.split('T')[0] +
+              ' ' +
+              this.createEventForm.value.dateStart.split('T')[1].split('+')[0],
+            date_end:
+              this.createEventForm.value.dateEnd.split('T')[0] +
+              ' ' +
+              this.createEventForm.value.dateEnd.split('T')[1].split('+')[0],
+            description: this.createEventForm.value.description,
+            sponsor: this.createEventForm.value.sponsor,
+            price: this.createEventForm.value.price,
+            places: this.createEventForm.value.places,
+          }
+          setTimeout(() => {
+            console.log(this.test.places[0].controls.coords.value)
+          }, 8000)
+        }
+
         return false
       default:
         return true
     }
   }
+
+  createDoubleForm() {}
 
   getMessage(): string {
     if (!this.placeValid && !this.seansValid) {

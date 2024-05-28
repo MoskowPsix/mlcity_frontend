@@ -1,3 +1,4 @@
+
 <ion-content mode="md">
   <app-create-rules-modal [agreement_id]="1"></app-create-rules-modal>
   <div class="buttons-dekstop">
@@ -900,7 +901,10 @@
       <!-- предпросмотр -->
       <ion-row class="tiket-main"  [hidden]="stepCurrency !== 5">
         <ion-col>
-            
+          <ng-container *ngIf="stepCurrency === 5">
+            <app-event-show [createObj] = "test"></app-event-show>
+          </ng-container>
+   
         </ion-col>
       </ion-row>
     

@@ -5,6 +5,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Output,
+  Input,
 } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
 import {
@@ -18,6 +19,7 @@ import {
   map,
   delay,
   filter,
+  timeInterval,
 } from 'rxjs'
 import { IEvent } from 'src/app/models/event'
 import { EventsService } from 'src/app/services/events.service'
@@ -41,6 +43,7 @@ import { UserService } from 'src/app/services/user.service'
 import { FilterService } from 'src/app/services/filter.service'
 import { LocationService } from 'src/app/services/location.service'
 import { MapService } from 'src/app/services/map.service'
+import { YaReadyEvent } from 'angular8-yandex-maps'
 
 // import { Swiper } from 'swiper/types';
 
@@ -76,7 +79,11 @@ export class EventShowComponent implements OnInit, OnDestroy {
   startLikesCount: number = 0
 
   locationId!: number
+  map!: YaReadyEvent<ymaps.Map>
 
+  showRout: boolean = false
+  url: any = ''
+  @Input() createObj: any = {}
   constructor(
     private route: ActivatedRoute,
     private eventsService: EventsService,
@@ -87,7 +94,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     private metrika: Metrika,
     private location: Location,
-    private router: Router,
+    public router: Router,
     private titleService: Title,
     private metaService: Meta,
     private userService: UserService,
@@ -118,6 +125,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         if (event) {
           this.event = event
+          console.log(event)
+
           // this.places = event.places_full;
         }
         this.titleService.setTitle(event.name)
@@ -173,6 +182,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         )
         .subscribe((response: any) => {
           this.places.push(...response.places.data)
+          console.log(this.places)
           this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
             response.places.next_cursor,
           )
@@ -182,6 +192,20 @@ export class EventShowComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges()
         })
     }
+  }
+
+  onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>, place: any) {
+    //Создаем метку
+    this.map = { target, ymaps }
+    target.geoObjects.add(
+      new ymaps.Placemark(
+        [place.controls.coords.value[0], place.controls.coords.value[1]],
+        {},
+        { preset: 'twirl#violetIcon' },
+      ),
+    )
+    this.map.target.controls.remove('zoomControl')
+    this.map.target.behaviors.disable('drag')
   }
 
   setActivePlace(i: number) {
@@ -284,32 +308,40 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    //Получаем ид ивента из параметра маршрута
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      this.eventId = params['id']
+    console.log(this.router.url)
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.url = this.router.url
+      console.log(this.url)
+      if (this.router.url !== '/cabinet/events/create') {
+        this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+          this.eventId = params['id']
+        })
+        this.filterService.locationId
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((value) => {
+            this.loadMore = true
+            this.locationId = Number(value)
+            this.places = []
+            this.setLocationForPlaces()
+          })
+        this.userAuth = this.authService.getAuthState()
+        this.getEvent()
+        // this.getEventPlaces();
+        this.user = this.userService.user.value
+        this.checkLiked()
+        this.checFavorite()
+        this.router.events
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((value: any) => {
+            this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
+              '',
+            )
+            // this.queryBuilderService.locationIdForEventShow.next(0)
+          })
+      }
     })
-    this.filterService.locationId
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.loadMore = true
-        this.locationId = Number(value)
-        this.places = []
-        this.setLocationForPlaces()
-      })
-    this.userAuth = this.authService.getAuthState()
-    this.getEvent()
-    // this.getEventPlaces();
-    this.user = this.userService.user.value
-    this.checkLiked()
-    this.checFavorite()
-    this.router.events
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
-          '',
-        )
-        // this.queryBuilderService.locationIdForEventShow.next(0)
-      })
+
+    //Получаем ид ивента из параметра маршрута
   }
 
   // ngAfterViewInit() {
