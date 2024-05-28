@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">MLCity</string>
-    <string name="title_activity_main">MLCity</string>
+    <string name="app_name">Вокруг: События рядом</string>
+    <string name="title_activity_main">Вокруг: События рядом</string>
     <string name="package_name">mlcity.ru</string>
     <string name="custom_url_scheme">mlcity.ru</string>
   <string name="asset_statements" translatable="false">[{ \"include\": \"https://mlcity.ru/.well-known/assetlinks.json\" }]</string>
