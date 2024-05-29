@@ -63,7 +63,7 @@
               <ng-container *ngIf="event.files && event.files.length; else notFiles">
                 <ng-container *ngFor="let file of event.files">
                   <swiper-slide style="height: 19rem;" class="" *ngIf="file.local === 1">
-                    <img alt="img" src="{{host}}:{{port}}{{ file.link }}" />
+                   
                     <div class="swiper-container-img_wrapper">
                       <div class="swiper-container-header-content">
                       </div>
@@ -267,6 +267,36 @@
 
    <!-- {{createObj.name}} -->
    <ion-col>
+    <swiper-container
+    class="swiper-container"
+      [pagination]="true"
+      [grabCursor]="true"
+      [slidesPerView]="1"
+      [centeredSlides]="true"
+      [followFinger]="false"
+      [initialSlide]="0"
+      *ngIf="createObj.files"
+    >
+    <swiper-slide *ngFor="let slide of createObj.files">
+      <img alt="img" src="{{ slide }}" />
+        <div class="swiper-container-img_wrapper">
+      </div>
+    </swiper-slide>
+    <ng-container *ngIf="createObj.vkFiles">
+      <swiper-slide *ngFor="let slide of createObj.vkFiles">
+        <ng-container *ngIf="slide.photo">
+           <img alt="img" src="{{ slide.photo.sizes[3].url }}" />
+          <div class="swiper-container-img_wrapper"></div>
+        </ng-container>
+        <ng-container *ngIf="slide.video">
+           <img alt="img" src="{{ slide.video.image[0].url }}" />
+          <div class="swiper-container-img_wrapper"></div>
+        </ng-container>
+       
+      </swiper-slide>
+    </ng-container>
+ 
+  </swiper-container>
     <div class="event-name-header" style="padding-left: 0;">
       {{ createObj.name }}
       <h3 class="swiper-container-header-content-time title" style="font-size: 16px;">{{createObj.date_start  | date:'d MMM в HH:mm' }} - {{ createObj.date_end | date:'d MMM в HH:mm'}}</h3>

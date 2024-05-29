@@ -105,8 +105,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 5
-  test: any = {}
+  stepCurrency: number = 0
+  createObj: any = {}
   steps: number = 6
   dataValid: boolean = true
   openModalImgs: boolean = false
@@ -1011,10 +1011,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       case 5:
         if (this.createFormCount == 0) {
           this.createFormCount++
-          console.log()
-          console.log(this.imagesPreview)
-
-          this.test = {
+          this.createObj = {
             name: this.createEventForm.value.name,
             date_start:
               this.createEventForm.value.dateStart.split('T')[0] +
@@ -1028,9 +1025,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             sponsor: this.createEventForm.value.sponsor,
             price: this.createEventForm.value.price,
             places: this.createEventForm.value.places,
+            files: this.imagesPreview,
+            vkFiles: this.vkGroupPostSelected?.attachments,
           }
           setTimeout(() => {
-            console.log(this.test.places[0].controls.coords.value)
+            console.log(this.createObj.places[0].controls.coords.value)
           }, 8000)
         }
 

@@ -862,39 +862,7 @@
             </ion-item>
           </ion-col>
             <ion-col>
-              <ion-list style="padding-bottom: 4rem;">
-                <ion-radio-group formControlName="status" (ionChange)="selectedStatus($event)" [value]="statusSelected" required>
-                  <ng-container *ngIf="!statusesLoaded">
-                    <ng-container *ngFor="let key of [1,2,3,4,5]">
-                      <ion-item>
-                        <ion-avatar>
-                          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                        </ion-avatar>
-                        <ion-label class="ion-padding-start">
-                          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                        </ion-label>
-                      </ion-item>
-                    </ng-container>
-                  </ng-container>
-
-                  <ng-container *ngIf="statusesLoaded">
-                    <ng-container *ngFor="let status of statuses">
-                      <ion-item *ngIf="status.name === 'На модерации'">
-                        <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
-                        <ion-label>Отправить на модерацию</ion-label>
-                        <ion-radio slot="end" [value]="status.id" checked></ion-radio>
-                      </ion-item>
-
-                      <ion-item *ngIf="status.name === 'Черновик'">
-                        <ion-icon name="create" slot="start" color="medium" size="large"></ion-icon>
-                        <ion-label>Оставить в черновиках</ion-label>
-                        <ion-radio slot="end" [value]="status.id"></ion-radio>
-                      </ion-item>
-                    </ng-container>
-                  </ng-container>
-
-                </ion-radio-group>
-              </ion-list>
+          
             </ion-col>
         </ion-col>
       </ion-row>
@@ -902,7 +870,38 @@
       <ion-row class="view-main"  [hidden]="stepCurrency !== 5">
         <ion-col>
           <ng-container *ngIf="stepCurrency === 5">
-            <app-event-show [createObj] = "test"></app-event-show>
+            <app-event-show [createObj] = "createObj"></app-event-show>
+            <ion-radio-group formControlName="status" (ionChange)="selectedStatus($event)" [value]="statusSelected" required>
+              <ng-container *ngIf="!statusesLoaded">
+                <ng-container *ngFor="let key of [1,2,3,4,5]">
+                  <ion-item>
+                    <ion-avatar>
+                      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                    </ion-avatar>
+                    <ion-label class="ion-padding-start">
+                      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                    </ion-label>
+                  </ion-item>
+                </ng-container>
+              </ng-container>
+
+              <ng-container *ngIf="statusesLoaded">
+                <ng-container *ngFor="let status of statuses">
+                  <ion-item *ngIf="status.name === 'На модерации'">
+                    <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
+                    <ion-label>Отправить на модерацию</ion-label>
+                    <ion-radio slot="end" [value]="status.id" checked></ion-radio>
+                  </ion-item>
+
+                  <ion-item *ngIf="status.name === 'Черновик'">
+                    <ion-icon name="create" slot="start" color="medium" size="large"></ion-icon>
+                    <ion-label>Оставить в черновиках</ion-label>
+                    <ion-radio slot="end" [value]="status.id"></ion-radio>
+                  </ion-item>
+                </ng-container>
+              </ng-container>
+
+            </ion-radio-group>
           </ng-container>
    
         </ion-col>

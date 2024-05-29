@@ -310,9 +310,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log(this.router.url)
+    console.log(this.createObj)
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.url = this.router.url
-      console.log(this.url)
       if (this.router.url !== '/cabinet/events/create') {
         this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
           this.eventId = params['id']
