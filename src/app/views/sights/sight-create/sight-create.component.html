@@ -1,6 +1,5 @@
 <app-create-rules-modal [agreement_id]="2"></app-create-rules-modal>
 <ion-content mode="md">
-
   <div class="buttons-dekstop">
 
     <div class="buttons-desktop-wrapper">
@@ -9,7 +8,6 @@
         <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
         <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
       </div>
-
 
       <div class="btnsWrapper btnsWrapperNext">
         <ion-button [disabled]="detectedDataInvalid()" class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
@@ -42,8 +40,6 @@
 
       <form class="mainChild" [formGroup]="createSightForm" (submit)="onSubmit()" enctype="multipart/form-data">
 
-
-
         <ion-column class="mainLabelAndBar">
           <div class="ion-text-start">
             <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип достопримечательности</h3>
@@ -57,8 +53,6 @@
           <!-- кнопки шагов -->
 
           <ion-column>
-
-
 
             <ion-col size-lg="4" size-md="8" size-xs="12">
               <div class="stepper-progress">
@@ -79,11 +73,7 @@
           </ion-column>
         </ion-column>
 
-
-
-
           <!-- шаг 1 -->
-
 
           <ng-container *ngIf="!typesLoaded && stepCurrency===0">
             <ng-container *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">
@@ -97,7 +87,7 @@
               </ion-item>
             </ng-container>
           </ng-container>
-          <ion-label *ngIf="typesLoaded && stepCurrency == 0"><h2 style="color: #949494; text-align: center;">
+          <ion-label *ngIf="typesLoaded && stepCurrency === 0"><h2 style="color: #949494; text-align: center;">
             <ion-icon name="star"></ion-icon> - Первый выбранный вами тип станет основным, будет отображаться на карте и карточке мероприятия</h2>
           </ion-label>
           <ion-row  *ngIf="typesLoaded"  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
@@ -125,7 +115,6 @@
                         <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                         <ion-input formControlName="sponsor"  type="text" name="sponsor" required  placeholder="Организатор достопримечательности"></ion-input>
                       </ion-item>
-                     
   
                       <!-- <ion-item fill="outline">
                         <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Название мероприятия</ion-label>
@@ -139,10 +128,6 @@
                           <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
                       </ion-item> -->
                   <!-- Организатор -->
-              
-             
-
-             
 
               </ion-column>
 
@@ -181,7 +166,6 @@
                         </ng-container>
                         <ng-container *ngFor="let group of vkGroups">
 
-
                             <ion-item>
                               <ion-avatar>
                                 <img alt="ava" src="{{ group.photo_50 }}" />
@@ -208,23 +192,15 @@
 
                   </ion-list>
 
-
-
                   <ion-button  class="modalBtnBottom" (click)="closeModalGroup()">
                     Закрыть
                   </ion-button>
-
 
               </ion-content>
 
             </ng-template>
 
-
           </ion-modal>
-
-
-
-
 
           <ion-modal backdropDismiss="false" [isOpen]="openModalPostValue">
 
@@ -256,7 +232,6 @@
                               <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                             </ion-label>
                           </ion-item>
-
 
                           <ion-card-content>
                             <ion-skeleton-text [animated]="true" style="height: 100px;"></ion-skeleton-text>
@@ -368,18 +343,14 @@
                     </ion-row>
                   </ng-template>
 
-
                 </ion-content>
             </ng-template>
 
           </ion-modal>
 
-
-
           <ion-col class="stepThird ion-justify-content-center">
 
             <ion-col @fade>
-
 
               <div class="BtnModalParrent " style="display: flex; align-items: center;">
 
@@ -443,7 +414,6 @@
                   </div>
               </ion-colum>
 
-
               <ion-col class="photoMain"  @fade>
                 <!-- <ion-label position="floating">Добавление фотографий (*.png, *.jpeg)</ion-label> -->
                 <div  class="ion-margin-vertical">
@@ -455,8 +425,6 @@
                   <!-- Image Preview -->
 
                 </div>
-
-
 
                 <ion-row *ngIf="vkGroups && vkGroupPostSelected && !vkGroupPostSelected.attachments.length" class="ion-padding-vertical">
                   <ion-col class="ion-align-self-center ion-justify-content-center">
@@ -474,14 +442,6 @@
             </ion-col>
 
           </ion-col>
-
-
-
-
-
-
-
-
 
         </ion-row>
 
@@ -584,9 +544,6 @@
                 </ion-item>
               </ng-container>
 
-
-
-
             </ion-card>
 
             <ion-chip style="margin-bottom: 2rem;" color="primary" class="ion-justify-item-center" (click)="addPrice()">
@@ -594,13 +551,11 @@
               <ion-icon name="add-outline"></ion-icon>
             </ion-chip>
 
-
             <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
               <ion-item fill="outline">
                 <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
               </ion-item>
             </ion-col>
-
 
             <ion-col>
               <ion-list>
@@ -637,19 +592,11 @@
               </ion-list>
             </ion-col>
 
-
           </ion-col>
-
-
-
-
 
         </ion-row>
 
-
-
          <!-- Десктопный блок кнопок -->
-
 
         <!-- Фиксированный блок кнопок для мобилы-->
         <div class="buttons-mobile">

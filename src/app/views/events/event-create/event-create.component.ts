@@ -102,10 +102,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   })
   inputValue: string = ''
   user: any
+  createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 3
-  steps: number = 5
+  stepCurrency: number = 0
+  createObj: any = {}
+  steps: number = 6
   dataValid: boolean = true
   openModalImgs: boolean = false
   openModalPostValue: boolean = false
@@ -809,6 +811,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Клик по нкопке назад
   stepPrev() {
+    this.createFormCount == 0
     this.stepCurrency--
   }
 
@@ -981,6 +984,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }
 
       case 4:
+        this.createFormCount = 0
         let priceValid = false
         let validValidPrice = false
         this.createEventForm.controls['price'].value.forEach(
@@ -1004,11 +1008,38 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         } else {
           return false
         }
+      case 5:
+        if (this.createFormCount == 0) {
+          this.createFormCount++
+          this.createObj = {
+            name: this.createEventForm.value.name,
+            date_start:
+              this.createEventForm.value.dateStart.split('T')[0] +
+              ' ' +
+              this.createEventForm.value.dateStart.split('T')[1].split('+')[0],
+            date_end:
+              this.createEventForm.value.dateEnd.split('T')[0] +
+              ' ' +
+              this.createEventForm.value.dateEnd.split('T')[1].split('+')[0],
+            description: this.createEventForm.value.description,
+            sponsor: this.createEventForm.value.sponsor,
+            price: this.createEventForm.value.price,
+            places: this.createEventForm.value.places,
+            files: this.imagesPreview,
+            vkFiles: this.vkGroupPostSelected?.attachments,
+          }
+          setTimeout(() => {
+            console.log(this.createObj.places[0].controls.coords.value)
+          }, 8000)
+        }
 
+        return false
       default:
         return true
     }
   }
+
+  createDoubleForm() {}
 
   getMessage(): string {
     if (!this.placeValid && !this.seansValid) {

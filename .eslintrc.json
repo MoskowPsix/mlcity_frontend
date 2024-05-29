@@ -10,7 +10,6 @@
       },
       "extends": [
         "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates",
         "plugin:prettier/recommended"
       ],
       "rules": {
@@ -41,7 +40,14 @@
     {
       "files": ["*.html"],
       "extends": ["plugin:@angular-eslint/template/recommended"],
-      "rules": {}
+      "rules": {
+        "no-multiple-empty-lines":[
+          "error",
+          {
+            "max":1
+          }
+        ]
+      }
     }
   ]
 }

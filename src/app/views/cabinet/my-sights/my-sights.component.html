@@ -20,7 +20,6 @@
                   </ion-div>
 
                   <ion-modal backdropDismiss="false" [isOpen] = "edditModalOpen">
-                  
                    
                       <ng-template #name>
                         <ion-button (click) = "closeModal()">
@@ -28,7 +27,6 @@
                       </ion-button>
                       <div style="overflow-y: scroll;">
                        <form action="">
-                        
 
                           <h2>Название достопримечтаельности</h2>
                           <ion-input value="{{sightModal.name}}" ></ion-input>
@@ -56,16 +54,10 @@
                                       </div>
                                     
                                     </ion-col>
-                                    
-
-
-
-                                      
 
                                       <input type="file" (change) = "changeFile($event)" accept="image/*" #file [hidden] = "true">
                                       <ion-button (click)="file.click()" (click) = "UserAddNewImgs()" style="margin-bottom: 10px;" class="imgblock">Добавить</ion-button>
                                 </ion-col>
-    
                              
                             </ion-list>
                           </ion-column>
@@ -73,7 +65,6 @@
                        </form>
                        </div>
                       </ng-template>
-                  
                     
                   </ion-modal>
 
@@ -84,7 +75,6 @@
                 </ion-row>
             </ion-col>
           </ng-container>
-          
           
           <ng-container *ngIf="!loadSights">
             
@@ -131,9 +121,5 @@
     </ion-row>
   </ion-grid>  
 
-
-
-
 </ion-content>
-
  

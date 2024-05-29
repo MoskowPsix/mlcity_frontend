@@ -10,7 +10,6 @@
 
 <p wrap="soft | hard" class="text">{{ readMore ? text : text | slice:0:200 }}<span *ngIf="!readMore && showToggle">...</span></p>
 
-
 <div class="ion-text-center" *ngIf="showToggle">
   <ion-chip color="clear" (click)="readMore = !readMore; toggle()" fill="clear" size="small" >
     {{ (!readMore) ? 'показать весь текст...' : 'скрыть текст' }}

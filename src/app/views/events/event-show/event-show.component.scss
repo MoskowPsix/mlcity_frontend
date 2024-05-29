@@ -5,7 +5,17 @@
 }
 .event-name {
 }
-
+.likes {
+  background-color: #f6f4f5;
+  border-radius: 30px;
+  padding: 6px;
+  min-width: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row-reverse;
+  gap: 0.5rem;
+}
 .event-name-header {
   margin-left: 1%;
   padding-left: 8%;
@@ -135,7 +145,11 @@
 .event-container {
   background-color: white;
 }
-
+.seances{
+  display: block;
+  width: 100%;
+  margin-left: auto;
+}
 .seance {
   background-color: rgba(211, 207, 207, 0.219);
   margin-bottom: 0.6rem;
@@ -146,8 +160,15 @@
   color: #000000;
   font-size: calc(16px + 10 * (100vh / 1406));
 }
-.map {
-  height: 100%;
+.map_prew {
+  height:20rem;
+  width: 80%;
+
+}
+.accordion-content{
+  border: 1px solid rgba(0, 0, 0, 0.096);
+  min-height: 20rem;
+  display: flex;
 }
 
 .left-block {
@@ -192,7 +213,11 @@
   display: flex;
   align-items: center;
 }
-
+.map{
+  height: 15rem;
+  width: 50%;
+  position: absolute;
+}
 .sub-title {
   line-height: 1.5;
   color: #737373;
@@ -217,7 +242,12 @@ ion-accordion-group {
   transform: scale(1.3);
   color: #3880ff99;
 }
-
+.social-buttons_prev{
+  display: flex;
+  gap: 1rem;
+  color: #999ca1;
+  margin-bottom: 1rem;
+}
 .social-buttons {
   font-family: 'Montserrat-Medium';
   display: flex;
@@ -269,11 +299,26 @@ ion-accordion-group {
 }
 
 @media screen and (min-width: 0px) and (max-width: 991px) {
-  .event-name-header{
+  .map_prew{
+    min-width: 100%;
+  }
+
+  .seance-wrapper{
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    max-width: 80%;
+  }
+  .accordion-content{
+    min-height: 20rem;
+    display: block;
+  }
+  .event-name-header {
     padding-left: 0;
   }
   .map {
-    height: 15rem;
+    width: 99%;
+    height: 20rem;
   }
 
   .social-buttons {
@@ -323,7 +368,6 @@ ion-accordion-group {
 }
 
 @media screen and (min-width: 0px) and (max-width: 960px) {
-  
 }
 @media screen and (min-width: 1324px) {
   .ion-justify-content-center {
@@ -350,7 +394,6 @@ ion-accordion-group {
     --width: 100%;
     swiper-slide {
       height: 100%;
-
       img {
         border-radius: 6px;
         width: auto;
@@ -362,5 +405,110 @@ ion-accordion-group {
 
   .ico.share {
     display: none;
+  }
+}
+.map {
+  height: 100%;
+  width: 100%;
+}
+.seance-skelet {
+  height: 80px;
+  width: 300px;
+  border-radius: 8px;
+}
+.seances {
+  font-family: "Montserrat-Regular";
+  background-color: white;
+  border-radius: 8px;
+}
+
+.seance-time-c1 {
+  max-height: 360px;
+  width: 95%;
+}
+.seance-time-c2 {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.336);
+  align-items: center;
+  padding-left: 20px;
+}
+.seance-time-container {
+  max-height: 430px;
+  overflow-y: auto;
+  align-items: center;
+}
+
+.seance-time-content {
+  border-bottom: solid 1px black;
+}
+
+.seance-time-hour-container {
+  align-items: center;
+  margin-top: auto;
+  font-size: 21px;
+
+  margin-bottom: auto;
+  margin-left: 5px;
+  padding-top: 25px;
+}
+.day-color {
+  color: red;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  margin-right: 0;
+  letter-spacing: 1.2px;
+  font-weight: 500;
+}
+.hours {
+  padding-top: 12px;
+  margin-left: 35px;
+  font-size: 2rem;
+}
+
+.seance-time-day {
+  padding-top: 70%;
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.seance-time-month {
+  line-height: 1.14;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: rgba(75, 73, 73, 0.4);
+  font-weight: 600;
+  opacity: 85%;
+}
+.seance-wrapper{
+  background: none;
+  max-width: 95%;
+  display: flex;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.096);
+ 
+}
+.seances-time-container {
+  background: none;
+  height: 300px;
+  border-radius: 8px;
+}
+
+@media screen and (min-width: 0px) and (max-width: 768px) {
+  .seances-container {
+    display: block;
+  }
+
+  .map {
+    height: 500px;
+  }
+
+  .seances {
+    background-color: white;
+  }
+
+  h4 {
+    font-size: 18px;
   }
 }

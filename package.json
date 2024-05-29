@@ -12,9 +12,11 @@
     "test": "ng test",
     "lint": "ng lint",
     "format": "ng lint --fix",
-    "prettier:check": "prettier --config ./.prettierrc --list-different \"src/{app,environments}/**/*{.ts,.js,.json,.css,.scss}\"",
+    "prettier:check": "prettier --config ./.prettierrc --list-different \"src/{app,environments}/**/*{.ts,.js,.json,.css,.scss,.html}\"",
     "prettier:fix": "prettier --config ./.prettierrc --write \"src/{app,environments}/**/*{.ts,.js,.json,.css,.scss}\"",
-    "generate-sitemap": "sitemap-generator https://mlcity.ru/"
+    "generate-sitemap": "sitemap-generator https://mlcity.ru/",
+    "lint-css": "stylelint src/**/*.scss"
+
   },
   "private": true,
   "dependencies": {
@@ -92,6 +94,8 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "prettier-eslint": "^16.3.0",
+    "stylelint": "^16.5.0",
+    "stylelint-config-standard": "^36.0.0",
     "ts-node": "~8.3.0",
     "typescript": "~4.8.4",
     "webpack": "^5.76.0",
