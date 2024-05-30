@@ -1087,8 +1087,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .create(event)
       .pipe(
         tap((res) => {
-          this.loadingService.hideLoading()
-          this.toastService.showToast(MessagesEvents.create, 'success')
           this.createEventForm.reset()
           this.resetUploadInfo()
           this.vkGroupPostSelected = null
