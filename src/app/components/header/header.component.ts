@@ -169,7 +169,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.modalClose()
   }
 
-  //Получить ивенты
+  //Получить ивентыы
   getEventsAndSights(event: any) {
     if (event.target.value.length >= 3) {
       this.eventsListLoading = true
