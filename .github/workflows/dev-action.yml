@@ -1,0 +1,23 @@
+name : 'MLCity frontend develop server deploy'
+
+on:
+  push:
+    branches: ["Develop"]
+
+jobs:
+  re-build-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key: ${{ secrets.DEV_SSH }}
+
+          script: |
+            cd ${{ secrets.DEV_DIR }};
+            git checkout Develop;
+            git pull && echo ${{secrets.DEV_GIT_USERNAME}} && echo ${{secrets.GIT_TOKEN}};
+            sudo docker compose down
+            sudo docker compose up --build -d
+
