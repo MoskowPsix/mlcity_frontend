@@ -261,7 +261,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.locationService.getFavoriteCities().subscribe((response: any) => {
       this.favoriteCities = response.cities
-      console.log(this.favoriteCities)
     })
 
     //Подписываемся на состояние модалки поиска города

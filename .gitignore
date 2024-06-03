@@ -8,9 +8,15 @@
 *.tmp.*
 UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
+App.ipa
+App.xcarchive
 
 *.log
 log.txt
+
+ios/App/fastlane/.env
+ios/App/fastlane/git_key
+ios/App/private_keys
 
 
 /.sourcemaps

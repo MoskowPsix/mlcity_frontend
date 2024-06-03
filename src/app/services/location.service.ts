@@ -16,6 +16,8 @@ export class LocationService {
     )
   }
 
+  //test
+
   getLocationsIds(id: number) {
     //Получаем регио или город по id
     return this.http.get<any>(
