@@ -1,7 +1,7 @@
 export enum Statuses {
-  moderation = 6,
-  publish = '1',
-  denied = '2',
-  draft = '3',
-  archive = '5',
+  moderation = 1,
+  publish = '3',
+  denied = '7',
+  draft = '4',
+  archive = '6',
 }
