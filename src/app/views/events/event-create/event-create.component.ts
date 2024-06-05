@@ -456,7 +456,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.statuses = response.statuses
         if (response.statuses) {
           response.statuses.forEach((status: IStatus) => {
-            if (status.name == 'Изменено') {
+            if (status.name == 'Новое') {
               this.statusSelected = status.id
               this.createEventForm.patchValue({ status: status.id })
             }

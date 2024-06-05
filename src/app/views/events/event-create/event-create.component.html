@@ -887,7 +887,7 @@
 
               <ng-container *ngIf="statusesLoaded">
                 <ng-container *ngFor="let status of statuses">
-                  <ion-item *ngIf="status.name === 'Изменено'">
+                  <ion-item *ngIf="status.name === 'Новое'">
                     <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
                     <ion-label>Отправить на модерацию</ion-label>
                     <ion-radio slot="end" [value]="status.id" checked></ion-radio>
