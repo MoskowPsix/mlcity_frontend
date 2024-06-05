@@ -184,7 +184,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.responseData = data
     this.userService.setUser(this.responseData.user)
     this.loadingService.hideLoading()
-    this.toastService.showToast(MessagesAuth.login, 'success')
     this.loginForm.reset()
     this.loginForm.enable()
 
