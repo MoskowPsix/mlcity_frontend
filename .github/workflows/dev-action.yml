@@ -16,8 +16,8 @@ jobs:
 
           script: |
             cd ${{ secrets.DEV_DIR }};
-            git checkout Develop;
-            git pull && echo ${{secrets.DEV_GIT_USERNAME}} && echo ${{secrets.GIT_TOKEN}};
+            sudo git checkout Develop;
+            sudo git pull && echo ${{secrets.DEV_GIT_USERNAME}} && echo ${{secrets.GIT_TOKEN}};
             sudo docker compose down
             sudo docker compose up --build -d
 
