@@ -116,7 +116,7 @@
               </ion-col>
 
                 <ion-item class="second-step-input-wrapper" fill="outline">
-            
+
                   <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                   <ion-input formControlName="sponsor"  type="text" name="sponsor" required  placeholder="Организатор мероприятия"></ion-input>
                 </ion-item>
@@ -197,7 +197,7 @@
                         <ion-list-header>
                           <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
                         </ion-list-header>
-              
+
                         <div *ngIf="vkGroupPosts; else notSelectedGroup">
                           <!-- Скелетна анимация -->
                           <ng-container *ngIf="!vkGroupPostsLoaded">
@@ -367,7 +367,7 @@
                           </ion-button>
                         </div>
                         <ng-container *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length">
-                       
+
                             <div *ngFor="let attachment of vkGroupPostSelected.attachments" class="img-parent">
                               <ng-conainer *ngIf="attachment.video">
                                 <img class="imagesPreview" alt="" src="{{ attachment.video.image[0].url }}" />
@@ -381,7 +381,7 @@
                               </ng-conainer>
                             </div>
                           </ng-container>
-                    
+
                       </div>
                           <ion-item style="border-top: 1px solid rgba(85, 84, 84, 0.226);">
                             <div (click)="filesUpload.click()" style="align-items: center; display: flex; justify-content: center; align-items: center;">
@@ -390,7 +390,7 @@
                               </ion-button>
                               <ion-text style="color: gray; font-size: small;">Добавить картинку</ion-text>
                             </div>
-                           
+
                           </ion-item>
                       </ion-item>
                         <input formControlName="files" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
@@ -480,7 +480,7 @@
           </ion-col>
         </ion-column>
       </ion-row>
-      
+
       <!-- шаг 4 -->
       <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
         <ion-label *ngIf="isNextButtonClicked === true" class="pick">{{ getMessage() }}</ion-label>
@@ -635,7 +635,7 @@
                                     id="{{'eventStart-'+i+'-'+i_s}}"
                                     [firstDayOfWeek]="1"
                                     [showDefaultButtons]="true"
-                                    [displayFormat]="'MM/YYYY'" 
+                                    [displayFormat]="'MM/YYYY'"
                                     [pickerFormat]="'MMMM YYYY'"
                                     doneText="Ok"
                                     cancelText="Отмена"
@@ -768,7 +768,7 @@
                                     id="{{'eventStart-'+i+'-'+i_s}}"
                                     [firstDayOfWeek]="1"
                                     [showDefaultButtons]="true"
-                                    [displayFormat]="'MM/YYYY'" 
+                                    [displayFormat]="'MM/YYYY'"
                                     [pickerFormat]="'MMMM YYYY'"
                                     doneText="Ok"
                                     cancelText="Отмена"
@@ -809,19 +809,19 @@
                       </ion-button>
                     </ion-col>
                   </div>
-                
+
                 </ion-card>
-               
+
               </ng-container>
             </ion-col>
-              
+
             <ion-col *ngIf="mobile" style="margin-bottom:10rem; display:flex; align-items: center; justify-content: center;">
               <ion-button color="primary" class="" (click)="addPlaceForm()">
               Добавить место проведения
               </ion-button>
             </ion-col>
           </ion-col>
-        
+
       </ion-row>
 
       <!-- шаг 5 -->
@@ -862,7 +862,7 @@
             </ion-item>
           </ion-col>
             <ion-col>
-          
+
             </ion-col>
         </ion-col>
       </ion-row>
@@ -887,7 +887,7 @@
 
               <ng-container *ngIf="statusesLoaded">
                 <ng-container *ngFor="let status of statuses">
-                  <ion-item *ngIf="status.name === 'На модерации'">
+                  <ion-item *ngIf="status.name === 'На редактировании'">
                     <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
                     <ion-label>Отправить на модерацию</ion-label>
                     <ion-radio slot="end" [value]="status.id" checked></ion-radio>
@@ -903,10 +903,10 @@
 
             </ion-radio-group>
           </ng-container>
-   
+
         </ion-col>
       </ion-row>
-    
+
        <!-- Десктопный блок кнопок -->
 
       <!-- Фиксированный блок кнопок для мобилы-->

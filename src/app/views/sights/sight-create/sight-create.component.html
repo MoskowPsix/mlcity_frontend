@@ -110,18 +110,18 @@
                     <div *ngIf="createSightForm.controls['name'].invalid && createSightForm.controls['name'].dirty"  class="validation">
                       <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название достопримечательности должно содержать минимум 3 символа</ion-note>
                     </div>
-                  
+
                       <ion-item class="second-step-input-wrapper" fill="outline">
                         <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                         <ion-input formControlName="sponsor"  type="text" name="sponsor" required  placeholder="Организатор достопримечательности"></ion-input>
                       </ion-item>
-  
+
                       <!-- <ion-item fill="outline">
                         <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Название мероприятия</ion-label>
                         <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
                         <ion-input #eventName fill="solid" style="" size="small" class="nameEvent" formControlName="name" type="text" name="name" required></ion-input>
                       </ion-item> -->
-      
+
                       <!-- <ion-item class="" fill="outline">
                           <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Организатор мероприятия</ion-label>
                           <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
@@ -481,7 +481,7 @@
               <ion-icon name="earth" slot="start"  size="small" color="primary"></ion-icon>
               <ion-input placeholder="поиск по адресу"  formControlName="address" (ionChange)="clearSearche($event)" id="search-map" type="text" name="search" value="{{this.createSightForm.value.address}}" required></ion-input>
             </ion-item>
-          
+
             <ion-item style="z-index: 1" lines="none">
               <ion-label *ngIf="!locationLoader">Текущий город: <span style="width: 100%; margin-bottom: -2rem;">{{city}} ({{region}})</span></ion-label>
               <ion-list style="width: 50%" *ngIf="locationLoader">
@@ -575,7 +575,7 @@
 
                   <ng-container *ngIf="statusesLoaded">
                     <ng-container *ngFor="let status of statuses">
-                      <ion-item *ngIf="status.name === 'На модерации'">
+                      <ion-item *ngIf="status.name === 'На редактировании'">
                         <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
                         <ion-label>Отправить на модерацию</ion-label>
                         <ion-radio slot="end" [value]="status.id"></ion-radio>
