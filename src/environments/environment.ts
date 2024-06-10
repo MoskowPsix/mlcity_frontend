@@ -16,6 +16,7 @@ export const environment = {
   DOMAIN: 'mlcity.ru',
   vkontakteAuthUrl: `http://localhost:8000/api/social-auth/vkontakte`,
   appleAuthUrl: 'http://localhost:8000/api/social-auth/apple',
+  yandexAuthUrl: 'http://localhost:8000/api/social-auth/yandex/',
   vkontakteServiceKey:
     '7c6d50047c6d50047c6d5004647f7f17fc77c6d7c6d50041fa47869a3cc84a7c0bed429',
   // cityName: 'Заречный',

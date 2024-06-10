@@ -10,8 +10,9 @@ export const environment = {
   BACKEND_URL: 'http://dev.mlcity.ru',
   BACKEND_PORT: '8000',
   DOMAIN: 'mlcity.ru',
-  appleAuthUrl: 'https://www.mlcity.ru:3443/api/social-auth/apple',
-  vkontakteAuthUrl: `https://www.mlcity.ru:3443/api/social-auth/vkontakte`,
+  appleAuthUrl: 'http://dev.mlcity.ru:8000/api/social-auth/apple',
+  vkontakteAuthUrl: `http://dev.mlcity.ru:8000/api/social-auth/vkontakte`,
+  yandexAuthUrl: 'http://dev.mlcity:8000/api/social-auth/yandex/',
   vkontakteServiceKey:
     '7c6d50047c6d50047c6d5004647f7f17fc77c6d7c6d50041fa47869a3cc84a7c0bed429',
   // cityName: 'Заречный',

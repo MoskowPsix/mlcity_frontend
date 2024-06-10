@@ -165,7 +165,7 @@
 <ion-content class="MainBlock">
   <!-- Обёртка для центрирования -->
     <ion-grid class="Login_wrapper">
-      
+
       <form [formGroup]="loginForm" (submit)="onSubmitLogin()" enctype="multipart/form-data">
 
        <ion-row class="LoginMainBlock">
@@ -270,10 +270,16 @@
                 <a  (click)="onLoading(); loginApple()">
 
                   <ion-div class="apple-logo-circle">
-                    
+
                       <ion-icon class="logo-apple-icon" name="logo-apple"></ion-icon>
-                    
+
                   </ion-div>
+                </a>
+
+                <a href="{{yandexAuthUrl}}">
+                  <div class="yandex-logo-circle">
+
+                  </div>
                 </a>
 
             </ion-item>

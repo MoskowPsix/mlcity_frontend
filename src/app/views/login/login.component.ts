@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   vkontakteAuthUrl: string = environment.vkontakteAuthUrl
   appleAuthUrl: string = environment.appleAuthUrl
+  yandexAuthUrl: string = environment.yandexAuthUrl
   user_id!: number
   loginForm!: FormGroup
   responseData: any
@@ -215,6 +216,48 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
+  async loginApple() {
+    if (Capacitor.getPlatform() == 'ios') {
+      const options: SignInWithAppleOptions = {
+        clientId: 'mlcity.ru',
+        redirectURI: 'https://www.mlcity.ru:3443/api/social-auth/apple',
+        state: String(this.appleState),
+        nonce: 'nonce',
+      }
+
+      SignInWithApple.authorize(options)
+        .then((res: SignInWithAppleResponse) => {
+          console.log(res)
+          console.log(options)
+          this.authService
+            .loginApple(res.response)
+            .pipe(
+              takeUntil(this.destroy$),
+              catchError((err) => {
+                this.toastService.showToast(
+                  'При авторизвции apple что-то пошло не так',
+                  'warning',
+                )
+                return of(EMPTY)
+              }),
+            )
+            .subscribe((response) => {
+              this.loginAfterSocial(response.token)
+            })
+        })
+        .catch((e) => {
+          console.log(e)
+          this.toastService.showToast(
+            'При авторизвции apple что-то пошло не так',
+            'warning',
+          )
+          return of(EMPTY)
+        })
+    } else {
+      window.open('https://www.mlcity.ru:3443/api/social-auth/apple')
+    }
+  }
+
   ngOnInit() {
     //Создаем поля для формы
     this.loginForm = new FormGroup({
@@ -268,48 +311,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   //   });
 
   // }
-
-  async loginApple() {
-    if (Capacitor.getPlatform() == 'ios') {
-      const options: SignInWithAppleOptions = {
-        clientId: 'mlcity.ru',
-        redirectURI: 'https://www.mlcity.ru:3443/api/social-auth/apple',
-        state: String(this.appleState),
-        nonce: 'nonce',
-      }
-
-      SignInWithApple.authorize(options)
-        .then((res: SignInWithAppleResponse) => {
-          console.log(res)
-          console.log(options)
-          this.authService
-            .loginApple(res.response)
-            .pipe(
-              takeUntil(this.destroy$),
-              catchError((err) => {
-                this.toastService.showToast(
-                  'При авторизвции apple что-то пошло не так',
-                  'warning',
-                )
-                return of(EMPTY)
-              }),
-            )
-            .subscribe((response) => {
-              this.loginAfterSocial(response.token)
-            })
-        })
-        .catch((e) => {
-          console.log(e)
-          this.toastService.showToast(
-            'При авторизвции apple что-то пошло не так',
-            'warning',
-          )
-          return of(EMPTY)
-        })
-    } else {
-      window.open('https://www.mlcity.ru:3443/api/social-auth/apple')
-    }
-  }
 
   ngOnDestroy() {
     // отписываемся от всех подписок
