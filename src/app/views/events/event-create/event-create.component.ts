@@ -231,6 +231,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
                     MessagesErrors.vkTokenError,
                   'danger',
                 )
+                console.log(err)
                 this.loadingService.hideLoading()
                 this.authService.logout()
                 return of(EMPTY)
