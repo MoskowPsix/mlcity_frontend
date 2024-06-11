@@ -839,9 +839,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           dateStart: this.formatingTimeStart,
         })
         this.startTime = event.target.value
-        console.log(
-          this.createEventForm.value.places[place].value.seances[seans],
-        )
       }
     } else if (param === 'end') {
       this.formatingTimeEnd = this.createEventForm.value.places[
@@ -856,9 +853,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           dateEnd: this.formatingTimeEnd,
         })
         this.startTime = event.target.value
-        console.log(
-          this.createEventForm.value.places[place].value.seances[seans],
-        )
+     
       }
     }
   }
@@ -889,7 +884,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       })
     }
 
-    console.log(this.createEventForm.value.places[place].value.seances[seans])
   }
 
   detectedDataInvalid() {
@@ -1029,9 +1023,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             files: this.imagesPreview,
             vkFiles: this.vkGroupPostSelected?.attachments,
           }
-          setTimeout(() => {
-            console.log(this.createEventForm.value)
-          }, 8000)
         }
 
         return false
@@ -1109,27 +1100,24 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Отпрвка формы
 
   onSubmit() {
-    console.log(this.createEventForm.value)
     this.searchMinSeans()
     //собираем плейсы
     let event = this.createFormData() // собираем формдату
     this.createEventForm.disable()
     this.loadingService.showLoading()
-    console.log(this.createEventForm.value)
     this.eventsService
       .create(event)
       .pipe(
         tap((res) => {
           this.loadingService.hideLoading()
           this.toastService.showToast(MessagesEvents.create, 'success')
-          console.log(this.createEventForm.value)
           this.createEventForm.reset()
           this.resetUploadInfo()
           this.vkGroupPostSelected = null
           this.createEventForm.controls['name'].reset()
           this.createEventForm.controls['description'].reset()
-          // this.createEventForm.controls['address'].reset()
-          // this.createEventForm.controls['coords'].reset()
+          this.createEventForm.controls['address'].reset()
+          this.createEventForm.controls['coords'].reset()
           this.createEventForm.controls['files'].reset()
           this.createEventForm.controls['price'].reset()
           this.createEventForm.controls['materials'].reset()
@@ -1138,7 +1126,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           this.createEventForm.enable()
           this.stepCurrency = this.stepStart
 
-          // this.router.navigate(['/home'])
+          this.router.navigate(['/home'])
         }),
         catchError((err) => {
           this.toastService.showToast(
@@ -1403,7 +1391,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.dateTomorrow.setDate(this.dateTomorrow.getDate() + 1)
   }
   ngOnInit() {
-    console.log(this.router.url)
     this.setValueDateDefault()
     this.mobileOrNote()
     let locationId: any
