@@ -843,9 +843,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           dateStart: this.formatingTimeStart,
         })
         this.startTime = event.target.value
-        console.log(
-          this.createEventForm.value.places[place].value.seances[seans],
-        )
       }
     } else if (param === 'end') {
       this.formatingTimeEnd = this.createEventForm.value.places[
@@ -860,9 +857,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           dateEnd: this.formatingTimeEnd,
         })
         this.startTime = event.target.value
-        console.log(
-          this.createEventForm.value.places[place].value.seances[seans],
-        )
+     
       }
     }
   }
@@ -893,7 +888,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       })
     }
 
-    console.log(this.createEventForm.value.places[place].value.seances[seans])
   }
 
   detectedDataInvalid() {
@@ -1015,6 +1009,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       case 5:
         if (this.createFormCount == 0) {
           this.createFormCount++
+          this.searchMinSeans()
           this.createObj = {
             name: this.createEventForm.value.name,
             date_start:
@@ -1032,9 +1027,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             files: this.imagesPreview,
             vkFiles: this.vkGroupPostSelected?.attachments,
           }
-          setTimeout(() => {
-            console.log(this.createObj.places[0].controls.coords.value)
-          }, 8000)
         }
 
         return false
@@ -1117,18 +1109,19 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     let event = this.createFormData() // собираем формдату
     this.createEventForm.disable()
     this.loadingService.showLoading()
-
     this.eventsService
       .create(event)
       .pipe(
         tap((res) => {
+          this.loadingService.hideLoading()
+          this.toastService.showToast(MessagesEvents.create, 'success')
           this.createEventForm.reset()
           this.resetUploadInfo()
           this.vkGroupPostSelected = null
           this.createEventForm.controls['name'].reset()
           this.createEventForm.controls['description'].reset()
-          // this.createEventForm.controls['address'].reset()
-          // this.createEventForm.controls['coords'].reset()
+          this.createEventForm.controls['address'].reset()
+          this.createEventForm.controls['coords'].reset()
           this.createEventForm.controls['files'].reset()
           this.createEventForm.controls['price'].reset()
           this.createEventForm.controls['materials'].reset()
@@ -1136,6 +1129,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           //this.city = ''
           this.createEventForm.enable()
           this.stepCurrency = this.stepStart
+
           this.router.navigate(['/home'])
         }),
         catchError((err) => {
@@ -1191,6 +1185,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           })
         }
       })
+
     this.createEventForm.controls['places'].value.push(
       new FormGroup({
         sight_id: new FormControl('', [Validators.minLength(1)]),
@@ -1345,25 +1340,30 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //ищем минимальный и максимальный плейс
 
   searchMinSeans() {
-    let dateStart =
+    const pad = (number: any) => (number < 10 ? '0' + number : number)
+    let dateStart = new Date(
       this.createEventForm.value.places[0].value.seances[0].value.dateStart.split(
         '+',
-      )[0]
-    let dateEnd =
+      )[0],
+    )
+
+    let dateEnd = new Date(
       this.createEventForm.value.places[0].value.seances[0].value.dateEnd.split(
         '+',
-      )[0]
+      )[0],
+    )
 
     let minSeans: any = {
       value: {
-        dateStart: new Date(dateStart).toISOString(),
-        dateEnd: new Date(dateEnd).toISOString(),
+        dateStart: `${dateStart.getFullYear()}-${pad(dateStart.getMonth() + 1)}-${pad(dateStart.getDate())}T${pad(dateStart.getHours())}:${pad(dateStart.getMinutes())}:${pad(dateStart.getSeconds())}`,
+        dateEnd: `${dateEnd.getFullYear()}-${pad(dateEnd.getMonth() + 1)}-${pad(dateEnd.getDate())}T${pad(dateEnd.getHours())}:${pad(dateEnd.getMinutes())}:${pad(dateEnd.getSeconds())}`,
       },
     }
+
     let maxSeans: any = {
       value: {
-        dateStart: new Date(dateStart).toISOString(),
-        dateEnd: new Date(dateEnd).toISOString(),
+        dateStart: `${dateStart.getFullYear()}-${pad(dateStart.getMonth() + 1)}-${pad(dateStart.getDate())}T${pad(dateStart.getHours())}:${pad(dateStart.getMinutes())}:${pad(dateStart.getSeconds())}`,
+        dateEnd: `${dateEnd.getFullYear()}-${pad(dateEnd.getMonth() + 1)}-${pad(dateEnd.getDate())}T${pad(dateEnd.getHours())}:${pad(dateEnd.getMinutes())}:${pad(dateEnd.getSeconds())}`,
       },
     }
     // minSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
@@ -1395,7 +1395,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.dateTomorrow.setDate(this.dateTomorrow.getDate() + 1)
   }
   ngOnInit() {
-    console.log(this.router.url)
     this.setValueDateDefault()
     this.mobileOrNote()
     let locationId: any
