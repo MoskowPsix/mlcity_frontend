@@ -309,24 +309,26 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.eventId = params['id']
     })
     this.userAuth = this.authService.getAuthState()
-    this.getEvent()
-    this.checkLiked()
-    this.checFavorite()
-    this.filterService.locationId
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.loadMore = true
-        this.locationId = Number(value)
-        this.places = []
-        this.setLocationForPlaces()
-      })
-    this.router.events
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
-          '',
-        )
-      })
+    if (this.router.url !== '/cabinet/events/create') {
+      this.getEvent()
+      this.checkLiked()
+      this.checFavorite()
+      this.filterService.locationId
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          this.loadMore = true
+          this.locationId = Number(value)
+          this.places = []
+          this.setLocationForPlaces()
+        })
+      this.router.events
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((value: any) => {
+          this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
+            '',
+          )
+        })
+    }
   }
 
   ngOnDestroy() {

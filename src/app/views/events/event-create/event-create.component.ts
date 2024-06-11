@@ -803,11 +803,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.eventNameElement.setFocus()
       }, 500)
     }
-    if (this.stepCurrency == 2) {
-      setTimeout(() => {
-        this.eventDescriptionElement.setFocus()
-      }, 500)
-    }
   }
 
   //Клик по нкопке назад
@@ -854,7 +849,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           dateEnd: this.formatingTimeEnd,
         })
         this.startTime = event.target.value
-     
       }
     }
   }
@@ -884,7 +878,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         dateEnd: this.formatingTimeEnd,
       })
     }
-
   }
 
   detectedDataInvalid() {
@@ -1117,8 +1110,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           this.vkGroupPostSelected = null
           this.createEventForm.controls['name'].reset()
           this.createEventForm.controls['description'].reset()
-          this.createEventForm.controls['address'].reset()
-          this.createEventForm.controls['coords'].reset()
+          // this.createEventForm.controls['address'].reset()
+          // this.createEventForm.controls['coords'].reset()
           this.createEventForm.controls['files'].reset()
           this.createEventForm.controls['price'].reset()
           this.createEventForm.controls['materials'].reset()
@@ -1130,6 +1123,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           this.router.navigate(['/home'])
         }),
         catchError((err) => {
+          console.log(err)
           this.toastService.showToast(
             err.error.message || MessagesErrors.default,
             'danger',
