@@ -70,6 +70,7 @@ export class PlaceInfoComponent implements OnInit {
           this.normalizeDate()
         }),
         catchError((error) => {
+          console.log(error)
           this.toastSerivce.showToast(MessagesErrors.default, 'danger')
           return of(EMPTY)
         }),
@@ -116,31 +117,33 @@ export class PlaceInfoComponent implements OnInit {
           return d
         }
       })
-      this.changeDateRange({
-        dateStart: new Date()
-          .toLocaleDateString('pt-br')
-          .split('/')
-          .reverse()
-          .join('-'),
-        dateEnd: new Date(test[0].date_start)
-          .toLocaleDateString('pt-br')
-          .split('/')
-          .reverse()
-          .join('-'),
-      })
-    } else {
-      this.changeDateRange({
-        dateStart: new Date()
-          .toLocaleDateString('pt-br')
-          .split('/')
-          .reverse()
-          .join('-'),
-        dateEnd: new Date()
-          .toLocaleDateString('pt-br')
-          .split('/')
-          .reverse()
-          .join('-'),
-      })
+      try {
+        this.changeDateRange({
+          dateStart: new Date()
+            .toLocaleDateString('pt-br')
+            .split('/')
+            .reverse()
+            .join('-'),
+          dateEnd: new Date(test[0].date_start)
+            .toLocaleDateString('pt-br')
+            .split('/')
+            .reverse()
+            .join('-'),
+        })
+      } catch (error) {
+        this.changeDateRange({
+          dateStart: new Date()
+            .toLocaleDateString('pt-br')
+            .split('/')
+            .reverse()
+            .join('-'),
+          dateEnd: new Date()
+            .toLocaleDateString('pt-br')
+            .split('/')
+            .reverse()
+            .join('-'),
+        })
+      }
     }
   }
 

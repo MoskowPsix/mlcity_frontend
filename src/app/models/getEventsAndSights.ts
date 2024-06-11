@@ -20,6 +20,8 @@ export interface IGetEventsAndSights {
   radius?: number // радиус круга в котором выводить ивент / места
   eventIds?: string
   sightIds?: string
+  orderBy?: string
+  desc?: boolean
 }
 
 //Пример

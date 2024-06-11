@@ -167,7 +167,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // this.mapService.geolocationCity.next(item.name);
     // this.mapService.geolocationRegion.next(item.location_parent.name);
     this.modalClose()
-    this.toastService.showToast(MessagesCityes.setCitySuccess, 'success')
   }
 
   //Получить ивенты

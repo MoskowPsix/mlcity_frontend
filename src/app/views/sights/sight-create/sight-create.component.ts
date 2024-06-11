@@ -886,7 +886,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       .pipe(
         tap((res) => {
           this.loadingService.hideLoading()
-          this.toastService.showToast(MessagesSights.create, 'success')
           //this.createEventForm.reset()
           this.resetUploadInfo()
           this.vkGroupPostSelected = null
