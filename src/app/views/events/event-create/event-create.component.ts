@@ -231,6 +231,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
                     MessagesErrors.vkTokenError,
                   'danger',
                 )
+                console.log(err)
                 this.loadingService.hideLoading()
                 this.authService.logout()
                 return of(EMPTY)
@@ -456,7 +457,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.statuses = response.statuses
         if (response.statuses) {
           response.statuses.forEach((status: IStatus) => {
-            if (status.id === Statuses.moderation) {
+            if (status.name == 'Новое') {
               this.statusSelected = status.id
               this.createEventForm.patchValue({ status: status.id })
             }

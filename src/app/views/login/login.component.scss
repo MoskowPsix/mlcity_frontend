@@ -251,3 +251,15 @@ ion-modal {
     height: 30px;
   }
 }
+
+.yandex-logo-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 1rem;
+  background-image: url("data:image/svg+xml,%3Csvg%20width='56'%20height='56'%20viewBox='0%200%2044%2044'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3E%3Crect%20width='44'%20height='44'%20fill='%23FC3F1D'/%3E%3Cpath%20d='M24.7407%2033.9778H29.0889V9.04443H22.7592C16.3929%209.04443%2013.0538%2012.303%2013.0538%2017.1176C13.0538%2021.2731%2015.2187%2023.6163%2019.0532%2026.1609L21.3832%2027.6987L18.3927%2025.1907L12.4667%2033.9778H17.1818L23.5115%2024.5317L21.3098%2023.0671C18.6496%2021.2731%2017.3469%2019.8818%2017.3469%2016.8613C17.3469%2014.2068%2019.2183%2012.4128%2022.7776%2012.4128H24.7223V33.9778H24.7407Z'%20fill='white'/%3E%3C/svg%3E%0A");
+
+}
