@@ -125,7 +125,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         if (event) {
           this.event = event
-          console.log(event)
 
           // this.places = event.places_full;
         }
@@ -143,7 +142,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
   setLocationForPlaces() {
     this.loadPlace = true
     const coords = this.mapService.getLastMapCoordsFromLocalStorage()
-    console.log(coords)
     this.locationService
       .getLocationByCoords(coords)
       .pipe(
@@ -154,11 +152,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe(async (response: any) => {
-        console.log(response)
         await this.queryBuilderService.locationIdForEventShow.next(
           response.location.id,
         )
-        this.getEventPlaces()
+        await this.getEventPlaces()
       })
   }
 
@@ -182,7 +179,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
         )
         .subscribe((response: any) => {
           this.places.push(...response.places.data)
-          console.log(this.places)
           this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
             response.places.next_cursor,
           )
@@ -197,7 +193,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
   onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>, place: any) {
     //Создаем метку
     this.map = { target, ymaps }
-    console.log(place.value.seances[0].value.dateStart)
     target.geoObjects.add(
       new ymaps.Placemark(
         [place.controls.coords.value[0], place.controls.coords.value[1]],
@@ -309,52 +304,30 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.router.url)
-    console.log(this.createObj)
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.url = this.router.url
-      if (this.router.url !== '/cabinet/events/create') {
-        this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-          this.eventId = params['id']
-        })
-        this.filterService.locationId
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((value) => {
-            this.loadMore = true
-            this.locationId = Number(value)
-            this.places = []
-            this.setLocationForPlaces()
-          })
-        this.userAuth = this.authService.getAuthState()
-        this.getEvent()
-        // this.getEventPlaces();
-        this.user = this.userService.user.value
-        this.checkLiked()
-        this.checFavorite()
-        this.router.events
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((value: any) => {
-            this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
-              '',
-            )
-            // this.queryBuilderService.locationIdForEventShow.next(0)
-          })
-      }
-    })
-
     //Получаем ид ивента из параметра маршрута
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.eventId = params['id']
+    })
+    this.userAuth = this.authService.getAuthState()
+    this.getEvent()
+    this.checkLiked()
+    this.checFavorite()
+    this.filterService.locationId
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.loadMore = true
+        this.locationId = Number(value)
+        this.places = []
+        this.setLocationForPlaces()
+      })
+    this.router.events
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value: any) => {
+        this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
+          '',
+        )
+      })
   }
-
-  // ngAfterViewInit() {
-  //   // register();
-  //   // this.cdr.detectChanges();
-  //   // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
-  //   //   this.swiper = res.first.nativeElement.swiper
-  //   //   console.log(res.first.nativeElement.swiper)
-  //   // });
-  //   // this.swiper?.update()
-  //   // console.log(this.swiper)
-  // }
 
   ngOnDestroy() {
     // отписываемся от всех подписок
