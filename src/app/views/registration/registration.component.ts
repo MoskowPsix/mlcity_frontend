@@ -330,8 +330,8 @@ export class RegistrationComponent implements OnInit {
     await this.checkPassword()
     await this.checkEmail()
     await this.checkName()
-    await this.SubmitPhone()
-    await this.checkNumber()
+    // await this.SubmitPhone()
+    // await this.checkNumber()
 
     if (this.emailBusy && this.nameBusy && this.busyPass && this.privacyCheck) {
       this.authservice
