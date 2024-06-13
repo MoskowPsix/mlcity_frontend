@@ -53,8 +53,6 @@
       <img alt="img" src="{{host}}:{{port}}{{ event.types[0].ico }}" />
     </div>
 
-    
-
     <ion-card-header [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
       <ion-text class="last-header card-title">{{ event.name | truncate:[60,'...'] }}</ion-text>
       <ng-container *ngIf="!isSight">
@@ -81,7 +79,6 @@
         </ion-card>
       </ng-container>
     </ng-container> -->
-
 
   </div>
 

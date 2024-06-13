@@ -8,7 +8,7 @@ export const environment = {
   apiKeyYandexSubject: '6483f031-ac2f-4600-a338-269045f79ee2',
   YANDEX_METRICA_KEY: 96112606,
   YANDEX_METRICA_ON: false,
-  APP_NAME: 'MyLittleCity',
+  APP_NAME: 'Вокруг',
   BASE_URL: 'http://localhost',
   PORT: '8100',
   BACKEND_URL: 'http://localhost',
@@ -16,6 +16,7 @@ export const environment = {
   DOMAIN: 'mlcity.ru',
   vkontakteAuthUrl: `http://localhost:8000/api/social-auth/vkontakte`,
   appleAuthUrl: 'http://localhost:8000/api/social-auth/apple',
+  yandexAuthUrl: 'http://localhost:8000/api/social-auth/yandex/',
   vkontakteServiceKey:
     '7c6d50047c6d50047c6d5004647f7f17fc77c6d7c6d50041fa47869a3cc84a7c0bed429',
   // cityName: 'Заречный',

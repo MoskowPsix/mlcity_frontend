@@ -15,7 +15,7 @@ import {
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { AuthService } from 'src/app/services/auth.service'
 import { ToastService } from 'src/app/services/toast.service'
-import { MaskitoOptions, MaskitoElementPredicateAsync } from '@maskito/core'
+import { MaskitoOptions, MaskitoElementPredicate } from '@maskito/core'
 import { LoadingService } from 'src/app/services/loading.service'
 import { UserService } from 'src/app/services/user.service'
 import { TokenService } from 'src/app/services/token.service'
@@ -85,7 +85,7 @@ export class RegistrationComponent implements OnInit {
     ],
   }
 
-  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
+  readonly maskPredicate: MaskitoElementPredicate = async (el: any) =>
     (el as HTMLIonInputElement).getInputElement()
 
   readonly maskNumber: MaskitoOptions = {
@@ -330,8 +330,8 @@ export class RegistrationComponent implements OnInit {
     await this.checkPassword()
     await this.checkEmail()
     await this.checkName()
-    await this.SubmitPhone()
-    await this.checkNumber()
+    // await this.SubmitPhone()
+    // await this.checkNumber()
 
     if (this.emailBusy && this.nameBusy && this.busyPass && this.privacyCheck) {
       this.authservice

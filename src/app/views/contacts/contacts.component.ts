@@ -57,6 +57,7 @@ export class ContactsComponent {
     }
   }
 
+  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnInit() {
     this.contactForm = new FormGroup({
       email: new FormControl('', [

@@ -30,6 +30,7 @@ import {
   Validators,
 } from '@angular/forms'
 import { UserService } from 'src/app/services/user.service'
+import { MaskitoOptions } from '@maskito/core'
 import { EventTypeService } from 'src/app/services/event-type.service'
 import { IEventType } from 'src/app/models/event-type'
 import { IStatus } from 'src/app/models/status'
@@ -58,6 +59,7 @@ import { SightsService } from 'src/app/services/sights.service'
 import { SafeUrlPipe } from './event-create.pipe'
 import { Router } from '@angular/router'
 import { CreateRulesModalComponent } from 'src/app/components/create-rules-modal/create-rules-modal.component'
+import { maskitoTimeOptionsGenerator } from '@maskito/kit'
 
 @Component({
   selector: 'app-event-create',
@@ -81,7 +83,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   mobile: boolean = false
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
-
+  currentTime = new Date()
   @ViewChild('eventName') eventNameElement!: any
   @ViewChild('eventDescription') eventDescriptionElement!: any
   @HostListener('window:resize', ['$event'])
@@ -95,13 +97,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
   placesClose: any = []
-
+  maskTime: MaskitoOptions = maskitoTimeOptionsGenerator({
+    mode: 'HH:MM',
+  })
   inputValue: string = ''
   user: any
+  createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
   stepCurrency: number = 0
-  steps: number = 5
+  createObj: any = {}
+  steps: number = 6
   dataValid: boolean = true
   openModalImgs: boolean = false
   openModalPostValue: boolean = false
@@ -119,6 +125,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   typesLoaded: boolean = false
   typeSelected: number | null = null
   currentType: any = []
+  dateTomorrow = new Date()
   statuses: IStatus[] = []
   statusesLoaded: boolean = false
   statusSelected: number | null = null
@@ -142,7 +149,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   isNextButtonClicked: boolean = false
   placeValid: boolean = false
   seansValid: boolean = false
+  startTime: any = '12, 0, 0, 0'
+  startEnd: any = ''
+  DateTimeFormatOptions: any = new Intl.DateTimeFormat('ru', {
+    dateStyle: 'short',
+  })
 
+  formatingTimeStart: string = ''
+  formatingTimeEnd: string = ''
   //nextButtonDisable: boolean = false
 
   placemark!: ymaps.Placemark
@@ -167,7 +181,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router,
     private yaGeocoderService: YaGeocoderService,
-  ) {}
+  ) { }
 
   nextStep() {
     this.isNextButtonClicked = true
@@ -195,7 +209,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           return of(user)
         }),
         switchMap((user: any) => {
-          if (!user?.social_account) {
+          if (
+            !user?.social_account ||
+            user?.social_account.provider != 'vkontakte'
+          ) {
             this.toastService.showToast(
               MessagesErrors.vkGroupSearch,
               'secondary',
@@ -213,10 +230,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
                 //Выкидываем на логин если с ВК проблемы
                 this.toastService.showToast(
                   err.error?.message ||
-                    err.error?.error_msg ||
-                    MessagesErrors.vkTokenError,
+                  err.error?.error_msg ||
+                  MessagesErrors.vkTokenError,
                   'danger',
                 )
+                console.log(err)
                 this.loadingService.hideLoading()
                 this.authService.logout()
                 return of(EMPTY)
@@ -234,8 +252,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         catchError((err) => {
           this.toastService.showToast(
             err.error?.message ||
-              err.error?.error_msg ||
-              MessagesErrors.default,
+            err.error?.error_msg ||
+            MessagesErrors.default,
             'danger',
           )
           this.loadingService.hideLoading()
@@ -249,10 +267,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   getUrlVideo(owner_id: number, video_id: number) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       'https://vk.com/video_ext.php?oid=' +
-        owner_id +
-        '&id=' +
-        video_id +
-        '&hd=2',
+      owner_id +
+      '&id=' +
+      video_id +
+      '&hd=2',
     )
   }
   //Устанавливаем группы
@@ -442,7 +460,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.statuses = response.statuses
         if (response.statuses) {
           response.statuses.forEach((status: IStatus) => {
-            if (status.id === Statuses.moderation) {
+            if (status.name == 'Новое') {
               this.statusSelected = status.id
               this.createEventForm.patchValue({ status: status.id })
             }
@@ -549,7 +567,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         checkZoomRange: false,
       })
       this.maps[num].target.setZoom(17)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   ReserveGeocoder(num: number): void {
@@ -677,10 +695,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           this.formData.append(
             'vkFilesVideo[]',
             'https://vk.com/video_ext.php?oid=' +
-              attachment.video.owner_id +
-              '&id=' +
-              attachment.video.id +
-              '&hd=2',
+            attachment.video.owner_id +
+            '&id=' +
+            attachment.video.id +
+            '&hd=2',
           )
         }
         if (attachment.link) {
@@ -788,15 +806,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.eventNameElement.setFocus()
       }, 500)
     }
-    if (this.stepCurrency == 2) {
-      setTimeout(() => {
-        this.eventDescriptionElement.setFocus()
-      }, 500)
-    }
   }
 
   //Клик по нкопке назад
   stepPrev() {
+    this.createFormCount == 0
     this.stepCurrency--
   }
 
@@ -810,7 +824,64 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  //Блокировка шагов в баре
+  testTime(event: any, place: any, seans: any, param: any) {
+    if (param === 'start') {
+      this.formatingTimeStart = this.createEventForm.value.places[
+        place
+      ].value.seances[seans].value.dateStart.slice(0, 11)
+      if (event.target.value.length == 5) {
+        this.formatingTimeStart =
+          this.formatingTimeStart + event.target.value + ':00' + '+00:00'
+        this.createEventForm.value.places[place].value.seances[
+          seans
+        ].patchValue({
+          dateStart: this.formatingTimeStart,
+        })
+        this.startTime = event.target.value
+      }
+    } else if (param === 'end') {
+      this.formatingTimeEnd = this.createEventForm.value.places[
+        place
+      ].value.seances[seans].value.dateEnd.slice(0, 11)
+      if (event.target.value.length == 5) {
+        this.formatingTimeEnd =
+          this.formatingTimeEnd + event.target.value + ':00' + '+00:00'
+        this.createEventForm.value.places[place].value.seances[
+          seans
+        ].patchValue({
+          dateEnd: this.formatingTimeEnd,
+        })
+        this.startTime = event.target.value
+      }
+    }
+  }
+
+  testDate(event: any, place: any, seans: any, param: any) {
+    let thisSeansTimeStart =
+      this.createEventForm.value.places[place].value.seances[
+        seans
+      ].value.dateStart.split('T')[1]
+    let thisSeansTimeEnd =
+      this.createEventForm.value.places[place].value.seances[
+        seans
+      ].value.dateEnd.split('T')[1]
+
+    if (param === 'start') {
+      let str = event.target.value
+      let index = str.indexOf('T')
+      this.formatingTimeStart = str.slice(0, index) + 'T' + thisSeansTimeStart
+      this.createEventForm.value.places[place].value.seances[seans].patchValue({
+        dateStart: this.formatingTimeStart,
+      })
+    } else if (param === 'end') {
+      let str = event.target.value
+      let index = str.indexOf('T')
+      this.formatingTimeEnd = str.slice(0, index) + 'T' + thisSeansTimeEnd
+      this.createEventForm.value.places[place].value.seances[seans].patchValue({
+        dateEnd: this.formatingTimeEnd,
+      })
+    }
+  }
 
   detectedDataInvalid() {
     let dataStart: any = new Date(
@@ -904,6 +975,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }
 
       case 4:
+        this.createFormCount = 0
         let priceValid = false
         let validValidPrice = false
         this.createEventForm.controls['price'].value.forEach(
@@ -927,11 +999,36 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         } else {
           return false
         }
+      case 5:
+        if (this.createFormCount == 0) {
+          this.createFormCount++
+          this.searchMinSeans()
+          this.createObj = {
+            name: this.createEventForm.value.name,
+            date_start:
+              this.createEventForm.value.dateStart.split('T')[0] +
+              ' ' +
+              this.createEventForm.value.dateStart.split('T')[1].split('+')[0],
+            date_end:
+              this.createEventForm.value.dateEnd.split('T')[0] +
+              ' ' +
+              this.createEventForm.value.dateEnd.split('T')[1].split('+')[0],
+            description: this.createEventForm.value.description,
+            sponsor: this.createEventForm.value.sponsor,
+            price: this.createEventForm.value.price,
+            places: this.createEventForm.value.places,
+            files: this.imagesPreview,
+            vkFiles: this.vkGroupPostSelected?.attachments,
+          }
+        }
 
+        return false
       default:
         return true
     }
   }
+
+  createDoubleForm() { }
 
   getMessage(): string {
     if (!this.placeValid && !this.seansValid) {
@@ -1025,9 +1122,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           //this.city = ''
           this.createEventForm.enable()
           this.stepCurrency = this.stepStart
+
           this.router.navigate(['/home'])
         }),
         catchError((err) => {
+          console.log(err)
           this.toastService.showToast(
             err.error.message || MessagesErrors.default,
             'danger',
@@ -1080,6 +1179,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           })
         }
       })
+
     this.createEventForm.controls['places'].value.push(
       new FormGroup({
         sight_id: new FormControl('', [Validators.minLength(1)]),
@@ -1098,12 +1198,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         seances: new FormControl(
           [
             new FormGroup({
+              //заметка
               dateStart: new FormControl(
-                new Date().toISOString().slice(0, 19) + 'Z',
+                this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00',
                 [Validators.required],
               ),
               dateEnd: new FormControl(
-                new Date().toISOString().slice(0, 19) + 'Z',
+                this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00',
                 [Validators.required],
               ),
             }),
@@ -1149,12 +1250,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     ].controls.seances.value.push(
       new FormGroup({
         dateStart: new FormControl(
-          new Date().toISOString().slice(0, 19) + 'Z',
+          this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00',
           [Validators.required],
         ),
-        dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [
-          Validators.required,
-        ]),
+        dateEnd: new FormControl(
+          this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00',
+          [Validators.required],
+        ),
       }),
     )
   }
@@ -1232,16 +1334,30 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //ищем минимальный и максимальный плейс
 
   searchMinSeans() {
+    const pad = (number: any) => (number < 10 ? '0' + number : number)
+    let dateStart = new Date(
+      this.createEventForm.value.places[0].value.seances[0].value.dateStart.split(
+        '+',
+      )[0],
+    )
+
+    let dateEnd = new Date(
+      this.createEventForm.value.places[0].value.seances[0].value.dateEnd.split(
+        '+',
+      )[0],
+    )
+
     let minSeans: any = {
       value: {
-        dateStart: new Date().toISOString(),
-        dateEnd: new Date().toISOString(),
+        dateStart: `${dateStart.getFullYear()}-${pad(dateStart.getMonth() + 1)}-${pad(dateStart.getDate())}T${pad(dateStart.getHours())}:${pad(dateStart.getMinutes())}:${pad(dateStart.getSeconds())}`,
+        dateEnd: `${dateEnd.getFullYear()}-${pad(dateEnd.getMonth() + 1)}-${pad(dateEnd.getDate())}T${pad(dateEnd.getHours())}:${pad(dateEnd.getMinutes())}:${pad(dateEnd.getSeconds())}`,
       },
     }
+
     let maxSeans: any = {
       value: {
-        dateStart: new Date().toISOString(),
-        dateEnd: new Date().toISOString(),
+        dateStart: `${dateStart.getFullYear()}-${pad(dateStart.getMonth() + 1)}-${pad(dateStart.getDate())}T${pad(dateStart.getHours())}:${pad(dateStart.getMinutes())}:${pad(dateStart.getSeconds())}`,
+        dateEnd: `${dateEnd.getFullYear()}-${pad(dateEnd.getMonth() + 1)}-${pad(dateEnd.getDate())}T${pad(dateEnd.getHours())}:${pad(dateEnd.getMinutes())}:${pad(dateEnd.getSeconds())}`,
       },
     }
     // minSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
@@ -1269,7 +1385,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     )
   }
 
+  setValueDateDefault() {
+    this.dateTomorrow.setDate(this.dateTomorrow.getDate() + 1)
+  }
   ngOnInit() {
+    this.setValueDateDefault()
     this.mobileOrNote()
     let locationId: any
     this.filterService.locationId
@@ -1302,12 +1422,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         price: new FormControl([], [Validators.required]),
         materials: new FormControl('', [Validators.minLength(1)]),
         dateStart: new FormControl(
-          new Date().toISOString().slice(0, 19) + 'Z',
+          this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00',
           [Validators.required],
         ),
-        dateEnd: new FormControl(new Date().toISOString().slice(0, 19) + 'Z', [
-          Validators.required,
-        ]),
+        dateEnd: new FormControl(
+          this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00',
+          [Validators.required],
+        ),
       },
       [dateRangeValidator],
     )

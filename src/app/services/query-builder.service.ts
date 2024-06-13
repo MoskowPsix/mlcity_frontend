@@ -197,6 +197,8 @@ export class QueryBuilderService {
       dateEnd: this.dateEnd,
       radius: this.radius,
       page: this.paginationPublicEventsForTapeCurrentPage.value,
+      orderBy: 'date_start',
+      desc: true,
     }
   }
 

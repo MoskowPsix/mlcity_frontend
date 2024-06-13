@@ -1,11 +1,8 @@
 import {
   Component,
   Input,
-  OnInit,
   Output,
   EventEmitter,
-  SimpleChange,
-  SimpleChanges,
   HostListener,
 } from '@angular/core'
 
@@ -16,7 +13,7 @@ import { timer } from 'rxjs'
   templateUrl: './drop-down-button.component.html',
   styleUrls: ['./drop-down-button.component.scss'],
 })
-export class DropDownButtonComponent implements OnInit {
+export class DropDownButtonComponent {
   constructor() {}
   firstCircleClass: string = 'first'
   secondCircleClass: string = 'second'
@@ -29,7 +26,6 @@ export class DropDownButtonComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent): void {
     let target = event.target as HTMLElement
-    console.log(event.target)
     if (target.getAttribute('name') !== 'dropButton') {
       this.close()
     }
@@ -70,5 +66,4 @@ export class DropDownButtonComponent implements OnInit {
       }, 3000)
     }
   }
-  ngOnInit() {}
 }

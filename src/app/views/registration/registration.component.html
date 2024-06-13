@@ -36,7 +36,6 @@
 
                             </ion-input>
 
-
                       </ion-item>
 
                       <ion-note *ngIf="!nameBusy" style="text-align: center;" color="danger">{{busyName}} уже занято, попробуйте другое</ion-note>
@@ -67,10 +66,6 @@
 
                   </ion-list>
 
-
-
-
-
             </div>
 
             <ion-item>
@@ -83,13 +78,11 @@
 
             <ion-div class="Login_btns_content">
 
-
               <ion-list>
-
 
                 <ion-item>
 
-                      <ion-button  [disabled]="registerForm.invalid || registerForm.disabled && busyPass === false || privacyCheck==false" type="submit" class="Login_btns">
+                      <ion-button  [disabled]="registerForm.invalid || registerForm.disabled && busyPass === false || privacyCheck===false" type="submit" class="Login_btns">
                           Зарегестрироваться
                       </ion-button>
 
@@ -98,40 +91,24 @@
                 <ion-router-link class="Login_main_link" routerLink="/login">
                   <ion-item>
 
-
                   <ion-button class="Login_btns CreateAcc_btn">
                       Войти в аккаунт
                   </ion-button>
-
 
                   </ion-item>
 
                 </ion-router-link>
 
-
-
                </ion-list>
-
-
-
-
-
 
             </ion-div>
 
-
-
             <!-- test -->
-
-
-
-
 
             <ion-modal #modal backdropDismiss="false" [isOpen] = "submitResponce">
 
               <ng-template>
                   <ion-content>
-
 
                       <ion-div  style="display: flex; justify-content: center; margin-top: -50px;">
                           <ion-div style="display: flex;" class="Login_logo_wrapper">
@@ -148,7 +125,6 @@
                             font-size: 45.4pt;
                             color: #007BBE;
 
-
                             " class="Login_logo_text">
                               mlcity
                             </ion-label>
@@ -163,7 +139,6 @@
                             Введите код, отправленный вам на почту
                           </p>
 
-
                       </ion-col>
                       <form [formGroup] = "modalForm"  style="width: 90%; display: flex; flex-direction: column; justify-content: center; align-items: center;" action="">
 
@@ -174,14 +149,12 @@
                           <div style="width: 70px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
                           <div style="width: 70px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
 
-
                         </div>
                         <ion-note *ngIf="!confirmCode" style="text-align: center; width: 100%; font-size: 16pt; margin-top: 20px; margin-left: 30px;" color="danger">Код не верный</ion-note>
 
                         <ion-div [hidden]="timerRetryButton" style="background: none; border:none; box-shadow: none; margin-top: 60px; margin-left: 30px; --font-size: 16pt;" >
                            <ion-note  style="text-transform: none; text-align: center; font-size: 16pt; margin-top: 10px; color:#357fa7; margin-left: 30px; ">Не пришёл код?</ion-note>
                            <div style="margin-top: 20px;">
-
 
                             <ion-note *ngIf="timerRertyFormated"  style="text-transform: none; text-align: center; font-size: 15pt; margin-top: 20px;  color:#6CA9CA" >Доступно через: {{timerRertyFormated}}  </ion-note>
 
@@ -193,21 +166,17 @@
                           <ion-button (click) = "RertryCodeBtn()" style="margin-top: 60px;">Отправить код ещё раз</ion-button>
                         </ion-div>
 
-
                       </form>
                   </ion-content>
               </ng-template>
 
             </ion-modal>
 
-
               <ion-list class="LoginWith_list">
 
                        <h6 class="LoginWith_list_text">Войти с помощью</h6>
 
                 <ion-item>
-
-
 
                   <a href="{{ vkontakteAuthUrl }}">
 
@@ -219,23 +188,12 @@
                   </a>
               </ion-item>
 
-
-
               </ion-list>
 
-
-
-
-
-
-
-
          </ion-row>
-
 
         </form>
       </ion-grid>
   </ion-content>
-
 
 </ng-container>

@@ -19,11 +19,8 @@
   <ion-segment-button (click) = "segmentClick($event)" value="5">
     <ion-label>5</ion-label>
   </ion-segment-button>
-  
  
 </ion-segment>
-
-
 
 <ion-content style="--display: flex; --flex-direction: row;" >
   <ion-column class="buttonNavigationParrent">
@@ -32,15 +29,12 @@
   </ion-column> 
 
   <ion-column>
-
     
   <ion-column style="display: flex; justify-content: center; width: 100%;" *ngIf="loadSight">
-   
 
         <form [formGroup] = "edditForm">
           <!-- Шаг первый -->
           <ion-column [hidden] = "segment !== 1">
-
           
             <div>
               <ion-label class="inputLabel">Организатор</ion-label>
@@ -67,7 +61,6 @@
 
               <ion-column style="display: flex;" [hidden] = "segment !== 2">
                 <app-sight-type [typesNow]="typesNow"  [types]="types" [isSight]="true" (typeOutput)="getType($event)"></app-sight-type>
-
                 
                   <div style="margin-left: 20px;">
                     
@@ -87,20 +80,9 @@
                     </ion-column>
                   </div>
                
-
-             
-
-                
-    
-                 
-               
               </ion-column>
-              
-             
-
 
             </ion-radio-group>
-         
 
           </ion-column>
 
@@ -147,10 +129,7 @@
             <ion-textarea style="background-color: #fff; border: 1px solid #707070; border-radius: 20px;"></ion-textarea>
           </ion-column>
 
-
         </form>
-
-
 
       </ion-column>
       
@@ -158,6 +137,5 @@
           <ion-button class="buttonNavigation" (click) = "nextStage()">Далее</ion-button>
         </ion-column>
   </ion-column>
-
 
 </ion-content>

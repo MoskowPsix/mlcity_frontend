@@ -11,12 +11,10 @@
           <app-header></app-header>
         </ion-toolbar>
       </ion-header>
-      
-          
 
         <ion-router-outlet></ion-router-outlet>
 
-      <ion-footer>
+      <ion-footer *ngIf="url !== '/cabinet/events/create'">
         <ion-toolbar>
             <app-footer></app-footer>
         </ion-toolbar>

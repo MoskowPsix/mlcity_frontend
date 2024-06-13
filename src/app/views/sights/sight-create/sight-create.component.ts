@@ -352,7 +352,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         this.statuses = response.statuses
         if (response.statuses) {
           response.statuses.forEach((status: IStatus) => {
-            if (status.id === Statuses.moderation) {
+            if (status.name === 'Новое') {
               this.statusSelected = status.id
               this.createSightForm.patchValue({ status: status.id })
             }
@@ -886,7 +886,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       .pipe(
         tap((res) => {
           this.loadingService.hideLoading()
-          this.toastService.showToast(MessagesSights.create, 'success')
           //this.createEventForm.reset()
           this.resetUploadInfo()
           this.vkGroupPostSelected = null
