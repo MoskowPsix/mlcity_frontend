@@ -50,7 +50,7 @@ import { FavoritesComponent } from './views/cabinet/favorites/favorites.componen
 import { CommentsListComponent } from './components/comments-list/comments-list.component'
 import { SightTypeCaruselComponent } from './components/sight-type-carusel/sight-type-carusel.component'
 import { EventTypeCaruselComponent } from './components/event-type-carusel/event-type-carusel.component'
-
+import { RecoveryPasswordService } from './services/recovery-password.service'
 import { AuthService } from './services/auth.service'
 import { ToastService } from './services/toast.service'
 import { TokenService } from './services/token.service'
@@ -200,6 +200,7 @@ registerLocaleData(localeRu, 'ru')
     LoadingService,
     TokenService,
     ToastService,
+    RecoveryPasswordService,
     UserService,
     MapService,
     EventTypeService,

@@ -15,6 +15,7 @@ import { Location } from '@angular/common'
 import { Metrika } from 'ng-yandex-metrika'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
+import { RecoveryPasswordService } from 'src/app/services/recovery-password.service'
 import {
   SignInWithApple,
   SignInWithAppleResponse,
@@ -36,11 +37,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   yandexAuthUrl: string = environment.yandexAuthUrl
   user_id!: number
   loginForm!: FormGroup
+  recoveryForm!: FormGroup
   responseData: any
   iconState: boolean = true
   token?: string
+  closeRecoveryModal: boolean = true
   modalPass: boolean = false
   presentingElement: undefined
+  errPassword: boolean = true
   formSetPassword!: FormGroup
   appleState: Number = Math.floor(Math.random() * 21)
 
@@ -57,6 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private location: Location,
     private titleService: Title,
     private metaService: Meta,
+    private recoveryPasswordService: RecoveryPasswordService,
   ) {
     this.titleService.setTitle('Вход на сайт MLCity.')
     this.metaService.updateTag({
@@ -142,6 +147,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.positiveResponseAfterLogin(data)
         },
         error: (err) => {
+          this.recoveryPasswordChange()
           this.errorResponseAfterLogin(err)
         },
       })
@@ -193,6 +199,20 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
+  submitRecovery() {
+    console.log(this.recoveryForm.value.email)
+    this.loadingService.showLoading()
+    this.recoveryPasswordService
+      .recoveryPassword(this.recoveryForm.value.email)
+      .pipe()
+      .subscribe((res: any) => {
+        console.log(res.status)
+        this.closeRecoveryModal = !this.closeRecoveryModal
+        this.toastService.showToast('Ссылка была отправлена на почту', 'sucses')
+        this.loadingService.hideLoading()
+      })
+  }
+
   errorResponseAfterLogin(err: any) {
     this.loadingService.hideLoading()
     this.toastService.showToast(
@@ -200,6 +220,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       'warning',
     )
     this.loginForm.enable()
+  }
+
+  recoveryPasswordChange() {
+    this.errPassword = true
   }
 
   MailOrName() {
@@ -280,6 +304,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       password_retry: new FormControl('', [
         Validators.required,
         Validators.minLength(3),
+      ]),
+    })
+
+    this.recoveryForm = new FormGroup({
+      email: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50),
       ]),
     })
 
