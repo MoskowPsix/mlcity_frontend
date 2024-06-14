@@ -10,6 +10,7 @@ export const environment = {
   BACKEND_URL: 'https://api.vokrug.city',
   BACKEND_PORT: '443',
   DOMAIN: 'vokrug.city',
+  appleClientId: 'mlcity.ru',
   appleAuthUrl: 'https://api.vokrug.city/api/social-auth/apple',
   vkontakteAuthUrl: `https://api.vokrug.city/api/social-auth/vkontakte`,
   yandexAuthUrl: 'https://api.vokrug.city/api/social-auth/yandex/',

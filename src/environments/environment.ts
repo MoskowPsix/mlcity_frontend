@@ -15,6 +15,7 @@ export const environment = {
   BACKEND_PORT: '8000',
   DOMAIN: 'mlcity.ru',
   vkontakteAuthUrl: `http://localhost:8000/api/social-auth/vkontakte`,
+  appleClientId: 'mlcity.ru',
   appleAuthUrl: 'http://localhost:8000/api/social-auth/apple',
   yandexAuthUrl: 'http://localhost:8000/api/social-auth/yandex/',
   vkontakteServiceKey:

@@ -219,8 +219,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   async loginApple() {
     if (Capacitor.getPlatform() == 'ios') {
       const options: SignInWithAppleOptions = {
-        clientId: 'mlcity.ru',
-        redirectURI: 'https://www.mlcity.ru:3443/api/social-auth/apple',
+        clientId: environment.appleClientId,
+        redirectURI: environment.appleAuthUrl,
         state: String(this.appleState),
         nonce: 'nonce',
       }
@@ -254,7 +254,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           return of(EMPTY)
         })
     } else {
-      window.open('https://www.mlcity.ru:3443/api/social-auth/apple')
+      window.open(environment.appleAuthUrl)
     }
   }
 
