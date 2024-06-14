@@ -40,6 +40,7 @@ import { SightShowComponent } from './views/sights/sight-show/sight-show.compone
 import { EventCreateComponent } from './views/events/event-create/event-create.component'
 import { SightsComponent } from './views/sights/sights.component'
 import { SightCreateComponent } from './views/sights/sight-create/sight-create.component'
+import { RecoveryPasswordComponent } from './views/recovery-password/recovery-password.component'
 import { ReadMoreComponent } from './components/read-more/read-more.component'
 import { FiltersComponent } from './components/filters/filters.component'
 import { FiltersNotButtonComponent } from './components/filters_not_button/filters_not_button.component'
@@ -125,6 +126,7 @@ registerLocaleData(localeRu, 'ru')
     CabinetComponent,
     HomeComponent,
     LoginComponent,
+    RecoveryPasswordComponent,
     HeaderComponent,
     SidebarComponent,
     AddEventComponent,

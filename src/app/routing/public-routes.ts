@@ -14,7 +14,7 @@ import { FiltersNotButtonComponent } from '../components/filters_not_button/filt
 import { CalendulaComponent } from '../components/calendula/calendula.component'
 import { NoPathComponent } from '../views/no-path/no-path.component'
 import { PrivacyComponent } from '../views/privacy/privacy.component'
-
+import { RecoveryPasswordComponent } from '../views/recovery-password/recovery-password.component'
 export const publicRoutes: Routes = [
   {
     path: 'test',
@@ -39,6 +39,10 @@ export const publicRoutes: Routes = [
     path: 'events',
     component: EventsComponent,
     canActivate: [CheckAuthCanActiveGuard],
+  },
+  {
+    path: 'recovery/:code',
+    component: RecoveryPasswordComponent,
   },
   {
     path: 'events/:id',

@@ -41,10 +41,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   responseData: any
   iconState: boolean = true
   token?: string
+  timer: any
+  timerReady: boolean = true
+  seconds: number = 60
   closeRecoveryModal: boolean = true
   modalPass: boolean = false
   presentingElement: undefined
-  errPassword: boolean = true
+  errPassword: boolean = false
   formSetPassword!: FormGroup
   appleState: Number = Math.floor(Math.random() * 21)
 
@@ -187,6 +190,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     }, 5000)
   }
 
+  validateRecovery() {
+    this.timerReady = false
+    this.timer = setInterval(() => {
+      if (this.seconds != 0 && !this.timerReady) {
+        this.seconds--
+      } else {
+        clearInterval(this.timer)
+        this.seconds = 60
+        this.timerReady = true
+      }
+    }, 1000)
+  }
+
   positiveResponseAfterLogin(data: any) {
     this.responseData = data
     this.userService.setUser(this.responseData.user)
@@ -200,15 +216,28 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   submitRecovery() {
-    console.log(this.recoveryForm.value.email)
+    this.validateRecovery()
     this.loadingService.showLoading()
     this.recoveryPasswordService
       .recoveryPassword(this.recoveryForm.value.email)
-      .pipe()
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          this.toastService.showToast('Почта не зарегестрированна', 'warning')
+          this.loadingService.hideLoading()
+          return of(EMPTY)
+        }),
+      )
       .subscribe((res: any) => {
-        console.log(res.status)
+        console.log(res)
         this.closeRecoveryModal = !this.closeRecoveryModal
-        this.toastService.showToast('Ссылка была отправлена на почту', 'sucses')
+        if (res.status) {
+          this.toastService.showToast(
+            'Ссылка была отправлена на почту',
+            'success',
+          )
+        }
+
         this.loadingService.hideLoading()
       })
   }

@@ -237,12 +237,14 @@
                                       <img *ngIf="iconState" class="Login_icon recovery-icon" src="/assets/icons/login_mail.svg" alt="">
                                       <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
                                     </ion-input>
+                                    <ion-note *ngIf="recoveryForm.controls['email'].hasError('required')" color="danger">Поле email не может быть пустым</ion-note>
                                   </div>
                                 </form>
                                
                               </div>
-                              <ion-button class="recovery-button" (click)="submitRecovery()">Востановить</ion-button>
+                              <ion-button [disabled]="recoveryForm.invalid || !timerReady" class="recovery-button" (click)="submitRecovery()">Востановить</ion-button>
                               <h6 id="recoveryLink" class="password-recovery">Не пришёл код?</h6>
+                              <h6 id="recoveryLink" *ngIf="!timerReady" class="password-recovery">доступно через {{seconds * 1000 | date: 'mm:ss' }} </h6>
                             </div>
                          
                           </ng-template>
