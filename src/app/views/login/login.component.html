@@ -180,7 +180,7 @@
                   <img *ngIf="false"alt="logo" src="/svg/no-photo.svg" />
 
                   <ion-label class="Login_logo_text">
-                    mlcity
+                  ВОКРУГ
                   </ion-label>
 
                 </ion-item>
@@ -221,11 +221,42 @@
                     <div style="text-align: center;" *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="validation">
                       <ion-note *ngIf="loginForm.controls['password'].hasError('required')" color="danger">Пароль не может быть пустым</ion-note>
                     </div>
+                   
+                      <div class="password-recovery" *ngIf="errPassword">
+                        <h6 id="recoveryLink" class="">Забыли пароль?</h6>
+                        <ion-modal class="recovery-modal" trigger="recoveryLink"  [canDismiss]="closeRecoveryModal" >
+                          <ng-template>
+                            <div class="recovery-main">
+                              <p style="width: 90%; font-size: 20pt; color:#129AE4; font-family: 'Montserrat', sans-serif; margin-left: auto; margin-right: auto;">
+                                На указанный вами адрес придёт ссылка
+                              </p>
+                              <div class="recovery-form">
+                                <form [formGroup]="recoveryForm" action="">
+                                  <div class="Login_inputs_main">
+                                    <ion-input  formControlName="email"  class="Login_inputs recovery-input" type="email" placeholder="Электронная почта" required>
+                                      <img *ngIf="iconState" class="Login_icon recovery-icon" src="/assets/icons/login_mail.svg" alt="">
+                                      <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
+                                    </ion-input>
+                                    <ion-note *ngIf="recoveryForm.controls['email'].hasError('required')" color="danger">Поле email не может быть пустым</ion-note>
+                                  </div>
+                                </form>
+                               
+                              </div>
+                              <ion-button [disabled]="recoveryForm.invalid || !timerReady" class="recovery-button" (click)="submitRecovery()">Востановить</ion-button>
+                              <h6 id="recoveryLink" class="password-recovery">Не пришёл код?</h6>
+                              <h6 id="recoveryLink" *ngIf="!timerReady" class="password-recovery">доступно через {{seconds * 1000 | date: 'mm:ss' }} </h6>
+                            </div>
+                         
+                          </ng-template>
+                         
+                        </ion-modal>
+                      </div>
+                    
             </ion-list>
 
           </div>
 
-          <ion-div class="Login_btns_content">
+          <div class="Login_btns_content">
 
             <ion-list>
 
@@ -250,7 +281,7 @@
 
              </ion-list>
 
-          </ion-div>
+          </div>
 
             <ion-list class="LoginWith_list">
 
@@ -260,20 +291,20 @@
 
                 <a href="{{vkontakteAuthUrl}}" (click)="onLoading();">
 
-                  <ion-div class="vk_logo_circle">
-                     <ion-div class="vk_logo_quad">
+                  <div class="vk_logo_circle">
+                     <div class="vk_logo_quad">
                       <ion-icon class="logo-vk" name="logo-vk"></ion-icon>
-                     </ion-div>
-                  </ion-div>
+                     </div>
+                  </div>
                 </a>
 
                 <a  (click)="onLoading(); loginApple()">
 
-                  <ion-div class="apple-logo-circle">
+                  <div class="apple-logo-circle">
 
                       <ion-icon class="logo-apple-icon" name="logo-apple"></ion-icon>
 
-                  </ion-div>
+                  </div>
                 </a>
 
                 <a href="{{yandexAuthUrl}}">

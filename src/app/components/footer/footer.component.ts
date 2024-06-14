@@ -86,7 +86,6 @@ export class FooterComponent implements OnInit {
   // }
 
   ngOnInit() {
-    console.log(this.currentRout.url)
     this.getUser()
     this.checkAuthenticated()
     this.mobileOrNote()

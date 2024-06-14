@@ -44,9 +44,9 @@
 
       <ion-column class="mainLabelAndBar">
         <div class="ion-text-start">
-          <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип мероприятия</h3>
-          <h3 [hidden]="stepCurrency !== 1" class="mt-0 mainLabelAndBarText">Название мероприятия</h3>
-          <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">О мероприятие</h3>
+          <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип события</h3>
+          <h3 [hidden]="stepCurrency !== 1" class="mt-0 mainLabelAndBarText">Название события</h3>
+          <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">О событие</h3>
           <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Место проведения</h3>
           <h3 [hidden]="stepCurrency !== 4" class="mt-0 mainLabelAndBarText">Цена и билеты</h3>
           <h3 [hidden]="stepCurrency !== 5" class="mt-0 mainLabelAndBarText">Предпросмотр</h3>
@@ -890,7 +890,7 @@
                   <ion-item *ngIf="status.name === 'Новое'">
                     <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
                     <ion-label>Отправить на модерацию</ion-label>
-                    <ion-radio slot="end" [value]="status.id" checked></ion-radio>
+                    <ion-radio slot="end" [value]="status.id"></ion-radio>
                   </ion-item>
 
                   <ion-item *ngIf="status.name === 'Черновик'">

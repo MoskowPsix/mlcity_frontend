@@ -75,7 +75,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     } else {
       this.mobile = false
     }
-    console.log(this.mobile)
   }
 
   constructor(

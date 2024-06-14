@@ -181,7 +181,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router,
     private yaGeocoderService: YaGeocoderService,
-  ) {}
+  ) { }
 
   nextStep() {
     this.isNextButtonClicked = true
@@ -209,7 +209,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           return of(user)
         }),
         switchMap((user: any) => {
-          if (!user?.social_account) {
+          if (
+            !user?.social_account ||
+            user?.social_account.provider != 'vkontakte'
+          ) {
             this.toastService.showToast(
               MessagesErrors.vkGroupSearch,
               'secondary',
@@ -227,10 +230,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
                 //Выкидываем на логин если с ВК проблемы
                 this.toastService.showToast(
                   err.error?.message ||
-                    err.error?.error_msg ||
-                    MessagesErrors.vkTokenError,
+                  err.error?.error_msg ||
+                  MessagesErrors.vkTokenError,
                   'danger',
                 )
+                console.log(err)
                 this.loadingService.hideLoading()
                 this.authService.logout()
                 return of(EMPTY)
@@ -248,8 +252,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         catchError((err) => {
           this.toastService.showToast(
             err.error?.message ||
-              err.error?.error_msg ||
-              MessagesErrors.default,
+            err.error?.error_msg ||
+            MessagesErrors.default,
             'danger',
           )
           this.loadingService.hideLoading()
@@ -263,10 +267,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   getUrlVideo(owner_id: number, video_id: number) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       'https://vk.com/video_ext.php?oid=' +
-        owner_id +
-        '&id=' +
-        video_id +
-        '&hd=2',
+      owner_id +
+      '&id=' +
+      video_id +
+      '&hd=2',
     )
   }
   //Устанавливаем группы
@@ -563,7 +567,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         checkZoomRange: false,
       })
       this.maps[num].target.setZoom(17)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   ReserveGeocoder(num: number): void {
@@ -691,10 +695,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           this.formData.append(
             'vkFilesVideo[]',
             'https://vk.com/video_ext.php?oid=' +
-              attachment.video.owner_id +
-              '&id=' +
-              attachment.video.id +
-              '&hd=2',
+            attachment.video.owner_id +
+            '&id=' +
+            attachment.video.id +
+            '&hd=2',
           )
         }
         if (attachment.link) {
@@ -802,11 +806,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.eventNameElement.setFocus()
       }, 500)
     }
-    if (this.stepCurrency == 2) {
-      setTimeout(() => {
-        this.eventDescriptionElement.setFocus()
-      }, 500)
-    }
   }
 
   //Клик по нкопке назад
@@ -839,9 +838,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           dateStart: this.formatingTimeStart,
         })
         this.startTime = event.target.value
-        console.log(
-          this.createEventForm.value.places[place].value.seances[seans],
-        )
       }
     } else if (param === 'end') {
       this.formatingTimeEnd = this.createEventForm.value.places[
@@ -856,9 +852,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           dateEnd: this.formatingTimeEnd,
         })
         this.startTime = event.target.value
-        console.log(
-          this.createEventForm.value.places[place].value.seances[seans],
-        )
       }
     }
   }
@@ -888,8 +881,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         dateEnd: this.formatingTimeEnd,
       })
     }
-
-    console.log(this.createEventForm.value.places[place].value.seances[seans])
   }
 
   detectedDataInvalid() {
@@ -1011,6 +1002,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       case 5:
         if (this.createFormCount == 0) {
           this.createFormCount++
+          this.searchMinSeans()
           this.createObj = {
             name: this.createEventForm.value.name,
             date_start:
@@ -1028,9 +1020,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             files: this.imagesPreview,
             vkFiles: this.vkGroupPostSelected?.attachments,
           }
-          setTimeout(() => {
-            console.log(this.createObj.places[0].controls.coords.value)
-          }, 8000)
         }
 
         return false
@@ -1039,7 +1028,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  createDoubleForm() {}
+  createDoubleForm() { }
 
   getMessage(): string {
     if (!this.placeValid && !this.seansValid) {
@@ -1113,11 +1102,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     let event = this.createFormData() // собираем формдату
     this.createEventForm.disable()
     this.loadingService.showLoading()
-
     this.eventsService
       .create(event)
       .pipe(
         tap((res) => {
+          this.loadingService.hideLoading()
+          this.toastService.showToast(MessagesEvents.create, 'success')
           this.createEventForm.reset()
           this.resetUploadInfo()
           this.vkGroupPostSelected = null
@@ -1132,9 +1122,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           //this.city = ''
           this.createEventForm.enable()
           this.stepCurrency = this.stepStart
+
           this.router.navigate(['/home'])
         }),
         catchError((err) => {
+          console.log(err)
           this.toastService.showToast(
             err.error.message || MessagesErrors.default,
             'danger',
@@ -1187,6 +1179,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           })
         }
       })
+
     this.createEventForm.controls['places'].value.push(
       new FormGroup({
         sight_id: new FormControl('', [Validators.minLength(1)]),
@@ -1341,25 +1334,30 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //ищем минимальный и максимальный плейс
 
   searchMinSeans() {
-    let dateStart =
+    const pad = (number: any) => (number < 10 ? '0' + number : number)
+    let dateStart = new Date(
       this.createEventForm.value.places[0].value.seances[0].value.dateStart.split(
         '+',
-      )[0]
-    let dateEnd =
+      )[0],
+    )
+
+    let dateEnd = new Date(
       this.createEventForm.value.places[0].value.seances[0].value.dateEnd.split(
         '+',
-      )[0]
+      )[0],
+    )
 
     let minSeans: any = {
       value: {
-        dateStart: new Date(dateStart).toISOString(),
-        dateEnd: new Date(dateEnd).toISOString(),
+        dateStart: `${dateStart.getFullYear()}-${pad(dateStart.getMonth() + 1)}-${pad(dateStart.getDate())}T${pad(dateStart.getHours())}:${pad(dateStart.getMinutes())}:${pad(dateStart.getSeconds())}`,
+        dateEnd: `${dateEnd.getFullYear()}-${pad(dateEnd.getMonth() + 1)}-${pad(dateEnd.getDate())}T${pad(dateEnd.getHours())}:${pad(dateEnd.getMinutes())}:${pad(dateEnd.getSeconds())}`,
       },
     }
+
     let maxSeans: any = {
       value: {
-        dateStart: new Date(dateStart).toISOString(),
-        dateEnd: new Date(dateEnd).toISOString(),
+        dateStart: `${dateStart.getFullYear()}-${pad(dateStart.getMonth() + 1)}-${pad(dateStart.getDate())}T${pad(dateStart.getHours())}:${pad(dateStart.getMinutes())}:${pad(dateStart.getSeconds())}`,
+        dateEnd: `${dateEnd.getFullYear()}-${pad(dateEnd.getMonth() + 1)}-${pad(dateEnd.getDate())}T${pad(dateEnd.getHours())}:${pad(dateEnd.getMinutes())}:${pad(dateEnd.getSeconds())}`,
       },
     }
     // minSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
@@ -1391,7 +1389,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.dateTomorrow.setDate(this.dateTomorrow.getDate() + 1)
   }
   ngOnInit() {
-    console.log(this.router.url)
     this.setValueDateDefault()
     this.mobileOrNote()
     let locationId: any
