@@ -8,7 +8,7 @@ export const environment = {
   apiKeyYandexSubject: '6483f031-ac2f-4600-a338-269045f79ee2',
   YANDEX_METRICA_KEY: 96112606,
   YANDEX_METRICA_ON: false,
-  APP_NAME: 'Вокруг',
+  APP_NAME: 'ВОКРУГ',
   BASE_URL: 'http://localhost',
   PORT: '8100',
   BACKEND_URL: 'http://localhost',
