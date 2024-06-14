@@ -5,6 +5,10 @@ import { App, URLOpenListenerEvent } from '@capacitor/app'
 import { environment } from 'src/environments/environment'
 import { ToastService } from './services/toast.service'
 import { Subject, takeUntil } from 'rxjs'
+import { CheckVersionService } from './services/check-version.service'
+import { ActionPerformed, LocalNotifications } from '@capacitor/local-notifications'
+import { MessagesUpdate } from './enums/messages-update'
+import { StoreUrls } from './enums/store-urls'
 
 @Component({
   selector: 'app-root',
@@ -17,6 +21,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private zone: NgZone,
     private toast: ToastService,
+    private checkVersionService: CheckVersionService,
   ) {
     this.initializeApp()
   }
@@ -48,10 +53,16 @@ export class AppComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.mobileOrNote()
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.url = this.router.url
     })
+
+    // this.checkVersionService.getCurrentVersion().then((res: string) => {
+    //   this.toast.showToast(res, 'primary')
+    // })
+
+    this.checkVersionService.checkVersionIsDeprecated()
   }
 }
