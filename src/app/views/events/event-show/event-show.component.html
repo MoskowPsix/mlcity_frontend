@@ -63,13 +63,13 @@
               <ng-container *ngIf="event.files && event.files.length; else notFiles">
                 <ng-container *ngFor="let file of event.files">
                   <swiper-slide style="height: 19rem;" class="" *ngIf="file.local === 1">
-                    <img alt="img" :src="`${host}:${port}/${file.link}`" />
+                    <img alt="img" src="{{host}}:{{port}}{{file.link}}" /> 
                     <div class="swiper-container-img_wrapper">
                     </div>
                   </swiper-slide>
   
                   <swiper-slide  style="min-height: 19rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
-                    <img alt="img" src="{{ file.link }}" />
+                    <img alt="img" :src="{{ file.link }}" />
                     <div class="swiper-container-img_wrapper">
                     </div>
                   </swiper-slide>
