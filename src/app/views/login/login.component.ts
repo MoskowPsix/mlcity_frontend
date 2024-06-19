@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private metaService: Meta,
     private recoveryPasswordService: RecoveryPasswordService,
   ) {
-    this.titleService.setTitle('Вход на сайт MLCity.')
+    this.titleService.setTitle('Вход на сайт vokrug.city')
     this.metaService.updateTag({
       name: 'description',
       content: 'Вход на сайт.',

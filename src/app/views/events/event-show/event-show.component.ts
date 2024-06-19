@@ -62,6 +62,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
+  
 
   user?: any
   eventId?: number

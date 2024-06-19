@@ -26,6 +26,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="vokrug.city" android:pathPrefix="/" />
+                <data android:scheme="https" android:host="vokrug.city" android:pathPrefix="/*" />
                 <!-- Public routs -->
                 <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/home"/>-->
                 <!--                <data android:scheme="https" android:host="mlcity.ru" android:pathPrefix="/events"/>-->
