@@ -42,11 +42,11 @@
 
         <ion-column class="mainLabelAndBar">
           <div class="ion-text-start">
-            <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип достопримечательности</h3>
-            <h3 [hidden]="stepCurrency !== 1" class="mt-0 mainLabelAndBarText">Название достопримечательности</h3>
-            <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">Об достопримечательности</h3>
-            <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Место достопримечательности</h3>
-            <h3 [hidden]="stepCurrency !== 4" class="mt-0 mainLabelAndBarText">Стоимость посещения</h3>
+            <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип места или сообщества</h3>
+            <h3 [hidden]="stepCurrency !== 1" class="mt-0 mainLabelAndBarText">Название места или сообщества</h3>
+            <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">О сообществе</h3>
+            <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Ваша локация</h3>
+            <h3 [hidden]="stepCurrency !== 4" class="mt-0 mainLabelAndBarText">Материалы сообщества</h3>
 
           </div>
 
@@ -104,16 +104,16 @@
           <ion-column class="stepSecond">
               <ion-column class="">
                     <ion-item class="second-step-input-wrapper" fill="outline">
-                      <ion-input #sightName fill="solid" style="" size="small" formControlName="name" type="text" name="name" placeholder="Название достопримечательности" required></ion-input>
+                      <ion-input #sightName fill="solid" style="" size="small" formControlName="name" type="text" name="name" placeholder="Название сообщества" required></ion-input>
                     </ion-item>
 
                     <div *ngIf="createSightForm.controls['name'].invalid && createSightForm.controls['name'].dirty"  class="validation">
-                      <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название достопримечательности должно содержать минимум 3 символа</ion-note>
+                      <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название сообщества должно содержать минимум 3 символа</ion-note>
                     </div>
 
                       <ion-item class="second-step-input-wrapper" fill="outline">
                         <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-                        <ion-input formControlName="sponsor"  type="text" name="sponsor" required  placeholder="Организатор достопримечательности"></ion-input>
+                        <ion-input formControlName="sponsor"  type="text" name="sponsor" required  placeholder="Организатор сообщества"></ion-input>
                       </ion-item>
 
                       <!-- <ion-item fill="outline">
@@ -365,10 +365,10 @@
                       <ion-col class="description-item-wrapper" *ngIf="stepCurrency === 2">
                         <ion-item class="description-item" fill="outline"
                         >
-                          <ion-label position="stacked">Об достопримечательности</ion-label>
+                          <ion-label position="stacked">О сообществе</ion-label>
                             <ion-textarea
                               formControlName="description"
-                              placeholder="Введите информацию о достопримечательности..."
+                              placeholder="Введите информацию о ващем сообществе или месте, если есть конкретный адрес..."
                               [autoGrow]="true"
                               required
                               class="description-text"
@@ -406,11 +406,8 @@
 
                         </ion-item>
 
-                        <div *ngIf="createSightForm.controls['description'].invalid && createSightForm.controls['description'].dirty"  class="validation">
-                          <ion-note *ngIf="!createSightForm.controls['description'].hasError('minLength')" color="danger">поле "Об Достопримечательности" должно содержать минимум 10 символа</ion-note>
-                        </div>
-
                       </ion-col>
+                      
                   </div>
               </ion-colum>
 
@@ -514,7 +511,7 @@
         <!-- шаг 5 -->
         <ion-row class="tiket-main"  [hidden]="stepCurrency !== 4">
           <ion-col  @fade>
-            <ion-card  *ngFor="let item of createSightForm.controls['price'].value; let i_p = index">
+            <!-- <ion-card  *ngFor="let item of createSightForm.controls['price'].value; let i_p = index">
               <ng-container [formGroup]="createSightForm.controls['price'].value[i_p]" >
                 <ion-item fill="none">
                   <ion-icon name="pricetag-outline" color="primary"></ion-icon>
@@ -522,8 +519,8 @@
                     <h2> Билет {{i_p+1}}</h2>
                   </ion-label>
 
-                    <ion-chip style="margin-left: auto;" color="danger" (click)="deletePrice(i_p)">Удалить
-                      <!-- <ion-icon name="close-outline"></ion-icon> -->
+                    <ion-chip style="margin-left: auto;" color="danger" (click)="deletePrice(i_p)">
+                      Удалить
                     </ion-chip>
 
                 </ion-item>
@@ -544,12 +541,12 @@
                 </ion-item>
               </ng-container>
 
-            </ion-card>
-
+            </ion-card> -->
+<!-- 
             <ion-chip style="margin-bottom: 2rem;" color="primary" class="ion-justify-item-center" (click)="addPrice()">
               <ion-label>Добавить билет</ion-label>
               <ion-icon name="add-outline"></ion-icon>
-            </ion-chip>
+            </ion-chip> -->
 
             <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
               <ion-item fill="outline">

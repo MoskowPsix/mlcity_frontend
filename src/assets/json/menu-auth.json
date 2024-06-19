@@ -28,6 +28,23 @@
             }
         ]
     },
+    {
+        "title": "Мои сообщества",       
+        "icon": "newspaper",
+        "route": "/cabinet/sights",
+        "children":[
+            {
+                "title": "Все",              
+                "icon": "list",
+                "route": "/cabinet/events"
+            },
+            {
+                "title": "Создать",              
+                "icon": "add-circle",
+                "route": "/cabinet/sights/create"
+            }
+        ]
+    },
 
     {
         

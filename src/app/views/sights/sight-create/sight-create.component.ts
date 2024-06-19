@@ -72,7 +72,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   user: any
   currentType: any = []
   stepStart: number = 0
-  stepCurrency: number = 2
+  stepCurrency: number = 0
   steps: number = 5
 
   @ViewChild('sightName') sightNameElement!: any
@@ -736,7 +736,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Клик по кнопке веперед
   stepNext() {
     this.stepCurrency++
-    console.log(this.stepCurrency)
     if (this.stepCurrency == 1) {
       setTimeout(() => {
         this.sightNameElement.setFocus()
@@ -768,7 +767,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.currentType.push(Number(event))
       this.createSightForm.value.type.push(Number(event))
     }
-    console.log(this.currentType)
   }
 
   //Клик по шагу в баре
@@ -802,14 +800,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         }
       case 2:
         //шаг третий
-        if (
-          this.createSightForm.controls['description'].invalid ||
-          this.createSightForm.controls['workTime'].invalid
-        ) {
-          return true
-        } else {
-          return false
-        }
+        return false
       case 3:
         //шаг четвёртый
         if (
@@ -832,7 +823,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
               this.createSightForm.controls['price'].value.length == 1
             ) {
               priceValid = true
-              console.log(this.createSightForm.controls['price'].value.length)
             } else {
               priceValid = false
             }
@@ -916,7 +906,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$),
       )
-      .subscribe()
+      .subscribe((res) => {
+        this.toastService.showToast(MessagesSights.create, 'success')
+      })
   }
 
   ngOnInit() {
@@ -944,17 +936,11 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.minLength(3),
         ]),
-        description: new FormControl('', [
-          Validators.required,
-          Validators.minLength(10),
-        ]),
-        workTime: new FormControl('', [Validators.minLength(3)]),
+        description: new FormControl('', [Validators.minLength(0)]),
+        workTime: new FormControl('', []),
         address: new FormControl('', [Validators.required]),
         locationId: new FormControl('', [Validators.required]),
-        coords: new FormControl(coords, [
-          Validators.required,
-          Validators.minLength(2),
-        ]),
+        coords: new FormControl(coords, [Validators.minLength(2)]),
         type: new FormControl([], [Validators.required]),
         status: new FormControl(
           { value: this.statusSelected, disabled: false },
