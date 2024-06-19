@@ -355,7 +355,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 56;
+				CURRENT_PROJECT_VERSION = 57;
 				DEVELOPMENT_TEAM = L3GYA8KNK5;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = L3GYA8KNK5;
 				INFOPLIST_FILE = App/Info.plist;
@@ -382,7 +382,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 56;
+				CURRENT_PROJECT_VERSION = 57;
 				DEVELOPMENT_TEAM = L3GYA8KNK5;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = L3GYA8KNK5;
 				INFOPLIST_FILE = App/Info.plist;
