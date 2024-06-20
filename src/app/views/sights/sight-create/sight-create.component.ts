@@ -153,7 +153,10 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           return of(user)
         }),
         switchMap((user: any) => {
-          if (!user?.social_account) {
+          if (
+            !user?.social_account ||
+            user?.social_account.provider != 'vkontakte'
+          ) {
             this.toastService.showToast(
               MessagesErrors.vkGroupSearch,
               'secondary',
