@@ -28,7 +28,6 @@ export class AddEventComponent {
   ]
   selectedType(event: any) {
     this.typeSelected = event.detail.value
-    console.log(this.typeSelected)
   }
 
   constructor(
@@ -149,10 +148,7 @@ export class AddEventComponent {
     this.Polyline.editor.startEditing()
 
     this.Polyline.editor.events.add('drawing', (el) => {
-      console.log(el)
-
       if (this.Polyline.editor.state.get('drawing') === false) {
-        console.log('стопэ')
       }
     })
 
@@ -161,9 +157,7 @@ export class AddEventComponent {
 
   //Настройки пешеходного маршрута
   createPedestrianRouteMap() {
-    this.pol.forEach((el) => {
-      console.log(el)
-    })
+    this.pol.forEach((el) => {})
     this.map.target.geoObjects.removeAll()
 
     var multiRoute = new ymaps.multiRouter.MultiRoute(

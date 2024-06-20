@@ -39,7 +39,6 @@ export class CreateRulesModalComponent implements OnInit {
 
   userReadRulesFnc(event: any) {
     this.userReadRules = !event.target.checked
-    console.log(this.userReadRules)
   }
 
   ngOnInit() {

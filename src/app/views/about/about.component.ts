@@ -14,9 +14,7 @@ export class AboutComponent implements OnInit {
   userScroll: number = 0
 
   @HostListener('window:scroll', ['$event'])
-  myScroll(event: Event) {
-    console.log(1)
-  }
+  myScroll(event: Event) {}
 
   constructor(
     private titleService: Title,

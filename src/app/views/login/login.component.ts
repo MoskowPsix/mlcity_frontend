@@ -229,7 +229,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe((res: any) => {
-        console.log(res)
         this.closeRecoveryModal = !this.closeRecoveryModal
         if (res.status) {
           this.toastService.showToast(
@@ -280,8 +279,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       SignInWithApple.authorize(options)
         .then((res: SignInWithAppleResponse) => {
-          console.log(res)
-          console.log(options)
           this.authService
             .loginApple(res.response)
             .pipe(
