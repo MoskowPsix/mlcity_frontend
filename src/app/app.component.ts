@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
   url: any = ''
   mobile: boolean = false
   platformType: string = Capacitor.getPlatform()
+  
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
     if (window.innerWidth < 900) {
