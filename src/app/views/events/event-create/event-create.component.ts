@@ -279,7 +279,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.vkGroups = items
     } else {
       this.vkGroups = []
-      this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')
+      // this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')
     }
   }
 

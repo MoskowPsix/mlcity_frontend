@@ -104,17 +104,14 @@ export class EdditSightComponent implements OnInit {
         map((respons: any) => {
           this.sight = respons
 
-          console.log(this.sight.name)
           this.sightFiles = this.sight.files
           this.loadSight = true
 
-          console.log(this.sight)
           this.place = this.sight
           this.sightTypesOldID = this.place.types
 
           //передаём массив выбраных типов в компонент с чекбоксами
           this.typesNow = this.typesNow.concat(this.sightTypesOldID)
-          console.log(this.typesNow)
         }),
         catchError((err) => {
           return of(EMPTY)
@@ -147,7 +144,6 @@ export class EdditSightComponent implements OnInit {
         .subscribe((response: any) => {
           this.cityesList = response.locations
           this.cityesListLoading = false
-          console.log(response)
         })
     } else {
       this.minLengthCityesListError = true
@@ -192,20 +188,13 @@ export class EdditSightComponent implements OnInit {
       this.sight.description !== this.edditForm.value.descriptionSight ||
       this.sight.name !== this.edditForm.value.nameSight
     ) {
-      console.log('что то было изменено ')
-      console.log(this.sight.name)
-      console.log(this.edditForm.value.nameSight)
-      console.log(this.edditForm.value.descriptionSight)
-      console.log(this.sight.description)
     } else {
-      console.log('всё как предже')
     }
   }
 
   showTypesNow() {}
 
   getType(event: any) {
-    console.log('Я работаю')
     let nowTypesId: any[] = []
 
     for (let i = 0; i < this.typesNow.length; i++) {
@@ -223,8 +212,6 @@ export class EdditSightComponent implements OnInit {
       let type = this.types.find((t) => t.id == event)
 
       this.addetTypesName.push(type?.name)
-
-      console.log('типы', this.types)
     }
     //добавляю в массив апдейта
     else if (
@@ -234,8 +221,6 @@ export class EdditSightComponent implements OnInit {
     ) {
       this.removedTypes.splice(this.removedTypes.indexOf(event), 1)
       this.addetTypes.push(event)
-
-      console.log('Добавленых типов', this.addetTypes)
     }
 
     // удаляю из массива апдейтов
@@ -244,17 +229,11 @@ export class EdditSightComponent implements OnInit {
       nowTypesId.indexOf(event) == -1
     ) {
       this.addetTypes.splice(this.addetTypes.indexOf(event), 1)
-      console.log('Добавленых типов', this.addetTypes)
     }
     // добавляю в массив удалённых добавленные ранее
     else if (nowTypesId.indexOf(event) !== -1) {
       this.removedTypes.push(event)
-      console.log('Удаление добавленых ранее типов', this.removedTypes)
     }
-
-    console.log(nowTypesId)
-    console.log(this.addetTypesName)
-    console.log(this.addetTypesName)
   }
 
   ngOnInit() {

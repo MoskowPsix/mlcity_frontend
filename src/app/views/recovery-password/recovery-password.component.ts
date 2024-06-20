@@ -42,7 +42,6 @@ export class RecoveryPasswordComponent implements OnInit {
   }
 
   changeCode() {
-    console.log(this.activatedRoute.snapshot.params['code'])
     this.recoveryForm.patchValue({
       code: this.activatedRoute.snapshot.params['code'],
     })
@@ -70,7 +69,6 @@ export class RecoveryPasswordComponent implements OnInit {
       )
       .subscribe((res) => {
         this.loadingService.hideLoading()
-        console.log(res.status)
         if (res.status == 'success') {
           this.toastService.showToast('Вы успешно сменили пароль', 'success')
           this.router.navigate(['login'])
