@@ -181,7 +181,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router,
     private yaGeocoderService: YaGeocoderService,
-  ) { }
+  ) {}
 
   nextStep() {
     this.isNextButtonClicked = true
@@ -230,8 +230,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
                 //Выкидываем на логин если с ВК проблемы
                 this.toastService.showToast(
                   err.error?.message ||
-                  err.error?.error_msg ||
-                  MessagesErrors.vkTokenError,
+                    err.error?.error_msg ||
+                    MessagesErrors.vkTokenError,
                   'danger',
                 )
                 console.log(err)
@@ -252,8 +252,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         catchError((err) => {
           this.toastService.showToast(
             err.error?.message ||
-            err.error?.error_msg ||
-            MessagesErrors.default,
+              err.error?.error_msg ||
+              MessagesErrors.default,
             'danger',
           )
           this.loadingService.hideLoading()
@@ -267,10 +267,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   getUrlVideo(owner_id: number, video_id: number) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       'https://vk.com/video_ext.php?oid=' +
-      owner_id +
-      '&id=' +
-      video_id +
-      '&hd=2',
+        owner_id +
+        '&id=' +
+        video_id +
+        '&hd=2',
     )
   }
   //Устанавливаем группы
@@ -567,7 +567,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         checkZoomRange: false,
       })
       this.maps[num].target.setZoom(17)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   ReserveGeocoder(num: number): void {
@@ -695,10 +695,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           this.formData.append(
             'vkFilesVideo[]',
             'https://vk.com/video_ext.php?oid=' +
-            attachment.video.owner_id +
-            '&id=' +
-            attachment.video.id +
-            '&hd=2',
+              attachment.video.owner_id +
+              '&id=' +
+              attachment.video.id +
+              '&hd=2',
           )
         }
         if (attachment.link) {
@@ -838,6 +838,66 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           dateStart: this.formatingTimeStart,
         })
         this.startTime = event.target.value
+        if (
+          this.createEventForm.value.places[place].value.seances[seans].value
+            .dateStart >=
+          this.createEventForm.value.places[place].value.seances[seans].value
+            .dateEnd
+        ) {
+          let splitDate: string =
+            this.createEventForm.value.places[place].value.seances[
+              seans
+            ].value.dateStart.split('T')[0]
+          let splitMinuts = this.createEventForm.value.places[
+            place
+          ].value.seances[seans].value.dateStart
+            .split('T')[1]
+            .split(':')[1]
+          let splitBelt: string = this.createEventForm.value.places[
+            place
+          ].value.seances[seans].value.dateStart
+            .split('T')[1]
+            .split('+')[1]
+          let newTime: number =
+            +this.createEventForm.value.places[place].value.seances[
+              seans
+            ].value.dateStart
+              .split('T')[1]
+              .split('+')[0]
+              .split(':')[0] + 1
+          console.log(splitMinuts)
+          console.log(splitBelt)
+          console.log(
+            this.createEventForm.value.places[place].value.seances[seans].value
+              .dateEnd,
+          )
+          console.log(
+            splitDate +
+              'T' +
+              newTime +
+              ':' +
+              splitMinuts +
+              ':' +
+              '00' +
+              '+' +
+              '00',
+          )
+
+          this.createEventForm.value.places[place].value.seances[
+            seans
+          ].patchValue({
+            dateEnd:
+              splitDate +
+              'T' +
+              newTime +
+              ':' +
+              splitMinuts +
+              ':' +
+              '00' +
+              '+' +
+              '00',
+          })
+        }
       }
     } else if (param === 'end') {
       this.formatingTimeEnd = this.createEventForm.value.places[
@@ -1028,7 +1088,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  createDoubleForm() { }
+  createDoubleForm() {}
 
   getMessage(): string {
     if (!this.placeValid && !this.seansValid) {
@@ -1259,6 +1319,16 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         ),
       }),
     )
+  }
+
+  public formatingTimeToInput(str: string, param: string): string | Date {
+    let date: string | Date = ''
+    if (param === 'standart') {
+      date = str.split('+')[0]
+    } else if (param === 'iso') {
+      date = new Date(str.split('+')[0]).toISOString()
+    }
+    return date
   }
 
   getCityes(event: any) {

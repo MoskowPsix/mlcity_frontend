@@ -49,23 +49,26 @@ ion-label {
   padding: 1rem;
   border-radius: 4px;
 }
-
+.buttons-wrapper{
+  display: flex;
+}
 .place_close {
   width: 0%;
   height: 0%;
   display: none;
   transition: 0.5s height;
 }
-
+.button-cancel{
+  --background: gray;
+}
 .place-wrapper_close {
   transition: 0.5s all;
   height: 0vh;
 }
 
 .place-wrapper_open {
-  overflow-y: scroll;
+  overflow-y: auto;
   transition: 0.5s all;
-  height: 90vh;
 }
 
 .place-row_open {
@@ -145,7 +148,7 @@ ion-label {
 
 .map {
   width: 100%;
-  height: 60vh;
+  height: 30vh;
 }
 
 .mt-0 {

@@ -213,8 +213,9 @@
                     </div> -->
 
                     <ion-item>
-                          <ion-input formControlName="password" class ="Login_inputs" type="password"   placeholder="Пароль">
-                             <img class="Login_icon" src="/assets/icons/login_password.svg" alt="">
+                      <button (click)="openPassword(passwordInput)" type="button" class="password-icon-wrapper" ></button>
+                          <ion-input formControlName="password" class ="Login_inputs" type="password" placeholder="Пароль" #passwordInput>
+                              <img class="Login_icon password-icon" src="/assets/icons/login_password.svg" alt="">
                           </ion-input>
                     </ion-item>
 
@@ -222,8 +223,8 @@
                       <ion-note *ngIf="loginForm.controls['password'].hasError('required')" color="danger">Пароль не может быть пустым</ion-note>
                     </div>
                    
-                      <div class="password-recovery" *ngIf="errPassword">
-                        <h6 id="recoveryLink" class="">Забыли пароль?</h6>
+                      <div class="password-recovery" id="recoveryLink">
+                        <h6  class="">Забыли пароль?</h6>
                         <ion-modal class="recovery-modal" trigger="recoveryLink"  >
                           <ng-template>
                             <div class="recovery-main">

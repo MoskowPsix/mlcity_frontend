@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  ViewChild,
+} from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router'
 import { EMPTY, Subject, catchError, filter, of, takeUntil } from 'rxjs'
@@ -136,6 +142,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     actionSheet.present()
     const { role } = await actionSheet.onWillDismiss()
     return role === 'confirm'
+  }
+
+  public openPassword(event: any): void {
+    if (event.type == 'password') {
+      event.type = 'text'
+    } else {
+      event.type = 'password'
+    }
   }
 
   onSubmitLogin() {

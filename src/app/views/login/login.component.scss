@@ -154,7 +154,6 @@ ion-input {
     }
 
     .LoginWith_list {
-      margin-top: 2rem;
       display: flex;
       padding-bottom: 10px;
       justify-content: center;
@@ -234,6 +233,16 @@ ion-modal {
     margin-top: 2vh;
     border-radius: 6px 6px 0px 6px;
   }
+}
+
+.password-icon-wrapper{
+  cursor: pointer;
+  z-index: 1000;
+  position: absolute;
+  width:3rem;
+  top: 0.5rem;
+  height: 90%;
+ opacity: 0;
 }
 .vkPasswordModalHeader {
 }

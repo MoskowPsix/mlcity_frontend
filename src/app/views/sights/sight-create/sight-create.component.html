@@ -38,7 +38,7 @@
 
     <ion-grid class="main">
 
-      <form class="mainChild" [formGroup]="createSightForm" (submit)="onSubmit()" enctype="multipart/form-data">
+      <form onsubmit="return false;" class="mainChild" [formGroup]="createSightForm" (submit)="onSubmit()" enctype="multipart/form-data">
 
         <ion-column class="mainLabelAndBar">
           <div class="ion-text-start">
