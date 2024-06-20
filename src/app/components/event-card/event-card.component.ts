@@ -307,17 +307,19 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   findPrice() {
-    for (let i = 0; i < this.event.price.length; i++) {
-      this.prices.push(Number(this.event.price[i].cost_rub))
+    if (!this.isSight) {
+      for (let i = 0; i < this.event.price.length; i++) {
+        this.prices.push(Number(this.event.price[i].cost_rub))
+      }
+      this.minPrice = Math.min(...this.prices)
+      this.maxPrice = Math.max(...this.prices)
     }
-    this.minPrice = Math.min(...this.prices)
-    this.maxPrice = Math.max(...this.prices)
   }
 
   ngOnInit() {
+    this.userAuth = this.authService.getAuthState()
     this.findPrice()
     this.slugName = this.helpers.translit(this.event.name)
-    this.userAuth = this.authService.getAuthState()
     this.startLikesCount = this.event.likes
       ? this.event.likes.vk_count + this.event.likes.local_count
       : 0

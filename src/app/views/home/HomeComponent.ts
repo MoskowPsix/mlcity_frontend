@@ -183,7 +183,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private locationService: LocationService,
   ) {
     this.titleService.setTitle(
-      'MLCity - Мероприятия и достопремечательности вокруг вас',
+      'VOKRUG - Мероприятия и достопремечательности вокруг вас',
     )
     let prevPath = this.location.path()
     this.router.events

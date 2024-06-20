@@ -49,23 +49,26 @@ ion-label {
   padding: 1rem;
   border-radius: 4px;
 }
-
+.buttons-wrapper{
+  display: flex;
+}
 .place_close {
   width: 0%;
   height: 0%;
   display: none;
   transition: 0.5s height;
 }
-
+.button-cancel{
+  --background: gray;
+}
 .place-wrapper_close {
   transition: 0.5s all;
   height: 0vh;
 }
 
 .place-wrapper_open {
-  overflow-y: scroll;
+  overflow-y: auto;
   transition: 0.5s all;
-  height: 90vh;
 }
 
 .place-row_open {
@@ -145,7 +148,7 @@ ion-label {
 
 .map {
   width: 100%;
-  height: 60vh;
+  height: 30vh;
 }
 
 .mt-0 {
@@ -421,6 +424,18 @@ ion-padding {
   display: flex;
   justify-content: center;
 }
+.view-main{
+  max-width: 90%;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.date-start {
+  margin-top: 4rem;
+}
+.date-end {
+  margin-top: 4rem;
+}
 
 .backToGroupBtn {
   margin-left: 1vh;
@@ -431,7 +446,11 @@ ion-padding {
   padding-left: 10%;
   padding-right: 10%;
 }
-
+.time-input-wrapper {
+  max-width: 18rem;
+  margin: auto;
+  display: flex;
+}
 .timeAndDescription {
   display: flex;
   justify-content: center;
@@ -553,6 +572,18 @@ ion-padding {
     color: #4c81f7;
     text-align: center;
   }
+}
+.time-input {
+  height: 2rem;
+  margin-top: auto;
+  margin-bottom: auto;
+  max-width: 6rem;
+  background-color: #edeef0;
+  border: none;
+  border-radius: 6px;
+  color: #000000;
+  text-align: center;
+  outline: #a3a3a3;
 }
 
 @media screen and (max-width: 992px) {

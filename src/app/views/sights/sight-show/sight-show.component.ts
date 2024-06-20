@@ -35,6 +35,7 @@ import { HelpersService } from 'src/app/services/helpers.service'
 import { ContentObserver } from '@angular/cdk/observers'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 
+register()
 @Component({
   selector: 'app-sight-show',
   templateUrl: './sight-show.component.html',
@@ -288,7 +289,6 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    register()
     this.cdr.detectChanges()
     // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
     //   this.swiper = res.first.nativeElement.swiper

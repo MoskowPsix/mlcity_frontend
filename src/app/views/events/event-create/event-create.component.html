@@ -1,56 +1,66 @@
+
+
 <ion-content mode="md">
+
   <app-create-rules-modal [agreement_id]="1"></app-create-rules-modal>
   <div class="buttons-dekstop">
 
     <div class="buttons-desktop-wrapper">
 
       <div class="btnsWrapperBack">
-        <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
-        <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+
+        <ion-button routerLink="/home" class="backButton buttonsNavigate button-cancel">Отмена</ion-button>
       </div>
 
-
       <div class="btnsWrapper btnsWrapperNext">
-        <div (click)="nextStep()">
-        <ion-button class="buttonsNavigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        <div class="buttons-wrapper">
+          <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <div (click)="nextStep()">
+          <ion-button class="buttonsNavigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+          </div>
+          <ion-button class="buttonsNavigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
         </div>
-        <ion-button class="buttonsNavigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+       
       </div>
 
     </div>
   </div>
 
-
   <div class="buttons-dekstop_mobile">
-
+  
     <div class="buttons-desktop-wrapper_mobile">
 
       <div class="btns-wrapper">
-        <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
-        <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+        <ion-button routerLink="/home" class="backButton buttonsNavigate button-cancel">Отмена</ion-button>
       </div>
 
-
       <div class="btns-wrapper">
-        <div (click)="nextStep()">
-        <ion-button class="buttons-navigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        <div class="buttons-wrapper">
+          <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <div (click)="nextStep()">
+          <ion-button class="buttons-navigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+          </div>
+          <ion-button class="buttons-navigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
         </div>
-        <ion-button class="buttons-navigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+       
       </div>
 
     </div>
   </div>
 
   <ion-grid class="main">
-    <form class="mainChild" [formGroup]="createEventForm" (submit)="onSubmit()" enctype="multipart/form-data">
+    <form onsubmit="return false;" class="mainChild" [formGroup]="createEventForm" (submit)="onSubmit()" enctype="multipart/form-data">
 
       <ion-column class="mainLabelAndBar">
         <div class="ion-text-start">
-          <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип мероприятия</h3>
-          <h3 [hidden]="stepCurrency !== 1" class="mt-0 mainLabelAndBarText">Название мероприятия</h3>
-          <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">О мероприятие</h3>
-          <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Место проведения</h3>
+          <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип события</h3>
+          <h3 [hidden]="stepCurrency !== 1" class="mt-0 mainLabelAndBarText">Название события</h3>
+          <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">О событие</h3>
+          <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Время и место</h3>
           <h3 [hidden]="stepCurrency !== 4" class="mt-0 mainLabelAndBarText">Цена и билеты</h3>
+          <h3 [hidden]="stepCurrency !== 5" class="mt-0 mainLabelAndBarText">Предпросмотр</h3>
 
         </div>
 
@@ -73,7 +83,6 @@
                         <ion-button disabled="true" *ngIf="!(stepCurrency === i)" (click)="goToStep(i)" class="buttonBarLight animated fadeIn">
                           {{ i + 1 }}
                         </ion-button>
-
 
                     </div>
                   </div>
@@ -118,7 +127,7 @@
               </ion-col>
 
                 <ion-item class="second-step-input-wrapper" fill="outline">
-            
+
                   <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                   <ion-input formControlName="sponsor"  type="text" name="sponsor" required  placeholder="Организатор мероприятия"></ion-input>
                 </ion-item>
@@ -199,7 +208,7 @@
                         <ion-list-header>
                           <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
                         </ion-list-header>
-              
+
                         <div *ngIf="vkGroupPosts; else notSelectedGroup">
                           <!-- Скелетна анимация -->
                           <ng-container *ngIf="!vkGroupPostsLoaded">
@@ -326,13 +335,10 @@
                           </ion-row>
                         </ng-template>
 
-
                       </ion-content>
                   </ng-template>
 
         </ion-modal>
-
-
 
         <!-- <div class="openModalBtnWraper">
           <ion-button class="openModalBtn" style="--border-radius:8px;" (click)="openModalGroup()" class="selectGroup">
@@ -372,7 +378,7 @@
                           </ion-button>
                         </div>
                         <ng-container *ngIf="vkGroups && vkGroupPostSelected && vkGroupPostSelected.attachments.length">
-                       
+
                             <div *ngFor="let attachment of vkGroupPostSelected.attachments" class="img-parent">
                               <ng-conainer *ngIf="attachment.video">
                                 <img class="imagesPreview" alt="" src="{{ attachment.video.image[0].url }}" />
@@ -386,12 +392,16 @@
                               </ng-conainer>
                             </div>
                           </ng-container>
-                    
+
                       </div>
                           <ion-item style="border-top: 1px solid rgba(85, 84, 84, 0.226);">
-                            <ion-button  (click)="filesUpload.click()" style="--background: none; --box-shadow: none;" class="addPhoto">
-                              <ion-icon class="addPhotoIcon" style="color: gray;" name="image-outline"></ion-icon>
-                            </ion-button>
+                            <div (click)="filesUpload.click()" style="align-items: center; display: flex; justify-content: center; align-items: center;">
+                              <ion-button style="--background: none; --box-shadow: none;" class="addPhoto">
+                                <ion-icon class="addPhotoIcon" style="color: gray;" name="image-outline"></ion-icon>
+                              </ion-button>
+                              <ion-text style="color: gray; font-size: small;">Добавить картинку</ion-text>
+                            </div>
+
                           </ion-item>
                       </ion-item>
                         <input formControlName="files" (change)="onFileChange($event)" type="file" name="files[]" accept="image/png, image/jpeg" hidden multiple #filesUpload>
@@ -406,11 +416,8 @@
               </div>
             </ion-column>
 
-
             <ion-col class="photoMain"  @fade>
               <!-- <ion-label position="floating">Добавление фотографий (*.png, *.jpeg)</ion-label> -->
-
-
 
               <ion-row *ngIf="vkGroups && vkGroupPostSelected && !vkGroupPostSelected.attachments.length" class="ion-padding-vertical">
                 <ion-col class="ion-align-self-center ion-justify-content-center">
@@ -427,9 +434,7 @@
 <!--
             <ion-column>
 
-
               <div class="timeParrent">
-
 
                <div class="dateFirst">
                   <ion-list-header><ion-label>Начало мероприятия: </ion-label></ion-list-header>
@@ -451,7 +456,6 @@
                     </ng-template>
                   </ion-modal>
                </div>
-
 
                <div class="dateLast">
 
@@ -478,37 +482,19 @@
                 </ion-modal>
                </div>
 
-
               </div>
 
-
-
             </ion-column> -->
-
             <div  style="max-width: 60vh;" *ngIf="createEventForm.hasError('dateInvalid')">
               <ion-note color="danger">Дата начала не может быть позднее даты конца, а дата конца не может быть раньше даты начала.</ion-note>
             </div>
-
-
-
           </ion-col>
-
-
-
-
-
-
         </ion-column>
-
-
-
       </ion-row>
 
       <!-- шаг 4 -->
       <ion-row  [hidden]="stepCurrency !== 3" class="ion-justify-content-center">
-
         <ion-label *ngIf="isNextButtonClicked === true" class="pick">{{ getMessage() }}</ion-label>
-
         <!-- <ion-button (click)="searchMinSeans()">test</ion-button> -->
         <ion-col *ngIf="stepCurrency === 3" @fade>
             <ion-row *ngIf="!mobile" class="place-list">
@@ -525,12 +511,10 @@
                     }"
                     ></ion-icon>
                   </div>
-
                   <ion-item lines="none">
                     <ion-col style="display: flex; width: 100%;">
                       <span style="margin-right: 1rem; min-width: 2rem; display: flex; align-items: center;">Текущий город:</span>
                       <ion-label style="display: flex; justify-content: center; align-items: center;" *ngIf="!locationLoader"><span>{{placeArrayForm[i].city}} ({{placeArrayForm[i].region}})</span></ion-label>
-
                       <!-- сворачиваем плейс -->
                     </ion-col>
                     <ion-list style="width: 50%" *ngIf="locationLoader">
@@ -545,7 +529,6 @@
                     </ion-item>
                   </ion-column>
                 </ion-col>
-
 
                 <ion-card class="" >
                 <div style=" transition: 0.5s ;" #place id="{{i}}" [ngClass]="{
@@ -605,7 +588,6 @@
                           </ion-list>
                       </div>
                       </ion-col> -->
-
                     <!-- Поиск не работает, сломан -->
                     <ion-item lines="none" style="margin-bottom: 2rem;" >
                       <div class="map ">
@@ -636,7 +618,7 @@
                           <ion-item style="display: flex; justify-content: space-between; width: 100%;" lines="none">
                             <ion-row  style="display: flex; justify-content: space-between; width: 100%;">
                               <ion-item lines="none">
-                                <ion-label style="color:black; padding-bottom: 2rem;" ><h2>Сеанс {{i_s+1}}</h2></ion-label>
+                                <ion-label style="color:black; padding-bottom: 2rem;" ><h2>Время начала {{i_s+1}}</h2></ion-label>
                               </ion-item>
                               <ion-item lines="none">
                                 <ion-chip color="danger" (click)="deleteSeanceForm(i, i_s)">Удалить
@@ -646,47 +628,52 @@
                             </ion-row>
                           </ion-item>
                         </ion-card-header>
-
                           <ion-col style="display: flex; justify-content: space-between;">
-
+      <!-- пк версия датайм -->
                             <ion-row class="date-start">
                               <ion-list-header style="text-align: center;"><ion-label>Начало сеанса: </ion-label></ion-list-header>
-                              <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 100%;"
+                              <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 50%;"
                                 datetime="{{'eventStart-'+i+'-'+i_s}}"
                                 class="ion-margin-vertical"
                               ></ion-datetime-button>
+                              <input style="" (input) = "testTime($event,i,i_s,'start')" class="time-input" value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateStart, 'standart')|date:'HH:mm'}}" [maskito]="maskTime" type="text"  #startSeansInput{{i_s}}>
                               <ion-modal [keepContentsMounted]="true">
                                 <ng-template>
                                   <ion-datetime
+                                    value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateStart, 'iso')}}"
+                                    (ionChange)="testDate($event,i,i_s,'start')"
+                                    presentation="date"
                                     id="{{'eventStart-'+i+'-'+i_s}}"
                                     [firstDayOfWeek]="1"
                                     [showDefaultButtons]="true"
+                                    [displayFormat]="'MM/YYYY'"
+                                    [pickerFormat]="'MMMM YYYY'"
                                     doneText="Ok"
                                     cancelText="Отмена"
                                     locale="ru-RU"
-                                    formControlName="dateStart"
                                     ></ion-datetime>
                                 </ng-template>
                               </ion-modal>
-
                             </ion-row>
-
                             <ion-row class="date-end">
                                   <ion-list-header style="text-align: center;"><ion-label>Конец сеанса: </ion-label></ion-list-header>
-                                  <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 100%;"
+                                  <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 50%;"
                                     datetime="{{'eventEnd-'+i+'-'+i_s}}"
                                     class="ion-margin-vertical"
                                   ></ion-datetime-button>
+                                  <input (input) = "testTime($event,i,i_s,'end')" class="time-input" [maskito]="maskTime" type="text"value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateEnd, 'standart')|date:'HH:mm'}}">
                                   <ion-modal [keepContentsMounted]="true">
                                     <ng-template>
                                       <ion-datetime
+                                      value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateEnd, 'iso')}}"
+                                        (ionChange)="testDate($event,i,i_s,'end')"
                                         id="{{'eventEnd-'+i+'-'+i_s}}"
                                         [firstDayOfWeek]="1"
                                         [showDefaultButtons]="true"
+                                        presentation="date"
                                         doneText="Ok"
                                         cancelText="Отмена"
                                         locale="ru-RU"
-                                        formControlName="dateEnd"
                                       ></ion-datetime>
                                     </ng-template>
                                   </ion-modal>
@@ -701,13 +688,8 @@
                       <ion-label>Добавить сеанс</ion-label>
                       <ion-icon name="add-outline"></ion-icon>
                     </ion-chip>
-
                   </ion-list>
                   </ion-card-content>
-
-                  <!-- <ion-card-footer>
-
-                  </ion-card-footer> -->
                 </div>
                 </ion-card>
 
@@ -717,7 +699,6 @@
                 <ion-icon name="add-outline"></ion-icon>
               </ion-chip>
             </ion-row>
-
             <ion-col *ngIf="mobile" class="place-list_mobile">
               <!-- мобильный плейс -->
               <ion-list style="width: 50%" *ngIf="locationLoader">
@@ -783,41 +764,50 @@
                           <ion-chip color="danger"(click)="deleteSeanceForm(i, i_s)">Удалить</ion-chip>
                         </ion-item>
                         <ion-col style="display: flex; justify-content: center; align-items: center;" >Начало сеанса</ion-col>
-                        <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 100%;"
-                                datetime="{{'eventStart-'+i+'-'+i_s}}"
-                                class="ion-margin-vertical"
-                              ></ion-datetime-button>
+                        <div class="time-input-wrapper">
+                          <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 50%;"
+                          datetime="{{'eventStart-'+i+'-'+i_s}}"
+                          class="ion-margin-vertical"></ion-datetime-button>
+                          <input (input) = "testTime($event,i,i_s,'start')" class="time-input" [maskito]="maskTime" type="text" value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateStart, 'standart')|date:'HH:mm'}}" #startSeansInput{{i_s}}>
+                        </div>
                               <ion-modal [keepContentsMounted]="true">
                                 <ng-template>
                                   <ion-datetime
+                                    value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateStart, 'iso')}}"
+                                    (ionChange)="testDate($event,i,i_s,'start')"
+                                    presentation="date"
                                     id="{{'eventStart-'+i+'-'+i_s}}"
                                     [firstDayOfWeek]="1"
                                     [showDefaultButtons]="true"
+                                    [displayFormat]="'MM/YYYY'"
+                                    [pickerFormat]="'MMMM YYYY'"
                                     doneText="Ok"
                                     cancelText="Отмена"
                                     locale="ru-RU"
-                                    formControlName="dateStart"
                                     ></ion-datetime>
                                 </ng-template>
                               </ion-modal>
-
                         <ion-col style="margin-top: -1rem;">
                           <ion-col style="display: flex; justify-content: center; align-items: center;" >Конец сеанса</ion-col>
-                          <ion-datetime-button style="margin-left: auto; margin-right: auto;"
-                                    datetime="{{'eventEnd-'+i+'-'+i_s}}"
-                                    class="ion-margin-vertical"
-                                  >
-                          </ion-datetime-button>
+                          <div class="time-input-wrapper">
+                              <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 50%;"
+                              datetime="{{'eventEnd-'+i+'-'+i_s}}"
+                              class=""
+                            ></ion-datetime-button>
+                            <input (input) = "testTime($event,i,i_s,'end')" class="time-input" [maskito]="maskTime" type="text" value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateEnd, 'standart')|date:'HH:mm'}}">
+                          </div>
                                   <ion-modal [keepContentsMounted]="true">
                                     <ng-template>
                                       <ion-datetime
+                                        value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateEnd, 'iso')}}"
+                                        (ionChange)="testDate($event,i,i_s,'end')"
                                         id="{{'eventEnd-'+i+'-'+i_s}}"
                                         [firstDayOfWeek]="1"
                                         [showDefaultButtons]="true"
+                                        presentation="date"
                                         doneText="Ok"
                                         cancelText="Отмена"
                                         locale="ru-RU"
-                                        formControlName="dateEnd"
                                       ></ion-datetime>
                                     </ng-template>
                                   </ion-modal>
@@ -830,19 +820,19 @@
                       </ion-button>
                     </ion-col>
                   </div>
-                
+
                 </ion-card>
-               
+
               </ng-container>
             </ion-col>
-              
+
             <ion-col *ngIf="mobile" style="margin-bottom:10rem; display:flex; align-items: center; justify-content: center;">
               <ion-button color="primary" class="" (click)="addPlaceForm()">
               Добавить место проведения
               </ion-button>
             </ion-col>
           </ion-col>
-        
+
       </ion-row>
 
       <!-- шаг 5 -->
@@ -856,17 +846,12 @@
                   <ion-label style="color:black">
                     <h1> Цена {{i_p+1}}</h1>
                   </ion-label>
-
-  
                     <ion-chip color="danger" (click)="deletePrice(i_p)">Удалить
                       <!-- <ion-icon name="close-outline"></ion-icon> -->
                     </ion-chip>
-
                 </ion-item>
               </ion-card-hider>
-
               <ion-item>
-
                 <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
                 <ion-input  formControlName="cors_rub" type="number" name="price" placeholder="Бесплатно"></ion-input>
               </ion-item>
@@ -876,66 +861,62 @@
                 <ion-textarea formControlName="description" type="text" name="price"></ion-textarea>
               </ion-item>
             </ng-container>
-
           </ion-card>
-
-
-
           <ion-chip style="margin-bottom: 2rem;" color="primary" class="ion-justify-item-center" (click)="addPrice()">
             <ion-label>Добавить цену</ion-label>
             <ion-icon name="add-outline"></ion-icon>
           </ion-chip>
-
-
-
           <ion-col style="margin-top: 15px;" size-lg="4" size-md="8" size-xs="12" @fade>
             <ion-item fill="outline">
 
               <ion-textarea formControlName="materials" placeholder="Cсылки на фото, пост вк, оплату билетов и.т.д..." [autoGrow]="true"></ion-textarea>
             </ion-item>
           </ion-col>
-
-
-
             <ion-col>
-              <ion-list style="padding-bottom: 4rem;">
-                <ion-radio-group formControlName="status" (ionChange)="selectedStatus($event)" [value]="statusSelected" required>
-                  <ng-container *ngIf="!statusesLoaded">
-                    <ng-container *ngFor="let key of [1,2,3,4,5]">
-                      <ion-item>
-                        <ion-avatar>
-                          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                        </ion-avatar>
-                        <ion-label class="ion-padding-start">
-                          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                        </ion-label>
-                      </ion-item>
-                    </ng-container>
-                  </ng-container>
 
-                  <ng-container *ngIf="statusesLoaded">
-                    <ng-container *ngFor="let status of statuses">
-                      <ion-item *ngIf="status.name === 'На модерации'">
-                        <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
-                        <ion-label>Отправить на модерацию</ion-label>
-                        <ion-radio slot="end" [value]="status.id" checked></ion-radio>
-                      </ion-item>
-
-                      <ion-item *ngIf="status.name === 'Черновик'">
-                        <ion-icon name="create" slot="start" color="medium" size="large"></ion-icon>
-                        <ion-label>Оставить в черновиках</ion-label>
-                        <ion-radio slot="end" [value]="status.id"></ion-radio>
-                      </ion-item>
-                    </ng-container>
-                  </ng-container>
-
-                </ion-radio-group>
-              </ion-list>
             </ion-col>
         </ion-col>
       </ion-row>
+      <!-- предпросмотр -->
+      <ion-row class="view-main"  [hidden]="stepCurrency !== 5">
+        <ion-col>
+          <ng-container *ngIf="stepCurrency === 5">
+            <app-event-show [createObj] = "createObj"></app-event-show>
+            <ion-radio-group formControlName="status" (ionChange)="selectedStatus($event)" [value]="statusSelected" required>
+              <ng-container *ngIf="!statusesLoaded">
+                <ng-container *ngFor="let key of [1,2,3,4,5]">
+                  <ion-item>
+                    <ion-avatar>
+                      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                    </ion-avatar>
+                    <ion-label class="ion-padding-start">
+                      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                    </ion-label>
+                  </ion-item>
+                </ng-container>
+              </ng-container>
 
+              <ng-container *ngIf="statusesLoaded">
+                <ng-container *ngFor="let status of statuses">
+                  <ion-item *ngIf="status.name === 'Новое'">
+                    <ion-icon name="checkmark-done" slot="start" color="success" size="large"></ion-icon>
+                    <ion-label>Отправить на модерацию</ion-label>
+                    <ion-radio slot="end" [value]="status.id"></ion-radio>
+                  </ion-item>
 
+                  <ion-item *ngIf="status.name === 'Черновик'">
+                    <ion-icon name="create" slot="start" color="medium" size="large"></ion-icon>
+                    <ion-label>Оставить в черновиках</ion-label>
+                    <ion-radio slot="end" [value]="status.id"></ion-radio>
+                  </ion-item>
+                </ng-container>
+              </ng-container>
+
+            </ion-radio-group>
+          </ng-container>
+
+        </ion-col>
+      </ion-row>
 
        <!-- Десктопный блок кнопок -->
 

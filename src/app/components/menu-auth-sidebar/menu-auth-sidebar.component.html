@@ -14,7 +14,6 @@
     <ion-icon src="assets/icons/ring.svg" class="ring"></ion-icon>
   </ion-row>
 
-
   <div *ngFor="let item of menuAuth" >
     <div *ngIf="item.children?.length > 0;  else itemMenu">
       <ion-accordion-group expand="inset">

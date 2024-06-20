@@ -96,7 +96,6 @@ export class AuthService {
     this.userService.removeUserFromLocalStorage()
     this.authenticationState.next(false)
     this.router.navigate(['login'])
-    this.toastService.showToast(MessagesAuth.logout, 'secondary')
   }
 
   resetPassword(data: PasswordReset) {

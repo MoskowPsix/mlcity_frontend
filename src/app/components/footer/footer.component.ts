@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, HostListener, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { EMPTY, Observable } from 'rxjs'
 import { AuthService } from 'src/app/services/auth.service'
@@ -20,7 +20,8 @@ export class FooterComponent implements OnInit {
   isAuth: boolean = false
   avatarUrl!: string
   user!: any
-
+  mobile: boolean = false
+  currentRout = this.router
   constructor(
     private router: Router,
     private filterService: FilterService,
@@ -29,6 +30,16 @@ export class FooterComponent implements OnInit {
     //private authService: AuthService,
   ) {}
 
+  @HostListener('window:resize', ['$event'])
+  mobileOrNote() {
+    if (window.innerWidth < 900) {
+      this.mobile = true
+    } else if (window.innerWidth > 900) {
+      this.mobile = false
+    } else {
+      this.mobile = false
+    }
+  }
   getEventService() {
     return this.filterService.eventsCount.value
   }
@@ -77,5 +88,6 @@ export class FooterComponent implements OnInit {
   ngOnInit() {
     this.getUser()
     this.checkAuthenticated()
+    this.mobileOrNote()
   }
 }

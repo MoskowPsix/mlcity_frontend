@@ -148,6 +148,7 @@ export class PlaceInfoComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log()
     if (this.load_seances) {
       this.getSeanses()
     }

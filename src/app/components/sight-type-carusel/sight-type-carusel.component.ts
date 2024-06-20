@@ -1,5 +1,6 @@
 import {
   Component,
+  Directive,
   ElementRef,
   EventEmitter,
   Input,
@@ -85,8 +86,8 @@ export class SightTypeCaruselComponent implements OnInit {
     if (!this.type_id) {
       this.type_id = 'all'
     }
-    setTimeout(() => {
-      this.fixCenterElement(this.type_id)
-    }, 5000)
+    // setTimeout(() => {
+    //   this.fixCenterElement(this.type_id)
+    // }, 5000)
   }
 }

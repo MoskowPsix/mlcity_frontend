@@ -64,8 +64,8 @@ export class EventTypeCaruselComponent implements OnInit {
   }
   fixCenterElement(type_id: any) {
     var elem = this.wigetScroll.nativeElement.offsetWidth
-    let left = document.getElementById(type_id)!.offsetLeft
-    let right = elem - document.getElementById(type_id)!.offsetLeft
+    let left = document.getElementById(type_id + 'event')!.offsetLeft
+    let right = elem - document.getElementById(type_id + 'event')!.offsetLeft
     if (left > right) {
       this.wigetScroll.nativeElement.scrollTo({
         left: left - elem / 2,
@@ -89,8 +89,8 @@ export class EventTypeCaruselComponent implements OnInit {
     }
     this.type_id.length ? (this.clickAll = false) : (this.clickAll = true)
     // this.fixCenterElement(this.type_id)
-    setTimeout(() => {
-      this.fixCenterElement(this.type_id)
-    }, 5000)
+    // setTimeout(() => {
+    //   this.fixCenterElement(this.type_id)
+    // }, 5000)
   }
 }

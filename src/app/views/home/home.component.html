@@ -1,7 +1,6 @@
 <meta name="description" content="Узнайте какие события и достопремечательности проходят рядом с вами и в вашем городе.">
 
 <ion-content >
-  <div style="padding-top: var(--ion-safe-area-top,0);"></div>
   <!-- Карта -->
   <div name="map" class="map">
     <ya-map name="map" [@mapAnimate] (ready)="onMapReady($event)"
@@ -43,7 +42,6 @@
     </div>
 
     <!-- Лоадер карты -->
- 
 
     <!-- Кнопка геопозиции -->
     <div class="geo-container">
@@ -57,10 +55,7 @@
       </div> -->
     </div>
 
-
-
     <!-- Фильтр радиуса -->
-
 
       <!-- Просмотр в радиусе -->
   </div>
@@ -141,8 +136,6 @@
       <ion-icon (click)="radiusMinus()" name="remove-outline" class="range-radius-main-plus" color="primary"></ion-icon>
   </div>
 </div>
-
-
 
  <!-- Выбор отображения на карте -->
 

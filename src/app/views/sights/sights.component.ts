@@ -116,7 +116,6 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   scrollUp() {
-    console.log('я работаю')
     document.getElementById('topSi')?.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -328,7 +327,6 @@ export class SightsComponent implements OnInit, OnDestroy {
     }
     if (boundingClientRect.y > this.testScrol) {
       this.headerWrapper.nativeElement.style.transform = 'translateY(-0%)'
-      console.log('ScrollUp')
     }
     if (boundingClientRect.y < this.testScrol) {
       this.headerWrapper.nativeElement.style.transform = 'translateY(-220%)'

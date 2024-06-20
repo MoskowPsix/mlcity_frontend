@@ -202,11 +202,11 @@
   align-items: center;
 }
 
-@media only screen and (min-height:750px){
-  .range-radius-main_2{
-    top:41%;
+@media only screen and (min-height: 750px) {
+  .range-radius-main_2 {
+    top: 41%;
   }
-  .geo-container{
+  .geo-container {
     top: 76%;
   }
 }
@@ -287,9 +287,6 @@
     max-height: 5rem;
   }
 }
-
-
-
 
 .geo-button-container:hover {
   cursor: pointer;
@@ -423,13 +420,12 @@ ion-spinner {
   color: #737373;
 }
 
-
-@media screen and (min-width:1060px) and (max-height:750px){
-  .range-radius-main_2{
+@media screen and (min-width: 1060px) and (max-height: 750px) {
+  .range-radius-main_2 {
     top: 45%;
   }
-  .geo-container{
-    top:80%;
+  .geo-container {
+    top: 80%;
   }
 }
 

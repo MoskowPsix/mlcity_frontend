@@ -40,6 +40,7 @@ import { SightShowComponent } from './views/sights/sight-show/sight-show.compone
 import { EventCreateComponent } from './views/events/event-create/event-create.component'
 import { SightsComponent } from './views/sights/sights.component'
 import { SightCreateComponent } from './views/sights/sight-create/sight-create.component'
+import { RecoveryPasswordComponent } from './views/recovery-password/recovery-password.component'
 import { ReadMoreComponent } from './components/read-more/read-more.component'
 import { FiltersComponent } from './components/filters/filters.component'
 import { FiltersNotButtonComponent } from './components/filters_not_button/filters_not_button.component'
@@ -50,7 +51,7 @@ import { FavoritesComponent } from './views/cabinet/favorites/favorites.componen
 import { CommentsListComponent } from './components/comments-list/comments-list.component'
 import { SightTypeCaruselComponent } from './components/sight-type-carusel/sight-type-carusel.component'
 import { EventTypeCaruselComponent } from './components/event-type-carusel/event-type-carusel.component'
-
+import { RecoveryPasswordService } from './services/recovery-password.service'
 import { AuthService } from './services/auth.service'
 import { ToastService } from './services/toast.service'
 import { TokenService } from './services/token.service'
@@ -85,6 +86,7 @@ import { MyEventsComponent } from './views/cabinet/my-events/my-events.component
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component'
 import { RegistrationComponent } from './views/registration/registration.component'
 import { MaskitoModule } from '@maskito/angular'
+
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatFormFieldModule } from '@angular/material/form-field'
@@ -124,6 +126,7 @@ registerLocaleData(localeRu, 'ru')
     CabinetComponent,
     HomeComponent,
     LoginComponent,
+    RecoveryPasswordComponent,
     HeaderComponent,
     SidebarComponent,
     AddEventComponent,
@@ -199,6 +202,7 @@ registerLocaleData(localeRu, 'ru')
     LoadingService,
     TokenService,
     ToastService,
+    RecoveryPasswordService,
     UserService,
     MapService,
     EventTypeService,

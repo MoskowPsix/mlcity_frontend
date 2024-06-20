@@ -62,13 +62,8 @@
                 <ng-container *ngFor="let file of sight.files">
 
                   <swiper-slide style="min-height: 19rem;" class="" *ngIf="file.local === 1">
-                    <img alt="img" src="{{ file.link }}" />
+                    <img alt="img" src="{{host}}:{{port}}{{file.link}}" /> 
                   </swiper-slide>
-
-
-
-
-
 
                   <swiper-slide style="min-height: 19rem;" *ngIf="file.local === 0">
                     <img alt="img" src="{{ file.link }}" />
@@ -110,7 +105,6 @@
                   {{sight.name}}
                 </div>
 
-
                 <div class="social-buttons">
                   <div class="likes">
                     <ion-icon name="chatbox-outline" class="ico"></ion-icon>
@@ -131,12 +125,9 @@
 
                 </div>
 
-
-
                 <div class="content-main">
 
                   <ion-col class="content-main-description">
-
 
                     <div>
                       <div class="description">{{ sight.description }}</div>
@@ -147,9 +138,7 @@
                       </div>
                     </div>
 
-
                   </ion-col>
-
 
                   <ion-col *ngIf="sight.price !== null">
                     <div style="font-family:'Montserrat-Bold'; margin-bottom: 0.5rem;" class="title">
@@ -159,7 +148,6 @@
                         <ion-grid class="tickets-grid">
                           <div  *ngFor="let price of sight.price"  class="ticket-main">
 
-
                             <div *ngIf="price.cost_rub > 0" class="ticket-main-price">
                               {{price.cost_rub}} ₽
                             </div>
@@ -167,7 +155,6 @@
                               Вход бесплатный
 
                             </div>
-
 
                             <div  class="ticket-main-description">
                               {{price.descriptions}}
@@ -179,7 +166,6 @@
                       </div>
 
                   </ion-col>
-
 
                   <ion-col>
                     <div class="title" style="margin-bottom: 0.3rem;">
@@ -220,13 +206,10 @@
                         {{sight.work_time}}
                     </div>
 
-
                     <div style="padding: 0.1rem;" *ngIf='sight.work_time === ""' class="simple-text">
                         Не указано
                     </div>
                   </ion-col>
-
-
 
                   <ion-col>
                     <h2 style="margin-top:-0.5rem;" class="title">Адрес</h2>
@@ -270,8 +253,6 @@
           </ion-col>
         </ion-row>
 
-
-
         <ion-row *ngIf="sight.materials" class="ion-justify-content-center">
           <ion-col size-lg="8" size-md="12" size-xs="12" class="ion-margin">
             {{ sight.materials }}
@@ -287,11 +268,4 @@
     </div>
 
   </ion-content>
-
-
-
-
-
-
-
 

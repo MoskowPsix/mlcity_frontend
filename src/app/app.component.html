@@ -5,23 +5,27 @@
     </ion-menu> -->
 
     <!-- <div class="ion-page" id="main-content"> -->
-      <div style="padding-top: var(--ion-safe-area-top,0);"></div>
+ 
       <ion-header mode="md">
-        <ion-toolbar class="header">
-          <app-header></app-header>
-        </ion-toolbar>
+        <ng-coniner *ngIf="platformType === 'ios' && mobile">
+          <ion-toolbar   mode="ios" style=" height: var(--ion-safe-area-top); --border:none; --box-shadow: none; box-shadow: none;" class="home">
+            <app-header></app-header>
+          </ion-toolbar>
+        </ng-coniner>
+        <ng-coniner *ngIf="platformType !== 'ios' || !mobile">
+          <ion-toolbar class="home">
+            <app-header></app-header>
+          </ion-toolbar>
+        </ng-coniner>
+        
       </ion-header>
-      
-          
-
+     
         <ion-router-outlet></ion-router-outlet>
-
-      <ion-footer>
+      <ion-footer *ngIf="url !== '/cabinet/events/create'">
         <ion-toolbar>
             <app-footer></app-footer>
         </ion-toolbar>
       </ion-footer>
-
     <!-- </div> -->
   <!-- </ion-split-pane> -->
 </ion-app>

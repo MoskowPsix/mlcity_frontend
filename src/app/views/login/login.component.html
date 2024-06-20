@@ -1,6 +1,5 @@
  <!-- <ion-content> -->
 
-
  <!-- <ion-grid>
     <ion-row class="ion-justify-content-center ion-margin-top">
       <img src="/assets/icons/favicon.png" alt="logo" class="logo" />
@@ -13,13 +12,11 @@
     <ion-row class="ion-justify-content-center">
       <a href="{{ vkontakteAuthUrl }}" (click)="onLoading()"><ion-icon class="logo-vk" name="logo-vk"></ion-icon></a> -->
 
-
       <!-- коментарий -->
 
       <!-- <a (click)="loginPhone()"><ion-icon class="logo-telephone" name="call"></ion-icon></a> -->
 
        <!-- коментарий -->
-
 
     <!-- </ion-row>
 
@@ -68,7 +65,6 @@
     </ion-row>
   </ion-grid> -->
 
-
   <!-- модальное окно с паролем для вк -->
   <ion-modal class="vkPasswordModal" #modal [isOpen]="modalPass" [presentingElement]="presentingElement">
     <ng-template>
@@ -83,10 +79,8 @@
 
       <ion-col class="vkPasswordModalMainWrapper">
 
-
       <ion-content class="ion-padding vkPasswordModalMain">
         <ion-item lines="none" [formGroup]="formSetPassword">
-
 
           <ion-col>
 
@@ -127,13 +121,10 @@
 
       </ion-col>
 
-
     </ng-template>
   </ion-modal>
 
-
 <!-- коментарий -->
-
 
   <!-- <ion-modal #modalPhone [isOpen]="modalPhone" [presentingElement]="presentingElement">
     <ng-template>
@@ -169,20 +160,13 @@
 
   <!-- коментарий -->
 
-
-
 <!-- </ion-content> -->
-
-
-
-
 
 <ion-content class="MainBlock">
   <!-- Обёртка для центрирования -->
     <ion-grid class="Login_wrapper">
-      
-      <form [formGroup]="loginForm" (submit)="onSubmitLogin()" enctype="multipart/form-data">
 
+      <form [formGroup]="loginForm" (submit)="onSubmitLogin()" enctype="multipart/form-data">
 
        <ion-row class="LoginMainBlock">
           <div class="LoginMainBlock_header">
@@ -196,7 +180,7 @@
                   <img *ngIf="false"alt="logo" src="/svg/no-photo.svg" />
 
                   <ion-label class="Login_logo_text">
-                    mlcity
+                  ВОКРУГ
                   </ion-label>
 
                 </ion-item>
@@ -229,27 +213,53 @@
                     </div> -->
 
                     <ion-item>
-                          <ion-input formControlName="password" class ="Login_inputs" type="password"   placeholder="Пароль">
-                             <img class="Login_icon" src="/assets/icons/login_password.svg" alt="">
+                      <button (click)="openPassword(passwordInput)" type="button" class="password-icon-wrapper" ></button>
+                          <ion-input formControlName="password" class ="Login_inputs" type="password" placeholder="Пароль" #passwordInput>
+                              <img class="Login_icon password-icon" src="/assets/icons/login_password.svg" alt="">
                           </ion-input>
                     </ion-item>
 
                     <div style="text-align: center;" *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="validation">
                       <ion-note *ngIf="loginForm.controls['password'].hasError('required')" color="danger">Пароль не может быть пустым</ion-note>
                     </div>
+                   
+                      <div class="password-recovery" id="recoveryLink">
+                        <h6  class="">Забыли пароль?</h6>
+                        <ion-modal class="recovery-modal" trigger="recoveryLink"  >
+                          <ng-template>
+                            <div class="recovery-main">
+                              <p style="width: 90%; font-size: 20pt; color:#129AE4; font-family: 'Montserrat', sans-serif; margin-left: auto; margin-right: auto;">
+                                На указанный вами адрес придёт ссылка
+                              </p>
+                              <div class="recovery-form">
+                                <form [formGroup]="recoveryForm" action="">
+                                  <div class="Login_inputs_main">
+                                    <ion-input  formControlName="email"  class="Login_inputs recovery-input" type="email" placeholder="Электронная почта" required>
+                                      <img *ngIf="iconState" class="Login_icon recovery-icon" src="/assets/icons/login_mail.svg" alt="">
+                                      <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
+                                    </ion-input>
+                                    <ion-note *ngIf="recoveryForm.controls['email'].hasError('required')" color="danger">Поле email не может быть пустым</ion-note>
+                                  </div>
+                                </form>
+                               
+                              </div>
+                              <ion-button [disabled]="recoveryForm.invalid || !timerReady" class="recovery-button" (click)="submitRecovery()">Востановить</ion-button>
+                              <h6 id="recoveryLink" class="password-recovery">Не пришёл код?</h6>
+                              <h6 id="recoveryLink" *ngIf="!timerReady" class="password-recovery">доступно через {{seconds * 1000 | date: 'mm:ss' }} </h6>
+                            </div>
+                         
+                          </ng-template>
+                         
+                        </ion-modal>
+                      </div>
+                    
             </ion-list>
-
-
 
           </div>
 
-
-
-          <ion-div class="Login_btns_content">
-
+          <div class="Login_btns_content">
 
             <ion-list>
-
 
               <ion-item>
 
@@ -262,29 +272,17 @@
               <ion-router-link class="Login_main_link" routerLink="/registration">
                 <ion-item>
 
-
                 <ion-button class="Login_btns CreateAcc_btn">
                     Создать аккаунт
                 </ion-button>
-
 
                 </ion-item>
 
               </ion-router-link>
 
-
-
              </ion-list>
 
-
-
-
-
-
-          </ion-div>
-
-
-
+          </div>
 
             <ion-list class="LoginWith_list">
 
@@ -292,41 +290,35 @@
 
               <ion-item>
 
-
-
                 <a href="{{vkontakteAuthUrl}}" (click)="onLoading();">
 
-                  <ion-div class="vk_logo_circle">
-                     <ion-div class="vk_logo_quad">
+                  <div class="vk_logo_circle">
+                     <div class="vk_logo_quad">
                       <ion-icon class="logo-vk" name="logo-vk"></ion-icon>
-                     </ion-div>
-                  </ion-div>
+                     </div>
+                  </div>
                 </a>
 
                 <a  (click)="onLoading(); loginApple()">
 
-                  <ion-div class="apple-logo-circle">
-                    
+                  <div class="apple-logo-circle">
+
                       <ion-icon class="logo-apple-icon" name="logo-apple"></ion-icon>
-                    
-                  </ion-div>
+
+                  </div>
+                </a>
+
+                <a href="{{yandexAuthUrl}}">
+                  <div class="yandex-logo-circle">
+
+                  </div>
                 </a>
 
             </ion-item>
 
-
-
             </ion-list>
 
-
-
-
-
-
-
-
        </ion-row>
-
 
       </form>
     </ion-grid>
@@ -406,8 +398,5 @@
     </ng-template>
   </ion-modal> -->
 
-
 <!-- </ion-content> -->
-
-
 
