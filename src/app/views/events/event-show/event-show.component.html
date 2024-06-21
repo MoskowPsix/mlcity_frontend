@@ -3,7 +3,7 @@
   <ion-content>
     <!-- skeleton animation -->
     <div class="pb-2rem" class="event-container">
-      <ng-container *ngIf="loadingEvent">
+      <ng-container *ngIf="loadingEvent && router.url !== '/cabinet/events/create'">
         <ion-row class="ion-justify-content-center">
           <ion-col size-lg="12" size-md="12" size-xs="12">
             <ion-row class="ion-justify-content-center">
@@ -258,7 +258,6 @@
     </div>
   
   </ion-content>
-  
 </ng-container>
 
 <ng-container *ngIf="router.url === '/cabinet/events/create'">
