@@ -201,7 +201,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .getUser()
       .pipe(
         tap(() => {
-          this.loadingService.showLoading(MessagesLoading.vkGroupSearch)
+          // this.loadingService.showLoading(MessagesLoading.vkGroupSearch)
         }),
         switchMap((user: any) => {
           this.user = user
@@ -213,10 +213,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             !user?.social_account ||
             user?.social_account.provider != 'vkontakte'
           ) {
-            this.toastService.showToast(
-              MessagesErrors.vkGroupSearch,
-              'secondary',
-            )
+            // this.toastService.showToast(
+            //   MessagesErrors.vkGroupSearch,
+            //   'secondary',
+            // )
           } else {
             // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
             return this.vkService.getGroups().pipe(
