@@ -47,7 +47,7 @@ import { LocationService } from 'src/app/services/location.service'
 import { Location } from 'src/app/models/location'
 import { FilterService } from 'src/app/services/filter.service'
 import { Router } from '@angular/router'
-
+import { GeneratePlugSightEventsImgService } from 'src/app/services/generate-plug-sight-events-img.service'
 @Component({
   selector: 'app-sight-create',
   templateUrl: './sight-create.component.html',
@@ -77,7 +77,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   @ViewChild('sightName') sightNameElement!: any
   @ViewChild('sightDescription') sightDescriptionElement!: any
-
+  @ViewChild('plug', { static: true }) plug!: ElementRef
   vkGroups: any
   //Создать переменную для постов со страницы
   vkGroupSelected: number | null = null
@@ -642,6 +642,11 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.createSightForm.controls['price'].value.splice(num, 1)
   }
 
+  testPlug() {
+    let generatePlug: GeneratePlugSightEventsImgService =
+      new GeneratePlugSightEventsImgService(this.plug, 'create')
+    generatePlug.generatePlug()
+  }
   //формируем дату для отправки на сервер
   createFormData() {
     if (
@@ -737,7 +742,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   //Клик по кнопке веперед
-  stepNext() {
+  nextStep() {
     this.stepCurrency++
     if (this.stepCurrency == 1) {
       setTimeout(() => {

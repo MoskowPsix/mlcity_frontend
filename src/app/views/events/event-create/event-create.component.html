@@ -1,5 +1,4 @@
 
-
 <ion-content mode="md">
 
   <app-create-rules-modal [agreement_id]="1"></app-create-rules-modal>
@@ -838,6 +837,14 @@
       <!-- шаг 5 -->
       <ion-row class="tiket-main"  [hidden]="stepCurrency !== 4">
         <ion-col *ngIf="stepCurrency === 4" class="ion-justify-content-center" @fade>
+          <ion-card class="test" *ngIf= "this.createEventForm.controls['price'].value.length === 0">
+            <ion-item >
+              <ion-label style="color:black">
+                Вход свободный
+              </ion-label>
+            </ion-item>
+         
+          </ion-card>
           <ion-card class="test" *ngFor="let item of createEventForm.controls['price'].value; let i_p = index">
             <ng-container [formGroup]="createEventForm.controls['price'].value[i_p]">
               <ion-card-hider>

@@ -9,7 +9,14 @@
 
 ion-item {
 }
-
+.close-button{
+  --background: gray;
+  margin: auto;
+}
+.close-button-wrapper{
+  display: flex;
+  justify-content: center;
+}
 .main-title {
   font-size: 4rem;
   font-family: 'Montserrat-Bold';

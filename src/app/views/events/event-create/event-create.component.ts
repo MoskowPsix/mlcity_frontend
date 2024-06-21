@@ -201,7 +201,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .getUser()
       .pipe(
         tap(() => {
-          // this.loadingService.showLoading(MessagesLoading.vkGroupSearch)
+          this.loadingService.showLoading(MessagesLoading.vkGroupSearch)
         }),
         switchMap((user: any) => {
           this.user = user
@@ -1033,9 +1033,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }
 
       case 4:
+        let tempPrice
         this.createFormCount = 0
         let priceValid = false
         let validValidPrice = false
+        console.log(this.createEventForm.controls['price'].value.length)
+        if (this.createEventForm.controls['price'].value.length == 0) {
+          priceValid = true
+        }
         this.createEventForm.controls['price'].value.forEach(
           (item: any, i: number) => {
             if (this.createEventForm.controls['price'].value.length > 1) {
@@ -1100,6 +1105,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+  public nullPrice(): void {
+    if (this.createEventForm.controls['price'].value.length == 0) {
+      this.addPrice()
+    }
+  }
+
   stepIsValid(step: number = this.stepStart) {
     switch (step) {
       case 1:
@@ -1156,6 +1167,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.searchMinSeans()
+    this.nullPrice()
     //собираем плейсы
     let event = this.createFormData() // собираем формдату
     this.createEventForm.disable()
