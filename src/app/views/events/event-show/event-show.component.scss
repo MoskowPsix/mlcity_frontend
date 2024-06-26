@@ -325,9 +325,10 @@ ion-accordion-group {
     padding-left: 0;
     max-width: 100%;
   }
-  .swiper-container {
-    height: 19rem;
+  swiper-slide{
+    height: auto;
   }
+
   .swiper-container-img_wrapper {
     .swiper-container-header-content {
       padding-left: 1rem;
