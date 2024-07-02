@@ -1,89 +1,163 @@
-.filters {
+.main-grid {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 21rem);
+  gap: 33px;
+  padding: 10px;
+  margin: auto;
+  justify-content: center;
+}
+.main-grid-load {
+  padding-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 21rem);
+  gap: 33px;
+  
+  margin: auto;
+  justify-content: center;
+}
+
+.card-wrapper {
   position: relative;
-  z-index: 1;
 }
 
-.segments {
-  background-color: #ced4e0;
+.card {
+  border-radius: 10px;
+  width: 20.5rem;
+  height: 200px;
+  background-size: 100%;
+  background-position: center;
+  color: white;
+  text-align: center;
+  position: relative;
+}
+.card-load{
+
+  border-radius: 10px;
+  width: 20.5rem;
+  height: 200px;
+ 
 }
 
-.segment-title {
-  color: black;
 
-  ion-icon {
-    color: black;
-    padding-right: 5px;
-  }
+
+.info-wrapper {
+  pointer-events: none;
+  border-radius: 10px;
+  position: absolute;
+  background-color: none;
+  width: 20.5rem;
+  height: 200px;
+  z-index: 2;
 }
 
-.segment-box {
-  animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+.price {
+  font-size: 0.8rem;
+  text-align: center;
+  background-color: #1C2226;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  min-width: 3.75rem;
+  height: 1.438rem;
+}
+.price-load{
+  font-size: 0.8rem;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  width: 3.75rem;
+  height: 1.438rem;
 }
 
-ion-segment-button {
-  --border-width: 0;
+.edit-button {
+  right: 1rem;
+  top: 0.5rem;
+  position: absolute;
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  transition: 0.3s all;
+  height: 2rem;
+  background-color: #F98F11;
+  border-radius: 50%;
+}
+.edit-button-load {
+  right: 1rem;
+  top: 0.5rem;
+  position: absolute;
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  transition: 0.3s all;
+  height: 2rem;
+  border-radius: 50%;
 }
 
-.note {
-  color: #9c9ea5;
-  //margin-top: 5px;
+.edit-button:hover {
+  transition: 0.3s all;
+  background-color: #fcac4b;
 }
 
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0 auto;
 }
 
-@media screen and (min-width: 0px) and (max-width: 768px) {
-  .filters {
-    position: fixed;
-    bottom: 5rem;
-    right: 1.5rem;
-    z-index: 999999;
-  }
+.info-wrapper {
 
-  .segments {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-  .app-event-card {
-    //margin-left: 2%;
-    //margin-right: 2%;
-  }
+  padding-right: 0.625rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
 }
 
-@media (min-width: 768px) {
-  .filters {
-    // position: fixed;
-    // bottom: 5rem;
-    // right: 1.5rem;
-    // z-index: 9999;
-  }
-  .app-event-card {
-    //margin-left: 30%;
-    //margin-right: 30%;
-  }
+.info-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-bottom: 0.5rem;
+  position: absolute;
+  bottom: 0;
 
-  .segments {
-    margin-top: 5px;
-  }
 }
 
-@media screen and (min-width: 769px) and (max-width: 1313px) {
-  .segments {
-    margin-top: 60px;
-  }
-  .app-event-card {
-    //margin-left: 35%;
-    //margin-right: 35%;
-  }
+.info-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.7rem;
+  color: #fff;
+  background-color: #1c2226d5;
+  min-width: 3.125rem;
+  height: 1.438rem;
+  border-radius: 4px;
+}
+.info-text-load {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.7rem;
+  color: #fff;
+  min-width: 3.125rem;
+  height: 1.438rem;
+  border-radius: 4px;
 }
 
-.test {
-  background-color: #edeef0;
+.info-text-container {
+  display: flex;
+  gap: 0.313rem;
+
 }

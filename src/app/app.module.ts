@@ -101,6 +101,7 @@ import { PrivacyComponent } from './views/privacy/privacy.component'
 import { CreateRulesModalComponent } from './components/create-rules-modal/create-rules-modal.component'
 import { RulesModalCheckService } from './services/rules-modal-check.service'
 import { MiniCardComponent } from './components/mini-card/mini-card.component'
+import { CardGridComponent } from './components/card-grid/card-grid.component'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -130,6 +131,7 @@ registerLocaleData(localeRu, 'ru')
     HeaderComponent,
     SidebarComponent,
     AddEventComponent,
+    CardGridComponent,
     DropdownPopupComponent,
     MenuAuthComponent,
     MenuAuthSidebarComponent,

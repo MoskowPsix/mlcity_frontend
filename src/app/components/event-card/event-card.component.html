@@ -1,6 +1,6 @@
-<ion-card>
+<!-- <ion-card> -->
   <!-- ['/sights', event.id] - было лень переделывать поэтому тут event.id подразумевает ид места, так как компонент универсальный и можно передать место -->
-  <div class=" ripple-parent rectangle" >
+  <!-- <div class=" ripple-parent rectangle" >
     <swiper-container
       [routerLink]="isSight ? ['/sights', event.id, slugName] : ['/events', event.id, slugName]"
       #swiper
@@ -8,9 +8,9 @@
       autoplay-disableOnInteraction="false"
       [followFinger]="false"
       [initialSlide]="0"
-    >
+    > -->
 <!-- [loop]="true" -->
-      <ng-container *ngIf="event.files; else notFiles">
+      <!-- <ng-container *ngIf="event.files; else notFiles">
 
         <ng-container *ngFor="let file of event.files">
           <swiper-slide *ngIf="file.local === 1 && file.file_types[0].name === 'image'">
@@ -23,14 +23,14 @@
             <iframe [src]="file.link + '&autoplay=1&mute=1'|safeVideoByUrl" allow="encrypted-media; fullscreen; picture-in-picture;" autoplay width="100%" height="100%" frameborder="0"></iframe>
           </swiper-slide>
         </ng-container>
-      </ng-container>
+      </ng-container> -->
 
-      <ng-template #notFiles>
+      <!-- <ng-template #notFiles>
         <swiper-slide><img alt="default img" src="/svg/no-photo.svg" /></swiper-slide>
       </ng-template>
-    </swiper-container>
+    </swiper-container> -->
 
-    <ng-container *ngIf="swiperTotalSlids && swiperTotalSlids > 1">
+    <!-- <ng-container *ngIf="swiperTotalSlids && swiperTotalSlids > 1">
       <div class="slids-pagination">
         {{ swiperCurrentSlide }} / {{ swiperTotalSlids }}
       </div>
@@ -39,7 +39,7 @@
     <div class="date" *ngIf="event.date_start && event.date_end">
       <span>НАЧАЛО: {{ event.date_start | date:'d MMM в HH:mm' }}</span>
       <span>КОНЕЦ: {{ event.date_end | date:'d MMM в HH:mm' }}</span>
-    </div>
+    </div> -->
 
     <!-- <div class="price" *ngIf="event.price">
       <span *ngIf="event.price.length > 1">от {{ getMinPrice(event.price) }} руб. до {{ getMaxPrice(event.price) }} руб.</span>
@@ -49,7 +49,7 @@
       <span>Бесплатно</span>
     </div> -->
 
-    <div *ngIf="event.types && event.types.length" class="type">
+    <!-- <div *ngIf="event.types && event.types.length" class="type">
       <img alt="img" src="{{host}}:{{port}}{{ event.types[0].ico }}" />
     </div>
 
@@ -69,7 +69,7 @@
         <app-read-more text="{{ event.description }}"></app-read-more>
       </div>
 
-    </ion-card-content>
+    </ion-card-content> -->
 
     <!-- Ссылки которые пока просто ссылки без превью. -->
     <!-- <ng-container *ngIf="event.files && event.files.length; else notFiles">
@@ -80,7 +80,7 @@
       </ng-container>
     </ng-container> -->
 
-  </div>
+  <!-- </div>
 
   <ion-item class="footer" lines="none">
     <ion-row slot="start">
@@ -96,10 +96,10 @@
       </ion-chip>
       <ion-chip [color]="favorite ? 'warning' : ''" (click)="toggleFavorite(event.id)">
         <ion-icon *ngIf="!loadingFavotire" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''"  class="ico"></ion-icon>
-        <ion-spinner name="crescent" *ngIf="loadingFavotire" class="load_spinner"></ion-spinner>
-        <ion-label *ngIf="event.favorites_users_count !== 0 && event.favorites_users_count">{{ getCurentNumber(event.favorites_users_count) }}</ion-label>
+        <ion-spinner name="crescent" *ngIf="loadingFavotire" class="load_spinner"></ion-spinner> -->
+        <!-- <ion-label *ngIf="event.favorites_users_count !== 0 && event.favorites_users_count">{{ getCurentNumber(event.favorites_users_count) }}</ion-label> -->
         <!-- <ion-icon name="share-social-outline" class="ico share"></ion-icon> -->
-      </ion-chip>
+      <!-- </ion-chip>
     </ion-row>
     <ion-chip *ngIf="event.views_users_count" [disabled]="true" color="dark" slot="end">
       <ion-icon name="eye-outline"></ion-icon>
@@ -110,4 +110,25 @@
     <app-comments-list [comments]="event.comments" [isSight]="isSight" [event_id]="event.id"></app-comments-list>
   </div>
 
-</ion-card>
+</ion-card> -->
+
+  <div class="card-wrapper">
+    <ng-container>
+        <div class="card" style="background-image: url('{{event.files[0].link}} ');">
+          <div *ngIf="myEvent" class="edit-button"></div>
+              <div class="info-wrapper">
+                  <div class="info-header"> <div class="price"> </div>
+              </div>
+    
+                <div class="info-footer">
+                    <div class="info-text-container">
+                      <div class="info-text"></div>
+                    </div>
+                </div>
+          </div>
+        </div>
+    
+    </ng-container>
+   
+  </div>
+

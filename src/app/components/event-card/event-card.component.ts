@@ -64,6 +64,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() callFromCabinet: boolean = true
   @Input() event!: any
   @Input() isSight: boolean = false
+  @Input() myEvent: boolean = false
   comments: boolean = false
   loadingComment: boolean = false
 
