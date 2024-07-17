@@ -102,6 +102,7 @@ import { CreateRulesModalComponent } from './components/create-rules-modal/creat
 import { RulesModalCheckService } from './services/rules-modal-check.service'
 import { MiniCardComponent } from './components/mini-card/mini-card.component'
 import { CardGridComponent } from './components/card-grid/card-grid.component'
+import { ScrollService } from './services/scroll.service'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -213,6 +214,7 @@ registerLocaleData(localeRu, 'ru')
     AuthGuard,
     LoggedInAuthGuard,
     CheckAuthCanActiveGuard,
+    ScrollService,
     NativeGeocoder,
     LocationAccuracy,
     DatePipe,

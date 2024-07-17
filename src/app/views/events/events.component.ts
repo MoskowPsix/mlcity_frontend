@@ -9,6 +9,7 @@ import {
   ChangeDetectionStrategy,
   HostListener,
 } from '@angular/core'
+
 import {
   catchError,
   delay,
@@ -138,6 +139,7 @@ export class EventsComponent implements OnInit, OnDestroy {
       })
   }
 
+  
   setDate(event: any) {
     this.filterService.setStartDateTolocalStorage(event.dateStart)
     this.filterService.setEndDateTolocalStorage(event.dateEnd)
@@ -307,6 +309,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
   //скролл
   scrollPaginate = (): void => {
+    console.log('scrollPaginate')
     this.scrollUpCheckState()
     const boundingClientRect =
       this.ContentCol.nativeElement?.getBoundingClientRect()
@@ -339,6 +342,11 @@ export class EventsComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngAfterViewInit() {
     this.scrollStart = this.ContentCol.nativeElement?.getBoundingClientRect()
+    this.ContentCol.nativeElement.addEventListener(
+      'scroll',
+      this.scrollPaginate,
+      true,
+    )
   }
   ngOnInit() {
     this.router.events
@@ -348,7 +356,7 @@ export class EventsComponent implements OnInit, OnDestroy {
           // this.filterService.changeFilter.next(true)
         }
       })
-    window.addEventListener('scroll', this.scrollPaginate, true)
+
     // window.addEventListener("scrollend", this.scrollEvent, true)
 
     this.date = {

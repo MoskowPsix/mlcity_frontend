@@ -154,6 +154,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  test() {
+    console.log(this.event.files[0])
+  }
+
   getUrlFrame(url: string) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
