@@ -101,6 +101,9 @@ import { PrivacyComponent } from './views/privacy/privacy.component'
 import { CreateRulesModalComponent } from './components/create-rules-modal/create-rules-modal.component'
 import { RulesModalCheckService } from './services/rules-modal-check.service'
 import { MiniCardComponent } from './components/mini-card/mini-card.component'
+import { TestPageComponent } from './views/test-page/test-page.component'
+import { TypeSwitherComponent } from './components/type-swither/type-swither.component'
+import { SwitchTypeService } from './services/switch-type.service'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -177,6 +180,8 @@ registerLocaleData(localeRu, 'ru')
     PrivacyComponent,
     DropDownButtonComponent,
     MiniCardComponent,
+    TestPageComponent,
+    TypeSwitherComponent,
   ],
   imports: [
     BrowserModule,
@@ -216,7 +221,8 @@ registerLocaleData(localeRu, 'ru')
     DatePipe,
     RulesModalCheckService,
     TruncatePipe,
+    SwitchTypeService,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

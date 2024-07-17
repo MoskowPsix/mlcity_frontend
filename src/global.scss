@@ -29,32 +29,44 @@
 
 
 @font-face {
-	font-family: 'Montserrat-Thin'; 
-	src: url('./assets/fonts/Montserrat-Thin.ttf'); 
+	font-family: 'Montserrat-Thin';
+	src: url('./assets/fonts/Montserrat-Thin.ttf');
 }
 
 @font-face {
-	font-family: 'Montserrat-SemiBold'; 
-	src: url('./assets/fonts/Montserrat-SemiBold.ttf'); 
+	font-family: 'Montserrat-SemiBold';
+	src: url('./assets/fonts/Montserrat-SemiBold.ttf');
 }
 @font-face {
-	font-family: 'Montserrat-Bold'; 
-	src: url('./assets/fonts/Montserrat-Bold.ttf'); 
+  font-family: 'NunitoSans-Italic';
+  src: url('./assets/fonts/NunitoSans-Italic.ttf');
+}
+@font-face {
+  font-family: 'NunitoSans';
+  src: url('./assets/fonts/NunitoSans.ttf');
+}
+@font-face {
+  font-family: 'NunitoSans-SemiBold';
+  src: url('./assets/fonts/NunitoSans-SemiBold.ttf');
+}
+@font-face {
+	font-family: 'Montserrat-Bold';
+	src: url('./assets/fonts/Montserrat-Bold.ttf');
 }
 
 @font-face {
-	font-family: 'Montserrat-Regular'; 
-	src: url('./assets/fonts/Montserrat-Regular.ttf'); 
+	font-family: 'Montserrat-Regular';
+	src: url('./assets/fonts/Montserrat-Regular.ttf');
 }
 
 @font-face {
-	font-family: 'Montserrat-Medium'; 
-	src: url('./assets/fonts/Montserrat-Medium.ttf'); 
+	font-family: 'Montserrat-Medium';
+	src: url('./assets/fonts/Montserrat-Medium.ttf');
 }
 
 @font-face {
-	font-family: 'Montserrat-Light'; 
-	src: url('./assets/fonts/Montserrat-Light.ttf'); 
+	font-family: 'Montserrat-Light';
+	src: url('./assets/fonts/Montserrat-Light.ttf');
 }
 
 
@@ -87,7 +99,7 @@ ion-list {
 }
 
 ion-content {
-    
+
 }
 
 ion-item-divider{
@@ -260,7 +272,7 @@ swiper-slide {
 }
 
 @media screen and (min-width: 0px) and (max-width: 768px) {
-   
+
 
     // ion-content.md{
     //     --padding-top: 6rem;

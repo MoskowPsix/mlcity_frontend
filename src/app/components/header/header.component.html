@@ -1,32 +1,3 @@
-<!-- Мобильное меню -->
-    <!-- <div class="header-mobile"> -->
-        <!-- <ion-buttons slot="end">
-            <ion-menu-toggle>
-                <ion-button>
-                    <ion-icon slot="icon-only" name="menu"></ion-icon>
-                </ion-button>
-            </ion-menu-toggle>
-        </ion-buttons> -->
-        <!-- <ion-row class="header-mobile"> -->
-            <!-- <ion-col>
-                <ion-title *ngIf="!showBackButton">
-                    <div class="logo">
-                        <img src="assets/icons/favicon.png">
-                        <span>{{ appName }}</span>
-                    </div>
-                </ion-title>
-            </ion-col> -->
-            <!-- <ion-col *ngIf="showBackButton" size="auto">
-                <ion-icon  name="chevron-back" size="large" color="primary" appBackButton></ion-icon>
-            </ion-col> -->
-
-            <!-- <ion-col class="flex ion-justify-content-end z-index-9999"> -->
-                <!-- <ion-searchbar animated="true" placeholder="Поиск"></ion-searchbar> -->
-                <!-- <ion-icon name="search" color="medium" size="large" class="ico" (click)="isModalSearchEventsOpen(true)"></ion-icon> -->
-            <!-- </ion-col>
-        </ion-row>
-    </div> -->
-
 <!-- Декстопное меню -->
 <div class="header ion-align-items-center" id="header">
     <ion-router-link color="dark" routerLink="/home">
@@ -45,10 +16,9 @@
         </ion-button>
     </ion-col>
 
-     <ion-col style="padding-right: 3px;" class="searchParrent ion-padding-horizontal">
-        <!-- <ion-searchbar placeholder="Поиск" color="light" (click)="isModalSearchEventsOpen(true)"></ion-searchbar> -->
-         <ion-button style="min-width: 80px; display: flex; justify-content: center; "  fill="outline" expand="block" (click)="isModalSearchEventsOpen(true)" class="SearchInput"><ion-icon style="width: 20px; height: 20px; --font-size: 20px;" name="search" slot="start"></ion-icon>поиск</ion-button>
-    </ion-col>
+     <div>
+      <app-type-swither></app-type-swither>
+     </div>
 
     <ion-col  size="auto" class="menu ion-align-items-center">
         <div *ngFor="let item of menuPublic">
@@ -69,13 +39,23 @@
                     color="dark"
                     [routerLink]="[item.route]"
                     [routerLinkActive]="['active']"
+                    *ngIf="item.title !== 'Лента'"
                 >
-
                     <img *ngIf="item.icon === 'prism'"  src="/assets/icons/MakiMuseum.svg" slot="start" class="icon">
                     <ion-icon *ngIf="item.icon !== 'prism'" name="{{ item.icon }}" slot="start" color="primary"></ion-icon>
                     <ion-label slot="start">{{item.title}}</ion-label>
-                    <!-- <ion-badge *ngIf="item.title === 'События'" slot="end" >{{ getEventService() }}</ion-badge>
-                    <ion-badge *ngIf="item.title === 'Места'" slot="end" >{{ getSightService() }}</ion-badge> -->
+                </ion-button>
+
+                <ion-button
+                    fill="clear"
+                    color="dark"
+                    [routerLink]="[feedLink]"
+                    [routerLinkActive]="['active']"
+                    *ngIf="item.title === 'Лента'"
+                >
+                    <img *ngIf="item.icon === 'prism'"  src="/assets/icons/MakiMuseum.svg" slot="start" class="icon">
+                    <ion-icon *ngIf="item.icon !== 'prism'" name="{{ item.icon }}" slot="start" color="primary"></ion-icon>
+                    <ion-label slot="start">{{item.title}}</ion-label>
                 </ion-button>
 
             </ng-template>

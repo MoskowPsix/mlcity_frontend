@@ -15,11 +15,16 @@ import { CalendulaComponent } from '../components/calendula/calendula.component'
 import { NoPathComponent } from '../views/no-path/no-path.component'
 import { PrivacyComponent } from '../views/privacy/privacy.component'
 import { RecoveryPasswordComponent } from '../views/recovery-password/recovery-password.component'
+import { TestPageComponent } from '../views/test-page/test-page.component'
 export const publicRoutes: Routes = [
   {
     path: 'test',
     component: CalendulaComponent,
     canActivate: [CheckAuthCanActiveGuard],
+  },
+  {
+    path: 'testpage',
+    component: TestPageComponent,
   },
   {
     path: 'home',
