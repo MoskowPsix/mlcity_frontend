@@ -51,6 +51,7 @@ import { FavoritesComponent } from './views/cabinet/favorites/favorites.componen
 import { CommentsListComponent } from './components/comments-list/comments-list.component'
 import { SightTypeCaruselComponent } from './components/sight-type-carusel/sight-type-carusel.component'
 import { EventTypeCaruselComponent } from './components/event-type-carusel/event-type-carusel.component'
+import { ModalCheckEmailComponent } from './components/modal-check-email/modal-check-email.component'
 import { RecoveryPasswordService } from './services/recovery-password.service'
 import { AuthService } from './services/auth.service'
 import { ToastService } from './services/toast.service'
@@ -177,6 +178,7 @@ registerLocaleData(localeRu, 'ru')
     PrivacyComponent,
     DropDownButtonComponent,
     MiniCardComponent,
+    ModalCheckEmailComponent,
   ],
   imports: [
     BrowserModule,

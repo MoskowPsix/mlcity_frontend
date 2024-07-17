@@ -23,6 +23,10 @@ export class AuthService {
     private userService: UserService,
   ) {}
 
+  isAuthEmail(): boolean {
+    let user = this.userService.getUserFromLocalStorage()
+    return user?.email_verified_at ? true : false
+  }
   isAuthenticated(): boolean {
     let token = this.tokenService.getToken()
     let user = this.userService.getUserFromLocalStorage()

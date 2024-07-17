@@ -10,6 +10,8 @@ export class NavigationService {
   private history: string[] = []
   public showBackButton: BehaviorSubject<boolean> = new BehaviorSubject(true)
 
+  public modalAuthEmail: BehaviorSubject<boolean> = new BehaviorSubject(false)
+
   public modalSearchCityesOpen: BehaviorSubject<boolean> = new BehaviorSubject(
     false,
   ) //открытие модалки с поиском городов
