@@ -7,6 +7,7 @@ import { RouteReuseStrategy } from '@angular/router'
 import { ReactiveFormsModule } from '@angular/forms'
 import { ContactsComponent } from './views/contacts/contacts.component'
 import { DropDownButtonComponent } from './components/drop-down-button/drop-down-button.component'
+import { UserSectionComponent } from './components/user-section/user-section.component'
 import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
@@ -137,6 +138,7 @@ registerLocaleData(localeRu, 'ru')
     MenuAuthComponent,
     MenuAuthSidebarComponent,
     FooterComponent,
+    UserSectionComponent,
     AboutComponent,
     NotFoundComponent,
     ForbiddenComponent,
