@@ -101,6 +101,7 @@ import { PrivacyComponent } from './views/privacy/privacy.component'
 import { CreateRulesModalComponent } from './components/create-rules-modal/create-rules-modal.component'
 import { RulesModalCheckService } from './services/rules-modal-check.service'
 import { MiniCardComponent } from './components/mini-card/mini-card.component'
+import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -177,6 +178,7 @@ registerLocaleData(localeRu, 'ru')
     PrivacyComponent,
     DropDownButtonComponent,
     MiniCardComponent,
+    UpdateVersionModalComponent,
   ],
   imports: [
     BrowserModule,

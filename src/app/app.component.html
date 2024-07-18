@@ -5,7 +5,7 @@
     </ion-menu> -->
 
     <!-- <div class="ion-page" id="main-content"> -->
- 
+
       <ion-header mode="md">
         <ng-coniner *ngIf="platformType === 'ios' && mobile">
           <ion-toolbar   mode="ios" style=" height: var(--ion-safe-area-top); --border:none; --box-shadow: none; box-shadow: none;" class="home">
@@ -17,9 +17,10 @@
             <app-header></app-header>
           </ion-toolbar>
         </ng-coniner>
-        
+
       </ion-header>
-     
+
+      <app-update-version-modal></app-update-version-modal>
         <ion-router-outlet></ion-router-outlet>
       <ion-footer *ngIf="url !== '/cabinet/events/create' && url !== '/cabinet/sights/create'">
         <ion-toolbar>
