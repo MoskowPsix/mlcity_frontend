@@ -96,6 +96,7 @@ import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component'
 import { TypesComponent } from './components/types/types.component'
 import { MetrikaModule } from 'ng-yandex-metrika'
+import { BackButtonComponent } from './components/back-button/back-button.component'
 import { NgxSliderModule } from '@angular-slider/ngx-slider'
 import { CollapsedTextComponent } from './components/collapsed-text/collapsed-text.component'
 import { PrivacyComponent } from './views/privacy/privacy.component'
@@ -129,6 +130,7 @@ registerLocaleData(localeRu, 'ru')
     CabinetComponent,
     HomeComponent,
     LoginComponent,
+    BackButtonComponent,
     RecoveryPasswordComponent,
     HeaderComponent,
     SidebarComponent,
