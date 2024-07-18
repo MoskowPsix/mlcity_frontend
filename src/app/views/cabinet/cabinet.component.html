@@ -321,9 +321,21 @@
         <div class="header-tools">
             <app-back-button></app-back-button>
             <span>Профиль</span>
-            <app-back-button></app-back-button>
+            <app-circle-button ></app-circle-button>
         </div>
-   
     </div>
-        <app-user-section></app-user-section>
+
+    <section class="content">
+        <app-user-section [user]="user"></app-user-section>
+        <div class="menu">
+            <app-profile-item [routing]="'events'" [iconColor]="'#FAEAD7'" [icon]="'/assets/icons/fire.svg'" [name]="'Мои мероприятия'"></app-profile-item>
+            <app-profile-item [routing]="'sights'" [iconColor]="'#DCE9FF'" [icon]="'/assets/icons/place.svg'" [name]="'Мои сообщества'"></app-profile-item>
+            <app-profile-item [routing]="'/contacts'" [iconColor]="'#11f93840'" [icon]="'/assets/icons/subtract.svg'" [name]="'Помощь и обратная связь'"></app-profile-item>
+        </div>
+        <div class="agreement-link">Пользовательское соглашение</div>
+        <div class="exit-button-wrapper">
+            <app-exit-button></app-exit-button>
+        </div>
+    </section>
+        
 </ion-content>

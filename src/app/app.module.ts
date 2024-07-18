@@ -37,6 +37,7 @@ import { NotFoundComponent } from './views/errors/not-found/not-found.component'
 import { ForbiddenComponent } from './views/errors/forbidden/forbidden.component'
 import { ServerErrorComponent } from './views/errors/server-error/server-error.component'
 import { EventShowComponent } from './views/events/event-show/event-show.component'
+import { CircleButtonComponent } from './components/circle-button/circle-button.component'
 import { SightShowComponent } from './views/sights/sight-show/sight-show.component'
 import { EventCreateComponent } from './views/events/event-create/event-create.component'
 import { SightsComponent } from './views/sights/sights.component'
@@ -87,7 +88,8 @@ import { MyEventsComponent } from './views/cabinet/my-events/my-events.component
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component'
 import { RegistrationComponent } from './views/registration/registration.component'
 import { MaskitoModule } from '@maskito/angular'
-
+import { ProfileItemComponent } from './components/profile-item/profile-item.component'
+import { ExitButtonComponent } from './components/exit-button/exit-button.component'
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatFormFieldModule } from '@angular/material/form-field'
@@ -130,6 +132,7 @@ registerLocaleData(localeRu, 'ru')
     CabinetComponent,
     HomeComponent,
     LoginComponent,
+    CircleButtonComponent,
     BackButtonComponent,
     RecoveryPasswordComponent,
     HeaderComponent,
@@ -141,6 +144,7 @@ registerLocaleData(localeRu, 'ru')
     MenuAuthSidebarComponent,
     FooterComponent,
     UserSectionComponent,
+    ExitButtonComponent,
     AboutComponent,
     NotFoundComponent,
     ForbiddenComponent,
@@ -154,6 +158,7 @@ registerLocaleData(localeRu, 'ru')
     SightTypeComponent,
     ReadMoreComponent,
     FiltersComponent,
+    ProfileItemComponent,
     FiltersNotButtonComponent,
     CalendulaComponent,
     NoDataComponent,

@@ -1,3 +1,18 @@
-<p>
-  user-section works!
-</p>
+<div class="user-section-main">
+  <ng-container *ngIf="!user">
+    <ion-skeleton-text [animated]="true" class="user-section-image-scleton"></ion-skeleton-text>
+    <div class="user-section-info">
+        <ion-skeleton-text [animated]="true" class="user-section-name-sceleton"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" class="user-section-email-sceleton"></ion-skeleton-text>
+    </div>
+  </ng-container>
+
+    <ng-container *ngIf="user">
+      <div *ngIf="user.avatar" style="background: url('{{user.avatar}}'); background-size: cover;" class="user-section-image"></div>
+      <div *ngIf="!user.avatar" class="user-section-image"></div>
+      <div class="user-section-info">
+          <div class="user-section-name">{{user.name}}</div>
+          <div class="user-section-email">{{user.email}}</div>
+      </div>
+  </ng-container>
+</div>

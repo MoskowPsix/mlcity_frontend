@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { IUser } from 'src/app/models/user';
 
 @Component({
   selector: 'app-user-section',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class UserSectionComponent  implements OnInit {
 
   constructor() { }
-
+  @Input() user!: IUser
   ngOnInit() {}
 
 }
