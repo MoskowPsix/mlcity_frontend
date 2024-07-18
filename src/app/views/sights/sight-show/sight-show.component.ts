@@ -94,29 +94,31 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   formatingTime() {
-    let daysTime = this.workTimeCult
-    let text = this.workTimeCult.match(/\((.*?)\)/g)
-    if (text) {
-      daysTime = this.workTimeCult.replace(text![0], '')
-    }
-    let dayArray = daysTime.split(',')
-    for (let i = 0; i < dayArray.length; i++) {
-      dayArray[i] = dayArray[i].slice(4)
-      dayArray[i] = dayArray[i].replace(/^\s+/, '')
-      if (dayArray[i].length > 15) {
-        this.workTimeCultValue++
-        break
+    if (this.workTimeCult) {
+      let daysTime = this.workTimeCult
+      let text = this.workTimeCult.match(/\((.*?)\)/g)
+      if (text) {
+        daysTime = this.workTimeCult.replace(text![0], '')
       }
-    }
-    this.workTimeCultOb = {
-      monday: dayArray[0],
-      tuesday: dayArray[1],
-      wednesday: dayArray[2],
-      thursday: dayArray[3],
-      Friday: dayArray[4],
-      saturday: dayArray[5],
-      sunday: dayArray[6],
-      text: text,
+      let dayArray = daysTime.split(',')
+      for (let i = 0; i < dayArray.length; i++) {
+        dayArray[i] = dayArray[i].slice(4)
+        dayArray[i] = dayArray[i].replace(/^\s+/, '')
+        if (dayArray[i].length > 15) {
+          this.workTimeCultValue++
+          break
+        }
+      }
+      this.workTimeCultOb = {
+        monday: dayArray[0],
+        tuesday: dayArray[1],
+        wednesday: dayArray[2],
+        thursday: dayArray[3],
+        Friday: dayArray[4],
+        saturday: dayArray[5],
+        sunday: dayArray[6],
+        text: text,
+      }
     }
   }
 

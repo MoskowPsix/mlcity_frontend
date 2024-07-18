@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/services/auth.service'
 export class CabinetComponent {
   constructor(private authService: AuthService) {}
 
-  platformType: any = Capacitor.getPlatform()
+  platformType: string = Capacitor.getPlatform()
 
   onLogout() {
     this.authService.logout()

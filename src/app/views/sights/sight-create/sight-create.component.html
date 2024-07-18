@@ -5,48 +5,58 @@
     <div class="buttons-desktop-wrapper">
 
       <div class="btnsWrapperBack">
-        <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
-        <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+
+        <ion-button routerLink="/home" class="backButton buttonsNavigate button-cancel">Отмена</ion-button>
       </div>
 
       <div class="btnsWrapper btnsWrapperNext">
-        <ion-button [disabled]="detectedDataInvalid()" class="buttonsNavigate" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-        <ion-button [disabled]="detectedDataInvalid()" class="buttonsNavigate" *ngIf="stepCurrency === steps-1" (click)="onSubmit()" type="submit" ><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+        <div class="buttons-wrapper">
+          <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <div (click)="nextStep()">
+            <ion-button class="buttonsNavigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+          </div>
+          <ion-button class="buttonsNavigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+        </div>
+       
       </div>
 
     </div>
   </div>
 
   <div class="buttons-dekstop_mobile">
-
+  
     <div class="buttons-desktop-wrapper_mobile">
 
       <div class="btns-wrapper">
-        <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
-        <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+        <ion-button routerLink="/home" class="backButton buttonsNavigate button-cancel">Отмена</ion-button>
       </div>
 
       <div class="btns-wrapper">
-        <div (click)="stepNext()">
-        <ion-button class="buttons-navigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        <div class="buttons-wrapper">
+          <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <div (click)="nextStep()">
+          <ion-button class="buttons-navigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+          </div>
+          <ion-button class="buttons-navigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
         </div>
-        <ion-button class="buttons-navigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+       
       </div>
 
     </div>
   </div>
-
     <ion-grid class="main">
 
-      <form class="mainChild" [formGroup]="createSightForm" (submit)="onSubmit()" enctype="multipart/form-data">
+      <form onsubmit="return false;" class="mainChild" [formGroup]="createSightForm" (submit)="onSubmit()" enctype="multipart/form-data">
 
         <ion-column class="mainLabelAndBar">
           <div class="ion-text-start">
-            <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип достопримечательности</h3>
-            <h3 [hidden]="stepCurrency !== 1" class="mt-0 mainLabelAndBarText">Название достопримечательности</h3>
-            <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">Об достопримечательности</h3>
-            <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Место достопримечательности</h3>
-            <h3 [hidden]="stepCurrency !== 4" class="mt-0 mainLabelAndBarText">Стоимость посещения</h3>
+            <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип места или сообщества</h3>
+            <h3 [hidden]="stepCurrency !== 1" class="mt-0 mainLabelAndBarText">Название места или сообщества</h3>
+            <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">О сообществе</h3>
+            <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Ваша локация</h3>
+            <h3 [hidden]="stepCurrency !== 4" class="mt-0 mainLabelAndBarText">Материалы сообщества</h3>
 
           </div>
 
@@ -87,8 +97,10 @@
               </ion-item>
             </ng-container>
           </ng-container>
+          <div #plug></div>
           <ion-label *ngIf="typesLoaded && stepCurrency === 0"><h2 style="color: #949494; text-align: center;">
             <ion-icon name="star"></ion-icon> - Первый выбранный вами тип станет основным, будет отображаться на карте и карточке мероприятия</h2>
+           
           </ion-label>
           <ion-row  *ngIf="typesLoaded"  [hidden]="stepCurrency !== 0" class="ion-justify-content-center">
             <!-- <ion-label *ngIf="isNextButtonClicked == true && currentType == 0 " class="pick">Выберите тип, чтобы перейти на следующий шаг</ion-label> -->
@@ -104,17 +116,18 @@
           <ion-column class="stepSecond">
               <ion-column class="">
                     <ion-item class="second-step-input-wrapper" fill="outline">
-                      <ion-input #sightName fill="solid" style="" size="small" formControlName="name" type="text" name="name" placeholder="Название достопримечательности" required></ion-input>
+                      <ion-input #sightName fill="solid" style="" size="small" formControlName="name" type="text" name="name" placeholder="Название сообщества" required></ion-input>
                     </ion-item>
 
                     <div *ngIf="createSightForm.controls['name'].invalid && createSightForm.controls['name'].dirty"  class="validation">
-                      <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название достопримечательности должно содержать минимум 3 символа</ion-note>
+                      <ion-note *ngIf="!createSightForm.controls['name'].hasError('minLength')" color="danger">Название сообщества должно содержать минимум 3 символа</ion-note>
                     </div>
-
+<!-- 
                       <ion-item class="second-step-input-wrapper" fill="outline">
                         <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-                        <ion-input formControlName="sponsor"  type="text" name="sponsor" required  placeholder="Организатор достопримечательности"></ion-input>
-                      </ion-item>
+                        <ion-input formControlName="sponsor"  type="text" name="sponsor" required  placeholder="Организатор сообщества"></ion-input>
+                      </ion-item> -->
+                      <ion-input formControlName="sponsor" name="sponsor" hidden="true" value="''"></ion-input>
 
                       <!-- <ion-item fill="outline">
                         <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Название мероприятия</ion-label>
@@ -365,10 +378,10 @@
                       <ion-col class="description-item-wrapper" *ngIf="stepCurrency === 2">
                         <ion-item class="description-item" fill="outline"
                         >
-                          <ion-label position="stacked">Об достопримечательности</ion-label>
+                          <ion-label position="stacked">О сообществе</ion-label>
                             <ion-textarea
                               formControlName="description"
-                              placeholder="Введите информацию о достопримечательности..."
+                              placeholder="Введите информацию о ващем сообществе или месте, если есть конкретный адрес..."
                               [autoGrow]="true"
                               required
                               class="description-text"
@@ -402,15 +415,13 @@
                           <ion-button  (click)="filesUpload.click()" style="--background: none; --box-shadow: none;" class="addPhoto">
                             <ion-icon class="addPhotoIcon" style="color: gray;" name="image-outline"></ion-icon>
                           </ion-button>
+                          <ion-text style="color: gray; font-size: small;">Добавить картинку</ion-text>
                         </ion-item>
 
                         </ion-item>
-
-                        <div *ngIf="createSightForm.controls['description'].invalid && createSightForm.controls['description'].dirty"  class="validation">
-                          <ion-note *ngIf="!createSightForm.controls['description'].hasError('minLength')" color="danger">поле "Об Достопримечательности" должно содержать минимум 10 символа</ion-note>
-                        </div>
 
                       </ion-col>
+                      
                   </div>
               </ion-colum>
 
@@ -514,7 +525,7 @@
         <!-- шаг 5 -->
         <ion-row class="tiket-main"  [hidden]="stepCurrency !== 4">
           <ion-col  @fade>
-            <ion-card  *ngFor="let item of createSightForm.controls['price'].value; let i_p = index">
+            <!-- <ion-card  *ngFor="let item of createSightForm.controls['price'].value; let i_p = index">
               <ng-container [formGroup]="createSightForm.controls['price'].value[i_p]" >
                 <ion-item fill="none">
                   <ion-icon name="pricetag-outline" color="primary"></ion-icon>
@@ -522,8 +533,8 @@
                     <h2> Билет {{i_p+1}}</h2>
                   </ion-label>
 
-                    <ion-chip style="margin-left: auto;" color="danger" (click)="deletePrice(i_p)">Удалить
-                      <!-- <ion-icon name="close-outline"></ion-icon> -->
+                    <ion-chip style="margin-left: auto;" color="danger" (click)="deletePrice(i_p)">
+                      Удалить
                     </ion-chip>
 
                 </ion-item>
@@ -544,12 +555,12 @@
                 </ion-item>
               </ng-container>
 
-            </ion-card>
-
+            </ion-card> -->
+<!-- 
             <ion-chip style="margin-bottom: 2rem;" color="primary" class="ion-justify-item-center" (click)="addPrice()">
               <ion-label>Добавить билет</ion-label>
               <ion-icon name="add-outline"></ion-icon>
-            </ion-chip>
+            </ion-chip> -->
 
             <ion-col size-lg="4" size-md="8" size-xs="12" @fade>
               <ion-item fill="outline">
@@ -599,17 +610,6 @@
          <!-- Десктопный блок кнопок -->
 
         <!-- Фиксированный блок кнопок для мобилы-->
-        <div class="buttons-mobile">
-          <ion-row class="ion-justify-content-center">
-            <ion-col size="6">
-              <ion-button *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()" expand="block"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
-            </ion-col>
-            <ion-col size="6">
-              <ion-button *ngIf="stepCurrency !== steps"  (click)="stepNext()" expand="block">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
-              <ion-button *ngIf="stepCurrency === steps - 1" type="submit" [disabled] ="createSightForm.invalid || createSightForm.disabled" expand="block"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
-            </ion-col>
-          </ion-row>
-        </div>
 
       </form>
     </ion-grid>

@@ -47,7 +47,7 @@ import { LocationService } from 'src/app/services/location.service'
 import { Location } from 'src/app/models/location'
 import { FilterService } from 'src/app/services/filter.service'
 import { Router } from '@angular/router'
-
+import { GeneratePlugSightEventsImgService } from 'src/app/services/generate-plug-sight-events-img.service'
 @Component({
   selector: 'app-sight-create',
   templateUrl: './sight-create.component.html',
@@ -72,12 +72,12 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   user: any
   currentType: any = []
   stepStart: number = 0
-  stepCurrency: number = 2
+  stepCurrency: number = 0
   steps: number = 5
 
   @ViewChild('sightName') sightNameElement!: any
   @ViewChild('sightDescription') sightDescriptionElement!: any
-
+  @ViewChild('plug', { static: true }) plug!: ElementRef
   vkGroups: any
   //Создать переменную для постов со страницы
   vkGroupSelected: number | null = null
@@ -145,7 +145,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       .getUser()
       .pipe(
         tap(() => {
-          this.loadingService.showLoading(MessagesLoading.vkGroupSearch)
+          // this.loadingService.showLoading(MessagesLoading.vkGroupSearch)
         }),
         switchMap((user: any) => {
           this.user = user
@@ -153,11 +153,14 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           return of(user)
         }),
         switchMap((user: any) => {
-          if (!user?.social_account) {
-            this.toastService.showToast(
-              MessagesErrors.vkGroupSearch,
-              'secondary',
-            )
+          if (
+            !user?.social_account ||
+            user?.social_account.provider != 'vkontakte'
+          ) {
+            // this.toastService.showToast(
+            //   MessagesErrors.vkGroupSearch,
+            //   'secondary',
+            // )
           } else {
             // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
             return this.vkService.getGroups().pipe(
@@ -210,7 +213,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.vkGroups = items
     } else {
       this.vkGroups = []
-      this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')
+      // this.toastService.showToast(MessagesErrors.vkGroupSearch, 'secondary')
     }
   }
 
@@ -639,6 +642,11 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.createSightForm.controls['price'].value.splice(num, 1)
   }
 
+  testPlug() {
+    let generatePlug: GeneratePlugSightEventsImgService =
+      new GeneratePlugSightEventsImgService(this.plug, 'create')
+    generatePlug.generatePlug()
+  }
   //формируем дату для отправки на сервер
   createFormData() {
     if (
@@ -734,9 +742,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   //Клик по кнопке веперед
-  stepNext() {
+  nextStep() {
     this.stepCurrency++
-    console.log(this.stepCurrency)
     if (this.stepCurrency == 1) {
       setTimeout(() => {
         this.sightNameElement.setFocus()
@@ -768,7 +775,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.currentType.push(Number(event))
       this.createSightForm.value.type.push(Number(event))
     }
-    console.log(this.currentType)
   }
 
   //Клик по шагу в баре
@@ -802,14 +808,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         }
       case 2:
         //шаг третий
-        if (
-          this.createSightForm.controls['description'].invalid ||
-          this.createSightForm.controls['workTime'].invalid
-        ) {
-          return true
-        } else {
-          return false
-        }
+        return false
       case 3:
         //шаг четвёртый
         if (
@@ -832,7 +831,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
               this.createSightForm.controls['price'].value.length == 1
             ) {
               priceValid = true
-              console.log(this.createSightForm.controls['price'].value.length)
             } else {
               priceValid = false
             }
@@ -916,7 +914,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$),
       )
-      .subscribe()
+      .subscribe((res) => {
+        this.toastService.showToast(MessagesSights.create, 'success')
+      })
   }
 
   ngOnInit() {
@@ -944,17 +944,11 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.minLength(3),
         ]),
-        description: new FormControl('', [
-          Validators.required,
-          Validators.minLength(10),
-        ]),
-        workTime: new FormControl('', [Validators.minLength(3)]),
+        description: new FormControl('', [Validators.minLength(0)]),
+        workTime: new FormControl('', []),
         address: new FormControl('', [Validators.required]),
         locationId: new FormControl('', [Validators.required]),
-        coords: new FormControl(coords, [
-          Validators.required,
-          Validators.minLength(2),
-        ]),
+        coords: new FormControl(coords, [Validators.minLength(2)]),
         type: new FormControl([], [Validators.required]),
         status: new FormControl(
           { value: this.statusSelected, disabled: false },

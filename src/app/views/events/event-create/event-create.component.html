@@ -1,53 +1,63 @@
 
 <ion-content mode="md">
+
   <app-create-rules-modal [agreement_id]="1"></app-create-rules-modal>
   <div class="buttons-dekstop">
 
     <div class="buttons-desktop-wrapper">
 
       <div class="btnsWrapperBack">
-        <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
-        <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+
+        <ion-button routerLink="/home" class="backButton buttonsNavigate button-cancel">Отмена</ion-button>
       </div>
 
       <div class="btnsWrapper btnsWrapperNext">
-        <div (click)="nextStep()">
-        <ion-button class="buttonsNavigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        <div class="buttons-wrapper">
+          <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <div (click)="nextStep()">
+          <ion-button class="buttonsNavigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+          </div>
+          <ion-button class="buttonsNavigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
         </div>
-        <ion-button class="buttonsNavigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+       
       </div>
 
     </div>
   </div>
 
   <div class="buttons-dekstop_mobile">
-
+  
     <div class="buttons-desktop-wrapper_mobile">
 
       <div class="btns-wrapper">
-        <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
-        <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+        <ion-button routerLink="/home" class="backButton buttonsNavigate button-cancel">Отмена</ion-button>
       </div>
 
       <div class="btns-wrapper">
-        <div (click)="nextStep()">
-        <ion-button class="buttons-navigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+        <div class="buttons-wrapper">
+          <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <ion-button class="backButton buttonsNavigate" *ngIf="stepCurrency !== stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
+          <div (click)="nextStep()">
+          <ion-button class="buttons-navigate" [disabled]="detectedDataInvalid()" *ngIf="stepCurrency !== steps" [hidden]="stepCurrency === steps-1"  (click)="stepNext()">Далее <ion-icon name="chevron-forward" slot="end"></ion-icon></ion-button>
+          </div>
+          <ion-button class="buttons-navigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
         </div>
-        <ion-button class="buttons-navigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
+       
       </div>
 
     </div>
   </div>
 
   <ion-grid class="main">
-    <form class="mainChild" [formGroup]="createEventForm" (submit)="onSubmit()" enctype="multipart/form-data">
+    <form onsubmit="return false;" class="mainChild" [formGroup]="createEventForm" (submit)="onSubmit()" enctype="multipart/form-data">
 
       <ion-column class="mainLabelAndBar">
         <div class="ion-text-start">
           <h3 [hidden]="stepCurrency !== 0" class="mt-0 mainLabelAndBarText">Тип события</h3>
           <h3 [hidden]="stepCurrency !== 1" class="mt-0 mainLabelAndBarText">Название события</h3>
           <h3 [hidden]="stepCurrency !== 2" class="mt-0 mainLabelAndBarText">О событие</h3>
-          <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Место проведения</h3>
+          <h3 [hidden]="stepCurrency !== 3" class="mt-0 mainLabelAndBarText">Время и место</h3>
           <h3 [hidden]="stepCurrency !== 4" class="mt-0 mainLabelAndBarText">Цена и билеты</h3>
           <h3 [hidden]="stepCurrency !== 5" class="mt-0 mainLabelAndBarText">Предпросмотр</h3>
 
@@ -625,11 +635,11 @@
                                 datetime="{{'eventStart-'+i+'-'+i_s}}"
                                 class="ion-margin-vertical"
                               ></ion-datetime-button>
-                              <input style="" (input) = "testTime($event,i,i_s,'start')" class="time-input" [maskito]="maskTime" type="text" value="12:00" #startSeansInput{{i_s}}>
+                              <input style="" (input) = "testTime($event,i,i_s,'start')" class="time-input" value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateStart, 'standart')|date:'HH:mm'}}" [maskito]="maskTime" type="text"  #startSeansInput{{i_s}}>
                               <ion-modal [keepContentsMounted]="true">
                                 <ng-template>
                                   <ion-datetime
-                                    value="{{this.dateTomorrow.toISOString()}}"
+                                    value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateStart, 'iso')}}"
                                     (ionChange)="testDate($event,i,i_s,'start')"
                                     presentation="date"
                                     id="{{'eventStart-'+i+'-'+i_s}}"
@@ -650,11 +660,11 @@
                                     datetime="{{'eventEnd-'+i+'-'+i_s}}"
                                     class="ion-margin-vertical"
                                   ></ion-datetime-button>
-                                  <input (input) = "testTime($event,i,i_s,'end')" class="time-input" [maskito]="maskTime" type="text" value="15:00">
+                                  <input (input) = "testTime($event,i,i_s,'end')" class="time-input" [maskito]="maskTime" type="text"value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateEnd, 'standart')|date:'HH:mm'}}">
                                   <ion-modal [keepContentsMounted]="true">
                                     <ng-template>
                                       <ion-datetime
-                                        value="{{this.dateTomorrow.toISOString()}}"
+                                      value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateEnd, 'iso')}}"
                                         (ionChange)="testDate($event,i,i_s,'end')"
                                         id="{{'eventEnd-'+i+'-'+i_s}}"
                                         [firstDayOfWeek]="1"
@@ -757,12 +767,12 @@
                           <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 50%;"
                           datetime="{{'eventStart-'+i+'-'+i_s}}"
                           class="ion-margin-vertical"></ion-datetime-button>
-                          <input (input) = "testTime($event,i,i_s,'start')" class="time-input" [maskito]="maskTime" type="text" value="12:00" #startSeansInput{{i_s}}>
+                          <input (input) = "testTime($event,i,i_s,'start')" class="time-input" [maskito]="maskTime" type="text" value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateStart, 'standart')|date:'HH:mm'}}" #startSeansInput{{i_s}}>
                         </div>
                               <ion-modal [keepContentsMounted]="true">
                                 <ng-template>
                                   <ion-datetime
-                                    value="{{this.dateTomorrow.toISOString()}}"
+                                    value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateStart, 'iso')}}"
                                     (ionChange)="testDate($event,i,i_s,'start')"
                                     presentation="date"
                                     id="{{'eventStart-'+i+'-'+i_s}}"
@@ -783,12 +793,12 @@
                               datetime="{{'eventEnd-'+i+'-'+i_s}}"
                               class=""
                             ></ion-datetime-button>
-                            <input (input) = "testTime($event,i,i_s,'end')" class="time-input" [maskito]="maskTime" type="text" value="15:00">
+                            <input (input) = "testTime($event,i,i_s,'end')" class="time-input" [maskito]="maskTime" type="text" value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateEnd, 'standart')|date:'HH:mm'}}">
                           </div>
                                   <ion-modal [keepContentsMounted]="true">
                                     <ng-template>
                                       <ion-datetime
-                                        value="{{this.dateTomorrow.toISOString()}}"
+                                        value="{{this.formatingTimeToInput(this.createEventForm.value.places[i].value.seances[i_s].value.dateEnd, 'iso')}}"
                                         (ionChange)="testDate($event,i,i_s,'end')"
                                         id="{{'eventEnd-'+i+'-'+i_s}}"
                                         [firstDayOfWeek]="1"
@@ -827,6 +837,14 @@
       <!-- шаг 5 -->
       <ion-row class="tiket-main"  [hidden]="stepCurrency !== 4">
         <ion-col *ngIf="stepCurrency === 4" class="ion-justify-content-center" @fade>
+          <ion-card class="test" *ngIf= "this.createEventForm.controls['price'].value.length === 0">
+            <ion-item >
+              <ion-label style="color:black">
+                Вход свободный
+              </ion-label>
+            </ion-item>
+         
+          </ion-card>
           <ion-card class="test" *ngFor="let item of createEventForm.controls['price'].value; let i_p = index">
             <ng-container [formGroup]="createEventForm.controls['price'].value[i_p]">
               <ion-card-hider>

@@ -117,9 +117,7 @@ export class RegistrationComponent implements OnInit {
         const newPath = location.path()
         this.metrika.hit(newPath, {
           referer: prevPath,
-          callback: () => {
-            console.log('hit end')
-          },
+          callback: () => {},
         })
         prevPath = newPath
       })

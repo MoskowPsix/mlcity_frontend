@@ -27,6 +27,8 @@ export class AppComponent implements OnInit {
   }
   url: any = ''
   mobile: boolean = false
+  platformType: string = Capacitor.getPlatform()
+
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
     if (window.innerWidth < 900) {
@@ -53,7 +55,7 @@ export class AppComponent implements OnInit {
     })
   }
 
-  async ngOnInit() {
+  ngOnInit(): void {
     this.mobileOrNote()
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.url = this.router.url

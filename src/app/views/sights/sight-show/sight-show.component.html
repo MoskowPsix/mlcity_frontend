@@ -61,8 +61,10 @@
               <ng-container *ngIf="sight.files && sight.files.length; else notFiles">
                 <ng-container *ngFor="let file of sight.files">
 
-                  <swiper-slide style="min-height: 19rem;" class="" *ngIf="file.local === 1">
-                    <img alt="img" src="{{ file.link }}" />
+                  <swiper-slide style="height: 19rem;" class="" *ngIf="file.local === 1">
+                    <img alt="img" src="{{host}}:{{port}}{{file.link}}" /> 
+                    <div class="swiper-container-img_wrapper">
+                    </div>
                   </swiper-slide>
 
                   <swiper-slide style="min-height: 19rem;" *ngIf="file.local === 0">
@@ -167,7 +169,8 @@
 
                   </ion-col>
 
-                  <ion-col>
+                  <ion-col *ngIf="sight.work_time">
+    
                     <div class="title" style="margin-bottom: 0.3rem;">
                       Время работы
                     </div>

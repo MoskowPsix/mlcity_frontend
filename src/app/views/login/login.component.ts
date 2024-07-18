@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  ViewChild,
+} from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router'
 import { EMPTY, Subject, catchError, filter, of, takeUntil } from 'rxjs'
@@ -15,6 +21,7 @@ import { Location } from '@angular/common'
 import { Metrika } from 'ng-yandex-metrika'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
+import { RecoveryPasswordService } from 'src/app/services/recovery-password.service'
 import {
   SignInWithApple,
   SignInWithAppleResponse,
@@ -36,11 +43,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   yandexAuthUrl: string = environment.yandexAuthUrl
   user_id!: number
   loginForm!: FormGroup
+  recoveryForm!: FormGroup
   responseData: any
   iconState: boolean = true
   token?: string
+  timer: any
+  timerReady: boolean = true
+  seconds: number = 60
+  closeRecoveryModal: boolean = true
   modalPass: boolean = false
   presentingElement: undefined
+  errPassword: boolean = false
   formSetPassword!: FormGroup
   appleState: Number = Math.floor(Math.random() * 21)
 
@@ -57,8 +70,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     private location: Location,
     private titleService: Title,
     private metaService: Meta,
+    private recoveryPasswordService: RecoveryPasswordService,
   ) {
-    this.titleService.setTitle('Вход на сайт MLCity.')
+    this.titleService.setTitle('Вход на сайт vokrug.city')
     this.metaService.updateTag({
       name: 'description',
       content: 'Вход на сайт.',
@@ -130,6 +144,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     return role === 'confirm'
   }
 
+  public openPassword(event: any): void {
+    if (event.type == 'password') {
+      event.type = 'text'
+    } else {
+      event.type = 'password'
+    }
+  }
+
   onSubmitLogin() {
     this.loginForm.disable()
     this.loadingService.showLoading()
@@ -142,6 +164,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.positiveResponseAfterLogin(data)
         },
         error: (err) => {
+          this.recoveryPasswordChange()
           this.errorResponseAfterLogin(err)
         },
       })
@@ -181,6 +204,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     }, 5000)
   }
 
+  validateRecovery() {
+    this.timerReady = false
+    this.timer = setInterval(() => {
+      if (this.seconds != 0 && !this.timerReady) {
+        this.seconds--
+      } else {
+        clearInterval(this.timer)
+        this.seconds = 60
+        this.timerReady = true
+      }
+    }, 1000)
+  }
+
   positiveResponseAfterLogin(data: any) {
     this.responseData = data
     this.userService.setUser(this.responseData.user)
@@ -193,6 +229,32 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
+  submitRecovery() {
+    this.validateRecovery()
+    this.loadingService.showLoading()
+    this.recoveryPasswordService
+      .recoveryPassword(this.recoveryForm.value.email)
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          this.toastService.showToast('Почта не зарегестрированна', 'warning')
+          this.loadingService.hideLoading()
+          return of(EMPTY)
+        }),
+      )
+      .subscribe((res: any) => {
+        this.closeRecoveryModal = !this.closeRecoveryModal
+        if (res.status) {
+          this.toastService.showToast(
+            'Ссылка была отправлена на почту',
+            'success',
+          )
+        }
+
+        this.loadingService.hideLoading()
+      })
+  }
+
   errorResponseAfterLogin(err: any) {
     this.loadingService.hideLoading()
     this.toastService.showToast(
@@ -200,6 +262,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       'warning',
     )
     this.loginForm.enable()
+  }
+
+  recoveryPasswordChange() {
+    this.errPassword = true
   }
 
   MailOrName() {
@@ -219,16 +285,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   async loginApple() {
     if (Capacitor.getPlatform() == 'ios') {
       const options: SignInWithAppleOptions = {
-        clientId: 'mlcity.ru',
-        redirectURI: 'https://www.mlcity.ru:3443/api/social-auth/apple',
+        clientId: environment.appleClientId,
+        redirectURI: environment.appleAuthUrl,
         state: String(this.appleState),
         nonce: 'nonce',
       }
 
       SignInWithApple.authorize(options)
         .then((res: SignInWithAppleResponse) => {
-          console.log(res)
-          console.log(options)
           this.authService
             .loginApple(res.response)
             .pipe(
@@ -254,7 +318,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           return of(EMPTY)
         })
     } else {
-      window.open('https://www.mlcity.ru:3443/api/social-auth/apple')
+      window.open(environment.appleAuthUrl)
     }
   }
 
@@ -280,6 +344,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       password_retry: new FormControl('', [
         Validators.required,
         Validators.minLength(3),
+      ]),
+    })
+
+    this.recoveryForm = new FormGroup({
+      email: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(50),
       ]),
     })
 

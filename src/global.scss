@@ -87,14 +87,7 @@ ion-list {
 }
 
 ion-content {
-    // overwrite inline styles
-    --offset-bottom: auto!important;
-    // --offset-bottom: 85%!important;
-    --overflow: hidden;
-    overflow: auto;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    
 }
 
 ion-item-divider{
@@ -121,6 +114,10 @@ ion-toolbar {
 .marker-ico {
   margin:auto;
   transform: rotate(0);
+}
+ion-content{
+    background: #fff;
+    --padding-top: var(--ion-safe-area-top, 0);
 }
 
 .marker {

@@ -10,6 +10,8 @@
 	<array>
 		<string>webcredentials:mlcity.ru</string>
 		<string>applinks:mlcity.ru</string>
+		<string>webcredentials:vokrug.city</string>
+		<string>applinks:vokrug.city</string>
 	</array>
 </dict>
 </plist>

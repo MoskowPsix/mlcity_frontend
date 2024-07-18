@@ -339,7 +339,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngAfterViewInit() {
     this.scrollStart = this.ContentCol.nativeElement?.getBoundingClientRect()
-    console.log(this.scrollStart)
   }
   ngOnInit() {
     this.router.events

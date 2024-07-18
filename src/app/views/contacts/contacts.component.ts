@@ -24,7 +24,6 @@ export class ContactsComponent {
 
   onSubmit() {
     if (this.contactForm.valid) {
-      console.log(this.contactForm.value);
       this.supportService
         .sendMailSupport(this.contactForm.value)
         .pipe(
@@ -36,15 +35,12 @@ export class ContactsComponent {
           })
         )
         .subscribe(ress => {
-          console.log(ress);
           this.ToastService.showToast('Вы успешно отправили обращение к нам, ждите ответа на свою электронную почту в течении 2 дней','success')
           this.contactForm.reset()
         
         });
     } else {
-      console.log('no');
     }
-    console.log(this.contactForm.value.name);
   }
 
 

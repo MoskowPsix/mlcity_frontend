@@ -3,7 +3,7 @@
   <ion-content>
     <!-- skeleton animation -->
     <div class="pb-2rem" class="event-container">
-      <ng-container *ngIf="loadingEvent">
+      <ng-container *ngIf="loadingEvent && router.url !== '/cabinet/events/create'">
         <ion-row class="ion-justify-content-center">
           <ion-col size-lg="12" size-md="12" size-xs="12">
             <ion-row class="ion-justify-content-center">
@@ -62,22 +62,20 @@
             >
               <ng-container *ngIf="event.files && event.files.length; else notFiles">
                 <ng-container *ngFor="let file of event.files">
-                  <swiper-slide style="height: 19rem;" class="" *ngIf="file.local === 1">
-                   
+                  <swiper-slide style="" class="" *ngIf="file.local === 1">
+                    <img alt="img" src="{{host}}:{{port}}{{file.link}}" /> 
                     <div class="swiper-container-img_wrapper">
-                      <div class="swiper-container-header-content">
-                      </div>
                     </div>
                   </swiper-slide>
   
-                  <swiper-slide  style="min-height: 19rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
-                    <img alt="img" src="{{ file.link }}" />
+                  <swiper-slide  style="" *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
+                    <img alt="img" :src="{{ file.link }}" />
                     <div class="swiper-container-img_wrapper">
                     </div>
                   </swiper-slide>
   
                   <!-- видео -->
-                  <swiper-slide  style="min-height: 19rem;" *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
+                  <swiper-slide  style="" *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
                     <iframe class="video_content" [src]="getUrlFrame(file.link)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
                     <div class="swiper-container-img_wrapper">
                       <div class="swiper-container-header-content">
@@ -260,7 +258,6 @@
     </div>
   
   </ion-content>
-  
 </ng-container>
 
 <ng-container *ngIf="router.url === '/cabinet/events/create'">
