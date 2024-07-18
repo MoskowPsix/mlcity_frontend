@@ -33,8 +33,8 @@ export class AuthGuard implements CanActivate {
       this.navigationService.modalAuthEmail.next(false)
       return true
     } else if (this.authService.getAuthState()) {
-      this.navigationService.modalAuthEmail.next(true)
-      return false
+      // this.navigationService.modalAuthEmail.next(true)
+      return true
     } else {
       this.navigationService.modalAuthEmail.next(false)
       this.router.navigate(['login'])
