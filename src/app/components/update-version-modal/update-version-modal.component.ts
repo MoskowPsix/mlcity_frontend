@@ -9,12 +9,16 @@ import { CheckVersionService } from 'src/app/services/check-version.service'
 })
 export class UpdateVersionModalComponent implements OnInit {
   stores!: StoreInfo[]
-  isOpen: boolean = false
+  isOpen: boolean = true
   constructor(private checkVersionService: CheckVersionService) {}
 
   openStore(url: string): void {
     window.open(url)
   }
+  closeModal() {
+    this.isOpen = !this.isOpen
+  }
+
   async ngOnInit() {
     if (await this.checkVersionService.checkVersionIsDeprecated()) {
       this.isOpen = true

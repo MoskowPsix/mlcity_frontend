@@ -1,24 +1,30 @@
 <ion-modal
   [isOpen]="isOpen"
-  [initialBreakpoint]="[0.75]"
-  [breakpoints]="[0.0, 0.75, 0.75]"
+  [initialBreakpoint]="[0.8]"
+  [breakpoints]="[0, 0.8, 0.9]"
   mode="ios"
   >
   <ng-template>
       <ion-header>
         <ion-toolbar>
-        <ion-title>Обновите приложение</ion-title>
+        <ion-title color="primary">Обновление</ion-title>
         <ion-buttons slot="end">
-          <ion-button>x</ion-button>
+          <ion-button (click)="closeModal()">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </ion-button>
         </ion-buttons>
         </ion-toolbar>
       </ion-header>
     <ion-content color="primary" class="ion-padding">
+      <div class="text-content">
+        <p>Примите нашу победу над недочетами.</p>
+      </div>
       <div class="">
         <img src="/assets/icons/update_app_3.svg">
       </div>
 
       <div *ngIf="stores">
+
           <ion-list
           *ngFor="let store of stores"
            lines="none"
