@@ -78,7 +78,7 @@ jobs:
           export PASSWORD=${{secrets.DEV_BACK_VERSION_PLATFORM_PASSWORD}}
           cd scripts
           ls
-          sudo chmod +x update-version.sh
+          sudo chmod +x ./update-version.sh
           ls
           ./update-version.sh
 
