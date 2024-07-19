@@ -1,3 +1,4 @@
+# bin/bash
 platform=$1
 
 update_version_url=$(echo "$UPDATE_VERSION_URL")
