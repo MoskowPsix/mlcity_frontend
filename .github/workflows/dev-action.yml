@@ -5,67 +5,67 @@ on:
     branches: ['Develop']
 
 jobs:
-  # re-build-docker-image:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: appleboy/ssh-action@v1.0.3
-  #       with:
-  #         host: ${{ secrets.DEV_HOST }}
-  #         username: ${{ secrets.DEV_USER }}
-  #         key: ${{ secrets.DEV_SSH }}
+  re-build-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key: ${{ secrets.DEV_SSH }}
 
-  #         script: |
-  #           cd ${{ secrets.DEV_DIR }};
-  #           sudo git checkout Develop;
-  #           sudo git pull && echo ${{secrets.DEV_GIT_USERNAME}} && echo ${{secrets.GIT_TOKEN}};
-  #           sudo docker compose down
-  #           sudo docker-compose up --build -d --force-recreate --renew-anon-volumes
+          script: |
+            cd ${{ secrets.DEV_DIR }};
+            sudo git checkout Develop;
+            sudo git pull && echo ${{secrets.DEV_GIT_USERNAME}} && echo ${{secrets.GIT_TOKEN}};
+            sudo docker compose down
+            sudo docker-compose up --build -d --force-recreate --renew-anon-volumes
 
-  # build-deploy-android:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-java@v4
-  #       with:
-  #         java-version: '17'
-  #         distribution: 'temurin'
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: '18'
+  build-deploy-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '18'
 
-  #     - name: Install androidsdk
-  #       run: sudo snap install androidsdk
+      - name: Install androidsdk
+        run: sudo snap install androidsdk
 
-  #     - name: Set path androidsdk
-  #       run: export ANDROID_HOME=$HOME/cmdline-tools && export PATH=$PATH:$ANDROID_HOME/tools/bin && export PATH=$PATH:$ANDROID_HOME/platform-tools
+      - name: Set path androidsdk
+        run: export ANDROID_HOME=$HOME/cmdline-tools && export PATH=$PATH:$ANDROID_HOME/tools/bin && export PATH=$PATH:$ANDROID_HOME/platform-tools
 
-  #     - name: Install androidsdk
-  #       run: sudo snap install androidsdk
+      - name: Install androidsdk
+        run: sudo snap install androidsdk
 
-  #     - name: Set path androidsdk
-  #       run: export ANDROID_HOME=$HOME/cmdline-tools && export PATH=$PATH:$ANDROID_HOME/tools/bin && export PATH=$PATH:$ANDROID_HOME/platform-tools
+      - name: Set path androidsdk
+        run: export ANDROID_HOME=$HOME/cmdline-tools && export PATH=$PATH:$ANDROID_HOME/tools/bin && export PATH=$PATH:$ANDROID_HOME/platform-tools
 
-  #     - name: Install dependencies
-  #       run: npm install
+      - name: Install dependencies
+        run: npm install
 
-  #     - name: Build npx
-  #       run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
+      - name: Build npx
+        run: npx ng build --configuration=production && npx cap copy && npx cap sync --inline
 
-  #     - name: Grable build
-  #       if: success()
-  #       run: cd android && sh ./gradlew  bundleRelease
+      - name: Grable build
+        if: success()
+        run: cd android && sh ./gradlew  bundleRelease
 
-  #     - name: Add key in .aad
-  #       run: cd android && jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore MLCity_key_v2.jks -storepass ${{secrets.ANDROID_PASSWORD}} -keypass ${{secrets.ANDROID_PASSWORD}} app/build/outputs/bundle/release/app-release.aab ${{secrets.ANDROID_ALIAS}}
+      - name: Add key in .aad
+        run: cd android && jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore MLCity_key_v2.jks -storepass ${{secrets.ANDROID_PASSWORD}} -keypass ${{secrets.ANDROID_PASSWORD}} app/build/outputs/bundle/release/app-release.aab ${{secrets.ANDROID_ALIAS}}
 
-  #     - name: Upload Android App to Play Store
-  #       uses: joutvhu/publish-android@v1
-  #       with:
-  #         serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-  #         packageName: mlcity.ru
-  #         releaseFile: android/app/build/outputs/bundle/release/*.aab
-  #         track: debug
-  #         inAppUpdatePriority: 2
+      - name: Upload Android App to Play Store
+        uses: joutvhu/publish-android@v1
+        with:
+          serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: mlcity.ru
+          releaseFile: android/app/build/outputs/bundle/release/*.aab
+          track: debug
+          inAppUpdatePriority: 2
 
   update-version:
     runs-on: ubuntu-latest
