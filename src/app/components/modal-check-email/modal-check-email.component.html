@@ -1,7 +1,6 @@
   <ion-modal #modal backdropDismiss="false" [isOpen]="submitResponse">
 
     <ng-template>
-        <ion-content>
               <ion-item lines="none" >
                   <ion-icon (click)="cancel()" class="close-batton" name="close" slot="end"></ion-icon>
               </ion-item>
@@ -27,7 +26,7 @@
 
             </div>
 
-            <ion-col style="display: flex; justify-content: center; align-items: center" class="ion-justify-content-center">
+            <ion-col style="display: flex;" class="ion-justify-content-center">
 
                 <p style="width: 90%; margin-left: 30px; font-size: 27pt; color:#129AE4; font-family: 'Montserrat', sans-serif; margin-left: auto; margin-right: auto;">
                   Введите код, отправленный вам на почту
@@ -64,7 +63,7 @@
               </div>
 
             </form>
-        </ion-content>
+
     </ng-template>
 
   </ion-modal>
