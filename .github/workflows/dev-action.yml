@@ -76,6 +76,7 @@ jobs:
           export UPDATE_VERSION_URL=${{secrets.DEV_BACK_VERSION_PLATFORM_URL_UPDATE}}
           export LOGIN=${{secrets.DEV_BACK_VERSION_PLATFORM_LOGIN}}
           export PASSWORD=${{secrets.DEV_BACK_VERSION_PLATFORM_PASSWORD}}
-          ls
-          ./scripts/update-version.sh
+          cd scripts
+          sudo chmod +x ./update-version.sh
+          ./update-version.sh
 
