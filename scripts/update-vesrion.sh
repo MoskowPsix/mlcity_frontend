@@ -1,11 +1,25 @@
 platform=$1
-version=$(grep )
+
 update_version_url=$(echo "$UPDATE_VERSION_URL")
+
 login='Admin'
 password='Qwerty123'
 
-echo "Version: $1
-Platform: $2
+## Получение определенной версии приложения исходя из платформы
+if [[ $platform == 'android' ]]; then
+  version=$(grep "versionName" ../android/app/build.gradle | cut -d '"' -f 2)
+elif [[ $platform == 'ios' ]]; then
+  version=$(grep MARKETING_VERSION ../ios/App/App.xcodeproj/project.pbxproj | cut -d ';' -f 1 | cut -d '=' -f 2)
+fi
+
+
+
+stringarray=($version)
+version=${stringarray[0]}
+##
+
+echo "Version: $version
+Platform: $platform
 URL: $update_version_url"
 
 ## Получение токена авторизации

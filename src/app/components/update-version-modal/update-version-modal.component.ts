@@ -9,7 +9,7 @@ import { CheckVersionService } from 'src/app/services/check-version.service'
 })
 export class UpdateVersionModalComponent implements OnInit {
   stores!: StoreInfo[]
-  isOpen: boolean = true
+  isOpen: boolean = false
   constructor(private checkVersionService: CheckVersionService) {}
 
   openStore(url: string): void {
