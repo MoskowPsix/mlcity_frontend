@@ -1,5 +1,8 @@
 
-<ion-content id="topEv" #lentEvent>
+<ion-content id="topEv" #lentEvent 
+[scrollEvents]="true"
+(ionScroll)="scrollPaginate()"
+>
   
   <!-- <div id="header-anchor">35454</div> -->
  

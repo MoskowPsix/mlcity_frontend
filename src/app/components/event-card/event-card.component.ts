@@ -64,6 +64,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() callFromCabinet: boolean = true
   @Input() event!: any
   @Input() isSight: boolean = false
+  @Input() myEvent: boolean = false
   comments: boolean = false
   loadingComment: boolean = false
 
@@ -151,6 +152,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           .subscribe()
       }
     }
+  }
+
+  test() {
+    console.log(this.event.files[0])
   }
 
   getUrlFrame(url: string) {

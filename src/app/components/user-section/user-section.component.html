@@ -1,0 +1,24 @@
+<div class="user-section-main">
+  
+  <ng-container *ngIf="!user">
+    <ion-skeleton-text [animated]="true" class="user-section-image-scleton"></ion-skeleton-text>
+    <div class="user-section-info">
+        <ion-skeleton-text [animated]="true" class="user-section-name-sceleton"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" class="user-section-email-sceleton"></ion-skeleton-text>
+    </div>
+  </ng-container>
+
+    <ng-container *ngIf="user">
+      <img src="{{avatarUrl}}" *ngIf="user.avatar"  class="user-section-image" >
+      <div *ngIf="!user.avatar" class="user-section-image"></div>
+      <div class="user-section-info">
+        <ng-container *ngIf="type !== 'button'">
+          <div class="user-section-name">{{user.name}}</div>
+          <div class="user-section-email">{{user.email}}</div>
+        </ng-container>
+       
+          <button class="user-section-button" (click)="click()" *ngIf="type === 'button' && buttonText">{{buttonText}}</button>
+      </div>
+    
+  </ng-container>
+</div>

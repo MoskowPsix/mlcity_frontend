@@ -1,0 +1,65 @@
+
+.user-section-image-scleton{
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 50%;
+}
+.user-section-name-sceleton{
+    width: 10rem;
+    height: 1.25rem;
+}
+.user-section-email-sceleton{
+    width: 8rem;
+    height: 0.75rem;
+    padding-top: 0.375rem;
+
+}
+
+
+
+.user-section-image{
+    width: 3.75rem;
+    height: 3.75rem;
+    background-size: cover;
+    border-radius: 50%;
+}
+.user-section-main{
+    display: flex;
+}
+.user-section-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 0.625rem ;
+}
+.user-section-name{
+    color: #1C2226;
+    font-size: 1.25rem;
+}
+.user-section-email{
+    padding-top: 0.375rem;
+    color: #4C5861;
+    font-size: 0.75rem;
+}
+.user-section-button{
+    min-width: 16rem;
+    height: 2rem;
+    background: none;
+    text-align: center;
+    color: #3880FF;
+    font-size: 0.75rem;
+    border-radius: 5px;
+    transition: 0.2s;
+    border: 1px solid #3881ff3d;
+}
+.user-section-button:active{
+    transition: 0.2s;
+    min-width: 16rem;
+    height: 2rem;
+    background-color: #3881ff;
+    text-align: center;
+    color: #ffffff;
+    font-size: 0.75rem;
+    border-radius: 5px;
+
+}

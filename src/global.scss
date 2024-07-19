@@ -65,8 +65,10 @@ ion-content {
   // --offset-bottom: 85%!important;
   --overflow: hidden;
   overflow: auto;
+  --background: #FAFAFA;
   &::-webkit-scrollbar {
     display: none;
+
   }
 }
 
@@ -123,7 +125,6 @@ ion-toolbar {
   transform: rotate(0);
 }
 ion-content{
-    background: #fff;
     --padding-top: var(--ion-safe-area-top, 0);
 }
 
@@ -249,7 +250,6 @@ swiper-slide {
 }
 
 .inner-scroll{
-    background-color: red;
     padding: 0;
   }
 @keyframes pulsate{
@@ -358,3 +358,5 @@ swiper-slide {
     font-family:Montserrat-SemiBold;
     font-size: 16px;
 }
+
+

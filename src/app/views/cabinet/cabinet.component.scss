@@ -1,0 +1,38 @@
+.header-plug{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: flex;
+    padding-bottom:0.625rem;
+    align-items: end;
+    background-color: #4C5861;
+    width: 100%;
+    min-height: 4.6rem;
+    border-radius: 0px 0px 1.5rem 1.5rem;
+}
+.header-tools{
+    color: #fff;
+    font-size: 1.25rem;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.content{
+    padding-top: 1.9rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.menu{
+    padding-top: 1rem;
+}
+.agreement-link{
+    padding-top:1.75rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    color: #000000;
+    font-size: 0.8rem;
+    opacity: 35%;
+}
+.exit-button-wrapper{
+    padding-top: 1.813rem;
+}

@@ -1,5 +1,5 @@
-<!-- <ion-content> -->
-    <!-- <ion-grid style="padding-top: var(--ion-safe-area-top, 0);">
+<!-- <ion-content>
+    <ion-grid style="padding-top: var(--ion-safe-area-top, 0);">
         <ion-row class="ion-justify-content-center ion-align-items-center">
             <ion-col size-lg="4" size-md="8" size-xs="12"> -->
                 <!-- <ion-accordion-group expand="inset">
@@ -154,7 +154,7 @@
                     </ion-accordion>
                   </ion-accordion-group> -->
             <!-- </ion-col>
-        </ion-row> -->
+        </ion-row>
 
         <!-- <ion-row class="ion-justify-content-center ">
             <ion-col size-lg="4" size-md="8" size-xs="12">
@@ -315,6 +315,27 @@
         </ion-row> -->
     <!-- </ion-grid>
 </ion-content> -->
+
 <ion-content>
-    
+    <div class="header-plug">
+        <div class="header-tools">
+            <app-back-button></app-back-button>
+            <span>Профиль</span>
+            <app-circle-button icon="/assets/icons/menu-pen.svg" (clicked) ="navigateToSettings()" ></app-circle-button>
+        </div>
+    </div>
+
+    <section class="content">
+        <app-user-section [user]="user"></app-user-section>
+        <div class="menu">
+            <app-profile-item [routing]="'events'" [iconColor]="'#FAEAD7'" [icon]="'/assets/icons/fire.svg'" [name]="'Мои мероприятия'"></app-profile-item>
+            <app-profile-item [routing]="'sights'" [iconColor]="'#DCE9FF'" [icon]="'/assets/icons/place.svg'" [name]="'Мои сообщества'"></app-profile-item>
+            <app-profile-item [routing]="'/contacts'" [iconColor]="'#11f93840'" [icon]="'/assets/icons/subtract.svg'" [name]="'Помощь и обратная связь'"></app-profile-item>
+        </div>
+        <div class="agreement-link">Пользовательское соглашение</div>
+        <div class="exit-button-wrapper">
+            <app-exit-button></app-exit-button>
+        </div>
+    </section>
+
 </ion-content>

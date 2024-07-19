@@ -1,4 +1,4 @@
-<ion-content class="test">
+<!-- <ion-content class="test">
   <ion-grid class="mb-6-5rem">   
     <ion-row class="ion-justify-content-center">
       <ion-col size-lg="10" size-md="12" size-xs="12">
@@ -11,9 +11,9 @@
                   <div class="ion-align-item-center">
                   </div>
                 </ion-col> 
-                <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card">
+                <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card"> -->
                   <!-- цикл создания карточек -->
-                  <ion-div #widgetsContent *ngFor="let sight of sights; let i = index"> 
+                  <!-- <ion-div #widgetsContent *ngFor="let sight of sights; let i = index"> 
                     
                     <ion-button class="edditButton" id="editModal" (click)="openModal(sight)" expand="block"><ion-icon name="pencil-outline"></ion-icon></ion-button>
                     <app-event-card [event]="sight" [isSight]="true"></app-event-card>
@@ -122,4 +122,9 @@
   </ion-grid>  
 
 </ion-content>
- 
+  -->
+<ion-content>
+  <ion-content>
+    <app-card-grid [cards]="sights" [isSight]="true"></app-card-grid>
+  </ion-content>
+</ion-content>

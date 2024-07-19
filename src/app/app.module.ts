@@ -7,6 +7,7 @@ import { RouteReuseStrategy } from '@angular/router'
 import { ReactiveFormsModule } from '@angular/forms'
 import { ContactsComponent } from './views/contacts/contacts.component'
 import { DropDownButtonComponent } from './components/drop-down-button/drop-down-button.component'
+import { UserSectionComponent } from './components/user-section/user-section.component'
 import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
@@ -36,6 +37,7 @@ import { NotFoundComponent } from './views/errors/not-found/not-found.component'
 import { ForbiddenComponent } from './views/errors/forbidden/forbidden.component'
 import { ServerErrorComponent } from './views/errors/server-error/server-error.component'
 import { EventShowComponent } from './views/events/event-show/event-show.component'
+import { CircleButtonComponent } from './components/circle-button/circle-button.component'
 import { SightShowComponent } from './views/sights/sight-show/sight-show.component'
 import { EventCreateComponent } from './views/events/event-create/event-create.component'
 import { SightsComponent } from './views/sights/sights.component'
@@ -87,7 +89,8 @@ import { MyEventsComponent } from './views/cabinet/my-events/my-events.component
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component'
 import { RegistrationComponent } from './views/registration/registration.component'
 import { MaskitoModule } from '@maskito/angular'
-
+import { ProfileItemComponent } from './components/profile-item/profile-item.component'
+import { ExitButtonComponent } from './components/exit-button/exit-button.component'
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatFormFieldModule } from '@angular/material/form-field'
@@ -96,12 +99,20 @@ import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component'
 import { TypesComponent } from './components/types/types.component'
 import { MetrikaModule } from 'ng-yandex-metrika'
+import { BackButtonComponent } from './components/back-button/back-button.component'
 import { NgxSliderModule } from '@angular-slider/ngx-slider'
 import { CollapsedTextComponent } from './components/collapsed-text/collapsed-text.component'
 import { PrivacyComponent } from './views/privacy/privacy.component'
 import { CreateRulesModalComponent } from './components/create-rules-modal/create-rules-modal.component'
+import { StandartInputComponent } from './components/materials/standart-input/standart-input.component'
 import { RulesModalCheckService } from './services/rules-modal-check.service'
 import { MiniCardComponent } from './components/mini-card/mini-card.component'
+import { CardGridComponent } from './components/card-grid/card-grid.component'
+import { ScrollService } from './services/scroll.service'
+import { StandartButtonComponent } from './components/materials/standart-button/standart-button.component'
+import { StandartButtonLongComponent } from './components/materials/standart-button-long/standart-button-long.component'
+import { ButtonRoundedComponent } from './components/materials/button-rounded/button-rounded.component'
+import { ListButtonComponent } from './components/materials/list-button/list-button.component'
 import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
 const mapConfig: YaConfig = {
   apikey:
@@ -128,14 +139,20 @@ registerLocaleData(localeRu, 'ru')
     CabinetComponent,
     HomeComponent,
     LoginComponent,
+    CircleButtonComponent,
+    BackButtonComponent,
     RecoveryPasswordComponent,
     HeaderComponent,
     SidebarComponent,
     AddEventComponent,
+    CardGridComponent,
     DropdownPopupComponent,
+    StandartInputComponent,
     MenuAuthComponent,
     MenuAuthSidebarComponent,
     FooterComponent,
+    UserSectionComponent,
+    ExitButtonComponent,
     AboutComponent,
     NotFoundComponent,
     ForbiddenComponent,
@@ -149,12 +166,18 @@ registerLocaleData(localeRu, 'ru')
     SightTypeComponent,
     ReadMoreComponent,
     FiltersComponent,
+    ProfileItemComponent,
     FiltersNotButtonComponent,
     CalendulaComponent,
     NoDataComponent,
     EventCardComponent,
     CommentsListComponent,
     FavoritesComponent,
+    StandartButtonComponent,
+    StandartButtonLongComponent,
+    ButtonRoundedComponent,
+    CircleButtonComponent,
+    ListButtonComponent,
     TruncatePipe,
     CreateRulesModalComponent,
     BackButtonDirective,
@@ -215,6 +238,7 @@ registerLocaleData(localeRu, 'ru')
     AuthGuard,
     LoggedInAuthGuard,
     CheckAuthCanActiveGuard,
+    ScrollService,
     NativeGeocoder,
     LocationAccuracy,
     DatePipe,
