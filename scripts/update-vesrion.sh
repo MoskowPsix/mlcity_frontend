@@ -2,8 +2,8 @@ platform=$1
 
 update_version_url=$(echo "$UPDATE_VERSION_URL")
 
-login='Admin'
-password='Qwerty123'
+login=$(echo "$LOGIN")
+password=$(echo "$PASSWORD")
 
 ## Получение определенной версии приложения исходя из платформы
 if [[ $platform == 'android' ]]; then
