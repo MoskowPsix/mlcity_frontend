@@ -61,15 +61,11 @@
 
 ion-content {
   // overwrite inline styles
-  --offset-bottom: auto!important;
   // --offset-bottom: 85%!important;
   --overflow: hidden;
   overflow: auto;
   --background: #FAFAFA;
-  &::-webkit-scrollbar {
-    display: none;
 
-  }
 }
 
 body {
@@ -93,10 +89,6 @@ body {
 ion-list {
     font-family: 'Montserrat-regular';
     font-size: 1rem;
-}
-
-ion-content {
-
 }
 
 ion-item-divider{
