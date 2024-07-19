@@ -15,8 +15,9 @@
     "prettier:check": "prettier --config ./.prettierrc --list-different \"src/{app,environments}/**/*{.ts,.js,.json,.css,.scss,.html}\"",
     "prettier:fix": "prettier --config ./.prettierrc --write \"src/{app,environments}/**/*{.ts,.js,.json,.css,.scss}\"",
     "generate-sitemap": "sitemap-generator https://mlcity.ru/",
-    "lint-css": "stylelint src/**/*.scss"
+    "lint-css": "stylelint src/**/*.scss",
 
+    "capacitor:build:after":"echo plat $CAPACITOR_PLATFORM_NAME"
   },
   "private": true,
   "dependencies": {
@@ -43,6 +44,7 @@
     "@capacitor/haptics": "^5.0.0",
     "@capacitor/ios": "^5.0.0",
     "@capacitor/keyboard": "^5.0.0",
+    "@capacitor/local-notifications": "^5.0.8",
     "@capacitor/status-bar": "^5.0.0",
     "@ionic/angular": "^6.7.5",
     "@maskito/angular": "^2.3.1",
