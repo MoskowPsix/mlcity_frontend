@@ -1,0 +1,29 @@
+<button
+  id="{{id}}"
+  type = {{type}}
+  
+  (click)="onClick()"
+  class="
+  flex
+  justify-center
+  items-center
+  min-w-[6.25rem]
+  min-h-[1.625rem]
+  max-h-[1.625rem]
+  bg-[var(--buttonRoundedBackgroundStandart)]
+  text-[11px]
+  button-rounded
+  rounded-[100px]
+  font-['NunitoSans-SemiBold']
+  text-[#4C5861]
+  " 
+>
+<img *ngIf="icon !== ''" class="
+w-[1rem] 
+h-[1rem]
+mr-[0.313rem]
+img
+
+" src="{{icon}}" alt="">
+{{buttonText}}
+</button>

@@ -1,4 +1,5 @@
 <div class="user-section-main">
+  
   <ng-container *ngIf="!user">
     <ion-skeleton-text [animated]="true" class="user-section-image-scleton"></ion-skeleton-text>
     <div class="user-section-info">
@@ -8,11 +9,16 @@
   </ng-container>
 
     <ng-container *ngIf="user">
-      <div *ngIf="user.avatar" style="background: url('{{user.avatar}}'); background-size: cover;" class="user-section-image"></div>
+      <img src="{{avatarUrl}}" *ngIf="user.avatar"  class="user-section-image" >
       <div *ngIf="!user.avatar" class="user-section-image"></div>
       <div class="user-section-info">
+        <ng-container *ngIf="type !== 'button'">
           <div class="user-section-name">{{user.name}}</div>
           <div class="user-section-email">{{user.email}}</div>
+        </ng-container>
+       
+          <button class="user-section-button" (click)="click()" *ngIf="type === 'button' && buttonText">{{buttonText}}</button>
       </div>
+    
   </ng-container>
 </div>

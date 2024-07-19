@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 export class CircleButtonComponent implements OnInit {
   constructor() {}
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>()
+  @Input() icon: string = ''
   click() {
     this.clicked.emit()
   }

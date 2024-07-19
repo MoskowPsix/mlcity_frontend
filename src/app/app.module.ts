@@ -103,10 +103,15 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider'
 import { CollapsedTextComponent } from './components/collapsed-text/collapsed-text.component'
 import { PrivacyComponent } from './views/privacy/privacy.component'
 import { CreateRulesModalComponent } from './components/create-rules-modal/create-rules-modal.component'
+import { StandartInputComponent } from './components/materials/standart-input/standart-input.component'
 import { RulesModalCheckService } from './services/rules-modal-check.service'
 import { MiniCardComponent } from './components/mini-card/mini-card.component'
 import { CardGridComponent } from './components/card-grid/card-grid.component'
 import { ScrollService } from './services/scroll.service'
+import { StandartButtonComponent } from './components/materials/standart-button/standart-button.component'
+import { StandartButtonLongComponent } from './components/materials/standart-button-long/standart-button-long.component'
+import { ButtonRoundedComponent } from './components/materials/button-rounded/button-rounded.component'
+import { ListButtonComponent } from './components/materials/list-button/list-button.component'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -140,6 +145,7 @@ registerLocaleData(localeRu, 'ru')
     AddEventComponent,
     CardGridComponent,
     DropdownPopupComponent,
+    StandartInputComponent,
     MenuAuthComponent,
     MenuAuthSidebarComponent,
     FooterComponent,
@@ -165,6 +171,11 @@ registerLocaleData(localeRu, 'ru')
     EventCardComponent,
     CommentsListComponent,
     FavoritesComponent,
+    StandartButtonComponent,
+    StandartButtonLongComponent,
+    ButtonRoundedComponent,
+    CircleButtonComponent,
+    ListButtonComponent,
     TruncatePipe,
     CreateRulesModalComponent,
     BackButtonDirective,

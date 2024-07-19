@@ -1,3 +1,6 @@
-<button (click)="click()" class="circle-button">
-  <img src="/assets/icons/menu-pen.svg" alt="">
-</button>
+<ng-container >
+  <button (click)="click()" class="circle-button">
+    <img (click)="click()" src="{{icon}}" alt="">
+  </button>
+  
+</ng-container>

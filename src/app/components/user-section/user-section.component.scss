@@ -41,3 +41,25 @@
     color: #4C5861;
     font-size: 0.75rem;
 }
+.user-section-button{
+    min-width: 16rem;
+    height: 2rem;
+    background: none;
+    text-align: center;
+    color: #3880FF;
+    font-size: 0.75rem;
+    border-radius: 5px;
+    transition: 0.2s;
+    border: 1px solid #3881ff3d;
+}
+.user-section-button:active{
+    transition: 0.2s;
+    min-width: 16rem;
+    height: 2rem;
+    background-color: #3881ff;
+    text-align: center;
+    color: #ffffff;
+    font-size: 0.75rem;
+    border-radius: 5px;
+
+}

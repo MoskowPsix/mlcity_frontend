@@ -1,0 +1,14 @@
+.img{
+    filter: brightness(0) saturate(100%) invert(31%) sepia(7%) saturate(971%) hue-rotate(163deg) brightness(97%) contrast(85%);
+}
+.button-rounded:hover{
+    background-color: var(--buttonRoundedBackgroundHover);
+    color: #fff;
+    transition: 0.3s all;
+    .img{
+        filter: brightness(0) saturate(100%) invert(100%) sepia(49%) saturate(0%) hue-rotate(56deg) brightness(108%) contrast(101%);
+    }
+}
+.button-rounded{
+    transition: 0.3s all;
+}
