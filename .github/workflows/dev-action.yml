@@ -80,7 +80,5 @@ jobs:
           export LOGIN=${{secrets.DEV_BACK_VERSION_PLATFORM_LOGIN}}
           export PASSWORD=${{secrets.DEV_BACK_VERSION_PLATFORM_PASSWORD}}
 
-          . ${{github.workspace}}/scripts/update-version.sh
-        shell: bash
-
-
+      - name: stat sh
+        run: ./update_version.sh
