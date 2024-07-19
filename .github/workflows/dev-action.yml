@@ -76,7 +76,7 @@ jobs:
           export UPDATE_VERSION_URL=${{secrets.DEV_BACK_VERSION_PLATFORM_URL_UPDATE}}
           export LOGIN=${{secrets.DEV_BACK_VERSION_PLATFORM_LOGIN}}
           export PASSWORD=${{secrets.DEV_BACK_VERSION_PLATFORM_PASSWORD}}
-
-          ./scripts/start.sh android
+          chmod +x ./scripts/update_version.sh
+          ./scripts/update_version.sh android
 
 
