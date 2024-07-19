@@ -8,9 +8,9 @@ password=$(echo "$PASSWORD")
 
 ## Получение определенной версии приложения исходя из платформы
 if [[ $platform == 'android' ]]; then
-  version=$(grep "versionName" ../android/app/build.gradle | cut -d '"' -f 2)
+  version=$(grep "versionName" ./android/app/build.gradle | cut -d '"' -f 2)
 elif [[ $platform == 'ios' ]]; then
-  version=$(grep MARKETING_VERSION ../ios/App/App.xcodeproj/project.pbxproj | cut -d ';' -f 1 | cut -d '=' -f 2)
+  version=$(grep MARKETING_VERSION ./ios/App/App.xcodeproj/project.pbxproj | cut -d ';' -f 1 | cut -d '=' -f 2)
 fi
 
 
