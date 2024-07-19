@@ -35,6 +35,8 @@ export class SettingsComponent implements OnInit {
   avatar: string = ''
   avatarLoad: boolean = false
   avatarUrl!: string
+  passwordChange: boolean = false
+  passwordError: string = ''
   public new_name: FormControl = new FormControl('')
   previewPhotoUrl!: string
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
@@ -110,6 +112,22 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  checkPassword() {
+    if (
+      this.passwordResetForm.valid ||
+      this.passwordResetForm.value.new_password !==
+        this.passwordResetForm.value.retry_password
+    ) {
+      this.passwordError = 'ошибка'
+    } else {
+      this.passwordError = ''
+      console.log('ошибка')
+    }
+  }
+
+  submitPassword() {
+    this.checkPassword()
+  }
   onFileSelected(event: any) {
     const file: File = event.target.files[0]
     if (file) {
@@ -118,7 +136,7 @@ export class SettingsComponent implements OnInit {
     }
   }
   openPasswordBlock(event: HTMLElement, plug: HTMLElement) {
-    console.log(event)
+    this.passwordChange = true
     let block = event
     block.classList.toggle('password-inputs-wrapper_active')
     plug.classList.toggle('plug-password-wrapper_active')
@@ -140,10 +158,20 @@ export class SettingsComponent implements OnInit {
     this.passwordResetForm = new FormGroup({
       old_password: new FormControl('', [
         Validators.required,
-        Validators.minLength(1),
+        Validators.minLength(8),
       ]),
-      new_password: new FormControl('', Validators.required),
-      retry_password: new FormControl('', Validators.required),
+      old_password_plug: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
+      new_password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
+      retry_password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
     })
     this.resetForm = new FormGroup({
       new_name: new FormControl(this.user.name, [Validators.minLength(1)]),

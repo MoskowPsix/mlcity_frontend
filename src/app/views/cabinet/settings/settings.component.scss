@@ -99,12 +99,14 @@
 }
  .password-inputs-wrapper{
   height: 0;
+  opacity: 0;
   overflow-y: hidden;
   transition: 0.7s;
  }
  .password-inputs-wrapper_active{
   height: 14rem;
   overflow-y: hidden;
+  opacity: 1;
   transition: 0.7s;
 
  }

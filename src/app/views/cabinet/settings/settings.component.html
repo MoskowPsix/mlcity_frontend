@@ -38,13 +38,14 @@
               </div>
 
               <div #passwordBlock class="password-inputs-wrapper">
-                <app-standart-input type="password"  placeholder="•••••••••••" [label]="'Старый пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="false"></app-standart-input >
-                <app-standart-input type="password"  placeholder="•••••••••••" [label]="'Новый пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="false"></app-standart-input >
-                <app-standart-input type="password"  placeholder="•••••••••••" [label]="'Повторите пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="false"></app-standart-input >
+                <app-standart-input [invalid]="passwordResetForm.get('old_password')!.invalid && passwordError !==''" [openPassword]="true" type="password"  placeholder="•••••••••••" [label]="'Старый пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="false"></app-standart-input >
+                <app-standart-input [invalid]="passwordResetForm.get('new_password')!.invalid && passwordError !=='' || passwordError !==''" [openPassword]="true" type="password"  placeholder="•••••••••••" [label]="'Новый пароль'" [control] = "passwordResetForm.get('new_password')" [readonly]="false"></app-standart-input >
+                <app-standart-input  [invalid]="passwordResetForm.get('retry_password')!.invalid && passwordError !=='' || passwordError !==''" [openPassword]="true" type="password"  placeholder="•••••••••••" [label]="'Повторите пароль'" [control] = "passwordResetForm.get('retry_password')" [readonly]="false"></app-standart-input >
               </div>
             </form>
             <div class="save-wrapper">
-              <app-standart-button buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button>
+              <app-standart-button *ngIf="!passwordChange" buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button>
+              <app-standart-button  *ngIf="passwordChange" (click)="submitPassword()" buttonText = "Сохранить" type="button" theme ="standart"></app-standart-button>
 
             </div>
         </ng-container>
