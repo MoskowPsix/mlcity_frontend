@@ -23,7 +23,7 @@ export class CabinetComponent implements OnInit {
     this.authService.logout()
   }
   navigateToSettings() {
-    this.router.navigate(['/settings'])
+    this.router.navigate(['cabinet/settings'])
   }
 
   ngOnInit() {
