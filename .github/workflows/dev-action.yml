@@ -70,7 +70,7 @@ jobs:
   update-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       - name: Update Android
         run: |
           export UPDATE_VERSION_URL=${{secrets.DEV_BACK_VERSION_PLATFORM_URL_UPDATE}}
@@ -79,5 +79,6 @@ jobs:
           sudo chmod +x ${{github.workspace}}/scripts/update-version.sh
           ls
           . ${{github.workspace}}/scripts/update-version.sh
+        shell: bash
 
 
