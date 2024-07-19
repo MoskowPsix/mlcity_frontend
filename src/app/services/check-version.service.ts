@@ -11,6 +11,9 @@ import { MobileNotificationService } from './mobile-notification.service';
 import { MessagesUpdate } from '../enums/messages-update';
 import { StoreUrls } from '../enums/store-urls';
 import { StoreInfo } from '../models/store-info';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { MobileVersionService } from './mobile-version.service';
 
 
 @Injectable({
@@ -20,6 +23,7 @@ export class CheckVersionService {
   constructor(
     private toastService: ToastService,
     private mobileNotificationService: MobileNotificationService,
+    private mobileVersionService: MobileVersionService
   ) {
     LocalNotifications.addListener('localNotificationActionPerformed', (notification: ActionPerformed) => {
       this.goToUpdateApp(notification)
@@ -37,7 +41,7 @@ export class CheckVersionService {
     return appInfo
   }
 
-  async showNotificationAboutVersion(version: string) {
+  async showNotificationAboutVersion() {
     await LocalNotifications.requestPermissions()
     this.mobileNotificationService.sendBasicNotification(
       'Ваша версия приложения устарела',
@@ -49,9 +53,12 @@ export class CheckVersionService {
 
   async checkVersionIsDeprecated(): Promise<boolean> {
     let version: string = await this.getCurrentVersion()
-
-    if (version != '1.5.6' && version != 'no version') {
-      this.showNotificationAboutVersion('1.5.4')
+    let versionActual: any
+    this.mobileVersionService.getActualVersionFromServer().pipe().subscribe((res: any) => {
+      versionActual = res.data[2]
+    })
+    if (version != versionActual && version != 'no version' && this.checkDateAfterUpdateAppMoreThenDay(versionActual.updatedAt)) {
+      this.showNotificationAboutVersion()
       return true
     }
 
@@ -80,6 +87,13 @@ export class CheckVersionService {
       })
     }
     return stores
+  }
+
+  checkDateAfterUpdateAppMoreThenDay(vesrionUpdate: Date) {
+    const oneDayInMilliseconds = 86400000
+    const differenceInMilliseconds = Date.now() - vesrionUpdate.getTime()
+    const differenceInDays = differenceInMilliseconds / oneDayInMilliseconds
+    return differenceInDays > 1
   }
 
   async goToUpdateApp(notification: ActionPerformed) {
