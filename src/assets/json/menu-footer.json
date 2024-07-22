@@ -1,0 +1,27 @@
+[
+  {
+    "title":"Лента",
+    "icon": "/assets/icons/feed.svg",
+    "activeIcon":"/assets/icons/active-feed.svg",
+    "path": "/events"
+  },
+  {
+    "title":"Карта",
+    "icon": "/assets/icons/new_map.svg",
+    "activeIcon":"/assets/icons/active-map.svg",
+    "path": "/home"
+  },
+  {
+    "title":"Избранное",
+    "icon": "/assets/icons/heart.svg",
+    "activeIcon":"/assets/icons/heart_active.svg",
+    "path": "/cabinet/favorites"
+  },
+  {
+    "title":"Профиль",
+    "icon": "/assets/icons/new-profile.svg",
+    "activeIcon":"/assets/icons/profile_active.svg",
+    "path": "/cabinet"
+  }
+]
+

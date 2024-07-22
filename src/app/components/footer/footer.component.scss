@@ -17,20 +17,7 @@ $font-color: #4c5861;
     width: 1.5rem;
   }
 
-  .item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 5px;
-    width: 5rem;
-    color: #999;
-    font-weight: bold;
-    cursor: pointer;
 
-    .icon {
-      font-size: 1.25rem;
-      filter: invert(32%) sepia(6%) saturate(1132%) hue-rotate(163deg) brightness(96%) contrast(87%);
-    }
     .user-name {
       max-width: 55px;
       white-space: nowrap;
@@ -38,7 +25,6 @@ $font-color: #4c5861;
       text-overflow: ellipsis;
     }
   }
-}
 
 .title {
   font-size: 0.625rem;
@@ -47,9 +33,7 @@ $font-color: #4c5861;
 }
 
 .item-active {
-  .title {
-    color: #3880FF;
-  }
+  filter: brightness(0) saturate(100%) invert(40%) sepia(41%) saturate(3715%) hue-rotate(207deg) brightness(103%) contrast(101%);
 }
 
 .active {

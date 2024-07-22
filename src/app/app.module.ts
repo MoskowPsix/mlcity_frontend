@@ -114,6 +114,7 @@ import { StandartButtonLongComponent } from './components/materials/standart-but
 import { ButtonRoundedComponent } from './components/materials/button-rounded/button-rounded.component'
 import { ListButtonComponent } from './components/materials/list-button/list-button.component'
 import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
+import { FooterItemComponent } from './components/footer/footer-item/footer-item.component'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -204,6 +205,7 @@ registerLocaleData(localeRu, 'ru')
     MiniCardComponent,
     UpdateVersionModalComponent,
     ModalCheckEmailComponent,
+    FooterItemComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,49 +1,7 @@
 <!-- мобильный футтер -->
 <div class="footer-mobile">
 
-  <div
-    class="item"
-    [routerLink]="['events']"
-    [routerLinkActive]="['item-active']"
-    >
-    <div>
-      <img src="/assets/icons/feed.svg" class="icon">
-    </div>
-   <span class="title">Лента</span>
-  </div>
-
-  <div
-    class="item"
-    [routerLink]="['home']"
-    [routerLinkActive]="['item-active']"
-    >
-    <div>
-      <img src="/assets/icons/new_map.svg" class="icon">
-    </div>
-   <span class="title">Карта</span>
-  </div>
-
-  <div
-    class="item"
-    [routerLink]="['cabinet/favorites']"
-    [routerLinkActive]="['item-active']"
-    >
-    <div>
-      <img src="/assets/icons/heart.svg" class="icon">
-    </div>
-   <span class="title">Избранное</span>
-  </div>
-
-  <div
-    class="item"
-    [routerLink]="['cabinet']"
-    [routerLinkActive]="['item-active']"
-    >
-    <div>
-      <img src="/assets/icons/person-outline.svg" class="icon">
-    </div>
-   <span class="title">Профиль</span>
-  </div>
+<app-footer-item *ngFor="let itemMenu of menu" [menuItem]="itemMenu"/>
 
     <!-- <div
         class="item"
