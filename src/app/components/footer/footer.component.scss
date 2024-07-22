@@ -1,3 +1,5 @@
+$font-color: #4c5861;
+
 .footer-mobile {
   display: flex;
   flex-direction: row;
@@ -26,12 +28,8 @@
     cursor: pointer;
 
     .icon {
-      font-size: 1.5rem;
-    }
-
-    .title {
-      font-size: 0.7rem;
-      margin-top: 0.25rem;
+      font-size: 1.25rem;
+      filter: invert(32%) sepia(6%) saturate(1132%) hue-rotate(163deg) brightness(96%) contrast(87%);
     }
     .user-name {
       max-width: 55px;
@@ -42,12 +40,16 @@
   }
 }
 
+.title {
+  font-size: 0.625rem;
+  font-family: 'NunitoSans-Regular';
+  color: $font-color;
+}
+
 .item-active {
-  background-color: #3b82f6;
-  border-radius: 10px;
-  box-shadow:
-    rgba(0, 0, 0, 0.12) 0px 1px 3px,
-    rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  .title {
+    color: #3880FF;
+  }
 }
 
 .active {

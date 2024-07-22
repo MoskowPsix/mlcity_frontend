@@ -24,7 +24,6 @@ export class FooterComponent implements OnInit {
   currentRout = this.router
   constructor(
     private router: Router,
-    private filterService: FilterService,
     private authService: AuthService,
     private userService: UserService,
     //private authService: AuthService,
@@ -39,17 +38,6 @@ export class FooterComponent implements OnInit {
     } else {
       this.mobile = false
     }
-  }
-  getEventService() {
-    return this.filterService.eventsCount.value
-  }
-
-  getSightService() {
-    return this.filterService.sightsCount.value
-  }
-
-  getFavoritesService() {
-    return this.filterService.favoritesCount.value
   }
   checkAuthenticated() {
     this.authService.authenticationState.subscribe((res: boolean) => {
@@ -71,19 +59,7 @@ export class FooterComponent implements OnInit {
     })
   }
 
-  // currentYear = new Date().getFullYear();
-  // appName = environment.APP_NAME
-  // isAuthenticated: boolean = false
-  // subscription_1!: Subscription
 
-  //Проверяем авторизован ли пользователь
-  // checkAuthenticated(){
-  //   this.subscription_1 = this.authService.authenticationState.subscribe(
-  //     ((res: boolean) => {
-  //        this.isAuthenticated = res;
-  //     })
-  //   );
-  // }
 
   ngOnInit() {
     this.getUser()

@@ -1,14 +1,57 @@
 <!-- мобильный футтер -->
 <div class="footer-mobile">
 
-    <div
+  <div
+    class="item"
+    [routerLink]="['events']"
+    [routerLinkActive]="['item-active']"
+    >
+    <div>
+      <img src="/assets/icons/feed.svg" class="icon">
+    </div>
+   <span class="title">Лента</span>
+  </div>
+
+  <div
+    class="item"
+    [routerLink]="['home']"
+    [routerLinkActive]="['item-active']"
+    >
+    <div>
+      <img src="/assets/icons/new_map.svg" class="icon">
+    </div>
+   <span class="title">Карта</span>
+  </div>
+
+  <div
+    class="item"
+    [routerLink]="['cabinet/favorites']"
+    [routerLinkActive]="['item-active']"
+    >
+    <div>
+      <img src="/assets/icons/heart.svg" class="icon">
+    </div>
+   <span class="title">Избранное</span>
+  </div>
+
+  <div
+    class="item"
+    [routerLink]="['cabinet']"
+    [routerLinkActive]="['item-active']"
+    >
+    <div>
+      <img src="/assets/icons/person-outline.svg" class="icon">
+    </div>
+   <span class="title">Профиль</span>
+  </div>
+
+    <!-- <div
         class="item"
         [routerLink]="['events']"
         [routerLinkActive]="['item-active']"
     >
         <ion-row>
             <ion-icon name="balloon" class="icon" [routerLinkActive]="['active']"></ion-icon>
-            <!-- <ion-badge>{{ getEventService() }}</ion-badge> -->
         </ion-row>
         <span class="title" [routerLinkActive]="['active']">События</span>
     </div>
@@ -20,7 +63,6 @@
     >
         <ion-row>
           <img src="/assets/icons/MakiMuseum.svg" class="svg-icon">
-            <!-- <ion-badge>{{ getSightService() }}</ion-badge> -->
         </ion-row>
         <span class="title" [routerLinkActive]="['active']">Места</span>
     </div>
@@ -42,7 +84,6 @@
     >
         <ion-row>
             <ion-icon name="star" class="icon" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"></ion-icon>
-            <!-- <ion-badge>{{ getFavoritesService() }}</ion-badge> -->
         </ion-row>
         <span class="title" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">Избранное</span>
     </div>
@@ -60,13 +101,5 @@
           <ion-icon *ngIf="!isAuth" name="person" class="icon" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"></ion-icon>
           <span class="title user-name" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">{{ user ? user.name: "Кабинет" }}</span>
 
-    </div>
-    <!-- <div *ngIf="!isAuthenticated"
-        class="item"
-        [routerLink]="['login']"
-        [routerLinkActive]="['item-active']"
-    >
-        <ion-icon name="log-in" class="icon" [routerLinkActive]="['active']"></ion-icon>
-        <span class="title"  [routerLinkActive]="['active']">Вход</span>
     </div> -->
 </div>
