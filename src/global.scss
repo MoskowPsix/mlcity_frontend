@@ -26,8 +26,6 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-
-
 @font-face {
 	font-family: 'Montserrat-Thin';
 	src: url('./assets/fonts/Montserrat-Thin.ttf');
@@ -69,7 +67,13 @@
 	src: url('./assets/fonts/Montserrat-Light.ttf');
 }
 
-
+:root {
+    --orange-color: #f7ab31;
+    --orange-filter: brightness(0) saturate(100%) invert(76%) sepia(67%) saturate(4165%) hue-rotate(2deg) brightness(104%) contrast(108%);        
+    --blue-color:#3880FF;
+    --blue-filter: invert(42%) sepia(79%) saturate(2572%) hue-rotate(204deg) brightness(100%) contrast(104%)
+    --white-filter: invert(100%) sepia(8%) saturate(7472%) hue-rotate(199deg) brightness(103%) contrast(114%);
+}
 
 // ion-content{
 //     --padding-top: 110px !important;
