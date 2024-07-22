@@ -1,0 +1,5 @@
+<div class="code-input">
+  
+  <input *ngFor="let input of codeCount; let i = index" (input)="nextFocus($event)" #item class="input-item" type="number" maxlength="1" id="{{i}}">
+   <button #setButton >test</button>
+</div>

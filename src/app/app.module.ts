@@ -85,6 +85,7 @@ import { PlaceInfoComponent } from './components/place-info/place-info.component
 import { SightTypeComponent } from './components/sight-type/sight-type.component'
 import { SafeUrlPipe } from './views/events/event-create/event-create.pipe'
 import { SafeUrlPipe2 } from './components/event-card/event-card.pipe'
+import { CodeInputComponent } from './components/materials/code-input/code-input.component'
 import { MyEventsComponent } from './views/cabinet/my-events/my-events.component'
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component'
 import { RegistrationComponent } from './views/registration/registration.component'
@@ -143,6 +144,7 @@ registerLocaleData(localeRu, 'ru')
     BackButtonComponent,
     RecoveryPasswordComponent,
     HeaderComponent,
+    CodeInputComponent,
     SidebarComponent,
     AddEventComponent,
     CardGridComponent,

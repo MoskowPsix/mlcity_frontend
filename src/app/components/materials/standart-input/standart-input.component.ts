@@ -17,9 +17,7 @@ export class StandartInputComponent implements OnInit {
   @Input() openPassword: boolean = false
   @Input() invalid: boolean = false
 
-  ngOnChanges() {
-    console.log(this.control)
-  }
+  ngOnChanges() {}
   openPasword(input: any) {
     input.type = input.type === 'password' ? 'text' : 'password'
   }

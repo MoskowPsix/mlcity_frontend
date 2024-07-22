@@ -16,30 +16,39 @@ import { UserService } from 'src/app/services/user.service'
   styleUrls: ['./modal-check-email.component.scss'],
 })
 export class ModalCheckEmailComponent implements OnInit {
-    constructor(
+  constructor(
     private userService: UserService,
     private loadingService: LoadingService,
     private navigationService: NavigationService,
     private authService: AuthService,
     private router: Router,
     private toastService: ToastService,
-  
   ) {}
   private readonly destroy$ = new Subject<void>()
-  public emailForm!:FormGroup
-  @Input() openModal!:boolean
-  public userEmail:boolean = false  
-  public userEmail2:boolean = false  
-  ngOnChange(){
-    
+  public emailForm!: FormGroup
+  @Input() openModal!: boolean
+  public userEmail: boolean = false
+  public userEmailConfirm: boolean = false
+  public codeFocused!: boolean
+
+  ngAfterViewInit() {
+    this.codeFocused = true
+  }
+  ngOnChange() {}
+  checkEmail() {
+    this.userEmail = this.userService.getUserFromLocalStorage().email !== null
+    this.userEmailConfirm =
+      this.userService.getUserFromLocalStorage().email_verified_at !== null
+  
   }
   ngOnInit(): void {
-   this.emailForm =  new FormGroup({
-        email: new FormControl('', [])
+    this.checkEmail()
+    this.emailForm = new FormGroup({
+      email: new FormControl('', []),
       //         Validators.required,
       //         Validators.minLength(4),
       //       ]),
-      })
+    })
   }
 }
 //   constructor(

@@ -240,6 +240,11 @@ swiper-slide {
         border-radius: 2%;
     }
 }
+// убираем стрелки у input
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
 
 .inner-scroll{
     padding: 0;
