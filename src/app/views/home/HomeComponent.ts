@@ -41,6 +41,7 @@ import { Title } from '@angular/platform-browser'
 import { animate, style, transition, trigger } from '@angular/animations'
 import { LoadingService } from 'src/app/services/loading.service'
 import { LocationService } from 'src/app/services/location.service'
+import { SwitchTypeService } from 'src/app/services/switch-type.service'
 
 @Component({
   selector: 'app-home',
@@ -181,6 +182,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private loadingService: LoadingService,
     private locationService: LocationService,
+    private switchTypeService: SwitchTypeService
   ) {
     this.titleService.setTitle(
       'VOKRUG - Мероприятия и достопремечательности вокруг вас',
@@ -255,6 +257,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.navigationService.modalEventRadiusShowOpen.next(true)
   }
 
+  setTypeState(type: string) {
+    this.stateType = type
+    this.getEventsAndSights()
+    this.eventSightHeader()
+  }
   eventSightHeader() {
     if (this.stateType == 'sights') {
       this.calendulaWrapper.nativeElement.style.transform = 'translateY(-300%)'
@@ -998,6 +1005,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges()
       })
 
+
+
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
     this.filterService.changeFilter
       .pipe(takeUntil(this.destroy$))
@@ -1025,10 +1034,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.sightsContentModal = []
         this.eventTypeId = value[0]
       })
-    // this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
-    //   this.filterService.changeFilter.next(true);
-    // });
-    // this.getEventsAndSights();
+
+    this.switchTypeService.currentType.pipe().subscribe((value:string) => {
+      this.setTypeState(value)
+    })
     window.addEventListener('scroll', this.nextPageModal, true)
   }
   ngOnDestroy() {

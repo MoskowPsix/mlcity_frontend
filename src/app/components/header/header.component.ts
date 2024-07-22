@@ -23,6 +23,7 @@ import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { FilterService } from 'src/app/services/filter.service'
 import { LocationService } from 'src/app/services/location.service'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
+import { SwitchTypeService } from 'src/app/services/switch-type.service'
 
 @Component({
   selector: 'app-header',
@@ -34,7 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   menuPublic: IMenu[] = []
   appName = environment.APP_NAME
-
+  feedLink: string = '/events'
   modalSearchCityesOpen: boolean = false
   modalSearchEventsOpen: boolean = false
 
@@ -87,8 +88,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sightsService: SightsService,
     private filterService: FilterService,
     private locationService: LocationService,
+    private switchTypeService: SwitchTypeService,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   getEventService() {
     return this.filterService.eventsCount.value
@@ -342,8 +344,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.filterService.changeFilter.next(true)
       })
 
-    this.filterService.changeFilter.subscribe(() => {})
+    this.filterService.changeFilter.subscribe(() => { })
 
+    this.switchTypeService.link.pipe().subscribe((value:string) => {
+      this.feedLink = value
+    })
     //Формируем меню из файла
     this.menuPublic = menuPublicData
 

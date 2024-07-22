@@ -1,0 +1,51 @@
+.content-container {
+  padding: 2px;
+  background-color: white;
+  border-radius: 16px;
+  width: 6.625rem;
+  max-width: 7.847rem;
+  height: 2rem;
+  align-items: center;
+
+}
+
+.types-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  height: 100%;
+}
+
+.sight-container {
+  background-color: #3880FF;
+  height: 28px;
+  width: 4.5rem;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.selected-type-text {
+  color: white;
+  font-family: 'NunitoSans-SemiBold';
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.white-color {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(38%) saturate(2%) hue-rotate(62deg) brightness(112%) contrast(100%);
+}
+
+.flag-icon {
+  width: 14px;
+}
+.fire-icon-orange {
+  width: 14px;
+  filter: brightness(0) saturate(100%) invert(76%) sepia(67%) saturate(4165%) hue-rotate(2deg) brightness(104%) contrast(108%);
+}

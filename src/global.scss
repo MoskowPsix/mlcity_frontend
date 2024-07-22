@@ -38,6 +38,18 @@
 	src: url('./assets/fonts/Montserrat-SemiBold.ttf');
 }
 @font-face {
+  font-family: 'NunitoSans-Italic';
+  src: url('./assets/fonts/NunitoSans-Italic.ttf');
+}
+@font-face {
+  font-family: 'NunitoSans';
+  src: url('./assets/fonts/NunitoSans.ttf');
+}
+@font-face {
+  font-family: 'NunitoSans-SemiBold';
+  src: url('./assets/fonts/NunitoSans-SemiBold.ttf');
+}
+@font-face {
 	font-family: 'Montserrat-Bold';
 	src: url('./assets/fonts/Montserrat-Bold.ttf');
 }
@@ -99,6 +111,10 @@ body {
 ion-list {
     font-family: 'Montserrat-regular';
     font-size: 1rem;
+}
+
+ion-content {
+
 }
 
 ion-item-divider{
@@ -360,5 +376,6 @@ swiper-slide {
     font-family:Montserrat-SemiBold;
     font-size: 16px;
 }
+
 
 

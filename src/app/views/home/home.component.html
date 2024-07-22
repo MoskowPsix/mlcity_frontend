@@ -33,12 +33,12 @@
         <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
       </div>
       <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType !== 'sights'"></ion-progress-bar>
-     
+
     </div>
 
     <!-- Фильтры для мест -->
     <div class="sight-carusel-container">
-      
+
     </div>
 
     <!-- Лоадер карты -->
@@ -81,7 +81,7 @@
                   <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
                   <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text></ion-card-subtitle>
                 </ion-card-header>
-              
+
                 <ion-card-content>
                   <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                   <ion-skeleton-text [animated]="true"></ion-skeleton-text>
@@ -89,13 +89,13 @@
                   <ion-skeleton-text [animated]="true"></ion-skeleton-text>
                   <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
                 </ion-card-content>
-              </ion-card>      
+              </ion-card>
             </ion-col>
           </ion-row>
-        </ng-container> 
+        </ng-container>
 
           <ng-container *ngIf="modalContent || !loadModal">
-            <ion-row class="ion-justify-content-start" id="modalShowContent">
+            <ion-row class="ion-justify-content-center" id="modalShowContent">
               <ion-col *ngFor="let item of modalContent; let i = index" size="12">
                 <app-event-card [event]="item" [isSight]="stateType === 'sights' ? true : false"></app-event-card>
               </ion-col>
@@ -103,7 +103,7 @@
                 <app-event-card [event]="modalContent"></app-event-card>
               </ion-col> -->
             </ion-row>
-            
+
             <ng-container *ngIf="loadModalMore">
               <ion-row class="ion-justify-content-center">
                 <ion-spinner class="ion-margin-vertical"></ion-spinner>
@@ -140,20 +140,15 @@
  <!-- Выбор отображения на карте -->
 
  <div (click)="openModalSwitcher()" class="{{modalSwitcherClass}}">
-  <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="stateType='events'" (click)="getEventsAndSights()" (click)="eventSightHeader()" #event>
+  <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="setTypeState('events')" #event>
     <div class="{{modalSwitcherTextClass}}">События</div>
     <ion-icon name="balloon" style="min-width: 28px; min-height: 28px" class="swither-icon" color="primary"></ion-icon>
-  
+
     <!-- <img src="/assets/icons/TablerTicket.svg" class="swither-icon"> -->
   </div>
   <div class="swither-bg" #buttonActive></div>
-  <div class="swither" (click)="onSegmentChanged(sight, 2)" (click)="stateType='sights'" (click)="getEventsAndSights()" (click)="eventSightHeader()" #sight>
+  <div class="swither" (click)="onSegmentChanged(sight, 2)" (click)="setTypeState('sights')" #sight>
     <div class="{{modalSwitcherTextClass}}">Места</div>
     <img src="/assets/icons/MakiMuseum.svg" class="swither-icon">
-     
-    <!-- <ion-icon name="prism" class="swither-icon" color="primary"></ion-icon>  -->
   </div>
-  <!-- <div class="swither" (click)="onSegmentChanged(new, 3)" #new>
-    <ion-icon name="flame" class="swither-icon" color="primary"></ion-icon>
-  </div> -->
 </div>

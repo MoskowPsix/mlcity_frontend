@@ -5,16 +5,10 @@
         "route": "/home"
     },
     {
-        "title": "События",
-        "icon": "balloon",
-        "route": "/events"
+      "title": "Лента",
+      "icon": "newspaper",
+      "route": "/events"
     },
-    {
-        "title": "Места",
-        "icon": "prism",
-        "route": "/sights"
-    },
-
     {
         "title":"Избранное",
         "icon":"star",

@@ -115,6 +115,9 @@ import { ButtonRoundedComponent } from './components/materials/button-rounded/bu
 import { ListButtonComponent } from './components/materials/list-button/list-button.component'
 import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
 import { FooterItemComponent } from './components/footer/footer-item/footer-item.component'
+import { TestPageComponent } from './views/test-page/test-page.component'
+import { TypeSwitherComponent } from './components/type-swither/type-swither.component'
+import { SwitchTypeService } from './services/switch-type.service'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -206,6 +209,8 @@ registerLocaleData(localeRu, 'ru')
     UpdateVersionModalComponent,
     ModalCheckEmailComponent,
     FooterItemComponent,
+    TestPageComponent,
+    TypeSwitherComponent,
   ],
   imports: [
     BrowserModule,
@@ -246,7 +251,8 @@ registerLocaleData(localeRu, 'ru')
     DatePipe,
     RulesModalCheckService,
     TruncatePipe,
+    SwitchTypeService,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
