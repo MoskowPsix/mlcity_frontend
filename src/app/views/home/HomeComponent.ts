@@ -259,8 +259,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   setTypeState(type: string) {
     this.stateType = type
+
     this.getEventsAndSights()
     this.eventSightHeader()
+  }
+
+  changeTypeState() {
+    this.switchTypeService.changeType()
   }
   eventSightHeader() {
     if (this.stateType == 'sights') {

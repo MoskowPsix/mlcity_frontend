@@ -3,7 +3,7 @@
     "title":"Лента",
     "icon": "/assets/icons/feed.svg",
     "activeIcon":"/assets/icons/active-feed.svg",
-    "path": "/events"
+    "path": "feed"
   },
   {
     "title":"Карта",
