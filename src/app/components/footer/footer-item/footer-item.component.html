@@ -4,12 +4,10 @@
     [routerLinkActive]="'item-active'"
     class="item"
     >
-    <div>
       <img [src]="menuItem.activeIcon" *ngIf="isActive(); else activeIcon" class="icon active">
       <ng-template #activeIcon>
         <img [src]="menuItem.icon" class="icon">
       </ng-template>
-    </div>
    <span [ngClass]="{'active': isActive()}" class="title">{{ menuItem.title }}</span>
   </div>
 </div>

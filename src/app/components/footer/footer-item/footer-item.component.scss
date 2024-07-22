@@ -3,6 +3,7 @@ $font-color: #4c5861;
 .icon {
   font-size: 1.25rem;
   width: 1.25rem;
+  height: 1.25rem;
 
   filter: invert(32%) sepia(6%) saturate(1132%) hue-rotate(163deg) brightness(96%) contrast(87%);
 }
@@ -12,6 +13,7 @@ $font-color: #4c5861;
 }
 
 .title {
+  margin-top: 0.125rem;
   font-size: 0.625rem;
   font-family: 'NunitoSans-Regular';
   color: $font-color;
