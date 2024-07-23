@@ -1,4 +1,4 @@
-<div class="calendar-button-container" (click)="openDatepicker()">
+<div class="calendar-button-container" (click)="picker.open()">
   <div>
       <img *ngIf="!outlineIcon; else outline" src="/assets/icons/new_calendar.svg" class="date-picker-icon">
 
@@ -10,29 +10,18 @@
   <div class="date-text">
     1 янв. - 30 янв.
   </div>
+
+  <div class="calendar-container">
+      <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+        <input style="display: none;" matStartDate formControlName="start" placeholder="Start date">
+        <input style="display: none;" matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+  </div>
+
+
 </div>
 
-<mat-form-field appearance="fill">
-  <mat-label>Enter a date range</mat-label>
-  <mat-date-range-input [rangePicker]="picker">
-    <input matStartDate placeholder="Start date">
-    <input matEndDate placeholder="End date">
-  </mat-date-range-input>
-  <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-date-range-picker #picker></mat-date-range-picker>
-</mat-form-field>
+<p> {{ dateRange.controls['start'].value }} - {{ dateRange.controls['end'].value }}</p>
 
-<!-- <ion-datetime-button class="datetime" mode="ios" datetime="datetime"></ion-datetime-button>
 
-<ion-modal mode="ios" [isOpen]="openModal" [keepContentsMounted]="true">
-  <ng-template>
-    <ion-datetime presentation="date" id="datetime">
-      <ion-buttons slot="buttons">
-        <ion-button class="action-button">Сегодня</ion-button>
-        <ion-button class="action-button">Завтра</ion-button>
-        <ion-button class="action-button">Выходные</ion-button>
-      </ion-buttons>
-    </ion-datetime>
-  </ng-template>
-</ion-modal> -->

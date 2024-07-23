@@ -1,11 +1,18 @@
 .calendar-button-container {
   width: 8.125rem;
   height: 2rem;
+  margin-top: 50%;
+  margin-left: 50%;
   border-radius: 16px;
   background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.calendar-container {
+  position: absolute;
+
 }
 
 .date-text {

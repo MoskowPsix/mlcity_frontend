@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-calendar-button',
@@ -10,6 +11,10 @@ export class CalendarButtonComponent implements OnInit {
   openModal: boolean = true
   constructor() { }
 
+  dateRange = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null)
+  })
   openDatepicker() {
     this.openModal = !this.openModal
   }

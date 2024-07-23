@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import { LocalNotifications } from '@capacitor/local-notifications'
 
 @Injectable({
@@ -7,19 +8,21 @@ import { LocalNotifications } from '@capacitor/local-notifications'
 export class MobileNotificationService {
 
   constructor() {
-    LocalNotifications.registerActionTypes({
-      types: [
-        {
-          id: 'UPDATE_APP',
-          actions: [
-            {
-              id: 'UPDATE_APP_ACCEPT',
-              title: 'Обновить приложение',
-            },
-          ],
-        },
-      ],
-    })
+    if (Capacitor.getPlatform() == 'android' || Capacitor.getPlatform() == 'ios') {
+      LocalNotifications.registerActionTypes({
+        types: [
+          {
+            id: 'UPDATE_APP',
+            actions: [
+              {
+                id: 'UPDATE_APP_ACCEPT',
+                title: 'Обновить приложение',
+              },
+            ],
+          },
+        ],
+      })
+    }
    }
 
   checkPermission() {
