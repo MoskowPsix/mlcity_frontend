@@ -1,4 +1,11 @@
-import { animate, state, style, transition, trigger } from '@angular/animations'
+import {
+  animate,
+  keyframes,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations'
 import { Component, OnInit } from '@angular/core'
 import { Subject, takeUntil } from 'rxjs'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
@@ -8,44 +15,66 @@ import { SwitchTypeService } from 'src/app/services/switch-type.service'
   templateUrl: './type-swither.component.html',
   styleUrls: ['./type-swither.component.scss'],
   animations: [
-    trigger('openClose', [
-      // ...
-      state('open', style({
-        height: '200px',
-        opacity: 1,
-        backgroundColor: 'yellow'
-      })),
-      state('closed', style({
-        height: '100px',
-        opacity: 0.8,
-        backgroundColor: 'blue'
-      })),
-      transition('* => closed', [
-        animate('1s')
-      ]),
-      transition('* => open', [
-        animate('0.5s')
-      ]),
+    trigger('contentContainerAnimate', [
+      state('events', style({ width: '90px' })),
+      state('sights', style({ width: '110px' })),
+      transition('events <=> sights', animate('300ms ease-in-out')),
+      transition('sights <=> events', animate('300ms ease-in-out')),
     ]),
-  ]
+    trigger('textHidden', [
+      state('false', style({ opacity: 0 })),
+      state('true', style({ opacity: 1 })),
+      transition('false <=> true', animate('300ms ease-in-out')),
+    ]),
+    trigger('sightTypeAnimate', [
+      state(
+        'true',
+        style({
+          background: 'white',
+        }),
+      ),
+      state(
+        'false',
+        style({
+          background: 'var(--blue-color)',
+        }),
+      ),
+      transition('true => false', animate('1s ease-in')),
+      transition('false => true', animate('1s ease-out')),
+    ]),
+    trigger('eventTypeAnimate', [
+      state(
+        'true',
+        style({
+          background: 'white',
+        }),
+      ),
+      state(
+        'false',
+        style({
+          background: 'var(--orange-color)',
+        }),
+      ),
+      transition('true => false', animate('1s ease-out')),
+      transition('false => true', animate('1s ease-in')),
+    ]),
+  ],
 })
 export class TypeSwitherComponent implements OnInit {
   private readonly destroy$ = new Subject<void>()
-  constructor(
-    private swithTypeService: SwitchTypeService
-  ) { }
+  constructor(private switchTypeService: SwitchTypeService) {}
   type: string = ''
   sight: string = 'sights'
   event: string = 'events'
 
-
-  swithType() {
-    this.swithTypeService.changeType()
+  switchType() {
+    this.switchTypeService.changeType()
   }
-  ngOnInit() { 
-    this.swithTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      this.type = value
-    })
+  ngOnInit() {
+    this.switchTypeService.currentType
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.type = value
+      })
   }
-
 }

@@ -1,32 +1,40 @@
-$img-size: 12px;
-$padding-left-right-container: 10px; 
+$img-size: 14px;
+$padding-left-right-container: 12px; 
+$padding-left-right-container-active: 4px;
+$animate-time: 200ms;
 
 .content-container {
+  position: relative;
+  background-color: white;
   padding: 2px;
-  background-color: red;
   border-radius: 16px;
-  min-width: 106px;
-  max-width: 125.5px;
   height: 32px;
   align-items: center;
   margin: auto;
-
+  width: 125px;
 }
 
 .types-container {
+  border-radius: 16px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  height: 28px;
+  height: 100%;
+  width: 125px;
 }
 
 .sight-container {
+  transition:  background $animate-time ease-in-out;
+  margin-right: 4px;
+  height: 28px;
+  justify-content: left;
+  border-radius: 16px;
   display: flex;
   align-items: center;
-  padding-left: $padding-left-right-container;
-  padding-right: $padding-left-right-container;
-  justify-content: center;
+  padding-left: $padding-left-right-container-active;
+  padding-right: $padding-left-right-container-active;
   img {
+    transition: 0.5s ease-in-out;
     filter: var(--blue-filter);
     height: $img-size;
     width: $img-size;
@@ -34,7 +42,6 @@ $padding-left-right-container: 10px;
 }
 
 .sight-container.active {
-  background-color: var(--blue-color);
   justify-content: center; 
   align-items: center; 
   display: flex;
@@ -42,8 +49,6 @@ $padding-left-right-container: 10px;
   padding-left: $padding-left-right-container;
   padding-right: $padding-left-right-container;
   border-radius: 16px;
-  display: flex;
-  align-items: center;
   img {
     height: $img-size;
     width: $img-size;
@@ -52,13 +57,17 @@ $padding-left-right-container: 10px;
 }
 
 .event-container {
+  transition: background $animate-time ease-in-out;
+  justify-content: left;
   width: 100%;
   display: flex;
   align-items: center;
-  padding-left: $padding-left-right-container;
-  padding-right: $padding-left-right-container;
-  justify-content: center;
+  padding-left: $padding-left-right-container-active;
+  padding-right: $padding-left-right-container-active;
+  border-radius: 16px;
+  height: 28px;
   img {
+    transition: 0.5s ease-in-out;
     height: $img-size;
     width: $img-size;
     filter: var(--orange-filter);
@@ -66,16 +75,11 @@ $padding-left-right-container: 10px;
 }
 
 .event-container.active {
-  background-color: var(--orange-color);
-  justify-content: center; 
-  align-items: center; 
+  justify-content:left; 
   display: flex;
   height: 28px;
-  padding-left: 8;
-  padding-right: 8;
+  padding-right: $padding-left-right-container;
   border-radius: 16px;
-  display: flex;
-  align-items: center;
   img {
     height: $img-size;
     width: $img-size;  
@@ -83,8 +87,28 @@ $padding-left-right-container: 10px;
   }
 }
 .selected-type-text {
+  max-height: 32px;
+  animation: slid-top 0.2s forwards;
   color: white;
   font-family: 'NunitoSans-SemiBold';
-  font-size: 12px;
-  margin-left: 4px;
+  font-size: 10px;
+  margin: 4px;
+}
+
+@keyframes slid-top {
+	0% {
+		margin-left: -800px;
+	}
+	20% {
+		margin-left: -800px;
+    opacity: 0;
+	}
+	35% {
+		margin-left: 4px;
+    opacity: 0;
+	}
+	100% {
+		margin-left: 4px;
+    opacity: 1;
+	}
 }

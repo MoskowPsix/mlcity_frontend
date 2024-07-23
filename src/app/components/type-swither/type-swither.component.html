@@ -1,27 +1,17 @@
-<div (click)="swithType()" class="content-container">
-  <div class="types-container">
-    <div [class.active]="type === sight" class="event-container">
+<div (click)="switchType()" class="content-container">
+  <div [@contentContainerAnimate]="type" class="types-container">
+    <div [@eventTypeAnimate]="type === event" class="event-container" [class.active]="type === sight">
       <img [class.active]="type === sight" class="fire-icon-orange" src="/assets/icons/fire.svg">
       <p *ngIf="type === sight" class="selected-type-text">
         События
       </p>
     </div>
 
-    <div [class.active]="type == event" class="sight-container">
-      <img [class.active]="type == sight" class="flag-icon white-color" src="/assets/icons/flag.svg">
-      <p *ngIf="type === event" class="selected-type-text">
+    <div [@sightTypeAnimate]="type === sight" [class.active]="type === event" class="sight-container">
+      <img [class.active]="type === event" class="flag-icon white-color" src="/assets/icons/flag.svg">
+      <p  *ngIf="type === event" class="selected-type-text">
         Места
       </p>
     </div>
   </div>
 </div>
-
-<!-- <div style="width: 87.55px; padding: 10px; background: #F99011; border-radius: 100px; justify-content: center; align-items: center; gap: 5px; display: flex">
-  <div style="width: 11.55px; height: 14px; background: white"></div>
-  <div style="color: white; font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 12px; word-wrap: break-word">События</div>
-</div>
-<div style="width: 32px; padding: 10px; border-radius: 100px; justify-content: center; align-items: center; gap: 5px; display: flex">
-  <div style="width: 12px; height: 13px; flex-direction: column; justify-content: center; align-items: center; display: inline-flex">
-    <div style="width: 12px; height: 13px; background: #3880FF; border: 1.20px #3880FF solid"></div>
-  </div>
-</div> -->
