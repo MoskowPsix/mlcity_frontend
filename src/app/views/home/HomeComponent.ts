@@ -469,7 +469,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           e.get('target').options.set(
             'iconContentLayout',
             ymaps.templateLayoutFactory.createClass(
-              `<div class="marker active"><img src="${this.activeIcoLink}"/></div>`,
+              `<div class="marker active"> <img class="active" src="/assets/icons/ticket.svg"> </div>`,
             ),
           )
         }

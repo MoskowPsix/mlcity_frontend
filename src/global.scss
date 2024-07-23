@@ -147,6 +147,7 @@ ion-content{
 }
 
 .marker {
+    transition: all 1s ease;
     position: absolute;
     width: 36px;
     overflow: hidden;
@@ -173,8 +174,8 @@ ion-content{
 
 .marker.now {
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border: 1px solid white;
   box-shadow: -2px 2px 2px #aaaaaa;
   border-radius: 50% 50% 50% 0;
@@ -208,21 +209,31 @@ ion-content{
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
+@keyframes fadeIn {
+  0% {
+    width: 36px;
+    height: 36px;
+  }
+
+  50% {
+    width: 40px;
+    height: 40px;
+  }
+
+  100% {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 .marker.active {
-    width: 60px;
-    height: 60px;
-    border: 4px solid #f902fd;
-    margin:-40px 0px 0px -20px;
+  animation: fadeIn 3s infinite;
 }
 
 .marker.active > img {
-  width: 75%;
-  height: 75%;
-  position: absolute;
-  top: 50%;
-  left: 53%;
-  filter: invert(63%) sepia(65%) saturate(6812%) hue-rotate(205deg) brightness(100%) contrast(103%);
-  transform: translate(-50%, -50%) rotate(45deg);
+  width: 24px;
+  height: 18px;
+  transform: rotate(45deg);
 }
 
 .marker:after{
