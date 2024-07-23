@@ -148,26 +148,39 @@ ion-content{
 
 .marker {
     position: absolute;
-    width: 40px;
-    height: 40px;
-    border: 4px solid #008aed;
-    box-shadow: -2px 2px 2px #aaaaaa;
-    border-radius: 50% 50% 50% 0;
+    width: 36px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    border: 2px solid white;
+    border-radius: 100%;
     transform: rotate(-45deg);
-    background: #fff;
+    background: #3880FF;
     margin:-15px 0px 0px -10px;
 }
 
+.marker > img {
+  width: 16px;
+  height: 14px;
+  transform: rotate(45deg);
+}
+
+.marker-icon {
+  background-image: url('/assets/icons/ticket.svg');
+}
+
 .marker.now {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    border: 4px solid #008aed;
-    box-shadow: -2px 2px 2px #aaaaaa;
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    background: #fff;
-    margin:-15px 0px 0px -10px;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 1px solid white;
+  box-shadow: -2px 2px 2px #aaaaaa;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: #3880FF;
+  margin:-15px 0px 0px -10px;
 }
 
 .marker.now:after{
@@ -227,16 +240,7 @@ ion-content{
     box-shadow: 1px 1px 1px 1px #89849b;
     animation-delay: 1.1s;
 }
-.marker > img {
-    width: 75%;
-    height: 75%;
-    position: absolute;
-    top: 50%;
-    left: 53%;
-    filter: invert(63%) sepia(65%) saturate(6812%) hue-rotate(205deg) brightness(100%) contrast(103%);
-    transform: translate(-50%, -50%) rotate(45deg);
-    // padding: 7px 0 0 7px;
-}
+
 
 
 swiper-container {

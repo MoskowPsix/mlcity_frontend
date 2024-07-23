@@ -32,7 +32,6 @@ import { ISight } from 'src/app/models/sight'
 import { SightsService } from 'src/app/services/sights.service'
 import { PlaceService } from 'src/app/services/place.service'
 import { IPlace } from 'src/app/models/place'
-import { Metrika } from 'ng-yandex-metrika'
 import { NavigationEnd, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { filter } from 'rxjs/operators'
@@ -87,6 +86,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
 
+  clustererOptions: ymaps.IClustererOptions = {
+    preset: 'islands#greenClusterIcons'
+  }
   map!: YaReadyEvent<ymaps.Map>
   placemarks: ymaps.Placemark[] = []
   placemarks_sights: ymaps.Placemark[] = []
@@ -176,7 +178,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     private placeService: PlaceService,
     private ngZone: NgZone,
-    private metrika: Metrika,
     private router: Router,
     private location: Location,
     private titleService: Title,
@@ -188,15 +189,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       'VOKRUG - Мероприятия и достопремечательности вокруг вас',
     )
     let prevPath = this.location.path()
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const newPath = location.path()
-        this.metrika.hit(newPath, {
-          referer: prevPath,
-        })
-        prevPath = newPath
-      })
   }
 
   // при клике по кнопке радиуча (5 10 15 20 25)
@@ -733,19 +725,19 @@ export class HomeComponent implements OnInit, OnDestroy {
         let marker
 
         if (icoLink.length > 0) {
-          marker = `<div style="border-color: #7df088;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`
+          marker = `<div class="marker"> <img src="/assets/icons/ticket.svg"> </div>`
         } else {
-          marker = `<div style="border-color: #7df088;" class="marker"><img style="color:#008aed;"/></div>`
+          marker = `<div class="marker"> <img src="/assets/icons/ticket.svg"> </div>`
         }
 
         placemark = new ymaps.Placemark(
           [item.latitude, item.longitude],
           {},
           {
+            preset: "islands#circleIcon",
             balloonContent: item,
             balloonAutoPan: false,
-            // С иконкой
-            // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #7df088;" class="marker"><img src="${icoLink}"/></div>`)
+
             iconContentLayout: ymaps.templateLayoutFactory.createClass(marker),
           },
         )
