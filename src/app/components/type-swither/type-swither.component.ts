@@ -16,8 +16,8 @@ import { SwitchTypeService } from 'src/app/services/switch-type.service'
   styleUrls: ['./type-swither.component.scss'],
   animations: [
     trigger('contentContainerAnimate', [
-      state('events', style({ width: '90px' })),
-      state('sights', style({ width: '110px' })),
+      state('sights', style({ width: '90px' })),
+      state('events', style({ width: '110px' })),
       transition('events <=> sights', animate('300ms ease-in-out')),
       transition('sights <=> events', animate('300ms ease-in-out')),
     ]),
@@ -69,6 +69,7 @@ export class TypeSwitherComponent implements OnInit {
 
   switchType() {
     this.switchTypeService.changeType()
+    console.log(this.switchTypeService.currentType.value)
   }
   ngOnInit() {
     this.switchTypeService.currentType

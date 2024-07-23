@@ -9,7 +9,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core'
-import { YaReadyEvent } from 'angular8-yandex-maps'
+import { AngularYandexMapsModule, YaReadyEvent } from 'angular8-yandex-maps'
 import {
   catchError,
   EMPTY,
@@ -182,7 +182,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private loadingService: LoadingService,
     private locationService: LocationService,
-    private switchTypeService: SwitchTypeService
+    private switchTypeService: SwitchTypeService,
   ) {
     this.titleService.setTitle(
       'VOKRUG - Мероприятия и достопремечательности вокруг вас',
@@ -315,12 +315,20 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   async onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>): Promise<void> {
     this.map = { target, ymaps }
-
+    let color =
+      this.switchTypeService.currentType.value === 'sights'
+        ? '#3880FF'
+        : '#f7ab31'
     // Создаем и добавляем круг
     this.CirclePoint = new ymaps.Circle(
       [[11, 11], 1000 * this.radius],
       {},
-      { fillOpacity: 0.15, draggable: false },
+      {
+        fillOpacity: 0.8,
+        draggable: false,
+        strokeColor: color,
+        fillColor: color,
+      },
     )
     target.geoObjects.add(this.CirclePoint)
 
@@ -354,7 +362,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.modalButtonLoader = true
         this.CirclePoint.geometry?.setRadius(this.radius * 15)
         this.CirclePoint.options.set('fillOpacity', 0.7)
-        this.CirclePoint.options.set('fillColor', '#474A51')
+        this.CirclePoint.options.set('fillColor', color)
         this.CirclePoint.options.set('strokeWidth', 0)
         this.myGeo.options.set('iconImageOffset', [-30, -62])
       }
@@ -378,7 +386,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (!this.navigationService.appFirstLoading.value) {
         this.CirclePoint.geometry?.setRadius(this.radius * 1000)
         this.myGeo.options.set('iconImageOffset', [-30, -55])
-        this.CirclePoint.options.set('fillColor')
+        this.CirclePoint.options.set('fillColor', color)
         this.CirclePoint.options.set('fillOpacity', 0.15)
         this.CirclePoint.options.set('strokeWidth')
         this.getEventsAndSights()
@@ -414,6 +422,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     )
   }
 
+  createCluster() {
+    let color =
+      this.switchTypeService.currentType.value === 'sights'
+        ? 'var(--blue-color)'
+        : 'var(--orange-color)'
+    return ymaps.templateLayoutFactory.createClass(
+      `<div class="cluster" style="background-color: ${color};">{{ properties.geoObjects.length }}</div>`,
+    )
+  }
+
   async setPlacemarksAndClusters() {
     let eventsIds: any[] = []
     let sightIds: any[] = []
@@ -422,6 +440,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .geoQuery(this.placemarks)
       .searchInside(this.CirclePoint)
       .clusterize({
+        clusterIconLayout: this.createCluster(),
         clusterDisableClickZoom: true,
         hasBalloon: false,
         clusterBalloonPanelMaxMapArea: 0,
@@ -445,7 +464,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.activeClaster = e.get('target')
               e.get('target').options.set(
                 'preset',
-                'islands#invertedPinkClusterIcons',
+                'islands#invertedVioletClusterIcons',
               )
             })
         } else {
@@ -728,9 +747,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         let marker
 
         if (icoLink.length > 0) {
-          marker = `<div style="border-color: #7df088;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`
+          marker = `<div style="border-color: white; background-color: var(--orange-color);" class="marker"><img style="filter: invert(100%) sepia(8%) saturate(7472%) hue-rotate(199deg) brightness(103%) contrast(114%);" src="${icoLink}"/></div>`
         } else {
-          marker = `<div style="border-color: #7df088;" class="marker"><img style="color:#008aed;"/></div>`
+          marker = `<div style="border-color: white; background-color: var(--orange-color);" class="marker"><img style="filter: invert(100%) sepia(8%) saturate(7472%) hue-rotate(199deg) brightness(103%) contrast(114%);"/></div>`
         }
 
         placemark = new ymaps.Placemark(
@@ -749,9 +768,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         let marker
         let icoLink = `${this.host}:${this.port}${item.types[0].ico}`
         if (item.types[0].ico.length > 0) {
-          marker = `<div style="border-color: #6574fc;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`
+          marker = `<div style="border-color: white; background-color: var(--blue-color);" class="marker"><img style="filter: invert(100%) sepia(8%) saturate(7472%) hue-rotate(199deg) brightness(103%) contrast(114%);" src="${icoLink}"/></div>`
         } else {
-          marker = `<div style="border-color: #6574fc;" class="marker"></div>`
+          marker = `<div style="border-color: white; background-color: var(--blue-color);" class="marker"></div>`
         }
         placemark = new ymaps.Placemark(
           [item.latitude, item.longitude],
@@ -992,7 +1011,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
         if (!value && this.activeClaster) {
           // убираем активный класс у кластера при закрытие модалки
-          this.activeClaster.options.set('preset', '')
+          this.activeClaster.options.set('preset')
           this.setMapData()
         }
         this.cdr.detectChanges()
@@ -1004,8 +1023,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.modalEventRadiusShowOpen = value
         this.cdr.detectChanges()
       })
-
-
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
     this.filterService.changeFilter
@@ -1035,7 +1052,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.eventTypeId = value[0]
       })
 
-    this.switchTypeService.currentType.pipe().subscribe((value:string) => {
+    this.switchTypeService.currentType.pipe().subscribe((value: string) => {
+      let color = value === 'sights' ? '#3880FF' : '#f7ab31'
+      this.CirclePoint.options.set('fillColor', color)
+      this.CirclePoint.options.set('strokeColor', color)
       this.setTypeState(value)
     })
     window.addEventListener('scroll', this.nextPageModal, true)

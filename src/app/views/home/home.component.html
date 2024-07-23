@@ -8,12 +8,13 @@
       [zoom]="zoom"
       [center]="[0,0]"
       [state]="{controls: ['zoomControl']}"
+      [clusterer]
       [options]="{
         yandexMapDisablePoiInteractivity: true,
         minZoom:minZoom,
         suppressMapOpenBlock: true,
         suppressObsoleteBrowserNotifier: true,
-        autoFitToViewport: 'always'
+        autoFitToViewport: 'always',
       }"
     >
     </ya-map>
