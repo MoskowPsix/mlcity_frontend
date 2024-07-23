@@ -16,8 +16,7 @@
     "prettier:fix": "prettier --config ./.prettierrc --write \"src/{app,environments}/**/*{.ts,.js,.json,.css,.scss}\"",
     "generate-sitemap": "sitemap-generator https://mlcity.ru/",
     "lint-css": "stylelint src/**/*.scss",
-
-    "capacitor:build:after":"echo plat $CAPACITOR_PLATFORM_NAME"
+    "capacitor:build:after": "echo plat $CAPACITOR_PLATFORM_NAME"
   },
   "private": true,
   "dependencies": {

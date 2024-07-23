@@ -120,6 +120,8 @@ import { TypeSwitherComponent } from './components/type-swither/type-swither.com
 import { SwitchTypeService } from './services/switch-type.service'
 import { CalendarButtonComponent } from './components/calendar/calendar-button/calendar-button.component'
 import { CalendarComponent } from './components/calendar/calendar.component'
+import { MatInputModule } from '@angular/material/input'
+
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -231,6 +233,7 @@ registerLocaleData(localeRu, 'ru')
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
