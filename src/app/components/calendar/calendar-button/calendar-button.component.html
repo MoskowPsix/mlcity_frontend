@@ -1,0 +1,28 @@
+<div class="calendar-button-container" (click)="openDatepicker()">
+  <div>
+      <img *ngIf="!outlineIcon; else outline" src="/assets/icons/new_calendar.svg" class="date-picker-icon">
+
+      <ng-template #outline>
+        <img src="/assets/icons/new_calendar-outline.svg" class="date-picker-icon">
+      </ng-template>
+  </div>
+
+  <div class="date-text">
+    1 янв. - 30 янв.
+  </div>
+</div>
+
+<ion-datetime-button class="datetime" mode="ios" datetime="datetime"></ion-datetime-button>
+
+<ion-modal mode="ios" [isOpen]="openModal" [keepContentsMounted]="true">
+  <ng-template>
+    <ion-datetime presentation="date" multiple="true" id="datetime">
+      <span slot="title">Выберите даты</span>
+      <ion-buttons slot="buttons">
+        <ion-button class="action-button">Сегодня</ion-button>
+        <ion-button class="action-button">Завтра</ion-button>
+        <ion-button class="action-button">Выходные</ion-button>
+      </ion-buttons>
+    </ion-datetime>
+  </ng-template>
+</ion-modal>

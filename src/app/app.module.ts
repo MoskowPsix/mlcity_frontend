@@ -118,6 +118,8 @@ import { FooterItemComponent } from './components/footer/footer-item/footer-item
 import { TestPageComponent } from './views/test-page/test-page.component'
 import { TypeSwitherComponent } from './components/type-swither/type-swither.component'
 import { SwitchTypeService } from './services/switch-type.service'
+import { CalendarButtonComponent } from './components/calendar/calendar-button/calendar-button.component'
+import { CalendarComponent } from './components/calendar/calendar.component'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -211,6 +213,8 @@ registerLocaleData(localeRu, 'ru')
     FooterItemComponent,
     TestPageComponent,
     TypeSwitherComponent,
+    CalendarButtonComponent,
+    CalendarComponent,
   ],
   imports: [
     BrowserModule,
