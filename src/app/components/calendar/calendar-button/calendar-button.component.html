@@ -12,18 +12,8 @@
   </div>
 </div>
 
-<mat-form-field appearance="fill">
-  <mat-label>Enter a date range</mat-label>
-  <mat-date-range-input [rangePicker]="picker">
-    <input matStartDate placeholder="Start date">
-    <input matEndDate placeholder="End date">
-  </mat-date-range-input>
-  <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-date-range-picker #picker></mat-date-range-picker>
-</mat-form-field>
 
-<!-- <ion-datetime-button class="datetime" mode="ios" datetime="datetime"></ion-datetime-button>
+<ion-datetime-button class="datetime" mode="ios" datetime="datetime"></ion-datetime-button>
 
 <ion-modal mode="ios" [isOpen]="openModal" [keepContentsMounted]="true">
   <ng-template>
@@ -35,4 +25,4 @@
       </ion-buttons>
     </ion-datetime>
   </ng-template>
-</ion-modal> -->
+</ion-modal>
