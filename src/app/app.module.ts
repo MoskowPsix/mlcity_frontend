@@ -98,7 +98,6 @@ import { EdditSightComponent } from './views/cabinet/my-sights/edit-sight/eddit-
 import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.component'
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component'
 import { TypesComponent } from './components/types/types.component'
-import { MetrikaModule } from 'ng-yandex-metrika'
 import { BackButtonComponent } from './components/back-button/back-button.component'
 import { NgxSliderModule } from '@angular-slider/ngx-slider'
 import { CollapsedTextComponent } from './components/collapsed-text/collapsed-text.component'
@@ -126,12 +125,6 @@ const mapConfig: YaConfig = {
   lang: 'ru_RU',
 }
 
-const metricaConfig: any = {
-  id: environment.YANDEX_METRICA_ON ? 96112606 : 0,
-  clickmap: true,
-  trackLinks: true,
-  accurateTrackBounce: true,
-}
 
 registerLocaleData(localeRu, 'ru')
 
@@ -220,7 +213,6 @@ registerLocaleData(localeRu, 'ru')
     AngularYandexMapsModule.forRoot(mapConfig),
     HttpClientModule,
     NgxSliderModule,
-    MetrikaModule.forRoot(metricaConfig),
     HttpClientJsonpModule,
     ReactiveFormsModule,
     MaskitoModule,

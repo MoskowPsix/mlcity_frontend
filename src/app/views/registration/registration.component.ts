@@ -25,7 +25,6 @@ import { IonModal } from '@ionic/angular'
 // import { MessagesErrors } from 'src/app/enums/messages-register';
 import internal from 'stream'
 import { Location } from '@angular/common'
-import { Metrika } from 'ng-yandex-metrika'
 import { environment } from 'src/environments/environment'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
@@ -99,7 +98,6 @@ export class RegistrationComponent implements OnInit {
     private userService: UserService,
     private tokenService: TokenService,
     private router: Router,
-    private metrika: Metrika,
     private location: Location,
     private titleService: Title,
     private metaService: Meta,
@@ -109,18 +107,6 @@ export class RegistrationComponent implements OnInit {
       name: 'description',
       content: 'Регистрация на сайте.',
     })
-
-    let prevPath = this.location.path()
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const newPath = location.path()
-        this.metrika.hit(newPath, {
-          referer: prevPath,
-          callback: () => {},
-        })
-        prevPath = newPath
-      })
   }
 
   ngOnInit() {

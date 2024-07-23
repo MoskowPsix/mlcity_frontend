@@ -33,18 +33,13 @@ import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { NavigationService } from 'src/app/services/navigation.service'
 import { LocationService } from 'src/app/services/location.service'
 import { register } from 'swiper/element'
-import { time } from 'console'
-import { throws } from 'assert'
-import { Metrika } from 'ng-yandex-metrika'
-import { NavigationEnd, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
-import { IonContent } from '@ionic/angular'
-import { ViewportScroller } from '@angular/common'
 import { BehaviorSubject } from 'rxjs'
 import { MapService } from 'src/app/services/map.service'
 import { Capacitor } from '@capacitor/core'
+import { Router } from '@angular/router'
 
 register()
 
@@ -114,7 +109,6 @@ export class EventsComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService,
     private locationService: LocationService,
-    private metrika: Metrika,
     private router: Router,
     private location: Location,
     private titleService: Title,
@@ -139,7 +133,7 @@ export class EventsComponent implements OnInit, OnDestroy {
       })
   }
 
-  
+
   setDate(event: any) {
     this.filterService.setStartDateTolocalStorage(event.dateStart)
     this.filterService.setEndDateTolocalStorage(event.dateEnd)

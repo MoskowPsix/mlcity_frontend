@@ -16,7 +16,6 @@ import {
   EMPTY,
   filter,
 } from 'rxjs'
-import { ISight } from 'src/app/models/sight'
 import { SightsService } from 'src/app/services/sights.service'
 import { IonicSlides } from '@ionic/angular'
 import { register } from 'swiper/element/bundle'
@@ -26,13 +25,9 @@ import { MessagesAuth } from 'src/app/enums/messages-auth'
 import { ToastService } from 'src/app/services/toast.service'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { AuthService } from 'src/app/services/auth.service'
-// import { Swiper } from 'swiper/types';
 import { Location } from '@angular/common'
-import { Metrika } from 'ng-yandex-metrika'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
-import { HelpersService } from 'src/app/services/helpers.service'
-import { ContentObserver } from '@angular/cdk/observers'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 
 register()
@@ -74,23 +69,12 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private toastService: ToastService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
-    private metrika: Metrika,
     private location: Location,
     private router: Router,
     private titleService: Title,
     private metaService: Meta,
     private queryBuilderService: QueryBuilderService,
   ) {
-    let prevPath = this.location.path()
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const newPath = location.path()
-        this.metrika.hit(newPath, {
-          referer: prevPath,
-        })
-        prevPath = newPath
-      })
   }
 
   formatingTime() {

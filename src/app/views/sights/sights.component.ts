@@ -26,7 +26,6 @@ import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { NavigationService } from 'src/app/services/navigation.service'
 import { SightsService } from 'src/app/services/sights.service'
 import { LocationService } from 'src/app/services/location.service'
-import { Metrika } from 'ng-yandex-metrika'
 import { NavigationEnd, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { Title } from '@angular/platform-browser'
@@ -78,7 +77,6 @@ export class SightsComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService,
     private locationService: LocationService,
-    private metrika: Metrika,
     private router: Router,
     private location: Location,
     private titleService: Title,
@@ -100,18 +98,6 @@ export class SightsComponent implements OnInit, OnDestroy {
               content: 'Достопримечательности вашего города тут',
             })
           })
-      })
-
-    let prevPath = this.location.path()
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const newPath = location.path()
-        this.metrika.hit(newPath, {
-          referer: prevPath,
-          callback: () => {},
-        })
-        prevPath = newPath
       })
   }
 

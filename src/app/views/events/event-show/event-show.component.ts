@@ -21,7 +21,6 @@ import {
   filter,
   timeInterval,
 } from 'rxjs'
-import { IEvent } from 'src/app/models/event'
 import { EventsService } from 'src/app/services/events.service'
 import { IonicSlides } from '@ionic/angular'
 import { register } from 'swiper/element/bundle'
@@ -31,12 +30,8 @@ import { ToastService } from 'src/app/services/toast.service'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { AuthService } from 'src/app/services/auth.service'
 import { DomSanitizer } from '@angular/platform-browser'
-import { IPlace } from 'src/app/models/place'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
-import { PlaceService } from 'src/app/services/place.service'
 import { Location } from '@angular/common'
-import { Metrika } from 'ng-yandex-metrika'
-import { HelpersService } from 'src/app/services/helpers.service'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
 import { UserService } from 'src/app/services/user.service'
@@ -62,7 +57,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
-  
+
 
   user?: any
   eventId?: number
@@ -93,7 +88,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
     private queryBuilderService: QueryBuilderService,
-    private metrika: Metrika,
     private location: Location,
     public router: Router,
     private titleService: Title,
@@ -103,16 +97,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private locationService: LocationService,
     private mapService: MapService,
   ) {
-    let prevPath = this.location.path()
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const newPath = location.path()
-        this.metrika.hit(newPath, {
-          referer: prevPath,
-        })
-        prevPath = newPath
-      })
   }
 
   getEvent() {

@@ -18,7 +18,6 @@ import { MessagesAuth } from 'src/app/enums/messages-auth'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { ActionSheetController } from '@ionic/angular'
 import { Location } from '@angular/common'
-import { Metrika } from 'ng-yandex-metrika'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
 import { RecoveryPasswordService } from 'src/app/services/recovery-password.service'
@@ -66,7 +65,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private actionSheetCtrl: ActionSheetController,
-    private metrika: Metrika,
     private location: Location,
     private titleService: Title,
     private metaService: Meta,
@@ -77,19 +75,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       name: 'description',
       content: 'Вход на сайт.',
     })
-
-    // let prevPath = this.location.path();
-    // this.router
-    // .events
-    //   .pipe(filter(event => (event instanceof NavigationEnd)))
-    //   .subscribe(() => {
-    //     const newPath = location.path();
-    //     this.metrika.hit(newPath, {
-    //       referer: prevPath,
-    //       callback: () => { console.log('hit end'); }
-    //     });
-    //     prevPath = newPath;
-    //   });
   }
 
   loginPhone() {
