@@ -26,7 +26,7 @@ export class SettingsComponent implements OnInit {
     private toastService: ToastService,
     private loadingService: LoadingService,
     private authService: AuthService,
-    private navigationService:NavigationService
+    private navigationService: NavigationService,
   ) {}
 
   private readonly destroy$ = new Subject<void>()
@@ -36,10 +36,12 @@ export class SettingsComponent implements OnInit {
   formData: FormData = new FormData()
   avatar: string = ''
   avatarLoad: boolean = false
-  public email:boolean = this.navigationService.modalAuthEmail.value
+  public email: boolean = this.navigationService.modalAuthEmail.value
+  public modalEmail: boolean = true
   avatarUrl!: string
   passwordChange: boolean = false
   passwordError: string = ''
+  public step: number = 0
   public new_name: FormControl = new FormControl('')
   previewPhotoUrl!: string
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
@@ -115,8 +117,8 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  checkEmail(){
-    this.navigationService.modalAuthEmail.pipe().subscribe(()=>{
+  checkEmail() {
+    this.navigationService.modalAuthEmail.pipe().subscribe(() => {
       this.email = this.navigationService.modalAuthEmail.value
     })
   }
@@ -160,7 +162,12 @@ export class SettingsComponent implements OnInit {
     }
     reader.readAsDataURL(file)
   }
-
+  closeModal() {
+    this.modalEmail = false
+    setTimeout(() => {
+      this.router.navigate(['/home'])
+    }, 10)
+  }
   ngOnInit() {
     this.checkEmail()
     this.isMobile = this.platform.is('mobile')

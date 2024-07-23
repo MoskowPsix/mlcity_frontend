@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core'
 import { catchError, delay, EMPTY, map, of, Subject, takeUntil } from 'rxjs'
 import { NavigationService } from 'src/app/services/navigation.service'
 import { MaskitoOptions, MaskitoElementPredicate } from '@maskito/core'
@@ -27,10 +34,13 @@ export class ModalCheckEmailComponent implements OnInit {
   private readonly destroy$ = new Subject<void>()
   public emailForm!: FormGroup
   @Input() openModal!: boolean
+  @Output() closeModalEmitter = new EventEmitter()
   public userEmail: boolean = false
   public userEmailConfirm: boolean = false
   public codeFocused!: boolean
-
+  public currentStep: number = 0
+  
+  public leftPosotion: number = 0
   ngAfterViewInit() {
     this.codeFocused = true
   }
@@ -39,7 +49,26 @@ export class ModalCheckEmailComponent implements OnInit {
     this.userEmail = this.userService.getUserFromLocalStorage().email !== null
     this.userEmailConfirm =
       this.userService.getUserFromLocalStorage().email_verified_at !== null
-  
+  }
+  submitCode(event: any) {
+    console.log(event)
+  }
+  nextStep(step: HTMLElement) {
+    console.log(step)
+    this.leftPosotion += 100
+    step.style.transition = '0.2s all'
+    this.currentStep++
+    step.style.marginLeft = `-${this.leftPosotion}vw`
+  }
+  backStep(step: HTMLElement) {
+    this.leftPosotion -= 100
+    console.log(this.leftPosotion)
+    step.style.transition = '0.2s all'
+    this.currentStep--
+    step.style.marginLeft = `-${this.leftPosotion}vw`
+  }
+  closeModal() {
+    this.closeModalEmitter.emit()
   }
   ngOnInit(): void {
     this.checkEmail()

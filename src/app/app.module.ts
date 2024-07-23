@@ -24,6 +24,7 @@ import { AppComponent } from './app.component'
 import { EventsComponent } from './views/events/events.component'
 import { CabinetComponent } from './views/cabinet/cabinet.component'
 import { HomeComponent } from './views/home/HomeComponent'
+import { EmailConfirmComponent } from './views/cabinet/email-confirm/email-confirm.component'
 import { LoginComponent } from './views/login/login.component'
 import { HeaderComponent } from './components/header/header.component'
 import { SidebarComponent } from './components/sidebar/sidebar.component'
@@ -115,6 +116,7 @@ import { StandartButtonLongComponent } from './components/materials/standart-but
 import { ButtonRoundedComponent } from './components/materials/button-rounded/button-rounded.component'
 import { ListButtonComponent } from './components/materials/list-button/list-button.component'
 import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
+import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -154,6 +156,7 @@ registerLocaleData(localeRu, 'ru')
     MenuAuthSidebarComponent,
     FooterComponent,
     UserSectionComponent,
+    EmailConfirmComponent,
     ExitButtonComponent,
     AboutComponent,
     NotFoundComponent,
@@ -202,6 +205,7 @@ registerLocaleData(localeRu, 'ru')
     CollapsedTextComponent,
     ContactsComponent,
     PrivacyComponent,
+    TestIframeComponent,
     DropDownButtonComponent,
     MiniCardComponent,
     UpdateVersionModalComponent,

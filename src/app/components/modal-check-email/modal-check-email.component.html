@@ -68,32 +68,7 @@
   </ion-modal> -->
   <ion-modal backdropDismiss="false" [isOpen]="openModal">
     <ng-template>
-      <div>
-        <div class="header-plug">
-          <div class="header-tools">
-              <app-back-button></app-back-button>
-              <span>Подтвердите почту</span>
-              <div style="opacity: 0; pointer-events: none;"><app-circle-button></app-circle-button></div>
-          </div>
-        </div>
-
-        <div class="content">
-          <div class="content-step-fist" *ngIf="!userEmail">
-            <span class="email-add-text">Не смогли найти вашу почту, пожалуйста введите данные ниже</span>
-            <form class="email-form" [formGroup]="emailForm" action="">  
-              <app-standart-input  [label]="'Электронная почта'" [control] = "emailForm.get('email')" type="email"></app-standart-input>
-            </form>
-            <app-standart-button  buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button>
-          </div>
-          <div class="content-step-fist" *ngIf="userEmail && !userEmailConfirm">
-            <span class="email-add-text">Вам на почту был отпрвлен код, пожалуйста введите его ниже</span>
-            <form class="email-form" [formGroup]="emailForm" action=""> 
-              <app-code-input *ngIf="codeFocused" [setFocused]="codeFocused"></app-code-input>
-            </form>
-            <app-standart-button  buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button>
-          </div>
-        </div>
-      </div>
+ 
   
     </ng-template>
   </ion-modal>

@@ -57,12 +57,27 @@
 	src: url('./assets/fonts/Montserrat-Light.ttf');
 }
 
+@font-face {
+    font-family: "NunitoSans-SemiBold";
+    src: url('/assets/fonts/static/NunitoSans_7pt-SemiBold.ttf');
+}
+@font-face {
+    font-family: "NunitoSans-Regular";
+    src: url('/assets/fonts/static/NunitoSans_7pt-Regular.ttf');
+}
 
+
+
+:root{
+    --font-bold:'NunitoSans-SemiBold';
+    --font-regular:'NunitoSans-Regular';
+    --font-color:#4C5861;
+}
 
 ion-content {
   // overwrite inline styles
   // --offset-bottom: 85%!important;
-  --overflow: hidden;
+  --overflow:auto;
   overflow: auto;
   --background: #FAFAFA;
 
@@ -355,5 +370,4 @@ input::-webkit-inner-spin-button {
     font-family:Montserrat-SemiBold;
     font-size: 16px;
 }
-
 
