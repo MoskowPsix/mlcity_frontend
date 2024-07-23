@@ -357,6 +357,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
 
       if (!this.navigationService.appFirstLoading.value) {
+        color =
+          this.switchTypeService.currentType.value === 'sights'
+            ? '#3880FF'
+            : '#f7ab31'
         this.eventsLoading = true
         this.sightsLoading = true
         this.modalButtonLoader = true
