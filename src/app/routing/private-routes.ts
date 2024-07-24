@@ -95,7 +95,7 @@ export const privateRoutes: Routes = [
   {
     path: 'cabinet/events/create',
     component: EventCreateComponent,
-    canActivate: [AuthGuard, EmailConfirmGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: 'cabinet/sights/:id/edit',

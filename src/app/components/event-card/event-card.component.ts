@@ -10,6 +10,8 @@ import {
   ChangeDetectionStrategy,
   NgZone,
 } from '@angular/core'
+
+import { DatePipe } from '@angular/common'
 import {
   catchError,
   delay,
@@ -57,6 +59,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
     private helpers: HelpersService,
+    private datePipe: DatePipe,
   ) {}
 
   private readonly destroy$ = new Subject<void>()
@@ -84,7 +87,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   swiperModules = [IonicSlides]
 
   userAuth: boolean = false
-
+  formatedStartDate!: any
+  formatedEndDate!: any
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
 
@@ -316,26 +320,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       for (let i = 0; i < this.event.price.length; i++) {
         this.prices.push(Number(this.event.price[i].cost_rub))
       }
+      console.log(this.prices)
       this.minPrice = Math.min(...this.prices)
       this.maxPrice = Math.max(...this.prices)
-    }
-  }
-
-  ngOnInit() {
-    this.userAuth = this.authService.getAuthState()
-    this.findPrice()
-    this.slugName = this.helpers.translit(this.event.name)
-    this.startLikesCount = this.event.likes
-      ? this.event.likes.vk_count + this.event.likes.local_count
-      : 0
-    this.favorite = this.event.favorites_users_exists!
-    this.like = this.event.liked_users_exists!
-    // window.addEventListener('scrollend', this.scrollEvent, true);
-
-    //КИдаем запрос в ВК чтобы обновить лайки и лайкнуть у нас если юзер лайкнул в ВК
-    if (this.event.vk_group_id && this.event.vk_post_id) {
-      this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
-      this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
+      console.log(this.minPrice, this.maxPrice)
     }
   }
 
@@ -457,5 +445,33 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     //console.log(this.event.id)
     this.destroy$.next()
     this.destroy$.complete()
+  }
+  ngOnInit() {
+    this.formatedStartDate = this.datePipe.transform(
+      this.event.date_start,
+      'dd-MMM',
+    )
+ 
+    this.formatedEndDate = this.datePipe.transform(
+      this.event.date_end,
+      'dd-MMM',
+    )
+
+    console.log(this.event)
+    this.userAuth = this.authService.getAuthState()
+    this.findPrice()
+    this.slugName = this.helpers.translit(this.event.name)
+    this.startLikesCount = this.event.likes
+      ? this.event.likes.vk_count + this.event.likes.local_count
+      : 0
+    this.favorite = this.event.favorites_users_exists!
+    this.like = this.event.liked_users_exists!
+    // window.addEventListener('scrollend', this.scrollEvent, true);
+
+    //КИдаем запрос в ВК чтобы обновить лайки и лайкнуть у нас если юзер лайкнул в ВК
+    if (this.event.vk_group_id && this.event.vk_post_id) {
+      this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
+      this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
+    }
   }
 }
