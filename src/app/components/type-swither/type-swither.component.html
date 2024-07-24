@@ -1,14 +1,17 @@
-<div (click)="swithType()" class="content-container">
-  <div class="types-container">
-    <div class="event-container">
-      <img class="fire-icon-orange" src="/assets/icons/fire.svg">
+<div (click)="switchType()" class="content-container">
+  <div [@contentContainerAnimate]="type" class="types-container">
+    <div [@eventTypeAnimate]="type === sight" class="event-container" [class.active]="type === event">
+      <img [class.active]="type === event" class="fire-icon-orange" src="/assets/icons/fire.svg">
+      <p *ngIf="type === event" class="selected-type-text">
+        События
+      </p>
     </div>
 
-    <div class="sight-container">
-      <img class="flag-icon white-color" src="/assets/icons/flag.svg">
-      <div class="selected-type-text">
+    <div [@sightTypeAnimate]="type === event" [class.active]="type === sight" class="sight-container">
+      <img [class.active]="type === sight" class="flag-icon white-color" src="/assets/icons/flag.svg">
+      <p  *ngIf="type === sight" class="selected-type-text">
         Места
-      </div>
+      </p>
     </div>
   </div>
 </div>
