@@ -11,8 +11,6 @@ export interface ISight {
   location: any[]
   latitude: number
   longitude: number
-  favorites_users_exists?: boolean
-  liked_users_exists?: boolean
   type?: number
   status?: number
   files?: any[]
