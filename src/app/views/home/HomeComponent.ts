@@ -466,12 +466,27 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.port +
                 e.get('target').options._options.balloonContent.types[0].ico)
 
-          e.get('target').options.set(
-            'iconContentLayout',
-            ymaps.templateLayoutFactory.createClass(
-              `<div class="marker active"> <img class="active" src="/assets/icons/ticket.svg"> </div>`,
-            ),
-          )
+          console.log(e.get('target').options._options.balloonContent.type)
+          switch (e.get('target').options._options.balloonContent.type) {
+            case 'event':
+              e.get('target').options.set(
+                'iconContentLayout',
+                ymaps.templateLayoutFactory.createClass(
+                  `<div class="marker event active"> <img src="/assets/icons/ticket.svg"> </div>`,
+                ),
+              )
+              break
+
+            case 'sights':
+              e.get('target').options.set(
+                'iconContentLayout',
+                ymaps.templateLayoutFactory.createClass(
+                  `<div class="marker sight active"> <img src="/assets/icons/ticket.svg"> </div>`,
+                ),
+              )
+              break
+          }
+
         }
         this.navigationService.modalEventShowOpen.next(true)
         if (eventsIds.length) {
@@ -725,9 +740,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         let marker
 
         if (icoLink.length > 0) {
-          marker = `<div class="marker"> <img src="/assets/icons/ticket.svg"> </div>`
+          marker = `<div class="marker event"> <img src="/assets/icons/ticket.svg"> </div>`
         } else {
-          marker = `<div class="marker"> <img src="/assets/icons/ticket.svg"> </div>`
+          marker = `<div class="marker event"> <img src="/assets/icons/ticket.svg"> </div>`
         }
 
         placemark = new ymaps.Placemark(
@@ -746,18 +761,18 @@ export class HomeComponent implements OnInit, OnDestroy {
         let marker
         let icoLink = `${this.host}:${this.port}${item.types[0].ico}`
         if (item.types[0].ico.length > 0) {
-          marker = `<div style="border-color: #6574fc;" class="marker"><img style="color:#008aed;" src="${icoLink}"/></div>`
+          marker = `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
         } else {
-          marker = `<div style="border-color: #6574fc;" class="marker"></div>`
+          marker = `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
         }
         placemark = new ymaps.Placemark(
           [item.latitude, item.longitude],
           {},
           {
+            preset: "islands#circleIcon",
             balloonContent: item,
             balloonAutoPan: false,
             // С иконкой
-            // iconContentLayout: ymaps.templateLayoutFactory.createClass(`<div style="border-color: #6574fc;" class="marker"><img src="${icoLink}"/></div>`)
             iconContentLayout: ymaps.templateLayoutFactory.createClass(marker),
           },
         )

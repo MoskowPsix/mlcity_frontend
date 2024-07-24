@@ -158,8 +158,16 @@ ion-content{
     border: 2px solid white;
     border-radius: 100%;
     transform: rotate(-45deg);
-    background: #3880FF;
+
     margin:-15px 0px 0px -10px;
+}
+
+.marker.event {
+  background: #3880FF;
+}
+
+.marker.sight {
+  background-color: #F99011;
 }
 
 .marker > img {
@@ -216,8 +224,8 @@ ion-content{
   }
 
   50% {
-    width: 40px;
-    height: 40px;
+    width: 39px;
+    height: 39px;
   }
 
   100% {
@@ -227,8 +235,9 @@ ion-content{
 }
 
 .marker.active {
-  animation: fadeIn 3s infinite;
+  animation: fadeIn 2s infinite;
 }
+
 
 .marker.active > img {
   width: 24px;
