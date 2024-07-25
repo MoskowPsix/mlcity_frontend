@@ -17,6 +17,10 @@ export class HistoryContent {
   private types!: ISightType[] | IEventType[]
   private prices!: IPrice[]
   /**
+   * @param origin any оригинальный объект событий или мест
+   * @param edit any изменённый объект событй или мест
+   * @return boolen
+   *
    * Сравнивает два входных значения и при совпадении возвращает true, напротив же false.
    */
   private isDifferentAttributes(origin: any, edit: any): boolean {
@@ -26,6 +30,9 @@ export class HistoryContent {
     return false
   }
   /**
+   * @param name string имя свойства класса
+   * @return any значение свойства класса
+   *
    * Получение значения свойства класса по его имени.
    *
    * Принимает в себя имя свойства и отдаёт значение этого свойства
@@ -34,6 +41,10 @@ export class HistoryContent {
     return this[name as keyof HistoryContent]
   }
   /**
+   * @param name string имя свойства класса
+   * @param value any значение которое присваевается свойству класса
+   * @return void
+   *
    * Присвоения значения по имени свойства класса.
    *
    * Принимает в себя имя свойства класса и значение, которое нужно присвоить свойству.
@@ -42,6 +53,10 @@ export class HistoryContent {
     this[name as keyof HistoryContent] = value
   }
   /**
+   * @param name string имя свойства класса, которое является массивом
+   * @param value any значение, которое добавляется в массив
+   * @return void
+   *
    * Добавляет значение в массив по имени свойства класса.
    *
    * Принимает в себя имя свойства класса и значение, которое нужно добавить в массив.
@@ -50,6 +65,11 @@ export class HistoryContent {
     this[name as keyof HistoryContent].push(value)
   }
   /**
+   * @param name string - имя свойства класса, которое является объектом
+   * @param key string - ключ объекта свойства класса
+   * @param value any - значение присваемового свойству объекта свойства класса
+   * @return void
+   *
    * Присваивает значение свойства объекту, который является свойством класса.
    *
    * Принимает в себя имя свойства класса, ключь объекта свойсьва класса, значение которое нужно устаноить.
@@ -58,6 +78,11 @@ export class HistoryContent {
     this[name as keyof HistoryContent][key] = value
   }
   /**
+   * @param name string имя объекта свойства класса
+   * @param key string ключ массива объекта свойства класса
+   * @param value any значение добавляемое в массив объекта свойства класса
+   * @return void
+   *
    * Добавляет значение в массив свойства объекта, который является свойством класса.
    *
    * Принимает в себя имя свойства класса, ключь объекта свойсьва класса, значение которое нужно добавить в массив.
@@ -70,6 +95,10 @@ export class HistoryContent {
     this[name as keyof HistoryContent][key].push(value)
   }
   /**
+   * @param name string имя массова свойства объекта класса
+   * @param key string ключ массива свойства объекта класса
+   * @return void
+   *
    * Получение значения свойства объекта, который является свойством класса.
    *
    * Принимает имя объекста свойства класса и ключь объекта свойства класса.
@@ -78,6 +107,9 @@ export class HistoryContent {
     return this[name as keyof HistoryContent][key]
   }
   /**
+   * @param name string имя свойства класса
+   * @return void
+   *
    * Находит и определяет тип свойства класса для понимания как с ним обращаться, как со строкой или как с массивом.
    *
    * Входное значение имя свойства.
@@ -89,6 +121,9 @@ export class HistoryContent {
       : this.compareAndSetString(name)
   }
   /**
+   * @param name string имя свойства класса
+   * @return void
+   *
    * Сравнивает и устанавливает значение свойству класса по имени.
    *
    * Принимает имя свойства класса, который является ещё и ключом объекта свойств класса edited и origin.
@@ -107,6 +142,9 @@ export class HistoryContent {
     }
   }
   /**
+   * @param name string имя свойства класса
+   * @return void
+   *
    * Сравнивает и добавляет значение в массив свойству класса по имени.
    *
    * Принимает имя свойства класса, который является ещё и ключом объекта свойств класса edited и origin.
