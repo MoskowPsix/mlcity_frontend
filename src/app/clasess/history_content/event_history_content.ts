@@ -23,18 +23,6 @@ export class EventHistoryContent extends HistoryContent {
   date_start!: Date
   date_end!: Date
 
-  compareAndSetDateStart() {
-    if (this.isDifferentAttributes(this.origin.date_start, this.origin.date_start)) {
-      this.date_start = this.edited.date_start
-    }
-  }
-
-  compareAndSetDateEnd() {
-    if (this.isDifferentAttributes(this.origin.date_end, this.origin.date_end)) {
-      this.date_end = this.edited.date_end
-    }
-  }
-
   /**
    * Проверка на изменение мест, если места изменелись, они добавляются в массив, измениться они могут следующим образом:
    * - если добавилось что-то новое.
@@ -43,7 +31,7 @@ export class EventHistoryContent extends HistoryContent {
    *
    * Внутри так же идет проверка на изменения сеансов почти по той же логике
    */
-  compareAndSetPlaces() {
+  private compareAndSetPlaces() {
     for (let editedPlace of this.edited.places) {
       // случай на добавление
       if (editedPlace.id == null) {
@@ -97,7 +85,7 @@ export class EventHistoryContent extends HistoryContent {
 
     @returns {EditedSeance[]} массив измененных сеансов либо undefiend
   */
-  compareAndGetSeances(originalSeances: any, editedSeances: any): EditedSeance[] | undefined {
+  private compareAndGetSeances(originalSeances: any, editedSeances: any): EditedSeance[] | undefined {
     if (!isEqual(originalSeances, editedSeances)) {
       let seances: EditedSeance[] = []
 
@@ -146,7 +134,7 @@ export class EventHistoryContent extends HistoryContent {
    * @param seanceId id измененного
    * @returns возвращает сеанс если он находится, иначе undefiend
    */
-  searchOriginSeance(seances: any, seanceId: number): any | undefined {
+  private searchOriginSeance(seances: any, seanceId: number): any | undefined {
     for (let seance of seances) {
       if (seance.id == seanceId) {
         return seance
@@ -162,12 +150,20 @@ export class EventHistoryContent extends HistoryContent {
    * @param seanceId id измененного
    * @returns возвращает место если оно находится, иначе undefiend
    */
-  searchOriginPlace(placeId: number): IPlace | undefined {
+  private searchOriginPlace(placeId: number): IPlace | undefined {
     for (let element of this.origin.places)
       if (element.id == placeId) {
         return element
       }
 
     return undefined
+  }
+
+  public merge(origin: any, edited: any) {
+    this.origin = origin
+    this.edited = edited
+
+    this.compareAndSet('name')
+    this.compareAndSet('')
   }
 }
