@@ -87,11 +87,7 @@ export class HistoryContent {
    *
    * Принимает в себя имя свойства класса, ключь объекта свойсьва класса, значение которое нужно добавить в массив.
    */
-  protected setPropertyObjectsForArrayPush(
-    name: string,
-    key: string,
-    value: any,
-  ): void {
+  protected setPropertyObjectsForArrayPush(name: string, key: string, value: any): void {
     this[name as keyof HistoryContent][key].push(value)
   }
   /**
@@ -116,9 +112,7 @@ export class HistoryContent {
    */
   protected compareAndSet(name: string): void {
     const property: any = this.getProperty(name)
-    typeof property === typeof []
-      ? this.compareAndSetArray(name)
-      : this.compareAndSetString(name)
+    typeof property === typeof [] ? this.compareAndSetArray(name) : this.compareAndSetString(name)
   }
   /**
    * @param name string имя свойства класса
@@ -132,12 +126,7 @@ export class HistoryContent {
    * то присваивает значения свойству класса с таким же именем как ключ объекта
    */
   private compareAndSetString(name: string): void {
-    if (
-      this.isDifferentAttributes(
-        this.getPropertyObjects('origin', name),
-        this.getPropertyObjects('edited', name),
-      )
-    ) {
+    if (this.isDifferentAttributes(this.getPropertyObjects('origin', name), this.getPropertyObjects('edited', name))) {
       this.setProperty(name, this.edited.name)
     }
   }
