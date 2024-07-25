@@ -9,6 +9,7 @@ import { LoadingService } from 'src/app/services/loading.service'
 import { ToastService } from 'src/app/services/toast.service'
 import { UserService } from 'src/app/services/user.service'
 import { environment } from 'src/environments/environment'
+import { NavigationService } from 'src/app/services/navigation.service'
 
 @Component({
   selector: 'app-settings',
@@ -25,6 +26,7 @@ export class SettingsComponent implements OnInit {
     private toastService: ToastService,
     private loadingService: LoadingService,
     private authService: AuthService,
+    private navigationService: NavigationService,
   ) {}
 
   private readonly destroy$ = new Subject<void>()
@@ -34,9 +36,12 @@ export class SettingsComponent implements OnInit {
   formData: FormData = new FormData()
   avatar: string = ''
   avatarLoad: boolean = false
+  public email: boolean = this.navigationService.modalAuthEmail.value
+  public modalEmail: boolean = true
   avatarUrl!: string
   passwordChange: boolean = false
   passwordError: string = ''
+  public step: number = 0
   public new_name: FormControl = new FormControl('')
   previewPhotoUrl!: string
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
@@ -112,6 +117,12 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  checkEmail() {
+    this.navigationService.modalAuthEmail.pipe().subscribe(() => {
+      this.email = this.navigationService.modalAuthEmail.value
+    })
+  }
+
   checkPassword() {
     if (
       this.passwordResetForm.valid ||
@@ -151,8 +162,14 @@ export class SettingsComponent implements OnInit {
     }
     reader.readAsDataURL(file)
   }
-
+  closeModal() {
+    this.modalEmail = false
+    setTimeout(() => {
+      this.router.navigate(['/home'])
+    }, 10)
+  }
   ngOnInit() {
+    this.checkEmail()
     this.isMobile = this.platform.is('mobile')
     this.getUser()
     this.passwordResetForm = new FormGroup({

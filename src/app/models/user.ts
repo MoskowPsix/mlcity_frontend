@@ -3,6 +3,7 @@ export interface IUser {
   name: string
   email: string
   password?: string
+  email_verified_at?: string
   token?: string
   avatar: string | null
   roles?: string[]

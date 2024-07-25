@@ -1,0 +1,40 @@
+.input-item{
+    max-width: 2.5rem;
+    height: 3rem;
+    background: #bcc1c5b6;
+    border: none;
+    border-radius: 4px;
+    font-size: 2rem;
+    text-align: center;
+  
+  }
+  .code-input{
+    padding-top: 2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding-bottom: 2rem;
+  }
+  .input-item:focus{
+    transition: 0.2s;
+    outline: 1px solid #52b1fab0;
+  }
+  .retry-code-text_active{
+    font-family: var(--font-bold);
+    color: #3880FF;
+  }
+  .retry-code-text{
+    font-family: var(--font-bold);
+    color: rgba(101, 102, 104, 0.7803921569);
+  }
+  .retry-code-timer{
+    font-size: 0.75rem;
+  }
+  .retry-code{
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }

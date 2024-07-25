@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CircleButtonComponent } from './circle-button.component';
+import { TestIframeComponent } from './test-iframe.component';
 
-describe('CircleButtonComponent', () => {
-  let component: CircleButtonComponent;
-  let fixture: ComponentFixture<CircleButtonComponent>;
+describe('TestIframeComponent', () => {
+  let component: TestIframeComponent;
+  let fixture: ComponentFixture<TestIframeComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CircleButtonComponent ],
+      declarations: [ TestIframeComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CircleButtonComponent);
+    fixture = TestBed.createComponent(TestIframeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

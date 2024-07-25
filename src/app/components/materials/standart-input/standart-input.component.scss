@@ -71,3 +71,15 @@
 .open-input-icon:active{
     filter: brightness(0) saturate(100%) invert(20%) sepia(2%) saturate(3827%) hue-rotate(188deg) brightness(93%) contrast(92%);
 }
+.standart-input_disabled{
+    border: none;
+    pointer-events: none;
+    border-radius: 5px;
+    width: 100%;
+    min-height: 2.25rem;
+    font-size: 12px;
+    background-color: #c0c0c071;
+    padding-left: 0.8rem;
+    transition: 0.1s;
+    color: #51555896;
+}

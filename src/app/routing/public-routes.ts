@@ -15,6 +15,8 @@ import { CalendulaComponent } from '../components/calendula/calendula.component'
 import { NoPathComponent } from '../views/no-path/no-path.component'
 import { PrivacyComponent } from '../views/privacy/privacy.component'
 import { RecoveryPasswordComponent } from '../views/recovery-password/recovery-password.component'
+import { TestIframeComponent } from '../views/test-iframe/test-iframe.component'
+import { EmailConfirmComponent } from '../views/cabinet/email-confirm/email-confirm.component'
 import { TestPageComponent } from '../views/test-page/test-page.component'
 export const publicRoutes: Routes = [
   {
@@ -29,6 +31,11 @@ export const publicRoutes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [CheckAuthCanActiveGuard],
+  },
+  {
+    path: 'email-confirm',
+    component: EmailConfirmComponent,
     canActivate: [CheckAuthCanActiveGuard],
   },
   {

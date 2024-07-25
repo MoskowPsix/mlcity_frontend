@@ -15,6 +15,7 @@ import { SettingsPrivacyComponent } from '../views/cabinet/settings/settings-pri
 import { MyEventsComponent } from '../views/cabinet/my-events/my-events.component'
 import { MySightsComponent } from '../views/cabinet/my-sights/my-sights.component'
 import { EdditSightComponent } from '../views/cabinet/my-sights/edit-sight/eddit-sight.component'
+import { EmailConfirmGuard } from '../guards/confirm-email.guard'
 
 export const privateRoutes: Routes = [
   {

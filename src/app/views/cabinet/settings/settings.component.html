@@ -13,24 +13,31 @@
     </ion-grid>
     
   </ion-content> -->
+
   <ion-content>
     <div class="header-plug">
         <div class="header-tools">
             <app-back-button></app-back-button>
-            <span>Редактировать</span>
+            <span >Редактировать</span>
             <div style="opacity: 0; pointer-events: none;"><app-circle-button></app-circle-button></div>
         </div>
     </div>
-
+    <!-- <div class="content-plug">
+        <div class="content-plug-main">
+            <div class="plug-main-block-img">
+              <div class="plug-main-header"></div>
+            </div>
+        </div>
+    </div> -->
     <section class="content">
         <app-user-section [type] = "'button'" [buttonText]="'Сменить фотографию'" [fixedImg]="previewPhotoUrl" (clicked)="f.click()" [user]="user"></app-user-section>
-    
         <ng-container>
             <form class="form" [formGroup]="resetForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
                       <input class="ion-hide" #f type="file" (change)="onFileSelected($event)"   accept="image/png, image/jpeg">
                       <app-standart-input [label]="'Имя'"  [control] = "resetForm.get('new_name')"  [readonly]="false"></app-standart-input>
                       <!-- <app-standart-button buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button> -->
             </form>
+
             <form [formGroup]="passwordResetForm" action="" class="password-form">
               <div #plug class="plug-password-wrapper">
                 <app-standart-input (click)="openPasswordBlock(passwordBlock,plug)" type="password" [disabled]="true" placeholder="•••••••••••" [label]="'Пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="true"></app-standart-input >
