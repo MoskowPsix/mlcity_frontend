@@ -140,6 +140,12 @@ export class EventHistoryContent extends HistoryContent {
     return undefined
   }
 
+  /**
+   * по id измененного сеанса ищет оригинальный сеанс
+   * @param seances массив оригинальных
+   * @param seanceId id измененного
+   * @returns возвращает сеанс если он находится, иначе undefiend
+   */
   searchOriginSeance(seances: any, seanceId: number): any | undefined {
     for (let seance of seances) {
       if (seance.id == seanceId) {
@@ -150,6 +156,12 @@ export class EventHistoryContent extends HistoryContent {
     return undefined
   }
 
+  /**
+   * по id измененного места ищет оригинальный
+   * @param seances массив оригинальных
+   * @param seanceId id измененного
+   * @returns возвращает место если оно находится, иначе undefiend
+   */
   searchOriginPlace(placeId: number): IPlace | undefined {
     for (let element of this.origin.places)
       if (element.id == placeId) {
