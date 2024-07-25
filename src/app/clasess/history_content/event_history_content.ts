@@ -24,17 +24,13 @@ export class EventHistoryContent extends HistoryContent {
   date_end!: Date
 
   compareAndSetDateStart() {
-    if (
-      this.isDifferentAttributes(this.origin.date_start, this.origin.date_start)
-    ) {
+    if (this.isDifferentAttributes(this.origin.date_start, this.origin.date_start)) {
       this.date_start = this.edited.date_start
     }
   }
 
   compareAndSetDateEnd() {
-    if (
-      this.isDifferentAttributes(this.origin.date_end, this.origin.date_end)
-    ) {
+    if (this.isDifferentAttributes(this.origin.date_end, this.origin.date_end)) {
       this.date_end = this.edited.date_end
     }
   }
@@ -66,9 +62,7 @@ export class EventHistoryContent extends HistoryContent {
       }
 
       // случай на изменение
-      let originPlace: IPlace | undefined = this.searchOriginPlace(
-        editedPlace.id,
-      )
+      let originPlace: IPlace | undefined = this.searchOriginPlace(editedPlace.id)
       if (originPlace != undefined && !isEqual(originPlace, editedPlace)) {
         let editedPlace: EditedPlace = {}
         editedPlace.place_id = editedPlace.place_id
@@ -86,10 +80,7 @@ export class EventHistoryContent extends HistoryContent {
         }
 
         // Проверяем есть ли измененные сеансы у места, если есть добавляем
-        let editedSeances = this.compareAndGetSeances(
-          originPlace.seances,
-          editedPlace.history_seances,
-        )
+        let editedSeances = this.compareAndGetSeances(originPlace.seances, editedPlace.history_seances)
 
         if (editedSeances != undefined) {
           editedPlace.history_seances = editedSeances
@@ -106,10 +97,7 @@ export class EventHistoryContent extends HistoryContent {
 
     @returns {EditedSeance[]} массив измененных сеансов либо undefiend
   */
-  compareAndGetSeances(
-    originalSeances: any,
-    editedSeances: any,
-  ): EditedSeance[] | undefined {
+  compareAndGetSeances(originalSeances: any, editedSeances: any): EditedSeance[] | undefined {
     if (!isEqual(originalSeances, editedSeances)) {
       let seances: EditedSeance[] = []
 
@@ -130,10 +118,7 @@ export class EventHistoryContent extends HistoryContent {
         }
 
         // если сеанс на изменение, создаем обьект нужной структуры и добавляем в массив
-        let originSeance: any = this.searchOriginSeance(
-          originalSeances,
-          editedSeance.id,
-        )
+        let originSeance: any = this.searchOriginSeance(originalSeances, editedSeance.id)
         if (originSeance != undefined && !isEqual(originSeance, editedSeance)) {
           let editedSeance: EditedSeance = {}
           editedSeance.seance_id = editedSeance.seance_id
