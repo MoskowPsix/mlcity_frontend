@@ -146,9 +146,35 @@ export class HistoryContent {
     const edited: any[] = this.getPropertyObjects('edited', name)
     edited.forEach((edit) => {
       const orig = origin.find((o: any) => o.id === edit.id)
-      if (!isEqual(edit, orig) || !edit) {
-        this.setPropertyForArrayPush(name, edit)
+      if (
+        !isEqual(this.delArrayInObject(edit), this.delArrayInObject(orig)) ||
+        !edit
+      ) {
+        this.setPropertyForArrayPush(name, this.delArrayInObject(edit))
       }
     })
+  }
+  /**
+   *
+   * @param obj object объект который нужно отчистить от массивов
+   * @returns void
+   *
+   * Очищаем объект от массивов
+   */
+  private delArrayInObject(obj: any): void {
+    if (obj === 'object') {
+      const result: any = {}
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          if (!(Array.isArray(obj[key]) || typeof obj[key] === 'object')) {
+            result[key] = obj[key]
+          }
+        }
+      }
+
+      return result
+    } else {
+      return obj
+    }
   }
 }
