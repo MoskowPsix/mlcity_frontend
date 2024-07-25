@@ -7,13 +7,13 @@ export class EventHistoryContent extends HistoryContent {
   date_end!: Date
 
   compareAndSetDateStart() {
-    if (this.compareAttributes(this.origin.date_start, this.origin.date_start)) {
+    if (this.isDifferentAttributes(this.origin.date_start, this.origin.date_start)) {
       this.date_start = this.edited.date_start
     }
   }
 
   compareAndSetDateEnd() {
-    if (this.compareAttributes(this.origin.date_end, this.origin.date_end)) {
+    if (this.isDifferentAttributes(this.origin.date_end, this.origin.date_end)) {
       this.date_end = this.edited.date_end
     }
   }

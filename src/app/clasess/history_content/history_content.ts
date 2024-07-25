@@ -16,7 +16,7 @@ export class HistoryContent {
   types!: ISightType[] | IEventType[]
   prices!: IPrice[]
 
-  compareAttributes(orig: any, edit: any): boolean {
+  isDifferentAttributes(orig: any, edit: any): boolean {
     if (orig === edit) {
       return true
     }
