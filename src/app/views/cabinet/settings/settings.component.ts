@@ -10,7 +10,7 @@ import { ToastService } from 'src/app/services/toast.service'
 import { UserService } from 'src/app/services/user.service'
 import { environment } from 'src/environments/environment'
 import { NavigationService } from 'src/app/services/navigation.service'
-
+import { RecoveryPasswordService } from 'src/app/services/recovery-password.service'
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -27,6 +27,7 @@ export class SettingsComponent implements OnInit {
     private loadingService: LoadingService,
     private authService: AuthService,
     private navigationService: NavigationService,
+    private recoveryPasswordService: RecoveryPasswordService,
   ) {}
 
   private readonly destroy$ = new Subject<void>()
@@ -146,14 +147,47 @@ export class SettingsComponent implements OnInit {
       this.previewPhoto(file)
     }
   }
-  openPasswordBlock(event: HTMLElement, plug: HTMLElement) {
-    this.passwordChange = true
-    let block = event
-    block.classList.toggle('password-inputs-wrapper_active')
-    plug.classList.toggle('plug-password-wrapper_active')
-    setTimeout(() => {
-      plug.classList.add('plug-password-wrapper_none')
-    }, 500)
+  openPasswordBlock() {
+    this.loadingService.showLoading()
+    this.userService
+      .getUserById()
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          this.toastService.showToast(`${err.messages}`, 'danger')
+          return of(EMPTY)
+        }),
+      )
+      .subscribe((res: any) => {
+        if (res.user.email_verified_at) {
+          this.recoveryPasswordService
+            .recoveryPassword(res.user.email)
+            .pipe(
+              takeUntil(this.destroy$),
+              catchError((err) => {
+                console.log(err)
+                return of(EMPTY)
+              }),
+            )
+            .subscribe((res: any) => {
+              this.loadingService.hideLoading()
+              this.toastService.showToast(
+                'Ссылка для смены пароля была отправлена вам на почту',
+                'success',
+              )
+            })
+        } else {
+          this.loadingService.hideLoading()
+          this.router.navigate(['/email-confirm'])
+        }
+      })
+    // this.passwordChange = true
+    // let block = event
+    // block.classList.toggle('password-inputs-wrapper_active')
+    // plug.classList.toggle('plug-password-wrapper_active')
+    // setTimeout(() => {
+    //   plug.classList.add('plug-password-wrapper_none')
+    // }, 500)
   }
   previewPhoto(file: File) {
     const reader: FileReader = new FileReader()

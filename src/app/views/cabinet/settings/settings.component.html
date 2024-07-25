@@ -40,8 +40,8 @@
 
             <form [formGroup]="passwordResetForm" action="" class="password-form">
               <div #plug class="plug-password-wrapper">
-                <app-standart-input (click)="openPasswordBlock(passwordBlock,plug)" type="password" [disabled]="true" placeholder="•••••••••••" [label]="'Пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="true"></app-standart-input >
-                <button (click)="openPasswordBlock(passwordBlock,plug)" class="password-change">Сменить</button>
+                <app-standart-input (click)="openPasswordBlock()" type="password" [disabled]="true" placeholder="•••••••••••" [label]="'Пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="true"></app-standart-input >
+                <button (click)="openPasswordBlock()" class="password-change">Сменить</button>
               </div>
 
               <div #passwordBlock class="password-inputs-wrapper">
