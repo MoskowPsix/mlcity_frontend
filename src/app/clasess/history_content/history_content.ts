@@ -72,7 +72,7 @@ export class HistoryContent {
     if (
       this.isDifferentAttributes(
         this.getPropertyObjectsByName('origin', name),
-        this.getPropertyObjectsByName('edit', name),
+        this.getPropertyObjectsByName('edited', name),
       )
     ) {
       this.setPropertyByName(name, this.edited.name)
