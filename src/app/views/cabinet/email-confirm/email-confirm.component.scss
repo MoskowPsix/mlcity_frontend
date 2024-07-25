@@ -97,12 +97,25 @@ ion-list {
   margin-top: 3rem;
   padding-bottom: 0.5rem;
   display: flex;
+  text-align: center;
   font-size: 1rem;
 }
 .email-form{
 
 }
 
+.email-change{
+  margin-top: -2.05rem;
+  right: 1.2rem;
+  position: absolute;
+  background: #DCE9FF;
+  color: #3880FF;
+  font-size: 12px;
+  border-radius: 5px;
+  transition: 0.1s;
+  width: 7.875rem;
+  height:1.875rem;
+}
 
 .step-first-header{
   justify-content: center;

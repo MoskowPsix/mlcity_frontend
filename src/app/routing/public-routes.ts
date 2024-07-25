@@ -31,6 +31,7 @@ export const publicRoutes: Routes = [
   {
     path: 'email-confirm',
     component: EmailConfirmComponent,
+    canActivate: [CheckAuthCanActiveGuard],
   },
   {
     path: '',

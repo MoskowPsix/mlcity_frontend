@@ -184,22 +184,22 @@ export class RegistrationComponent implements OnInit {
     this.modal.dismiss(null, 'cancel')
   }
 
-  checkEmail() {
-    this.busyEmail = this.registerForm.value.email
-    if (!this.registerForm.controls['email'].invalid) {
-      this.authservice
-        .checkEmail(this.registerForm.value.email)
-        .pipe(
-          map((respons: any) => {
-            this.emailBusy = respons.user_email
-          }),
-          catchError((err) => {
-            return of(EMPTY)
-          }),
-        )
-        .subscribe()
-    }
-  }
+  // checkEmail() {
+  //   this.busyEmail = this.registerForm.value.email
+  //   if (!this.registerForm.controls['email'].invalid) {
+  //     this.authservice
+  //       .checkEmail(this.registerForm.value.email)
+  //       .pipe(
+  //         map((respons: any) => {
+  //           this.emailBusy = respons.user_email
+  //         }),
+  //         catchError((err) => {
+  //           return of(EMPTY)
+  //         }),
+  //       )
+  //       .subscribe()
+  //   }
+  // }
 
   checkNumber() {
     this.authservice
@@ -306,6 +306,7 @@ export class RegistrationComponent implements OnInit {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (data: any) => {
+            console.log(data.user)
             this.positiveResponseAfterLogin(data)
           },
           error: (err) => {
@@ -326,7 +327,7 @@ export class RegistrationComponent implements OnInit {
   async onSubmitReg() {
     this.loadingService.showLoading()
     await this.checkPassword()
-    await this.checkEmail()
+
     await this.checkName()
     // await this.SubmitPhone()
     // await this.checkNumber()
@@ -341,6 +342,7 @@ export class RegistrationComponent implements OnInit {
             this.submitResponce = true
             //this.confirmEmail();
             if (respons.status == 'success') {
+              this.router.navigate(['/email-confirm'], { replaceUrl: true })
               this.toastService.showToast(
                 'Вы успешно зарегестрировались!!!',
                 'success',
@@ -422,7 +424,7 @@ export class RegistrationComponent implements OnInit {
     this.timerRetryButton = false
     this.RetryCode()
     this.authservice
-      .retryCode()
+      .getEmailCode()
       .pipe(
         map((respons: any) => {}),
         catchError((err) => {

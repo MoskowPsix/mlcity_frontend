@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content >
   <!-- <ng-container *ngIf="false">
     <div>
     <div class="header-plug">
@@ -45,12 +45,12 @@
   </div>
 </ng-container> -->
 
-<ng-container *ngIf="true">
+<ng-container *ngIf="user">
     <div>
     <div class="header-plug">
       <div class="header-tools">
           <app-circle-button *ngIf="currentStep === 0" icon="/assets/icons/arrow.svg" (clicked) ="closeModal()" ></app-circle-button>
-          <app-circle-button *ngIf="currentStep !== 0" icon="/assets/icons/arrow.svg" (clicked) = "backStep(step)" ></app-circle-button>
+          <div  *ngIf="currentStep !== 0"><app-circle-button icon="/assets/icons/arrow.svg" (clicked) ="backStep(step)"></app-circle-button></div>
           <span>Подтвердите почту</span>
           <div style="opacity: 0; pointer-events: none;"><app-circle-button></app-circle-button></div>
       </div>
@@ -65,23 +65,26 @@
               <div class="img-container">
                   <img src="/assets/images/girlSearch.svg" alt="">
               </div>
-              <form class="email-form" [formGroup]="emailForm" action="">  
-                <app-standart-input  [label]="'Электронная почта'" [control] = "emailForm.get('email')" type="email" ></app-standart-input>
+              <form class="email-form" [formGroup]="emailForm">  
+                <app-standart-input *ngIf="userWithEmail && !emailChangeValue" [readonly]="true" [disabled]="true"  [label]="'Электронная почта'" [control] = "emailForm.get('email')" type="email" ></app-standart-input>
+                <button *ngIf="userWithEmail && currentStep === 0 && !emailChangeValue && !emailConfirm" (click)="emailChange()" class="email-change">Сменить</button>
+                <app-standart-input *ngIf="!userWithEmail||emailChangeValue" [readonly]="false" [disabled]="false"  [label]="'Электронная почта'" [control] = "emailForm.get('email')" type="email" ></app-standart-input>
               </form>
-              <div class="info-container">Не смогли найти вашу электронную почту, пожалуйста введите её выше</div>
-              <app-standart-button [disabled]="this.emailForm.invalid"  (clicked)="nextStep(step)"  buttonText = "Далее" type="submit" theme ="standart"></app-standart-button>
+              <div *ngIf="!userWithEmail" class="info-container">Не смогли найти вашу электронную почту, пожалуйста введите её выше</div>
+              <div *ngIf="userWithEmail" class="info-container">Пожалуйста, подтвердите вашу почту для использования приложения в полном обЪёме</div>
+              <app-standart-button *ngIf="!emailConfirm" [disabled]="this.emailForm.invalid"  (clicked)="getCode()" buttonText = "Подтвердить" type="submit" theme ="standart"></app-standart-button>
+              <app-standart-button *ngIf="emailConfirm" (clicked)="showMessageVerificated()" buttonText = "Подтвердить" type="submit" theme ="standart"></app-standart-button>
           </div>
             
             <div class="step-first">
-              <span class="email-add-text">Вам на почту был отпрвлен код, пожалуйста введите его ниже</span>
-                <form class="email-form" [formGroup]="emailForm" action=""> 
-                  <app-code-input [timerSecondsCount]="60" (codeRetry)="codeRetry($event)" [setFocused]="false"></app-code-input>
+              <span class="email-add-text">Вам на почту {{this.emailForm.value.email}} был отпрвлен код, пожалуйста введите его ниже</span>
+                <form class="email-form" [formGroup]="emailForm"> 
+                  <app-code-input (codeRetry)="codeRetry()" [timerSecondsCount]="timer" (code)="submitCode($event)" type="button" [setFocused]="false"></app-code-input>
                 </form>
-              
             </div>
-      
           </div>    
     </div>
   </div>
 </ng-container>
+
 </ion-content>

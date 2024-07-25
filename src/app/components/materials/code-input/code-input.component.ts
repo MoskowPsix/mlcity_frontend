@@ -15,17 +15,19 @@ import {
   maskitoNumberOptionsGenerator,
   maskitoTimeOptionsGenerator,
 } from '@maskito/kit'
+import { UserService } from 'src/app/services/user.service'
 @Component({
   selector: 'app-code-input',
   templateUrl: './code-input.component.html',
   styleUrls: ['./code-input.component.scss'],
 })
 export class CodeInputComponent implements OnInit, AfterViewInit {
-  constructor() {}
+  constructor(private userService: UserService) {}
   @ViewChildren('item') items: any
   @ViewChild('setButton') setButton: any
   itemsArray!: ElementRef[]
   timerInterval: any
+  dontFirstTimer: boolean = false
   @Input() setFocused!: boolean
   @Input() timerSecondsCount!: number
   @Output() code = new EventEmitter<String>()
@@ -58,14 +60,17 @@ export class CodeInputComponent implements OnInit, AfterViewInit {
     if (this.timer == 0 && !this.timerWait) {
       this.timerWait = true
       this.timer = this.timerSecondsCount
-      this.codeRetry.emit()
+      if (this.dontFirstTimer) {
+        this.codeRetry.emit()
+      }
+
       this.timerInterval = setInterval(() => {
         if (this.timer > 1) {
-          console.log(this.timer)
           this.timer--
         } else {
           this.timerWait = false
           this.timer = 0
+          this.dontFirstTimer = true
           clearInterval(this.timerInterval)
         }
       }, 1000)
@@ -98,6 +103,7 @@ export class CodeInputComponent implements OnInit, AfterViewInit {
     this.code.emit(code)
   }
   ngOnInit(): void {
-    // this.items.first.nativeElement.setFocus()
+    this.dontFirstTimer = false
+    this.timerStart()
   }
 }

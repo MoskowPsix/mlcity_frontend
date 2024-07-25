@@ -38,7 +38,6 @@ import { NotFoundComponent } from './views/errors/not-found/not-found.component'
 import { ForbiddenComponent } from './views/errors/forbidden/forbidden.component'
 import { ServerErrorComponent } from './views/errors/server-error/server-error.component'
 import { EventShowComponent } from './views/events/event-show/event-show.component'
-import { CircleButtonComponent } from './components/circle-button/circle-button.component'
 import { SightShowComponent } from './views/sights/sight-show/sight-show.component'
 import { EventCreateComponent } from './views/events/event-create/event-create.component'
 import { SightsComponent } from './views/sights/sights.component'
@@ -117,6 +116,7 @@ import { ButtonRoundedComponent } from './components/materials/button-rounded/bu
 import { ListButtonComponent } from './components/materials/list-button/list-button.component'
 import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
 import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
+import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -181,7 +181,6 @@ registerLocaleData(localeRu, 'ru')
     StandartButtonComponent,
     StandartButtonLongComponent,
     ButtonRoundedComponent,
-    CircleButtonComponent,
     ListButtonComponent,
     TruncatePipe,
     CreateRulesModalComponent,
