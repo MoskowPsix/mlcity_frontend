@@ -23,7 +23,7 @@ export class HistoryContent {
    *
    * Сравнивает два входных значения и при совпадении возвращает true, напротив же false.
    */
-  private isDifferentAttributes(origin: any, edit: any): boolean {
+  protected isDifferentAttributes(origin: any, edit: any): boolean {
     if (isEqual(origin, edit)) {
       return true
     }
@@ -37,7 +37,7 @@ export class HistoryContent {
    *
    * Принимает в себя имя свойства и отдаёт значение этого свойства
    */
-  private getProperty(name: string): any {
+  protected getProperty(name: string): any {
     return this[name as keyof HistoryContent]
   }
   /**
@@ -49,7 +49,7 @@ export class HistoryContent {
    *
    * Принимает в себя имя свойства класса и значение, которое нужно присвоить свойству.
    */
-  private setProperty(name: string, value: any): void {
+  protected setProperty(name: string, value: any): void {
     this[name as keyof HistoryContent] = value
   }
   /**
@@ -61,7 +61,7 @@ export class HistoryContent {
    *
    * Принимает в себя имя свойства класса и значение, которое нужно добавить в массив.
    */
-  private setPropertyForArrayPush(name: string, value: any): void {
+  protected setPropertyForArrayPush(name: string, value: any): void {
     this[name as keyof HistoryContent].push(value)
   }
   /**
@@ -74,7 +74,7 @@ export class HistoryContent {
    *
    * Принимает в себя имя свойства класса, ключь объекта свойсьва класса, значение которое нужно устаноить.
    */
-  private setPropertyObjects(name: string, key: string, value: any): void {
+  protected setPropertyObjects(name: string, key: string, value: any): void {
     this[name as keyof HistoryContent][key] = value
   }
   /**
@@ -87,7 +87,7 @@ export class HistoryContent {
    *
    * Принимает в себя имя свойства класса, ключь объекта свойсьва класса, значение которое нужно добавить в массив.
    */
-  private setPropertyObjectsForArrayPush(
+  protected setPropertyObjectsForArrayPush(
     name: string,
     key: string,
     value: any,
@@ -103,7 +103,7 @@ export class HistoryContent {
    *
    * Принимает имя объекста свойства класса и ключь объекта свойства класса.
    */
-  private getPropertyObjects(name: string, key: string): any {
+  protected getPropertyObjects(name: string, key: string): any {
     return this[name as keyof HistoryContent][key]
   }
   /**
@@ -114,7 +114,7 @@ export class HistoryContent {
    *
    * Входное значение имя свойства.
    */
-  compareAndSet(name: string): void {
+  protected compareAndSet(name: string): void {
     const property: any = this.getProperty(name)
     typeof property === typeof []
       ? this.compareAndSetArray(name)
