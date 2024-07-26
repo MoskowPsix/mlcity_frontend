@@ -28,6 +28,7 @@ jobs:
 
 
   re-build-docker-image:
+    needs: build-docker-image
     runs-on: ubuntu-latest
     steps:
       - uses: appleboy/ssh-action@v1.0.3
