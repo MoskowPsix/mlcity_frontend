@@ -110,7 +110,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         if (event) {
           this.event = event
-
+          console.log(event)
           // this.places = event.places_full;
         }
         this.titleService.setTitle(event.name)
