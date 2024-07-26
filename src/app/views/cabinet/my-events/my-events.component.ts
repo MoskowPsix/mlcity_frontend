@@ -41,7 +41,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
     this.getMyEvents()
   }
 
-  getMyEvents() {
+  getMyEvents(event?: any) {
     this.eventService
       .getEventsForUser(
         this.queryBuilderService.queryBuilder('eventsPublicForAuthor'),

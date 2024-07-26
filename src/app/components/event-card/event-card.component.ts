@@ -159,7 +159,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   test() {
-    console.log(this.event.files[0])
+   
   }
 
   getUrlFrame(url: string) {
@@ -320,10 +320,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       for (let i = 0; i < this.event.price.length; i++) {
         this.prices.push(Number(this.event.price[i].cost_rub))
       }
-      console.log(this.prices)
+      
       this.minPrice = Math.min(...this.prices)
       this.maxPrice = Math.max(...this.prices)
-      console.log(this.minPrice, this.maxPrice)
+
     }
   }
 
@@ -457,7 +457,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       'dd-MMM',
     )
 
-    console.log(this.event)
+
     this.userAuth = this.authService.getAuthState()
     this.findPrice()
     this.slugName = this.helpers.translit(this.event.name)

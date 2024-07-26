@@ -52,7 +52,11 @@
         <div class="segment-box" #ContentCol>
 
           <ng-container >
-            <ion-grid #cardContainer  class="events-grid ion-align-content-start">
+            <div class="wrapper-grid">
+              <app-card-grid [cards]="eventsCity" (endScroll)="eventsCityLoadingMore()"></app-card-grid>
+            </div>
+     
+            <!-- <ion-grid #cardContainer  class="events-grid ion-align-content-start">
               <ion-row>
                 <ion-col size="1" *ngFor="let event of eventsCity; let i = index">
                   <app-event-card  [event]="event" id="{{event.id}}"></app-event-card>
@@ -63,7 +67,7 @@
 
               </ion-row>
 
-            </ion-grid>
+            </ion-grid> -->
           </ng-container>
 
           <ng-container *ngIf="!loadingEventsCity">
@@ -88,14 +92,14 @@
             </ion-row>
           </ng-container>
 
-          <ng-container *ngIf="!loadingMoreEventsCity">
+          <!-- <ng-container *ngIf="!loadingMoreEventsCity">
             <div *ngIf="nextPage" class="ion-margin-horizontal">
               <ion-button expand="block" (click)="eventsCityLoadingMore()" [disabled]="loadingMoreEventsCity">
                 <ion-icon *ngIf="!loadingMoreEventsCity" slot="start" name="reload-outline"></ion-icon>
                 <span>Загрузить еще</span>
               </ion-button>
             </div>
-          </ng-container>
+          </ng-container> -->
 
           <ng-container *ngIf="loadingMoreEventsCity">
             <ion-row class="ion-justify-content-center">

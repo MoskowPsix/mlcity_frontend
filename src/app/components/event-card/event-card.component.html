@@ -115,8 +115,11 @@
   <div class="card-wrapper">
  
       <ng-container *ngIf="event.files[0].local === 0 && event.files[0].file_types[0].name === 'image'">
-        <div class="card" style="background-image: url('{{event.files[0].link}} ');">
-          <div *ngIf="myEvent" class="edit-button"></div>
+        <div class="card" routerLink="/events/{{event.id}}" style="background-image: url('{{event.files[0].link}} ');">
+                <div *ngIf="myEvent" class="edit-button">
+                  <app-circle-button icon="/assets/icons/menu-pen.svg" border="dark-all" ></app-circle-button>
+                </div>
+        
               <div class="info-wrapper">
                   <div class="info-header">
                      <div *ngIf="minPrice !== maxPrice" class="price"> 

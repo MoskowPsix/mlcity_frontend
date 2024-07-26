@@ -106,6 +106,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   getSightsCity() {
+    
     this.loadingMoreSightsCity
       ? (this.loadingSightsCity = true)
       : (this.loadingSightsCity = false)
