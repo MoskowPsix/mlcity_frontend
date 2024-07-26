@@ -19,9 +19,9 @@ interface EditedSeance {
 }
 
 export class EventHistoryContent extends HistoryContent {
-  places!: object[]
-  date_start!: Date
-  date_end!: Date
+  private places!: object[]
+  private date_start!: Date
+  private date_end!: Date
 
   /**
    * Проверка на изменение мест, если места изменелись, они добавляются в массив, измениться они могут следующим образом:
@@ -32,6 +32,9 @@ export class EventHistoryContent extends HistoryContent {
    * Внутри так же идет проверка на изменения сеансов почти по той же логике
    */
   private compareAndSetPlaces() {
+    if (this.edited.places == null) {
+      return
+    }
     for (let editedPlace of this.edited.places) {
       // случай на добавление
       if (editedPlace.id == null) {
@@ -162,10 +165,25 @@ export class EventHistoryContent extends HistoryContent {
   public merge(origin: any, edited: any) {
     this.origin = origin
     this.edited = edited
-    let elementsWhatNeedToCompare = ['name', 'description', 'materials', 'sponsor', 'files', 'types', 'prices']
+    let elementsWhatNeedToCompare = ['name', 'description', 'materials', 'sponsor']
     elementsWhatNeedToCompare.forEach((element: string) => {
-      this.compareAndSet(element)
+      this.compareAndSetString(element)
     })
     this.compareAndSetPlaces()
+
+    // console.log(this.origin, this.edited)
+
+    return {
+      name: this.name,
+      description: this.description,
+      materials: this.materials,
+      sponsor: this.sponsor,
+      date_start: this.date_start,
+      date_end: this.date_end,
+      history_files: this.files,
+      history_types: this.types,
+      history_prices: this.prices,
+      history_places: this.places,
+    }
   }
 }

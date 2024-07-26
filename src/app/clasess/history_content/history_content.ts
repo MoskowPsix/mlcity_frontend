@@ -9,13 +9,13 @@ import { isEqual } from 'lodash'
 export class HistoryContent {
   public origin: any = {}
   public edited: any = {}
-  private name!: string
-  private description!: string
-  private materials!: string
-  private sponsor!: string
-  private files!: IFile[]
-  private types!: ISightType[] | IEventType[]
-  private prices!: IPrice[]
+  protected name!: string
+  protected description!: string
+  protected materials!: string
+  protected sponsor!: string
+  protected files!: IFile[]
+  protected types!: ISightType[] | IEventType[]
+  protected prices!: IPrice[]
   /**
    * @param origin any оригинальный объект событий или мест
    * @param edit any изменённый объект событй или мест
@@ -24,10 +24,7 @@ export class HistoryContent {
    * Сравнивает два входных значения и при совпадении возвращает true, напротив же false.
    */
   protected isDifferentAttributes(origin: any, edit: any): boolean {
-    if (isEqual(origin, edit)) {
-      return true
-    }
-    return false
+    return !isEqual(origin, edit)
   }
   /**
    * @param name string имя свойства класса
@@ -50,6 +47,7 @@ export class HistoryContent {
    * Принимает в себя имя свойства класса и значение, которое нужно присвоить свойству.
    */
   protected setProperty(name: string, value: any): void {
+    console.log(name, value)
     this[name as keyof HistoryContent] = value
   }
   /**
@@ -125,9 +123,9 @@ export class HistoryContent {
    * Сравнивает два строковых значения объектов по одному ключу и если есть различия,
    * то присваивает значения свойству класса с таким же именем как ключ объекта
    */
-  private compareAndSetString(name: string): void {
+  protected compareAndSetString(name: string): void {
     if (this.isDifferentAttributes(this.getPropertyObjects('origin', name), this.getPropertyObjects('edited', name))) {
-      this.setProperty(name, this.edited.name)
+      this.setProperty(name, this.getPropertyObjects('edited', name))
     }
   }
   /**
@@ -146,10 +144,7 @@ export class HistoryContent {
     const edited: any[] = this.getPropertyObjects('edited', name)
     edited.forEach((edit) => {
       const orig = origin.find((o: any) => o.id === edit.id)
-      if (
-        !isEqual(this.delArrayInObject(edit), this.delArrayInObject(orig)) ||
-        !edit
-      ) {
+      if (!isEqual(this.delArrayInObject(edit), this.delArrayInObject(orig)) || !edit) {
         this.setPropertyForArrayPush(name, this.delArrayInObject(edit))
       }
     })
