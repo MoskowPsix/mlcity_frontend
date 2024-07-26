@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ButtonRoundedComponent } from './button-rounded.component';
+import { SecondHeaderComponent } from './second-header.component';
 
-describe('ButtonRoundedComponent', () => {
-  let component: ButtonRoundedComponent;
-  let fixture: ComponentFixture<ButtonRoundedComponent>;
+describe('SecondHeaderComponent', () => {
+  let component: SecondHeaderComponent;
+  let fixture: ComponentFixture<SecondHeaderComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ButtonRoundedComponent ],
+      declarations: [ SecondHeaderComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ButtonRoundedComponent);
+    fixture = TestBed.createComponent(SecondHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

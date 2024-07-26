@@ -4,8 +4,12 @@
     grid-template-columns: repeat(auto-fill, 21rem);
     gap: 33px;
     padding: 10px;
-    margin: auto;
     justify-content: center;
+    padding-bottom: 2rem;
+    background: none;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-y: auto;
   }
   .main-grid-load {
     padding-top: 2rem;

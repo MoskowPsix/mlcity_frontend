@@ -133,7 +133,6 @@ export class EventsComponent implements OnInit, OnDestroy {
       })
   }
 
-
   setDate(event: any) {
     this.filterService.setStartDateTolocalStorage(event.dateStart)
     this.filterService.setEndDateTolocalStorage(event.dateEnd)
@@ -322,15 +321,15 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.testScrol = boundingClientRect.y
 
     // console.log(this.ContentCol.nativeElement.getBoundingClientRect().bottom, window.innerHeight)
-    if (
-      boundingClientRect.bottom <= window.innerHeight * 2 &&
-      !(boundingClientRect.bottom <= window.innerHeight) &&
-      this.eventsCity &&
-      this.loadTrue
-    ) {
-      this.loadTrue = false
-      this.eventsCityLoadingMore()
-    }
+    // if (
+    //   boundingClientRect.bottom <= window.innerHeight * 2 &&
+    //   !(boundingClientRect.bottom <= window.innerHeight) &&
+    //   this.eventsCity &&
+    //   this.loadTrue
+    // ) {
+    //   this.loadTrue = false
+    //   this.eventsCityLoadingMore()
+    // }
   }
 
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
