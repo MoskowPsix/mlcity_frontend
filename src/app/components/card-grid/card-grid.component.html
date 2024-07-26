@@ -1,4 +1,4 @@
-<ng-container *ngIf="cards.length === 0">
+<ng-container *ngIf="cards.length === 0 && !notFound">
 
   <div class="main-grid-load">
     <div class="card-wrapper" *ngFor="let key of [1,2,3,4,5,6,7,8,9,10]">

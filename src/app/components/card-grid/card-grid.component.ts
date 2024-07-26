@@ -12,10 +12,16 @@ export class CardGridComponent implements OnInit {
   @Input() cards!: IEventType[] | ISightType[] | any[]
   @Input() isSight: boolean = false
   myEvents: boolean = false
+  notFound: boolean = false
   public checkedRout(): void {
     this.myEvents =
       this.router.url === '/cabinet/events' ||
       this.router.url === '/cabinet/sights'
+  }
+  ngOnChanges(): void {
+    if (this.cards.length == 0) {
+      this.notFound = true
+    }
   }
   ngOnInit() {
     this.checkedRout()
