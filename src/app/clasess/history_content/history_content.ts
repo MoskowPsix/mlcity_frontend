@@ -47,7 +47,6 @@ export class HistoryContent {
    * Принимает в себя имя свойства класса и значение, которое нужно присвоить свойству.
    */
   protected setProperty(name: string, value: any): void {
-    console.log(name, value)
     this[name as keyof HistoryContent] = value
   }
   /**

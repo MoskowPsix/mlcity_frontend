@@ -165,13 +165,23 @@ export class EventHistoryContent extends HistoryContent {
   public merge(origin: any, edited: any) {
     this.origin = origin
     this.edited = edited
-    let elementsWhatNeedToCompare = ['name', 'description', 'materials', 'sponsor']
+    let elementsWhatNeedToCompare = [
+      'name',
+      'description',
+      'materials',
+      'sponsor',
+      'date_start',
+      'date_end',
+      'files',
+      'types',
+      'prices',
+    ]
     elementsWhatNeedToCompare.forEach((element: string) => {
-      this.compareAndSetString(element)
+      this.compareAndSet(element)
     })
     this.compareAndSetPlaces()
 
-    // console.log(this.origin, this.edited)
+    // console.log(this.origin)
 
     return {
       name: this.name,
