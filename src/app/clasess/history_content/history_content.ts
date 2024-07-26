@@ -15,7 +15,7 @@ export class HistoryContent {
   protected sponsor!: string
   protected files: IFile[] = []
   protected types: ISightType[] | IEventType[] = []
-  protected prices: IPrice[] = []
+  protected price: IPrice[] = []
   /**
    * @param origin any оригинальный объект событий или мест
    * @param edit any изменённый объект событй или мест
@@ -142,6 +142,7 @@ export class HistoryContent {
     console.log(name)
     const origin: any[] = this.getPropertyObjects('origin', name)
     const edited: any[] = this.getPropertyObjects('edited', name)
+    console.log(origin, edited)
     edited.forEach((edit) => {
       const orig = origin.find((o: any) => o.id === edit.id)
       if (!isEqual(this.delArrayInObject(edit), this.delArrayInObject(orig)) || !edit) {

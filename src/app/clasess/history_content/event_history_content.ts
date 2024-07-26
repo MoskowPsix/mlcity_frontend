@@ -72,7 +72,7 @@ export class EventHistoryContent extends HistoryContent {
         this.edited.places.push(changedPlace)
 
         // Проверяем есть ли измененные сеансы у места, если есть добавляем
-        let editedSeances = this.compareAndGetSeances(originPlace.seances, editedPlace.history_seances)
+        let editedSeances = this.compareAndGetSeances(originPlace.seances, editedPlace.seances)
 
         if (editedSeances != undefined) {
           changedPlace.history_seances = editedSeances
@@ -102,27 +102,27 @@ export class EventHistoryContent extends HistoryContent {
 
         // Если сеанс на удаление, создаем обьект нужной структуры и добавляем в массив
         if (editedSeance.on_delete != null && editedSeance.on_delete == true) {
-          let editedSeance: EditedSeance = {}
-          editedSeance.seance_id = editedSeance.seance_id
-          editedSeance.on_delete = editedSeance.on_delete
-          seances.push(editedSeance)
+          let changedSeance: EditedSeance = {}
+          changedSeance.seance_id = editedSeance.id
+          changedSeance.on_delete = editedSeance.on_delete
+          seances.push(changedSeance)
           continue
         }
 
         // если сеанс на изменение, создаем обьект нужной структуры и добавляем в массив
         let originSeance: any = this.searchOriginSeance(originalSeances, editedSeance.id)
         if (originSeance != undefined && !isEqual(originSeance, editedSeance)) {
-          let editedSeance: EditedSeance = {}
-          editedSeance.seance_id = editedSeance.seance_id
+          let changedSeance: EditedSeance = {}
+          changedSeance.seance_id = editedSeance.id
 
           if (originSeance.date_start != editedSeance.date_start) {
-            editedSeance.date_start = editedSeance.date_start
+            changedSeance.date_start = editedSeance.date_start
           }
           if (originSeance.date_end != editedSeance.date_end) {
-            editedSeance.date_end = editedSeance.date_end
+            changedSeance.date_end = editedSeance.date_end
           }
 
-          seances.push(editedSeance)
+          seances.push(changedSeance)
         }
       }
 
@@ -193,7 +193,7 @@ export class EventHistoryContent extends HistoryContent {
       date_end: this.date_end,
       history_files: this.files,
       history_types: this.types,
-      history_prices: this.prices,
+      history_prices: this.price,
       history_places: this.places,
     }
   }

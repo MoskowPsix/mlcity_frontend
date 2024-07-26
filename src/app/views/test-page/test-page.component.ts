@@ -41,6 +41,18 @@ export class TestPageComponent implements OnInit {
           longitude: 54,
           latitude: 24,
           address: 'TG',
+          seances: [
+            {
+              id: 1,
+              date_start: 'a',
+              date_end: 'b',
+            },
+            {
+              id: 2,
+              date_start: 'ab',
+              date_end: 'bb',
+            },
+          ],
         },
         {
           id: 2,
@@ -123,9 +135,26 @@ export class TestPageComponent implements OnInit {
         // измененное место
         {
           id: 1,
-          longitude: 24,
-          latitude: 34,
-          address: 'TGB',
+          longitude: 54,
+          latitude: 24,
+          address: 'TG',
+          seances: [
+            {
+              id: 1,
+              date_start: 'aa',
+              date_end: 'ba',
+            },
+            {
+              id: 2,
+              on_delete: true,
+              date_start: 'ab',
+              date_end: 'bb',
+            },
+            {
+              date_start: 'a2',
+              date_end: 'a3',
+            },
+          ],
         },
         // Новое место
         {
