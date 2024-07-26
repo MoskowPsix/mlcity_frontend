@@ -3,6 +3,11 @@
     <img src="{{icon}}" alt="">
   </button>
 </ng-container>
+<ng-container *ngIf="border == 'dark-all'">
+  <button (click)="click()" class="circle-button_dark-all">
+    <img src="{{icon}}" alt="">
+  </button>
+</ng-container>
 <ng-container *ngIf="border == ''">
   <button (click)="click()" class="circle-button">
     <img src="{{icon}}" alt="">

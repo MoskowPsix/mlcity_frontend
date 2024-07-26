@@ -41,7 +41,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
     this.getMyEvents()
   }
 
-  getMyEvents() {
+  getMyEvents(event?: any) {
     this.eventService
       .getEventsForUser(
         this.queryBuilderService.queryBuilder('eventsPublicForAuthor'),
@@ -51,6 +51,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
         retry(3),
         map((respons: any) => {
           this.events.push(...respons.events.data)
+          console.log(this.events)
           this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next(
             respons.events.next_cursor,
           )

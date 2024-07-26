@@ -34,6 +34,7 @@ import { MenuAuthComponent } from './components/menu-auth/menu-auth.component'
 import { MenuAuthSidebarComponent } from './components/menu-auth-sidebar/menu-auth-sidebar.component'
 import { FooterComponent } from './components/footer/footer.component'
 import { AboutComponent } from './views/about/about.component'
+import { SecondHeaderComponent } from './components/second-header/second-header.component'
 import { NotFoundComponent } from './views/errors/not-found/not-found.component'
 import { ForbiddenComponent } from './views/errors/forbidden/forbidden.component'
 import { ServerErrorComponent } from './views/errors/server-error/server-error.component'
@@ -111,7 +112,6 @@ import { CardGridComponent } from './components/card-grid/card-grid.component'
 import { ScrollService } from './services/scroll.service'
 import { StandartButtonComponent } from './components/materials/standart-button/standart-button.component'
 import { StandartButtonLongComponent } from './components/materials/standart-button-long/standart-button-long.component'
-import { ButtonRoundedComponent } from './components/materials/button-rounded/button-rounded.component'
 import { ListButtonComponent } from './components/materials/list-button/list-button.component'
 import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
 import { FooterItemComponent } from './components/footer/footer-item/footer-item.component'
@@ -120,6 +120,7 @@ import { TypeSwitherComponent } from './components/type-swither/type-swither.com
 import { SwitchTypeService } from './services/switch-type.service'
 import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
 import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
+import { RoundedButtonComponent } from './components/materials/rounded-button/rounded-button.component'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -127,7 +128,6 @@ const mapConfig: YaConfig = {
     `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
 }
-
 
 registerLocaleData(localeRu, 'ru')
 
@@ -142,6 +142,7 @@ registerLocaleData(localeRu, 'ru')
     CircleButtonComponent,
     BackButtonComponent,
     RecoveryPasswordComponent,
+    SecondHeaderComponent,
     HeaderComponent,
     CodeInputComponent,
     SidebarComponent,
@@ -166,6 +167,7 @@ registerLocaleData(localeRu, 'ru')
     SightShowComponent,
     SightCreateComponent,
     SightTypeComponent,
+    RoundedButtonComponent,
     ReadMoreComponent,
     FiltersComponent,
     ProfileItemComponent,
@@ -177,7 +179,6 @@ registerLocaleData(localeRu, 'ru')
     FavoritesComponent,
     StandartButtonComponent,
     StandartButtonLongComponent,
-    ButtonRoundedComponent,
     ListButtonComponent,
     TruncatePipe,
     CreateRulesModalComponent,
@@ -252,4 +253,4 @@ registerLocaleData(localeRu, 'ru')
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

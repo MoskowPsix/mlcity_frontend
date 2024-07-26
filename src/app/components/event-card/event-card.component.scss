@@ -233,17 +233,11 @@ ion-card-subtitle {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2rem;
-  transition: 0.3s all;
-  height: 2rem;
-  background-color: #F98F11;
+  
   border-radius: 50%;
 }
 
-.edit-button:hover {
-  transition: 0.3s all;
-  background-color: #fcac4b;
-}
+
 
 .info-header {
   display: flex;

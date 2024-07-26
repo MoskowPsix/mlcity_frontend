@@ -39,6 +39,24 @@
  
 }
 
+.header-plug{
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-family: var(--font-bold);
+  display: flex;
+  padding-bottom:0.625rem;
+  align-items: end;
+  width: 100%;
+  min-height: 12.625rem;
+  border-radius: 0px 0px 1.5rem 1.5rem;
+}
+.header-tools{
+  color: #fff;
+  font-size: 1.25rem;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
 
 
 .info-wrapper {
