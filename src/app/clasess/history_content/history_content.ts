@@ -13,9 +13,9 @@ export class HistoryContent {
   protected description!: string
   protected materials!: string
   protected sponsor!: string
-  protected files!: IFile[]
-  protected types!: ISightType[] | IEventType[]
-  protected prices!: IPrice[]
+  protected files: IFile[] = []
+  protected types: ISightType[] | IEventType[] = []
+  protected prices: IPrice[] = []
   /**
    * @param origin any оригинальный объект событий или мест
    * @param edit any изменённый объект событй или мест
@@ -139,6 +139,7 @@ export class HistoryContent {
    * то добавляет в массив значения свойству класса.
    */
   private compareAndSetArray(name: string): void {
+    console.log(name)
     const origin: any[] = this.getPropertyObjects('origin', name)
     const edited: any[] = this.getPropertyObjects('edited', name)
     edited.forEach((edit) => {

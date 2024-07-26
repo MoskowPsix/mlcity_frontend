@@ -35,6 +35,20 @@ export class TestPageComponent implements OnInit {
       materials: '',
       date_start: '2024-06-18 00:30:00',
       date_end: '2024-06-18 01:10:00',
+      places: [
+        {
+          id: 1,
+          longitude: 54,
+          latitude: 24,
+          address: 'TG',
+        },
+        {
+          id: 2,
+          longitude: 2,
+          latitude: 24,
+          address: 'TGB',
+        },
+      ],
       types: [
         {
           id: 9,
@@ -101,8 +115,32 @@ export class TestPageComponent implements OnInit {
       ],
       // изменены материалы
       materials: 'Новые материалы',
+      // новая дата
       date_start: '2024-06-21 00:30:00',
+      // новая дата
       date_end: '2024-06-24 01:10:00',
+      places: [
+        // измененное место
+        {
+          id: 1,
+          longitude: 24,
+          latitude: 34,
+          address: 'TGB',
+        },
+        // Новое место
+        {
+          latitude: 54,
+          longitude: 24,
+          address: 'T',
+        },
+        {
+          id: 2,
+          on_delete: true,
+          longitude: 2,
+          latitude: 24,
+          address: 'TGB',
+        },
+      ],
       types: [
         {
           id: 9,

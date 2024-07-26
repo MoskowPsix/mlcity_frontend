@@ -19,7 +19,7 @@ interface EditedSeance {
 }
 
 export class EventHistoryContent extends HistoryContent {
-  private places!: object[]
+  private places: object[] = []
   private date_start!: Date
   private date_end!: Date
 
@@ -55,26 +55,27 @@ export class EventHistoryContent extends HistoryContent {
       // случай на изменение
       let originPlace: IPlace | undefined = this.searchOriginPlace(editedPlace.id)
       if (originPlace != undefined && !isEqual(originPlace, editedPlace)) {
-        let editedPlace: EditedPlace = {}
-        editedPlace.place_id = editedPlace.place_id
+        let changedPlace: EditedPlace = {}
+        changedPlace.place_id = editedPlace.id
 
         if (originPlace.address != editedPlace.address) {
-          editedPlace.address = editedPlace.address
+          changedPlace.address = editedPlace.address
         }
 
         if (originPlace.latitude != editedPlace.latitude) {
-          editedPlace.latitude = editedPlace.latitude
+          changedPlace.latitude = editedPlace.latitude
         }
 
         if (originPlace.longitude != editedPlace.longitude) {
-          editedPlace.longitude = editedPlace.longitude
+          changedPlace.longitude = editedPlace.longitude
         }
+        this.edited.places.push(changedPlace)
 
         // Проверяем есть ли измененные сеансы у места, если есть добавляем
         let editedSeances = this.compareAndGetSeances(originPlace.seances, editedPlace.history_seances)
 
         if (editedSeances != undefined) {
-          editedPlace.history_seances = editedSeances
+          changedPlace.history_seances = editedSeances
         }
       }
     }
@@ -174,7 +175,7 @@ export class EventHistoryContent extends HistoryContent {
       'date_end',
       'files',
       'types',
-      'prices',
+      'price',
     ]
     elementsWhatNeedToCompare.forEach((element: string) => {
       this.compareAndSet(element)

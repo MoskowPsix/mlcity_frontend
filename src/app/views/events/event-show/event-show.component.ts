@@ -162,6 +162,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         )
         .subscribe((response: any) => {
           this.places.push(...response.places.data)
+          console.log(this.places)
           this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
             response.places.next_cursor,
           )
