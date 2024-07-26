@@ -1,4 +1,4 @@
-  <ion-modal #modal backdropDismiss="false" [isOpen]="submitResponse">
+  <!-- <ion-modal #modal backdropDismiss="false" [isOpen]="submitResponse">
 
     <ng-template>
               <ion-item lines="none" >
@@ -46,7 +46,6 @@
               <ion-note *ngIf="!confirmCode" style="text-align: center; width: 100%; font-size: 16pt; margin-top: 20px; margin-left: 30px;" color="danger">Код не верный</ion-note>
 
               <div [hidden]="timerRetryButton" style="background: none; border:none; box-shadow: none; margin-left: 30px; --font-size: 16pt;" >
-                <!-- <ion-note  style="text-transform: none; text-align: center; font-size: 16pt; margin-top: 10px; color:#357fa7; margin-left: 30px; ">Не пришёл код?</ion-note> -->
                 <div style="margin-top: 20px;">
 
                   <ion-note *ngIf="timerRertyFormated"  style="text-transform: none; text-align: center; font-size: 15pt; color:#6CA9CA" >Доступно через: {{timerRertyFormated}}  </ion-note>
@@ -66,4 +65,10 @@
 
     </ng-template>
 
+  </ion-modal> -->
+  <ion-modal backdropDismiss="false" [isOpen]="openModal">
+    <ng-template>
+ 
+  
+    </ng-template>
   </ion-modal>

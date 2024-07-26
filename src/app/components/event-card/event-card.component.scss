@@ -168,10 +168,6 @@ ion-card-subtitle {
   font-family: Montserrat-Regular;
 }
 
-.price {
-  font-size: 18px;
-  font-family: Montserrat-Regular;
-}
 
 .main-grid {
   margin-top: 2rem;
@@ -212,13 +208,20 @@ ion-card-subtitle {
 }
 
 .price {
-  font-size: 0.8rem;
   text-align: center;
-  background-color: #1C2226;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 0.625rem;
+  font-family: var(--font-bold);
+  text-align: center;
+  background-color: #1c2226b6;
   color: #fff;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 10px 10px 0;
   min-width: 3.75rem;
   height: 1.438rem;
+  padding-right: 0.75rem;
+  padding-left: 0.5rem;
 }
 
 .edit-button {
@@ -285,4 +288,10 @@ ion-card-subtitle {
   display: flex;
   gap: 0.313rem;
 
+}
+.event-name{
+  margin-top: 0.5rem;
+  color: var(--font-color-dark);
+  font-size:1rem;
+  font-family: var(--font-bold);
 }

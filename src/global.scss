@@ -84,12 +84,28 @@
 	src: url('./assets/fonts/NunitoSans-SemiBold.ttf');
 }
 
+@font-face {
+    font-family: "NunitoSans-SemiBold";
+    src: url('/assets/fonts/static/NunitoSans_7pt-SemiBold.ttf');
+}
+@font-face {
+    font-family: "NunitoSans-Regular";
+    src: url('/assets/fonts/static/NunitoSans_7pt-Regular.ttf');
+}
 
+
+
+:root{
+    --font-bold:'NunitoSans-SemiBold';
+    --font-regular:'NunitoSans-Regular';
+    --font-color:#4C5861;
+    --font-color-dark:#1C2226;
+}
 
 ion-content {
   // overwrite inline styles
   // --offset-bottom: 85%!important;
-  --overflow: hidden;
+  --overflow:auto;
   overflow: auto;
   --background: #FAFAFA;
 
@@ -323,6 +339,11 @@ swiper-slide {
         object-fit: cover;
         border-radius: 2%;
     }
+}
+// убираем стрелки у input
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 
 .inner-scroll{

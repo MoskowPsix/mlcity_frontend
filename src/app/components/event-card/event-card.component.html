@@ -118,32 +118,55 @@
         <div class="card" style="background-image: url('{{event.files[0].link}} ');">
           <div *ngIf="myEvent" class="edit-button"></div>
               <div class="info-wrapper">
-                  <div class="info-header"> <div class="price"> </div>
-              </div>
+                  <div class="info-header">
+                     <div *ngIf="minPrice !== maxPrice" class="price"> 
+                        от  {{minPrice}}₽
+                     </div>
+                     <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price"> 
+                        от  {{minPrice}}₽
+                     </div>
+                     <div *ngIf="minPrice === maxPrice && minPrice === 0" class="price"> 
+                        Бесплатно
+                     </div>
+                </div>
     
                 <div class="info-footer">
                     <div class="info-text-container">
-                      <div class="info-text"></div>
+                      <div *ngIf="formatedStartDate !== formatedEndDate" class="info-text">{{formatedStartDate}} - {{formatedEndDate}}</div>
+                      <div *ngIf="formatedStartDate === formatedEndDate" class="info-text">{{' '+formatedStartDate}}</div>
                     </div>
                 </div>
+              
           </div>
         </div>
+        <h4 class="event-name">{{event.name}}</h4>
       </ng-container>
 
       <ng-container *ngIf="event.files[0].local === 1 && event.files[0].file_types[0].name === 'image'">
         <div class="card" style="background-image: url('{{host}}:{{port}}{{event.files[0].link}} ');">
           <div *ngIf="myEvent" class="edit-button"></div>
               <div class="info-wrapper">
-                  <div class="info-header"> <div class="price"> </div>
-              </div>
-    
-                <div class="info-footer">
-                    <div class="info-text-container">
-                      <div class="info-text"></div>
+                  <div class="info-header">
+                    <div *ngIf="minPrice !== maxPrice" class="price"> 
+                      от  {{minPrice}}₽
                     </div>
-                </div>
+                    <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price"> 
+                      от  {{minPrice}}₽
+                    </div>
+                    <div *ngIf="minPrice === maxPrice && minPrice === 0" class="price"> 
+                      Бесплатно
+                    </div>
+                 </div>
+    
+                 <div class="info-footer">
+                  <div class="info-text-container">
+                    <div *ngIf="formatedStartDate !== formatedEndDate" class="info-text">{{formatedStartDate}} - {{formatedEndDate}}</div>
+                    <div *ngIf="formatedStartDate === formatedEndDate" class="info-text">{{' '+formatedStartDate}}</div>
+                  </div>
+              </div>
           </div>
         </div>
+        <h4 class="event-name">{{event.name}}</h4>
       </ng-container>
 
       <ng-container *ngIf="event.files[0].file_types[0].name === 'video'">
@@ -151,17 +174,27 @@
           <iframe [src]="event.files[0].link + '&autoplay=1&mute=1&loop=1'|safeVideoByUrl" allow="encrypted-media; fullscreen; picture-in-picture; loop" loop autoplay width="100%" height="100%" frameborder="0" ></iframe>
           <div *ngIf="myEvent" class="edit-button"></div>
               <div class="info-wrapper">
-                  <div class="info-header"> <div class="price"> </div>
-              </div>
+                <div class="info-header">
+                  <div *ngIf="minPrice !== maxPrice" class="price"> 
+                    от  {{minPrice}}₽
+                  </div>
+                  <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price"> 
+                    от  {{minPrice}}₽
+                  </div>
+                  <div *ngIf="minPrice === maxPrice && minPrice === 0" class="price"> 
+                    Бесплатно
+                  </div>
+               </div>
     
-                <div class="info-footer">
-                    <div class="info-text-container">
-                      <div class="info-text"></div>
-                    </div>
+               <div class="info-footer">
+                <div class="info-text-container">
+                  <div *ngIf="formatedStartDate !== formatedEndDate" class="info-text">{{formatedStartDate}} - {{formatedEndDate}}</div>
+                  <div *ngIf="formatedStartDate === formatedEndDate" class="info-text">{{' '+formatedStartDate}}</div>
                 </div>
+            </div>
           </div>
         </div>
-      
+        <h4 class="event-name">{{event.name}}</h4>
       </ng-container>
    
   </div>

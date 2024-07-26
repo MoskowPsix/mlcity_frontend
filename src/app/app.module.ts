@@ -24,6 +24,7 @@ import { AppComponent } from './app.component'
 import { EventsComponent } from './views/events/events.component'
 import { CabinetComponent } from './views/cabinet/cabinet.component'
 import { HomeComponent } from './views/home/HomeComponent'
+import { EmailConfirmComponent } from './views/cabinet/email-confirm/email-confirm.component'
 import { LoginComponent } from './views/login/login.component'
 import { HeaderComponent } from './components/header/header.component'
 import { SidebarComponent } from './components/sidebar/sidebar.component'
@@ -37,7 +38,6 @@ import { NotFoundComponent } from './views/errors/not-found/not-found.component'
 import { ForbiddenComponent } from './views/errors/forbidden/forbidden.component'
 import { ServerErrorComponent } from './views/errors/server-error/server-error.component'
 import { EventShowComponent } from './views/events/event-show/event-show.component'
-import { CircleButtonComponent } from './components/circle-button/circle-button.component'
 import { SightShowComponent } from './views/sights/sight-show/sight-show.component'
 import { EventCreateComponent } from './views/events/event-create/event-create.component'
 import { SightsComponent } from './views/sights/sights.component'
@@ -85,6 +85,7 @@ import { PlaceInfoComponent } from './components/place-info/place-info.component
 import { SightTypeComponent } from './components/sight-type/sight-type.component'
 import { SafeUrlPipe } from './views/events/event-create/event-create.pipe'
 import { SafeUrlPipe2 } from './components/event-card/event-card.pipe'
+import { CodeInputComponent } from './components/materials/code-input/code-input.component'
 import { MyEventsComponent } from './views/cabinet/my-events/my-events.component'
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component'
 import { RegistrationComponent } from './views/registration/registration.component'
@@ -117,6 +118,8 @@ import { FooterItemComponent } from './components/footer/footer-item/footer-item
 import { TestPageComponent } from './views/test-page/test-page.component'
 import { TypeSwitherComponent } from './components/type-swither/type-swither.component'
 import { SwitchTypeService } from './services/switch-type.service'
+import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
+import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
 const mapConfig: YaConfig = {
   apikey:
     environment.apiKeyYandex +
@@ -140,6 +143,7 @@ registerLocaleData(localeRu, 'ru')
     BackButtonComponent,
     RecoveryPasswordComponent,
     HeaderComponent,
+    CodeInputComponent,
     SidebarComponent,
     AddEventComponent,
     CardGridComponent,
@@ -149,6 +153,7 @@ registerLocaleData(localeRu, 'ru')
     MenuAuthSidebarComponent,
     FooterComponent,
     UserSectionComponent,
+    EmailConfirmComponent,
     ExitButtonComponent,
     AboutComponent,
     NotFoundComponent,
@@ -173,7 +178,6 @@ registerLocaleData(localeRu, 'ru')
     StandartButtonComponent,
     StandartButtonLongComponent,
     ButtonRoundedComponent,
-    CircleButtonComponent,
     ListButtonComponent,
     TruncatePipe,
     CreateRulesModalComponent,
@@ -197,6 +201,7 @@ registerLocaleData(localeRu, 'ru')
     CollapsedTextComponent,
     ContactsComponent,
     PrivacyComponent,
+    TestIframeComponent,
     DropDownButtonComponent,
     MiniCardComponent,
     UpdateVersionModalComponent,

@@ -9,7 +9,8 @@ import { LoadingService } from 'src/app/services/loading.service'
 import { ToastService } from 'src/app/services/toast.service'
 import { UserService } from 'src/app/services/user.service'
 import { environment } from 'src/environments/environment'
-
+import { NavigationService } from 'src/app/services/navigation.service'
+import { RecoveryPasswordService } from 'src/app/services/recovery-password.service'
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -25,6 +26,8 @@ export class SettingsComponent implements OnInit {
     private toastService: ToastService,
     private loadingService: LoadingService,
     private authService: AuthService,
+    private navigationService: NavigationService,
+    private recoveryPasswordService: RecoveryPasswordService,
   ) {}
 
   private readonly destroy$ = new Subject<void>()
@@ -34,9 +37,12 @@ export class SettingsComponent implements OnInit {
   formData: FormData = new FormData()
   avatar: string = ''
   avatarLoad: boolean = false
+  public email: boolean = this.navigationService.modalAuthEmail.value
+  public modalEmail: boolean = true
   avatarUrl!: string
   passwordChange: boolean = false
   passwordError: string = ''
+  public step: number = 0
   public new_name: FormControl = new FormControl('')
   previewPhotoUrl!: string
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
@@ -112,6 +118,12 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  checkEmail() {
+    this.navigationService.modalAuthEmail.pipe().subscribe(() => {
+      this.email = this.navigationService.modalAuthEmail.value
+    })
+  }
+
   checkPassword() {
     if (
       this.passwordResetForm.valid ||
@@ -135,14 +147,47 @@ export class SettingsComponent implements OnInit {
       this.previewPhoto(file)
     }
   }
-  openPasswordBlock(event: HTMLElement, plug: HTMLElement) {
-    this.passwordChange = true
-    let block = event
-    block.classList.toggle('password-inputs-wrapper_active')
-    plug.classList.toggle('plug-password-wrapper_active')
-    setTimeout(() => {
-      plug.classList.add('plug-password-wrapper_none')
-    }, 500)
+  openPasswordBlock() {
+    this.loadingService.showLoading()
+    this.userService
+      .getUserById()
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          this.toastService.showToast(`${err.messages}`, 'danger')
+          return of(EMPTY)
+        }),
+      )
+      .subscribe((res: any) => {
+        if (res.user.email_verified_at) {
+          this.recoveryPasswordService
+            .recoveryPassword(res.user.email)
+            .pipe(
+              takeUntil(this.destroy$),
+              catchError((err) => {
+                console.log(err)
+                return of(EMPTY)
+              }),
+            )
+            .subscribe((res: any) => {
+              this.loadingService.hideLoading()
+              this.toastService.showToast(
+                'Ссылка для смены пароля была отправлена вам на почту',
+                'success',
+              )
+            })
+        } else {
+          this.loadingService.hideLoading()
+          this.router.navigate(['/email-confirm'])
+        }
+      })
+    // this.passwordChange = true
+    // let block = event
+    // block.classList.toggle('password-inputs-wrapper_active')
+    // plug.classList.toggle('plug-password-wrapper_active')
+    // setTimeout(() => {
+    //   plug.classList.add('plug-password-wrapper_none')
+    // }, 500)
   }
   previewPhoto(file: File) {
     const reader: FileReader = new FileReader()
@@ -151,8 +196,14 @@ export class SettingsComponent implements OnInit {
     }
     reader.readAsDataURL(file)
   }
-
+  closeModal() {
+    this.modalEmail = false
+    setTimeout(() => {
+      this.router.navigate(['/home'])
+    }, 10)
+  }
   ngOnInit() {
+    this.checkEmail()
     this.isMobile = this.platform.is('mobile')
     this.getUser()
     this.passwordResetForm = new FormGroup({
