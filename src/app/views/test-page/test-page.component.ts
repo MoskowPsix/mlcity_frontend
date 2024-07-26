@@ -75,7 +75,6 @@ export class TestPageComponent  implements OnInit {
     [55.781329, 37.442781],
     [55.844708, 37.74887],
     [55.723123, 37.406067],
-    [55.858585, 37.48498],
   ];
 
   ngOnInit(): void {
