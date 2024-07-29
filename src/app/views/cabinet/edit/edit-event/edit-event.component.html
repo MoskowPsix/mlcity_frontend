@@ -6,15 +6,13 @@
                 <app-new-place></app-new-place>
             </div>
             <app-standart-button buttonText="Добавить место" type="button" theme ="light"></app-standart-button>
-            <app-standart-rich-input [label]="'Описание'" [control] = "editForm.get('name')"></app-standart-rich-input>
+            <app-standart-rich-input [label]="'Описание'" [control] = "editForm.get('description')"></app-standart-rich-input>
             <div class="category-container">
                 <span class="category-container-header">Категории</span>
                 <div class="category-button-grid">
-                    <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="Категория"></app-rounded-button>
-                    <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="Категория"></app-rounded-button>
-                    <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="Категория"></app-rounded-button>
-                    <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="Категория"></app-rounded-button>
-                    <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="Категория"></app-rounded-button>
+                    <ng-container *ngIf="event && event.types">
+                        <app-rounded-button  *ngFor="let category of event.types" routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="{{category.name}}"></app-rounded-button>
+                    </ng-container>
                 </div>
 
                 <div class="button-conatiner">
@@ -28,7 +26,9 @@
             </div>
 
             <div class="category-container">
-                <app-standart-input [label]="'Стоимость'" [control] = "editForm.get('name')"></app-standart-input>
+                <ng-container *ngIf="event && event.price">
+                    <app-standart-input *ngFor="let price of event.price; let i = index" [label]="'Стоимость '+ (i+1)" [control] = "editForm.get('name')"></app-standart-input>
+                </ng-container>                
                 <div class="button-conatiner">
                     <div class="button-container-item">
                       <app-standart-button buttonText="Добавить" type="button" theme ="standart"></app-standart-button>
@@ -40,7 +40,7 @@
             </div>
 
             <app-standart-input [label]="'Название события'" [control] = "editForm.get('name')"></app-standart-input>
-            <app-standart-input [label]="'Организатор'" [control] = "editForm.get('name')"></app-standart-input>
+            <app-standart-input [label]="'Организатор'" [control] = "editForm.get('sponsor')"></app-standart-input>
             <div class="save-button-wrapper">
                 <app-standart-button buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
             </div>

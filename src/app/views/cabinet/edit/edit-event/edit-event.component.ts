@@ -19,8 +19,9 @@ export class EditEventComponent implements OnInit {
   private readonly destroy$ = new Subject<void>()
   event!: IEvent
   editForm!: FormGroup
+  finalObject!: IEvent
   logFiles(event: any) {
-    console.log(event)
+    this.finalObject.files = event
   }
   ionViewWillEnter() {
     this.loadingService.showLoading()
@@ -30,13 +31,20 @@ export class EditEventComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         this.event = res
-        console.log(this.event.files)
+        console.log(res)
         this.loadingService.hideLoading()
+        this.editForm.patchValue({
+          name: res.name,
+          sponsor: res.sponsor,
+          description: res.description,
+        })
       })
   }
   ngOnInit() {
     this.editForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      description: new FormControl('', [Validators.required, Validators.minLength(3)]),
     })
   }
 }

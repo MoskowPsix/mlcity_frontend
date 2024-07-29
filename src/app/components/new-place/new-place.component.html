@@ -3,7 +3,8 @@
   <div class="place-container">
     <form [formGroup]="placeForm">
       <app-standart-input [label]="'Адрес'" [control]="placeForm.get('address')"></app-standart-input>
-      <app-standart-input [label]="'Время и дата'" [control]="placeForm.get('address')"></app-standart-input>
+      <app-standart-input [label]="'Время и дата'" [control]="placeForm.get('address')" type="date"></app-standart-input>
+    
     </form>
     <div class="button-conatiner">
       <div class="button-container-item">
