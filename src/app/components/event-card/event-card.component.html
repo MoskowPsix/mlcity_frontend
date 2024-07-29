@@ -115,9 +115,9 @@
   <div class="card-wrapper">
  
       <ng-container *ngIf="event.files[0].local === 0 && event.files[0].file_types[0].name === 'image'">
-        <div class="card" routerLink="/events/{{event.id}}" style="background-image: url('{{event.files[0].link}} ');">
+        <div (click)="checkEdit()" class="card" style="background-image: url('{{event.files[0].link}} ');">
                 <div *ngIf="myEvent" class="edit-button">
-                  <app-circle-button icon="/assets/icons/menu-pen.svg" border="dark-all" ></app-circle-button>
+                  <app-circle-button (clicked)="blockedRout()" routerLink="/cabinet/events/edit/{{event.id}}" icon="/assets/icons/menu-pen.svg" border="dark-all" ></app-circle-button>
                 </div>
         
               <div class="info-wrapper">

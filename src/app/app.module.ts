@@ -8,26 +8,25 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { ContactsComponent } from './views/contacts/contacts.component'
 import { DropDownButtonComponent } from './components/drop-down-button/drop-down-button.component'
 import { UserSectionComponent } from './components/user-section/user-section.component'
-import {
-  HttpClientModule,
-  HTTP_INTERCEPTORS,
-  HttpClientJsonpModule,
-} from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientJsonpModule } from '@angular/common/http'
 
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
 
 import { AppRoutingModule } from './routing/app-routing.module'
 
 import { AngularYandexMapsModule, YaConfig } from 'angular8-yandex-maps'
-
+import { EditEventComponent } from './views/cabinet/edit/edit-event/edit-event.component'
+import { EditSightComponent } from './views/cabinet/edit/edit-sight/edit-sight.component'
 import { AppComponent } from './app.component'
 import { EventsComponent } from './views/events/events.component'
+
 import { CabinetComponent } from './views/cabinet/cabinet.component'
 import { HomeComponent } from './views/home/HomeComponent'
 import { EmailConfirmComponent } from './views/cabinet/email-confirm/email-confirm.component'
 import { LoginComponent } from './views/login/login.component'
 import { HeaderComponent } from './components/header/header.component'
 import { SidebarComponent } from './components/sidebar/sidebar.component'
+import { EditSliderComponent } from './components/materials/edit-slider/edit-slider.component'
 import { AddEventComponent } from './views/add-event/add-event.component'
 import { DropdownPopupComponent } from './components/dropdown-popup/dropdown-popup.component'
 import { MenuAuthComponent } from './components/menu-auth/menu-auth.component'
@@ -101,11 +100,13 @@ import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component'
 import { TypesComponent } from './components/types/types.component'
 import { BackButtonComponent } from './components/back-button/back-button.component'
+import { StandartRichInputComponent } from './components/materials/standart-rich-input/standart-rich-input.component'
 import { NgxSliderModule } from '@angular-slider/ngx-slider'
 import { CollapsedTextComponent } from './components/collapsed-text/collapsed-text.component'
 import { PrivacyComponent } from './views/privacy/privacy.component'
 import { CreateRulesModalComponent } from './components/create-rules-modal/create-rules-modal.component'
 import { StandartInputComponent } from './components/materials/standart-input/standart-input.component'
+import { NewPlaceComponent } from './components/new-place/new-place.component'
 import { RulesModalCheckService } from './services/rules-modal-check.service'
 import { MiniCardComponent } from './components/mini-card/mini-card.component'
 import { CardGridComponent } from './components/card-grid/card-grid.component'
@@ -122,10 +123,7 @@ import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
 import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
 import { RoundedButtonComponent } from './components/materials/rounded-button/rounded-button.component'
 const mapConfig: YaConfig = {
-  apikey:
-    environment.apiKeyYandex +
-    '&' +
-    `suggest_apikey=${environment.apiKeyYandexSubject}`,
+  apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
 }
 
@@ -145,6 +143,8 @@ registerLocaleData(localeRu, 'ru')
     SecondHeaderComponent,
     HeaderComponent,
     CodeInputComponent,
+    EditEventComponent,
+    EditSightComponent,
     SidebarComponent,
     AddEventComponent,
     CardGridComponent,
@@ -166,6 +166,7 @@ registerLocaleData(localeRu, 'ru')
     SightsComponent,
     SightShowComponent,
     SightCreateComponent,
+    EditSliderComponent,
     SightTypeComponent,
     RoundedButtonComponent,
     ReadMoreComponent,
@@ -177,6 +178,7 @@ registerLocaleData(localeRu, 'ru')
     EventCardComponent,
     CommentsListComponent,
     FavoritesComponent,
+    NewPlaceComponent,
     StandartButtonComponent,
     StandartButtonLongComponent,
     ListButtonComponent,
@@ -187,6 +189,7 @@ registerLocaleData(localeRu, 'ru')
     SettingsProfileComponent,
     SettingsPrivacyComponent,
     SettingsFavoriteComponent,
+    StandartRichInputComponent,
     SettingsNotificationComponent,
     PlaceInfoComponent,
     SightTypeCaruselComponent,

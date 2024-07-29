@@ -1,0 +1,13 @@
+<ion-content>
+    <app-edit-slider></app-edit-slider>
+    <div class="content-container">
+        <form [formGroup]="editForm" action="" class="edit-form">
+            <app-new-place></app-new-place>
+            <app-standart-button buttonText="Добавить место" type="button" theme ="light"></app-standart-button>
+            <app-standart-input [label]="'Название события'" [control] = "editForm.get('name')"></app-standart-input>
+            <app-standart-input [label]="'Адрес'" [control] = "editForm.get('name')"></app-standart-input>
+            <app-standart-rich-input [label]="'Описание'" [control] = "editForm.get('name')"></app-standart-rich-input>
+            <app-standart-input [label]="'Организатор'" [control] = "editForm.get('name')"></app-standart-input>
+        </form>
+    </div>
+</ion-content>

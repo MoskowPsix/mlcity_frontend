@@ -40,6 +40,7 @@ import { SightsService } from 'src/app/services/sights.service'
 import { CommentsService } from 'src/app/services/comments.service'
 import numeral from 'numeral'
 import { HelpersService } from 'src/app/services/helpers.service'
+import { Router } from '@angular/router'
 register()
 
 @Component({
@@ -60,6 +61,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     private sanitizer: DomSanitizer,
     private helpers: HelpersService,
     private datePipe: DatePipe,
+    private router: Router,
   ) {}
 
   private readonly destroy$ = new Subject<void>()
@@ -94,17 +96,29 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   favorite: boolean = false
   loadingFavotire: boolean = false
-
+  url!: string
   like: boolean = false
   loadingLike: boolean = false
   startLikesCount: number = 0
   vkLikesCount: number | null = null
   //windowComment: boolean = false
-
+  dontEdit: boolean = true
   prices: number[] = []
   minPrice: number = 0
   maxPrice: number = 0
 
+  checkEdit() {
+    setTimeout(() => {
+      if (this.dontEdit) {
+        this.isSight
+          ? this.router.navigate(['/sights', this.event.id, this.slugName])
+          : this.router.navigate(['/events', this.event.id, this.slugName])
+      }
+    }, 10)
+  }
+  blockedRout() {
+    this.dontEdit = false
+  }
   toggleFavorite(event_id: number) {
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
@@ -158,9 +172,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  test() {
-   
-  }
+  test() {}
 
   getUrlFrame(url: string) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
@@ -320,10 +332,9 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       for (let i = 0; i < this.event.price.length; i++) {
         this.prices.push(Number(this.event.price[i].cost_rub))
       }
-      
+
       this.minPrice = Math.min(...this.prices)
       this.maxPrice = Math.max(...this.prices)
-
     }
   }
 
@@ -451,12 +462,11 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.event.date_start,
       'dd-MMM',
     )
- 
+
     this.formatedEndDate = this.datePipe.transform(
       this.event.date_end,
       'dd-MMM',
     )
-
 
     this.userAuth = this.authService.getAuthState()
     this.findPrice()

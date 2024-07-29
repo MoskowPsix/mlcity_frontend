@@ -1,0 +1,14 @@
+<div #mainPhoto style="background-image: url({{images[0]}});" class="main-photo">
+  <app-back-button></app-back-button>
+</div>
+<div class="slider-container">
+  <div class="slider-container-add-button">
+    <img src="/assets/icons/addPhoto.svg" alt="">
+    <span class="slider-container-add-button_text">Добавить фото</span>
+  </div>
+  
+  <div (click)="setMainPhoto($event)" *ngFor="let img of images" style="background-image: url({{img}});" class="slider-container-item">
+    <div class="delete-button-wrapper"><app-circle-button icon="/assets/icons/trash.svg"></app-circle-button></div>
+  </div>
+
+</div>
