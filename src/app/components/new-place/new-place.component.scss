@@ -1,0 +1,24 @@
+.place-header{
+    color: #4C5861;
+    font-family: var(--font-regular);
+    font-size: 0.75rem;
+    display: flex;
+    padding-bottom: 0.3rem;
+}
+.place-container{
+    height:13rem;
+    border: 1px solid #4642422b;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 5px;
+}
+.button-conatiner{
+    padding-top:0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3%;
+}
+.button-container-item{
+    min-width:48.5%;  
+}

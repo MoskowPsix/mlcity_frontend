@@ -19,7 +19,10 @@ export class EditEventComponent implements OnInit {
   private readonly destroy$ = new Subject<void>()
   event!: IEvent
   editForm!: FormGroup
-  ionViewWillLeave() {
+  logFiles(event: any) {
+    console.log(event)
+  }
+  ionViewWillEnter() {
     this.loadingService.showLoading()
     const eventId = this.routeActivated.snapshot.paramMap.get('id')
     this.eventsService
@@ -27,7 +30,7 @@ export class EditEventComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         this.event = res
-        console.log(res)
+        console.log(this.event.files)
         this.loadingService.hideLoading()
       })
   }

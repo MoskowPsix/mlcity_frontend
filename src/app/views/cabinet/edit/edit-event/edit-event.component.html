@@ -1,13 +1,50 @@
 <ion-content>
-    <app-edit-slider></app-edit-slider>
+    <app-edit-slider *ngIf="this.event && this.event.files" (filesEmit)="logFiles($event)" [files]="this.event.files"></app-edit-slider>
     <div class="content-container">
         <form [formGroup]="editForm" action="" class="edit-form">
-            <app-new-place></app-new-place>
+            <div class="place-container">
+                <app-new-place></app-new-place>
+            </div>
             <app-standart-button buttonText="Добавить место" type="button" theme ="light"></app-standart-button>
-            <app-standart-input [label]="'Название события'" [control] = "editForm.get('name')"></app-standart-input>
-            <app-standart-input [label]="'Адрес'" [control] = "editForm.get('name')"></app-standart-input>
             <app-standart-rich-input [label]="'Описание'" [control] = "editForm.get('name')"></app-standart-rich-input>
+            <div class="category-container">
+                <span class="category-container-header">Категории</span>
+                <div class="category-button-grid">
+                    <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="Категория"></app-rounded-button>
+                    <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="Категория"></app-rounded-button>
+                    <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="Категория"></app-rounded-button>
+                    <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="Категория"></app-rounded-button>
+                    <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/category.svg" buttonText="Категория"></app-rounded-button>
+                </div>
+
+                <div class="button-conatiner">
+                    <div class="button-container-item">
+                      <app-standart-button buttonText="Добавить" type="button" theme ="standart"></app-standart-button>
+                    </div>
+                    <div class="button-container-item">
+                      <app-standart-button buttonText="Сбросить" type="button" theme ="light"></app-standart-button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-container">
+                <app-standart-input [label]="'Стоимость'" [control] = "editForm.get('name')"></app-standart-input>
+                <div class="button-conatiner">
+                    <div class="button-container-item">
+                      <app-standart-button buttonText="Добавить" type="button" theme ="standart"></app-standart-button>
+                    </div>
+                    <div class="button-container-item">
+                      <app-standart-button buttonText="Сбросить" type="button" theme ="light"></app-standart-button>
+                    </div>
+                </div>
+            </div>
+
+            <app-standart-input [label]="'Название события'" [control] = "editForm.get('name')"></app-standart-input>
             <app-standart-input [label]="'Организатор'" [control] = "editForm.get('name')"></app-standart-input>
+            <div class="save-button-wrapper">
+                <app-standart-button buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
+            </div>
+
         </form>
     </div>
 </ion-content>

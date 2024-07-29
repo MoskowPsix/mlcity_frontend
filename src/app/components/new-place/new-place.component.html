@@ -1,3 +1,18 @@
-<p>
-  new-place works!
-</p>
+<div>
+  <span class="place-header">Место провидения</span>
+  <div class="place-container">
+    <form [formGroup]="placeForm">
+      <app-standart-input [label]="'Адрес'" [control]="placeForm.get('address')"></app-standart-input>
+      <app-standart-input [label]="'Время и дата'" [control]="placeForm.get('address')"></app-standart-input>
+    </form>
+    <div class="button-conatiner">
+      <div class="button-container-item">
+        <app-standart-button buttonText="Добавить время" type="button" theme ="standart"></app-standart-button>
+      </div>
+      <div class="button-container-item">
+        <app-standart-button buttonText="Сбросить" type="button" theme ="light"></app-standart-button>
+      </div>
+
+    </div>
+  </div>
+</div>

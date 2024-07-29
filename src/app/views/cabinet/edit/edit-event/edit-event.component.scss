@@ -2,3 +2,51 @@
     padding-left: 1rem;
     padding-right: 1rem;
 }
+.edit-form{
+    padding-top: 1rem;
+}
+.place-container{
+    padding-bottom:0.75rem;
+}
+.category-container{
+    padding-top: 1rem;
+}
+
+.category-button-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 6rem);
+    gap: 0.4rem;
+    max-width: 100%;
+}
+
+.category-container-header{
+    color: #4C5861;
+    font-family: var(--font-regular);
+    font-size: 0.75rem;
+    display: flex;
+    padding-bottom: 0.5rem;
+
+}
+
+.button-conatiner{
+    padding-top:0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3%;
+}
+.button-container-item{
+    min-width:48.5%;  
+}
+.price-container-header{
+    color: #4C5861;
+    font-family: var(--font-regular);
+    font-size: 0.75rem;
+    display: flex;
+    padding-bottom: 0.5rem;
+    margin-bottom: -1rem;
+}
+.save-button-wrapper{
+    padding-top: 1rem;
+    padding-bottom: 10rem;
+}
