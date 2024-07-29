@@ -16,4 +16,4 @@
   </div>
 
 </div>
-<input (input)="fileChanged($event)" multiple="multiple" style="opacity: 0;" #file type="file">
+<input (change)="fileChanged($event,file)" multiple="multiple" style="opacity: 0;" #file type="file">
