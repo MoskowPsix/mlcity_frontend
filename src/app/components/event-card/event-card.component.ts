@@ -12,18 +12,7 @@ import {
 } from '@angular/core'
 
 import { DatePipe } from '@angular/common'
-import {
-  catchError,
-  delay,
-  EMPTY,
-  map,
-  of,
-  retry,
-  Subject,
-  switchMap,
-  takeUntil,
-  tap,
-} from 'rxjs'
+import { catchError, delay, EMPTY, map, of, retry, Subject, switchMap, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { MessagesAuth } from 'src/app/enums/messages-auth'
 import { AuthService } from 'src/app/services/auth.service'
@@ -130,9 +119,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           .pipe(
             tap(() => {
               this.favorite = !this.favorite
-              this.favorite
-                ? this.event.favorites_users_count++
-                : this.event.favorites_users_count--
+              this.favorite ? this.event.favorites_users_count++ : this.event.favorites_users_count--
               this.loadingFavotire = false
             }),
             tap(() => {
@@ -152,9 +139,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           .pipe(
             tap(() => {
               this.favorite = !this.favorite
-              this.favorite
-                ? this.event.favorites_users_count++
-                : this.event.favorites_users_count--
+              this.favorite ? this.event.favorites_users_count++ : this.event.favorites_users_count--
 
               this.loadingFavotire = false
             }),
@@ -189,9 +174,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           .pipe(
             tap(() => {
               this.like = !this.like
-              this.like
-                ? this.event.liked_users_count++
-                : this.event.liked_users_count--
+              this.like ? this.event.liked_users_count++ : this.event.liked_users_count--
               this.loadingLike = false
             }),
             tap(() => {
@@ -211,9 +194,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           .pipe(
             tap(() => {
               this.like = !this.like
-              this.like
-                ? this.event.liked_users_count++
-                : this.event.liked_users_count--
+              this.like ? this.event.liked_users_count++ : this.event.liked_users_count--
               this.loadingLike = false
             }),
             tap(() => {
@@ -235,9 +216,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       .getPostGroup(vk_group_id, vk_post_id)
       .pipe(
         delay(100),
-        map((res) =>
-          res.response && res.response.length ? res.response[0].likes.count : 0,
-        ),
+        map((res) => (res.response && res.response.length ? res.response[0].likes.count : 0)),
         switchMap((count) => {
           //if (count !== 0){
           this.eventsService
@@ -246,10 +225,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
               // обновляем на беке  кол-во вк лайков
               catchError((err) => {
                 //console.log(err)
-                this.toastService.showToast(
-                  MessagesErrors.vkLikesError,
-                  'secondary',
-                )
+                this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
                 return of(EMPTY)
               }),
               takeUntil(this.destroy$),
@@ -259,8 +235,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           return of(count)
         }),
         tap((count) => {
-          if (this.event.likes !== null)
-            this.startLikesCount = this.event.likes.local_count + count // обновляем лайки в представлении
+          if (this.event.likes !== null) this.startLikesCount = this.event.likes.local_count + count // обновляем лайки в представлении
         }),
         catchError((err) => {
           //console.log(err)
@@ -458,22 +433,15 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.destroy$.complete()
   }
   ngOnInit() {
-    this.formatedStartDate = this.datePipe.transform(
-      this.event.date_start,
-      'dd-MMM',
-    )
+    this.formatedStartDate = this.datePipe.transform(this.event.date_start, 'dd-MMM')
+    console.log(this.event)
 
-    this.formatedEndDate = this.datePipe.transform(
-      this.event.date_end,
-      'dd-MMM',
-    )
+    this.formatedEndDate = this.datePipe.transform(this.event.date_end, 'dd-MMM')
 
     this.userAuth = this.authService.getAuthState()
     this.findPrice()
     this.slugName = this.helpers.translit(this.event.name)
-    this.startLikesCount = this.event.likes
-      ? this.event.likes.vk_count + this.event.likes.local_count
-      : 0
+    this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     this.favorite = this.event.favorites_users_exists!
     this.like = this.event.liked_users_exists!
     // window.addEventListener('scrollend', this.scrollEvent, true);

@@ -1,204 +1,47 @@
-<!-- <ion-card> -->
-  <!-- ['/sights', event.id] - было лень переделывать поэтому тут event.id подразумевает ид места, так как компонент универсальный и можно передать место -->
-  <!-- <div class=" ripple-parent rectangle" >
-    <swiper-container
-      [routerLink]="isSight ? ['/sights', event.id, slugName] : ['/events', event.id, slugName]"
-      #swiper
-      [modules]="swiperModules"
-      autoplay-disableOnInteraction="false"
-      [followFinger]="false"
-      [initialSlide]="0"
-    > -->
-<!-- [loop]="true" -->
-      <!-- <ng-container *ngIf="event.files; else notFiles">
-
-        <ng-container *ngFor="let file of event.files">
-          <swiper-slide *ngIf="file.local === 1 && file.file_types[0].name === 'image'">
-            <ion-img style="background-image: url('{{host}}:{{port}}{{ file.link }}');"/>
-          </swiper-slide>
-          <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
-              <img alt="{{file.name}}" src="{{ file.link }}" style="z-index: 10;"/>
-          </swiper-slide>
-          <swiper-slide *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
-            <iframe [src]="file.link + '&autoplay=1&mute=1'|safeVideoByUrl" allow="encrypted-media; fullscreen; picture-in-picture;" autoplay width="100%" height="100%" frameborder="0"></iframe>
-          </swiper-slide>
-        </ng-container>
-      </ng-container> -->
-
-      <!-- <ng-template #notFiles>
-        <swiper-slide><img alt="default img" src="/svg/no-photo.svg" /></swiper-slide>
-      </ng-template>
-    </swiper-container> -->
-
-    <!-- <ng-container *ngIf="swiperTotalSlids && swiperTotalSlids > 1">
-      <div class="slids-pagination">
-        {{ swiperCurrentSlide }} / {{ swiperTotalSlids }}
-      </div>
-    </ng-container>
-
-    <div class="date" *ngIf="event.date_start && event.date_end">
-      <span>НАЧАЛО: {{ event.date_start | date:'d MMM в HH:mm' }}</span>
-      <span>КОНЕЦ: {{ event.date_end | date:'d MMM в HH:mm' }}</span>
-    </div> -->
-
-    <!-- <div class="price" *ngIf="event.price">
-      <span *ngIf="event.price.length > 1">от {{ getMinPrice(event.price) }} руб. до {{ getMaxPrice(event.price) }} руб.</span>
-      <span *ngIf="event.price.length === 1">{{ event.price[0].cost_rub }} руб.</span>
-    </div>
-    <div class="price" *ngIf="!event.price">
-      <span>Бесплатно</span>
-    </div> -->
-
-    <!-- <div *ngIf="event.types && event.types.length" class="type">
-      <img alt="img" src="{{host}}:{{port}}{{ event.types[0].ico }}" />
-    </div>
-
-    <ion-card-header [routerLink]="isSight ? ['/sights', event.id] : ['/events', event.id]">
-      <ion-text class="last-header card-title">{{ event.name | truncate:[60,'...'] }}</ion-text>
-      <ng-container *ngIf="!isSight">
-        <div *ngIf="minPrice !== 0 && minPrice !== maxPrice" class="price">от {{minPrice}}₽ до {{maxPrice}}₽</div>
-        <div *ngIf="minPrice === 0 && maxPrice === 0" class="price">Вход свободный</div>
-        <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price">Вход {{minPrice}}₽</div>
-      </ng-container>
-   
-      <ion-card-subtitle>{{ event.address }}</ion-card-subtitle>
-    </ion-card-header>
-
-    <ion-card-content lines="none">
-      <div [routerLink]="isSight ? ['/sights', event.id, slugName] : ['/events', event.id, slugName]" class="text-wrapper">
-        <app-read-more text="{{ event.description }}"></app-read-more>
-      </div>
-
-    </ion-card-content> -->
-
-    <!-- Ссылки которые пока просто ссылки без превью. -->
-    <!-- <ng-container *ngIf="event.files && event.files.length; else notFiles">
-      <ng-container *ngFor="let file of event.files">
-        <ion-card *ngIf="file.local === 0 && file.file_types[0].name === 'link'">
-          <ion-item button detail="true" href="{{ file.url }}" ></ion-item>
-        </ion-card>
-      </ng-container>
-    </ng-container> -->
-
-  <!-- </div>
-
-  <ion-item class="footer" lines="none">
-    <ion-row slot="start">
-      <ion-chip (click)="toggleLike(event.id)" [color]="like ? 'danger' : ''" >
-        <ion-icon *ngIf="!loadingLike" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'danger' : ''" class="ico"></ion-icon>
-        <ion-spinner name="crescent" *ngIf="loadingLike" class="load_spinner"></ion-spinner>
-        <ion-label *ngIf="event.liked_users_count !== 0 && event.liked_users_count">{{ getCurentNumber(event.liked_users_count) }}</ion-label>
-      </ion-chip>
-      <ion-chip (click)="toggleComment()">
-        <ion-icon *ngIf="!loadingComment" name="chatbox-outline" class="ico"></ion-icon>
-        <ion-spinner name="crescent" *ngIf="loadingComment" class="load_spinner"></ion-spinner>
-        <ion-label *ngIf="event.comments_count !== 0 && event.comments_count && !loadingComment">{{ event.comments_count }}</ion-label>
-      </ion-chip>
-      <ion-chip [color]="favorite ? 'warning' : ''" (click)="toggleFavorite(event.id)">
-        <ion-icon *ngIf="!loadingFavotire" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''"  class="ico"></ion-icon>
-        <ion-spinner name="crescent" *ngIf="loadingFavotire" class="load_spinner"></ion-spinner> -->
-        <!-- <ion-label *ngIf="event.favorites_users_count !== 0 && event.favorites_users_count">{{ getCurentNumber(event.favorites_users_count) }}</ion-label> -->
-        <!-- <ion-icon name="share-social-outline" class="ico share"></ion-icon> -->
-      <!-- </ion-chip>
-    </ion-row>
-    <ion-chip *ngIf="event.views_users_count" [disabled]="true" color="dark" slot="end">
-      <ion-icon name="eye-outline"></ion-icon>
-      <ion-label>{{ getCurentNumber(event.views_users_count) }}</ion-label>
-    </ion-chip>
-  </ion-item>
-  <div class="comment-container" class="comments" *ngIf="comments">
-    <app-comments-list [comments]="event.comments" [isSight]="isSight" [event_id]="event.id"></app-comments-list>
-  </div>
-
-</ion-card> -->
-
   <div class="card-wrapper">
- 
-      <ng-container *ngIf="event.files[0].local === 0 && event.files[0].file_types[0].name === 'image'">
-        <div (click)="checkEdit()" class="card" style="background-image: url('{{event.files[0].link}} ');">
+
+      <ng-container>
+        <div *ngIf="event.files.length > 0; else emptyFiles">
+          <ng-container>
+            <div class="card" *ngIf="event.files[0].local === 0 && event.files[0].file_types[0].name === 'image'; else isLocal" style="background-image: url('{{event.files[0].link}} '); position: absolute;"></div>
+          </ng-container>
+          <ng-template #isLocal>
+            <div class="card" *ngIf="event.files[1].local === 0 && event.files[0].file_types[0].name === 'image'; else isVideo" style="background-image: url('{{event.files[0].link}} '); position: absolute;"></div>
+          </ng-template>
+          <ng-template #isVideo>
+            <iframe [src]="event.files[0].link + '&autoplay=1&mute=1&loop=1'|safeVideoByUrl" allow="encrypted-media; fullscreen; picture-in-picture; loop" loop autoplay width="100%" height="100%" frameborder="0" ></iframe>
+          </ng-template>
+        </div>
+        <ng-template #emptyFiles>
+          <div class="card" style="background-image: url('assets/images/nophoto.jpg'); position: absolute;"></div>
+        </ng-template>
+
+        <div (click)="checkEdit()" class="card">
                 <div *ngIf="myEvent" class="edit-button">
                   <app-circle-button (clicked)="blockedRout()" routerLink="/cabinet/events/edit/{{event.id}}" icon="/assets/icons/menu-pen.svg" border="dark-all" ></app-circle-button>
                 </div>
-        
               <div class="info-wrapper">
                   <div class="info-header">
-                     <div *ngIf="minPrice !== maxPrice" class="price"> 
+                     <div *ngIf="minPrice !== maxPrice" class="price">
                         от  {{minPrice}}₽
                      </div>
-                     <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price"> 
+                     <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price">
                         от  {{minPrice}}₽
                      </div>
-                     <div *ngIf="minPrice === maxPrice && minPrice === 0" class="price"> 
+                     <div *ngIf="minPrice === maxPrice && minPrice === 0" class="price">
                         Бесплатно
                      </div>
                 </div>
-    
+
                 <div class="info-footer">
-                    <div class="info-text-container">
+                    <div class="info-text-container" *ngIf="formatedStartDate || formatedEndDate">
                       <div *ngIf="formatedStartDate !== formatedEndDate" class="info-text">{{formatedStartDate}} - {{formatedEndDate}}</div>
                       <div *ngIf="formatedStartDate === formatedEndDate" class="info-text">{{' '+formatedStartDate}}</div>
                     </div>
                 </div>
-              
-          </div>
-        </div>
-        <h4 class="event-name">{{event.name}}</h4>
-      </ng-container>
 
-      <ng-container *ngIf="event.files[0].local === 1 && event.files[0].file_types[0].name === 'image'">
-        <div class="card" style="background-image: url('{{host}}:{{port}}{{event.files[0].link}} ');">
-          <div *ngIf="myEvent" class="edit-button"></div>
-              <div class="info-wrapper">
-                  <div class="info-header">
-                    <div *ngIf="minPrice !== maxPrice" class="price"> 
-                      от  {{minPrice}}₽
-                    </div>
-                    <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price"> 
-                      от  {{minPrice}}₽
-                    </div>
-                    <div *ngIf="minPrice === maxPrice && minPrice === 0" class="price"> 
-                      Бесплатно
-                    </div>
-                 </div>
-    
-                 <div class="info-footer">
-                  <div class="info-text-container">
-                    <div *ngIf="formatedStartDate !== formatedEndDate" class="info-text">{{formatedStartDate}} - {{formatedEndDate}}</div>
-                    <div *ngIf="formatedStartDate === formatedEndDate" class="info-text">{{' '+formatedStartDate}}</div>
-                  </div>
-              </div>
           </div>
         </div>
         <h4 class="event-name">{{event.name}}</h4>
       </ng-container>
-
-      <ng-container *ngIf="event.files[0].file_types[0].name === 'video'">
-        <div class="card">
-          <iframe [src]="event.files[0].link + '&autoplay=1&mute=1&loop=1'|safeVideoByUrl" allow="encrypted-media; fullscreen; picture-in-picture; loop" loop autoplay width="100%" height="100%" frameborder="0" ></iframe>
-          <div *ngIf="myEvent" class="edit-button"></div>
-              <div class="info-wrapper">
-                <div class="info-header">
-                  <div *ngIf="minPrice !== maxPrice" class="price"> 
-                    от  {{minPrice}}₽
-                  </div>
-                  <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price"> 
-                    от  {{minPrice}}₽
-                  </div>
-                  <div *ngIf="minPrice === maxPrice && minPrice === 0" class="price"> 
-                    Бесплатно
-                  </div>
-               </div>
-    
-               <div class="info-footer">
-                <div class="info-text-container">
-                  <div *ngIf="formatedStartDate !== formatedEndDate" class="info-text">{{formatedStartDate}} - {{formatedEndDate}}</div>
-                  <div *ngIf="formatedStartDate === formatedEndDate" class="info-text">{{' '+formatedStartDate}}</div>
-                </div>
-            </div>
-          </div>
-        </div>
-        <h4 class="event-name">{{event.name}}</h4>
-      </ng-container>
-   
   </div>
-
