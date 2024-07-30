@@ -22,20 +22,24 @@
                 </div>
             </div>
 
-            <div class="category-container">
+            <div class="prices-container">
                 <ng-container *ngIf="event && event.price">
-                    <app-standart-input *ngFor="let price of event.price; let i = index" [label]="'Стоимость '+ (i+1)" [control] = "editForm.get('name')"></app-standart-input>
+                    <!-- <app-standart-input *ngFor="let price of event.price; let i = index" [label]="'Стоимость '+ (i+1)" [control] = "editForm.get('name')"></app-standart-input> -->
+                     <ng-container *ngFor="let price of this.editForm.value.price; let i = index">
+                        <app-new-price [form]="editForm" *ngIf="!price.on_delete" (deletePriceEmit)="deletePrice($event)" (addPriceEmit)="setValuePrice($event)"  [price]="price"></app-new-price>
+                     </ng-container>
+                     
                 </ng-container>                
                 <div class="button-conatiner">
                     <div class="button-container-item">
-                      <app-standart-button buttonText="Добавить" type="button" theme ="standart"></app-standart-button>
+                      <app-standart-button (click)="addPrice()" buttonText="Добавить" type="button" theme ="standart"></app-standart-button>
                     </div>
                 </div>
             </div>
 
             <app-standart-input [label]="'Название события'" [control] = "editForm.get('name')"></app-standart-input>
             <app-standart-input [label]="'Организатор'" [control] = "editForm.get('sponsor')"></app-standart-input>
-            <div class="save-button-wrapper">
+            <div (click)="logFunction()" class="save-button-wrapper">
                 <app-standart-button buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
             </div>
 

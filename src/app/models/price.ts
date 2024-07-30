@@ -3,5 +3,6 @@ export interface IPrice {
   event_id: number
   sight_id?: number
   cost_rub?: number
-  description?: string
+  descriptions?: string
+  temp_id?: string
 }

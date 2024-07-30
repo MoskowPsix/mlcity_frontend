@@ -1,0 +1,6 @@
+<label class="label" for="price">Билет</label>
+<form [formGroup]="pricesForm" class="input-block">
+  <input formControlName="cost_rub" (input)="setPrice()" id="price" class="price-input" type="text" placeholder="Цена">
+  <input formControlName="descriptions" (input)="setPrice()" placeholder="Описание" class="description-input" type="text">
+  <button (click)="deletePrice()" class="delete-button" type="button"><img class="delete-img" src="assets/icons/trash.svg" alt=""></button>
+</form>
