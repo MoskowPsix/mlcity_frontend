@@ -6,6 +6,10 @@ import { IEvent } from 'src/app/models/event'
 import { EventsService } from 'src/app/services/events.service'
 import { LoadingService } from 'src/app/services/loading.service'
 import { fileTypeValidator } from 'src/app/validators/file-type.validators'
+import { EventTypeService } from 'src/app/services/event-type.service'
+import { IEventType } from 'src/app/models/event-type'
+import { environment } from 'src/environments/environment'
+import { QueryBuilderService } from 'src/app/services/query-builder.service'
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
@@ -13,14 +17,20 @@ import { fileTypeValidator } from 'src/app/validators/file-type.validators'
 })
 export class EditEventComponent implements OnInit {
   constructor(
+    private eventTypeService: EventTypeService,
     private routeActivated: ActivatedRoute,
     private eventsService: EventsService,
-    private loadingService: LoadingService, // LoadingService is injected
+    private loadingService: LoadingService,
+    private queryBuilderService: QueryBuilderService,
   ) {}
   private readonly destroy$ = new Subject<void>()
   event!: IEvent
   editForm!: FormGroup
   finalObject!: IEvent
+  openModalCategory: boolean = false
+  allTypes: IEventType[] = []
+  backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
+  previewCategory: any = []
   logFiles(event: any) {
     this.finalObject.files = event
   }
@@ -47,7 +57,6 @@ export class EditEventComponent implements OnInit {
       let index = this.editForm.value.price.indexOf(event)
       this.editForm.value.price.splice(index, 1)
     }
-    console.log(this.editForm.value.price)
   }
   getPriceIndex(event: any) {
     if (event.id) {
@@ -65,18 +74,76 @@ export class EditEventComponent implements OnInit {
       let index = this.getPriceIndex(event)
       this.editForm.value.price[index].cost_rub = event.cost_rub
       this.editForm.value.price[index].descriptions = event.descriptions
-      console.log(this.editForm.value.price)
     } else {
       let id = event.temp_id
-      console.log(this.editForm.value.price)
+
       let index = this.editForm.value.price.map((e: any) => e.temp_id).indexOf(event.temp_id)
       this.editForm.value.price[index].cost_rub = event.cost_rub
       this.editForm.value.price[index].descriptions = event.descriptions
       this.editForm.value.price
     }
   }
+  getCategory() {
+    if (this.allTypes.length == 0) {
+      this.loadingService.showLoading()
+      this.eventTypeService
+        .getTypes()
+        .pipe()
+        .subscribe((res: any) => {
+          this.allTypes = res.types
+          this.loadingService.hideLoading()
+          if (res.status === 'success') {
+            this.openModalCategory = true
+          }
+        })
+    } else {
+      this.openModalCategory = true
+    }
+  }
+  closeModal() {
+    this.openModalCategory = false
+  }
+  checkCategory(category: IEventType) {
+    let index = this.editForm.value.types.map((e: any) => e.id).indexOf(category.id)
+    if (index !== -1 && !this.editForm.value.types[index].on_delete) {
+      return true
+    } else {
+      return false
+    }
+  }
+  clickCategory(category: IEventType) {
+    let index = this.editForm.value.types.map((e: any) => e.id).indexOf(category.id)
+    let previewTempIndex = this.previewCategory.map((e: any) => e.id).indexOf(category.id)
+    if (index == -1) {
+      this.editForm.value.types.push({
+        id: category.id,
+      })
+      this.previewCategory.push(category)
+    } else {
+      if (this.editForm.value.types[index].name && !this.editForm.value.types[index].on_delete) {
+        this.editForm.value.types[index].on_delete = true
+        this.previewCategory.splice(previewTempIndex, 1)
+      } else if (this.editForm.value.types[index].name && this.editForm.value.types[index].on_delete) {
+        this.previewCategory.push(category)
+        this.editForm.value.types[index].on_delete = false
+      } else {
+        this.previewCategory.splice(previewTempIndex, 1)
+        this.editForm.value.types.splice(index, 1)
+      }
+    }
+  }
+  getPlaces() {
+    console.log(this.event.id)
+    this.eventsService
+      .getEventPlaces(this.event.id, this.queryBuilderService.queryBuilder('eventPlaces'))
+      .pipe()
+      .subscribe((res) => {
+        console.log(res)
+      })
+  }
   ionViewWillEnter() {
     let priceArray: any = []
+    let typesArray: any = []
     this.loadingService.showLoading()
     const eventId = this.routeActivated.snapshot.paramMap.get('id')
     this.eventsService
@@ -85,11 +152,12 @@ export class EditEventComponent implements OnInit {
         takeUntil(this.destroy$),
         tap((res) => {
           priceArray = res.price
+          typesArray = res.types
+          this.event = res
         }),
       )
       .subscribe((res: any) => {
-        this.event = res
-        console.log(res)
+        this.getPlaces()
         this.loadingService.hideLoading()
         this.editForm.patchValue({
           name: res.name,
@@ -97,8 +165,11 @@ export class EditEventComponent implements OnInit {
           description: res.description,
         })
         priceArray.forEach((price: any) => {
-          console.log(priceArray)
           this.editForm.value.price.push(price)
+        })
+        typesArray.forEach((type: any) => {
+          this.previewCategory.push(type)
+          this.editForm.value.types.push(type)
         })
       })
   }
@@ -112,6 +183,7 @@ export class EditEventComponent implements OnInit {
       description: new FormControl('', [Validators.required, Validators.minLength(3)]),
       files: new FormControl('', fileTypeValidator(['png', 'jpg', 'jpeg'])),
       price: new FormControl([], [Validators.required]),
+      types: new FormControl([], [Validators.required]),
     })
   }
 }
