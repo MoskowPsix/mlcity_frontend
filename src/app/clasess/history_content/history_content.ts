@@ -15,7 +15,9 @@ export class HistoryContent {
   protected sponsor!: string
   protected files: IFile[] = []
   protected types: ISightType[] | IEventType[] = []
-  protected price: IPrice[] = []
+  protected price: object[] = []
+
+  
   /**
    * @param origin any оригинальный объект событий или мест
    * @param edit any изменённый объект событй или мест
@@ -26,6 +28,7 @@ export class HistoryContent {
   protected isDifferentAttributes(origin: any, edit: any): boolean {
     return !isEqual(origin, edit)
   }
+
   /**
    * @param name string имя свойства класса
    * @return any значение свойства класса
@@ -37,6 +40,7 @@ export class HistoryContent {
   protected getProperty(name: string): any {
     return this[name as keyof HistoryContent]
   }
+
   /**
    * @param name string имя свойства класса
    * @param value any значение которое присваевается свойству класса
@@ -49,6 +53,7 @@ export class HistoryContent {
   protected setProperty(name: string, value: any): void {
     this[name as keyof HistoryContent] = value
   }
+
   /**
    * @param name string имя свойства класса, которое является массивом
    * @param value any значение, которое добавляется в массив
@@ -61,6 +66,7 @@ export class HistoryContent {
   protected setPropertyForArrayPush(name: string, value: any): void {
     this[name as keyof HistoryContent].push(value)
   }
+
   /**
    * @param name string - имя свойства класса, которое является объектом
    * @param key string - ключ объекта свойства класса
@@ -74,6 +80,7 @@ export class HistoryContent {
   protected setPropertyObjects(name: string, key: string, value: any): void {
     this[name as keyof HistoryContent][key] = value
   }
+
   /**
    * @param name string имя объекта свойства класса
    * @param key string ключ массива объекта свойства класса
@@ -87,6 +94,7 @@ export class HistoryContent {
   protected setPropertyObjectsForArrayPush(name: string, key: string, value: any): void {
     this[name as keyof HistoryContent][key].push(value)
   }
+
   /**
    * @param name string имя массова свойства объекта класса
    * @param key string ключ массива свойства объекта класса
@@ -99,6 +107,7 @@ export class HistoryContent {
   protected getPropertyObjects(name: string, key: string): any {
     return this[name as keyof HistoryContent][key]
   }
+
   /**
    * @param name string имя свойства класса
    * @return void
@@ -111,6 +120,7 @@ export class HistoryContent {
     const property: any = this.getProperty(name)
     typeof property === typeof [] ? this.compareAndSetArray(name) : this.compareAndSetString(name)
   }
+
   /**
    * @param name string имя свойства класса
    * @return void
@@ -127,6 +137,7 @@ export class HistoryContent {
       this.setProperty(name, this.getPropertyObjects('edited', name))
     }
   }
+
   /**
    * @param name string имя свойства класса
    * @return void
@@ -150,6 +161,7 @@ export class HistoryContent {
       }
     })
   }
+
   /**
    *
    * @param obj object объект который нужно отчистить от массивов
