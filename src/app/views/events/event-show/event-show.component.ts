@@ -88,11 +88,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
     private queryBuilderService: QueryBuilderService,
-    private location: Location,
     public router: Router,
     private titleService: Title,
     private metaService: Meta,
-    private userService: UserService,
     private filterService: FilterService,
     private locationService: LocationService,
     private mapService: MapService,
@@ -110,7 +108,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         if (event) {
           this.event = event
-
+          console.log(event)
           // this.places = event.places_full;
         }
         this.titleService.setTitle(event.name)
@@ -164,6 +162,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         )
         .subscribe((response: any) => {
           this.places.push(...response.places.data)
+          console.log(this.places)
           this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
             response.places.next_cursor,
           )

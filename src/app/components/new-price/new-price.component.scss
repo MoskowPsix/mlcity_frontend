@@ -1,0 +1,93 @@
+.input-block{
+    display: flex;
+}
+.price-input{
+    border: 1px solid #4c586141;
+    border-radius: 5px 0px 0px 5px;
+    width: 25%;
+    background: #fafafa;
+    min-height: 2.25rem;
+    z-index: 2;
+    font-size: 12px;
+    padding-left: 0.8rem;
+    transition: 0.2s;
+    transition: 0.1s;
+    color: #363d42;
+    font-family: var(--font-regular);
+
+}
+.price-input:focus{
+    border: 1px solid #4c586141;
+    border-radius: 5px 0px 0px 5px;
+    transition: 0.2s;
+    outline: 1px solid #52b1fab0;
+    background: #fafafa;
+    min-height: 2.25rem;
+    z-index: 2;
+    font-size: 12px;
+    padding-left: 0.8rem;
+    transition: 0.1s;
+    color: #363d42;
+    font-family: var(--font-regular);
+
+}
+.label{
+    color: #4C5861;
+    font-size: 12px;
+    margin-bottom: 6px;
+    font-family: var(--font-regular);
+}
+.description-input{
+    border: 1px solid #4c586141;
+    border-radius: 5px;
+    width: 100%;
+    padding-left: 27%;
+    margin-left: -25%;
+    z-index: 1;
+    border-left: none;
+    min-height: 2.25rem;
+    font-size: 12px;
+    transition: 0.1s;
+    color: #363d42;
+    font-family: var(--font-regular);
+    background: none;
+}
+.description-input:focus{
+    transition: 0.2s;
+    outline: 1px solid #52b1fab0;
+    border-radius: 5px;
+    background: none;
+    min-height: 2.25rem;
+    font-size: 12px;
+    padding-left: 27%;
+    color: #363d42;
+}
+.delete-button{
+    margin-top: 0.17rem;
+    width: 2rem;
+    border-radius: 2px;
+    transition: 0.2s;
+    background: #DCE9FF;
+    position: absolute;
+    right: 1.2rem;
+    z-index: 2;
+    height: 1.9rem;
+}
+.delete-button:active{
+    margin-top: 0.17rem;
+    width: 2rem;
+    border-radius: 2px;
+    transition: 0.2s;
+    background: #b0c6eb;
+    position: absolute;
+    right: 1.2rem;
+    z-index: 2;
+    height: 1.9rem;
+    .delete-img{
+    
+    }
+}
+.delete-img{
+    transition: 0.2s;
+    filter: brightness(0) saturate(100%) invert(39%) sepia(25%) saturate(2348%) hue-rotate(190deg) brightness(112%) contrast(105%);
+}

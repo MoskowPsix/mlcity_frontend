@@ -16,8 +16,7 @@
     "prettier:fix": "prettier --config ./.prettierrc --write \"src/{app,environments}/**/*{.ts,.js,.json,.css,.scss}\"",
     "generate-sitemap": "sitemap-generator https://mlcity.ru/",
     "lint-css": "stylelint src/**/*.scss",
-
-    "capacitor:build:after":"echo plat $CAPACITOR_PLATFORM_NAME"
+    "capacitor:build:after": "echo plat $CAPACITOR_PLATFORM_NAME"
   },
   "private": true,
   "dependencies": {
@@ -54,6 +53,7 @@
     "cordova-plugin-nativegeocoder": "^3.5.0",
     "cordova-plugin-request-location-accuracy": "^2.3.0",
     "ionicons": "^6.0.3",
+    "lodash": "^4.17.21",
     "numeral": "^2.0.6",
     "rxjs": "~7.5.0",
     "swiper": "^11.0.7",
@@ -75,6 +75,7 @@
     "@ionic/angular-toolkit": "10.0.0",
     "@ionic/lab": "3.2.15",
     "@types/jasmine": "~4.0.0",
+    "@types/lodash": "^4.17.7",
     "@types/node": "^12.11.1",
     "@types/numeral": "^2.0.5",
     "@typescript-eslint/eslint-plugin": "5.48.2",

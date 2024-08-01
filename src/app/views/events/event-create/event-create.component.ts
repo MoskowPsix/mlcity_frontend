@@ -12,23 +12,8 @@ import {
   HostListener,
 } from '@angular/core'
 import { trigger, style, animate, transition } from '@angular/animations'
-import {
-  switchMap,
-  tap,
-  of,
-  Subject,
-  takeUntil,
-  catchError,
-  delay,
-  retry,
-} from 'rxjs'
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  MinLengthValidator,
-  Validators,
-} from '@angular/forms'
+import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry } from 'rxjs'
+import { FormArray, FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms'
 import { UserService } from 'src/app/services/user.service'
 import { MaskitoOptions } from '@maskito/core'
 import { EventTypeService } from 'src/app/services/event-type.service'
@@ -67,10 +52,7 @@ import { maskitoTimeOptionsGenerator } from '@maskito/kit'
   styleUrls: ['./event-create.component.scss'],
   animations: [
     trigger('fade', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('500ms ease-in', style({ opacity: 1 })),
-      ]),
+      transition(':enter', [style({ opacity: 0 }), animate('500ms ease-in', style({ opacity: 1 }))]),
       transition(':leave', [animate('500ms ease-in', style({ opacity: 0 }))]),
     ]),
   ],
@@ -209,10 +191,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           return of(user)
         }),
         switchMap((user: any) => {
-          if (
-            !user?.social_account ||
-            user?.social_account.provider != 'vkontakte'
-          ) {
+          if (!user?.social_account || user?.social_account.provider != 'vkontakte') {
             // this.toastService.showToast(
             //   MessagesErrors.vkGroupSearch,
             //   'secondary',
@@ -221,17 +200,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
             return this.vkService.getGroups().pipe(
               switchMap((response: any) => {
-                response?.response.items
-                  ? this.setVkGroups(response?.response.items)
-                  : this.setVkGroups([])
+                response?.response.items ? this.setVkGroups(response?.response.items) : this.setVkGroups([])
                 return of(EMPTY)
               }),
               catchError((err) => {
                 //Выкидываем на логин если с ВК проблемы
                 this.toastService.showToast(
-                  err.error?.message ||
-                    err.error?.error_msg ||
-                    MessagesErrors.vkTokenError,
+                  err.error?.message || err.error?.error_msg || MessagesErrors.vkTokenError,
                   'danger',
                 )
                 this.loadingService.hideLoading()
@@ -249,12 +224,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           this.loadingService.hideLoading()
         }),
         catchError((err) => {
-          this.toastService.showToast(
-            err.error?.message ||
-              err.error?.error_msg ||
-              MessagesErrors.default,
-            'danger',
-          )
+          this.toastService.showToast(err.error?.message || err.error?.error_msg || MessagesErrors.default, 'danger')
           this.loadingService.hideLoading()
           return of(EMPTY)
         }),
@@ -265,11 +235,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   getUrlVideo(owner_id: number, video_id: number) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
-      'https://vk.com/video_ext.php?oid=' +
-        owner_id +
-        '&id=' +
-        video_id +
-        '&hd=2',
+      'https://vk.com/video_ext.php?oid=' + owner_id + '&id=' + video_id + '&hd=2',
     )
   }
   //Устанавливаем группы
@@ -352,9 +318,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
         this.vkGroupPosts = response.response
-        response.response
-          ? (this.vkGroupPostsLoaded = true)
-          : (this.vkGroupPostsLoaded = false) //для скелетной анимации
+        response.response ? (this.vkGroupPostsLoaded = true) : (this.vkGroupPostsLoaded = false) //для скелетной анимации
       })
   }
   // Грузим посты по URL сообщества
@@ -406,10 +370,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         delay(100),
         retry(2),
         catchError((err) => {
-          this.toastService.showToast(
-            MessagesErrors.LocationSearchError,
-            'warning',
-          )
+          this.toastService.showToast(MessagesErrors.LocationSearchError, 'warning')
           this.locationLoader = false
           return of(EMPTY)
         }),
@@ -479,26 +440,19 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
   //Выбор типа
   selectedStatus(status_id: any) {
-    status_id.detail.value
-      ? (this.statusSelected = status_id.detail.value)
-      : (this.statusSelected = null)
+    status_id.detail.value ? (this.statusSelected = status_id.detail.value) : (this.statusSelected = null)
   }
   //При клике ставим метку, если метка есть, то перемещаем ее
   onMapClick(e: YaEvent<ymaps.Map>, num: number) {
     const { target, event } = e
-    this.setLocationForCoords(
-      [event.get('coords')[0], event.get('coords')[1]],
-      num,
-    )
+    this.setLocationForCoords([event.get('coords')[0], event.get('coords')[1]], num)
     // this.createEventForm.value.places[num].patchValue({address: this.mapService.ReserveGeocoderNative([event.get('coords')[0], event.get('coords')[1]])})
     this.createEventForm.value.places[num].patchValue({
       coords: [event.get('coords')[0], event.get('coords')[1]],
     })
     // this.createEventForm.value.places[num].value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
     this.maps[num].target.geoObjects.removeAll()
-    this.placemark = new ymaps.Placemark(
-      this.createEventForm.value.places[num].value.coords,
-    )
+    this.placemark = new ymaps.Placemark(this.createEventForm.value.places[num].value.coords)
     this.maps[num].target.geoObjects.add(this.placemark)
     if (!Capacitor.isNativePlatform()) {
       this.ReserveGeocoder(num)
@@ -507,14 +461,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.ReserveGeocoder(num)
     }
     this.maps[num].target.geoObjects.removeAll()
-    this.maps[num].target.geoObjects.add(
-      new ymaps.Placemark([event.get('coords')[0], event.get('coords')[1]]),
-    )
+    this.maps[num].target.geoObjects.add(new ymaps.Placemark([event.get('coords')[0], event.get('coords')[1]]))
     this.maps[num].target.setBounds(
-      new ymaps.Placemark([
-        event.get('coords')[0],
-        event.get('coords')[1],
-      ]).geometry?.getBounds()!,
+      new ymaps.Placemark([event.get('coords')[0], event.get('coords')[1]]).geometry?.getBounds()!,
       { checkZoomRange: false },
     )
     this.maps[num].target.setZoom(17)
@@ -523,10 +472,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   // Поиск по улицам
   onMapReady(e: YaReadyEvent<ymaps.Map>, num: number) {
     this.maps[num] = e
-    if (
-      this.filterService.locationLatitude.value &&
-      this.filterService.locationLongitude.value
-    ) {
+    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value) {
       const coords: number[] = [
         Number(this.filterService.getLocationLatitudeFromlocalStorage()),
         Number(this.filterService.getLocationLongitudeFromlocalStorage()),
@@ -570,12 +516,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   ReserveGeocoder(num: number): void {
     // Декодирование координат
-    const geocodeResult = this.yaGeocoderService.geocode(
-      this.createEventForm.value.places[num].value.coords,
-      {
-        results: 1,
-      },
-    )
+    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.places[num].value.coords, {
+      results: 1,
+    })
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0)
 
@@ -589,15 +532,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   ForwardGeocoder(num: number): void {
     this.createEventForm.controls['places'].value[num].patchValue({
-      address: (<HTMLInputElement>document.getElementById('search-map-' + num))
-        .value,
+      address: (<HTMLInputElement>document.getElementById('search-map-' + num)).value,
     })
-    const geocodeResult = this.yaGeocoderService.geocode(
-      this.createEventForm.value.places[num].value.address,
-      {
-        results: 1,
-      },
-    )
+    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.places[num].value.address, {
+      results: 1,
+    })
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0)
       this.addPlacemark(firstGeoObject.geometry.getCoordinates(), num)
@@ -656,10 +595,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   // Заполняем превью фоток
   createImagesPreview() {
-    if (
-      this.uploadFiles &&
-      !this.createEventForm.controls['files'].hasError('requiredFileType')
-    ) {
+    if (this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')) {
       this.loadingService.showLoading()
       this.uploadFiles.forEach((file: any) => {
         let reader = new FileReader()
@@ -674,10 +610,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //формируем дату для отправки на сервер
   createFormData() {
-    if (
-      this.uploadFiles &&
-      !this.createEventForm.controls['files'].hasError('requiredFileType')
-    ) {
+    if (this.uploadFiles && !this.createEventForm.controls['files'].hasError('requiredFileType')) {
       for (var i = 0; i < this.uploadFiles.length; i++) {
         this.formData.append('localFilesImg[]', this.uploadFiles[i])
       }
@@ -692,11 +625,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         if (attachment.video) {
           this.formData.append(
             'vkFilesVideo[]',
-            'https://vk.com/video_ext.php?oid=' +
-              attachment.video.owner_id +
-              '&id=' +
-              attachment.video.id +
-              '&hd=2',
+            'https://vk.com/video_ext.php?oid=' + attachment.video.owner_id + '&id=' + attachment.video.id + '&hd=2',
           )
         }
         if (attachment.link) {
@@ -706,87 +635,36 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
 
     this.formData.append('name', this.createEventForm.controls['name'].value)
-    this.formData.append(
-      'sponsor',
-      this.createEventForm.controls['sponsor'].value,
-    )
-    this.formData.append(
-      'description',
-      this.createEventForm.controls['description'].value,
-    )
+    this.formData.append('sponsor', this.createEventForm.controls['sponsor'].value)
+    this.formData.append('description', this.createEventForm.controls['description'].value)
     // this.formData.append('coords', this.createEventForm.controls['coords'].value)
     // this.formData.append('address', this.createEventForm.controls['address'].value)
     // this.formData.append('city', this.city)
     this.formData.append('type[]', this.createEventForm.controls['type'].value)
-    this.formData.append(
-      'status',
-      this.createEventForm.controls['status'].value,
-    )
+    this.formData.append('status', this.createEventForm.controls['status'].value)
 
-    this.createEventForm.controls['price'].value.forEach(
-      (item: any, i: number) => {
-        this.formData.append(
-          `prices[${i}][cost_rub]`,
-          item.controls.cors_rub.value,
-        )
-        this.formData.append(
-          `prices[${i}][descriptions]`,
-          item.controls.description.value,
-        )
-      },
-    )
+    this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
+      this.formData.append(`prices[${i}][cost_rub]`, item.controls.cors_rub.value)
+      this.formData.append(`prices[${i}][descriptions]`, item.controls.description.value)
+    })
 
-    this.formData.append(
-      'materials',
-      this.createEventForm.controls['materials'].value,
-    )
-    this.formData.append(
-      'dateStart',
-      this.createEventForm.controls['dateStart'].value,
-    )
-    this.formData.append(
-      'dateEnd',
-      this.createEventForm.controls['dateEnd'].value,
-    )
-    this.formData.append(
-      'places[]',
-      this.createEventForm.controls['places'].value,
-    )
+    this.formData.append('materials', this.createEventForm.controls['materials'].value)
+    this.formData.append('dateStart', this.createEventForm.controls['dateStart'].value)
+    this.formData.append('dateEnd', this.createEventForm.controls['dateEnd'].value)
+    this.formData.append('places[]', this.createEventForm.controls['places'].value)
 
-    this.createEventForm.controls['places'].value.forEach(
-      (item: any, i: number) => {
-        this.formData.append(
-          `places[${i}][address]`,
-          item.controls.address.value,
-        )
-        this.formData.append(`places[${i}][coords]`, item.controls.coords.value)
-        this.formData.append(
-          `places[${i}][locationId]`,
-          item.controls.locationId.value,
-        )
-        this.formData.append(
-          `places[${i}][sightId]`,
-          item.controls.sight_id.value,
-        )
-        item.controls.seances.value.forEach(
-          (item_sean: any, i_sean: number) => {
-            this.formData.append(
-              `places[${i}][seances][${i_sean}][dateStart]`,
-              item_sean.controls.dateStart.value,
-            )
-            this.formData.append(
-              `places[${i}][seances][${i_sean}][dateEnd]`,
-              item_sean.controls.dateEnd.value,
-            )
-          },
-        )
-      },
-    )
+    this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
+      this.formData.append(`places[${i}][address]`, item.controls.address.value)
+      this.formData.append(`places[${i}][coords]`, item.controls.coords.value)
+      this.formData.append(`places[${i}][locationId]`, item.controls.locationId.value)
+      this.formData.append(`places[${i}][sightId]`, item.controls.sight_id.value)
+      item.controls.seances.value.forEach((item_sean: any, i_sean: number) => {
+        this.formData.append(`places[${i}][seances][${i_sean}][dateStart]`, item_sean.controls.dateStart.value)
+        this.formData.append(`places[${i}][seances][${i_sean}][dateEnd]`, item_sean.controls.dateEnd.value)
+      })
+    })
 
-    this.formData.append(
-      'vkPostId',
-      this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null,
-    )
+    this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null)
     // if (this.vkGroupPostSelected?.likes.count){
     //   this.formData.append('vkLikesCount', this.vkGroupPostSelected?.likes.count)
     // }
@@ -824,89 +702,48 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   testTime(event: any, place: any, seans: any, param: any) {
     if (param === 'start') {
-      this.formatingTimeStart = this.createEventForm.value.places[
-        place
-      ].value.seances[seans].value.dateStart.slice(0, 11)
+      this.formatingTimeStart = this.createEventForm.value.places[place].value.seances[seans].value.dateStart.slice(
+        0,
+        11,
+      )
       if (event.target.value.length == 5) {
-        this.formatingTimeStart =
-          this.formatingTimeStart + event.target.value + ':00' + '+00:00'
-        this.createEventForm.value.places[place].value.seances[
-          seans
-        ].patchValue({
+        this.formatingTimeStart = this.formatingTimeStart + event.target.value + ':00' + '+00:00'
+        this.createEventForm.value.places[place].value.seances[seans].patchValue({
           dateStart: this.formatingTimeStart,
         })
         this.startTime = event.target.value
         if (
-          this.createEventForm.value.places[place].value.seances[seans].value
-            .dateStart >=
-          this.createEventForm.value.places[place].value.seances[seans].value
-            .dateEnd
+          this.createEventForm.value.places[place].value.seances[seans].value.dateStart >=
+          this.createEventForm.value.places[place].value.seances[seans].value.dateEnd
         ) {
           let splitDate: string =
-            this.createEventForm.value.places[place].value.seances[
-              seans
-            ].value.dateStart.split('T')[0]
-          let splitMinuts = this.createEventForm.value.places[
-            place
-          ].value.seances[seans].value.dateStart
+            this.createEventForm.value.places[place].value.seances[seans].value.dateStart.split('T')[0]
+          let splitMinuts = this.createEventForm.value.places[place].value.seances[seans].value.dateStart
             .split('T')[1]
             .split(':')[1]
-          let splitBelt: string = this.createEventForm.value.places[
-            place
-          ].value.seances[seans].value.dateStart
+          let splitBelt: string = this.createEventForm.value.places[place].value.seances[seans].value.dateStart
             .split('T')[1]
             .split('+')[1]
           let newTime: number =
-            +this.createEventForm.value.places[place].value.seances[
-              seans
-            ].value.dateStart
+            +this.createEventForm.value.places[place].value.seances[seans].value.dateStart
               .split('T')[1]
               .split('+')[0]
               .split(':')[0] + 1
           console.log(splitMinuts)
           console.log(splitBelt)
-          console.log(
-            this.createEventForm.value.places[place].value.seances[seans].value
-              .dateEnd,
-          )
-          console.log(
-            splitDate +
-              'T' +
-              newTime +
-              ':' +
-              splitMinuts +
-              ':' +
-              '00' +
-              '+' +
-              '00',
-          )
+          console.log(this.createEventForm.value.places[place].value.seances[seans].value.dateEnd)
+          console.log(splitDate + 'T' + newTime + ':' + splitMinuts + ':' + '00' + '+' + '00')
 
-          this.createEventForm.value.places[place].value.seances[
-            seans
-          ].patchValue({
-            dateEnd:
-              splitDate +
-              'T' +
-              newTime +
-              ':' +
-              splitMinuts +
-              ':' +
-              '00' +
-              '+' +
-              '00',
+          this.createEventForm.value.places[place].value.seances[seans].patchValue({
+            dateEnd: splitDate + 'T' + newTime + ':' + splitMinuts + ':' + '00' + '+' + '00',
           })
         }
       }
     } else if (param === 'end') {
-      this.formatingTimeEnd = this.createEventForm.value.places[
-        place
-      ].value.seances[seans].value.dateEnd.slice(0, 11)
+      this.formatingTimeEnd = this.createEventForm.value.places[place].value.seances[seans].value.dateEnd.slice(0, 11)
       if (event.target.value.length == 5) {
-        this.formatingTimeEnd =
-          this.formatingTimeEnd + event.target.value + ':00' + '+00:00'
-        this.createEventForm.value.places[place].value.seances[
-          seans
-        ].patchValue({
+        this.formatingTimeEnd = this.formatingTimeEnd + event.target.value + ':00' + '+00:00'
+        this.createEventForm.value.places[place].value.seances[seans].patchValue({
           dateEnd: this.formatingTimeEnd,
         })
         this.startTime = event.target.value
@@ -915,14 +752,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   testDate(event: any, place: any, seans: any, param: any) {
-    let thisSeansTimeStart =
-      this.createEventForm.value.places[place].value.seances[
-        seans
-      ].value.dateStart.split('T')[1]
-    let thisSeansTimeEnd =
-      this.createEventForm.value.places[place].value.seances[
-        seans
-      ].value.dateEnd.split('T')[1]
+    let thisSeansTimeStart = this.createEventForm.value.places[place].value.seances[seans].value.dateStart.split('T')[1]
+    let thisSeansTimeEnd = this.createEventForm.value.places[place].value.seances[seans].value.dateEnd.split('T')[1]
 
     if (param === 'start') {
       let str = event.target.value
@@ -942,12 +773,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   detectedDataInvalid() {
-    let dataStart: any = new Date(
-      this.createEventForm.controls['dateStart'].value,
-    )
-    let dataEnd: any = new Date(
-      this.createEventForm.controls['dateEnd'].value,
-    ).getTime()
+    let dataStart: any = new Date(this.createEventForm.controls['dateStart'].value)
+    let dataEnd: any = new Date(this.createEventForm.controls['dateEnd'].value).getTime()
     let dataEndPlus: any = new Date(dataStart.getTime() + 15 * 60000)
 
     //разница в 15 минутах
@@ -963,10 +790,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       //шаг первый
       case 1:
         //шаг второй
-        if (
-          this.createEventForm.controls['name'].invalid ||
-          this.createEventForm.controls['sponsor'].invalid
-        ) {
+        if (this.createEventForm.controls['name'].invalid || this.createEventForm.controls['sponsor'].invalid) {
           return true
         } else {
           return false
@@ -1000,31 +824,21 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         // let placeValid:boolean = false
         // let seansValid:boolean = false
 
-        this.createEventForm.controls['places'].value.forEach(
-          (item: any, i: number) => {
-            item.controls.seances.value.forEach(
-              (item_sean: any, i_sean: number) => {
-                if (
-                  item_sean.controls.dateStart.value >=
-                  item_sean.controls.dateEnd.value
-                ) {
-                  this.seansValid = false
-                } else {
-                  this.seansValid = true
-                }
-              },
-            )
-
-            if (
-              item.controls.address.value.length > 0 ||
-              item.controls.address.value
-            ) {
-              this.placeValid = true
+        this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
+          item.controls.seances.value.forEach((item_sean: any, i_sean: number) => {
+            if (item_sean.controls.dateStart.value >= item_sean.controls.dateEnd.value) {
+              this.seansValid = false
             } else {
-              this.placeValid = false
+              this.seansValid = true
             }
-          },
-        )
+          })
+
+          if (item.controls.address.value.length > 0 || item.controls.address.value) {
+            this.placeValid = true
+          } else {
+            this.placeValid = false
+          }
+        })
 
         if (this.placeValid && this.seansValid) {
           return false
@@ -1041,21 +855,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         if (this.createEventForm.controls['price'].value.length == 0) {
           priceValid = true
         }
-        this.createEventForm.controls['price'].value.forEach(
-          (item: any, i: number) => {
-            if (this.createEventForm.controls['price'].value.length > 1) {
-              priceValid = this.createEventForm.controls['price'].value.every(
-                (item: any) => item.controls['description'].value.length >= 3,
-              )
-            } else if (
-              this.createEventForm.controls['price'].value.length == 1
-            ) {
-              priceValid = true
-            } else {
-              priceValid = false
-            }
-          },
-        )
+        this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
+          if (this.createEventForm.controls['price'].value.length > 1) {
+            priceValid = this.createEventForm.controls['price'].value.every(
+              (item: any) => item.controls['description'].value.length >= 3,
+            )
+          } else if (this.createEventForm.controls['price'].value.length == 1) {
+            priceValid = true
+          } else {
+            priceValid = false
+          }
+        })
 
         if (this.createEventForm.disabled || !priceValid) {
           return true
@@ -1119,9 +929,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         return this.createEventForm.controls['sponsor'].invalid ? false : true
 
       case 2:
-        return this.createEventForm.controls['description'].invalid
-          ? false
-          : true
+        return this.createEventForm.controls['description'].invalid ? false : true
       case 2:
         return this.createEventForm.hasError('dateInvalid') ? false : true
 
@@ -1197,10 +1005,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }),
         catchError((err) => {
           console.log(err)
-          this.toastService.showToast(
-            err.error.message || MessagesErrors.default,
-            'danger',
-          )
+          this.toastService.showToast(err.error.message || MessagesErrors.default, 'danger')
           this.createEventForm.enable()
           this.loadingService.hideLoading()
           return of(EMPTY)
@@ -1216,67 +1021,54 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
     this.placesClose.push({ open: true })
 
-    this.filterService.locationId
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        locId = value
-        if (value) {
-          this.locationServices
-            .getLocationsIds(locId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: any) => {
-              coords = [response.location.latitude, response.location.longitude]
-              this.placeArrayForm.push({
-                city: response.location.name,
-                region: response.location.location_parent.name,
-                sight_id: '',
-                sight_name: '',
-                address: '',
-                coords: coords,
-                seances: [{ num_s: 0 }],
-              })
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      locId = value
+      if (value) {
+        this.locationServices
+          .getLocationsIds(locId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((response: any) => {
+            coords = [response.location.latitude, response.location.longitude]
+            this.placeArrayForm.push({
+              city: response.location.name,
+              region: response.location.location_parent.name,
+              sight_id: '',
+              sight_name: '',
+              address: '',
+              coords: coords,
+              seances: [{ num_s: 0 }],
             })
-        } else {
-          locId = ''
-          coords = ['', '']
-          this.placeArrayForm.push({
-            city: 'Не указан',
-            region: 'Не указан',
-            sight_id: '',
-            sight_name: '',
-            address: '',
-            seances: [{ num_s: 0 }],
           })
-        }
-      })
+      } else {
+        locId = ''
+        coords = ['', '']
+        this.placeArrayForm.push({
+          city: 'Не указан',
+          region: 'Не указан',
+          sight_id: '',
+          sight_name: '',
+          address: '',
+          seances: [{ num_s: 0 }],
+        })
+      }
+    })
 
     this.createEventForm.controls['places'].value.push(
       new FormGroup({
         sight_id: new FormControl('', [Validators.minLength(1)]),
-        locationId: new FormControl(locId, [
-          Validators.minLength(1),
-          Validators.required,
-        ]),
-        coords: new FormControl(coords, [
-          Validators.required,
-          Validators.minLength(2),
-        ]),
-        address: new FormControl('', [
-          Validators.minLength(1),
-          Validators.required,
-        ]),
+        locationId: new FormControl(locId, [Validators.minLength(1), Validators.required]),
+        coords: new FormControl(coords, [Validators.required, Validators.minLength(2)]),
+        address: new FormControl('', [Validators.minLength(1), Validators.required]),
         seances: new FormControl(
           [
             new FormGroup({
               //заметка
-              dateStart: new FormControl(
-                this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00',
-                [Validators.required],
-              ),
-              dateEnd: new FormControl(
-                this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00',
-                [Validators.required],
-              ),
+              dateStart: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00', [
+                Validators.required,
+              ]),
+              dateEnd: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00', [
+                Validators.required,
+              ]),
             }),
           ],
           [Validators.required],
@@ -1289,10 +1081,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.createEventForm.controls['price'].value.push(
       new FormGroup({
         cors_rub: new FormControl('', []),
-        description: new FormControl('', [
-          Validators.required,
-          Validators.minLength(5),
-        ]),
+        description: new FormControl('', [Validators.required, Validators.minLength(5)]),
       }),
     )
   }
@@ -1307,26 +1096,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   deleteSeanceForm(num: number, num_s: number) {
     this.placeArrayForm[num].seances.splice(num_s, 1)
-    this.createEventForm.controls['places'].value[num].value.seances.splice(
-      num_s,
-      1,
-    )
+    this.createEventForm.controls['places'].value[num].value.seances.splice(num_s, 1)
   }
 
   addSeances(num: number) {
     this.placeArrayForm[num].seances.push({})
-    this.createEventForm.controls['places'].value[
-      num
-    ].controls.seances.value.push(
+    this.createEventForm.controls['places'].value[num].controls.seances.value.push(
       new FormGroup({
-        dateStart: new FormControl(
-          this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00',
-          [Validators.required],
-        ),
-        dateEnd: new FormControl(
-          this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00',
-          [Validators.required],
-        ),
+        dateStart: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00', [
+          Validators.required,
+        ]),
+        dateEnd: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00', [Validators.required]),
       }),
     )
   }
@@ -1369,16 +1149,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.createEventForm.value.places[num].patchValue({ locationId: item.id })
     this.maps[num].target.geoObjects.removeAll()
     // this.placemark = new ymaps.Placemark([item.latitude, item.longitude])
-    this.maps[num].target.geoObjects.add(
-      new ymaps.Placemark([item.latitude, item.longitude]),
-    )
-    this.maps[num].target.setBounds(
-      new ymaps.Placemark([
-        item.latitude,
-        item.longitude,
-      ]).geometry?.getBounds()!,
-      { checkZoomRange: false },
-    )
+    this.maps[num].target.geoObjects.add(new ymaps.Placemark([item.latitude, item.longitude]))
+    this.maps[num].target.setBounds(new ymaps.Placemark([item.latitude, item.longitude]).geometry?.getBounds()!, {
+      checkZoomRange: false,
+    })
     this.maps[num].target.setZoom(17)
     this.onClearSearch()
   }
@@ -1415,17 +1189,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   searchMinSeans() {
     const pad = (number: any) => (number < 10 ? '0' + number : number)
-    let dateStart = new Date(
-      this.createEventForm.value.places[0].value.seances[0].value.dateStart.split(
-        '+',
-      )[0],
-    )
+    let dateStart = new Date(this.createEventForm.value.places[0].value.seances[0].value.dateStart.split('+')[0])
 
-    let dateEnd = new Date(
-      this.createEventForm.value.places[0].value.seances[0].value.dateEnd.split(
-        '+',
-      )[0],
-    )
+    let dateEnd = new Date(this.createEventForm.value.places[0].value.seances[0].value.dateEnd.split('+')[0])
 
     let minSeans: any = {
       value: {
@@ -1442,27 +1208,19 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
     // minSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
     // maxSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
-    this.createEventForm.controls['places'].value.forEach(
-      (item: any, i: number) => {
-        item.controls['seances'].value.forEach(
-          (item_sean: any, i_sean: number) => {
-            if (item_sean.value.dateStart < minSeans.value.dateStart) {
-              minSeans = item_sean
-            }
-            if (item_sean.value.dateEnd > maxSeans.value.dateEnd) {
-              maxSeans = item_sean
-            }
-          },
-        )
-      },
-    )
+    this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
+      item.controls['seances'].value.forEach((item_sean: any, i_sean: number) => {
+        if (item_sean.value.dateStart < minSeans.value.dateStart) {
+          minSeans = item_sean
+        }
+        if (item_sean.value.dateEnd > maxSeans.value.dateEnd) {
+          maxSeans = item_sean
+        }
+      })
+    })
 
-    this.createEventForm.controls['dateStart'].setValue(
-      minSeans.value.dateStart.slice(0, 19),
-    )
-    this.createEventForm.controls['dateEnd'].setValue(
-      maxSeans.value.dateEnd.slice(0, 19),
-    )
+    this.createEventForm.controls['dateStart'].setValue(minSeans.value.dateStart.slice(0, 19))
+    this.createEventForm.controls['dateEnd'].setValue(maxSeans.value.dateEnd.slice(0, 19))
   }
 
   setValueDateDefault() {
@@ -1472,43 +1230,25 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.setValueDateDefault()
     this.mobileOrNote()
     let locationId: any
-    this.filterService.locationId
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        locationId = value
-      })
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      locationId = value
+    })
     //Создаем поля для формы
     this.createEventForm = new FormGroup(
       {
-        name: new FormControl('', [
-          Validators.required,
-          Validators.minLength(3),
-        ]),
-        sponsor: new FormControl('', [
-          Validators.required,
-          Validators.minLength(3),
-        ]),
-        description: new FormControl('', [
-          Validators.required,
-          Validators.minLength(10),
-        ]),
+        name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+        sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
+        description: new FormControl('', [Validators.required, Validators.minLength(10)]),
         places: new FormControl([], [Validators.required]),
         type: new FormControl([], [Validators.required]),
-        status: new FormControl(
-          { value: this.statusSelected, disabled: false },
-          [Validators.required],
-        ),
+        status: new FormControl({ value: this.statusSelected, disabled: false }, [Validators.required]),
         files: new FormControl('', fileTypeValidator(['png', 'jpg', 'jpeg'])),
         price: new FormControl([], [Validators.required]),
         materials: new FormControl('', [Validators.minLength(1)]),
-        dateStart: new FormControl(
-          this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00',
-          [Validators.required],
-        ),
-        dateEnd: new FormControl(
-          this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00',
-          [Validators.required],
-        ),
+        dateStart: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00', [
+          Validators.required,
+        ]),
+        dateEnd: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00', [Validators.required]),
       },
       [dateRangeValidator],
     )

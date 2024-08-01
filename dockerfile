@@ -1,4 +1,4 @@
-FROM node:20.5 as build
+FROM node as build
 
 WORKDIR /var/www/MLCity_frontend
 

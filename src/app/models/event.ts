@@ -11,17 +11,10 @@ export interface IEvent {
   sponsor: string
   description: string
   address: string
-  location: any[]
-  latitude: number
-  longitude: number
-  favorites_users_exists?: boolean
-  liked_users_exists?: boolean
-  type?: number
-  status?: number
+  statuses?: any[]
   files?: any[]
   types?: any[]
   likes?: any
-  places_full: any[]
   price?: any
   materials?: string
   date_start: Date

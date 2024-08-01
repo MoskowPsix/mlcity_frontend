@@ -26,7 +26,7 @@ export class CabinetComponent implements OnInit {
     this.router.navigate(['cabinet/settings'])
   }
   ionViewWillEnter() {
-    console.log('я родился')
+
     this.userService
       .getUserById()
       .pipe()

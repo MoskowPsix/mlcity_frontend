@@ -1,0 +1,74 @@
+<ion-content>
+    <app-edit-slider *ngIf="this.event && this.event.files" (filesEmit)="logFiles($event)" [files]="this.event.files"></app-edit-slider>
+    <div class="content-container">
+        <form [formGroup]="editForm" action="" class="edit-form">
+            <app-standart-input [label]="'Название события'" [control] = "editForm.get('name')"></app-standart-input>
+            <app-standart-rich-input [label]="'Описание'" [control] = "editForm.get('description')"></app-standart-rich-input>
+            <div class="category-container">
+                <ng-container>
+                    <ion-modal mode="ios" (didDismiss)="closeModal()"  [isOpen]="openModalCategory">
+                        <ng-template>
+                            <ion-toolbar mode="ios">
+                                <ion-title mode="ios" class="category-modal-header-text">Выберите типы</ion-title>
+                            </ion-toolbar>
+                            <ion-content>
+                                <div class="category-modal-grid">
+                                    <ng-container *ngIf="allTypes.length > 0">
+                                        <ng-container *ngFor="let category of allTypes" >
+                                            <div (click)="clickCategory(category)"  [ngClass]="{'category-modal-grid-item_active': checkCategory(category), 'category-modal-grid-item': !checkCategory(category)}" >
+                                                <img class="category-icon" src="{{backendUrl}}{{category.ico}}" alt="">
+                                                <span class="category-text">{{category.name}}</span>
+                                            </div>
+                                        </ng-container>
+                                    
+                                    </ng-container>
+                                </div>
+                            </ion-content>
+                        </ng-template>
+                        
+                    </ion-modal>
+                </ng-container>
+                <span class="category-container-header">Категории</span>
+                <div class="category-button-grid">
+                    <ng-container *ngIf="event && event.types">
+                        <app-rounded-button style="pointer-events: none;"  *ngFor="let category of previewCategory" routerLink="/cabinet/events/create" icon="assets/icons/category.svg" type="button" buttonText="{{category.name}}"></app-rounded-button>
+                    </ng-container>
+                </div>
+
+                <div class="button-conatiner">
+                    <div class="button-container-item">
+                      <app-standart-button (click)="getCategory()" buttonText="Изменить" type="button" theme ="light"></app-standart-button>
+                    </div>
+                </div>
+            </div>
+            <div class="prices-container">
+                <ng-container *ngIf="event && event.price">
+                    <!-- <app-standart-input *ngFor="let price of event.price; let i = index" [label]="'Стоимость '+ (i+1)" [control] = "editForm.get('name')"></app-standart-input> -->
+                     <ng-container *ngFor="let price of this.editForm.value.price; let i = index">
+                        <div class="price-container-item-wrapper">
+                            <app-new-price [form]="editForm" *ngIf="!price.on_delete" (deletePriceEmit)="deletePrice($event)" (addPriceEmit)="setValuePrice($event)"  [price]="price"></app-new-price>
+                        </div>
+                     </ng-container>
+                </ng-container>                
+                <div class="button-conatiner">
+                    <div class="button-container-item">
+                      <app-standart-button (click)="addPrice()" buttonText="Добавить" type="button" theme ="light"></app-standart-button>
+                    </div>
+                </div>
+            </div>
+            <div class="place-container">
+                <ng-container *ngFor="let place of this.editForm.value.places; let i = index">
+                    <div class="place-wrapper">
+                        <app-new-place *ngIf="!place.on_delete" (placeDeleteEmit)="deletePlace($event)" (seanceEditEmit)="editSeance($event)" (seanceDeleteEmit)="deleteSeance($event)" (seanceEmit)="addSeance($event)" [placeId]="i" [place]="place"></app-new-place>
+                    </div>
+                </ng-container>
+            </div>
+            <app-standart-button (click)="addPlace()" buttonText="Добавить место" type="button" theme ="light"></app-standart-button>
+            <app-standart-input [label]="'Организатор'" [control] = "editForm.get('sponsor')"></app-standart-input>
+            <div (click)="logFunction()" class="save-button-wrapper">
+                <app-standart-button buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
+            </div>
+
+        </form>
+    </div>
+</ion-content>

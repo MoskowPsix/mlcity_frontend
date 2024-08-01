@@ -1,95 +1,216 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core'
+import { EventHistoryContent } from 'src/app/clasess/history_content/event_history_content'
 
 interface Placemark {
-  geometry: number[];
-  properties: ymaps.IPlacemarkProperties;
-  options: ymaps.IPlacemarkOptions;
+  geometry: number[]
+  properties: ymaps.IPlacemarkProperties
+  options: ymaps.IPlacemarkOptions
 }
-
 
 @Component({
   selector: 'app-test-page',
   templateUrl: './test-page.component.html',
   styleUrls: ['./test-page.component.scss'],
 })
-
-
-export class TestPageComponent  implements OnInit {
-
-  clustererOptions: ymaps.IClustererOptions = {
-    gridSize: 32,
-    clusterDisableClickZoom: true,
-    preset: 'islands#greenClusterIcons',
-  };
-
-  placemarks: Placemark[] = [];
-
-  points = [
-    [55.831903, 37.411961],
-    [55.763338, 37.565466],
-    [55.763338, 37.565466],
-    [55.744522, 37.616378],
-    [55.780898, 37.642889],
-    [55.793559, 37.435983],
-    [55.800584, 37.675638],
-    [55.716733, 37.589988],
-    [55.775724, 37.56084],
-    [55.822144, 37.433781],
-    [55.87417, 37.669838],
-    [55.71677, 37.482338],
-    [55.78085, 37.75021],
-    [55.810906, 37.654142],
-    [55.865386, 37.713329],
-    [55.847121, 37.525797],
-    [55.778655, 37.710743],
-    [55.623415, 37.717934],
-    [55.863193, 37.737],
-    [55.86677, 37.760113],
-    [55.698261, 37.730838],
-    [55.6338, 37.564769],
-    [55.639996, 37.5394],
-    [55.69023, 37.405853],
-    [55.77597, 37.5129],
-    [55.775777, 37.44218],
-    [55.811814, 37.440448],
-    [55.751841, 37.404853],
-    [55.627303, 37.728976],
-    [55.816515, 37.597163],
-    [55.664352, 37.689397],
-    [55.679195, 37.600961],
-    [55.673873, 37.658425],
-    [55.681006, 37.605126],
-    [55.876327, 37.431744],
-    [55.843363, 37.778445],
-    [55.875445, 37.549348],
-    [55.662903, 37.702087],
-    [55.746099, 37.434113],
-    [55.83866, 37.712326],
-    [55.774838, 37.415725],
-    [55.871539, 37.630223],
-    [55.657037, 37.571271],
-    [55.691046, 37.711026],
-    [55.803972, 37.65961],
-    [55.616448, 37.452759],
-    [55.781329, 37.442781],
-    [55.844708, 37.74887],
-    [55.723123, 37.406067],
-  ];
-
-  ngOnInit(): void {
-    this.points.forEach((geometry, index) => {
-      this.placemarks.push({
-        geometry,
-        properties: {
-          hintContent: 'Содержание всплывающей подсказки',
-          balloonContent: 'Содержание балуна',
+export class TestPageComponent implements OnInit {
+  checkEditFunc() {
+    let orig = {
+      id: 1,
+      name: 'Квест «Тайны Поднебесной»',
+      sponsor:
+        'Муниципальное казённое учреждение культуры «Централизованная библиотечная система» Артёмовского городского округа',
+      description:
+        '2024 и 2025 годы объявлены «перекрестными» годами культуры России и Китая. Китай является ближайшим зарубежным соседом Приморского края. Край тесно сотрудничает с ним в экономическом, культурном и туристическом аспекте. Игра посвящена культуре и традициям Китайского государства и совместным дружеским связям. Путешествуя по станциям, ребята вспомнят изобретения древнего Китая, которые прочно вошли в жизнь многих людей по всему миру. Познакомятся с самыми популярными праздниками китайского народа. Узнают много интересного о самых знаменитых достопримечательностях дружественного государства. Попробуют себя в роли переводчиков с китайского, смастерят веер. Детей ждут загадки, ребусы, филворды и творческие задания.',
+      price: [
+        {
+          id: 2,
+          event_id: 1,
+          sight_id: null,
+          cost_rub: '50',
+          descriptions: 'Одна цена на все билеты.',
+          created_at: '2024-06-10T09:11:46.000000Z',
+          updated_at: '2024-06-10T09:11:46.000000Z',
         },
-        options: {
-          preset: 'islands#greenDotIcon',
+      ],
+      materials: '',
+      date_start: '2024-06-18 00:30:00',
+      date_end: '2024-06-18 01:10:00',
+      places: [
+        {
+          id: 1,
+          longitude: 54,
+          latitude: 24,
+          address: 'TG',
+          seances: [
+            {
+              id: 1,
+              date_start: 'a',
+              date_end: 'b',
+            },
+            {
+              id: 2,
+              date_start: 'ab',
+              date_end: 'bb',
+            },
+          ],
         },
-      });
-    });
+        {
+          id: 2,
+          longitude: 2,
+          latitude: 24,
+          address: 'TGB',
+        },
+      ],
+      types: [
+        {
+          id: 9,
+          name: 'Встречи',
+          ico: '/storage/icons/initiative.svg',
+          created_at: '2024-06-07T13:48:41.000000Z',
+          updated_at: '2024-06-07T13:48:41.000000Z',
+          cult_id: 33,
+          etype_id: null,
+          pivot: {
+            event_id: 1,
+            etype_id: 9,
+          },
+        },
+      ],
+      files: [
+        {
+          id: 4,
+          name: 'd511eb6769cf059a63a987bf85e42ed8.jpg',
+          link: 'https://cdn.culture.ru/images/93acd166-1610-56e1-a04e-16cead34e728/w_2048,h_1536/d511eb6769cf059a63a987bf85e42ed8.jpg',
+          local: 0,
+          event_id: 1,
+          created_at: '2024-06-10T09:11:46.000000Z',
+          updated_at: '2024-06-10T09:11:46.000000Z',
+          file_types: [
+            {
+              id: 1,
+              name: 'image',
+              created_at: '2024-06-07T13:48:41.000000Z',
+              updated_at: '2024-06-07T13:48:41.000000Z',
+              pivot: {
+                file_id: 4,
+                type_id: 1,
+              },
+            },
+          ],
+        },
+      ],
+    }
+    let edited = {
+      id: 1,
+      // измененное название
+      name: 'Квест «»',
+      // измененный спонсор
+      sponsor: 'Муниципальное казённое учреждение культуры « » Артёмовского городского округа',
+      // измененно описание
+      description:
+        '2024 и 2100 годы объявлены «перекрестными» годами культуры России и Китая. Китай является ближайшим зарубежным соседом Приморского края. Край тесно сотрудничает с ним в экономическом, культурном и туристическом аспекте. Игра посвящена культуре и традициям Китайского государства и совместным дружеским связям. Путешествуя по станциям, ребята вспомнят изобретения древнего Китая, которые прочно вошли в жизнь многих людей по всему миру. Познакомятся с самыми популярными праздниками китайского народа. Узнают много интересного о самых знаменитых достопримечательностях дружественного государства. Попробуют себя в роли переводчиков с китайского, смастерят веер. Детей ждут загадки, ребусы, филворды и творческие задания.',
+      price: [
+        {
+          id: 2,
+          event_id: 1,
+          sight_id: null,
+          cost_rub: '150', // цена изменена
+          descriptions: 'Одна цена на все билеты.',
+          created_at: '2024-06-10T09:11:46.000000Z',
+          updated_at: '2024-06-10T09:11:46.000000Z',
+        },
+        {
+          // новая цена
+          cost_rub: '250',
+          description: 'Новая цена на билеты',
+        },
+      ],
+      // изменены материалы
+      materials: 'Новые материалы',
+      // новая дата
+      date_start: '2024-06-21 00:30:00',
+      // новая дата
+      date_end: '2024-06-24 01:10:00',
+      places: [
+        // измененное место
+        {
+          id: 1,
+          longitude: 54,
+          latitude: 24,
+          address: 'TG',
+          seances: [
+            {
+              id: 1,
+              date_start: 'aa',
+              date_end: 'ba',
+            },
+            {
+              id: 2,
+              on_delete: true,
+              date_start: 'ab',
+              date_end: 'bb',
+            },
+            {
+              date_start: 'a2',
+              date_end: 'a3',
+            },
+          ],
+        },
+        // Новое место
+        {
+          latitude: 54,
+          longitude: 24,
+          address: 'T',
+        },
+        {
+          id: 2,
+          on_delete: true,
+          longitude: 2,
+          latitude: 24,
+          address: 'TGB',
+        },
+      ],
+      types: [
+        {
+          id: 9,
+          name: 'Встречи',
+          ico: '/storage/icons/initiative.svg',
+          created_at: '2024-06-07T13:48:41.000000Z',
+          updated_at: '2024-06-07T13:48:41.000000Z',
+          cult_id: 33,
+          etype_id: null,
+          pivot: {
+            event_id: 1,
+            etype_id: 9,
+          },
+        },
+      ],
+      files: [
+        {
+          id: 4,
+          name: 'd511eb6769cf059a63a987bf85e42ed8.jpg',
+          link: 'https://cdn.culture.ru/images/93acd166-1610-56e1-a04e-16cead34e728/w_2048,h_1536/d511eb6769cf059a63a987bf85e42ed8.jpg',
+          local: 0,
+          event_id: 1,
+          created_at: '2024-06-10T09:11:46.000000Z',
+          updated_at: '2024-06-10T09:11:46.000000Z',
+          file_types: [
+            {
+              id: 1,
+              name: 'image',
+              created_at: '2024-06-07T13:48:41.000000Z',
+              updated_at: '2024-06-07T13:48:41.000000Z',
+              pivot: {
+                file_id: 4,
+                type_id: 1,
+              },
+            },
+          ],
+        },
+      ],
+    }
+    let eventHistoryContent = new EventHistoryContent()
+    console.log(eventHistoryContent.merge(orig, edited))
   }
-
+  ngOnInit(): void { }
 }

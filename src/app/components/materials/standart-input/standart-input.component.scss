@@ -7,6 +7,8 @@
     padding-left: 0.8rem;
     transition: 0.1s;
     color: #363d42;
+    font-family: var(--font-regular);
+    background: none;
 }
 .standart-input_inavlid{
     border: 1px solid #ff0000;
@@ -15,6 +17,7 @@
     min-height: 2.25rem;
     font-size: 12px;
     padding-left: 0.8rem;
+    background: none;
     transition: 0.1s;
     color: #363d42;
 }
@@ -24,6 +27,7 @@
     width: 100%;
     min-height: 2.25rem;
     transition: 0.2s;
+    background: none;
     font-size: 12px;
     padding-left: 0.8rem;
     transition: 0.1s;
@@ -34,6 +38,7 @@
     outline: 1px solid #52b1fab0;
     border-radius: 5px;
     width: 100%;
+    background: none;
     min-height: 2.25rem;
     font-size: 12px;
     padding-left: 0.8rem;
@@ -44,6 +49,7 @@
     color: #4C5861;
     font-size: 12px;
     margin-bottom: 6px;
+    font-family: var(--font-regular);
 }
 .label_invalid{
     color: #ff0000;
