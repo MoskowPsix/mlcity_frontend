@@ -193,7 +193,7 @@ export class EventHistoryContent extends HistoryContent {
       history_files: this.files,
       history_types: this.types,
       history_prices: this.price,
-      history_places: this.places
+      history_places: this.places,
     }
   }
 }
