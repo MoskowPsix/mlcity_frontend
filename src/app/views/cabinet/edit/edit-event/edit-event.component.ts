@@ -136,26 +136,28 @@ export class EditEventComponent implements OnInit {
   }
   addSeance(event: any) {
     console.log(event)
-    this.placesArray[event].seances.push({
-      temp_id: this.placesArray[event].seances.length,
+    this.editForm.value.places[event].seances.push({
+      temp_id: this.editForm.value.places[event].seances.length,
+      date_start: '',
     })
   }
-  editSeance(seance: any) {
-    if (seance.temp_id) {
-      let seanceIndex = this.editForm.value.places[seance.placeId].seances
+  editSeance(seanceDate: any) {
+    if (seanceDate.temp_id || (seanceDate.temp_id == 0 && seanceDate.temp_id != null)) {
+      let seanceIndex = this.editForm.value.places[seanceDate.placeId].seances
         .map((e: any) => e.temp_id)
-        .indexOf(seance.temp_id)
-      this.editForm.value.places[seance.placeId].seances[seanceIndex].date_start = seance.date_start
+        .indexOf(seanceDate.temp_id)
+      this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_start = seanceDate.date_start
+      console.log(this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_start)
       console.log(this.editForm.value.places)
-    } else {
-      let seanceIndex = this.editForm.value.places[seance.placeId].seances
+    } else if (!seanceDate.temp_id && seanceDate.seance) {
+      let seanceIndex = this.editForm.value.places[seanceDate.placeId].seances
         .map((e: any) => e.id)
-        .indexOf(seance.seance.id)
-      this.editForm.value.places[seance.placeId].seances[seanceIndex].date_start = seance.seance.date_start
+        .indexOf(seanceDate.seance.id)
+      this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_start = seanceDate.seance.date_start
     }
   }
   deleteSeance(seance: any) {
-    if (seance.temp_id) {
+    if (seance.temp_id || (seance.temp_id == 0 && seance.temp_id != null)) {
       let seanceIndex = this.editForm.value.places[seance.placeId].seances
         .map((e: any) => e.temp_id)
         .indexOf(seance.temp_id)
@@ -183,6 +185,25 @@ export class EditEventComponent implements OnInit {
           this.editForm.value.places.push(place)
         })
       })
+  }
+  addPlace() {
+    let tempPlace = {
+      temp_id: this.editForm.value.places.length,
+      latitude: '',
+      longitude: '',
+      address: '',
+      event: [],
+      seances: [],
+    }
+    this.editForm.value.places.push(tempPlace)
+  }
+  deletePlace(placeId: any) {
+    let place = this.editForm.value.places[placeId]
+    if (place.id) {
+      this.editForm.value.places[placeId].on_delete = true
+    } else if (place.temp_id) {
+      this.editForm.value.places.splice(placeId, 1)
+    }
   }
   ionViewWillEnter() {
     let priceArray: any = []

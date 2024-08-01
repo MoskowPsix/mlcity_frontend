@@ -20,3 +20,36 @@
 .button-container-item{
     min-width:48.5%;  
 }
+.delete-button{
+    margin-top: 0.19rem;
+    width: 2rem;
+    margin-top: -1rem;
+    border-radius: 2px;
+    transition: 0.2s;
+    background: #DCE9FF;
+    right: 2.3rem;
+    z-index: 2;
+    height: 1.8rem;
+}
+.delete-button:active{
+    margin-top: 0.19rem;
+    width: 2rem;
+    margin-top: -1rem;
+    border-radius: 2px;
+    transition: 0.2s;
+   background: #b0c6eb;
+    right: 2.3rem;
+    z-index: 2;
+    height: 1.8rem;
+}
+.delete-img{
+    filter: brightness(0) saturate(100%) invert(39%) sepia(25%) saturate(2348%) hue-rotate(190deg) brightness(112%) contrast(105%);
+}
+
+.place-header-container{
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}

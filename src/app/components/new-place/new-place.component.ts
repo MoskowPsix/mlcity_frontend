@@ -15,6 +15,8 @@ export class NewPlaceComponent implements OnInit {
   @Input() placeId!: any
   @Output() seanceDeleteEmit = new EventEmitter()
   @Output() seanceEditEmit = new EventEmitter()
+  @Output() placeDeleteEmit = new EventEmitter()
+  @Output() placeEditEmit = new EventEmitter()
   seancesArray: any[] = []
   seanceEdit(seance: any) {
     this.seanceEditEmit.emit(seance)
@@ -25,11 +27,16 @@ export class NewPlaceComponent implements OnInit {
   seanceDelete(event: any) {
     this.seanceDeleteEmit.emit(event)
   }
+  deletePlace() {
+    this.placeDeleteEmit.emit(this.placeId)
+  }
   ngOnInit() {
-   
     this.seancesArray = this.place.seances
     this.placeForm = new FormGroup({
       address: new FormControl('', [Validators.required]),
     })
+    if (!this.place.id) {
+      this.addSeance()
+    }
   }
 }

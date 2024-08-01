@@ -1,5 +1,7 @@
 <div>
-  <span class="place-header">Место провидения</span>
+  <div class="place-header-container">
+    <span class="place-header">Место провидения</span>  <button (click)="deletePlace()" class="delete-button" type="button"><img class="delete-img" src="assets/icons/trash.svg" alt=""></button>
+  </div>
   <div class="place-container">
     <form [formGroup]="placeForm">
       <app-standart-input [label]="'Адрес'" [control]="placeForm.get('address')"></app-standart-input>
