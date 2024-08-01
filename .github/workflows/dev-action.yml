@@ -1,4 +1,4 @@
-name: 'MLCity frontend develop server deploy'
+name: 'Deploy to test server'
 
 on:
   push:
