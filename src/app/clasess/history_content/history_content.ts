@@ -6,6 +6,12 @@ import { ISight } from 'src/app/models/sight'
 import { ISightType } from 'src/app/models/sight-type'
 import { isEqual } from 'lodash'
 
+interface EditedPrice {
+  price_id: number
+  cost_rub?: string
+  description?: string
+}
+
 export class HistoryContent {
   public origin: any = {}
   public edited: any = {}
@@ -17,7 +23,7 @@ export class HistoryContent {
   protected types: ISightType[] | IEventType[] = []
   protected price: object[] = []
 
-  
+
   /**
    * @param origin any оригинальный объект событий или мест
    * @param edit any изменённый объект событй или мест
@@ -150,10 +156,9 @@ export class HistoryContent {
    * то добавляет в массив значения свойству класса.
    */
   private compareAndSetArray(name: string): void {
-    console.log(name)
     const origin: any[] = this.getPropertyObjects('origin', name)
     const edited: any[] = this.getPropertyObjects('edited', name)
-    console.log(origin, edited)
+
     edited.forEach((edit) => {
       const orig = origin.find((o: any) => o.id === edit.id)
       if (!isEqual(this.delArrayInObject(edit), this.delArrayInObject(orig)) || !edit) {
@@ -184,5 +189,51 @@ export class HistoryContent {
     } else {
       return obj
     }
+  }
+
+  protected compareAndSetPrices() {
+    if (this.edited.price == null) {
+      return
+    }
+
+    for (let editedPrice of this.edited.price) {
+      if (editedPrice.id == null) {
+        this.price.push(editedPrice)
+      }
+      if (editedPrice.on_delete != null && editedPrice.on_delete) {
+        let priceOnDelete = {
+          price_id: editedPrice.id,
+          on_delete: true
+        }
+        this.price.push(priceOnDelete)
+      }
+
+      let originalPrice = this.SearchOriginalPrice(editedPrice.id)
+
+      if (originalPrice != undefined && !isEqual(editedPrice, originalPrice)) {
+        let changedPrice: EditedPrice = {
+          price_id: editedPrice.id
+        }
+
+        if (!isEqual(editedPrice.cost_rub, originalPrice.cost_rub)) {
+          changedPrice.cost_rub = editedPrice.cost_rub
+        }
+
+        if (!isEqual(editedPrice.description, originalPrice.description)) {
+          changedPrice.description = editedPrice.description
+        }
+
+        this.price.push(changedPrice)
+      }
+    }
+  }
+
+  private SearchOriginalPrice(priceId: number) {
+    for (let element of this.origin.price)
+      if (element.id == priceId) {
+        return element
+      }
+
+    return undefined
   }
 }
