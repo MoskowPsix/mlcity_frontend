@@ -175,13 +175,12 @@ export class EventHistoryContent extends HistoryContent {
       'date_end',
       'files',
       'types',
-      'price',
     ]
     elementsWhatNeedToCompare.forEach((element: string) => {
       this.compareAndSet(element)
     })
     this.compareAndSetPlaces()
-
+    this.compareAndSetPrices()
     // console.log(this.origin)
 
     return {
@@ -194,7 +193,7 @@ export class EventHistoryContent extends HistoryContent {
       history_files: this.files,
       history_types: this.types,
       history_prices: this.price,
-      history_places: this.places,
+      history_places: this.places
     }
   }
 }
