@@ -4,7 +4,7 @@
   </div>
   <div class="place-container">
     <form [formGroup]="placeForm">
-      <app-standart-input [label]="'Адрес'" [control]="placeForm.get('address')"></app-standart-input>
+      <app-address-input [place]="place" label="Адрес"></app-address-input>
       <ng-container *ngFor="let seance of seancesArray">
         <app-new-seance *ngIf="!seance.on_delete" (seanceEditEmit)="seanceEdit($event)" [value]="seance.date_start" (seanceDeleteEmit)="seanceDelete($event)" [seance]="seance" [placeId]="placeId" [label]="'Начало события'" type="datetime-local" ></app-new-seance>
       </ng-container>

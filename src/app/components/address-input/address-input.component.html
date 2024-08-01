@@ -1,0 +1,30 @@
+
+<div  class="input-wrapper">
+
+  <ng-container >
+    <label class="label" for="{{label}}">{{label}}</label>
+    <input #input [readonly]="readonly" placeholder="{{placeholder}}" type="{{type}}" name="{{label}}" class="standart-input" name="new_name">
+    <div class="map ">
+      <ya-map 
+        (ready)="onMapReady($event)"
+        [zoom]="11"
+        [center]="coords"
+        [state]="{
+          controls: [
+            'zoomControl',
+            'fullscreenControl',]
+          }"
+        [options]="{
+          yandexMapDisablePoiInteractivity: true,
+          maxZoom:18,
+          suppressMapOpenBlock: true,
+          suppressObsoleteBrowserNotifier: true
+        }"
+      >
+      </ya-map>
+    </div>
+  </ng-container>
+  <!-- <ion-input  fill="outline" formControlName="address" value="{{this.createEventForm.controls['places'].value[i].controls['address'].value}}" (ionChange)="clearSearche($event, i)" placeholder="Адрес мероприятия..." id="{{'search-map-'+i}}" type="text" name="search" required></ion-input> -->
+
+</div>
+
