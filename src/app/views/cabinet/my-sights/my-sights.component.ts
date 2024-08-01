@@ -1,24 +1,7 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core'
-import {
-  EMPTY,
-  Subject,
-  catchError,
-  delay,
-  map,
-  of,
-  retry,
-  takeUntil,
-  tap,
-} from 'rxjs'
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { SightsService } from 'src/app/services/sights.service'
-import { FilterService } from 'src/app/services/filter.service'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { ToastService } from 'src/app/services/toast.service'
 
@@ -34,7 +17,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
     private sightsService: SightsService,
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
-  ) {}
+  ) { }
   nextPage: boolean = false
   sights: any[] = []
 
@@ -61,29 +44,25 @@ export class MySightsComponent implements OnInit, OnDestroy {
 
   getMySights() {
     this.sightsService
-      .getSightsForUser(
-        this.queryBuilderService.queryBuilder('sightsPublicForAuthor'),
-      )
+      .getSightsForUser(this.queryBuilderService.queryBuilder('sightsPublicForAuthor'))
       .pipe(
         delay(100),
         retry(3),
         map((respons: any) => {
           this.sights.push(...respons.sights.data)
-          if (respons.events.next_cursor) {
-            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(
-              respons.events.next_cursor,
-            )
+          if (respons.sights.next_cursor) {
+            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(respons.sights.next_cursor)
           }
-          respons.events.next_cursor
-            ? (this.nextPage = true)
-            : (this.nextPage = false)
+          respons.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
         }),
         tap(() => {
+          console.log(this.loadSights)
           this.loadSights = true
           this.loadMoreSights = false
         }),
         catchError((err) => {
           this.loadSights = true
+          console.log(err)
           this.toastService.showToast(MessagesErrors.default, 'danger')
           return of(EMPTY)
         }),
@@ -161,9 +140,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
       if (indexPreview !== -1) {
         this.imagesPreview.splice(indexPreview, 1)
       }
-      const indexFile = this.uploadFiles.findIndex(
-        (image) => image.name === imgName,
-      ) // ищем файл с именем картинки
+      const indexFile = this.uploadFiles.findIndex((image) => image.name === imgName) // ищем файл с именем картинки
 
       if (indexFile !== -1) {
         //удаляем из массива загруженых файлов, иначе перерисует картинки
