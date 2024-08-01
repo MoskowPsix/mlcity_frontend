@@ -183,21 +183,6 @@ ion-content{
     border-radius: 50%;
 }
 
-.cluster {
-    font-size: 0.75rem;
-    // background-color: var(--orange-color);
-    display:flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    position: absolute;
-    width: 36px;
-    height: 36px;
-    border: 2px solid white;
-    border-radius: 50%;
-}
-
 .marker {
     transition: all 1s ease;
     position: absolute;
@@ -232,7 +217,7 @@ ion-content{
 }
 
 .test {
-  
+
 }
 
 .marker.now {
@@ -293,6 +278,9 @@ ion-content{
     animation: fadeIn 2s infinite;
 }
 
+.cluster.active {
+  animation: fadeIn 2s infinite;
+}
 
 .marker.active > img {
   width: 24px;
