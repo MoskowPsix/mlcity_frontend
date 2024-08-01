@@ -8,7 +8,7 @@
   
   <ng-container *ngIf="!invalid && !disabled">
     <label class="label" for="{{label}}">{{label}}</label>
-    <input #input [readonly]="readonly" placeholder="{{placeholder}}" type="{{type}}" name="{{label}}" class="standart-input" name="new_name">
+    <input #input [readonly]="readonly" placeholder="{{placeholder}}" type="{{type}}" value="{{value}}" (input)="getSeanceDate($event)" name="{{label}}" class="standart-input" name="new_name">
     <button (click)="openPasword(input)" *ngIf="openPassword" type="button" class="open-input"><img class="open-input-icon" src="/assets/icons/open-input.svg" alt=""></button>
     <button (click)="seanceDelete()" class="delete-button" type="button"><img class="delete-img" src="assets/icons/trash.svg" alt=""></button>
   </ng-container>

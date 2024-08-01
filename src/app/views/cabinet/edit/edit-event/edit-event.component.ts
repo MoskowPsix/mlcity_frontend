@@ -137,8 +137,35 @@ export class EditEventComponent implements OnInit {
   addSeance(event: any) {
     console.log(event)
     this.placesArray[event].seances.push({
-      tempId: this.placesArray[event].seances.length,
+      temp_id: this.placesArray[event].seances.length,
     })
+  }
+  editSeance(seance: any) {
+    if (seance.temp_id) {
+      let seanceIndex = this.editForm.value.places[seance.placeId].seances
+        .map((e: any) => e.temp_id)
+        .indexOf(seance.temp_id)
+      this.editForm.value.places[seance.placeId].seances[seanceIndex].date_start = seance.date_start
+      console.log(this.editForm.value.places)
+    } else {
+      let seanceIndex = this.editForm.value.places[seance.placeId].seances
+        .map((e: any) => e.id)
+        .indexOf(seance.seance.id)
+      this.editForm.value.places[seance.placeId].seances[seanceIndex].date_start = seance.seance.date_start
+    }
+  }
+  deleteSeance(seance: any) {
+    if (seance.temp_id) {
+      let seanceIndex = this.editForm.value.places[seance.placeId].seances
+        .map((e: any) => e.temp_id)
+        .indexOf(seance.temp_id)
+      this.editForm.value.places[seance.placeId].seances.splice(seanceIndex, 1)
+    } else {
+      let seanceIndex = this.editForm.value.places[seance.placeId].seances
+        .map((e: any) => e.id)
+        .indexOf(seance.seance.id)
+      this.editForm.value.places[seance.placeId].seances[seanceIndex].on_delete = true
+    }
   }
   getPlaces() {
     console.log(this.event.id)
