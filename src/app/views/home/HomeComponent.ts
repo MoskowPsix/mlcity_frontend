@@ -405,7 +405,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.objectsInsideCircle.events.add('click', (e: any) => {
       this.modalContent = []
-      console.log('click')
       if (!e.get('target')._clusterBounds) {
         if (e.get('target').properties.get('geoObjects') !== undefined) {
           e.get('target')
