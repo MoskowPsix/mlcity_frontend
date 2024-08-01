@@ -10,6 +10,7 @@ import { EventTypeService } from 'src/app/services/event-type.service'
 import { IEventType } from 'src/app/models/event-type'
 import { environment } from 'src/environments/environment'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
+import { IPlace } from 'src/app/models/place'
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
@@ -28,6 +29,7 @@ export class EditEventComponent implements OnInit {
   editForm!: FormGroup
   finalObject!: IEvent
   openModalCategory: boolean = false
+  placesArray: IPlace[] = []
   allTypes: IEventType[] = []
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   previewCategory: any = []
@@ -132,13 +134,27 @@ export class EditEventComponent implements OnInit {
       }
     }
   }
+  addSeance(event: any) {
+    console.log(event)
+    this.placesArray[event].seances.push({
+      tempId: this.placesArray[event].seances.length,
+    })
+  }
   getPlaces() {
     console.log(this.event.id)
+    let tempPlaceArray: IPlace[] = []
     this.eventsService
-      .getEventPlaces(this.event.id, this.queryBuilderService.queryBuilder('eventPlaces'))
-      .pipe()
+      .getEventPlaces(this.event.id, {})
+      .pipe(
+        tap((res: any) => {
+          tempPlaceArray = res.places.data
+        }),
+      )
       .subscribe((res) => {
-        console.log(res)
+        tempPlaceArray.forEach((place: any) => {
+          this.placesArray.push(place)
+          this.editForm.value.places.push(place)
+        })
       })
   }
   ionViewWillEnter() {
@@ -184,6 +200,7 @@ export class EditEventComponent implements OnInit {
       files: new FormControl('', fileTypeValidator(['png', 'jpg', 'jpeg'])),
       price: new FormControl([], [Validators.required]),
       types: new FormControl([], [Validators.required]),
+      places: new FormControl([], [Validators.required]),
     })
   }
 }

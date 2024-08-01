@@ -6,7 +6,7 @@
     padding-bottom: 0.3rem;
 }
 .place-container{
-    height:13rem;
+    min-height:13rem;
     border: 1px solid #4642422b;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -15,6 +15,7 @@
 .button-conatiner{
     padding-top:0.75rem;
     gap: 3%;
+    padding-bottom: 0.75rem;
 }
 .button-container-item{
     min-width:48.5%;  

@@ -9,6 +9,9 @@
     padding-top: 1rem;
     padding-bottom:0.75rem;
 }
+.place-wrapper{
+    margin-top: 1rem;
+}
 .category-container{
     padding-top: 1rem;
 }
@@ -20,7 +23,8 @@
     gap: 0.5rem;
 }
 ion-modal{
-    --height: 50%;
+  --height: 20rem;
+  --width: 22rem;
   --border-radius: 16px;
   --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }

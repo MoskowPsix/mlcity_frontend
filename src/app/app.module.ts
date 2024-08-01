@@ -85,6 +85,7 @@ import { PlaceInfoComponent } from './components/place-info/place-info.component
 import { SightTypeComponent } from './components/sight-type/sight-type.component'
 import { SafeUrlPipe } from './views/events/event-create/event-create.pipe'
 import { NewPriceComponent } from './components/new-price/new-price.component'
+import { NewSeanceComponent } from './components/new-seance/new-seance.component'
 import { SafeUrlPipe2 } from './components/event-card/event-card.pipe'
 import { CodeInputComponent } from './components/materials/code-input/code-input.component'
 import { MyEventsComponent } from './views/cabinet/my-events/my-events.component'
@@ -187,6 +188,7 @@ registerLocaleData(localeRu, 'ru')
     CreateRulesModalComponent,
     BackButtonDirective,
     SettingsComponent,
+    NewSeanceComponent,
     SettingsProfileComponent,
     SettingsPrivacyComponent,
     SettingsFavoriteComponent,
