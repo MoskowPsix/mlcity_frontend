@@ -16,18 +16,42 @@ export class NewSeanceComponent implements OnInit {
   @Input() openPassword: boolean = false
   @Input() invalid: boolean = false
   @Input() disabled: boolean = false
+  @Input() value: string = ''
   @Input() placeId!: number
   @Input() seance: any
   @Output() seanceDeleteEmit = new EventEmitter()
+  @Output() seanceEditEmit = new EventEmitter()
 
   openPasword(input: any) {
     input.type = input.type === 'password' ? 'text' : 'password'
   }
+  getSeanceDate(time: any) {
+    if (!this.seance.id) {
+      this.seanceEditEmit.emit({
+        temp_id: this.seance.temp_id,
+        placeId: this.placeId,
+        date_start: time.target.value,
+      })
+    } else {
+      this.seance.date_start = time.target.value
+      this.seanceEditEmit.emit({
+        placeId: this.placeId,
+        seance: this.seance,
+      })
+    }
+  }
   seanceDelete() {
-    this.seanceDeleteEmit.emit({
-      id: this.seance.tempId,
-      placeId: this.placeId,
-    })
+    if (!this.seance.id) {
+      this.seanceDeleteEmit.emit({
+        temp_id: this.seance.temp_id,
+        placeId: this.placeId,
+      })
+    } else {
+      this.seanceDeleteEmit.emit({
+        placeId: this.placeId,
+        seance: this.seance,
+      })
+    }
   }
   ngOnInit() {}
 }

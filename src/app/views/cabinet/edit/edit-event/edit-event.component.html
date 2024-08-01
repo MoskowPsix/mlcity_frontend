@@ -59,7 +59,7 @@
             <div class="place-container">
                 <ng-container *ngFor="let place of placesArray; let i = index">
                     <div class="place-wrapper">
-                        <app-new-place (seanceEmit)="addSeance($event)" [placeId]="i" [place]="place"></app-new-place>
+                        <app-new-place (seanceEditEmit)="editSeance($event)" (seanceDeleteEmit)="deleteSeance($event)" (seanceEmit)="addSeance($event)" [placeId]="i" [place]="place"></app-new-place>
                     </div>
                 </ng-container>
             </div>
