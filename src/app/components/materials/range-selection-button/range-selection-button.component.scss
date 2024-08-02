@@ -1,14 +1,23 @@
 .range-container {
-  width: 2rem;
+  width: 2.2rem;
   height: 2rem;
-  background-color: red;
-  display: flex;
+  background-color:white;
+  border-radius: 36px;
+  transition: width 0.5s ease-in-out;
+  padding-left: 0.325rem;
+  padding-right: 0.325rem;
+  overflow-y: hidden;
+  overflow-x: hidden;
   align-items: center;
   justify-content: center;
 }
 
+.circle_container {
+  display: flex;
+}
+
 .range-container.active {
-  width: 11.25rem;
+  width: 12.8rem;
 }
 
 .range-element {

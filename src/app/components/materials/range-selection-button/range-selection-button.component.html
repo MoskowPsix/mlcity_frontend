@@ -1,24 +1,24 @@
 <div
   class="range-container"
-  [ngClass]="{'active': true}"
+  [ngClass]="{'active': state}"
+  (click)="changeState()"
   >
-    <app-circle-button>
+  <div class="circle_container">
+    <app-circle-button
+      *ngFor="let el of ['1', '2', '5', '10', 15, '25']">
       <div class="range-element">
-        <div>1</div>
+        <div>{{ el }}</div>
         <div>км</div>
     </div>
   </app-circle-button>
-  <app-circle-button>
-    <div class="range-element">
-      <div>2</div>
-      <div>км</div>
+  <app-circle-button
+    theme="dark-all"
+      >
+      <div class="range-element">
+        <div>30</div>
+        <div>км</div>
+    </div>
+  </app-circle-button>
   </div>
-</app-circle-button>
-<app-circle-button>
-  <div class="range-element">
-    <div>5</div>
-    <div>км</div>
-</div>
-</app-circle-button>
 </div>
 
