@@ -41,8 +41,8 @@ jobs:
             sudo docker stop dev-vokrug-frontend
             sudo docker container rm dev-vokrug-frontend
             sudo docker image rm adalave/dev-vokrug-frontend:stable
-            sudo docker pull adalave/dev-vokrug-frontend:stable
-            sudo docker run -p 80:80 -d --name dev-vokrug-frontend adalave/dev-vokrug-frontend:stable
+            docker pull adalave/dev-vokrug-frontend:stable
+            docker run -p 80:80 -d --name dev-vokrug-frontend adalave/dev-vokrug-frontend:stable
 
   build-deploy-android:
     runs-on: ubuntu-latest
