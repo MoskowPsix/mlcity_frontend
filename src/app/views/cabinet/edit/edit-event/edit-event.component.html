@@ -2,7 +2,7 @@
     <app-edit-slider *ngIf="this.event && this.event.files" (filesEmit)="logFiles($event)" [files]="this.event.files"></app-edit-slider>
     <div class="content-container">
         <form [formGroup]="editForm" action="" class="edit-form">
-            <app-standart-input [label]="'Название события'" [control] = "editForm.get('name')"></app-standart-input>
+            <app-standart-input [invalid]="invalidForm.name" [label]="'Название события'" [control] = "editForm.get('name')"></app-standart-input>
             <app-standart-rich-input [label]="'Описание'" [control] = "editForm.get('description')"></app-standart-rich-input>
             <div class="category-container">
                 <ng-container>

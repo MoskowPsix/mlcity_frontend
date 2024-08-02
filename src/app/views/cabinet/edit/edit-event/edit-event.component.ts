@@ -14,6 +14,11 @@ import { IPlace } from 'src/app/models/place'
 import { EventHistoryContent } from 'src/app/clasess/history_content/event_history_content'
 import { EditService } from 'src/app/services/edit.service'
 import _ from 'lodash'
+interface InvalidForm {
+  name: boolean
+  sponsor: boolean
+  description: boolean
+}
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
@@ -39,6 +44,11 @@ export class EditEventComponent implements OnInit {
   previewCategory: any = []
   copyEvent: any
 
+  invalidForm: InvalidForm = {
+    name: false,
+    description: false,
+    sponsor: false,
+  }
   logFiles(event: any) {
     this.editForm.value.files = event
   }
@@ -295,18 +305,24 @@ export class EditEventComponent implements OnInit {
       })
     }
   }
+  checkValidOfForm() {
+    this.invalidForm.name = this.editForm.get('name')!.invalid
+    this.invalidForm.description = this.editForm.get('description')!.invalid
+    this.invalidForm.sponsor = this.editForm.get('sponsor')!.invalid
+  }
   submitForm() {
-    this.clearFormOfTempData()
-    console.log(this.editForm.value)
-    let historyContent = new EventHistoryContent()
+    this.checkValidOfForm()
+    // this.clearFormOfTempData()
     // console.log(this.editForm.value)
-    this.editService
-      .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
-      .pipe()
-      .subscribe((res) => {
-        console.log(res)
-      })
-    console.log(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
+    // let historyContent = new EventHistoryContent()
+    // // console.log(this.editForm.value)
+    // this.editService
+    //   .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
+    //   .pipe()
+    //   .subscribe((res) => {
+    //     console.log(res)
+    //   })
+    // console.log(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
     // console.log(this.copyEvent)
   }
   ngOnInit() {
