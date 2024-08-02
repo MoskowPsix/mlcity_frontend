@@ -1,0 +1,28 @@
+.range-container {
+  width: 2rem;
+  height: 2rem;
+  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.range-container.active {
+  width: 11.25rem;
+}
+
+.range-element {
+  text-align: center;
+  min-width: 100%;
+  color: var(--font-color);
+  font-family: var(--font-bold);
+  font-size: 0.75rem;
+}
+
+.range-element-number {
+
+}
+
+.range-element-text {
+
+}
