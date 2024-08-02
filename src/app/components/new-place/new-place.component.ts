@@ -17,6 +17,7 @@ export class NewPlaceComponent implements OnInit {
   @Output() seanceEditEmit = new EventEmitter()
   @Output() placeDeleteEmit = new EventEmitter()
   @Output() placeEditEmit = new EventEmitter()
+  @Output() addressEditEmit = new EventEmitter()
   seancesArray: any[] = []
   seanceEdit(seance: any) {
     this.seanceEditEmit.emit(seance)
@@ -29,6 +30,9 @@ export class NewPlaceComponent implements OnInit {
   }
   deletePlace() {
     this.placeDeleteEmit.emit(this.placeId)
+  }
+  edditAdress(event: any) {
+    this.addressEditEmit.emit(event)
   }
   ngOnInit() {
     this.seancesArray = this.place.seances

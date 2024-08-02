@@ -11,6 +11,7 @@ import { IEventType } from 'src/app/models/event-type'
 import { environment } from 'src/environments/environment'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { IPlace } from 'src/app/models/place'
+import { EventHistoryContent } from 'src/app/clasess/history_content/event_history_content'
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
@@ -33,8 +34,9 @@ export class EditEventComponent implements OnInit {
   allTypes: IEventType[] = []
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   previewCategory: any = []
+
   logFiles(event: any) {
-    this.finalObject.files = event
+    this.editForm.value.files = event
   }
   addPrice() {
     this.editForm.value.price.push({
@@ -59,6 +61,14 @@ export class EditEventComponent implements OnInit {
       let index = this.editForm.value.price.indexOf(event)
       this.editForm.value.price.splice(index, 1)
     }
+  }
+  editAddress(event: any) {
+    console.log(event)
+    let index = event.placeId
+    this.editForm.value.places[index].location_id = event.location_id
+    this.editForm.value.places[index].address = event.address
+    this.editForm.value.places[index].latitude = event.latitude
+    this.editForm.value.places[index].longitude = event.longitude
   }
   getPriceIndex(event: any) {
     if (event.id) {
@@ -180,8 +190,13 @@ export class EditEventComponent implements OnInit {
         }),
       )
       .subscribe((res) => {
+        this.event.places = []
+
         tempPlaceArray.forEach((place: any) => {
           this.placesArray.push(place)
+          if (this.event.places) {
+            this.event.places.push(place)
+          }
           this.editForm.value.places.push(place)
         })
       })
@@ -237,8 +252,11 @@ export class EditEventComponent implements OnInit {
         })
       })
   }
-  logFunction() {
+  submitForm() {
+    let historyContent = new EventHistoryContent()
     console.log(this.editForm.value)
+    console.log(historyContent.merge(this.event, this.editForm.value))
+    console.log(this.event)
   }
   ngOnInit() {
     this.editForm = new FormGroup({

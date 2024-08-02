@@ -101,7 +101,7 @@ export class EventHistoryContent extends HistoryContent {
         }
 
         // Если сеанс на удаление, создаем обьект нужной структуры и добавляем в массив
-        if (editedSeance.on_delete != null && editedSeance.on_delete == true) {
+        if (editedSeance.on_delete != null && editedSeance.on_delete) {
           let changedSeance: EditedSeance = {}
           changedSeance.seance_id = editedSeance.id
           changedSeance.on_delete = editedSeance.on_delete
@@ -166,16 +166,7 @@ export class EventHistoryContent extends HistoryContent {
   public merge(origin: any, edited: any) {
     this.origin = origin
     this.edited = edited
-    let elementsWhatNeedToCompare = [
-      'name',
-      'description',
-      'materials',
-      'sponsor',
-      'date_start',
-      'date_end',
-      'files',
-      'types',
-    ]
+    let elementsWhatNeedToCompare = ['name', 'description', 'materials', 'sponsor', 'date_start', 'date_end']
     elementsWhatNeedToCompare.forEach((element: string) => {
       this.compareAndSet(element)
     })
