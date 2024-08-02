@@ -7,11 +7,18 @@ import { Component, OnInit } from '@angular/core'
 })
 export class RangeSelectionButtonComponent implements OnInit {
   state: boolean = true
+  radiusRange: number[] = [1, 2, 5, 10, 15, 25]
+  currentRange: number = 5
+
   constructor() { }
 
   changeState() {
     this.state = !this.state
     console.log('share')
+  }
+
+  changeRadius() {
+
   }
   ngOnInit() { }
 }

@@ -3,9 +3,7 @@
   height: 2rem;
   background-color:white;
   border-radius: 36px;
-  transition: width 0.5s ease-in-out;
-  padding-left: 0.325rem;
-  padding-right: 0.325rem;
+  transition: 0.5s ease-in-out;
   overflow-y: hidden;
   overflow-x: hidden;
   align-items: center;
@@ -14,6 +12,10 @@
 
 .circle_container {
   display: flex;
+}
+
+.circle_container.active {
+  padding-left: 0.325rem;
 }
 
 .range-container.active {
@@ -28,10 +30,9 @@
   font-size: 0.75rem;
 }
 
-.range-element-number {
-
-}
-
-.range-element-text {
-
+.range-element.active {
+  background-color: var(--blue-light-color);
+  border-radius: 32px;
+  color: var(--blue-color);
+  padding: 4px;
 }
