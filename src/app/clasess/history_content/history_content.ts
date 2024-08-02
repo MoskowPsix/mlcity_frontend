@@ -199,6 +199,8 @@ export class HistoryContent {
     for (let editedPrice of this.edited.price) {
       if (editedPrice.id == null) {
         this.price.push(editedPrice)
+
+        return
       }
       if (editedPrice.on_delete != null && editedPrice.on_delete) {
         let priceOnDelete = {
@@ -206,6 +208,8 @@ export class HistoryContent {
           on_delete: true
         }
         this.price.push(priceOnDelete)
+
+        return
       }
 
       let originalPrice = this.SearchOriginalPrice(editedPrice.id)

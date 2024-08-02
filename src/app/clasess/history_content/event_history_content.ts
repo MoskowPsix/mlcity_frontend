@@ -8,6 +8,7 @@ interface EditedPlace {
   address?: string
   latitude?: number
   longitude?: number
+  location_id?: number
   history_seances?: EditedSeance[]
 }
 
@@ -62,6 +63,10 @@ export class EventHistoryContent extends HistoryContent {
           changedPlace.address = editedPlace.address
         }
 
+        if (originPlace.location_id != editedPlace.location_id) {
+          changedPlace.location_id = editedPlace.location_id
+        }
+
         if (originPlace.latitude != editedPlace.latitude) {
           changedPlace.latitude = editedPlace.latitude
         }
@@ -101,7 +106,7 @@ export class EventHistoryContent extends HistoryContent {
         }
 
         // Если сеанс на удаление, создаем обьект нужной структуры и добавляем в массив
-        if (editedSeance.on_delete != null && editedSeance.on_delete == true) {
+        if (editedSeance.on_delete != null && editedSeance.on_delete) {
           let changedSeance: EditedSeance = {}
           changedSeance.seance_id = editedSeance.id
           changedSeance.on_delete = editedSeance.on_delete
@@ -173,8 +178,8 @@ export class EventHistoryContent extends HistoryContent {
       'sponsor',
       'date_start',
       'date_end',
-      'files',
       'types',
+      'files',
     ]
     elementsWhatNeedToCompare.forEach((element: string) => {
       this.compareAndSet(element)
@@ -184,16 +189,20 @@ export class EventHistoryContent extends HistoryContent {
     // console.log(this.origin)
 
     return {
-      name: this.name,
-      description: this.description,
-      materials: this.materials,
-      sponsor: this.sponsor,
-      date_start: this.date_start,
-      date_end: this.date_end,
-      history_files: this.files,
-      history_types: this.types,
-      history_prices: this.price,
-      history_places: this.places,
+      id: this.origin.id,
+      type: 'Event',
+      history_content: {
+        name: this.name,
+        description: this.description,
+        materials: this.materials,
+        sponsor: this.sponsor,
+        date_start: this.date_start,
+        date_end: this.date_end,
+        history_files: this.files,
+        history_types: this.types,
+        history_prices: this.price,
+        history_places: this.places,
+      },
     }
   }
 }

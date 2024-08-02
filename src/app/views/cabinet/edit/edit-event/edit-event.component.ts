@@ -11,6 +11,9 @@ import { IEventType } from 'src/app/models/event-type'
 import { environment } from 'src/environments/environment'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { IPlace } from 'src/app/models/place'
+import { EventHistoryContent } from 'src/app/clasess/history_content/event_history_content'
+import { EditService } from 'src/app/services/edit.service'
+import _ from 'lodash'
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
@@ -23,6 +26,7 @@ export class EditEventComponent implements OnInit {
     private eventsService: EventsService,
     private loadingService: LoadingService,
     private queryBuilderService: QueryBuilderService,
+    private editService: EditService,
   ) {}
   private readonly destroy$ = new Subject<void>()
   event!: IEvent
@@ -33,8 +37,10 @@ export class EditEventComponent implements OnInit {
   allTypes: IEventType[] = []
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   previewCategory: any = []
+  copyEvent: any
+
   logFiles(event: any) {
-    this.finalObject.files = event
+    this.editForm.value.files = event
   }
   addPrice() {
     this.editForm.value.price.push({
@@ -43,6 +49,7 @@ export class EditEventComponent implements OnInit {
       descriptions: '',
     })
   }
+  ngAfterViewInit(): void {}
   deletePrice(event: any) {
     if (event.id) {
       let index = this.editForm.value.price.map((e: any) => e.id).indexOf(event.id)
@@ -59,6 +66,14 @@ export class EditEventComponent implements OnInit {
       let index = this.editForm.value.price.indexOf(event)
       this.editForm.value.price.splice(index, 1)
     }
+  }
+  editAddress(event: any) {
+    console.log(event)
+    let index = event.placeId
+    this.editForm.value.places[index].location_id = event.location_id
+    this.editForm.value.places[index].address = event.address
+    this.editForm.value.places[index].latitude = event.latitude
+    this.editForm.value.places[index].longitude = event.longitude
   }
   getPriceIndex(event: any) {
     if (event.id) {
@@ -135,11 +150,12 @@ export class EditEventComponent implements OnInit {
     }
   }
   addSeance(event: any) {
-    console.log(event)
-    this.editForm.value.places[event].seances.push({
-      temp_id: this.editForm.value.places[event].seances.length,
-      date_start: '',
-    })
+    if (this.editForm.value.places[event].seances) {
+      this.editForm.value.places[event].seances.push({
+        temp_id: this.editForm.value.places[event].seances.length,
+        date_start: '',
+      })
+    }
   }
   editSeance(seanceDate: any) {
     if (seanceDate.temp_id || (seanceDate.temp_id == 0 && seanceDate.temp_id != null)) {
@@ -170,7 +186,7 @@ export class EditEventComponent implements OnInit {
     }
   }
   getPlaces() {
-    console.log(this.event.id)
+    console.log(this.event)
     let tempPlaceArray: IPlace[] = []
     this.eventsService
       .getEventPlaces(this.event.id, {})
@@ -179,9 +195,14 @@ export class EditEventComponent implements OnInit {
           tempPlaceArray = res.places.data
         }),
       )
-      .subscribe((res) => {
+      .subscribe(() => {
+        this.copyEvent.places = []
+
         tempPlaceArray.forEach((place: any) => {
           this.placesArray.push(place)
+          if (this.copyEvent.places) {
+            this.copyEvent.places.push(_.cloneDeep(place))
+          }
           this.editForm.value.places.push(place)
         })
       })
@@ -192,7 +213,6 @@ export class EditEventComponent implements OnInit {
       latitude: '',
       longitude: '',
       address: '',
-      event: [],
       seances: [],
     }
     this.editForm.value.places.push(tempPlace)
@@ -208,6 +228,8 @@ export class EditEventComponent implements OnInit {
   ionViewWillEnter() {
     let priceArray: any = []
     let typesArray: any = []
+    let filesArray: any = []
+
     this.loadingService.showLoading()
     const eventId = this.routeActivated.snapshot.paramMap.get('id')
     this.eventsService
@@ -217,10 +239,12 @@ export class EditEventComponent implements OnInit {
         tap((res) => {
           priceArray = res.price
           typesArray = res.types
-          this.event = res
+          filesArray = JSON.parse(JSON.stringify(res.files))
+          this.event = JSON.parse(JSON.stringify(res))
         }),
       )
       .subscribe((res: any) => {
+        this.copyEvent = _.cloneDeep(this.event)
         this.getPlaces()
         this.loadingService.hideLoading()
         this.editForm.patchValue({
@@ -235,17 +259,62 @@ export class EditEventComponent implements OnInit {
           this.previewCategory.push(type)
           this.editForm.value.types.push(type)
         })
+        filesArray.forEach((file: any) => {
+          console.log(file)
+          this.editForm.value.files.push(JSON.parse(JSON.stringify(file)))
+        })
       })
   }
-  logFunction() {
+  clearFormOfTempData() {
+    // let tempForm = _.cloneDeep(this.editForm)
+    if (this.editForm.value.price) {
+      this.editForm.value.price.forEach((price: any) => {
+        if (price.temp_id) {
+          delete price.temp_id
+        }
+      })
+    }
+    if (this.editForm.value.types) {
+      this.editForm.value.types.forEach((type: any) => {
+        if (type.temp_id) {
+          delete type.temp_id
+        }
+      })
+    }
+
+    if (this.editForm.value.places) {
+      this.editForm.value.places.forEach((place: any) => {
+        if (place.temp_id) {
+          delete place.temp_id
+        }
+        place.seances.forEach((seance: any) => {
+          if (seance.temp_id) {
+            delete seance.temp_id
+          }
+        })
+      })
+    }
+  }
+  submitForm() {
+    this.clearFormOfTempData()
     console.log(this.editForm.value)
+    let historyContent = new EventHistoryContent()
+    // console.log(this.editForm.value)
+    this.editService
+      .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
+      .pipe()
+      .subscribe((res) => {
+        console.log(res)
+      })
+    console.log(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
+    // console.log(this.copyEvent)
   }
   ngOnInit() {
     this.editForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      files: new FormControl('', fileTypeValidator(['png', 'jpg', 'jpeg'])),
+      files: new FormControl([]),
       price: new FormControl([], [Validators.required]),
       types: new FormControl([], [Validators.required]),
       places: new FormControl([], [Validators.required]),

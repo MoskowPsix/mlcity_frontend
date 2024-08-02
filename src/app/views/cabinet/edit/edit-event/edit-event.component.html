@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content *ngIf="editForm">
     <app-edit-slider *ngIf="this.event && this.event.files" (filesEmit)="logFiles($event)" [files]="this.event.files"></app-edit-slider>
     <div class="content-container">
         <form [formGroup]="editForm" action="" class="edit-form">
@@ -59,13 +59,22 @@
             <div class="place-container">
                 <ng-container *ngFor="let place of this.editForm.value.places; let i = index">
                     <div class="place-wrapper">
-                        <app-new-place *ngIf="!place.on_delete" (placeDeleteEmit)="deletePlace($event)" (seanceEditEmit)="editSeance($event)" (seanceDeleteEmit)="deleteSeance($event)" (seanceEmit)="addSeance($event)" [placeId]="i" [place]="place"></app-new-place>
+                        <app-new-place 
+                        *ngIf="!place.on_delete"
+                         (addressEditEmit)="editAddress($event)" 
+                         (placeDeleteEmit)="deletePlace($event)" 
+                         (seanceEditEmit)="editSeance($event)" 
+                         (seanceDeleteEmit)="deleteSeance($event)" 
+                         (seanceEmit)="addSeance($event)" 
+                         [placeId]="i" 
+                         [place]="place"
+                        ></app-new-place>
                     </div>
                 </ng-container>
             </div>
             <app-standart-button (click)="addPlace()" buttonText="Добавить место" type="button" theme ="light"></app-standart-button>
             <app-standart-input [label]="'Организатор'" [control] = "editForm.get('sponsor')"></app-standart-input>
-            <div (click)="logFunction()" class="save-button-wrapper">
+            <div (click)="submitForm()" class="save-button-wrapper">
                 <app-standart-button buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
             </div>
 

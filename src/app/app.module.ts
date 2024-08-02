@@ -123,6 +123,7 @@ import { TypeSwitherComponent } from './components/type-swither/type-swither.com
 import { SwitchTypeService } from './services/switch-type.service'
 import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
 import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
+import { AddressInputComponent } from './components/address-input/address-input.component'
 import { RoundedButtonComponent } from './components/materials/rounded-button/rounded-button.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
@@ -145,6 +146,7 @@ registerLocaleData(localeRu, 'ru')
     SecondHeaderComponent,
     HeaderComponent,
     CodeInputComponent,
+    AddressInputComponent,
     EditEventComponent,
     EditSightComponent,
     SidebarComponent,
