@@ -3,11 +3,13 @@
 
   <ng-container >
     <label class="label" for="{{label}}">{{label}}</label>
-    <input #input [readonly]="readonly" placeholder="{{placeholder}}" type="{{type}}" name="{{label}}" class="standart-input" name="new_name">
+    <input #input [readonly]="readonly" id="search-map-" placeholder="{{placeholder}}" type="{{type}}" name="{{label}}" class="standart-input" name="new_name">
     <div class="map ">
       <ya-map 
+       
         (ready)="onMapReady($event)"
         [zoom]="11"
+        (yaclick)="onMapClick($event)"
         [center]="coords"
         [state]="{
           controls: [
