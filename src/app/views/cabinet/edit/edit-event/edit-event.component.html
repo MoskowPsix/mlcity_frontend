@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content *ngIf="editForm">
     <app-edit-slider *ngIf="this.event && this.event.files" (filesEmit)="logFiles($event)" [files]="this.event.files"></app-edit-slider>
     <div class="content-container">
         <form [formGroup]="editForm" action="" class="edit-form">

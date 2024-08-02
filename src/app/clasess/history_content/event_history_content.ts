@@ -8,6 +8,7 @@ interface EditedPlace {
   address?: string
   latitude?: number
   longitude?: number
+  location_id?: number
   history_seances?: EditedSeance[]
 }
 
@@ -60,6 +61,10 @@ export class EventHistoryContent extends HistoryContent {
 
         if (originPlace.address != editedPlace.address) {
           changedPlace.address = editedPlace.address
+        }
+
+        if (originPlace.location_id != editedPlace.location_id) {
+          changedPlace.location_id = editedPlace.location_id
         }
 
         if (originPlace.latitude != editedPlace.latitude) {
@@ -166,7 +171,16 @@ export class EventHistoryContent extends HistoryContent {
   public merge(origin: any, edited: any) {
     this.origin = origin
     this.edited = edited
-    let elementsWhatNeedToCompare = ['name', 'description', 'materials', 'sponsor', 'date_start', 'date_end']
+    let elementsWhatNeedToCompare = [
+      'name',
+      'description',
+      'materials',
+      'sponsor',
+      'date_start',
+      'date_end',
+      'types',
+      'files',
+    ]
     elementsWhatNeedToCompare.forEach((element: string) => {
       this.compareAndSet(element)
     })
@@ -175,16 +189,20 @@ export class EventHistoryContent extends HistoryContent {
     // console.log(this.origin)
 
     return {
-      name: this.name,
-      description: this.description,
-      materials: this.materials,
-      sponsor: this.sponsor,
-      date_start: this.date_start,
-      date_end: this.date_end,
-      history_files: this.files,
-      history_types: this.types,
-      history_prices: this.price,
-      history_places: this.places,
+      id: this.origin.id,
+      type: 'Event',
+      history_content: {
+        name: this.name,
+        description: this.description,
+        materials: this.materials,
+        sponsor: this.sponsor,
+        date_start: this.date_start,
+        date_end: this.date_end,
+        history_files: this.files,
+        history_types: this.types,
+        history_prices: this.price,
+        history_places: this.places,
+      },
     }
   }
 }
