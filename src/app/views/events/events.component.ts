@@ -302,7 +302,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
   //скролл
   scrollPaginate = (): void => {
-    console.log('scrollPaginate')
     this.scrollUpCheckState()
     const boundingClientRect =
       this.ContentCol.nativeElement?.getBoundingClientRect()

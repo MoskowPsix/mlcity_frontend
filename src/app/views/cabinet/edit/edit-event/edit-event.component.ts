@@ -21,8 +21,13 @@ interface InvalidForm {
   description: boolean
   types: boolean
   places: boolean
-  seances: boolean
+
+  seances: {
+    error: boolean
+    message: string[]
+  }
   price: boolean
+  addressPlace: boolean
 }
 @Component({
   selector: 'app-edit-event',
@@ -57,8 +62,12 @@ export class EditEventComponent implements OnInit {
     sponsor: false,
     types: false,
     places: false,
-    seances: false,
+    seances: {
+      error: false,
+      message: [''],
+    },
     price: false,
+    addressPlace: false,
   }
   checkfreeEntry() {
     //проверка количества билетов
@@ -104,7 +113,6 @@ export class EditEventComponent implements OnInit {
     }
   }
   editAddress(event: any) {
-    console.log(event)
     let index = event.placeId
     this.editForm.value.places[index].location_id = event.location_id
     this.editForm.value.places[index].address = event.address
@@ -199,8 +207,6 @@ export class EditEventComponent implements OnInit {
         .map((e: any) => e.temp_id)
         .indexOf(seanceDate.temp_id)
       this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_start = seanceDate.date_start
-      console.log(this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_start)
-      console.log(this.editForm.value.places)
     } else if (!seanceDate.temp_id && seanceDate.seance) {
       let seanceIndex = this.editForm.value.places[seanceDate.placeId].seances
         .map((e: any) => e.id)
@@ -222,7 +228,6 @@ export class EditEventComponent implements OnInit {
     }
   }
   getPlaces() {
-    console.log(this.event)
     let tempPlaceArray: IPlace[] = []
     this.eventsService
       .getEventPlaces(this.event.id, {})
@@ -296,7 +301,6 @@ export class EditEventComponent implements OnInit {
           this.editForm.value.types.push(type)
         })
         filesArray.forEach((file: any) => {
-          console.log(file)
           this.editForm.value.files.push(JSON.parse(JSON.stringify(file)))
         })
       })
@@ -338,19 +342,24 @@ export class EditEventComponent implements OnInit {
         price.cost_rub = 0
       }
     })
-    console.log(this.editForm.value.price)
   }
   checkValidOfForm() {
     let typeCount = 0
     let priceCount = 0
+    let placesCount = 0
+    let placeSeanceCount = 0
     this.invalidForm = {
       name: false,
       description: false,
       sponsor: false,
       types: false,
       places: false,
-      seances: false,
+      seances: {
+        error: false,
+        message: [''],
+      },
       price: false,
+      addressPlace: false,
     }
     this.invalidForm.name = this.editForm.get('name')!.invalid
     this.invalidForm.description = this.editForm.get('description')!.invalid
@@ -373,7 +382,6 @@ export class EditEventComponent implements OnInit {
       })
     if (priceCount > 1) {
       this.editForm.value.price.forEach((price: any) => {
-        console.log(price)
         if (price.descriptions === '' && !price.on_delete) {
           this.invalidForm.price = true
         }
@@ -382,22 +390,72 @@ export class EditEventComponent implements OnInit {
     if (this.invalidForm.price) {
       this.toastService.showToast('Если у вас несколько билетов, то описание обязательно', 'warning')
     }
+    this.editForm.value.places.forEach((place: any) => {
+      if (!place.on_delete) {
+        placesCount++
+        let tempSeanceCount = 0
+        place.seances
+          .map((seance: any) => seance.on_delete)
+          .forEach((seance: any) => {
+            if (seance) {
+              tempSeanceCount++
+            }
+          })
+
+        if (tempSeanceCount == place.seances.length) {
+          this.invalidForm.seances.error = true
+          this.invalidForm.seances.message.push('Добавьте время проведения')
+        }
+        if (place.address == '') {
+          this.invalidForm.addressPlace = true
+        }
+        //проверяем в сколких плейсах есть сеансы
+        place.seances.forEach((seance: any) => {
+          if (!seance.on_delete) {
+            if (seance.date_start == '') {
+              this.invalidForm.seances.error = true
+              this.invalidForm.seances.message.push('Дата начала сеанса не может быть пустой')
+            }
+          }
+        })
+      }
+    })
+
+    if (this.invalidForm.seances.error == true) {
+      this.invalidForm.seances.message.forEach((message: any) => {
+        if (message !== '') {
+          this.toastService.showToast(message, 'warning')
+        }
+      })
+    }
+    if (placesCount === 0) {
+      this.invalidForm.places = true
+    }
+    if (this.invalidForm.places) {
+      this.toastService.showToast('Добавьте место проведения ', 'warning')
+    }
+    if (this.invalidForm.addressPlace) {
+      this.toastService.showToast('Адрес не может быть пустым', 'warning')
+    }
+    let allFirstLevelFalse = Object.values(this.invalidForm).every((value) => {
+      return value === false
+    })
+    if (allFirstLevelFalse && !this.invalidForm.seances.error) {
+      return true
+    } else {
+      return false
+    }
   }
   submitForm() {
-    this.checkValidOfForm()
-    this.setEmptyPrice()
-    // this.clearFormOfTempData()
-    // console.log(this.editForm.value)
-    // let historyContent = new EventHistoryContent()
-    // // console.log(this.editForm.value)
-    // this.editService
-    //   .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
-    //   .pipe()
-    //   .subscribe((res) => {
-    //     console.log(res)
-    //   })
-    // console.log(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
-    // console.log(this.copyEvent)
+    if (this.checkValidOfForm()) {
+      this.setEmptyPrice()
+      this.clearFormOfTempData()
+      let historyContent = new EventHistoryContent()
+      this.editService
+        .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
+        .pipe()
+        .subscribe((res) => {})
+    }
   }
   ngOnInit() {
     this.editForm = new FormGroup({

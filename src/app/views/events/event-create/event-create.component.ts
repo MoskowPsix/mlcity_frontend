@@ -729,10 +729,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
               .split('T')[1]
               .split('+')[0]
               .split(':')[0] + 1
-          console.log(splitMinuts)
-          console.log(splitBelt)
-          console.log(this.createEventForm.value.places[place].value.seances[seans].value.dateEnd)
-          console.log(splitDate + 'T' + newTime + ':' + splitMinuts + ':' + '00' + '+' + '00')
+        
 
           this.createEventForm.value.places[place].value.seances[seans].patchValue({
             dateEnd: splitDate + 'T' + newTime + ':' + splitMinuts + ':' + '00' + '+' + '00',
@@ -851,7 +848,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.createFormCount = 0
         let priceValid = false
         let validValidPrice = false
-        console.log(this.createEventForm.controls['price'].value.length)
         if (this.createEventForm.controls['price'].value.length == 0) {
           priceValid = true
         }
