@@ -30,6 +30,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
   MainImgSrc: any = ''
   addNewFile: boolean = false
   previewPhotoUrl!: string
+  spiner: boolean = false
   uploadFiles: File[] = []
   imagesPreview: any[] = []
   removedImages: string[] = []
@@ -44,6 +45,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
   }
 
   getMySights() {
+    this.spiner = true
     this.sightsService
       .getSightsForUser(this.queryBuilderService.queryBuilder('sightsPublicForAuthor'))
       .pipe(
@@ -51,6 +53,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
         retry(3),
         map((respons: any) => {
           this.sights.push(...respons.sights.data)
+          this.spiner = false
           if (respons.sights.next_cursor) {
             this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(respons.sights.next_cursor)
           }
