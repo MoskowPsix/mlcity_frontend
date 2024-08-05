@@ -1,5 +1,8 @@
 <ion-content>
   <ion-content>
-    <app-card-grid [cards]="sights" [isSight]="true"></app-card-grid>
+    <app-second-header size="xxl" img="/assets/images/myEventsHeader.png">
+      Мои сообщества <app-rounded-button routerLink="/cabinet/sights/create" icon="assets/icons/create.svg" buttonText="Создать"></app-rounded-button>
+    </app-second-header>
+    <app-card-grid [notFound]="notFound" [cards]="sights" [isSight]="true"></app-card-grid>
   </ion-content>
 </ion-content>

@@ -10,20 +10,7 @@ import {
   HostListener,
 } from '@angular/core'
 
-import {
-  catchError,
-  delay,
-  EMPTY,
-  map,
-  of,
-  retry,
-  Subject,
-  takeUntil,
-  tap,
-  debounceTime,
-  filter,
-  last,
-} from 'rxjs'
+import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime, filter, last } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { IEvent } from 'src/app/models/event'
 import { EventsService } from 'src/app/services/events.service'
@@ -97,7 +84,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   sightTypeId: any
 
   testScrol: any = 0
-
+  notFound!: boolean
   scrollUpState: boolean = true
 
   platformType: any = Capacitor.getPlatform()
@@ -115,22 +102,18 @@ export class EventsComponent implements OnInit, OnDestroy {
     private metaService: Meta,
     private mapService: MapService,
   ) {
-    this.filterService.locationId
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.locationService
-          .getLocationsIds(value)
-          .pipe(delay(100), retry(3), takeUntil(this.destroy$))
-          .subscribe((response) => {
-            this.titleService.setTitle(
-              'Мероприятия в городе ' + response.location.name,
-            )
-            this.metaService.updateTag({
-              name: 'description',
-              content: 'Мероприятия вашего города тут',
-            })
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.locationService
+        .getLocationsIds(value)
+        .pipe(delay(100), retry(3), takeUntil(this.destroy$))
+        .subscribe((response) => {
+          this.titleService.setTitle('Мероприятия в городе ' + response.location.name)
+          this.metaService.updateTag({
+            name: 'description',
+            content: 'Мероприятия вашего города тут',
           })
-      })
+        })
+    })
   }
 
   setDate(event: any) {
@@ -144,17 +127,12 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   scrollUpCheckState() {
-    const boundingClientRect =
-      this.ContentCol?.nativeElement.getBoundingClientRect()
-    boundingClientRect
-      ? (this.scrollUpState = boundingClientRect.y > 0)
-      : (this.scrollUpState = false)
+    const boundingClientRect = this.ContentCol?.nativeElement.getBoundingClientRect()
+    boundingClientRect ? (this.scrollUpState = boundingClientRect.y > 0) : (this.scrollUpState = false)
   }
 
   getEventsCity() {
-    this.loadingMoreEventsCity
-      ? (this.loadingEventsCity = true)
-      : (this.loadingEventsCity = false)
+    this.loadingMoreEventsCity ? (this.loadingEventsCity = true) : (this.loadingEventsCity = false)
 
     this.eventsService
       .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
@@ -163,16 +141,11 @@ export class EventsComponent implements OnInit, OnDestroy {
         retry(3),
         map((response: any) => {
           this.eventsCity.push(...response.events.data)
+
           this.filterService.setEventsCount(response.events.total)
-          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(
-            response.events.next_cursor,
-          )
-          response.events.next_cursor
-            ? (this.nextPage = true)
-            : (this.nextPage = false)
-          response.events.next_cursor
-            ? (this.loadTrue = true)
-            : (this.loadTrue = false)
+          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
+          response.events.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+          response.events.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
         }),
         tap(() => {
           this.loadingEventsCity = true
@@ -234,18 +207,11 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.scrollUpCheckState()
     let viewElement: boolean = false
 
-    for (
-      let i = 0;
-      i < this.widgetsContent.nativeElement.children.length;
-      i++
-    ) {
-      const boundingClientRect =
-        this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
+    for (let i = 0; i < this.widgetsContent.nativeElement.children.length; i++) {
+      const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
 
       if (
-        boundingClientRect.top >
-          (window.innerHeight - (window.innerHeight + window.innerHeight)) /
-            2 &&
+        boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight)) / 2 &&
         boundingClientRect.top < window.innerHeight / 2 &&
         !viewElement &&
         boundingClientRect.width !== 0 &&
@@ -303,8 +269,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   //скролл
   scrollPaginate = (): void => {
     this.scrollUpCheckState()
-    const boundingClientRect =
-      this.ContentCol.nativeElement?.getBoundingClientRect()
+    const boundingClientRect = this.ContentCol.nativeElement?.getBoundingClientRect()
     if (this.testScrol == 0) {
       this.testScrol = boundingClientRect.y
       this.headerWrapper.nativeElement.style.transform = 'translateY(-2%)'
@@ -334,20 +299,14 @@ export class EventsComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngAfterViewInit() {
     this.scrollStart = this.ContentCol.nativeElement?.getBoundingClientRect()
-    this.ContentCol.nativeElement.addEventListener(
-      'scroll',
-      this.scrollPaginate,
-      true,
-    )
+    this.ContentCol.nativeElement.addEventListener('scroll', this.scrollPaginate, true)
   }
   ngOnInit() {
-    this.router.events
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        if (value.url === '/event') {
-          // this.filterService.changeFilter.next(true)
-        }
-      })
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      if (value.url === '/event') {
+        // this.filterService.changeFilter.next(true)
+      }
+    })
 
     // window.addEventListener("scrollend", this.scrollEvent, true)
 
@@ -362,17 +321,15 @@ export class EventsComponent implements OnInit, OnDestroy {
     // this.getEventsGeolocation()
 
     //Подписываемся на изменение фильтра
-    this.filterService.changeFilter
-      .pipe(debounceTime(1000), takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value === true) {
-          this.eventsCity = []
-          this.eventsGeolocation = []
-          this.getEventsCity()
-          // this.getEventsGeolocation()
-        }
-        this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
-      })
+    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
+      if (value === true) {
+        this.eventsCity = []
+        this.eventsGeolocation = []
+        this.getEventsCity()
+        // this.getEventsGeolocation()
+      }
+      this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+    })
 
     //Подписываемся на город
     // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -380,11 +337,9 @@ export class EventsComponent implements OnInit, OnDestroy {
     //     this.city = response.location.name
     //   })
     // })
-    this.filterService.eventTypes
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.eventTypeId = value[0]
-      })
+    this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      this.eventTypeId = value[0]
+    })
 
     // console.log(this.cardContainer)
   }

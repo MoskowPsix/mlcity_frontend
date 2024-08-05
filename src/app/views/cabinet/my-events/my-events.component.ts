@@ -25,7 +25,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
   spiner: boolean = false
   loadEvents: boolean = false
   loadMoreEvents: boolean = false
-
+  notFound!: boolean
   eventsLoadingMore() {
     this.loadMoreEvents = true
     this.getMyEvents()
@@ -33,6 +33,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
 
   getMyEvents(event?: any) {
     if (this.nextPage) {
+      this.notFound = false
       this.spiner = true
       this.eventService
         .getEventsForUser(this.queryBuilderService.queryBuilder('eventsPublicForAuthor'))
@@ -40,7 +41,6 @@ export class MyEventsComponent implements OnInit, OnDestroy {
           delay(100),
           retry(3),
           map((respons: any) => {
-            console.log(respons.events.next_cursor)
             this.events.push(...respons.events.data)
             this.spiner = false
             this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next(respons.events.next_cursor)
@@ -57,7 +57,11 @@ export class MyEventsComponent implements OnInit, OnDestroy {
           }),
           takeUntil(this.destroy$),
         )
-        .subscribe()
+        .subscribe(() => {
+          if (this.events.length == 0) {
+            this.notFound = true
+          }
+        })
     }
   }
   ngOnInit() {

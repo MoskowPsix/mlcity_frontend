@@ -17,7 +17,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
     private sightsService: SightsService,
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
-  ) { }
+  ) {}
   nextPage: boolean = false
   sights: any[] = []
 
@@ -33,6 +33,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
   uploadFiles: File[] = []
   imagesPreview: any[] = []
   removedImages: string[] = []
+  notFound: boolean = false
 
   @ViewChild('idImgList') idImgList!: ElementRef
   @ViewChild('widgetsContent') widgetsContent!: ElementRef
@@ -68,7 +69,11 @@ export class MySightsComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$),
       )
-      .subscribe()
+      .subscribe(() => {
+        if (this.sights.length == 0) {
+          this.notFound = true
+        }
+      })
   }
 
   openModal(sight: any) {
