@@ -20,7 +20,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private filterService: FilterService,
   ) {}
-  nextPage: boolean = false
+  nextPage: boolean = true
   events: any[] = []
   spiner: boolean = false
   loadEvents: boolean = false
@@ -32,30 +32,33 @@ export class MyEventsComponent implements OnInit, OnDestroy {
   }
 
   getMyEvents(event?: any) {
-    this.spiner = true
-    this.eventService
-      .getEventsForUser(this.queryBuilderService.queryBuilder('eventsPublicForAuthor'))
-      .pipe(
-        delay(100),
-        retry(3),
-        map((respons: any) => {
-          this.events.push(...respons.events.data)
-          this.spiner = false
-          this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next(respons.events.next_cursor)
-          respons.events.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
-        }),
-        tap(() => {
-          this.loadEvents = true
-          this.loadMoreEvents = false
-        }),
-        catchError((err) => {
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          this.loadEvents = true
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe()
+    if (this.nextPage) {
+      this.spiner = true
+      this.eventService
+        .getEventsForUser(this.queryBuilderService.queryBuilder('eventsPublicForAuthor'))
+        .pipe(
+          delay(100),
+          retry(3),
+          map((respons: any) => {
+            console.log(respons.events.next_cursor)
+            this.events.push(...respons.events.data)
+            this.spiner = false
+            this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next(respons.events.next_cursor)
+            respons.events.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+          }),
+          tap(() => {
+            this.loadEvents = true
+            this.loadMoreEvents = false
+          }),
+          catchError((err) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            this.loadEvents = true
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe()
+    }
   }
   ngOnInit() {
     this.getMyEvents()

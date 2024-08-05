@@ -1,13 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core'
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router'
 import { catchError, EMPTY, finalize, of, Subject, takeUntil, tap } from 'rxjs'
@@ -73,7 +64,6 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
           this.loadingService.hideLoading()
           console.log(err.status)
           if (err.status !== 400) {
-            this.toastService.showToast(`${err.error.message}`, 'danger')
           } else {
             this.toastService.showToast(`Попробуйте позже`, 'danger')
           }
@@ -84,7 +74,6 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           this.loadingService.hideLoading()
           if ((res.status = 'success')) {
-
           }
         },
       })
@@ -119,7 +108,6 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
           this.loadingService.hideLoading()
           console.log(err.status)
           if (err.status !== 400) {
-            this.toastService.showToast(`${err.error.message}`, 'danger')
           }
           if (err.status == 400) {
             this.toastService.showToast(`Попробуйте позже`, 'danger')
@@ -142,10 +130,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
               this.userService.setUserToLocalStorage(tempUser)
               this.router.navigate(['/home'])
               this.loadingService.hideLoading()
-              this.toastService.showToast(
-                'Ваша успешно почта подтверждена!',
-                'success',
-              )
+              this.toastService.showToast('Ваша успешно почта подтверждена!', 'success')
             })
         }
       })
@@ -171,7 +156,6 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
               console.log(err)
               this.loadingService.hideLoading()
               if (err.status !== 400) {
-                this.toastService.showToast(`${err.error.message}`, 'danger')
               } else {
                 this.toastService.showToast(`Попробуйте позже`, 'danger')
               }
@@ -181,10 +165,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
           .subscribe((res: any) => {
             this.loadingService.hideLoading()
             if (res.status === 'success') {
-              this.toastService.showToast(
-                'Ваша успешно почта добавлена!',
-                'success',
-              )
+              this.toastService.showToast('Ваша успешно почта добавлена!', 'success')
               this.stepConfirm = true
               this.userWithEmail = true
               this.timer = 120
@@ -216,7 +197,6 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
               this.loadingService.hideLoading()
               console.log(err.status)
               if (err.status !== 400) {
-                this.toastService.showToast(`${err.error.message}`, 'danger')
               } else {
                 this.toastService.showToast(`Попробуйте позже`, 'danger')
                 this.stepConfirm = false
@@ -248,9 +228,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
     this.leftPosotion = 0
     // this.destroy$.complete()
   }
-  ngOnDestroy() {
-
-  }
+  ngOnDestroy() {}
   ionViewDidEnter() {}
 
   //местный ngOnit
@@ -283,10 +261,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.willRequestToGetCode = false
     this.emailForm = new FormGroup({
-      email: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      email: new FormControl('', [Validators.required, Validators.minLength(3)]),
     })
   }
 }
