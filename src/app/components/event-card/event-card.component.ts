@@ -95,10 +95,16 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   minPrice: number = 0
   maxPrice: number = 0
 
-  checkEdit() {
+  eventNavigation() {
     this.isSight
       ? this.router.navigate(['/sights', this.event.id, this.slugName])
       : this.router.navigate(['/events', this.event.id, this.slugName])
+  }
+  eventNavigationEdit() {
+    
+    this.isSight
+      ? this.router.navigate(['/cabinet/sights/edit', this.event.id])
+      : this.router.navigate(['/cabinet/events/edit', this.event.id])
   }
   blockedRout() {
     this.dontEdit = false
