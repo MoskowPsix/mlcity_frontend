@@ -40,7 +40,7 @@
 
             <form [formGroup]="passwordResetForm" action="" class="password-form">
               <div #plug class="plug-password-wrapper">
-                <app-standart-input (click)="openPasswordBlock()" type="password" [disabled]="true" placeholder="•••••••••••" [label]="'Пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="true"></app-standart-input >
+                <app-standart-input type="password" [disabled]="true" placeholder="•••••••••••" [label]="'Пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="true"></app-standart-input >
                 <button (click)="openPasswordBlock()" class="password-change">Сменить</button>
               </div>
 
@@ -51,8 +51,8 @@
               </div>
             </form>
             <div class="save-wrapper">
-              <app-standart-button *ngIf="!passwordChange" buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button>
-              <app-standart-button  *ngIf="passwordChange" (click)="submitPassword()" buttonText = "Сохранить" type="button" theme ="standart"></app-standart-button>
+              <app-standart-button (click)="onSubmit()" *ngIf="!passwordChange" buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button>
+              <!-- <app-standart-button  *ngIf="passwordChange" (click)="submitPassword()" buttonText = "Сохранить" type="button" theme ="standart"></app-standart-button> -->
 
             </div>
         </ng-container>
