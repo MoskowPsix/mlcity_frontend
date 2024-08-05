@@ -1,20 +1,16 @@
-import { Injectable } from '@angular/core';
-import { App } from '@capacitor/app';
-import { Capacitor } from '@capacitor/core';
-import { ToastService } from './toast.service';
-import {
-  ActionPerformed,
-  LocalNotifications,
-} from '@capacitor/local-notifications'
-import { privateDecrypt } from 'crypto';
-import { MobileNotificationService } from './mobile-notification.service';
-import { MessagesUpdate } from '../enums/messages-update';
-import { StoreUrls } from '../enums/store-urls';
-import { StoreInfo } from '../models/store-info';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { MobileVersionService } from './mobile-version.service';
-
+import { Injectable } from '@angular/core'
+import { App } from '@capacitor/app'
+import { Capacitor } from '@capacitor/core'
+import { ToastService } from './toast.service'
+import { ActionPerformed, LocalNotifications } from '@capacitor/local-notifications'
+import { privateDecrypt } from 'crypto'
+import { MobileNotificationService } from './mobile-notification.service'
+import { MessagesUpdate } from '../enums/messages-update'
+import { StoreUrls } from '../enums/store-urls'
+import { StoreInfo } from '../models/store-info'
+import { HttpClient } from '@angular/common/http'
+import { environment } from 'src/environments/environment'
+import { MobileVersionService } from './mobile-version.service'
 
 @Injectable({
   providedIn: 'root',
@@ -23,12 +19,11 @@ export class CheckVersionService {
   constructor(
     private toastService: ToastService,
     private mobileNotificationService: MobileNotificationService,
-    private mobileVersionService: MobileVersionService
+    private mobileVersionService: MobileVersionService,
   ) {
     LocalNotifications.addListener('localNotificationActionPerformed', (notification: ActionPerformed) => {
       this.goToUpdateApp(notification)
-      },
-    )
+    })
   }
 
   async getCurrentVersion() {
@@ -54,10 +49,17 @@ export class CheckVersionService {
   async checkVersionIsDeprecated(): Promise<boolean> {
     let version: string = await this.getCurrentVersion()
     let versionActual: any
-    this.mobileVersionService.getActualVersionFromServer().pipe().subscribe((res: any) => {
-      versionActual = res.data[2]
-    })
-    if (version != versionActual && version != 'no version' && this.checkDateAfterUpdateAppMoreThenDay(versionActual.updatedAt)) {
+    this.mobileVersionService
+      .getActualVersionFromServer()
+      .pipe()
+      .subscribe((res: any) => {
+        versionActual = res.data[2]
+      })
+    if (
+      version != versionActual &&
+      version != 'no version' &&
+      this.checkDateAfterUpdateAppMoreThenDay(versionActual.updatedAt)
+    ) {
       this.showNotificationAboutVersion()
       return true
     }

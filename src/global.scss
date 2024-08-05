@@ -69,7 +69,7 @@
 
 :root {
     --orange-color: #f7ab31;
-    --orange-filter: brightness(0) saturate(100%) invert(76%) sepia(67%) saturate(4165%) hue-rotate(2deg) brightness(104%) contrast(108%);        
+    --orange-filter: brightness(0) saturate(100%) invert(76%) sepia(67%) saturate(4165%) hue-rotate(2deg) brightness(104%) contrast(108%);
     --blue-color:#3880FF;
     --blue-filter: invert(42%) sepia(79%) saturate(2572%) hue-rotate(204deg) brightness(100%) contrast(104%)
     --white-filter: invert(100%) sepia(8%) saturate(7472%) hue-rotate(199deg) brightness(103%) contrast(114%);
@@ -183,21 +183,6 @@ ion-content{
     border-radius: 50%;
 }
 
-.cluster {
-    font-size: 0.75rem;
-    // background-color: var(--orange-color);
-    display:flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    position: absolute;
-    width: 36px;
-    height: 36px;
-    border: 2px solid white;
-    border-radius: 50%;
-}
-
 .marker {
     transition: all 1s ease;
     position: absolute;
@@ -229,6 +214,10 @@ ion-content{
 
 .marker-icon {
   background-image: url('/assets/icons/ticket.svg');
+}
+
+.test {
+
 }
 
 .marker.now {
@@ -289,6 +278,9 @@ ion-content{
     animation: fadeIn 2s infinite;
 }
 
+.cluster.active {
+  animation: fadeIn 2s infinite;
+}
 
 .marker.active > img {
   width: 24px;

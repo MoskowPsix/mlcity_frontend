@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { Subject, takeUntil, tap } from 'rxjs'
+import { catchError, EMPTY, of, Subject, takeUntil, tap } from 'rxjs'
 import { IEvent } from 'src/app/models/event'
 import { EventsService } from 'src/app/services/events.service'
 import { LoadingService } from 'src/app/services/loading.service'
@@ -41,9 +41,9 @@ export class EditEventComponent implements OnInit {
     private toastService: ToastService,
     private eventsService: EventsService,
     private loadingService: LoadingService,
-    private queryBuilderService: QueryBuilderService,
     private editService: EditService,
-  ) {}
+    private toastService: ToastService,
+  ) { }
   private readonly destroy$ = new Subject<void>()
   event!: IEvent
   editForm!: FormGroup
@@ -53,6 +53,7 @@ export class EditEventComponent implements OnInit {
   allTypes: IEventType[] = []
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   previewCategory: any = []
+  submitButtonState: boolean = false
   copyEvent: any
   freeEntry: boolean = true
 
@@ -94,7 +95,7 @@ export class EditEventComponent implements OnInit {
       descriptions: '',
     })
   }
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void { }
   deletePrice(event: any) {
     if (event.id) {
       let index = this.editForm.value.price.map((e: any) => e.id).indexOf(event.id)
@@ -452,15 +453,34 @@ export class EditEventComponent implements OnInit {
     }
   }
   submitForm() {
-    if (this.checkValidOfForm()) {
-      this.setEmptyPrice()
-      this.clearFormOfTempData()
-      let historyContent = new EventHistoryContent()
-      this.editService
-        .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
-        .pipe()
-        .subscribe((res) => {})
+    if (this.submitButtonState) {
+      return
     }
+    this.submitButtonState = true
+    this.loadingService.showLoading()
+    this.clearFormOfTempData()
+    console.log(this.editForm.value)
+    let historyContent = new EventHistoryContent()
+    this.editService
+      .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
+      .pipe(
+        catchError((err: any) => {
+          this.submitButtonState = false
+          this.loadingService.hideLoading()
+          if (err.status == 403) {
+            this.toastService.showToast('Событие уже находится на модерации', 'warning')
+          }
+          return of(EMPTY)
+        }),
+      )
+      .subscribe((res: any) => {
+        this.submitButtonState = false
+        this.loadingService.hideLoading()
+        if (res.status == 'success') {
+          this.toastService.showToast('Событие отправленно на проверку', 'success')
+        }
+        console.log(res)
+      })
   }
   ngOnInit() {
     this.editForm = new FormGroup({

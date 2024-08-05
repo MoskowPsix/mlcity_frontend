@@ -9,16 +9,14 @@ import { InfiniteScrollCustomEvent } from '@ionic/angular'
   styleUrls: ['./card-grid.component.scss'],
 })
 export class CardGridComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
   @Input() cards!: IEventType[] | ISightType[] | any[]
   @Input() isSight: boolean = false
   @Output() endScroll: EventEmitter<any> = new EventEmitter()
   myEvents: boolean = false
   notFound: any = false
   public checkedRout(): void {
-    this.myEvents =
-      this.router.url === '/cabinet/events' ||
-      this.router.url === '/cabinet/sights'
+    this.myEvents = this.router.url === '/cabinet/events' || this.router.url === '/cabinet/sights'
   }
   ngOnChanges(): void {
     if (this.cards.length != 0) {
@@ -33,7 +31,7 @@ export class CardGridComponent implements OnInit {
     this.endScroll.emit()
     trueEvent.target.complete()
   }
-  scrollPaginate() {}
+  scrollPaginate() { }
   ngOnInit() {
     this.checkedRout()
   }
