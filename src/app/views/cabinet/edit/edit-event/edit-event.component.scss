@@ -108,6 +108,9 @@ ion-modal{
 .button-container-item{
     min-width:48.5%;  
 }
+.not-found-span-container{
+    padding-top: 1rem;
+}
 
 .price-container-header{
     color: #4C5861;
@@ -123,4 +126,9 @@ ion-modal{
 }
 .price-container-item-wrapper{
     padding-top: 0.5rem;
+}
+.not-found-span{
+    font-size: 0.75rem;
+    color: #21272b;
+    font-family: var(--font-regular);
 }

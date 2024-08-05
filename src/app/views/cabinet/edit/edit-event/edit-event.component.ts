@@ -19,9 +19,9 @@ interface InvalidForm {
   name: boolean
   sponsor: boolean
   description: boolean
-  types:boolean
-  places:boolean
-  seances:boolean
+  types: boolean
+  places: boolean
+  seances: boolean
 }
 @Component({
   selector: 'app-edit-event',
@@ -32,7 +32,7 @@ export class EditEventComponent implements OnInit {
   constructor(
     private eventTypeService: EventTypeService,
     private routeActivated: ActivatedRoute,
-    private toastService:ToastService,
+    private toastService: ToastService,
     private eventsService: EventsService,
     private loadingService: LoadingService,
     private queryBuilderService: QueryBuilderService,
@@ -48,14 +48,29 @@ export class EditEventComponent implements OnInit {
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   previewCategory: any = []
   copyEvent: any
+  freeEntry: boolean = true
 
   invalidForm: InvalidForm = {
     name: false,
     description: false,
     sponsor: false,
-    types:false,
-    places:false,
-    seances:false
+    types: false,
+    places: false,
+    seances: false,
+  }
+  checkfreeEntry() {
+    if (this.editForm.value.price.map((e: any) => e.on_delete).indexOf(undefined) == -1) {
+      return true
+    } else {
+      return false
+    }
+  }
+  checkCountPlaces() {
+    if (this.editForm.value.places.map((e: any) => e.on_delete).indexOf(undefined) == -1) {
+      return true
+    } else {
+      return false
+    }
   }
   logFiles(event: any) {
     this.editForm.value.files = event
@@ -318,16 +333,15 @@ export class EditEventComponent implements OnInit {
     this.invalidForm.name = this.editForm.get('name')!.invalid
     this.invalidForm.description = this.editForm.get('description')!.invalid
     this.invalidForm.sponsor = this.editForm.get('sponsor')!.invalid
-    this.editForm.value.types.forEach((type:any) => {
-      if(!type.on_delete){
+    this.editForm.value.types.forEach((type: any) => {
+      if (!type.on_delete) {
         typeCount++
       }
-    });
+    })
     this.invalidForm.types = typeCount == 0
-    if(this.invalidForm.types){
+    if (this.invalidForm.types) {
       this.toastService.showToast('Должна быть хотя бы одна категория', 'warning')
     }
-   
   }
   submitForm() {
     this.checkValidOfForm()

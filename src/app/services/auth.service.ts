@@ -55,42 +55,28 @@ export class AuthService {
   }
 
   private getCSRF(): Observable<string> {
-    return this.http.get<string>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/sanctum/csrf-cookie`,
-    )
+    return this.http.get<string>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/sanctum/csrf-cookie`)
   }
 
   login(user: IUser): Observable<IUser> {
     return this.getCSRF().pipe(
       mergeMap((res) => {
-        return this.http.post<IUser>(
-          `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/login`,
-          user,
-        )
+        return this.http.post<IUser>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/login`, user)
       }),
     )
   }
   loginApple(data: any) {
-    return this.http.post<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/social-auth/apple`,
-      data,
-    )
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/social-auth/apple`, data)
   }
   register(data: any) {
-    return this.http.post<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/register`,
-      data,
-    )
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/register`, data)
   }
 
   setPassword(pass: any[]): Observable<IUser> {
     const params = pass
     return this.getCSRF().pipe(
       mergeMap((res) => {
-        return this.http.post<any>(
-          `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/set_password`,
-          params,
-        )
+        return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/set_password`, params)
       }),
     )
   }
@@ -110,21 +96,15 @@ export class AuthService {
   }
 
   checkName(name: string) {
-    return this.http.get<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/name/check/${name}`,
-    )
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/name/check/${name}`)
   }
 
   checkEmail(mail: string) {
-    return this.http.get<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/email/check/${mail}`,
-    )
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/email/check/${mail}`)
   }
 
   checkNumber(number: string) {
-    return this.http.get<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/number/check/${number}`,
-    )
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/number/check/${number}`)
   }
 
   verfiEmail(number: number) {
@@ -137,16 +117,10 @@ export class AuthService {
     )
   }
   getEmailCode() {
-    return this.http.post<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/code/email/generate`,
-      {},
-    )
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/code/email/generate`, {})
   }
 
   editEmailNotVerification(email: string) {
-    return this.http.put<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/email`,
-      email,
-    )
+    return this.http.put<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/email`, email)
   }
 }

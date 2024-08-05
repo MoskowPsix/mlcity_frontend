@@ -30,6 +30,7 @@
                 </ng-container>
                 <span class="category-container-header">Категории</span>
                 <div class="category-button-grid">
+                    <span class="not-found-span" *ngIf="previewCategory.length === 0">Не выбрано</span>
                     <ng-container *ngIf="event && event.types">
                         <app-rounded-button style="pointer-events: none;"  *ngFor="let category of previewCategory" routerLink="/cabinet/events/create" icon="assets/icons/category.svg" type="button" buttonText="{{category.name}}"></app-rounded-button>
                     </ng-container>
@@ -42,6 +43,9 @@
                 </div>
             </div>
             <div class="prices-container">
+                <div class="not-found-span-container">
+                    <span class="not-found-span" *ngIf="checkfreeEntry()">Свободный вход без билетов</span>
+                </div>
                 <ng-container *ngIf="event && event.price">
                     <!-- <app-standart-input *ngFor="let price of event.price; let i = index" [label]="'Стоимость '+ (i+1)" [control] = "editForm.get('name')"></app-standart-input> -->
                      <ng-container *ngFor="let price of this.editForm.value.price; let i = index">
@@ -57,6 +61,9 @@
                 </div>
             </div>
             <div class="place-container">
+                <div class="not-found-span-container">
+                    <span class="not-found-span" *ngIf="checkCountPlaces()">Место проведения не добавлено</span>
+                </div>
                 <ng-container *ngFor="let place of this.editForm.value.places; let i = index">
                     <div class="place-wrapper">
                         <app-new-place 
