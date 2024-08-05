@@ -26,15 +26,15 @@
     color: #363d42;
 }
 .standart-input_inavlid:focus{
-    outline: none;
-    min-height: 8rem;
+    border: 1px solid #ff0000;
     border-radius: 5px;
     width: 100%;
+    background: none;
+    outline: none;
     min-height: 2.25rem;
-    transition: 0.2s;
     padding-top: 0.9rem;
     font-size: 12px;
-    background: none;
+    min-height: 8rem;
     padding-left: 0.8rem;
     transition: 0.1s;
     color: #363d42;

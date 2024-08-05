@@ -13,11 +13,15 @@ import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { IPlace } from 'src/app/models/place'
 import { EventHistoryContent } from 'src/app/clasess/history_content/event_history_content'
 import { EditService } from 'src/app/services/edit.service'
+import { ToastService } from 'src/app/services/toast.service'
 import _ from 'lodash'
 interface InvalidForm {
   name: boolean
   sponsor: boolean
   description: boolean
+  types:boolean
+  places:boolean
+  seances:boolean
 }
 @Component({
   selector: 'app-edit-event',
@@ -28,6 +32,7 @@ export class EditEventComponent implements OnInit {
   constructor(
     private eventTypeService: EventTypeService,
     private routeActivated: ActivatedRoute,
+    private toastService:ToastService,
     private eventsService: EventsService,
     private loadingService: LoadingService,
     private queryBuilderService: QueryBuilderService,
@@ -48,6 +53,9 @@ export class EditEventComponent implements OnInit {
     name: false,
     description: false,
     sponsor: false,
+    types:false,
+    places:false,
+    seances:false
   }
   logFiles(event: any) {
     this.editForm.value.files = event
@@ -306,9 +314,20 @@ export class EditEventComponent implements OnInit {
     }
   }
   checkValidOfForm() {
+    let typeCount = 0
     this.invalidForm.name = this.editForm.get('name')!.invalid
     this.invalidForm.description = this.editForm.get('description')!.invalid
     this.invalidForm.sponsor = this.editForm.get('sponsor')!.invalid
+    this.editForm.value.types.forEach((type:any) => {
+      if(!type.on_delete){
+        typeCount++
+      }
+    });
+    this.invalidForm.types = typeCount == 0
+    if(this.invalidForm.types){
+      this.toastService.showToast('Должна быть хотя бы одна категория', 'warning')
+    }
+   
   }
   submitForm() {
     this.checkValidOfForm()

@@ -3,7 +3,7 @@
     <div class="content-container">
         <form [formGroup]="editForm" action="" class="edit-form">
             <app-standart-input [invalid]="invalidForm.name" [label]="'Название события'" [control] = "editForm.get('name')"></app-standart-input>
-            <app-standart-rich-input [label]="'Описание'" [control] = "editForm.get('description')"></app-standart-rich-input>
+            <app-standart-rich-input [invalid]="invalidForm.description"  [label]="'Описание'" [control] = "editForm.get('description')"></app-standart-rich-input>
             <div class="category-container">
                 <ng-container>
                     <ion-modal mode="ios" (didDismiss)="closeModal()"  [isOpen]="openModalCategory">
@@ -73,7 +73,7 @@
                 </ng-container>
             </div>
             <app-standart-button (click)="addPlace()" buttonText="Добавить место" type="button" theme ="light"></app-standart-button>
-            <app-standart-input [label]="'Организатор'" [control] = "editForm.get('sponsor')"></app-standart-input>
+            <app-standart-input [invalid]="invalidForm.sponsor" [label]="'Организатор'" [control] = "editForm.get('sponsor')"></app-standart-input>
             <div (click)="submitForm()" class="save-button-wrapper">
                 <app-standart-button buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
             </div>
