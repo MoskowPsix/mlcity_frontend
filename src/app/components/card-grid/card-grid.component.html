@@ -12,7 +12,10 @@
   <div class="main-grid">
       <app-event-card *ngFor="let card of cards; let i = index" [event]="card" [myEvent]="myEvents" [isSight]="isSight"></app-event-card>
   </div>
+  <div class="spiner-container">
+    <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>
+  </div>
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    <ion-infinite-scroll-content ></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ng-container>

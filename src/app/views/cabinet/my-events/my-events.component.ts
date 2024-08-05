@@ -1,15 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import {
-  EMPTY,
-  Subject,
-  catchError,
-  delay,
-  map,
-  of,
-  retry,
-  takeUntil,
-  tap,
-} from 'rxjs'
+import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { EventsService } from 'src/app/services/events.service'
 import { FilterService } from 'src/app/services/filter.service'
@@ -32,7 +22,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
   ) {}
   nextPage: boolean = false
   events: any[] = []
-
+  spiner: boolean = false
   loadEvents: boolean = false
   loadMoreEvents: boolean = false
 
@@ -42,22 +32,17 @@ export class MyEventsComponent implements OnInit, OnDestroy {
   }
 
   getMyEvents(event?: any) {
+    this.spiner = true
     this.eventService
-      .getEventsForUser(
-        this.queryBuilderService.queryBuilder('eventsPublicForAuthor'),
-      )
+      .getEventsForUser(this.queryBuilderService.queryBuilder('eventsPublicForAuthor'))
       .pipe(
         delay(100),
         retry(3),
         map((respons: any) => {
           this.events.push(...respons.events.data)
-          console.log(this.events)
-          this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next(
-            respons.events.next_cursor,
-          )
-          respons.events.next_cursor
-            ? (this.nextPage = true)
-            : (this.nextPage = false)
+          this.spiner = false
+          this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next(respons.events.next_cursor)
+          respons.events.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
         }),
         tap(() => {
           this.loadEvents = true

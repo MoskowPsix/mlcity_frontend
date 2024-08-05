@@ -433,7 +433,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   ngOnInit() {
     this.formatedStartDate = this.datePipe.transform(this.event.date_start, 'dd-MMM')
-    console.log(this.event)
 
     this.formatedEndDate = this.datePipe.transform(this.event.date_end, 'dd-MMM')
 

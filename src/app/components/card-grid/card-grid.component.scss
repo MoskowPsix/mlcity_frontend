@@ -11,6 +11,10 @@
     margin-right: auto;
     overflow-y: auto;
   }
+  .spiner-container{
+    display: flex;
+    justify-content: center;
+  }
   .main-grid-load {
     padding-top: 2rem;
     display: grid;
