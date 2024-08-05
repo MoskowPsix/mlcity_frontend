@@ -347,7 +347,7 @@ export class EditEventComponent implements OnInit {
     let typeCount = 0
     let priceCount = 0
     let placesCount = 0
-    let placeSeanceCount = 0
+    let fieldsValid = true
     this.invalidForm = {
       name: false,
       description: false,
@@ -437,10 +437,15 @@ export class EditEventComponent implements OnInit {
     if (this.invalidForm.addressPlace) {
       this.toastService.showToast('Адрес не может быть пустым', 'warning')
     }
-    let allFirstLevelFalse = Object.values(this.invalidForm).every((value) => {
-      return value === false
-    })
-    if (allFirstLevelFalse && !this.invalidForm.seances.error) {
+
+    for (let key of Object.keys(this.invalidForm)) {
+      if (typeof this.invalidForm[key as keyof typeof this.invalidForm] === 'boolean') {
+        if (this.invalidForm[key as keyof typeof this.invalidForm]) {
+          fieldsValid = false
+        }
+      }
+    }
+    if (fieldsValid && !this.invalidForm.seances.error) {
       return true
     } else {
       return false
