@@ -14,11 +14,10 @@
         <ng-template #emptyFiles>
           <div class="card" style="background-image: url('assets/images/nophoto.jpg'); position: absolute;"></div>
         </ng-template>
-
+        <div *ngIf="myEvent" class="edit-button">
+          <app-circle-button (clicked)="blockedRout()" routerLink="/cabinet/events/edit/{{event.id}}" icon="/assets/icons/menu-pen.svg" border="dark-all" ></app-circle-button>
+        </div>
         <div (click)="checkEdit()" class="card">
-                <div *ngIf="myEvent" class="edit-button">
-                  <app-circle-button (clicked)="blockedRout()" routerLink="/cabinet/events/edit/{{event.id}}" icon="/assets/icons/menu-pen.svg" border="dark-all" ></app-circle-button>
-                </div>
               <div class="info-wrapper">
                   <div class="info-header">
                      <div *ngIf="minPrice !== maxPrice" class="price">

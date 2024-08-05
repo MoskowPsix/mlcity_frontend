@@ -108,7 +108,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         if (event) {
           this.event = event
-          console.log(event)
           // this.places = event.places_full;
         }
         this.titleService.setTitle(event.name)
@@ -162,7 +161,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
         )
         .subscribe((response: any) => {
           this.places.push(...response.places.data)
-          console.log(this.places)
           this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
             response.places.next_cursor,
           )
