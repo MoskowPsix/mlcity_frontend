@@ -90,7 +90,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   loadingLike: boolean = false
   startLikesCount: number = 0
   vkLikesCount: number | null = null
-  //windowComment: boolean = false
   dontEdit: boolean = true
   prices: number[] = []
   minPrice: number = 0
