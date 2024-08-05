@@ -42,8 +42,7 @@ export class EditEventComponent implements OnInit {
     private eventsService: EventsService,
     private loadingService: LoadingService,
     private editService: EditService,
-    private toastService: ToastService,
-  ) { }
+  ) {}
   private readonly destroy$ = new Subject<void>()
   event!: IEvent
   editForm!: FormGroup
@@ -95,7 +94,7 @@ export class EditEventComponent implements OnInit {
       descriptions: '',
     })
   }
-  ngAfterViewInit(): void { }
+  ngAfterViewInit(): void {}
   deletePrice(event: any) {
     if (event.id) {
       let index = this.editForm.value.price.map((e: any) => e.id).indexOf(event.id)
@@ -453,34 +452,36 @@ export class EditEventComponent implements OnInit {
     }
   }
   submitForm() {
-    if (this.submitButtonState) {
-      return
-    }
-    this.submitButtonState = true
-    this.loadingService.showLoading()
-    this.clearFormOfTempData()
-    console.log(this.editForm.value)
-    let historyContent = new EventHistoryContent()
-    this.editService
-      .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
-      .pipe(
-        catchError((err: any) => {
+    if (this.checkValidOfForm()) {
+      if (this.submitButtonState) {
+        return
+      }
+      this.submitButtonState = true
+      this.loadingService.showLoading()
+      this.clearFormOfTempData()
+      console.log(this.editForm.value)
+      let historyContent = new EventHistoryContent()
+      this.editService
+        .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
+        .pipe(
+          catchError((err: any) => {
+            this.submitButtonState = false
+            this.loadingService.hideLoading()
+            if (err.status == 403) {
+              this.toastService.showToast('Событие уже находится на модерации', 'warning')
+            }
+            return of(EMPTY)
+          }),
+        )
+        .subscribe((res: any) => {
           this.submitButtonState = false
           this.loadingService.hideLoading()
-          if (err.status == 403) {
-            this.toastService.showToast('Событие уже находится на модерации', 'warning')
+          if (res.status == 'success') {
+            this.toastService.showToast('Событие отправленно на проверку', 'success')
           }
-          return of(EMPTY)
-        }),
-      )
-      .subscribe((res: any) => {
-        this.submitButtonState = false
-        this.loadingService.hideLoading()
-        if (res.status == 'success') {
-          this.toastService.showToast('Событие отправленно на проверку', 'success')
-        }
-        console.log(res)
-      })
+          console.log(res)
+        })
+    }
   }
   ngOnInit() {
     this.editForm = new FormGroup({
