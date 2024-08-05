@@ -34,6 +34,13 @@ export class NewPlaceComponent implements OnInit {
   edditAdress(event: any) {
     this.addressEditEmit.emit(event)
   }
+  checkCountSeances() {
+    if (this.seancesArray.map((e: any) => e.on_delete).indexOf(undefined) == -1) {
+      return true
+    } else {
+      return false
+    }
+  }
   ngOnInit() {
     this.seancesArray = this.place.seances
     this.placeForm = new FormGroup({

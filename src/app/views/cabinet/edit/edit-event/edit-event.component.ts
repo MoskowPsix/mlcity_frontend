@@ -22,6 +22,7 @@ interface InvalidForm {
   types: boolean
   places: boolean
   seances: boolean
+  price: boolean
 }
 @Component({
   selector: 'app-edit-event',
@@ -57,8 +58,10 @@ export class EditEventComponent implements OnInit {
     types: false,
     places: false,
     seances: false,
+    price: false,
   }
   checkfreeEntry() {
+    //проверка количества билетов
     if (this.editForm.value.price.map((e: any) => e.on_delete).indexOf(undefined) == -1) {
       return true
     } else {
@@ -328,8 +331,27 @@ export class EditEventComponent implements OnInit {
       })
     }
   }
+  setEmptyPrice() {
+    //Добавляю ноль в цену без суммы
+    this.editForm.value.price.forEach((price: any) => {
+      if (price.cost_rub == '') {
+        price.cost_rub = 0
+      }
+    })
+    console.log(this.editForm.value.price)
+  }
   checkValidOfForm() {
     let typeCount = 0
+    let priceCount = 0
+    this.invalidForm = {
+      name: false,
+      description: false,
+      sponsor: false,
+      types: false,
+      places: false,
+      seances: false,
+      price: false,
+    }
     this.invalidForm.name = this.editForm.get('name')!.invalid
     this.invalidForm.description = this.editForm.get('description')!.invalid
     this.invalidForm.sponsor = this.editForm.get('sponsor')!.invalid
@@ -342,9 +364,28 @@ export class EditEventComponent implements OnInit {
     if (this.invalidForm.types) {
       this.toastService.showToast('Должна быть хотя бы одна категория', 'warning')
     }
+    this.editForm.value.price
+      .map((e: any) => e.on_delete)
+      .forEach((price: any) => {
+        if (!price) {
+          priceCount++
+        }
+      })
+    if (priceCount > 1) {
+      this.editForm.value.price.forEach((price: any) => {
+        console.log(price)
+        if (price.descriptions === '' && !price.on_delete) {
+          this.invalidForm.price = true
+        }
+      })
+    }
+    if (this.invalidForm.price) {
+      this.toastService.showToast('Если у вас несколько билетов, то описание обязательно', 'warning')
+    }
   }
   submitForm() {
     this.checkValidOfForm()
+    this.setEmptyPrice()
     // this.clearFormOfTempData()
     // console.log(this.editForm.value)
     // let historyContent = new EventHistoryContent()

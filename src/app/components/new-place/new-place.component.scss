@@ -45,7 +45,14 @@
 .delete-img{
     filter: brightness(0) saturate(100%) invert(39%) sepia(25%) saturate(2348%) hue-rotate(190deg) brightness(112%) contrast(105%);
 }
-
+.not-found-span-container{
+    padding-top: 1rem;
+}
+.not-found-span{
+    font-size: 0.75rem;
+    color: #21272b;
+    font-family: var(--font-regular);
+}
 .place-header-container{
     padding-top: 2rem;
     display: flex;
