@@ -1,16 +1,31 @@
 <div
   class="range-container"
   [ngClass]="{'active': state}"
+  (click)="changeState()"
   >
   <div
-    class="circle_container"
+    class="circle-container"
     [ngClass]="{'active': state}"
   >
+  <div
+    *ngIf="!state"
+    >
+    <app-circle-button>
+      <div
+        class="range-element"
+      >
+        <div>{{ currentRange }}</div>
+        <div>км</div>
+      </div>
+    </app-circle-button>
+
+  </div>
     <app-circle-button
       *ngFor="let el of radiusRange">
       <div
+      (click)="changeRadius(el)"
         class="range-element"
-        [ngClass]="{'active': currentRange == el}"
+        [ngClass]="{'active': currentRange === el && state}"
       >
         <div>{{ el }}</div>
         <div>км</div>

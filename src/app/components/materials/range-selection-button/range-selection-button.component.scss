@@ -6,12 +6,11 @@
   transition: 0.5s ease-in-out;
   overflow-y: hidden;
   overflow-x: hidden;
-  align-items: center;
-  justify-content: center;
 }
 
-.circle_container {
+.circle-container {
   display: flex;
+  align-items: center;
 }
 
 .circle_container.active {
@@ -19,7 +18,7 @@
 }
 
 .range-container.active {
-  width: 12.8rem;
+  width: 12.1rem;
 }
 
 .range-element {

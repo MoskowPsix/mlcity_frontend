@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { FilterService } from 'src/app/services/filter.service'
 
 @Component({
   selector: 'app-range-selection-button',
@@ -6,19 +7,22 @@ import { Component, OnInit } from '@angular/core'
   styleUrls: ['./range-selection-button.component.scss'],
 })
 export class RangeSelectionButtonComponent implements OnInit {
-  state: boolean = true
-  radiusRange: number[] = [1, 2, 5, 10, 15, 25]
-  currentRange: number = 5
+  state: boolean = false
+  radiusRange: number[] = [0, 1, 2, 5, 10, 25]
+  currentRange!: number
 
-  constructor() { }
+  constructor(private filterService: FilterService) { }
 
   changeState() {
     this.state = !this.state
-    console.log('share')
   }
 
-  changeRadius() {
-
+  changeRadius(value: number) {
+    this.filterService.setRadiusTolocalStorage(`${value}`)
   }
-  ngOnInit() { }
+  ngOnInit() {
+    this.filterService.radius.subscribe((radius: string) => {
+      this.currentRange = Number(radius)
+    })
+  }
 }
