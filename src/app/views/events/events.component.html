@@ -30,7 +30,10 @@
 
       <!-- <div class="ion-padding" slot="content"> -->
         <div class="carusel-wrapper_flex" #headerWrapper>
-          <div >
+          <app-second-header size="xxl" img="/assets/images/tape.png">
+           Соыбтия вокруг <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/calendar.svg" buttonText="Создать"></app-rounded-button>
+          </app-second-header>
+          <!-- <div >
             <ng-container>
               <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
             </ng-container>
@@ -38,7 +41,7 @@
               <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
             </ng-container>
 
-          </div>
+          </div> -->
         </div>
 
       <!-- </div> -->
