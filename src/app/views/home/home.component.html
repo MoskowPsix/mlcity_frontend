@@ -72,16 +72,16 @@
   </div>
 
   <!-- Модальное окно просмотр ивента / места при клике метки на карте -->
-  <ion-modal id="modalEventShow" [isOpen]="modalEventShowOpen" (ionModalDidDismiss)="modalClose()" (ionBreakpointDidChange)="modalClose()" [initialBreakpoint]="0.9" [breakpoints]="[0, 0.9]" >
+  <ion-modal id="modalEventShow" [isOpen]="modalEventShowOpen" (ionModalDidDismiss)="modalClose()" (ionBreakpointDidChange)="modalClose()" [initialBreakpoint]="0.8">
     <div class="bg"></div>
     <ng-template #ContentModal>
-      <!-- <ion-header color="black">
+      <ion-header color="black">
         <ion-toolbar>
           <ion-buttons slot="end">
             <ion-button (click)="modalClose()">Закрыть</ion-button>
           </ion-buttons>
         </ion-toolbar>
-      </ion-header> -->
+      </ion-header>
       <ion-content>
         <ng-container *ngIf="loadModal">
           <ion-row class="ion-justify-content-center">
@@ -151,15 +151,16 @@
  <!-- Выбор отображения на карте -->
 
  <div (click)="openModalSwitcher()" class="{{modalSwitcherClass}}">
-  <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="setTypeState('events')" (click)="changeTypeState()" #event>
+  <app-type-swither></app-type-swither>
+  <!-- <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="setTypeState('events')" (click)="changeTypeState()" #event>
     <div class="{{modalSwitcherTextClass}}">События</div>
     <ion-icon name="balloon" style="min-width: 28px; min-height: 28px" class="swither-icon" color="primary"></ion-icon>
 
-    <!-- <img src="/assets/icons/TablerTicket.svg" class="swither-icon"> -->
+    <img src="/assets/icons/TablerTicket.svg" class="swither-icon">
   </div>
   <div class="swither-bg" #buttonActive></div>
   <div class="swither" (click)="onSegmentChanged(sight, 2)" (click)="setTypeState('sights')" (click)="changeTypeState()" #sight>
     <div class="{{modalSwitcherTextClass}}">Места</div>
     <img src="/assets/icons/MakiMuseum.svg" class="swither-icon">
-  </div>
+  </div> -->
 </div>
