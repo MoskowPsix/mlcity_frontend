@@ -345,11 +345,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     })
     this.map.target.controls.remove('zoomControl')
-    // this.map.target.controls.add('geolocationControl',{size:"large",position: {left:'50% ',bottom:0, right:0, top:"-150px",width:"150px"}})
-
-    // if (!this.map) {
-    //   this.onMapReady({target, ymaps});
-    // }
 
     await this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
       this.getEventsAndSights()
@@ -513,6 +508,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           : null
         this.modalContent.push(...response.sights.data)
       })
+  }
+
+  getCurrentBounds() {
+    console.log(this.map.target.getBounds())
   }
 
   getPlacesIds(id: number, type: string): Observable<any> {

@@ -16,6 +16,13 @@
   max-height: 80%;
 }
 
+.range-selection {
+  position: absolute;
+  right: 0;
+  padding-right: 1.5rem;
+  top: 15%;
+}
+
 .calendula-wrapper {
   transform: translateY(0%);
   transition: 0.6s all;
@@ -205,6 +212,9 @@
 @media only screen and (min-height: 750px) {
   .range-radius-main_2 {
     top: 41%;
+  }
+  .range-selection {
+    top: 40%;
   }
   .geo-container {
     top: 76%;
