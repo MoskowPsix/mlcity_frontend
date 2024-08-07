@@ -8,7 +8,7 @@ import { FilterService } from 'src/app/services/filter.service'
 })
 export class RangeSelectionButtonComponent implements OnInit {
   state: boolean = false
-  radiusRange: number[] = [0, 1, 2, 5, 10, 25]
+  radiusRange: number[] = [1, 2, 5, 10, 25]
   currentRange!: number
 
   constructor(private filterService: FilterService) { }
