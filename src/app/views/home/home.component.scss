@@ -129,12 +129,8 @@
   padding: 5px;
   right: 0;
   z-index: 103;
-  width: 50px;
   background-color: white;
   border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  transition: 0.3s all;
 }
 
 .swither-text {
@@ -150,36 +146,6 @@
   opacity: 1;
   transition: 1s all;
   cursor: pointer;
-}
-
-.container-swither:hover {
-  transition: 0.3s all;
-  width: 140px;
-  .swither-text {
-    font-family: 'Montserrat-Medium';
-    opacity: 1;
-    transition: 1s all;
-    cursor: pointer;
-  }
-}
-
-.container-swither_open {
-  right: 0;
-  position: absolute;
-  cursor: pointer;
-  top: 26%;
-  margin-top: 1%;
-  margin-right: 1.1rem;
-  margin-left: auto;
-  padding: 5px;
-  z-index: 103;
-  width: 140px;
-  background-color: white;
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  transition: 0.3s all;
 }
 
 .geo-container {
