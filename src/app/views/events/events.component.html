@@ -32,22 +32,24 @@
         <div class="carusel-wrapper_flex" #headerWrapper>
           <app-second-header size="xxl" img="/assets/images/tape.png">
             <div header-bottom>
-              Соыбтия вокруг <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/calendar.svg" buttonText="{{date.dateStart |date:'dd-MMM'}} - {{' '+date.dateEnd |date:'dd-MMM'}}"></app-rounded-button>
+              <ng-container >
+                <!-- <app-calendula (dateOutput)="setDate($event)" [date]="date"/> -->
+              </ng-container>
+              Соыбтия вокруг
+              <div class="calendar-button-wrapper">
+
+                <!-- <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/calendar.svg" buttonText="{{date.dateStart |date:'dd-MMM'}} - {{' '+date.dateEnd |date:'dd-MMM'}}"></app-rounded-button> -->
+              </div> 
             </div>
             
-            <div style="color: #fff; font-size: 1rem;" header-top>
-              asdasdasd
-            </div>
           </app-second-header>
           <!-- <div >
             <ng-container>
               <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
             </ng-container>
-            <ng-container >
-              <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
-            </ng-container>
 
           </div> -->
+         
         </div>
 
       <!-- </div> -->

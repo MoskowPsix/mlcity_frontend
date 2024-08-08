@@ -11,10 +11,7 @@ import {
   EventEmitter,
 } from '@angular/core'
 import { MaskitoOptions } from '@maskito/core'
-import {
-  maskitoNumberOptionsGenerator,
-  maskitoTimeOptionsGenerator,
-} from '@maskito/kit'
+import { maskitoNumberOptionsGenerator, maskitoTimeOptionsGenerator } from '@maskito/kit'
 import { UserService } from 'src/app/services/user.service'
 @Component({
   selector: 'app-code-input',
@@ -105,5 +102,12 @@ export class CodeInputComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.dontFirstTimer = false
     this.timerStart()
+  }
+  ionViewWillEnter() {
+    let itemsArray = this.items.toArray()
+    console.log('item')
+    itemsArray.forEach((item: any) => {
+      item.nativeElement.value = ''
+    })
   }
 }
