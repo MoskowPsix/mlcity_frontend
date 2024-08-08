@@ -27,13 +27,14 @@ import { BehaviorSubject } from 'rxjs'
 import { MapService } from 'src/app/services/map.service'
 import { Capacitor } from '@capacitor/core'
 import { Router } from '@angular/router'
-
+import { CalendarComponent } from 'src/app/components/calendar/calendar.component'
 register()
 
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss'],
+  
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventsComponent implements OnInit, OnDestroy {

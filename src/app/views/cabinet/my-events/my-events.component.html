@@ -1,6 +1,6 @@
 <ion-content>
   <app-second-header size="xxl" img="/assets/images/myEventsHeader.png">
-    Мои мероприятия <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/create.svg" buttonText="Создать"></app-rounded-button>
+      Мои мероприятия <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/create.svg" buttonText="Создать"></app-rounded-button>
   </app-second-header>
   <app-card-grid [notFound]="notFound" [spiner]="spiner" [cards]="events" (endScroll)="getMyEvents($event)"></app-card-grid>
  

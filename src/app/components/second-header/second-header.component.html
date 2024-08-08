@@ -1,14 +1,14 @@
 <div *ngIf="!size" class="header-plug">
   <div class="header-tools">
-    <ng-content select="[header-top]">
+    <ng-content>
 
     </ng-content>
   </div>
 </div>
 
 <div *ngIf="size === 'xxl' || size ==='xxl_n'" class="header-plug_xxl" style="background-image: url({{img}});">
-  <div [ngClass]="{'header-tools_xxl':size === 'xxl', 'header-tools_xxl_n':size === 'xxl_n'}">
-    <ng-content select="[header-bottom]">
+  <div class="header-tools_xxl">
+    <ng-content>
 
     </ng-content>
   </div>

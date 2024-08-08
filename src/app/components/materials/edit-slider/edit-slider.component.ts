@@ -6,9 +6,7 @@ import { ToastService } from 'src/app/services/toast.service'
   styleUrls: ['./edit-slider.component.scss'],
 })
 export class EditSliderComponent implements OnInit {
-  constructor(
-    private toastService: ToastService
-  ) {}
+  constructor(private toastService: ToastService) {}
   @Input() files: any[] = []
   @ViewChild('mainPhoto') mainPhoto!: any
   @Output() filesEmit: EventEmitter<any> = new EventEmitter<any>()
@@ -27,6 +25,7 @@ export class EditSliderComponent implements OnInit {
             link: e.target.result,
             name: file.name,
           })
+
           this.files.push(file)
         } else {
           this.toastService.showToast('Файл уже загружен!', 'warning')

@@ -95,7 +95,7 @@ import { MaskitoModule } from '@maskito/angular'
 import { ProfileItemComponent } from './components/profile-item/profile-item.component'
 import { ExitButtonComponent } from './components/exit-button/exit-button.component'
 import { MatDatepickerModule } from '@angular/material/datepicker'
-import { MatNativeDateModule } from '@angular/material/core'
+import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { EdditSightComponent } from './views/cabinet/my-sights/edit-sight/eddit-sight.component'
 import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.component'
@@ -133,7 +133,17 @@ const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
 }
-
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+}
 registerLocaleData(localeRu, 'ru')
 
 @NgModule({
@@ -244,6 +254,7 @@ registerLocaleData(localeRu, 'ru')
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
     AuthService,

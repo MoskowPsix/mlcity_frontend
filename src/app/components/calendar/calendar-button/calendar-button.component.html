@@ -1,4 +1,4 @@
-<div class="calendar-button-container" (click)="picker.open()">
+<!-- <div class="calendar-button-container" (click)="picker.open()">
   <div>
       <img *ngIf="!outlineIcon; else outline" src="/assets/icons/new_calendar.svg" class="date-picker-icon">
 
@@ -19,9 +19,14 @@
       <mat-date-range-picker #picker></mat-date-range-picker>
   </div>
 
-
+</div> -->
+  <app-rounded-button (click)="picker.open()" icon="assets/icons/calendar.svg" buttonText="{{dateRange.controls['start'].value }} -
+   {{' '+dateRange.controls['end'].value}}"></app-rounded-button>
+   <div class="calendar-container">
+    <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+      <input style="display: none;" matStartDate formControlName="start" placeholder="Start date">
+      <input style="display: none;" matEndDate formControlName="end" placeholder="End date">
+    </mat-date-range-input>
+    <mat-date-range-picker #picker></mat-date-range-picker>
 </div>
-
-<p> {{ dateRange.controls['start'].value }} - {{ dateRange.controls['end'].value }}</p>
-
 
