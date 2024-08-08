@@ -31,7 +31,13 @@
       <!-- <div class="ion-padding" slot="content"> -->
         <div class="carusel-wrapper_flex" #headerWrapper>
           <app-second-header size="xxl" img="/assets/images/tape.png">
-           Соыбтия вокруг <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/calendar.svg" buttonText="Создать"></app-rounded-button>
+            <div header-bottom>
+              Соыбтия вокруг <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/calendar.svg" buttonText="{{date.dateStart |date:'dd-MMM'}} - {{' '+date.dateEnd |date:'dd-MMM'}}"></app-rounded-button>
+            </div>
+            
+            <div style="color: #fff; font-size: 1rem;" header-top>
+              asdasdasd
+            </div>
           </app-second-header>
           <!-- <div >
             <ng-container>

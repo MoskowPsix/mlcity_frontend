@@ -112,12 +112,12 @@ export class AuthService {
       code: number,
     }
     return this.http.post<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/code/email/verificate`,
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/verificationUserEmail`,
       param,
     )
   }
   getEmailCode() {
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/code/email/generate`, {})
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/verificationEmail`, {})
   }
 
   editEmailNotVerification(email: string) {

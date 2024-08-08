@@ -302,6 +302,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.ContentCol.nativeElement.addEventListener('scroll', this.scrollPaginate, true)
   }
   ngOnInit() {
+    this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       if (value.url === '/event') {
         // this.filterService.changeFilter.next(true)
