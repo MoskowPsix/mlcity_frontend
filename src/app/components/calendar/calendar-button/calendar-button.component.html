@@ -1,0 +1,27 @@
+<div class="calendar-button-container" (click)="picker.open()">
+  <div>
+      <img *ngIf="!outlineIcon; else outline" src="/assets/icons/new_calendar.svg" class="date-picker-icon">
+
+      <ng-template #outline>
+        <img src="/assets/icons/new_calendar-outline.svg" class="date-picker-icon">
+      </ng-template>
+  </div>
+
+  <div class="date-text">
+    1 янв. - 30 янв.
+  </div>
+
+  <div class="calendar-container">
+      <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+        <input style="display: none;" matStartDate formControlName="start" placeholder="Start date">
+        <input style="display: none;" matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+  </div>
+
+
+</div>
+
+<p> {{ dateRange.controls['start'].value }} - {{ dateRange.controls['end'].value }}</p>
+
+

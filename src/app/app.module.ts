@@ -121,6 +121,10 @@ import { FooterItemComponent } from './components/footer/footer-item/footer-item
 import { TestPageComponent } from './views/test-page/test-page.component'
 import { TypeSwitherComponent } from './components/type-swither/type-swither.component'
 import { SwitchTypeService } from './services/switch-type.service'
+import { CalendarButtonComponent } from './components/calendar/calendar-button/calendar-button.component'
+import { CalendarComponent } from './components/calendar/calendar.component'
+import { MatInputModule } from '@angular/material/input'
+
 import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
 import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
 import { AddressInputComponent } from './components/address-input/address-input.component'
@@ -219,6 +223,8 @@ registerLocaleData(localeRu, 'ru')
     FooterItemComponent,
     TestPageComponent,
     TypeSwitherComponent,
+    CalendarButtonComponent,
+    CalendarComponent,
   ],
   imports: [
     BrowserModule,
@@ -234,6 +240,7 @@ registerLocaleData(localeRu, 'ru')
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
