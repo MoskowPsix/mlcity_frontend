@@ -1,8 +1,12 @@
 <ion-content>
+  <ion-button (click)="openModalFnc()">Открыть модалку</ion-button>
   <div class="test-page-container">
-    <div class="type-swither-container">
+    <!-- <div class="type-swither-container">
       <app-calendar-button></app-calendar-button>
-    </div>
+    </div> -->
   </div>
+  <ion-button (click)="openModalFnc()">Открыть модалку</ion-button>
+
+  <app-types-modal [openTypesModal]="openModal"></app-types-modal>
 </ion-content>
 

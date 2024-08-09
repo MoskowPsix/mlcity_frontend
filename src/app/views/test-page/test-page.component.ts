@@ -13,6 +13,10 @@ interface Placemark {
   styleUrls: ['./test-page.component.scss'],
 })
 export class TestPageComponent implements OnInit {
+  openModal = false
+  openModalFnc() {
+    this.openModal = true
+  }
   checkEditFunc() {
     let orig = {
       id: 1,
@@ -212,5 +216,5 @@ export class TestPageComponent implements OnInit {
     let eventHistoryContent = new EventHistoryContent()
     console.log(eventHistoryContent.merge(orig, edited))
   }
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }
