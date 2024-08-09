@@ -1,6 +1,12 @@
-<button 
-type = {{type}}
-class="rounded-button"
-#button
-(click)="onClick()"
-><img src="{{icon}}" alt="" class="rounded-button-img">{{buttonText}}</button>
+<button
+  type = {{type}}
+  class="rounded-button"
+  #button
+  (click)="onClick()"
+  >
+    <img src="{{icon}}" alt="" class="rounded-button-img">
+    {{buttonText}}
+    <ng-content>
+      
+    </ng-content>
+  </button>

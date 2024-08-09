@@ -1,0 +1,10 @@
+.category-container {
+  display: grid;
+  width: 6rem;
+  font-family: var(--font-bold);
+  grid-template-columns: 1fr 1fr;
+}
+
+.arrow {
+  grid-column: 2;
+}
