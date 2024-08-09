@@ -25,6 +25,11 @@ export const publicRoutes: Routes = [
     canActivate: [CheckAuthCanActiveGuard],
   },
   {
+    path: 'testframe',
+    component: TestIframeComponent,
+    canActivate: [CheckAuthCanActiveGuard],
+  },
+  {
     path: 'testpage',
     component: TestPageComponent,
   },

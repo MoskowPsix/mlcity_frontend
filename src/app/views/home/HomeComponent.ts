@@ -428,7 +428,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           e.get('target').options._options.balloonContent.type == 'event'
             ? (this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.ico)
             : (this.activeIcoLink =
-              this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico)
+                this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico)
 
           console.log(e.get('target').options._options.balloonContent.type)
           switch (e.get('target').options._options.balloonContent.type) {
@@ -904,6 +904,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.eventsContentModal = []
