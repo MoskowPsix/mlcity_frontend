@@ -71,13 +71,22 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
-    console.log('test')
-    if (window.innerWidth < 900) {
-      this.mobile = true
-    } else if (window.innerWidth > 900) {
-      this.mobile = false
-    } else {
-      this.mobile = false
+    switch (Capacitor.getPlatform()) {
+      case 'ios':
+        this.mobile = true
+        break
+      case 'android':
+        this.mobile = true
+        break
+      case 'web':
+        this.mobile = false
+        break
+    }
+
+    if (this.mobile == true) {
+      this.target = '_self'
+    } else if (this.mobile == false) {
+      this.target = '_blank'
     }
   }
   loginPhone() {
@@ -293,14 +302,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.mobileOrNoteService.mobile.subscribe(() => {
-      if (this.mobile != true) {
-        this.target = '_self'
-        console.log('в новом окне')
-      } else {
-        this.target = '_blank'
-      }
-    })
+    this.mobileOrNote()
     //Создаем поля для формы
     this.loginForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
