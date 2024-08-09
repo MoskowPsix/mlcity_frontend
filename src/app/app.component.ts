@@ -61,7 +61,7 @@ export class AppComponent implements OnInit {
     this.mobileOrNote()
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.url = this.router.url
-      this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:8100${this.url}`)
+      this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.BASE_URL}:${environment.PORT}${this.url}`)
     })
 
     // this.checkVersionService.getCurrentVersion().then((res: string) => {

@@ -17,7 +17,7 @@ import { Meta } from '@angular/platform-browser'
 import { RecoveryPasswordService } from 'src/app/services/recovery-password.service'
 import { SignInWithApple, SignInWithAppleResponse, SignInWithAppleOptions } from '@capacitor-community/apple-sign-in'
 import { Capacitor } from '@capacitor/core'
-
+import { MobileOrNoteService } from 'src/app/services/mobile-or-note.service'
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   timerReady: boolean = true
   seconds: number = 60
   target: string = ''
+  mobile: boolean = false
   closeRecoveryModal: boolean = true
   modalPass: boolean = false
   presentingElement: undefined
@@ -58,6 +59,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private actionSheetCtrl: ActionSheetController,
     private location: Location,
     private titleService: Title,
+    private mobileOrNoteService: MobileOrNoteService,
     private metaService: Meta,
     private recoveryPasswordService: RecoveryPasswordService,
   ) {
@@ -67,7 +69,17 @@ export class LoginComponent implements OnInit, OnDestroy {
       content: 'Вход на сайт.',
     })
   }
-
+  @HostListener('window:resize', ['$event'])
+  mobileOrNote() {
+    console.log('test')
+    if (window.innerWidth < 900) {
+      this.mobile = true
+    } else if (window.innerWidth > 900) {
+      this.mobile = false
+    } else {
+      this.mobile = false
+    }
+  }
   loginPhone() {
     this.formSetPassword = new FormGroup({
       number: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -281,6 +293,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.mobileOrNoteService.mobile.subscribe(() => {
+      if (this.mobile != true) {
+        this.target = '_self'
+        console.log('в новом окне')
+      } else {
+        this.target = '_blank'
+      }
+    })
     //Создаем поля для формы
     this.loginForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
