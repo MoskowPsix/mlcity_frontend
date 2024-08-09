@@ -129,6 +129,7 @@ import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
 import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
 import { AddressInputComponent } from './components/address-input/address-input.component'
 import { RoundedButtonComponent } from './components/materials/rounded-button/rounded-button.component'
+import { RangeSelectionButtonComponent } from './components/materials/range-selection-button/range-selection-button.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -231,10 +232,11 @@ registerLocaleData(localeRu, 'ru')
     UpdateVersionModalComponent,
     ModalCheckEmailComponent,
     FooterItemComponent,
-    TestPageComponent,
     TypeSwitherComponent,
     CalendarButtonComponent,
     CalendarComponent,
+    TestPageComponent,
+    RangeSelectionButtonComponent,
   ],
   imports: [
     BrowserModule,
