@@ -8,6 +8,7 @@ import { Subject, takeUntil } from 'rxjs'
 import { CheckVersionService } from './services/check-version.service'
 import { Capacitor } from '@capacitor/core'
 import { StoreInfo } from './models/store-info'
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private zone: NgZone,
+    private sanitizer: DomSanitizer,
     private toast: ToastService,
     private checkVersionService: CheckVersionService,
   ) {
@@ -26,6 +28,7 @@ export class AppComponent implements OnInit {
   }
   url: any = ''
   mobile: boolean = false
+  iframeUrl: any
   platformType: string = Capacitor.getPlatform()
 
   @HostListener('window:resize', ['$event'])
@@ -58,6 +61,7 @@ export class AppComponent implements OnInit {
     this.mobileOrNote()
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.url = this.router.url
+      this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:8100${this.url}`)
     })
 
     // this.checkVersionService.getCurrentVersion().then((res: string) => {

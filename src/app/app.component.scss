@@ -17,3 +17,31 @@
     display: none;
   }
 }
+.mobile-frame-wrapper{
+  width: 100%;
+  background: #FAFAFA;
+  z-index: 100;
+  position: absolute;
+  height: 100%;
+}
+.frame-content{
+  height: 100%;
+  display: flex;
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+}
+.iframe{
+  z-index: 100;
+
+  background: #fff;
+}
+.phone-wrapper-img{
+  background-position: center;
+  background-size: cover;
+  width: 30%;
+  height: 100%;
+  left: auto;
+  right: auto;
+  z-index: 99;
+}
