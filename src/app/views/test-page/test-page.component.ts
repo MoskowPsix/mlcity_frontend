@@ -24,7 +24,6 @@ export class TestPageComponent implements OnInit {
   }
   addCaategory(category: any) {
     this.categories.push(category)
-    console.log(this.categories)
   }
   deleteCaategory(index: any) {
     this.categories.splice(index, 1)
