@@ -14,13 +14,20 @@ interface Placemark {
 })
 export class TestPageComponent implements OnInit {
   openModal = false
-
+  categories: any = []
   openModalFnc() {
     this.openModal = true
     // console.log(this.openModal)
   }
   closeModal() {
     this.openModal = false
+  }
+  addCaategory(category: any) {
+    this.categories.push(category)
+    console.log(this.categories)
+  }
+  deleteCaategory(index: any) {
+    this.categories.splice(index, 1)
   }
   checkEditFunc() {
     let orig = {

@@ -13,6 +13,7 @@ ion-modal{
       
   }
   .category-modal-grid-item_active{
+      cursor: pointer;    
       background-color: #DCE9FF;
       width: 6rem;
       display: flex;

@@ -17,7 +17,7 @@ export class TypesModalComponent implements OnInit {
   ) {}
   @Input() openTypesModal!: boolean
   @Input() currentTypes: EventType[] = []
-  @Input() categories!: EventType[]
+  @Input() categories!: any[]
   @Output() closeModalEmit: EventEmitter<any> = new EventEmitter()
   @Output() addCategories: EventEmitter<any> = new EventEmitter()
   @Output() deleteCategories: EventEmitter<any> = new EventEmitter()
@@ -53,18 +53,22 @@ export class TypesModalComponent implements OnInit {
   addCategory(category: IEventType) {
     this.addCategories.emit(category)
   }
-  deleteCategory(category: IEventType) {
-    this.deleteCategories.emit(category)
+  deleteCategory(category: IEventType, index: number) {
+    this.deleteCategories.emit(index)
   }
   clickCategory(category: any) {
-    console.log(category)
+    let index
     if (this.categories) {
-      let index = this.categories.map((e: any) => e.id).indexOf(category.id)
-      if (index == -1) {
-        this.addCategory(category)
-      } else {
-        this.deleteCategory(category)
-      }
+      index = this.categories.map((e: any) => e.id).indexOf(category.id)
+    } else {
+      index = -1
+    }
+
+    if (index == -1) {
+      this.addCategory(category)
+    } 
+    else {
+      this.deleteCategory(category, index)
     }
   }
   checkCategory(category: any) {
