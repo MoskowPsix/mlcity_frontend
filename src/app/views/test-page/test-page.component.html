@@ -7,6 +7,6 @@
   </div>
   <ion-button (click)="openModalFnc()">Открыть модалку</ion-button>
 
-  <app-types-modal [openTypesModal]="openModal"></app-types-modal>
+  <app-types-modal (closeModalEmit)="closeModal()" [openTypesModal]="openModal"></app-types-modal>
 </ion-content>
 

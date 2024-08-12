@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, SimpleChanges } from '@angular/core'
 import { EventHistoryContent } from 'src/app/clasess/history_content/event_history_content'
 
 interface Placemark {
@@ -14,8 +14,13 @@ interface Placemark {
 })
 export class TestPageComponent implements OnInit {
   openModal = false
+
   openModalFnc() {
     this.openModal = true
+    // console.log(this.openModal)
+  }
+  closeModal() {
+    this.openModal = false
   }
   checkEditFunc() {
     let orig = {

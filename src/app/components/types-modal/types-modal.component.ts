@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core'
+import { Component, Input, OnInit, Output, SimpleChanges } from '@angular/core'
 import { IEventType } from 'src/app/models/event-type'
 import { environment } from 'src/environments/environment'
 import { LoadingService } from 'src/app/services/loading.service'
@@ -15,14 +15,18 @@ export class TypesModalComponent implements OnInit {
     private loadingService: LoadingService,
     private eventTypeService: EventTypeService,
   ) {}
-  @Input() openTypesModal: boolean = false
+  @Input() openTypesModal!: boolean
   @Input() currentTypes: EventType[] = []
+  @Input() categories!: EventType[]
+  @Output() closeModalEmit: EventEmitter<any> = new EventEmitter()
+  @Output() addCategories: EventEmitter<any> = new EventEmitter()
+  @Output() deleteCategories: EventEmitter<any> = new EventEmitter()
   allTypes: IEventType[] = []
 
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   clickCategoryEmit = new EventEmitter()
   closeModal() {
-    this.openTypesModal = false
+    this.closeModalEmit.emit(false)
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['openTypesModal']) {
@@ -46,9 +50,34 @@ export class TypesModalComponent implements OnInit {
       this.openTypesModal = true
     }
   }
-  clickCategory(category: any) {}
+  addCategory(category: IEventType) {
+    this.addCategories.emit(category)
+  }
+  deleteCategory(category: IEventType) {
+    this.deleteCategories.emit(category)
+  }
+  clickCategory(category: any) {
+    console.log(category)
+    if (this.categories) {
+      let index = this.categories.map((e: any) => e.id).indexOf(category.id)
+      if (index == -1) {
+        this.addCategory(category)
+      } else {
+        this.deleteCategory(category)
+      }
+    }
+  }
   checkCategory(category: any) {
-    return false
+    if (this.categories) {
+      let index = this.categories.map((e: any) => e.id).indexOf(category.id)
+      if (index !== -1) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
   }
   ngOnInit() {}
 }
