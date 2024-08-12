@@ -15,6 +15,34 @@ interface Placemark {
 export class TestPageComponent implements OnInit {
   openModal = false
   categories: any = []
+  switcherState: boolean = false
+  changeState(
+    itemFirstText: HTMLElement,
+    itemFirstImg: HTMLElement,
+    itemSecond: HTMLElement,
+    itemSecondImg: HTMLElement,
+  ) {
+    if (this.switcherState == false) {
+      itemFirstText.style.transform = 'translate(5rem)'
+      setTimeout(() => {
+        itemFirstText.style.opacity = '0'
+      }, 100)
+      itemFirstImg.classList.add('fire_non-active')
+      itemSecond.style.transform = 'translate(-3.5rem)'
+      itemSecondImg.classList.add('flag_active')
+    } else {
+      itemFirstImg.classList.remove('fire_non-active')
+      itemSecond.style.transform = 'translate(0rem)'
+      itemFirstText.style.opacity = '1'
+      setTimeout(() => {
+        itemFirstText.style.transform = 'translate(0rem)'
+      }, 100)
+
+      itemSecondImg.classList.remove('flag_active')
+    }
+
+    this.switcherState = !this.switcherState
+  }
   openModalFnc() {
     this.openModal = true
     // console.log(this.openModal)

@@ -5,15 +5,14 @@
   
         <div class="carusel-wrapper_flex" #headerWrapper>
           <app-second-header size="xxl" img="/assets/images/tape.png">
-            <div header-bottom>
-              <ng-container >
-                <!-- <app-calendula (dateOutput)="setDate($event)" [date]="date"/> -->
-              </ng-container>
-              События вокруг
+            <div class="header-top-container" header-top>
+              <app-type-swither></app-type-swither>
+              <app-category-button stateType="Event"></app-category-button>
+            </div>
+
+            <div class="header-bottom-container" header-bottom>
+                 События вокруг
               <app-calendar-button></app-calendar-button>
-              <div class="calendar-button-wrapper">
-              
-              </div> 
             </div>
             
           </app-second-header>

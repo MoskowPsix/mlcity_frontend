@@ -17,7 +17,16 @@ app-event-type-carusel {
 
 
 }
-
+.header-top-container{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.header-bottom-container{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
 .segment-title {
   color: black;
 

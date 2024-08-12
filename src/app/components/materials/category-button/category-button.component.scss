@@ -1,8 +1,10 @@
 .category-container {
-  display: grid;
-  width: 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 1.5rem;
   font-family: var(--font-bold);
-  grid-template-columns: 1fr 1fr;
+  width: 10rem;
 }
 
 .arrow {
