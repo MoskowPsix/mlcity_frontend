@@ -243,26 +243,26 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightTypesChange(typeId: any) {
     if (typeId !== 'all') {
       this.filterService.setSightTypesTolocalStorage([typeId])
-      this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
-      this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
+      // this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+      // this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
       this.filterService.changeFilter.next(true)
     } else {
       this.filterService.setSightTypesTolocalStorage([])
-      this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
-      this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
+      // this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+      // this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
       this.filterService.changeFilter.next(true)
     }
   }
   eventTypesChange(typeId: any) {
     if (typeId !== 'all') {
-      this.filterService.setEventTypesTolocalStorage([typeId])
-      this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
-      this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
+      this.filterService.setEventTypesTolocalStorage([typeId, 5, 3])
+      // this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+      // this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
       this.filterService.changeFilter.next(true)
     } else {
       this.filterService.setEventTypesTolocalStorage([])
-      this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
-      this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
+      // this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+      // this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
       this.filterService.changeFilter.next(true)
     }
   }

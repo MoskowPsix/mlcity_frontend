@@ -131,6 +131,7 @@ import { AddressInputComponent } from './components/address-input/address-input.
 import { RoundedButtonComponent } from './components/materials/rounded-button/rounded-button.component'
 import { RangeSelectionButtonComponent } from './components/materials/range-selection-button/range-selection-button.component'
 import { TypesModalComponent } from './components/types-modal/types-modal.component'
+import { CategoryButtonComponent } from './components/materials/category-button/category-button.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -239,6 +240,7 @@ registerLocaleData(localeRu, 'ru')
     CalendarComponent,
     TestPageComponent,
     RangeSelectionButtonComponent,
+    CategoryButtonComponent,
   ],
   imports: [
     BrowserModule,
