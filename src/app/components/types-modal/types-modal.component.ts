@@ -16,12 +16,11 @@ export class TypesModalComponent implements OnInit {
     private eventTypeService: EventTypeService,
   ) {}
   @Input() openTypesModal!: boolean
-  @Input() currentTypes: EventType[] = []
   @Input() categories!: any[]
   @Output() closeModalEmit: EventEmitter<any> = new EventEmitter()
   @Output() addCategories: EventEmitter<any> = new EventEmitter()
   @Output() deleteCategories: EventEmitter<any> = new EventEmitter()
-  allTypes: IEventType[] = []
+  @Input() allTypes: any
 
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   clickCategoryEmit = new EventEmitter()
@@ -66,8 +65,7 @@ export class TypesModalComponent implements OnInit {
 
     if (index == -1) {
       this.addCategory(category)
-    } 
-    else {
+    } else {
       this.deleteCategory(category, index)
     }
   }
