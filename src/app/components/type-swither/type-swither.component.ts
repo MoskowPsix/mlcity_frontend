@@ -1,5 +1,6 @@
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations'
-import { Component, OnInit } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
+import { Console } from 'console'
 import { Subject, takeUntil } from 'rxjs'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
 
@@ -14,8 +15,16 @@ export class TypeSwitherComponent implements OnInit {
   type: string = ''
   sight: string = 'sights'
   event: string = 'events'
+  @Input() redirect!: boolean
+  @Output() endingSwitchAnimation: EventEmitter<any> = new EventEmitter()
+  @ViewChild('switcher') switcher!: ElementRef<HTMLElement>
+  @ViewChild('itemFirstText') itemFirstText!: ElementRef<HTMLElement>
+  @ViewChild('itemFirstImg') itemFirstImg!: ElementRef<HTMLElement>
+  @ViewChild('itemSecond') itemSecond!: ElementRef<HTMLElement>
+  @ViewChild('itemSecondImg') itemSecondImg!: ElementRef<HTMLElement>
+  @ViewChild('itemSecondText') itemSecondText!: ElementRef<HTMLElement>
 
-  switchType(
+  render(
     switcher: HTMLElement,
     itemFirstText: HTMLElement,
     itemFirstImg: HTMLElement,
@@ -23,6 +32,7 @@ export class TypeSwitherComponent implements OnInit {
     itemSecondImg: HTMLElement,
     itemSecondText: HTMLElement,
   ) {
+    console.log('render')
     if (this.type === this.event) {
       switcher.style.width = '7rem'
       itemFirstText.style.opacity = '0'
@@ -44,9 +54,31 @@ export class TypeSwitherComponent implements OnInit {
 
       itemSecondImg.classList.remove('flag_active')
     }
-
+  }
+  switchType(
+    switcher: HTMLElement,
+    itemFirstText: HTMLElement,
+    itemFirstImg: HTMLElement,
+    itemSecond: HTMLElement,
+    itemSecondImg: HTMLElement,
+    itemSecondText: HTMLElement,
+  ) {
+    this.render(switcher, itemFirstText, itemFirstImg, itemSecond, itemSecondImg, itemSecondText)
     this.switchTypeService.changeType()
     console.log(this.switchTypeService.currentType.value)
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.render(
+      this.switcher.nativeElement,
+      this.itemFirstText.nativeElement,
+      this.itemFirstImg.nativeElement,
+      this.itemSecond.nativeElement,
+      this.itemSecondImg.nativeElement,
+      this.itemSecondText.nativeElement,
+    )
+  }
+  ngOnDestroy(): void {
+    
   }
   ngOnInit() {
     this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {

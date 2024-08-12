@@ -101,7 +101,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       : this.router.navigate(['/events', this.event.id, this.slugName])
   }
   eventNavigationEdit() {
-    
     this.isSight
       ? this.router.navigate(['/cabinet/sights/edit', this.event.id])
       : this.router.navigate(['/cabinet/events/edit', this.event.id])
@@ -304,7 +303,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   findPrice() {
-    if (!this.isSight) {
+    if (!this.isSight && this.event.price) {
       for (let i = 0; i < this.event.price.length; i++) {
         this.prices.push(Number(this.event.price[i].cost_rub))
       }

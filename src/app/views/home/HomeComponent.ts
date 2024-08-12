@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('calendulaWrapper') calendulaWrapper!: ElementRef
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
-
+  renderSwitcher: boolean = false
   clustererOptions: ymaps.IClustererOptions = {
     preset: 'islands#greenClusterIcons',
   }
@@ -307,7 +307,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.placemarks = []
       }
 
-      if (!this.navigationService.appFirstLoading.value) {
+      if (!this.navigationService.appFirstLoading.value && this.CirclePoint.options) {
         color = this.switchTypeService.currentType.value === 'sights' ? '#3880FF' : '#f7ab31'
         this.eventsLoading = true
         this.sightsLoading = true
@@ -712,29 +712,32 @@ export class HomeComponent implements OnInit, OnDestroy {
         )
         this.placemarks.push(placemark)
       } else {
-        let marker
-        let icoLink = `${this.host}:${this.port}${item.types[0].ico}`
-        if (item.types[0].ico.length > 0) {
-          marker = `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
-        } else {
-          marker = `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
+        if (item.types && item.types.length) {
+          let marker
+          let icoLink = `${this.host}:${this.port}${item.types[0].ico}`
+          if (item.types[0].ico.length > 0) {
+            marker = `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
+          } else {
+            marker = `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
+          }
+          placemark = new ymaps.Placemark(
+            [item.latitude, item.longitude],
+            {},
+            {
+              preset: 'islands#circleIcon',
+              balloonContent: item,
+              balloonAutoPan: false,
+              // С иконкой
+              iconContentLayout: ymaps.templateLayoutFactory.createClass(marker),
+            },
+          )
+          this.placemarks.push(placemark)
         }
-        placemark = new ymaps.Placemark(
-          [item.latitude, item.longitude],
-          {},
-          {
-            preset: 'islands#circleIcon',
-            balloonContent: item,
-            balloonAutoPan: false,
-            // С иконкой
-            iconContentLayout: ymaps.templateLayoutFactory.createClass(marker),
-          },
-        )
-        this.placemarks.push(placemark)
       }
     })
   }
 
+  ionViewWillEnter() {}
   async getEventsAndSights() {
     this.modalButtonLoader = true
     this.eventsModalNextPage = ''
@@ -903,7 +906,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    
+    this.renderSwitcher = !this.renderSwitcher
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.eventsContentModal = []
