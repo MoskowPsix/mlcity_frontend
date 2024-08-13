@@ -20,11 +20,19 @@
   </div>
 
 </div> -->
-  <app-rounded-button (click)="picker.open()" icon="assets/icons/calendar.svg" buttonText="{{dateRange.controls['start'].value }} -
-   {{' '+dateRange.controls['end'].value}}"></app-rounded-button>
-   <div class="calendar-container">
-    <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
-      <input style="display: none;" matStartDate formControlName="start" placeholder="Start date">
+<div class="calendar-button">
+</div>
+  <div class="rounded-calndar-button" *ngIf="dateStart && dateEnd; else noDates" (click)="picker.open()" >
+    <img class="calendar-icon" src="assets/icons/calendar.svg" alt="">
+    <span *ngIf="dateStart">{{dateStart|date:'d MMM'}}</span> - <span *ngIf="dateEnd !== 'Invalid date'">{{dateEnd| date:'d MMM'}}</span>
+  </div>
+  <ng-template #noDates>
+    <app-rounded-button (click)="picker.open()" icon="assets/icons/calendar.svg"></app-rounded-button>
+  </ng-template>
+
+   <div style="opacity: 0;" class="calendar-container">
+    <mat-date-range-input  [formGroup]="dateRange" [rangePicker]="picker">
+      <input  style="display: none;" matStartDate formControlName="start" placeholder="Start date">
       <input style="display: none;" matEndDate formControlName="end" placeholder="End date">
     </mat-date-range-input>
     <mat-date-range-picker #picker></mat-date-range-picker>

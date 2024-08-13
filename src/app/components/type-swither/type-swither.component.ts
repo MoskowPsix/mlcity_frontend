@@ -81,7 +81,6 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
     itemSecondText: HTMLElement,
   ) {
     this.switchTypeService.changeType()
-    this.render(switcher, itemFirstText, itemFirstImg, itemSecond, itemSecondImg, itemSecondText)
     setTimeout(() => {
       this.endingSwitchAnimation.emit()
     }, 300)

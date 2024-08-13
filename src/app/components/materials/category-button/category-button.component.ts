@@ -98,7 +98,6 @@ export class CategoryButtonComponent implements OnInit {
   ngOnInit() {
     this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.stateType = value
-      console.log(value)
       this.getTypes()
     })
   }

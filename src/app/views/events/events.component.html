@@ -12,7 +12,7 @@
 
             <div class="header-bottom-container" header-bottom>
                  События вокруг
-              <app-calendar-button></app-calendar-button>
+              <app-calendar-button (setDateEmit)="setDate($event)"></app-calendar-button>
             </div>
             
           </app-second-header>
