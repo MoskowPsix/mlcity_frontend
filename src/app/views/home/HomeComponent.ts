@@ -737,7 +737,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
   }
 
-  ionViewWillEnter() {}
+  ionViewWillEnter() {
+    this.renderSwitcher = !this.renderSwitcher
+  }
   async getEventsAndSights() {
     this.modalButtonLoader = true
     this.eventsModalNextPage = ''
@@ -906,7 +908,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.renderSwitcher = !this.renderSwitcher
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.eventsContentModal = []

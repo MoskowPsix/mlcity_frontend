@@ -15,13 +15,14 @@
     </div>
   </div>
 </div> -->
-<div #switcher (click)="switchType(switcher,itemfirstText,itemFirstImg,itemSecond,itemSecondImg,itemSecondText)" class="switcher">
+<div #switcher (click)="switchType(switcher,itemFirstText,itemFirstImg,itemSecond,itemSecondImg,itemSecondText)" class="switcher">
   <div class="switcher-content">
-    <div  [ngClass]="{'switcher_first': this.type === event, 'switcher_second': this.type === sight}"></div>
+    <div  [ngClass]="switcherClass"></div>
+    <!-- {'switcher_first': this.type === event, 'switcher_second': this.type === sight} -->
     
     <div #item_first class="switcher-item_first">
       <img class="fire" #itemFirstImg src="/assets/icons/fire.svg" alt="">
-      <span #itemfirstText>События</span>
+      <span #itemFirstText>События</span>
     </div>
     <div #itemSecond class="switcher-item_second">
       <img #itemSecondImg src ="/assets/icons/flag.svg" alt="">
