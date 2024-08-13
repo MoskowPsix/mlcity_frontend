@@ -132,7 +132,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   getEventsCity() {
-    
     // this.loadingMoreEventsCity ? (this.loadingEventsCity = true) : (this.loadingEventsCity = false)
     if (this.wait) {
       this.wait = false
@@ -144,7 +143,9 @@ export class EventsComponent implements OnInit, OnDestroy {
             tap((response: any) => {
               this.eventsCity.push(...response.events.data)
               console.log(this.eventsCity)
-              this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
+              response.events.next_cursor
+                ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
+                : this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
               if (response.events.next_cursor == null) {
                 this.nextPage = false
                 this.spiner = false
@@ -343,6 +344,8 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.wait = true
     this.nextPage = true
     this.notFound = false
+    this.eventsCity = []
+    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       if (value.url === '/event') {
@@ -363,8 +366,13 @@ export class EventsComponent implements OnInit, OnDestroy {
     // this.getEventsGeolocation()
 
     //Подписываемся на изменение фильтра
-    this.filterService.changeFilter.pipe(debounceTime(1), takeUntil(this.destroy$)).subscribe((value) => {
+    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
+      console.log('change')
       if (value === true) {
+        this.wait = true
+        this.nextPage = true
+        this.notFound = false
+
         this.eventsCity = []
         this.eventsGeolocation = []
         this.getEventsCity()

@@ -92,6 +92,7 @@ export class CategoryButtonComponent implements OnInit {
     let categoryId = this.currentTypes[index].id
     remove(this.selectedTypesId, (id) => id === categoryId)
     this.currentTypes.splice(index, 1)
+    console.log('удалил')
     this.setTypesToStore()
   }
 
