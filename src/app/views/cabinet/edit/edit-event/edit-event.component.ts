@@ -15,6 +15,7 @@ import { EventHistoryContent } from 'src/app/clasess/history_content/event_histo
 import { EditService } from 'src/app/services/edit.service'
 import { ToastService } from 'src/app/services/toast.service'
 import _ from 'lodash'
+import { serialize } from 'object-to-formdata'
 interface InvalidForm {
   name: boolean
   sponsor: boolean
@@ -55,6 +56,16 @@ export class EditEventComponent implements OnInit {
   submitButtonState: boolean = false
   copyEvent: any
   freeEntry: boolean = true
+  formData: FormData = new FormData()
+  options: object = {
+    indices: false,
+    nullsAsUndefineds: false,
+    booleansAsIntegers: false,
+    allowEmptyArrays: false,
+    noAttributesWithArrayNotation: false,
+    noFilesWithArrayNotation: false,
+    dotsForObjectNotation: false,
+  }
 
   invalidForm: InvalidForm = {
     name: false,
@@ -94,7 +105,6 @@ export class EditEventComponent implements OnInit {
       descriptions: '',
     })
   }
-  ngAfterViewInit(): void {}
   deletePrice(event: any) {
     if (event.id) {
       let index = this.editForm.value.price.map((e: any) => e.id).indexOf(event.id)
@@ -456,32 +466,37 @@ export class EditEventComponent implements OnInit {
       if (this.submitButtonState) {
         return
       }
-      // this.submitButtonState = true
-      // this.loadingService.showLoading()
+      this.submitButtonState = true
+      this.loadingService.showLoading()
       this.clearFormOfTempData()
-      console.log(this.editForm.value)
       let historyContent = new EventHistoryContent()
-      console.log(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
-      // this.editService
-      //   .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
-      //   .pipe(
-      //     catchError((err: any) => {
-      //       this.submitButtonState = false
-      //       this.loadingService.hideLoading()
-      //       if (err.status == 403) {
-      //         this.toastService.showToast('Событие уже находится на модерации', 'warning')
-      //       }
-      //       return of(EMPTY)
-      //     }),
-      //   )
-      //   .subscribe((res: any) => {
-      //     this.submitButtonState = false
-      //     this.loadingService.hideLoading()
-      //     if (res.status == 'success') {
-      //       this.toastService.showToast('Событие отправленно на проверку', 'success')
-      //     }
-      //     console.log(res)
-      //   })
+      let result = historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value))
+      let request = serialize(result)
+
+      this.editService
+        .sendEditEvent(request)
+        .pipe(
+          catchError((err: any) => {
+            this.submitButtonState = false
+            this.loadingService.hideLoading()
+            this.formData = new FormData()
+            if (err.status == 403) {
+              this.toastService.showToast('Событие уже находится на модерации', 'warning')
+            } else {
+              this.toastService.showToast('Что-то пошло не так', 'error')
+            }
+            return of(EMPTY)
+          }),
+        )
+        .subscribe((res: any) => {
+          this.formData = new FormData()
+          this.submitButtonState = false
+          this.loadingService.hideLoading()
+          if (res.status == 'success') {
+            this.toastService.showToast('Событие отправленно на проверку', 'success')
+          }
+          console.log(res)
+        })
     }
   }
   ngOnInit() {
