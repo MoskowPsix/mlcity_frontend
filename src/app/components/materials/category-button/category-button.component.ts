@@ -6,6 +6,8 @@ import { EventTypeService } from 'src/app/services/event-type.service'
 import { SightTypeService } from 'src/app/services/sight-type.service'
 import { remove } from 'lodash'
 import { LoadingService } from 'src/app/services/loading.service'
+import { SwitchTypeService } from 'src/app/services/switch-type.service'
+import { Subject, takeUntil } from 'rxjs'
 
 @Component({
   selector: 'app-category-button',
@@ -18,6 +20,7 @@ export class CategoryButtonComponent implements OnInit {
     private eventTypeService: EventTypeService,
     private sightTypeService: SightTypeService,
     private loadingService: LoadingService,
+    private switchTypeService: SwitchTypeService,
   ) {}
   public types!: IEventType[] | ISightType[]
   @Input() stateType!: string
@@ -25,10 +28,11 @@ export class CategoryButtonComponent implements OnInit {
   public typesString = ''
   public selectedTypesId: number[] = []
   @Input() currentTypes: IEventType[] | ISightType[] = []
+  private readonly destroy$ = new Subject<void>()
   getTypes() {
     // this.loadingService.showLoading()
     switch (this.stateType) {
-      case 'Event':
+      case 'events':
         this.eventTypeService
           .getTypes()
           .pipe()
@@ -37,7 +41,7 @@ export class CategoryButtonComponent implements OnInit {
             this.loadingService.hideLoading()
           })
         break
-      case 'Sight':
+      case 'sights':
         this.sightTypeService
           .getTypes()
           .pipe()
@@ -50,12 +54,12 @@ export class CategoryButtonComponent implements OnInit {
 
   setTypesToStore() {
     switch (this.stateType) {
-      case 'Event':
+      case 'events':
         this.filterService.setEventTypesTolocalStorage(this.selectedTypesId as unknown as number[])
         this.filterService.changeFilter.next(true)
         break
 
-      case 'Sight':
+      case 'sights':
         this.filterService.setSightTypesTolocalStorage(this.selectedTypesId as unknown as number[])
         this.filterService.changeFilter.next(true)
         break
@@ -92,6 +96,10 @@ export class CategoryButtonComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getTypes()
+    this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.stateType = value
+      console.log(value)
+      this.getTypes()
+    })
   }
 }

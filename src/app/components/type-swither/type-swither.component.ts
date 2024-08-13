@@ -10,7 +10,9 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core'
+import { Router } from '@angular/router'
 import { Console } from 'console'
+import { url } from 'inspector'
 import { Subject, takeUntil } from 'rxjs'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
 
@@ -21,7 +23,10 @@ import { SwitchTypeService } from 'src/app/services/switch-type.service'
 })
 export class TypeSwitherComponent implements OnInit, OnChanges {
   private readonly destroy$ = new Subject<void>()
-  constructor(private switchTypeService: SwitchTypeService) {}
+  constructor(
+    private switchTypeService: SwitchTypeService,
+    private router: Router,
+  ) {}
   type: string = ''
   sight: string = 'sights'
   event: string = 'events'
@@ -43,7 +48,6 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
     itemSecondImg: HTMLElement,
     itemSecondText: HTMLElement,
   ) {
-    console.log(this.switchTypeService.currentType.value)
     if (this.switchTypeService.currentType.value === this.sight) {
       this.switcherClass = 'switcher_second'
       switcher.style.width = '7rem'
@@ -78,9 +82,11 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
   ) {
     this.switchTypeService.changeType()
     this.render(switcher, itemFirstText, itemFirstImg, itemSecond, itemSecondImg, itemSecondText)
+    setTimeout(() => {
+      this.endingSwitchAnimation.emit()
+    }, 300)
   }
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log('change')
     this.render(
       this.switcher.nativeElement,
       this.itemFirstText.nativeElement,
@@ -92,8 +98,6 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
   }
   ionViewDidEnter() {}
   ngAfterViewInit() {
-    console.log('новый рендер')
-    console.log(this.type)
     this.render(
       this.switcher.nativeElement,
       this.itemFirstText.nativeElement,
@@ -105,8 +109,51 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
   }
   ngOnDestroy(): void {}
   ngOnInit() {
-    this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      this.type = value
-    })
+    if (this.router.url != '/sights') {
+      this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        this.type = value
+        if (
+          this.switcher &&
+          this.itemFirstText &&
+          this.itemFirstImg &&
+          this.itemSecond &&
+          this.itemSecondText &&
+          this.itemSecondImg
+        ) {
+          this.render(
+            this.switcher.nativeElement,
+            this.itemFirstText.nativeElement,
+            this.itemFirstImg.nativeElement,
+            this.itemSecond.nativeElement,
+            this.itemSecondImg.nativeElement,
+            this.itemSecondText.nativeElement,
+          )
+        } else {
+        }
+      })
+    } else {
+      this.switchTypeService.currentType.next(this.sight)
+      this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        this.type = value
+        if (
+          this.switcher &&
+          this.itemFirstText &&
+          this.itemFirstImg &&
+          this.itemSecond &&
+          this.itemSecondText &&
+          this.itemSecondImg
+        ) {
+          this.render(
+            this.switcher.nativeElement,
+            this.itemFirstText.nativeElement,
+            this.itemFirstImg.nativeElement,
+            this.itemSecond.nativeElement,
+            this.itemSecondImg.nativeElement,
+            this.itemSecondText.nativeElement,
+          )
+        } else {
+        }
+      })
+    }
   }
 }

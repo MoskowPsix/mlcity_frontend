@@ -1,23 +1,5 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
-  ElementRef,
-} from '@angular/core'
-import {
-  catchError,
-  delay,
-  EMPTY,
-  map,
-  of,
-  retry,
-  Subject,
-  takeUntil,
-  tap,
-  debounceTime,
-  filter,
-} from 'rxjs'
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
+import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime, filter } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { ISight } from 'src/app/models/sight'
 import { ToastService } from 'src/app/services/toast.service'
@@ -82,34 +64,30 @@ export class SightsComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private metaService: Meta,
   ) {
-    this.filterService.locationId
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.locationService
-          .getLocationsIds(value)
-          .pipe(delay(100), retry(3), takeUntil(this.destroy$))
-          .subscribe((response) => {
-            this.titleService.setTitle(
-              'Достопримечательности в городе ' + response.location.name,
-            )
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.locationService
+        .getLocationsIds(value)
+        .pipe(delay(100), retry(3), takeUntil(this.destroy$))
+        .subscribe((response) => {
+          this.titleService.setTitle('Достопримечательности в городе ' + response.location.name)
 
-            this.metaService.updateTag({
-              name: 'description',
-              content: 'Достопримечательности вашего города тут',
-            })
+          this.metaService.updateTag({
+            name: 'description',
+            content: 'Достопримечательности вашего города тут',
           })
-      })
+        })
+    })
   }
 
   scrollUp() {
     document.getElementById('topSi')?.scrollTo({ top: 0, behavior: 'smooth' })
   }
+  redirectToEvent() {
+    this.router.navigate(['/events'])
+  }
 
   getSightsCity() {
-    
-    this.loadingMoreSightsCity
-      ? (this.loadingSightsCity = true)
-      : (this.loadingSightsCity = false)
+    this.loadingMoreSightsCity ? (this.loadingSightsCity = true) : (this.loadingSightsCity = false)
 
     this.sightsService
       .getSights(this.queryBuilderService.queryBuilder('sightsForTape'))
@@ -119,15 +97,9 @@ export class SightsComponent implements OnInit, OnDestroy {
         map((respons: any) => {
           this.sightsCity.push(...respons.sights.data)
           this.filterService.setSightsCount(respons.total)
-          this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(
-            respons.sights.next_cursor,
-          )
-          respons.sights.next_cursor
-            ? (this.nextPage = true)
-            : (this.nextPage = false)
-          respons.sights.next_cursor
-            ? (this.loadTrue = true)
-            : (this.loadTrue = false)
+          this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(respons.sights.next_cursor)
+          respons.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+          respons.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
         }),
         tap(() => {
           this.loadingSightsCity = true
@@ -186,11 +158,8 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   scrollUpCheckState() {
-    const boundingClientRect =
-      this.ContentCol?.nativeElement.getBoundingClientRect()
-    boundingClientRect
-      ? (this.scrollUpState = boundingClientRect.y > 0)
-      : (this.scrollUpState = false)
+    const boundingClientRect = this.ContentCol?.nativeElement.getBoundingClientRect()
+    boundingClientRect ? (this.scrollUpState = boundingClientRect.y > 0) : (this.scrollUpState = false)
   }
 
   scrollEvent = (): void => {
@@ -198,18 +167,11 @@ export class SightsComponent implements OnInit, OnDestroy {
 
     let viewElement: boolean = false
 
-    for (
-      let i = 0;
-      i < this.widgetsContent.nativeElement.children.length;
-      i++
-    ) {
-      const boundingClientRect =
-        this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
+    for (let i = 0; i < this.widgetsContent.nativeElement.children.length; i++) {
+      const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
 
       if (
-        boundingClientRect.top >
-          (window.innerHeight - (window.innerHeight + window.innerHeight)) /
-            2 &&
+        boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight)) / 2 &&
         boundingClientRect.top < window.innerHeight / 2 &&
         !viewElement &&
         boundingClientRect.width !== 0 &&
@@ -269,17 +231,15 @@ export class SightsComponent implements OnInit, OnDestroy {
     // this.getSightsGeolocation()
 
     //Подписываемся на изменение фильтра
-    this.filterService.changeFilter
-      .pipe(debounceTime(1000), takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value === true) {
-          this.sightsCity = []
-          this.sightsGeolocation = []
-          this.getSightsCity()
-          // this.getSightsGeolocation()
-        }
-        this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
-      })
+    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
+      if (value === true) {
+        this.sightsCity = []
+        this.sightsGeolocation = []
+        this.getSightsCity()
+        // this.getSightsGeolocation()
+      }
+      this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+    })
 
     //Подписываемся на город
     // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -287,11 +247,9 @@ export class SightsComponent implements OnInit, OnDestroy {
     //     this.city = response.location.name
     //   })
     // })
-    this.filterService.sightTypes
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.sightTypeId = value[0]
-      })
+    this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      this.sightTypeId = value[0]
+    })
   }
 
   sightTypesChange(typeId: any) {
@@ -305,8 +263,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   scrollPaginate = (): void => {
-    const boundingClientRect =
-      this.ContentCol.nativeElement?.getBoundingClientRect()
+    const boundingClientRect = this.ContentCol.nativeElement?.getBoundingClientRect()
 
     if (this.testScrol == 0) {
       this.testScrol = boundingClientRect.y

@@ -298,7 +298,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   redirectToSight() {
-    console.log('цонец анимации')
     this.router.navigate(['/sights'])
   }
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
