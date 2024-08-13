@@ -11,6 +11,7 @@ app-event-type-carusel {
 
 .segments {
   background-color: #ced4e0;
+ 
 }
 
 .header-top-container{
@@ -32,10 +33,11 @@ app-event-type-carusel {
   }
 }
 .wrapper-grid{
-  margin-top: 128px;
+
 }
 .segment-box {
   animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  padding-top: 13rem;
 }
 
 .scroll-up {
