@@ -46,12 +46,11 @@ export class EventsComponent implements OnInit, OnDestroy {
   city: string = ''
   segment: string = 'eventsCitySegment'
   isFirstNavigation: any = new BehaviorSubject<boolean>(true)
-
   date: any
-
+  spiner: boolean = false
   eventsCity: IEvent[] = []
   eventsGeolocation: IEvent[] = []
-
+  wait: boolean = true
   scrollStart: any
 
   @ViewChild('cardContainer')
@@ -68,7 +67,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   currentPageEventsCity: number = 1
   currentPageEventsGeolocation: number = 1
 
-  nextPage: boolean = false
+  nextPage: boolean = true
 
   timeStart: number = 0
   timeEnd: number = 0
@@ -85,7 +84,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   sightTypeId: any
 
   testScrol: any = 0
-  notFound!: boolean
+  notFound: boolean = false
   scrollUpState: boolean = true
 
   platformType: any = Capacitor.getPlatform()
@@ -133,33 +132,88 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   getEventsCity() {
-    this.loadingMoreEventsCity ? (this.loadingEventsCity = true) : (this.loadingEventsCity = false)
+    
+    // this.loadingMoreEventsCity ? (this.loadingEventsCity = true) : (this.loadingEventsCity = false)
+    if (this.wait) {
+      this.wait = false
+      if (this.nextPage) {
+        this.spiner = true
+        this.eventsService
+          .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
+          .pipe(
+            tap((response: any) => {
+              this.eventsCity.push(...response.events.data)
+              console.log(this.eventsCity)
+              this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
+              if (response.events.next_cursor == null) {
+                this.nextPage = false
+                this.spiner = false
+              } else {
+                this.nextPage = true
+                this.spiner = false
+              }
+            }),
+            catchError((err) => {
+              this.toastService.showToast(MessagesErrors.default, 'danger')
+              this.loadingEventsCity = false
+              return of(EMPTY)
+            }),
+            takeUntil(this.destroy$),
+          )
+          .subscribe((response: any) => {
+            if (this.eventsCity.length === 0) {
+              this.notFound = true
+            }
+            this.wait = true
+            this.spiner = false
+          })
+      } else {
+        this.spiner = false
+      }
+    }
 
-    this.eventsService
-      .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
-      .pipe(
-        delay(100),
-        retry(3),
-        map((response: any) => {
-          this.eventsCity.push(...response.events.data)
-
-          this.filterService.setEventsCount(response.events.total)
-          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
-          response.events.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
-          response.events.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
-        }),
-        tap(() => {
-          this.loadingEventsCity = true
-          this.loadingMoreEventsCity = false
-        }),
-        catchError((err) => {
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          this.loadingEventsCity = false
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(() => {})
+    // this.loadingMoreEventsCity ? (this.loadingEventsCity = true) : (this.loadingEventsCity = false)
+    // this.spiner = true
+    // if (this.wait && this.nextPage) {
+    //   this.wait = false
+    //   console.log('request')
+    //   this.eventsService
+    //     .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
+    //     .pipe(
+    //       delay(100),
+    //       retry(3),
+    //       map((response: any) => {
+    //         this.eventsCity.push(...response.events.data)
+    //         this.wait = true
+    //         this.filterService.setEventsCount(response.events.total)
+    //         console.log(response.events.next_cursor)
+    //         this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
+    //         this.spiner = false
+    //         if (response.events.next_cursor == null) {
+    //           this.nextPage = false
+    //           this.spiner = false
+    //         } else {
+    //           this.nextPage = true
+    //           this.spiner = false
+    //           console.log(this.spiner)
+    //         }
+    //       }),
+    //       tap(() => {
+    //         this.loadingEventsCity = true
+    //         this.loadingMoreEventsCity = false
+    //         if (this.eventsCity.length == 0) {
+    //           this.notFound = true
+    //         }
+    //       }),
+    //       catchError((err) => {
+    //         this.toastService.showToast(MessagesErrors.default, 'danger')
+    //         this.loadingEventsCity = false
+    //         return of(EMPTY)
+    //       }),
+    //       takeUntil(this.destroy$),
+    //     )
+    //     .subscribe(() => {})
+    // }
   }
 
   // getEventsGeolocation(){
@@ -205,48 +259,42 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   scrollEvent = (): void => {
-    this.scrollUpCheckState()
-    let viewElement: boolean = false
-
-    for (let i = 0; i < this.widgetsContent.nativeElement.children.length; i++) {
-      const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
-
-      if (
-        boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight)) / 2 &&
-        boundingClientRect.top < window.innerHeight / 2 &&
-        !viewElement &&
-        boundingClientRect.width !== 0 &&
-        boundingClientRect.width !== 0
-      ) {
-        this.viewId.push(this.widgetsContent.nativeElement.children[i].id)
-
-        if (this.timeStart == 0) {
-          this.timeStart = new Date().getTime()
-        } else {
-          let time = (new Date().getTime() - this.timeStart) / 1000
-
-          if (time >= 3.14) {
-            let id = this.viewId[this.viewId.length - 2]
-            this.eventsService
-              .addView(id, time)
-              .pipe(
-                delay(100),
-                retry(1),
-                catchError((err) => {
-                  return of(EMPTY)
-                }),
-                takeUntil(this.destroy$),
-              )
-              .subscribe()
-          }
-
-          this.timeStart = 0
-
-          this.timerReload()
-        }
-      }
-    }
-    viewElement = true
+    // this.scrollUpCheckState()
+    // let viewElement: boolean = false
+    // for (let i = 0; i < this.widgetsContent.nativeElement.children.length; i++) {
+    //   const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
+    //   if (
+    //     boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight)) / 2 &&
+    //     boundingClientRect.top < window.innerHeight / 2 &&
+    //     !viewElement &&
+    //     boundingClientRect.width !== 0 &&
+    //     boundingClientRect.width !== 0
+    //   ) {
+    //     this.viewId.push(this.widgetsContent.nativeElement.children[i].id)
+    //     if (this.timeStart == 0) {
+    //       this.timeStart = new Date().getTime()
+    //     } else {
+    //       let time = (new Date().getTime() - this.timeStart) / 1000
+    //       if (time >= 3.14) {
+    //         let id = this.viewId[this.viewId.length - 2]
+    //         this.eventsService
+    //           .addView(id, time)
+    //           .pipe(
+    //             delay(100),
+    //             retry(1),
+    //             catchError((err) => {
+    //               return of(EMPTY)
+    //             }),
+    //             takeUntil(this.destroy$),
+    //           )
+    //           .subscribe()
+    //       }
+    //       this.timeStart = 0
+    //       this.timerReload()
+    //     }
+    //   }
+    // }
+    // viewElement = true
   }
 
   carusel(status: string) {
@@ -282,30 +330,19 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.headerWrapper.nativeElement.style.transform = 'translateY(-150%)'
     } else {
     }
-
     this.testScrol = boundingClientRect.y
-
-    // console.log(this.ContentCol.nativeElement.getBoundingClientRect().bottom, window.innerHeight)
-    // if (
-    //   boundingClientRect.bottom <= window.innerHeight * 2 &&
-    //   !(boundingClientRect.bottom <= window.innerHeight) &&
-    //   this.eventsCity &&
-    //   this.loadTrue
-    // ) {
-    //   this.loadTrue = false
-    //   this.eventsCityLoadingMore()
-    // }
   }
 
   redirectToSight() {
     this.router.navigate(['/sights'])
   }
-  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
-  ngAfterViewInit() {
-    this.scrollStart = this.ContentCol.nativeElement?.getBoundingClientRect()
-    this.ContentCol.nativeElement.addEventListener('scroll', this.scrollPaginate, true)
-  }
-  ngOnInit() {
+
+  ngAfterViewInit() {}
+  ngOnInit() {}
+  ionViewWillEnter() {
+    this.wait = true
+    this.nextPage = true
+    this.notFound = false
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       if (value.url === '/event') {
@@ -326,7 +363,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     // this.getEventsGeolocation()
 
     //Подписываемся на изменение фильтра
-    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
+    this.filterService.changeFilter.pipe(debounceTime(1), takeUntil(this.destroy$)).subscribe((value) => {
       if (value === true) {
         this.eventsCity = []
         this.eventsGeolocation = []
@@ -345,10 +382,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.eventTypeId = value[0]
     })
-
-    // console.log(this.cardContainer)
   }
-
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()

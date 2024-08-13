@@ -32,14 +32,18 @@ app-event-type-carusel {
     padding-right: 5px;
   }
 }
-.wrapper-grid{
 
-}
 .segment-box {
   animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   padding-top: 13rem;
 }
 
+.grid-wrapper{
+  padding-top: 13rem;
+}
+.main-grid-load{
+  overflow-y: hidden;
+}
 .scroll-up {
   position: fixed;
   bottom: 4rem;

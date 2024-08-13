@@ -1,24 +1,25 @@
-<ion-content id="topEv" #lentEvent 
-[scrollEvents]="true"
-(ionScroll)="scrollPaginate()"
->
-        <div class="carusel-wrapper_flex" #headerWrapper>
-          <app-second-header size="xxl" img="/assets/images/tape.png">
-            <div class="header-top-container" header-top>
-              <app-type-swither (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
-              <app-category-button stateType="Event"></app-category-button>
-            </div>
-
-            <div class="header-bottom-container" header-bottom>
-                 События вокруг
-              <app-calendar-button (setDateEmit)="setDate($event)"></app-calendar-button>
-            </div>
-            
-          </app-second-header>
-         
+<ion-content id="topEv" #lentEvent [scrollEvents]="true"(ionScroll)="scrollPaginate()">
+        <div  #ContentCol>
+          <div class="carusel-wrapper_flex" #headerWrapper>
+            <app-second-header size="xxl" img="/assets/images/tape.png">
+              <div class="header-top-container" header-top>
+                <app-type-swither (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
+                <app-category-button stateType="Event"></app-category-button>
+              </div>
+              <div class="header-bottom-container" header-bottom>
+                   События вокруг
+                <app-calendar-button (setDateEmit)="setDate($event)"></app-calendar-button>
+              </div>
+            </app-second-header>
+          </div>
+          
+          <div class="grid-wrapper">
+            <app-card-grid [notFound]="notFound" [spiner]="spiner" [cards]="eventsCity" (endScroll)="getEventsCity()"></app-card-grid>
+          </div>
+        
         </div>
    
-    <ion-row class="ion-justify-content-center" style="padding-top: var(--ion-safe-area-top,0);">
+    <!-- <ion-row class="ion-justify-content-center" style="padding-top: var(--ion-safe-area-top,0);">
         <ion-col size-lg="10" size-md="12" size-xs="12">
           <div class="segment-box" #ContentCol>
               <div class="wrapper-grid">
@@ -39,6 +40,6 @@
 
     <a routerLink="." fragment="header-anchor" class="scroll-up" [hidden]="scrollUpState" (click)="scrollUp()">
         <ion-icon size="large" name="chevron-up"></ion-icon>
-    </a>
+    </a> -->
 
 </ion-content>
