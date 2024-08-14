@@ -18,20 +18,12 @@
       }"
     >
     <ya-clusterer [options]="clustererOptions">
-      <!-- <ya-placemark
-      *ngFor="let placemark of placemarks"
-      [geometry]="placemark.geometry"
-        [properties]="placemark.properties"
-        [options]="placemark.options"
-      >
-
-      </ya-placemark> -->
     </ya-clusterer>
     </ya-map>
   </div>
 
   <!-- Управление картой -->
-  <div >
+  <div>
 
     <!-- Фильтры для ивентов -->
     <div class="calendula-container" #calendula>
@@ -39,24 +31,10 @@
           <app-type-swither></app-type-swither>
           <app-category-button stateType="Event"></app-category-button>
       </app-second-header>
-     <!-- <ion-toolbar class="type-wrapper_toolbar">
-      <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
-      <app-event-type-carusel *ngIf="stateType !== 'sights'" (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
-     </ion-toolbar>
-     <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType === 'sights'"></ion-progress-bar>
-      <div #calendulaWrapper class="calendula-wrapper">
-        <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
-      </div>
-      <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType !== 'sights'"></ion-progress-bar> -->
-
     </div>
 
-    <!-- Фильтры для мест -->
-    <div class="sight-carusel-container">
 
-    </div>
-
-    <!-- Лоадер карты -->
+  
 
     <!-- Кнопка геопозиции -->
     <div class="geo-container">
@@ -65,9 +43,6 @@
        [iconsPathArray]="['assets/icons/map-button.svg','assets/icons/geo-button.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']"
       (emmitter)="dropButton($event)">
       </app-drop-down-button>
-      <!-- <div class="geo-button-container" (click)="getGeoPosition()">
-        <ion-icon class="geo-button" color="primary" name="locate-outline" size="large"></ion-icon>
-      </div> -->
     </div>
 
     <!-- Фильтр радиуса -->
@@ -145,17 +120,4 @@
 
  <!-- Выбор отображения на карте -->
 
- <div (click)="openModalSwitcher()" class="container-swither">
-  <app-type-swither [redirect]="renderSwitcher"></app-type-swither>
-  <!-- <div class="swither" (click)="onSegmentChanged(event, 1)" (click)="setTypeState('events')" (click)="changeTypeState()" #event>
-    <div class="{{modalSwitcherTextClass}}">События</div>
-    <ion-icon name="balloon" style="min-width: 28px; min-height: 28px" class="swither-icon" color="primary"></ion-icon>
 
-    <img src="/assets/icons/TablerTicket.svg" class="swither-icon">
-  </div>
-  <div class="swither-bg" #buttonActive></div>
-  <div class="swither" (click)="onSegmentChanged(sight, 2)" (click)="setTypeState('sights')" (click)="changeTypeState()" #sight>
-    <div class="{{modalSwitcherTextClass}}">Места</div>
-    <img src="/assets/icons/MakiMuseum.svg" class="swither-icon">
-  </div> -->
-</div>
