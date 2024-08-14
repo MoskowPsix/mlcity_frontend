@@ -74,16 +74,46 @@ export class CategoryButtonComponent implements OnInit {
   // }
 
   openModalFnc() {
+    let storageFilterId: any
     switch (this.stateType) {
       case 'events':
-        if (this.types && this.types.events.length > 0) {
+        storageFilterId = this.filterService.getEventTypesFromlocalStorage()?.split(',')
+        if (this.types && this.types.events?.length) {
+          if (storageFilterId[0].length) {
+            storageFilterId.forEach((id: any) => {
+              let index = this.types.events.map((type: any) => type.id).indexOf(Number(id))
+              if (!this.currentTypes.includes(this.types.events[index])) {
+                this.currentTypes.push(this.types.events[index])
+              }
+
+              if (!this.selectedTypesId.includes(Number(id))) {
+                this.selectedTypesId.push(Number(id))
+              }
+            })
+            console.log(this.currentTypes)
+            console.log(this.selectedTypesId)
+          }
+
           this.typesForType = this.types.events
           this.openModal = true
         }
         break
 
       case 'sights':
+        storageFilterId = this.filterService.getSightTypesFromlocalStorage()?.split(',')
         if (this.types && this.types.sights.length > 0) {
+          if (storageFilterId[0].length) {
+            console.log(storageFilterId)
+            storageFilterId.forEach((id: any) => {
+              let index = this.types.sights.map((type: any) => type.id).indexOf(Number(id))
+              if (!this.currentTypes.includes(this.types.sights[index])) {
+                this.currentTypes.push(this.types.sights[index])
+              }
+              if (!this.selectedTypesId.includes(Number(id))) {
+                this.selectedTypesId.push(Number(id))
+              }
+            })
+          }
           this.typesForType = this.types.sights
           this.openModal = true
         }
@@ -96,7 +126,7 @@ export class CategoryButtonComponent implements OnInit {
   addCaategory(category: any) {
     this.currentTypes.push(category)
     this.selectedTypesId.push(category.id)
-
+    console.log(this.selectedTypesId)
     this.setTypesToStore()
   }
   deleteCaategory(index: any) {

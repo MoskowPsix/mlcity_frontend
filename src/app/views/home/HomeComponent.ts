@@ -737,9 +737,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
   }
 
-  ionViewWillEnter() {
-    this.renderSwitcher = !this.renderSwitcher
-  }
   async getEventsAndSights() {
     this.modalButtonLoader = true
     this.eventsModalNextPage = ''
@@ -910,8 +907,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }, 300)
     }
   }
-
-  ngOnInit(): void {
+  ionViewWillEnter() {
+    this.renderSwitcher = !this.renderSwitcher
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.eventsContentModal = []
@@ -977,6 +974,73 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.setTypeState(value)
     })
     window.addEventListener('scroll', this.nextPageModal, true)
+  }
+  ngOnInit(): void {}
+  //Подписываемся на изменение радиуса
+  // this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+  //   this.eventsContentModal = []
+  //   this.sightsContentModal = []
+  //   this.radius = parseInt(value)
+  //   if (this.map && this.map.target)
+  //     this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
+  //       checkZoomRange: true,
+  //     })
+  // })
+  // //Подписываемся на состояние модалки показа ивентов и мест
+  // this.navigationService.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+  //   this.modalEventShowOpen = value
+  //   if (!value && this.activePlacemark) {
+  //     // убираем активный класс у кастомного маркера при закрытие модалки
+  //     this.activePlacemark.options.set(
+  //       'iconContentLayout',
+  //       ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${this.activeIcoLink}"/></div>`),
+  //     )
+  //     this.setMapData()
+  //   }
+  //   if (!value && this.activeClaster) {
+  //     // убираем активный класс у кластера при закрытие модалки
+  //     this.activeClaster.options.set('preset')
+  //     this.setMapData()
+  //   }
+  //   this.cdr.detectChanges()
+  // })
+  // this.navigationService.modalEventRadiusShowOpen.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+  //   this.modalEventRadiusShowOpen = value
+  //   this.cdr.detectChanges()
+  // })
+  // //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
+  // this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+  //   if (value === true) {
+  //     this.eventsContentModal = []
+  //     this.sightsContentModal = []
+  //     this.mapService.positionFilter(this.map, this.CirclePoint)
+  //     if (this.filterService.locationLatitude && this.filterService.locationLongitude) {
+  //       this.getEventsAndSights()
+  //     }
+  //     this.loadingService.hideLoading()
+  //   }
+  // })
+  // this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+  //   this.eventsContentModal = []
+  //   this.sightsContentModal = []
+  //   this.sightTypeId = value[0]
+  // })
+  // this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+  //   this.eventsContentModal = []
+  //   this.sightsContentModal = []
+  //   this.eventTypeId = value[0]
+  // })
+  // this.switchTypeService.currentType.pipe().subscribe((value: string) => {
+  //   let color = value === 'sights' ? '#3880FF' : '#f7ab31'
+  //   this.CirclePoint?.options.set('fillColor', color)
+  //   this.CirclePoint?.options.set('strokeColor', color)
+  //   this.setTypeState(value)
+  // })
+  // window.addEventListener('scroll', this.nextPageModal, true)
+
+  ionViewDidLeave() {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
