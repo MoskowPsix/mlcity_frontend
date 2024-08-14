@@ -28,7 +28,8 @@ export class SightsComponent implements OnInit, OnDestroy {
 
   sightsCity: ISight[] = []
   sightsGeolocation: ISight[] = []
-
+  spiner: boolean = false
+  notFound: boolean = false
   loadingSightsCity: boolean = false
   loadingSightsGeolocation: boolean = false
 
@@ -87,32 +88,46 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   getSightsCity() {
-    this.loadingMoreSightsCity ? (this.loadingSightsCity = true) : (this.loadingSightsCity = false)
-
-    this.sightsService
-      .getSights(this.queryBuilderService.queryBuilder('sightsForTape'))
-      .pipe(
-        delay(100),
-        retry(3),
-        map((respons: any) => {
-          this.sightsCity.push(...respons.sights.data)
-          this.filterService.setSightsCount(respons.total)
-          this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(respons.sights.next_cursor)
-          respons.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
-          respons.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
-        }),
-        tap(() => {
-          this.loadingSightsCity = true
-          this.loadingMoreSightsCity = false
-        }),
-        catchError((err) => {
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          this.loadingSightsCity = false
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe()
+    // this.loadingMoreSightsCity ? (this.loadingSightsCity = true) : (this.loadingSightsCity = false)
+    this.spiner = true
+    this.notFound = false
+    if (this.nextPage) {
+      this.sightsService
+        .getSights(this.queryBuilderService.queryBuilder('sightsForTape'))
+        .pipe(
+          delay(100),
+          retry(3),
+          map((respons: any) => {
+            this.sightsCity.push(...respons.sights.data)
+            this.filterService.setSightsCount(respons.total)
+            this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(respons.sights.next_cursor)
+            respons.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+            respons.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
+          }),
+          tap((respons: any) => {
+            this.loadingSightsCity = true
+            this.loadingMoreSightsCity = false
+            if (this.nextPage == null) {
+              this.spiner = false
+            } else {
+              this.spiner = false
+            }
+          }),
+          catchError((err) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            this.loadingSightsCity = false
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe(() => {
+          if (this.sightsCity.length === 0) {
+            this.notFound = true
+          }
+        })
+    } else {
+      this.spiner = false
+    }
   }
 
   // getSightsGeolocation(){
@@ -212,45 +227,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     this.timeStart = new Date().getTime()
   }
 
-  ngOnInit() {
-    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    //   this.locationService.getLocationsIds(value).pipe(
-    //     delay(100),
-    //     retry(3),
-    //     takeUntil(this.destroy$)
-    //     ).subscribe((response) => {
-    //       console.log(response)
-    //       this.titleService.setTitle("Мероприятия в " + response.location.name)
-    //     })
-    // })
-    window.addEventListener('scroll', this.scrollPaginate, true)
-    window.addEventListener('scrollend', this.scrollEvent, true)
-    this.sightsCity = []
-    this.sightsGeolocation = []
-    this.getSightsCity()
-    // this.getSightsGeolocation()
-
-    //Подписываемся на изменение фильтра
-    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
-      if (value === true) {
-        this.sightsCity = []
-        this.sightsGeolocation = []
-        this.getSightsCity()
-        // this.getSightsGeolocation()
-      }
-      this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
-    })
-
-    //Подписываемся на город
-    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-    //     this.city = response.location.name
-    //   })
-    // })
-    this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
-      this.sightTypeId = value[0]
-    })
-  }
+  ngOnInit() {}
 
   sightTypesChange(typeId: any) {
     if (typeId !== 'all') {
@@ -289,6 +266,29 @@ export class SightsComponent implements OnInit, OnDestroy {
     }
   }
 
+  ionViewWillEnter() {
+    window.addEventListener('scroll', this.scrollPaginate, true)
+    window.addEventListener('scrollend', this.scrollEvent, true)
+    this.sightsCity = []
+    this.sightsGeolocation = []
+    this.nextPage = true
+    this.notFound = false
+    //Подписываемся на изменение фильтра
+    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
+      if (value === true) {
+        this.sightsCity = []
+        this.sightsGeolocation = []
+        this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next('')
+        this.nextPage = true
+        this.notFound = false
+        this.getSightsCity()
+      }
+      this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+    })
+    this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      this.sightTypeId = value[0]
+    })
+  }
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()
