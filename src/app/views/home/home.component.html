@@ -32,9 +32,11 @@
           <app-category-button stateType="Event"></app-category-button>
       </app-second-header>
     </div>
-
-
-  
+    <div class="map-tools">
+        <app-calendar-button *ngIf="stateType === 'events'" (setDateEmit)="setDate($event)"></app-calendar-button>
+        <app-calendar-button style="opacity: 0; pointer-events: none;" *ngIf="stateType === 'sights'" (setDateEmit)="setDate($event)"></app-calendar-button>
+        <app-range-selection-button/>
+    </div>
 
     <!-- Кнопка геопозиции -->
     <div class="geo-container">
@@ -112,12 +114,6 @@
 </ion-content>
 
 <!-- Шкала радиуса -->
-<div class="">
-  <div class="range-selection">
-    <app-range-selection-button/>
-  </div>
-</div>
 
  <!-- Выбор отображения на карте -->
-
 

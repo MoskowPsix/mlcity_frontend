@@ -15,12 +15,21 @@
 .range-radius-main_2 ngx-slider {
   max-height: 80%;
 }
+.map-tools{
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  top:clamp(5rem, -0.051rem + 16.16vw, 9rem);
+}
 
 .range-selection {
   position: absolute;
   right: 0;
   padding-right: 1.5rem;
-  top: 9vh;
+  top:clamp(5rem, -0.051rem + 16.16vw, 9rem);
 }
 
 .calendula-wrapper {
