@@ -35,14 +35,9 @@
 
     <!-- Фильтры для ивентов -->
     <div class="calendula-container" #calendula>
-      <app-second-header size="xxl" img="/assets/images/tapeSights.png">
-        <div class="header-top-container" header-top>
+      <app-second-header size="">
           <app-type-swither></app-type-swither>
           <app-category-button stateType="Event"></app-category-button>
-        </div>
-        <div class="header-bottom-container" header-bottom>
-             Места и сообщества
-        </div>
       </app-second-header>
      <!-- <ion-toolbar class="type-wrapper_toolbar">
       <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
