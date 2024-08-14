@@ -747,7 +747,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.eventsContentModal = []
     this.sightsContentModal = []
     const sources: any[] = []
-    if (this.stateType == 'events') {
+    if (
+      this.stateType == 'events' &&
+      this.mapService.circleCenterLongitude.value &&
+      this.mapService.circleCenterLatitude.value
+    ) {
       sources.push(this.getPlaces())
     } else if (this.stateType == 'sights') {
       sources.push(this.getSightsForMap())
@@ -949,8 +953,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.eventsContentModal = []
         this.sightsContentModal = []
         this.mapService.positionFilter(this.map, this.CirclePoint)
-
-        this.getEventsAndSights()
+        if (this.filterService.locationLatitude && this.filterService.locationLongitude) {
+          this.getEventsAndSights()
+        }
         this.loadingService.hideLoading()
       }
     })
@@ -967,8 +972,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.switchTypeService.currentType.pipe().subscribe((value: string) => {
       let color = value === 'sights' ? '#3880FF' : '#f7ab31'
-      this.CirclePoint.options.set('fillColor', color)
-      this.CirclePoint.options.set('strokeColor', color)
+      this.CirclePoint?.options.set('fillColor', color)
+      this.CirclePoint?.options.set('strokeColor', color)
       this.setTypeState(value)
     })
     window.addEventListener('scroll', this.nextPageModal, true)

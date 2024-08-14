@@ -22,7 +22,11 @@ export class CategoryButtonComponent implements OnInit {
     private loadingService: LoadingService,
     private switchTypeService: SwitchTypeService,
   ) {}
-  public types!: IEventType[] | ISightType[]
+  public types: any = {
+    events: [],
+    sights: [],
+  }
+  public typesForType: any
   @Input() stateType!: string
   public openModal!: boolean
   public typesString = ''
@@ -30,26 +34,21 @@ export class CategoryButtonComponent implements OnInit {
   @Input() currentTypes: IEventType[] | ISightType[] = []
   private readonly destroy$ = new Subject<void>()
   getTypes() {
-    // this.loadingService.showLoading()
-    switch (this.stateType) {
-      case 'events':
-        this.eventTypeService
-          .getTypes()
-          .pipe()
-          .subscribe((response) => {
-            this.types = response.types
-            this.loadingService.hideLoading()
-          })
-        break
-      case 'sights':
-        this.sightTypeService
-          .getTypes()
-          .pipe()
-          .subscribe((response) => {
-            this.types = response.types
-            this.loadingService.hideLoading()
-          })
-    }
+    this.loadingService.showLoading()
+    this.eventTypeService
+      .getTypes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response) => {
+        this.types.events = response.types
+      })
+    this.sightTypeService
+      .getTypes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response) => {
+        console.log(this.types)
+        this.types.sights = response.types
+        this.loadingService.hideLoading()
+      })
   }
 
   setTypesToStore() {
@@ -75,8 +74,20 @@ export class CategoryButtonComponent implements OnInit {
   // }
 
   openModalFnc() {
-    if (this.types && this.types.length > 0) {
-      this.openModal = true
+    switch (this.stateType) {
+      case 'events':
+        if (this.types && this.types.events.length > 0) {
+          this.typesForType = this.types.events
+          this.openModal = true
+        }
+        break
+
+      case 'sights':
+        if (this.types && this.types.sights.length > 0) {
+          this.typesForType = this.types.sights
+          this.openModal = true
+        }
+        break
     }
   }
   closeModal() {
@@ -97,9 +108,9 @@ export class CategoryButtonComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getTypes()
     this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.stateType = value
-      this.getTypes()
     })
   }
 }

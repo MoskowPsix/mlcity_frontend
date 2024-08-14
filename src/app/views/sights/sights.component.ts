@@ -155,10 +155,10 @@ export class SightsComponent implements OnInit, OnDestroy {
   // }
 
   sightsCityLoadingMore() {
-    this.loadingMoreSightsCity = true
-    this.currentPageSightsCity++
-    // this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(this.currentPageSightsCity)
-    this.getSightsCity()
+    // this.loadingMoreSightsCity = true
+    // this.currentPageSightsCity++
+    // // this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(this.currentPageSightsCity)
+    // this.getSightsCity()
   }
 
   // sightsGeolocationLoadingMore(){
@@ -271,6 +271,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     window.addEventListener('scrollend', this.scrollEvent, true)
     this.sightsCity = []
     this.sightsGeolocation = []
+    this.filterService.setSightTypesTolocalStorage([])
     this.nextPage = true
     this.notFound = false
     //Подписываемся на изменение фильтра
@@ -288,6 +289,9 @@ export class SightsComponent implements OnInit, OnDestroy {
     this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.sightTypeId = value[0]
     })
+  }
+  ionViewDidLeave() {
+    this.destroy$.next()
   }
   ngOnDestroy() {
     // отписываемся от всех подписок

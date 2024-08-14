@@ -142,7 +142,6 @@ export class EventsComponent implements OnInit, OnDestroy {
           .pipe(
             tap((response: any) => {
               this.eventsCity.push(...response.events.data)
-              console.log(this.eventsCity)
               response.events.next_cursor
                 ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
                 : this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
@@ -172,88 +171,13 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.spiner = false
       }
     }
-
-    // this.loadingMoreEventsCity ? (this.loadingEventsCity = true) : (this.loadingEventsCity = false)
-    // this.spiner = true
-    // if (this.wait && this.nextPage) {
-    //   this.wait = false
-    //   console.log('request')
-    //   this.eventsService
-    //     .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
-    //     .pipe(
-    //       delay(100),
-    //       retry(3),
-    //       map((response: any) => {
-    //         this.eventsCity.push(...response.events.data)
-    //         this.wait = true
-    //         this.filterService.setEventsCount(response.events.total)
-    //         console.log(response.events.next_cursor)
-    //         this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
-    //         this.spiner = false
-    //         if (response.events.next_cursor == null) {
-    //           this.nextPage = false
-    //           this.spiner = false
-    //         } else {
-    //           this.nextPage = true
-    //           this.spiner = false
-    //           console.log(this.spiner)
-    //         }
-    //       }),
-    //       tap(() => {
-    //         this.loadingEventsCity = true
-    //         this.loadingMoreEventsCity = false
-    //         if (this.eventsCity.length == 0) {
-    //           this.notFound = true
-    //         }
-    //       }),
-    //       catchError((err) => {
-    //         this.toastService.showToast(MessagesErrors.default, 'danger')
-    //         this.loadingEventsCity = false
-    //         return of(EMPTY)
-    //       }),
-    //       takeUntil(this.destroy$),
-    //     )
-    //     .subscribe(() => {})
-    // }
   }
-
-  // getEventsGeolocation(){
-  //   this.loadingMoreEventsGeolocation ? this.loadingEventsGeolocation = true : this.loadingEventsGeolocation = false
-
-  //   this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsPublicForGeolocationTab')).pipe(
-  //     delay(100),
-  //     retry(3),
-  //     map((respons:any) => {
-  //       this.eventsGeolocation.push(...respons.events.data)
-  //       this.totalPagesEventsGeolocation = respons.events.last_page
-  //       //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
-  //     }),
-  //     tap(() => {
-  //       this.loadingEventsGeolocation = true
-  //       this.loadingMoreEventsGeolocation = false
-  //     }),
-  //     catchError((err) =>{
-  //       this.toastService.showToast(MessagesErrors.default, 'danger')
-  //       this.loadingEventsGeolocation = false
-  //       return of(EMPTY)
-  //     }),
-  //     takeUntil(this.destroy$)
-  //   ).subscribe()
-  // }
 
   eventsCityLoadingMore() {
     this.loadingMoreEventsCity = true
     this.currentPageEventsCity++
-    // this.queryBuilderService.paginationPublicEventsCityCurrentPage.next(this.currentPageEventsCity)
     this.getEventsCity()
   }
-
-  // eventsGeolocationLoadingMore(){
-  //   this.loadingMoreEventsGeolocation = true
-  //   this.currentPageEventsGeolocation++
-  //   this.queryBuilderService.paginationPublicEventsGeolocationCurrentPage.next(this.currentPageEventsGeolocation)
-  //   this.getEventsGeolocation()
-  // }
 
   onSegmentChanged(event: any) {
     this.segment = event.detail.value
@@ -367,12 +291,11 @@ export class EventsComponent implements OnInit, OnDestroy {
 
     //Подписываемся на изменение фильтра
     this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
-      console.log('change')
       if (value === true) {
         this.wait = true
         this.nextPage = true
         this.notFound = false
-
+        this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
         this.eventsCity = []
         this.eventsGeolocation = []
         this.getEventsCity()
@@ -390,6 +313,9 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.eventTypeId = value[0]
     })
+  }
+  ionViewDidLeave() {
+    this.destroy$.next()
   }
   ngOnDestroy() {
     // отписываемся от всех подписок

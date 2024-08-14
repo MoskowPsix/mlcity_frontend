@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms'
 import { NativeDateAdapter, MatDateFormats, MAT_DATE_LOCALE } from '@angular/material/core'
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core'
 import moment from 'moment'
+import { Subject, takeUntil } from 'rxjs'
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -26,6 +27,7 @@ export class CalendarButtonComponent implements OnInit {
   openModal: boolean = true
   dateStart: any
   dateEnd: any
+  private readonly destroy$ = new Subject<void>()
   constructor() {}
 
   dateRange = new FormGroup({
@@ -38,10 +40,10 @@ export class CalendarButtonComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dateRange.valueChanges.subscribe((values) => {
+    this.dateRange.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((values) => {
       this.dateStart = moment(values.start).format('MM/DD/YYYY')
       this.dateEnd = moment(values.end).format('MM/DD/YYYY')
-      console.log()
+
       if (this.dateEnd !== 'Invalid date') {
         this.setDateEmit.emit({
           dateStart: moment(values.start).format('MM-DD-YYYY'),

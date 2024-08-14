@@ -60,17 +60,17 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
       itemSecondText.style.opacity = '1'
     } else if (this.switchTypeService.currentType.value === this.event) {
       this.switcherClass = 'switcher_first'
-      itemSecondText.style.opacity = '0'
-      switcher.style.width = '8rem'
-      itemFirstImg.classList.remove('fire_non-active')
-      itemSecond.style.transform = 'translate(0rem)'
-      itemFirstText.style.opacity = '1'
+      itemSecondText ? (itemSecondText.style.opacity = '0') : null
+      switcher ? (switcher.style.width = '8rem') : null
+      itemFirstImg ? itemFirstImg.classList.remove('fire_non-active') : null
+      itemSecond ? (itemSecond.style.transform = 'translate(0rem)') : null
+      itemFirstText ? (itemFirstText.style.opacity = '1') : null
 
       setTimeout(() => {
-        itemFirstText.style.transform = 'translate(0rem)'
+        itemFirstText ? (itemFirstText.style.transform = 'translate(0rem)') : null
       }, 100)
 
-      itemSecondImg.classList.remove('flag_active')
+      itemSecondImg ? itemSecondImg.classList.remove('flag_active') : null
     }
   }
   switchType(
@@ -92,23 +92,23 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.render(
-      this.switcher.nativeElement,
-      this.itemFirstText.nativeElement,
-      this.itemFirstImg.nativeElement,
-      this.itemSecond.nativeElement,
-      this.itemSecondImg.nativeElement,
-      this.itemSecondText.nativeElement,
+      this.switcher?.nativeElement,
+      this.itemFirstText?.nativeElement,
+      this.itemFirstImg?.nativeElement,
+      this.itemSecond?.nativeElement,
+      this.itemSecondImg?.nativeElement,
+      this.itemSecondText?.nativeElement,
     )
   }
   ionViewDidEnter() {}
   ngAfterViewInit() {
     this.render(
-      this.switcher.nativeElement,
-      this.itemFirstText.nativeElement,
-      this.itemFirstImg.nativeElement,
-      this.itemSecond.nativeElement,
-      this.itemSecondImg.nativeElement,
-      this.itemSecondText.nativeElement,
+      this.switcher?.nativeElement,
+      this.itemFirstText?.nativeElement,
+      this.itemFirstImg?.nativeElement,
+      this.itemSecond?.nativeElement,
+      this.itemSecondImg?.nativeElement,
+      this.itemSecondText?.nativeElement,
     )
   }
   ngOnDestroy(): void {}

@@ -35,7 +35,16 @@
 
     <!-- Фильтры для ивентов -->
     <div class="calendula-container" #calendula>
-     <ion-toolbar class="type-wrapper_toolbar">
+      <app-second-header size="xxl" img="/assets/images/tapeSights.png">
+        <div class="header-top-container" header-top>
+          <app-type-swither></app-type-swither>
+          <app-category-button stateType="Event"></app-category-button>
+        </div>
+        <div class="header-bottom-container" header-bottom>
+             Места и сообщества
+        </div>
+      </app-second-header>
+     <!-- <ion-toolbar class="type-wrapper_toolbar">
       <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" *ngIf="stateType === 'sights'" [type_id]="sightTypeId"></app-sight-type-carusel>
       <app-event-type-carusel *ngIf="stateType !== 'sights'" (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
      </ion-toolbar>
@@ -43,7 +52,7 @@
       <div #calendulaWrapper class="calendula-wrapper">
         <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
       </div>
-      <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType !== 'sights'"></ion-progress-bar>
+      <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType !== 'sights'"></ion-progress-bar> -->
 
     </div>
 
