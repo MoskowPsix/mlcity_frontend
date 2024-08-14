@@ -17,11 +17,17 @@ import { MySightsComponent } from '../views/cabinet/my-sights/my-sights.componen
 import { EditSightComponent } from '../views/cabinet/edit/edit-sight/edit-sight.component'
 import { EditEventComponent } from '../views/cabinet/edit/edit-event/edit-event.component'
 import { EmailConfirmGuard } from '../guards/confirm-email.guard'
+import { OrganizationCreateComponent } from '../views/cabinet/organization/create/organization-create/organization-create.component'
 
 export const privateRoutes: Routes = [
   {
     path: 'cabinet',
     component: CabinetComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'cabinet/organizations/create',
+    component: OrganizationCreateComponent,
     canActivate: [AuthGuard],
   },
   // children: [

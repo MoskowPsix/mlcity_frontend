@@ -124,6 +124,7 @@ import { SwitchTypeService } from './services/switch-type.service'
 import { CalendarButtonComponent } from './components/calendar/calendar-button/calendar-button.component'
 import { CalendarComponent } from './components/calendar/calendar.component'
 import { MatInputModule } from '@angular/material/input'
+import { OrganizationCreateComponent } from './views/cabinet/organization/create/organization-create/organization-create.component'
 
 import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
 import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
@@ -237,6 +238,7 @@ registerLocaleData(localeRu, 'ru')
     CalendarComponent,
     TestPageComponent,
     RangeSelectionButtonComponent,
+    OrganizationCreateComponent,
   ],
   imports: [
     BrowserModule,
