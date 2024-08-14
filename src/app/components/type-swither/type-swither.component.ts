@@ -30,6 +30,7 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
   type: string = ''
   sight: string = 'sights'
   event: string = 'events'
+  wait: boolean = false
 
   @Input() redirect!: boolean
   @Output() endingSwitchAnimation: EventEmitter<any> = new EventEmitter()
@@ -80,10 +81,14 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
     itemSecondImg: HTMLElement,
     itemSecondText: HTMLElement,
   ) {
-    this.switchTypeService.changeType()
-    setTimeout(() => {
-      this.endingSwitchAnimation.emit()
-    }, 300)
+    if (!this.wait) {
+      this.wait = true
+      this.switchTypeService.changeType()
+      setTimeout(() => {
+        this.endingSwitchAnimation.emit()
+        this.wait = false
+      }, 300)
+    }
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.render(
