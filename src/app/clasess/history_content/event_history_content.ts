@@ -33,6 +33,7 @@ export class EventHistoryContent extends HistoryContent {
    * Внутри так же идет проверка на изменения сеансов почти по той же логике
    */
   private compareAndSetPlaces() {
+    let places = JSON.parse(JSON.stringify(this.edited.places.map((place: any) => ({ ...place, place_id: place.id }))))
     if (this.edited.places == null) {
       return
     }
@@ -52,27 +53,23 @@ export class EventHistoryContent extends HistoryContent {
         this.places.push(placeOnDelete)
         continue
       }
-
       // случай на изменение
       let originPlace: IPlace | undefined = this.searchOriginPlace(editedPlace.id)
+      originPlace ? (editedPlace.id = JSON.parse(JSON.stringify(originPlace.id))) : null
       if (originPlace != undefined && !isEqual(originPlace, editedPlace)) {
         let changedPlace: EditedPlace = {}
         changedPlace.place_id = editedPlace.id
 
-        if (originPlace.address != editedPlace.address) {
+        if (
+          originPlace.latitude != editedPlace.latitude ||
+          originPlace.longitude != editedPlace.longitude ||
+          originPlace.address != editedPlace.address
+        ) {
           changedPlace.address = editedPlace.address
-        }
-
-        if (originPlace.location_id != editedPlace.location_id) {
-          changedPlace.location_id = editedPlace.location_id
-        }
-
-        if (originPlace.latitude != editedPlace.latitude) {
+          changedPlace.address = editedPlace.address
           changedPlace.latitude = editedPlace.latitude
-        }
-
-        if (originPlace.longitude != editedPlace.longitude) {
           changedPlace.longitude = editedPlace.longitude
+          changedPlace.location_id = editedPlace.location_id
         }
         this.edited.places.push(changedPlace)
 

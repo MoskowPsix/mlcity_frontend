@@ -58,7 +58,8 @@ export class EditEventComponent implements OnInit {
   freeEntry: boolean = true
   formData: FormData = new FormData()
   options: object = {
-    indices: false,
+    indexes: true,
+    indices: true,
     nullsAsUndefineds: false,
     booleansAsIntegers: false,
     allowEmptyArrays: false,
@@ -466,15 +467,13 @@ export class EditEventComponent implements OnInit {
       if (this.submitButtonState) {
         return
       }
-      this.submitButtonState = true
-      this.loadingService.showLoading()
+      // this.submitButtonState = true
+      // this.loadingService.showLoading()
       this.clearFormOfTempData()
       let historyContent = new EventHistoryContent()
       let result = historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value))
-      let request = serialize(result)
-
       this.editService
-        .sendEditEvent(request)
+        .sendEditEvent(serialize(result, this.options))
         .pipe(
           catchError((err: any) => {
             this.submitButtonState = false
@@ -495,7 +494,6 @@ export class EditEventComponent implements OnInit {
           if (res.status == 'success') {
             this.toastService.showToast('Событие отправленно на проверку', 'success')
           }
-          console.log(res)
         })
     }
   }

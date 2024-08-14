@@ -1,16 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { YaReadyEvent } from 'angular8-yandex-maps'
-import {
-  EMPTY,
-  Subject,
-  catchError,
-  delay,
-  map,
-  of,
-  retry,
-  takeUntil,
-  tap,
-} from 'rxjs'
+import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { IPlace } from 'src/app/models/place'
 import { PlaceService } from 'src/app/services/place.service'
@@ -27,16 +17,8 @@ export class PlaceInfoComponent implements OnInit {
   @Input() place!: IPlace
   place_date!: any[]
   date: any = {
-    dateStart: new Date()
-      .toLocaleDateString('pt-br')
-      .split('/')
-      .reverse()
-      .join('-'),
-    dateEnd: new Date()
-      .toLocaleDateString('pt-br')
-      .split('/')
-      .reverse()
-      .join('-'),
+    dateStart: new Date().toLocaleDateString('pt-br').split('/').reverse().join('-'),
+    dateEnd: new Date().toLocaleDateString('pt-br').split('/').reverse().join('-'),
   }
   @Input() load_seances!: boolean
 
@@ -50,11 +32,7 @@ export class PlaceInfoComponent implements OnInit {
   ) {}
 
   getUnixTime(time: string) {
-    return new Date(time)
-      .toLocaleDateString('pt-br')
-      .split('/')
-      .reverse()
-      .join('-')
+    return new Date(time).toLocaleDateString('pt-br').split('/').reverse().join('-')
   }
 
   getSeanses() {
@@ -88,9 +66,7 @@ export class PlaceInfoComponent implements OnInit {
         {},
         {
           iconLayout: 'default#imageWithContent',
-          iconContentLayout: ymaps.templateLayoutFactory.createClass(
-            `'<div class="marker"></div>'`,
-          ),
+          iconContentLayout: ymaps.templateLayoutFactory.createClass(`'<div class="marker"></div>'`),
         },
       ),
     )
@@ -119,29 +95,13 @@ export class PlaceInfoComponent implements OnInit {
       })
       try {
         this.changeDateRange({
-          dateStart: new Date()
-            .toLocaleDateString('pt-br')
-            .split('/')
-            .reverse()
-            .join('-'),
-          dateEnd: new Date(test[0].date_start)
-            .toLocaleDateString('pt-br')
-            .split('/')
-            .reverse()
-            .join('-'),
+          dateStart: new Date().toLocaleDateString('pt-br').split('/').reverse().join('-'),
+          dateEnd: new Date(test[0].date_start).toLocaleDateString('pt-br').split('/').reverse().join('-'),
         })
       } catch (error) {
         this.changeDateRange({
-          dateStart: new Date()
-            .toLocaleDateString('pt-br')
-            .split('/')
-            .reverse()
-            .join('-'),
-          dateEnd: new Date()
-            .toLocaleDateString('pt-br')
-            .split('/')
-            .reverse()
-            .join('-'),
+          dateStart: new Date().toLocaleDateString('pt-br').split('/').reverse().join('-'),
+          dateEnd: new Date().toLocaleDateString('pt-br').split('/').reverse().join('-'),
         })
       }
     }
