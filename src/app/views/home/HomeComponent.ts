@@ -307,7 +307,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.placemarks = []
       }
 
-      if (!this.navigationService.appFirstLoading.value && this.CirclePoint.options) {
+      if (!this.navigationService.appFirstLoading.value) {
         color = this.switchTypeService.currentType.value === 'sights' ? '#3880FF' : '#f7ab31'
         this.eventsLoading = true
         this.sightsLoading = true
@@ -712,27 +712,27 @@ export class HomeComponent implements OnInit, OnDestroy {
         )
         this.placemarks.push(placemark)
       } else {
-        if (item.types && item.types.length) {
-          let marker
-          let icoLink = `${this.host}:${this.port}${item.types[0].ico}`
-          if (item.types[0].ico.length > 0) {
-            marker = `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
-          } else {
-            marker = `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
-          }
-          placemark = new ymaps.Placemark(
-            [item.latitude, item.longitude],
-            {},
-            {
-              preset: 'islands#circleIcon',
-              balloonContent: item,
-              balloonAutoPan: false,
-              // С иконкой
-              iconContentLayout: ymaps.templateLayoutFactory.createClass(marker),
-            },
-          )
-          this.placemarks.push(placemark)
-        }
+        let marker
+        // let icoLink
+        // if (item.types && item.types.length) {
+        //   icoLink = `${this.host}:${this.port}${item.types[0].ico}`
+        // } else {
+        //   icoLink = ''
+        // }
+
+        marker = `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
+        placemark = new ymaps.Placemark(
+          [item.latitude, item.longitude],
+          {},
+          {
+            preset: 'islands#circleIcon',
+            balloonContent: item,
+            balloonAutoPan: false,
+            // С иконкой
+            iconContentLayout: ymaps.templateLayoutFactory.createClass(marker),
+          },
+        )
+        this.placemarks.push(placemark)
       }
     })
   }
