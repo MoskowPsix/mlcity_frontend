@@ -141,6 +141,10 @@ export class CategoryButtonComponent implements OnInit {
     console.log('удалил')
     this.setTypesToStore()
   }
+  ionViewDidLeave() {
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
 
   ngOnInit() {
     this.getTypes()
