@@ -31,6 +31,7 @@ export class CategoryButtonComponent implements OnInit {
   public openModal!: boolean
   public typesString = ''
   public selectedTypesId: number[] = []
+  public storageFilterIdCount: number = 0
   @Input() currentTypes: IEventType[] | ISightType[] = []
   private readonly destroy$ = new Subject<void>()
   getTypes() {
@@ -75,8 +76,11 @@ export class CategoryButtonComponent implements OnInit {
 
   openModalFnc() {
     let storageFilterId: any
+
     switch (this.stateType) {
       case 'events':
+        this.selectedTypesId = []
+        this.currentTypes = []
         storageFilterId = this.filterService.getEventTypesFromlocalStorage()?.split(',')
         if (this.types && this.types.events?.length) {
           if (storageFilterId[0].length) {
@@ -85,7 +89,6 @@ export class CategoryButtonComponent implements OnInit {
               if (!this.currentTypes.includes(this.types.events[index])) {
                 this.currentTypes.push(this.types.events[index])
               }
-
               if (!this.selectedTypesId.includes(Number(id))) {
                 this.selectedTypesId.push(Number(id))
               }
@@ -100,6 +103,8 @@ export class CategoryButtonComponent implements OnInit {
         break
 
       case 'sights':
+        this.selectedTypesId = []
+        this.currentTypes = []
         storageFilterId = this.filterService.getSightTypesFromlocalStorage()?.split(',')
         if (this.types && this.types.sights.length > 0) {
           if (storageFilterId[0].length) {
@@ -141,6 +146,19 @@ export class CategoryButtonComponent implements OnInit {
     this.getTypes()
     this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.stateType = value
+      this.filterService.changeFilter.subscribe(() => {
+        if (this.stateType == 'events') {
+          this.storageFilterIdCount = 0
+          this.filterService?.getEventTypesFromlocalStorage()!.split(',')[0] !== ''
+            ? (this.storageFilterIdCount = this.filterService?.getEventTypesFromlocalStorage()!.split(',').length)
+            : null
+        } else if (this.stateType == 'sights') {
+          this.storageFilterIdCount = 0
+          this.filterService?.getSightTypesFromlocalStorage()!.split(',')[0] !== ''
+            ? (this.storageFilterIdCount = this.filterService?.getSightTypesFromlocalStorage()!.split(',').length)
+            : null
+        }
+      })
     })
   }
 }

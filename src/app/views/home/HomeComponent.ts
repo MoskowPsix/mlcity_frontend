@@ -233,11 +233,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.switchTypeService.changeType()
   }
   eventSightHeader() {
-    if (this.stateType == 'sights') {
-      this.calendulaWrapper.nativeElement.style.transform = 'translateY(-300%)'
-    } else {
-      this.calendulaWrapper.nativeElement.style.transform = 'translateY(-0%)'
-    }
+    // if (this.stateType == 'sights') {
+    //   this.calendulaWrapper.nativeElement.style.transform = 'translateY(-300%)'
+    // } else {
+    //   this.calendulaWrapper.nativeElement.style.transform = 'translateY(-0%)'
+    // }
   }
 
   sightTypesChange(typeId: any) {
