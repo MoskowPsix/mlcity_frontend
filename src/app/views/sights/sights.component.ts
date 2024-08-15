@@ -292,6 +292,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
   ionViewDidLeave() {
     this.destroy$.next()
+    this.destroy$.complete()
   }
   ngOnDestroy() {
     // отписываемся от всех подписок

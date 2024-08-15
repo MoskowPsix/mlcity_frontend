@@ -34,7 +34,7 @@
     </div>
     <div class="map-tools">
         <app-calendar-button *ngIf="stateType === 'events'" (setDateEmit)="setDate($event)"></app-calendar-button>
-        <app-calendar-button style="opacity: 0; pointer-events: none;" *ngIf="stateType === 'sights'" (setDateEmit)="setDate($event)"></app-calendar-button>
+        <app-calendar-button style="opacity: 0; pointer-events: none;" *ngIf="stateType === 'sights'" ></app-calendar-button>
         <app-range-selection-button/>
     </div>
 

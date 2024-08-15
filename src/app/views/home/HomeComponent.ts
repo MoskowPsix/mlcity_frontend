@@ -1041,9 +1041,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   ionViewDidLeave() {
     this.destroy$.next()
     this.destroy$.complete()
+    console.log('destroy')
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
+    console.log('destroy')
     this.destroy$.next()
     this.destroy$.complete()
   }

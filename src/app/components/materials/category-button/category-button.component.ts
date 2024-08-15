@@ -145,12 +145,15 @@ export class CategoryButtonComponent implements OnInit {
     this.destroy$.next()
     this.destroy$.complete()
   }
-
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
   ngOnInit() {
     this.getTypes()
     this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.stateType = value
-      this.filterService.changeFilter.subscribe(() => {
+      this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {
         if (this.stateType == 'events') {
           this.storageFilterIdCount = 0
           this.filterService?.getEventTypesFromlocalStorage()!.split(',')[0] !== ''
