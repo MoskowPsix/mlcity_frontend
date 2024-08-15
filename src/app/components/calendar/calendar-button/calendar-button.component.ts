@@ -46,6 +46,10 @@ export class CalendarButtonComponent implements OnInit {
     if (this.filterService.getStartDateFromlocalStorage() && this.filterService.getEndDateFromlocalStorage()) {
       this.dateStart = moment(this.filterService.getStartDateFromlocalStorage()).format('MM/DD/YYYY')
       this.dateEnd = moment(this.filterService.getEndDateFromlocalStorage()).format('MM/DD/YYYY')
+      this.dateRange.patchValue({
+        start: moment(this.filterService.getStartDateFromlocalStorage()).toDate(),
+        end: moment(this.filterService.getEndDateFromlocalStorage()).toDate(),
+      })
     }
 
     this.dateRange.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((values) => {
