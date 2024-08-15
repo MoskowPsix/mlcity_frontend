@@ -6,67 +6,41 @@ import { BehaviorSubject } from 'rxjs'
 })
 export class FilterService {
   private nowDateStart: Date = new Date()
-  private nowDateEnd: Date = new Date(
-    new Date().getTime() + 1000 * 60 * 60 * 24 * 7,
-  )
+  private nowDateEnd: Date = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7)
   // public city: BehaviorSubject<any> = new BehaviorSubject(this.setCityTolocalStorage())
   // public region: BehaviorSubject<any> = new BehaviorSubject(this.setRegionTolocalStorage())
-  public locationId: BehaviorSubject<any> = new BehaviorSubject(
-    this.getLocationFromlocalStorage() || '',
-  )
+  public locationId: BehaviorSubject<any> = new BehaviorSubject(this.getLocationFromlocalStorage() || '')
   public locationLatitude: BehaviorSubject<string> = new BehaviorSubject(
     this.getLocationLatitudeFromlocalStorage() || '55.7522',
   )
   public locationLongitude: BehaviorSubject<string> = new BehaviorSubject(
     this.getLocationLongitudeFromlocalStorage() || '37.6156',
   )
-  public radius: BehaviorSubject<string> = new BehaviorSubject(
-    this.getRadiusFromlocalStorage() || '1',
-  )
+  public radius: BehaviorSubject<string> = new BehaviorSubject(this.getRadiusFromlocalStorage() || '1')
   // public startDate: BehaviorSubject<string> = new BehaviorSubject(this.getStartDateFromlocalStorage() || '')
   // public endDate: BehaviorSubject<string> = new BehaviorSubject(this.getEndDateFromlocalStorage() || '') // Ставим + неделю
-  public startDate: BehaviorSubject<string> = new BehaviorSubject(
-    this.nowDateStart.toISOString(),
-  )
-  public endDate: BehaviorSubject<string> = new BehaviorSubject(
-    this.nowDateEnd.toISOString(),
-  ) // Ставим + 2 месяцев
+  public startDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDateStart.toISOString())
+  public endDate: BehaviorSubject<string> = new BehaviorSubject(this.nowDateEnd.toISOString()) // Ставим + 2 месяцев
 
-  public dateFiltersSelected: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false)
+  public dateFiltersSelected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
-  public eventTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<
-    Array<number>
-  >(
-    this.getEventTypesFromlocalStorage()
-      ?.split(',')
-      .map(Number)
-      .filter(Boolean) || [],
+  public eventTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>(
+    this.getEventTypesFromlocalStorage()?.split(',').map(Number).filter(Boolean) || [],
   )
-  public sightTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<
-    Array<number>
-  >(
-    this.getSightTypesFromlocalStorage()
-      ?.split(',')
-      .map(Number)
-      .filter(Boolean) || [],
+  public sightTypes: BehaviorSubject<Array<number>> = new BehaviorSubject<Array<number>>(
+    this.getSightTypesFromlocalStorage()?.split(',').map(Number).filter(Boolean) || [],
   )
 
   public countFilters: BehaviorSubject<number> = new BehaviorSubject<number>(
     parseInt(this.getCountFiltersFromlocalStorage() || '0'),
   )
   //public saveFilters: BehaviorSubject<number> = new BehaviorSubject<number>(parseInt(this.getSaveFiltersFromlocalStorage() || '1'))
-  public changeFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false,
-  )
-  public changeCityFilter: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false)
+  public changeFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+  public changeCityFilter: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
   public eventsCount: BehaviorSubject<number> = new BehaviorSubject<number>(0)
   public sightsCount: BehaviorSubject<number> = new BehaviorSubject<number>(0)
-  public favoritesCount: BehaviorSubject<number> = new BehaviorSubject<number>(
-    0,
-  )
+  public favoritesCount: BehaviorSubject<number> = new BehaviorSubject<number>(0)
 
   constructor() {}
 
@@ -115,9 +89,7 @@ export class FilterService {
   //   return localStorage.getItem('circleCenter')
   // }
 
-  setLocationLatitudeTolocalStorage(
-    locationLatitude: string = this.locationLatitude.value,
-  ) {
+  setLocationLatitudeTolocalStorage(locationLatitude: string = this.locationLatitude.value) {
     localStorage.setItem('locationLatitude', locationLatitude)
     this.locationLatitude.next(locationLatitude)
   }
@@ -126,9 +98,7 @@ export class FilterService {
     return localStorage.getItem('locationLatitude')
   }
 
-  setLocationLongitudeTolocalStorage(
-    locationLongitude: string = this.locationLongitude.value,
-  ) {
+  setLocationLongitudeTolocalStorage(locationLongitude: string = this.locationLongitude.value) {
     localStorage.setItem('locationLongitude', locationLongitude)
     this.locationLongitude.next(locationLongitude)
   }
@@ -147,22 +117,22 @@ export class FilterService {
   }
 
   setStartDateTolocalStorage(startDate: string = this.startDate.value) {
-    //localStorage.setItem('startDateFilter',startDate)
+    localStorage.setItem('startDateFilter', startDate)
     this.startDate.next(startDate)
   }
 
-  // getStartDateFromlocalStorage(){
-  //   return localStorage.getItem('startDateFilter')
-  // }
+  getStartDateFromlocalStorage() {
+    return localStorage.getItem('startDateFilter')
+  }
 
   setEndDateTolocalStorage(endDate: string = this.endDate.value) {
-    //localStorage.setItem('endDateFilter',endDate)
+    localStorage.setItem('endDateFilter', endDate)
     this.endDate.next(endDate)
   }
 
-  // getEndDateFromlocalStorage(){
-  //   return localStorage.getItem('endDateFilter')
-  // }
+  getEndDateFromlocalStorage() {
+    return localStorage.getItem('endDateFilter')
+  }
 
   setEventTypesTolocalStorage(eventTypes: number[] = this.eventTypes.value) {
     localStorage.setItem('eventTypesFilter', eventTypes.toString())
@@ -182,9 +152,7 @@ export class FilterService {
     return localStorage.getItem('sightTypesFIlter')
   }
 
-  setCountFiltersTolocalStorage(
-    countFilters: number = this.countFilters.value,
-  ) {
+  setCountFiltersTolocalStorage(countFilters: number = this.countFilters.value) {
     localStorage.setItem('countFilters', countFilters.toString())
     this.countFilters.next(countFilters)
   }
