@@ -1,26 +1,6 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
-  ChangeDetectorRef,
-  Output,
-  Input,
-} from '@angular/core'
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Output, Input } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
-import {
-  Subject,
-  takeUntil,
-  tap,
-  retry,
-  catchError,
-  of,
-  EMPTY,
-  map,
-  delay,
-  filter,
-  timeInterval,
-} from 'rxjs'
+import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter, timeInterval } from 'rxjs'
 import { EventsService } from 'src/app/services/events.service'
 import { IonicSlides } from '@ionic/angular'
 import { register } from 'swiper/element/bundle'
@@ -39,7 +19,7 @@ import { FilterService } from 'src/app/services/filter.service'
 import { LocationService } from 'src/app/services/location.service'
 import { MapService } from 'src/app/services/map.service'
 import { YaReadyEvent } from 'angular8-yandex-maps'
-
+import { SliderComponent } from '@angular-slider/ngx-slider/slider.component'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -57,7 +37,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
-
 
   user?: any
   eventId?: number
@@ -94,8 +73,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private locationService: LocationService,
     private mapService: MapService,
-  ) {
-  }
+  ) {}
 
   getEvent() {
     this.eventsService
@@ -115,9 +93,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
           name: 'description',
           content: event.description,
         })
-        this.startLikesCount = this.event?.likes
-          ? this.event.likes.vk_count + this.event.likes.local_count
-          : 0
+        this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
       })
   }
 
@@ -134,9 +110,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe(async (response: any) => {
-        await this.queryBuilderService.locationIdForEventShow.next(
-          response.location.id,
-        )
+        await this.queryBuilderService.locationIdForEventShow.next(response.location.id)
         await this.getEventPlaces()
       })
   }
@@ -145,10 +119,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     if (this.loadMore) {
       this.loadPlace = true
       this.eventsService
-        .getEventPlaces(
-          this.eventId,
-          this.queryBuilderService.queryBuilder('eventPlaces'),
-        )
+        .getEventPlaces(this.eventId, this.queryBuilderService.queryBuilder('eventPlaces'))
         .pipe(
           delay(100),
           retry(3),
@@ -161,12 +132,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
         )
         .subscribe((response: any) => {
           this.places.push(...response.places.data)
-          this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
-            response.places.next_cursor,
-          )
-          response.places.next_cursor
-            ? (this.loadMore = true)
-            : (this.loadMore = false)
+          this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(response.places.next_cursor)
+          response.places.next_cursor ? (this.loadMore = true) : (this.loadMore = false)
           this.cdr.detectChanges()
         })
     }
@@ -268,11 +235,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .pipe(
           tap(() => {
             this.like = !this.like
-            this.like
-              ? this.startLikesCount++
-              : this.startLikesCount !== 0
-                ? this.startLikesCount--
-                : 0
+            this.like ? this.startLikesCount++ : this.startLikesCount !== 0 ? this.startLikesCount-- : 0
             this.loadingLike = false
           }),
           catchError((err) => {
@@ -295,21 +258,15 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.getEvent()
       this.checkLiked()
       this.checFavorite()
-      this.filterService.locationId
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          this.loadMore = true
-          this.locationId = Number(value)
-          this.places = []
-          this.setLocationForPlaces()
-        })
-      this.router.events
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((value: any) => {
-          this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
-            '',
-          )
-        })
+      this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        this.loadMore = true
+        this.locationId = Number(value)
+        this.places = []
+        this.setLocationForPlaces()
+      })
+      this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+        this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
+      })
     }
   }
 

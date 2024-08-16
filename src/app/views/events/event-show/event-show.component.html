@@ -1,7 +1,7 @@
 
 <ng-container *ngIf="url !== '/cabinet/events/create'">
   <ion-content>
-    <!-- skeleton animation -->
+   
     <div class="pb-2rem" class="event-container">
       <ng-container *ngIf="loadingEvent && router.url !== '/cabinet/events/create'">
         <ion-row class="ion-justify-content-center">
@@ -40,10 +40,11 @@
   
       <!-- content -->
       <ng-container *ngIf="event && !loadingEvent">
-        <ion-row class="ion-justify-content-center">
-          <ion-col size-lg="10" size-md="12" size-xs="12" class="">
+        <app-show-slider [files]="event.files"></app-show-slider>
+        <!-- <ion-row class="ion-justify-content-center">
+          <ion-col size-lg="10" size-md="12" size-xs="12" class=""> -->
   
-            <swiper-container
+            <!-- <swiper-container
             class="swiper-container"
               #swiper
               [modules]="swiperModules"
@@ -72,10 +73,10 @@
                     <img alt="img" :src="{{ file.link }}" />
                     <div class="swiper-container-img_wrapper">
                     </div>
-                  </swiper-slide>
+                  </swiper-slide> -->
   
                   <!-- видео -->
-                  <swiper-slide  style="" *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
+                  <!-- <swiper-slide  style="" *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
                     <iframe class="video_content" [src]="getUrlFrame(file.link)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
                     <div class="swiper-container-img_wrapper">
                       <div class="swiper-container-header-content">
@@ -92,14 +93,15 @@
               </ng-template>
             </swiper-container>
             
-          </ion-col>
-          <div class="event-name-header">
+          </ion-col> -->
+         
+          <!-- <div class="event-name-header">
             {{ event.name }}
             <h3 class="swiper-container-header-content-time title" style="font-size: 16px;">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
-          </div>
+          </div> -->
   
-        </ion-row>
-       
+        <!-- </ion-row> -->
+ 
         <div class="social-buttons">
           <div class="likes">
             <ion-icon name="chatbox-outline" class="ico"></ion-icon>

@@ -1,0 +1,20 @@
+
+  <swiper-container
+      class="swiper-container"
+      [pagination]="false"
+      [grabCursor]="true"
+      [slidesPerView]="1"
+      [centeredSlides]="true"
+      [followFinger]="false"
+      [initialSlide]="0">
+    <ng-container *ngFor ="let file of files">
+      <swiper-slide>
+        <ng-container>
+          <img [src]="checkUrl(file)" />
+          <div class="swiper-container-img_wrapper">
+        </div>
+        </ng-container>
+      </swiper-slide>
+    </ng-container>
+  
+</swiper-container>

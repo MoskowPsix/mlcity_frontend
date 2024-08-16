@@ -9,11 +9,10 @@ import { ContactsComponent } from './views/contacts/contacts.component'
 import { DropDownButtonComponent } from './components/drop-down-button/drop-down-button.component'
 import { UserSectionComponent } from './components/user-section/user-section.component'
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientJsonpModule } from '@angular/common/http'
-
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
-
+import { register } from 'swiper/element/bundle'
 import { AppRoutingModule } from './routing/app-routing.module'
-
+register()
 import { AngularYandexMapsModule, YaConfig } from 'angular8-yandex-maps'
 import { EditEventComponent } from './views/cabinet/edit/edit-event/edit-event.component'
 import { EditSightComponent } from './views/cabinet/edit/edit-sight/edit-sight.component'
@@ -125,7 +124,7 @@ import { CalendarButtonComponent } from './components/calendar/calendar-button/c
 import { CalendarComponent } from './components/calendar/calendar.component'
 import { MatInputModule } from '@angular/material/input'
 import { OrganizationCreateComponent } from './views/cabinet/organization/create/organization-create/organization-create.component'
-
+import { ShowSliderComponent } from './components/materials/show-slider/show-slider.component'
 import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
 import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
 import { AddressInputComponent } from './components/address-input/address-input.component'
@@ -163,6 +162,7 @@ registerLocaleData(localeRu, 'ru')
     RecoveryPasswordComponent,
     TypesModalComponent,
     SecondHeaderComponent,
+    ShowSliderComponent,
     HeaderComponent,
     CodeInputComponent,
     AddressInputComponent,
