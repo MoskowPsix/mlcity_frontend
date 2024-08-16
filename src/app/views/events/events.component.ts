@@ -8,6 +8,7 @@ import {
   AfterContentInit,
   ChangeDetectionStrategy,
   HostListener,
+  inject,
 } from '@angular/core'
 
 import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime, filter, last } from 'rxjs'
@@ -27,6 +28,7 @@ import { BehaviorSubject } from 'rxjs'
 import { MapService } from 'src/app/services/map.service'
 import { Capacitor } from '@capacitor/core'
 import { Router } from '@angular/router'
+import { SwitchTypeService } from 'src/app/services/switch-type.service'
 import { CalendarComponent } from 'src/app/components/calendar/calendar.component'
 register()
 
@@ -34,7 +36,7 @@ register()
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss'],
-  
+
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventsComponent implements OnInit, OnDestroy {
@@ -46,13 +48,13 @@ export class EventsComponent implements OnInit, OnDestroy {
   city: string = ''
   segment: string = 'eventsCitySegment'
   isFirstNavigation: any = new BehaviorSubject<boolean>(true)
-
   date: any
-
+  spiner: boolean = false
   eventsCity: IEvent[] = []
   eventsGeolocation: IEvent[] = []
-
+  wait: boolean = true
   scrollStart: any
+  switchTypeService: SwitchTypeService = inject(SwitchTypeService)
 
   @ViewChild('cardContainer')
   cardContainer!: ElementRef
@@ -68,7 +70,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   currentPageEventsCity: number = 1
   currentPageEventsGeolocation: number = 1
 
-  nextPage: boolean = false
+  nextPage: boolean = true
 
   timeStart: number = 0
   timeEnd: number = 0
@@ -85,7 +87,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   sightTypeId: any
 
   testScrol: any = 0
-  notFound!: boolean
+  notFound: boolean = false
   scrollUpState: boolean = true
 
   platformType: any = Capacitor.getPlatform()
@@ -117,12 +119,6 @@ export class EventsComponent implements OnInit, OnDestroy {
     })
   }
 
-  setDate(event: any) {
-    this.filterService.setStartDateTolocalStorage(event.dateStart)
-    this.filterService.setEndDateTolocalStorage(event.dateEnd)
-    this.filterService.changeFilter.next(true)
-  }
-
   scrollUp() {
     document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -133,120 +129,94 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   getEventsCity() {
-    this.loadingMoreEventsCity ? (this.loadingEventsCity = true) : (this.loadingEventsCity = false)
-
-    this.eventsService
-      .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
-      .pipe(
-        delay(100),
-        retry(3),
-        map((response: any) => {
-          this.eventsCity.push(...response.events.data)
-
-          this.filterService.setEventsCount(response.events.total)
-          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
-          response.events.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
-          response.events.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
-        }),
-        tap(() => {
-          this.loadingEventsCity = true
-          this.loadingMoreEventsCity = false
-        }),
-        catchError((err) => {
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          this.loadingEventsCity = false
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(() => {})
+    // this.loadingMoreEventsCity ? (this.loadingEventsCity = true) : (this.loadingEventsCity = false)
+    if (this.wait) {
+      this.wait = false
+      if (this.nextPage) {
+        this.spiner = true
+        this.eventsService
+          .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
+          .pipe(
+            tap((response: any) => {
+              this.eventsCity.push(...response.events.data)
+              response.events.next_cursor
+                ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
+                : this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
+              if (response.events.next_cursor == null) {
+                this.nextPage = false
+                this.spiner = false
+              } else {
+                this.nextPage = true
+                this.spiner = false
+              }
+            }),
+            catchError((err) => {
+              this.toastService.showToast(MessagesErrors.default, 'danger')
+              this.loadingEventsCity = false
+              return of(EMPTY)
+            }),
+            takeUntil(this.destroy$),
+          )
+          .subscribe((response: any) => {
+            if (this.eventsCity.length === 0) {
+              this.notFound = true
+            }
+            this.wait = true
+            this.spiner = false
+          })
+      } else {
+        this.spiner = false
+      }
+    }
   }
-
-  // getEventsGeolocation(){
-  //   this.loadingMoreEventsGeolocation ? this.loadingEventsGeolocation = true : this.loadingEventsGeolocation = false
-
-  //   this.eventsService.getEvents(this.queryBuilderService.queryBuilder('eventsPublicForGeolocationTab')).pipe(
-  //     delay(100),
-  //     retry(3),
-  //     map((respons:any) => {
-  //       this.eventsGeolocation.push(...respons.events.data)
-  //       this.totalPagesEventsGeolocation = respons.events.last_page
-  //       //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
-  //     }),
-  //     tap(() => {
-  //       this.loadingEventsGeolocation = true
-  //       this.loadingMoreEventsGeolocation = false
-  //     }),
-  //     catchError((err) =>{
-  //       this.toastService.showToast(MessagesErrors.default, 'danger')
-  //       this.loadingEventsGeolocation = false
-  //       return of(EMPTY)
-  //     }),
-  //     takeUntil(this.destroy$)
-  //   ).subscribe()
-  // }
 
   eventsCityLoadingMore() {
     this.loadingMoreEventsCity = true
     this.currentPageEventsCity++
-    // this.queryBuilderService.paginationPublicEventsCityCurrentPage.next(this.currentPageEventsCity)
     this.getEventsCity()
   }
-
-  // eventsGeolocationLoadingMore(){
-  //   this.loadingMoreEventsGeolocation = true
-  //   this.currentPageEventsGeolocation++
-  //   this.queryBuilderService.paginationPublicEventsGeolocationCurrentPage.next(this.currentPageEventsGeolocation)
-  //   this.getEventsGeolocation()
-  // }
 
   onSegmentChanged(event: any) {
     this.segment = event.detail.value
   }
 
   scrollEvent = (): void => {
-    this.scrollUpCheckState()
-    let viewElement: boolean = false
-
-    for (let i = 0; i < this.widgetsContent.nativeElement.children.length; i++) {
-      const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
-
-      if (
-        boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight)) / 2 &&
-        boundingClientRect.top < window.innerHeight / 2 &&
-        !viewElement &&
-        boundingClientRect.width !== 0 &&
-        boundingClientRect.width !== 0
-      ) {
-        this.viewId.push(this.widgetsContent.nativeElement.children[i].id)
-
-        if (this.timeStart == 0) {
-          this.timeStart = new Date().getTime()
-        } else {
-          let time = (new Date().getTime() - this.timeStart) / 1000
-
-          if (time >= 3.14) {
-            let id = this.viewId[this.viewId.length - 2]
-            this.eventsService
-              .addView(id, time)
-              .pipe(
-                delay(100),
-                retry(1),
-                catchError((err) => {
-                  return of(EMPTY)
-                }),
-                takeUntil(this.destroy$),
-              )
-              .subscribe()
-          }
-
-          this.timeStart = 0
-
-          this.timerReload()
-        }
-      }
-    }
-    viewElement = true
+    // this.scrollUpCheckState()
+    // let viewElement: boolean = false
+    // for (let i = 0; i < this.widgetsContent.nativeElement.children.length; i++) {
+    //   const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
+    //   if (
+    //     boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight)) / 2 &&
+    //     boundingClientRect.top < window.innerHeight / 2 &&
+    //     !viewElement &&
+    //     boundingClientRect.width !== 0 &&
+    //     boundingClientRect.width !== 0
+    //   ) {
+    //     this.viewId.push(this.widgetsContent.nativeElement.children[i].id)
+    //     if (this.timeStart == 0) {
+    //       this.timeStart = new Date().getTime()
+    //     } else {
+    //       let time = (new Date().getTime() - this.timeStart) / 1000
+    //       if (time >= 3.14) {
+    //         let id = this.viewId[this.viewId.length - 2]
+    //         this.eventsService
+    //           .addView(id, time)
+    //           .pipe(
+    //             delay(100),
+    //             retry(1),
+    //             catchError((err) => {
+    //               return of(EMPTY)
+    //             }),
+    //             takeUntil(this.destroy$),
+    //           )
+    //           .subscribe()
+    //       }
+    //       this.timeStart = 0
+    //       this.timerReload()
+    //     }
+    //   }
+    // }
+    // viewElement = true
   }
 
   carusel(status: string) {
@@ -282,27 +252,23 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.headerWrapper.nativeElement.style.transform = 'translateY(-150%)'
     } else {
     }
-
     this.testScrol = boundingClientRect.y
-
-    // console.log(this.ContentCol.nativeElement.getBoundingClientRect().bottom, window.innerHeight)
-    // if (
-    //   boundingClientRect.bottom <= window.innerHeight * 2 &&
-    //   !(boundingClientRect.bottom <= window.innerHeight) &&
-    //   this.eventsCity &&
-    //   this.loadTrue
-    // ) {
-    //   this.loadTrue = false
-    //   this.eventsCityLoadingMore()
-    // }
   }
 
-  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
-  ngAfterViewInit() {
-    this.scrollStart = this.ContentCol.nativeElement?.getBoundingClientRect()
-    this.ContentCol.nativeElement.addEventListener('scroll', this.scrollPaginate, true)
+  redirectToSight() {
+    this.router.navigate(['/sights'])
   }
-  ngOnInit() {
+
+  ngAfterViewInit() {}
+  ngOnInit() {}
+  ionViewWillEnter() {
+    this.switchTypeService.currentType.value == 'sights' ? this.router.navigate(['/sights']) : null
+
+    this.wait = true
+    this.nextPage = true
+    this.notFound = false
+    this.eventsCity = []
+    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       if (value.url === '/event') {
@@ -325,6 +291,10 @@ export class EventsComponent implements OnInit, OnDestroy {
     //Подписываемся на изменение фильтра
     this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
       if (value === true) {
+        this.wait = true
+        this.nextPage = true
+        this.notFound = false
+        this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
         this.eventsCity = []
         this.eventsGeolocation = []
         this.getEventsCity()
@@ -342,10 +312,19 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.eventTypeId = value[0]
     })
-
-    // console.log(this.cardContainer)
   }
-
+  ionViewDidLeave() {
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
+  setDate(event: any) {
+    this.filterService.setStartDateTolocalStorage(event.dateStart.toString())
+    this.filterService.setEndDateTolocalStorage(event.dateEnd.toString())
+    this.filterService.setLocationLatitudeTolocalStorage(this.mapService.circleCenterLatitude.value.toString())
+    this.filterService.setLocationLongitudeTolocalStorage(this.mapService.circleCenterLongitude.value.toString())
+    // this.queryBuilderService.updateParams()
+    this.filterService.changeFilter.next(true)
+  }
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()

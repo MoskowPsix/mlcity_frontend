@@ -1,23 +1,5 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
-  ElementRef,
-} from '@angular/core'
-import {
-  catchError,
-  delay,
-  EMPTY,
-  map,
-  of,
-  retry,
-  Subject,
-  takeUntil,
-  tap,
-  debounceTime,
-  filter,
-} from 'rxjs'
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
+import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime, filter } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { ISight } from 'src/app/models/sight'
 import { ToastService } from 'src/app/services/toast.service'
@@ -46,7 +28,8 @@ export class SightsComponent implements OnInit, OnDestroy {
 
   sightsCity: ISight[] = []
   sightsGeolocation: ISight[] = []
-
+  spiner: boolean = false
+  notFound: boolean = false
   loadingSightsCity: boolean = false
   loadingSightsGeolocation: boolean = false
 
@@ -82,65 +65,69 @@ export class SightsComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private metaService: Meta,
   ) {
-    this.filterService.locationId
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.locationService
-          .getLocationsIds(value)
-          .pipe(delay(100), retry(3), takeUntil(this.destroy$))
-          .subscribe((response) => {
-            this.titleService.setTitle(
-              'Достопримечательности в городе ' + response.location.name,
-            )
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.locationService
+        .getLocationsIds(value)
+        .pipe(delay(100), retry(3), takeUntil(this.destroy$))
+        .subscribe((response) => {
+          this.titleService.setTitle('Достопримечательности в городе ' + response.location.name)
 
-            this.metaService.updateTag({
-              name: 'description',
-              content: 'Достопримечательности вашего города тут',
-            })
+          this.metaService.updateTag({
+            name: 'description',
+            content: 'Достопримечательности вашего города тут',
           })
-      })
+        })
+    })
   }
 
   scrollUp() {
     document.getElementById('topSi')?.scrollTo({ top: 0, behavior: 'smooth' })
   }
+  redirectToEvent() {
+    this.router.navigate(['/events'])
+  }
 
   getSightsCity() {
-    
-    this.loadingMoreSightsCity
-      ? (this.loadingSightsCity = true)
-      : (this.loadingSightsCity = false)
-
-    this.sightsService
-      .getSights(this.queryBuilderService.queryBuilder('sightsForTape'))
-      .pipe(
-        delay(100),
-        retry(3),
-        map((respons: any) => {
-          this.sightsCity.push(...respons.sights.data)
-          this.filterService.setSightsCount(respons.total)
-          this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(
-            respons.sights.next_cursor,
-          )
-          respons.sights.next_cursor
-            ? (this.nextPage = true)
-            : (this.nextPage = false)
-          respons.sights.next_cursor
-            ? (this.loadTrue = true)
-            : (this.loadTrue = false)
-        }),
-        tap(() => {
-          this.loadingSightsCity = true
-          this.loadingMoreSightsCity = false
-        }),
-        catchError((err) => {
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          this.loadingSightsCity = false
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe()
+    // this.loadingMoreSightsCity ? (this.loadingSightsCity = true) : (this.loadingSightsCity = false)
+    this.spiner = true
+    this.notFound = false
+    if (this.nextPage) {
+      this.sightsService
+        .getSights(this.queryBuilderService.queryBuilder('sightsForTape'))
+        .pipe(
+          delay(100),
+          retry(3),
+          map((respons: any) => {
+            this.sightsCity.push(...respons.sights.data)
+            this.filterService.setSightsCount(respons.total)
+            this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(respons.sights.next_cursor)
+            respons.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+            respons.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
+          }),
+          tap((respons: any) => {
+            this.loadingSightsCity = true
+            this.loadingMoreSightsCity = false
+            if (this.nextPage == null) {
+              this.spiner = false
+            } else {
+              this.spiner = false
+            }
+          }),
+          catchError((err) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            this.loadingSightsCity = false
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe(() => {
+          if (this.sightsCity.length === 0) {
+            this.notFound = true
+          }
+        })
+    } else {
+      this.spiner = false
+    }
   }
 
   // getSightsGeolocation(){
@@ -168,10 +155,10 @@ export class SightsComponent implements OnInit, OnDestroy {
   // }
 
   sightsCityLoadingMore() {
-    this.loadingMoreSightsCity = true
-    this.currentPageSightsCity++
-    // this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(this.currentPageSightsCity)
-    this.getSightsCity()
+    // this.loadingMoreSightsCity = true
+    // this.currentPageSightsCity++
+    // // this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(this.currentPageSightsCity)
+    // this.getSightsCity()
   }
 
   // sightsGeolocationLoadingMore(){
@@ -186,11 +173,8 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   scrollUpCheckState() {
-    const boundingClientRect =
-      this.ContentCol?.nativeElement.getBoundingClientRect()
-    boundingClientRect
-      ? (this.scrollUpState = boundingClientRect.y > 0)
-      : (this.scrollUpState = false)
+    const boundingClientRect = this.ContentCol?.nativeElement.getBoundingClientRect()
+    boundingClientRect ? (this.scrollUpState = boundingClientRect.y > 0) : (this.scrollUpState = false)
   }
 
   scrollEvent = (): void => {
@@ -198,18 +182,11 @@ export class SightsComponent implements OnInit, OnDestroy {
 
     let viewElement: boolean = false
 
-    for (
-      let i = 0;
-      i < this.widgetsContent.nativeElement.children.length;
-      i++
-    ) {
-      const boundingClientRect =
-        this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
+    for (let i = 0; i < this.widgetsContent.nativeElement.children.length; i++) {
+      const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
 
       if (
-        boundingClientRect.top >
-          (window.innerHeight - (window.innerHeight + window.innerHeight)) /
-            2 &&
+        boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight)) / 2 &&
         boundingClientRect.top < window.innerHeight / 2 &&
         !viewElement &&
         boundingClientRect.width !== 0 &&
@@ -250,49 +227,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     this.timeStart = new Date().getTime()
   }
 
-  ngOnInit() {
-    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    //   this.locationService.getLocationsIds(value).pipe(
-    //     delay(100),
-    //     retry(3),
-    //     takeUntil(this.destroy$)
-    //     ).subscribe((response) => {
-    //       console.log(response)
-    //       this.titleService.setTitle("Мероприятия в " + response.location.name)
-    //     })
-    // })
-    window.addEventListener('scroll', this.scrollPaginate, true)
-    window.addEventListener('scrollend', this.scrollEvent, true)
-    this.sightsCity = []
-    this.sightsGeolocation = []
-    this.getSightsCity()
-    // this.getSightsGeolocation()
-
-    //Подписываемся на изменение фильтра
-    this.filterService.changeFilter
-      .pipe(debounceTime(1000), takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (value === true) {
-          this.sightsCity = []
-          this.sightsGeolocation = []
-          this.getSightsCity()
-          // this.getSightsGeolocation()
-        }
-        this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
-      })
-
-    //Подписываемся на город
-    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-    //     this.city = response.location.name
-    //   })
-    // })
-    this.filterService.sightTypes
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value: any) => {
-        this.sightTypeId = value[0]
-      })
-  }
+  ngOnInit() {}
 
   sightTypesChange(typeId: any) {
     if (typeId !== 'all') {
@@ -305,8 +240,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   scrollPaginate = (): void => {
-    const boundingClientRect =
-      this.ContentCol.nativeElement?.getBoundingClientRect()
+    const boundingClientRect = this.ContentCol.nativeElement?.getBoundingClientRect()
 
     if (this.testScrol == 0) {
       this.testScrol = boundingClientRect.y
@@ -332,6 +266,33 @@ export class SightsComponent implements OnInit, OnDestroy {
     }
   }
 
+  ionViewWillEnter() {
+    window.addEventListener('scroll', this.scrollPaginate, true)
+    window.addEventListener('scrollend', this.scrollEvent, true)
+    this.sightsCity = []
+    this.sightsGeolocation = []
+    this.nextPage = true
+    this.notFound = false
+    //Подписываемся на изменение фильтра
+    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
+      if (value === true) {
+        this.sightsCity = []
+        this.sightsGeolocation = []
+        this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next('')
+        this.nextPage = true
+        this.notFound = false
+        this.getSightsCity()
+      }
+      this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+    })
+    this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      this.sightTypeId = value[0]
+    })
+  }
+  ionViewDidLeave() {
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()

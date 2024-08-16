@@ -1,7 +1,9 @@
 <ion-content>
   <ion-content>
     <app-second-header size="xxl" img="/assets/images/myEventsHeader.png">
-      Мои сообщества <app-rounded-button routerLink="/cabinet/sights/create" icon="assets/icons/create.svg" buttonText="Создать"></app-rounded-button>
+      <ng-container header-bottom>
+        Мои сообщества <app-rounded-button routerLink="/cabinet/sights/create" icon="assets/icons/create.svg" buttonText="Создать"></app-rounded-button>
+      </ng-container>
     </app-second-header>
     <app-card-grid [spiner]="spiner" (endScroll)="getMySights()" [notFound]="notFound" [cards]="sights" [isSight]="true"></app-card-grid>
   </ion-content>

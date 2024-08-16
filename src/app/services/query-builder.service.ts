@@ -26,57 +26,42 @@ export class QueryBuilderService {
 
   public eventIds: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationModalEventsCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationModalEventsCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationModalSightsCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationModalSightsCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationPublicEventsCityCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicEventsCityCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
   //public paginationPublicEventsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicSightsRadiusPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
-  public paginationPublicEventsRadiusPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicSightsRadiusPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+  public paginationPublicEventsRadiusPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   // public paginationPublicEventsGeolocationCurrentPage!: BehaviorSubject<string>
   //public paginationPublicEventsGeolocationTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicEventsFavoritesCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicEventsFavoritesCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationPublicSightsCityCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicSightsCityCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
   //public paginationPublicSightsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicEventsForAuthorCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicEventsForAuthorCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginataionPublicEventPlacesCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginataionPublicEventPlacesCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationPublicSightsForAuthorCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicSightsForAuthorCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   // public paginationPublicSightsGeolocationCurrentPage!: BehaviorSubject<string>
   //public paginationPublicSightsGeolocatioTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicSightsFavoritesCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicSightsFavoritesCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationEventsInSightCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationEventsInSightCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationPublicEventsForTapeCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicEventsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationPublicSightsForTapeCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicSightsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public locationIdForEventShow: BehaviorSubject<number> =
-    new BehaviorSubject<number>(0)
+  public locationIdForEventShow: BehaviorSubject<number> = new BehaviorSubject<number>(0)
 
   constructor(
     private mapService: MapService,
@@ -87,11 +72,7 @@ export class QueryBuilderService {
   getUserID() {
     this.userService
       .getUser()
-      .pipe(
-        tap((user) =>
-          user && user.id ? (this.userID = user.id) : (this.userID = 0),
-        ),
-      )
+      .pipe(tap((user) => (user && user.id ? (this.userID = user.id) : (this.userID = 0))))
       .subscribe()
       .unsubscribe()
   }

@@ -1,16 +1,27 @@
 
 <ion-content id="topSi">
-  <div id="header-anchor"></div>
+  <div #ContentCol>
+    <div id="header-anchor"></div>
   <div class="carusel-wrapper_flex" #headerWrapper>
-    <div >
-      <ng-container>
-        <app-sight-type-carusel (typeOutput)="sightTypesChange($event)" [type_id]="sightTypeId"></app-sight-type-carusel>
-      </ng-container>
+    <div class="carusel-wrapper_flex" #headerWrapper>
+      <app-second-header size="xxl" img="/assets/images/tapeSights.png">
+        <div class="header-top-container" header-top>
+          <app-type-swither (endingSwitchAnimation)="redirectToEvent()"></app-type-swither>
+          <app-category-button stateType="Event"></app-category-button>
+        </div>
+        <div class="header-bottom-container" header-bottom>
+             Места и сообщества
+        </div>
+      </app-second-header>
     </div>
   </div>
-  <ion-grid class="mb-6-5rem">
+  <div class="grid-wrapper">
+    <app-card-grid [notFound]="notFound" [spiner]="spiner" [cards]="sightsCity" [isSight]="true" (endScroll)="getSightsCity()"></app-card-grid>
+  </div>
+  </div>
+  
+   <!-- <ion-grid class="mb-6-5rem"> 
       <ion-row class="ion-justify-content-center">
-        <ion-col size-lg="10" size-md="12" size-xs="12">
           <div class="segment-box"  #ContentCol>
             <ng-container *ngIf="loadingSightsCity">
               <div class="wrapper-grid">
@@ -32,13 +43,12 @@
               </ion-row>
             </ng-container>
           </div>
-        </ion-col>
       </ion-row>
-    </ion-grid>
+  </ion-grid> 
     <ng-container *ngIf="!sightsCity.length && loadingSightsCity">
       <app-no-data/>
     </ng-container>
     <a routerLink="." fragment="header-anchor" class="scroll-up" [hidden]="scrollUpState" (click)="scrollUp()">
       <ion-icon size="large" name="chevron-up"></ion-icon>
-    </a>
+    </a> -->
   </ion-content>

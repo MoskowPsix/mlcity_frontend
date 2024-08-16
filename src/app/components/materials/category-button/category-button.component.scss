@@ -1,0 +1,12 @@
+.category-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 1.5rem;
+  font-family: var(--font-bold);
+  width: 10rem;
+}
+
+.arrow {
+  grid-column: 2;
+}

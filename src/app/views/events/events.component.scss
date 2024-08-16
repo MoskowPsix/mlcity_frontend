@@ -11,13 +11,20 @@ app-event-type-carusel {
 
 .segments {
   background-color: #ced4e0;
-}
-.calendar-button-wrapper{
-
-
-
+ 
 }
 
+.header-top-container{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.header-bottom-container{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  font-size: clamp(0.875rem, -1.469rem + 12.5vw, 1.5rem);
+}
 .segment-title {
   color: black;
 
@@ -26,13 +33,18 @@ app-event-type-carusel {
     padding-right: 5px;
   }
 }
-.wrapper-grid{
-  margin-top: 128px;
-}
+
 .segment-box {
   animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  padding-top: 13rem;
 }
 
+.grid-wrapper{
+  padding-top: 13rem;
+}
+.main-grid-load{
+  overflow-y: hidden;
+}
 .scroll-up {
   position: fixed;
   bottom: 4rem;
