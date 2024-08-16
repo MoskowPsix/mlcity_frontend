@@ -80,8 +80,11 @@ export class CategoryButtonComponent implements OnInit {
       case 'events':
         this.selectedTypesId = []
         this.currentTypes = []
-        storageFilterId = this.filterService.getEventTypesFromlocalStorage()?.split(',')
-        if (this.types && this.types.events?.length) {
+        if(this.filterService.getEventTypesFromlocalStorage()){
+          storageFilterId = this.filterService.getEventTypesFromlocalStorage()?.split(',')
+        }
+
+        if (this.types && storageFilterId && this.types.events?.length) {
           if (storageFilterId[0].length) {
             storageFilterId.forEach((id: any) => {
               let index = this.types.events.map((type: any) => type.id).indexOf(Number(id))
@@ -94,16 +97,17 @@ export class CategoryButtonComponent implements OnInit {
             })
           }
 
-          this.typesForType = this.types.events
-          this.openModal = true
         }
+        
+        this.typesForType = this.types.events
+        this.openModal = true
         break
 
       case 'sights':
         this.selectedTypesId = []
         this.currentTypes = []
         storageFilterId = this.filterService.getSightTypesFromlocalStorage()?.split(',')
-        if (this.types && this.types.sights.length > 0) {
+        if (this.types && storageFilterId && this.types.sights.length > 0) {
           if (storageFilterId[0].length) {
             storageFilterId.forEach((id: any) => {
               let index = this.types.sights.map((type: any) => type.id).indexOf(Number(id))
@@ -115,9 +119,10 @@ export class CategoryButtonComponent implements OnInit {
               }
             })
           }
-          this.typesForType = this.types.sights
-          this.openModal = true
+        
         }
+        this.typesForType = this.types.sights
+        this.openModal = true
         break
     }
   }
@@ -151,12 +156,12 @@ export class CategoryButtonComponent implements OnInit {
       this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {
         if (this.stateType == 'events') {
           this.storageFilterIdCount = 0
-          this.filterService?.getEventTypesFromlocalStorage()!.split(',')[0] !== ''
+          this.filterService.getEventTypesFromlocalStorage() && this.filterService?.getEventTypesFromlocalStorage()!.split(',')[0] !== ''
             ? (this.storageFilterIdCount = this.filterService?.getEventTypesFromlocalStorage()!.split(',').length)
             : null
         } else if (this.stateType == 'sights') {
           this.storageFilterIdCount = 0
-          this.filterService?.getSightTypesFromlocalStorage()!.split(',')[0] !== ''
+          this.filterService?.getSightTypesFromlocalStorage()?.length && this.filterService?.getSightTypesFromlocalStorage()!.split(',')[0] !== ''
             ? (this.storageFilterIdCount = this.filterService?.getSightTypesFromlocalStorage()!.split(',').length)
             : null
         }
