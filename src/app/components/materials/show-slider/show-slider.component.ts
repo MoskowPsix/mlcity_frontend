@@ -18,7 +18,6 @@ export class ShowSliderComponent implements OnInit {
   sanitizer: DomSanitizer = inject(DomSanitizer)
 
   checkUrl(file: any) {
-    console.log(file)
     return file.link.includes('https') || file.link.includes('http')
       ? file.link
       : environment.BACKEND_URL + ':' + environment.BACKEND_PORT + file.link
@@ -27,5 +26,6 @@ export class ShowSliderComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }
