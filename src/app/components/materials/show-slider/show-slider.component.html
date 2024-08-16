@@ -10,9 +10,8 @@
     <ng-container *ngFor ="let file of files">
       <swiper-slide>
         <ng-container>
-          <img [src]="checkUrl(file)" />
-          <div class="swiper-container-img_wrapper">
-        </div>
+          <img *ngIf="file.file_types[0].name !== 'video'" [src]="checkUrl(file)" />
+          <iframe *ngIf="file.file_types[0].name === 'video'" class="video-content" [src]="iframeUrl(file.link)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
         </ng-container>
       </swiper-slide>
     </ng-container>
