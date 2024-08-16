@@ -11,6 +11,7 @@
 .circle-container {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .circle_container.active {
@@ -18,7 +19,7 @@
 }
 
 .range-container.active {
-  width: 10rem;
+  width: 13rem;
 }
 
 .range-element {

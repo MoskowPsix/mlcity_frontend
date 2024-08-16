@@ -12,25 +12,7 @@
     justify-content: space-between;
     align-items: center;
     transition: 0.2s;
+    max-height: 34px;
     display: flex;
     border-radius: 100px;
-}
-.rounded-button:active{
-    transition: 0.2s;
-    background-color:var(--font-color);
-    font-size: 0.75rem;
-    color:#fff ;
-    min-width: 2rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    text-align: center;
-    justify-content: space-between;
-    align-items: center;
-    display: flex;
-    border-radius: 100px;
-    .rounded-button-img{
-        filter: brightness(0) saturate(100%) invert(100%) sepia(46%) saturate(0%) hue-rotate(225deg) brightness(106%) contrast(100%);
-    }
 }

@@ -27,9 +27,11 @@ export class CardGridComponent implements OnInit {
     // }
   }
   onIonInfinite(event: any) {
-    let trueEvent = event as InfiniteScrollCustomEvent
-    this.endScroll.emit()
-    trueEvent.target.complete()
+    if (!this.notFound) {
+      let trueEvent = event as InfiniteScrollCustomEvent
+      this.endScroll.emit()
+      trueEvent.target.complete()
+    }
   }
   scrollPaginate() {}
   ngOnInit() {

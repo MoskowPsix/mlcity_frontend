@@ -11,10 +11,11 @@ export class RangeSelectionButtonComponent implements OnInit {
   radiusRange: number[] = [1, 2, 5, 10, 25]
   currentRange!: number
 
-  constructor(private filterService: FilterService) { }
+  constructor(private filterService: FilterService) {}
 
   changeState() {
     this.state = !this.state
+    console.log(this.state)
   }
 
   changeRadius(value: number) {
