@@ -392,7 +392,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           type: 'Rectangle',
           coordinates: [
             [0, 0],
-            [20, 20],
+            [40, 40],
           ],
         },
       })
