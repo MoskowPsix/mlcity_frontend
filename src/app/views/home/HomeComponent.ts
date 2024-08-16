@@ -967,7 +967,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.eventTypeId = value[0]
     })
 
-    this.switchTypeService.currentType.pipe().subscribe((value: string) => {
+    this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value: string) => {
       let color = value === 'sights' ? '#3880FF' : '#f7ab31'
       this.CirclePoint?.options.set('fillColor', color)
       this.CirclePoint?.options.set('strokeColor', color)
