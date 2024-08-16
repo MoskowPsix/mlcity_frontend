@@ -1,7 +1,8 @@
 import { IUser } from './user'
 
-export interface IOrganisation {
-  name: string
+export interface IOrganization {
+  id?: number
+  name?: string
   inn?: number
   ogrn?: number
   kpp?: number
