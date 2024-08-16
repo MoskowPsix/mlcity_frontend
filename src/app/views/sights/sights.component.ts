@@ -271,7 +271,6 @@ export class SightsComponent implements OnInit, OnDestroy {
     window.addEventListener('scrollend', this.scrollEvent, true)
     this.sightsCity = []
     this.sightsGeolocation = []
-    this.filterService.setSightTypesTolocalStorage([])
     this.nextPage = true
     this.notFound = false
     //Подписываемся на изменение фильтра

@@ -46,7 +46,6 @@ export class CategoryButtonComponent implements OnInit {
       .getTypes()
       .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
-        console.log(this.types)
         this.types.sights = response.types
         this.loadingService.hideLoading()
       })
@@ -93,8 +92,6 @@ export class CategoryButtonComponent implements OnInit {
                 this.selectedTypesId.push(Number(id))
               }
             })
-            console.log(this.currentTypes)
-            console.log(this.selectedTypesId)
           }
 
           this.typesForType = this.types.events
@@ -108,7 +105,6 @@ export class CategoryButtonComponent implements OnInit {
         storageFilterId = this.filterService.getSightTypesFromlocalStorage()?.split(',')
         if (this.types && this.types.sights.length > 0) {
           if (storageFilterId[0].length) {
-            console.log(storageFilterId)
             storageFilterId.forEach((id: any) => {
               let index = this.types.sights.map((type: any) => type.id).indexOf(Number(id))
               if (!this.currentTypes.includes(this.types.sights[index])) {
@@ -131,14 +127,12 @@ export class CategoryButtonComponent implements OnInit {
   addCaategory(category: any) {
     this.currentTypes.push(category)
     this.selectedTypesId.push(category.id)
-    console.log(this.selectedTypesId)
     this.setTypesToStore()
   }
   deleteCaategory(index: any) {
     let categoryId = this.currentTypes[index].id
     remove(this.selectedTypesId, (id) => id === categoryId)
     this.currentTypes.splice(index, 1)
-    console.log('удалил')
     this.setTypesToStore()
   }
   ionViewDidLeave() {
@@ -149,6 +143,7 @@ export class CategoryButtonComponent implements OnInit {
     this.destroy$.next()
     this.destroy$.complete()
   }
+
   ngOnInit() {
     this.getTypes()
     this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {

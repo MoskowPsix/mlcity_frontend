@@ -1,14 +1,13 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { BehaviorSubject } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
 })
 export class SwitchTypeService {
-
   public currentType: BehaviorSubject<string> = new BehaviorSubject<string>('events')
   public link: BehaviorSubject<string> = new BehaviorSubject<string>('/events')
-  constructor() { }
+  constructor() {}
 
   changeType() {
     if (this.currentType.value == 'events') {

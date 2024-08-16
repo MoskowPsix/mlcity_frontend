@@ -8,6 +8,7 @@ import {
   AfterContentInit,
   ChangeDetectionStrategy,
   HostListener,
+  inject,
 } from '@angular/core'
 
 import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime, filter, last } from 'rxjs'
@@ -27,6 +28,7 @@ import { BehaviorSubject } from 'rxjs'
 import { MapService } from 'src/app/services/map.service'
 import { Capacitor } from '@capacitor/core'
 import { Router } from '@angular/router'
+import { SwitchTypeService } from 'src/app/services/switch-type.service'
 import { CalendarComponent } from 'src/app/components/calendar/calendar.component'
 register()
 
@@ -52,6 +54,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   eventsGeolocation: IEvent[] = []
   wait: boolean = true
   scrollStart: any
+  switchTypeService: SwitchTypeService = inject(SwitchTypeService)
 
   @ViewChild('cardContainer')
   cardContainer!: ElementRef
@@ -115,7 +118,6 @@ export class EventsComponent implements OnInit, OnDestroy {
         })
     })
   }
-
 
   scrollUp() {
     document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' })
@@ -260,6 +262,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {}
   ngOnInit() {}
   ionViewWillEnter() {
+    this.switchTypeService.currentType.value == 'sights' ? this.router.navigate(['/sights']) : null
+
     this.wait = true
     this.nextPage = true
     this.notFound = false
