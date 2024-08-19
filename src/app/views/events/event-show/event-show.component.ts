@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Output, Input } from '@angular/core'
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Output, Input, inject } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
 import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter, timeInterval } from 'rxjs'
 import { EventsService } from 'src/app/services/events.service'
@@ -20,6 +20,7 @@ import { LocationService } from 'src/app/services/location.service'
 import { MapService } from 'src/app/services/map.service'
 import { YaReadyEvent } from 'angular8-yandex-maps'
 import { SliderComponent } from '@angular-slider/ngx-slider/slider.component'
+import { SearchFirstySeanceService } from 'src/app/services/search-firsty-seance.service'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -57,6 +58,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   map!: YaReadyEvent<ymaps.Map>
 
   showRout: boolean = false
+  searchFirstySeanceService:SearchFirstySeanceService = inject(SearchFirstySeanceService)
   url: any = ''
   @Input() createObj: any = {}
   constructor(
@@ -119,7 +121,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     if (this.loadMore) {
       this.loadPlace = true
       this.eventsService
-        .getEventPlaces(this.eventId, this.queryBuilderService.queryBuilder('eventPlaces'))
+        .getEventPlaces(this.eventId,)
         .pipe(
           delay(100),
           retry(3),
@@ -132,6 +134,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
         )
         .subscribe((response: any) => {
           this.places.push(...response.places.data)
+          this.searchFirstySeanceService.searchSeance(this.places).then((res)=>{
+            console.log(res)
+          })
           this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(response.places.next_cursor)
           response.places.next_cursor ? (this.loadMore = true) : (this.loadMore = false)
           this.cdr.detectChanges()
@@ -248,6 +253,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     }
   }
 
+  
   ngOnInit() {
     //Получаем ид ивента из параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
