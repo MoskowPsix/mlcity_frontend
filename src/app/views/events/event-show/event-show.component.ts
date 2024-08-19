@@ -60,6 +60,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
   showRout: boolean = false
   searchFirstySeanceService:SearchFirstySeanceService = inject(SearchFirstySeanceService)
   url: any = ''
+  likeUrl: string = ''
+  favoriteUrl: string = ''
+  priceState: string = ''
   @Input() createObj: any = {}
   constructor(
     private route: ActivatedRoute,
@@ -88,6 +91,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         if (event) {
           this.event = event
+          this.checkPrice()
           // this.places = event.places_full;
         }
         this.titleService.setTitle(event.name)
@@ -183,6 +187,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .pipe(retry(3), takeUntil(this.destroy$))
         .subscribe((liked: boolean) => {
           this.like = liked
+          console.log(liked)
+          this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
         })
   }
 
@@ -193,9 +199,18 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .pipe(retry(3), takeUntil(this.destroy$))
         .subscribe((favorite: boolean) => {
           this.favorite = favorite
+          this.favorite
+            ? (this.favoriteUrl = 'assets/icons/star-active.svg')
+            : (this.favoriteUrl = 'assets/icons/star.svg')
         })
   }
 
+  checkPrice() {
+    let prices = this.event.price
+    if (prices[0] == prices[prices.length] && prices[0] !== 0){
+      
+    } console.log(prices[0])
+  }
   // onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
   //   let icoLink = this.event && this.event.types && this.event.types.length ? this.host + ':' + this.port + this.event.types[0].ico : ''
 
@@ -218,6 +233,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .pipe(
           tap(() => {
             this.favorite = !this.favorite
+            this.favorite
+              ? (this.favoriteUrl = 'assets/icons/star-active.svg')
+              : (this.favoriteUrl = 'assets/icons/star.svg')
+            this.loadingLike = false
             this.loadingFavotire = false
           }),
           catchError((err) => {
@@ -235,12 +254,14 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
       this.loadingLike = true // для отображения спинера
+
       this.eventsService
         .toggleLike(event_id)
         .pipe(
           tap(() => {
             this.like = !this.like
             this.like ? this.startLikesCount++ : this.startLikesCount !== 0 ? this.startLikesCount-- : 0
+            this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
             this.loadingLike = false
           }),
           catchError((err) => {
@@ -259,6 +280,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
     })
+
     this.userAuth = this.authService.getAuthState()
     if (this.router.url !== '/cabinet/events/create') {
       this.getEvent()

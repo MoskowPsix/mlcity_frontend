@@ -41,6 +41,21 @@
       <!-- content -->
       <ng-container *ngIf="event && !loadingEvent">
         <app-show-slider [files]="event.files"></app-show-slider>
+
+        <div class="back-button-wrapper">
+          <app-back-button></app-back-button>
+        </div>
+
+        <div class="social-button-container">
+          <app-circle-button (click)="toggleFavorite(event.id)" [loading]="loadingFavotire" [icon]="favoriteUrl"></app-circle-button>
+          <app-circle-button (click)="toggleLike(event.id)" [loading]="loadingLike" [icon]="likeUrl"></app-circle-button>
+          <app-circle-button icon="assets/icons/share.svg"></app-circle-button>
+        </div>
+
+        <div class="price-container">
+          <span class="price-container__text">{{priceState}}</span>
+        </div>
+
         <!-- <ion-row class="ion-justify-content-center">
           <ion-col size-lg="10" size-md="12" size-xs="12" class=""> -->
   
@@ -102,7 +117,7 @@
   
         <!-- </ion-row> -->
 <!--  
-        <div class="social-buttons">
+        <!-- <div class="social-buttons">
           <div class="likes">
             <ion-icon name="chatbox-outline" class="ico"></ion-icon>
             <span *ngIf="event.comments.length !==0 " >{{ event.comments.length }}</span>
@@ -124,7 +139,7 @@
         
         <div class="main-content">
 
-        </div>
+        </div> -->
 
         <ion-row class="ion-justify-content-center">
   
