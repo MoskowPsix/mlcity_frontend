@@ -1,3 +1,40 @@
+.back-button-wrapper{
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1;
+}
+.social-button-container{
+  position: absolute;
+  display: flex;
+  gap: 5px;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
+}
+.price-container__text{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.7rem;
+  color: #fff;
+  background-color: #1c2226d5;
+  min-width: 3.125rem;
+  height: 1.438rem;
+  border-radius: 4px;
+  position: absolute;
+  top: 11.5rem;
+  z-index: 1;
+  left: 1rem;
+}
+
+
+
+
+
 .ico-small {
   width: 30px;
   height: 30px;

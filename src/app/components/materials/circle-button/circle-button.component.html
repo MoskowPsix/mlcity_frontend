@@ -12,7 +12,8 @@
 </ng-container>
 <ng-container *ngIf="border === ''">
   <button (click)="click()" class="circle-button">
-    <img *ngIf="icon" src="{{icon}}" alt="">
+    <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>  
+    <img  style="{{changeColor}}" *ngIf="icon && !loading" src="{{icon}}" alt="">
     <ng-content></ng-content>
   </button>
 </ng-container>
