@@ -133,6 +133,8 @@ import { RoundedButtonComponent } from './components/materials/rounded-button/ro
 import { RangeSelectionButtonComponent } from './components/materials/range-selection-button/range-selection-button.component'
 import { TypesModalComponent } from './components/types-modal/types-modal.component'
 import { CategoryButtonComponent } from './components/materials/category-button/category-button.component'
+import { SeancesContainerComponent } from './components/materials/seances-container/seances-container.component'
+import { SeanceShowComponent } from './components/materials/seance-show/seance-show.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -180,6 +182,7 @@ registerLocaleData(localeRu, 'ru')
     MenuAuthSidebarComponent,
     FooterComponent,
     UserSectionComponent,
+    SeancesContainerComponent,
     EmailConfirmComponent,
     ExitButtonComponent,
     AboutComponent,
@@ -195,6 +198,7 @@ registerLocaleData(localeRu, 'ru')
     EditSliderComponent,
     SightTypeComponent,
     RoundedButtonComponent,
+    SeanceShowComponent,
     ReadMoreComponent,
     FiltersComponent,
     ProfileItemComponent,

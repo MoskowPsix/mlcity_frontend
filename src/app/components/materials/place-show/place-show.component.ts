@@ -10,15 +10,15 @@ import { IPlace } from 'src/app/models/place'
 export class PlaceShowComponent implements OnInit {
   constructor() {}
   @Input() place!: any
+  @Input() priceState!: string
   public map!: YaReadyEvent<ymaps.Map>
   onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>, place: any) {
     this.map = { target, ymaps }
     target.geoObjects.add(new ymaps.Placemark([place.latitude, place.longitude], {}, { preset: 'twirl#violetIcon' }))
-    console.log(place)
     this.map.target.controls.remove('zoomControl')
     this.map.target.behaviors.disable('drag')
   }
   ngOnInit() {
-    console.log(this.place)
+
   }
 }

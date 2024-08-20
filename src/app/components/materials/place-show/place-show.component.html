@@ -18,10 +18,6 @@
         }">
         </ya-map>
       </div>
-      <div class="place-content-container__seances">
-        <div class="seances__calendar-button">
-          
-        </div>
-      </div>
+      <app-seances-container [priceState]="priceState" [seances]="place.seances"/>
     </div>
 </ion-accordion>

@@ -73,59 +73,8 @@
             <span  class="title">
               Расписание
             </span>
-            <app-place-show-container [places]="places" [prices]="this.event.price"></app-place-show-container>
-            <ion-accordion-group>
-              <!-- <ion-accordion class="">
-                <ion-item slot="header" style="border-bottom: 1px solid #4c586156;text-align: start; padding-left: -1rem;">
-                  <ion-label>First Accordion</ion-label>
-                </ion-item> -->
-                <!-- <div class="accordion-content ion-padding" slot="content">
-                  <div *ngIf="place.controls.coords.value" class="map_prew">
-                    <ya-map 
-                    [zoom]="15"  
-                    [center]="[place.controls.coords.value[0], place.controls.coords.value[1]]"
-                    (ready)="onMapReady($event,place)"
-                    [state]="{controls: ['zoomControl','fullscreenControl']}"
-                    [options]="{
-                      yandexMapDisablePoiInteractivity: true,
-                      minZoom:1,
-                      maxZoom:18,
-                      suppressMapOpenBlock: true,
-                      suppressObsoleteBrowserNotifier: true
-                    }">
-                    </ya-map>
-                  </div> -->
-                  <!-- <div class="seances">
-                    <div class="seance-time-container ion-justify-content-center">
-                      <div class="seance-time-c1">
-                        <div class="seance-wrapper">
-                          <ion-col style="max-width:90px;">
-                            <div style="display: flex;">
-                              <div class="vertical-text">
-                                {{ seance.value.dateStart.split('+')[0]|date:'EE' }}
-                              </div>
-                              <div>
-                                <p class="seance-time-day" >{{ seance.value.dateStart.split('+')[0]|date:'d' }}</p>
-                              </div>
-                            </div>
-                            <div class="seance-time-month">
-                              {{ seance.value.dateStart.split('+')[0]|date:'MMMM' }}
-                            </div>
-                          </ion-col>
-          
-                          <div class="seance-time-hour-container">
-                            <div>{{seance.value.dateStart.split('+')[0]|date:'H:mm'}} - {{seance.value.dateEnd.split('+')[0]|date:'H:mm'}}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
-              <!-- </ion-accordion> -->
-      
-            </ion-accordion-group>
+            <app-place-show-container [priceState]="priceState" [places]="places" [prices]="this.event.price"></app-place-show-container>
           </div>
-          
         </div> 
 
         <ion-row class="ion-justify-content-center" style="display: none;">

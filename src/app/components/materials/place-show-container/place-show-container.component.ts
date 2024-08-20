@@ -11,6 +11,6 @@ export class PlaceShowContainerComponent implements OnInit {
   constructor() {}
   @Input() places: IPlace[] = []
   @Input() prices: IPrice[] = []
-  
+  @Input() priceState!: string
   ngOnInit() {}
 }

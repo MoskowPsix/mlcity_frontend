@@ -1,0 +1,6 @@
+<ng-container *ngIf="seances">
+  <div>
+    <app-seance-show [priceState]="priceState" [seance]="seance" *ngFor="let seance of seances"></app-seance-show>
+  </div>
+</ng-container>
+
