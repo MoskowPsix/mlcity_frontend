@@ -49,7 +49,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   favorite: boolean = false
   loadingFavotire: boolean = false
-
+  firstySeance:any
   like: boolean = false
   loadingLike: boolean = false
   startLikesCount: number = 0
@@ -139,7 +139,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .subscribe((response: any) => {
           this.places.push(...response.places.data)
           this.searchFirstySeanceService.searchSeance(this.places).then((res)=>{
-            console.log(res)
+            this.firstySeance = res
+            console.log(this.firstySeance)
           })
           this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(response.places.next_cursor)
           response.places.next_cursor ? (this.loadMore = true) : (this.loadMore = false)
@@ -207,9 +208,26 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   checkPrice() {
     let prices = this.event.price
-    if (prices[0] == prices[prices.length] && prices[0] !== 0){
-      
-    } console.log(prices[0])
+
+    if(prices[0].cost_rub == 0 && prices[0].cost_rub == prices[prices.length - 1].cost_rub){
+      this.priceState = 'Бесплатно'
+    }
+
+    if (prices[0].cost_rub == prices[prices.length - 1].cost_rub && prices[0] !== 0){
+      console.log(prices.length)
+      this.priceState = prices[0].cost_rub + '₽'
+    }
+
+    if(prices[0] != prices[prices.length] && prices[0] !== 0){
+      this.priceState = prices[0].cost_rub
+      let minPrice = prices[0].cost_rub
+      console.log(prices)
+      prices.forEach((price:any)=>{
+        price.cost_rub < minPrice ? minPrice = price.cost_rub:null
+      })
+      this.priceState = 'от ' + minPrice + '₽'
+    }
+
   }
   // onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
   //   let icoLink = this.event && this.event.types && this.event.types.length ? this.host + ':' + this.port + this.event.types[0].ico : ''
@@ -274,8 +292,11 @@ export class EventShowComponent implements OnInit, OnDestroy {
     }
   }
 
-  
-  ngOnInit() {
+  ionViewWillEnter(){
+    this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
+    this.favorite
+              ? (this.favoriteUrl = 'assets/icons/star-active.svg')
+              : (this.favoriteUrl = 'assets/icons/star.svg')
     //Получаем ид ивента из параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
@@ -296,6 +317,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
       })
     }
+  }
+  ngOnInit() {
+  
   }
 
   ngOnDestroy() {

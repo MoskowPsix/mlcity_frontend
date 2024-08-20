@@ -92,6 +92,10 @@
     src: url('/assets/fonts/static/NunitoSans_7pt-SemiBold.ttf');
 }
 @font-face {
+    font-family: "NunitoSans-Bold";
+    src: url('/assets/fonts/static/NunitoSans_7pt-Bold.ttf');
+}
+@font-face {
     font-family: "NunitoSans-Regular";
     src: url('/assets/fonts/static/NunitoSans_7pt-Regular.ttf');
 }
@@ -99,7 +103,7 @@
 
 
 :root{
-    --font-bold:'NunitoSans-SemiBold';
+    --font-bold:'NunitoSans-Bold';
     --font-regular:'NunitoSans-Regular';
     --font-color:#4C5861;
     --font-color-dark:#1C2226;

@@ -4,7 +4,7 @@ import { FilterService } from './filter.service';
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps'
 import { LocationService } from './location.service';
 import moment from 'moment'
-import { tap } from 'rxjs';
+import { Subject, takeUntil, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,6 +14,7 @@ export class SearchFirstySeanceService {
     private yaGeocoderService: YaGeocoderService,
     private locationService:LocationService
   ) { }
+  private readonly destroy$ = new Subject<void>()
   filterService:FilterService = inject(FilterService)
   
   searchSeanceForPlaces(places:IPlace[]) {
@@ -46,6 +47,7 @@ export class SearchFirstySeanceService {
         let minSeancePlace
         if (lastMapLatitude && lastMapLongitude) { // Если есть координаты на карте
             this.locationService.getLocationByCoords([Number(lastMapLatitude), Number(lastMapLongitude)]).pipe(
+              takeUntil(this.destroy$),
                 tap((res: any) => {
                   locationName = res.location.name;
                   locationParrent = res.location.location_parent.name
