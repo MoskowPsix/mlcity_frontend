@@ -30,6 +30,7 @@ import { CommentsService } from 'src/app/services/comments.service'
 import numeral from 'numeral'
 import { HelpersService } from 'src/app/services/helpers.service'
 import { Router } from '@angular/router'
+import { Statuses } from 'src/app/enums/statuses-new'
 register()
 
 @Component({
@@ -166,12 +167,23 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   showInfoAboutStatus() {
     switch (this.getLastStatus().name) {
-      case 'Новое':
+      case Statuses.new:
         this.toastService.showToast('Находится на рассмотрении', 'primary')
         break
-      case 'Изменено':
+      case Statuses.changed:
         this.toastService.showToast('Находится на модерации', 'warning')
         break
+      case Statuses.published:
+        this.toastService.showToast('Находится в активном состоянии', 'success')
+        break
+      case Statuses.blocked:
+        this.toastService.showToast('На данный момент заблокированно', 'danger')
+        break
+      case Statuses.denied:
+        this.toastService.showToast('Было отклонено модератором', 'danger')
+        break
+      case Statuses.draft:
+          this.toastService.showToast('Находится в черновиках', 'secondary')
     }
   }
 
@@ -427,7 +439,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.destroy$.complete()
   }
   ngOnInit() {
-    console.log(this.event)
     this.formatedStartDate = this.datePipe.transform(this.event.date_start, 'dd-MMM')
 
     this.formatedEndDate = this.datePipe.transform(this.event.date_end, 'dd-MMM')
