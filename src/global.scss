@@ -79,7 +79,11 @@
 }
 @font-face {
 	font-family: 'NunitoSans-Regular';
-	src: url('./assets/fonts/NunitoSans-Regular.ttf');
+	src: url('./assets/fonts/NunitoSans.ttf');
+}
+@font-face {
+	font-family: 'NunitoSans-Light';
+	src: url('./assets/fonts/NunitoSans.ttf');
 }
 
 @font-face {
@@ -103,6 +107,7 @@
 
 
 :root{
+    --font-light:'NunitoSans-Light';
     --font-bold:'NunitoSans-Bold';
     --font-regular:'NunitoSans-Regular';
     --font-color:#4C5861;

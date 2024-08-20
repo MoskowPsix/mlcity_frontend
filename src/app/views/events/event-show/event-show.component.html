@@ -58,22 +58,27 @@
         </div>
         
         <div class="main-content">
+          
           <div class="main-content__firt-seance" *ngIf="firstySeance">
             ближайший сеанс {{firstySeance.seance.date_start|date:'d MMM в HH:mm'}}
           </div>
+
           <strong class="main-content__name">{{event.name}}</strong>
+
           <app-collapsed-text>
               {{ event.description }}
           </app-collapsed-text>
+
           <div class="main-content__shedule">
             <span  class="title">
               Расписание
             </span>
+            <app-place-show-container [places]="places" [prices]="this.event.price"></app-place-show-container>
             <ion-accordion-group>
-              <ion-accordion class="">
+              <!-- <ion-accordion class="">
                 <ion-item slot="header" style="border-bottom: 1px solid #4c586156;text-align: start; padding-left: -1rem;">
                   <ion-label>First Accordion</ion-label>
-                </ion-item>
+                </ion-item> -->
                 <!-- <div class="accordion-content ion-padding" slot="content">
                   <div *ngIf="place.controls.coords.value" class="map_prew">
                     <ya-map 
@@ -116,7 +121,7 @@
                     </div>
                   </div>
                 </div> -->
-              </ion-accordion>
+              <!-- </ion-accordion> -->
       
             </ion-accordion-group>
           </div>

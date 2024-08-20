@@ -18,7 +18,8 @@ import { EditEventComponent } from './views/cabinet/edit/edit-event/edit-event.c
 import { EditSightComponent } from './views/cabinet/edit/edit-sight/edit-sight.component'
 import { AppComponent } from './app.component'
 import { EventsComponent } from './views/events/events.component'
-
+import { PlaceShowComponent } from './components/materials/place-show/place-show.component'
+import { PlaceShowContainerComponent } from './components/materials/place-show-container/place-show-container.component'
 import { CabinetComponent } from './views/cabinet/cabinet.component'
 import { HomeComponent } from './views/home/HomeComponent'
 import { EmailConfirmComponent } from './views/cabinet/email-confirm/email-confirm.component'
@@ -174,6 +175,8 @@ registerLocaleData(localeRu, 'ru')
     DropdownPopupComponent,
     StandartInputComponent,
     MenuAuthComponent,
+    PlaceShowContainerComponent,
+    PlaceShowComponent,
     MenuAuthSidebarComponent,
     FooterComponent,
     UserSectionComponent,
