@@ -233,7 +233,7 @@ ion-card-subtitle {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   border-radius: 50%;
 }
 
@@ -253,6 +253,7 @@ ion-card-subtitle {
 }
 
 .info-footer {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   padding-left: 0.5rem;
@@ -282,6 +283,27 @@ ion-card-subtitle {
   display: flex;
   gap: 0.313rem;
 
+}
+.status-container {
+  right: 1rem;
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1c2226b6;
+  padding: 6px;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+  border-radius: 50%;
+  top: 10.6rem;
+}
+
+.status {
+  height: 2px;
+  width: 2px;
+  padding: 4px;
+  border-radius: 50%;
 }
 .event-name{
   margin-top: 0.5rem;

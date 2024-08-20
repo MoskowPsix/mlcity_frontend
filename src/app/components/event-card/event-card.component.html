@@ -18,6 +18,9 @@
         <div *ngIf="myEvent" class="edit-button">
           <app-circle-button (click)="eventNavigationEdit()"  icon="/assets/icons/menu-pen.svg" border="dark-all" ></app-circle-button>
         </div>
+        <div  *ngIf="myEvent"class="status-container" (click)="showInfoAboutStatus()">
+          <div class="status" [ngStyle]="{'background-color': getLastStatusColor()}"></div>
+        </div>
 
         <div (click)="eventNavigation()" class="card">
               <div class="info-wrapper">

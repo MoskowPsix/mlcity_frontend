@@ -51,7 +51,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     private helpers: HelpersService,
     private datePipe: DatePipe,
     private router: Router,
-  ) {}
+  ) { }
 
   private readonly destroy$ = new Subject<void>()
 
@@ -94,6 +94,13 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   prices: number[] = []
   minPrice: number = 0
   maxPrice: number = 0
+  statusColor: Record<string, string> = {
+    Новое: '#3880FF',
+    Изменено: '#F99011',
+    Опубликовано: '#22CA3D',
+    Отказ: '#E83940',
+    Черновик: '#4C5861',
+  }
 
   eventNavigation() {
     this.isSight
@@ -157,7 +164,16 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  test() {}
+  showInfoAboutStatus() {
+    switch (this.getLastStatus().name) {
+      case 'Новое':
+        this.toastService.showToast('Находится на рассмотрении', 'primary')
+        break
+      case 'Изменено':
+        this.toastService.showToast('Находится на модерации', 'warning')
+        break
+    }
+  }
 
   getUrlFrame(url: string) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
@@ -313,6 +329,23 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  getLastStatusColor() {
+    let status: string = this.getLastStatus().name
+
+    return this.statusColor[status]
+  }
+
+  getLastStatus() {
+    let status: any
+    this.event.statuses.forEach((element: any) => {
+      if (element.pivot.last) {
+        status = element
+      }
+    })
+
+    return status
+  }
+
   ngAfterViewInit(): void {
     this.swiper = this.swiperRef?.nativeElement.swiper
     setTimeout(() => {
@@ -329,45 +362,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.swiper?.update()
   }
-
-  // scrollEvent = (): void => {
-
-  //   const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
-  //   if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {
-  //     if (!this.viewElementTimeStart){
-  //       this.viewElementTimeStart = new Date().getTime()
-  //     }
-  //   } else if ((this.viewElementTimeStart && !this.viewElement) || ((this.viewElementTimeStart && !this.viewElement) && (boundingClientRect.width === 0 && boundingClientRect.width === 0))) {
-  //     this.viewElementTimeEnd = new Date().getTime()
-  //     let time: any
-  //     time = (new Date().getTime() - this.viewElementTimeStart)/1000
-  //     if (time > 3.141) {
-  //       if (this.isSight) {
-  //         this.sightsService.addView(this.event.id, time).pipe(
-  //           delay(100),
-  //           retry(3),
-  //           catchError((err) =>{
-  //             return of(EMPTY)
-  //           }),
-  //           takeUntil(this.destroy$)
-  //         ).subscribe()
-  //       } else {
-  //         this.eventsService.addView(this.event.id, time).pipe(
-  //           delay(100),
-  //           retry(3),
-  //           catchError((err) =>{
-  //             return of(EMPTY)
-  //           }),
-  //           takeUntil(this.destroy$)
-  //         ).subscribe()
-  //       }
-  //       this.viewElement = true
-  //     }
-  //     this.viewElementTimeStart = 0
-  //     this.viewElementTimeEnd = 0
-  //   }
-  //   //console.log(boundingClientRect)
-  // }
 
   toggleComment() {
     this.loadingComment = true
@@ -433,6 +427,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.destroy$.complete()
   }
   ngOnInit() {
+    console.log(this.event)
     this.formatedStartDate = this.datePipe.transform(this.event.date_start, 'dd-MMM')
 
     this.formatedEndDate = this.datePipe.transform(this.event.date_end, 'dd-MMM')
