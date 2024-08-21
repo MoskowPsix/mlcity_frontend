@@ -2,7 +2,7 @@
 <ng-container *ngIf="url !== '/cabinet/events/create'">
   <ion-content>
    
-    <div class="pb-2rem" class="event-container">
+    <div class="pb-2rem"  class="event-container">
       <ng-container *ngIf="loadingEvent && router.url !== '/cabinet/events/create'">
         <ion-row class="ion-justify-content-center">
           <ion-col size-lg="12" size-md="12" size-xs="12">
@@ -73,7 +73,7 @@
             <span  class="title">
               Расписание
             </span>
-            <app-place-show-container [priceState]="priceState" [places]="places" [prices]="this.event.price"></app-place-show-container>
+            <app-place-show-container [priceState]="priceStateForShow" [places]="places" [prices]="this.event.price"></app-place-show-container>
           </div>
         </div> 
 

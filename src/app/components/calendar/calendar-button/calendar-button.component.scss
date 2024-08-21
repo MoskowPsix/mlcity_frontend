@@ -44,7 +44,7 @@
   font-size: 0.75rem;
   font-family: 'NunitoSans-SemiBold';
 }
-.rounded-calndar-button{
+.rounded-calendar-button{
   background-color: #fff;
   font-size: 0.75rem;
   color: var(--font-color);
@@ -60,6 +60,28 @@
   transition: 0.2s;
   display: flex;
   border-radius: 100px;
+}
+.calendar-light{
+  margin-top: 0.6rem;
+  background-color: #fff;
+  font-size: 0.65rem;
+  font-family: var(--font-bold);
+  color: #4588fc;
+  padding: 6px;
+  max-height: 34px;
+  text-align: center;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--blue-color);
+  transition: 0.2s;
+  display: flex;
+  max-width: 165px;
+  border: 1px solid #3881ff50;
+  .calendar-icon{
+    margin-right: 0.3rem;
+    filter: brightness(0) saturate(100%) invert(41%) sepia(33%) saturate(4003%) hue-rotate(206deg) brightness(102%) contrast(101%);
+  }
+  border-radius: 5px;
 }
 .calendar-icon{
   margin-right: 0.3rem;

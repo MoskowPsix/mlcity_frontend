@@ -17,7 +17,7 @@
     display: grid;
     min-width: 100%;
     min-height:3.85rem;
-    grid-template-columns: 30% 40% 30%;
+    grid-template-columns: 25.5% 43% 31%;
 }
 .buy-ticket-seance-button{
     padding-left: 0.7rem;
@@ -46,12 +46,12 @@
     font-family: var(--font-regular);
 }
 .price-seance{
-    padding-left: 0.5rem;
     display: grid;
     align-items: center;
+    justify-content: center;
     place-self: center;
     min-width: 100%;
-    padding-top: 0.2rem;
+    width: 100%;
     font-size: 0.85rem;
     color: var(--gray-color);
     font-family: var(--font-bold);
