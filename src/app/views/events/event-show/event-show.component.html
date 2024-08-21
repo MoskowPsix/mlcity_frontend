@@ -58,7 +58,6 @@
         </div>
         
         <div class="main-content">
-          
           <div class="main-content__firt-seance" *ngIf="firstySeance">
             ближайший сеанс {{firstySeance.seance.date_start|date:'d MMM в HH:mm'}}
           </div>
@@ -75,6 +74,16 @@
             </span>
             <app-place-show-container [priceState]="priceStateForShow" [places]="places" [prices]="this.event.price"></app-place-show-container>
           </div>
+          <div class="main-content__community">
+            <strong class="title">Сообщество</strong>
+            <div class="community-wrapper">
+              <app-user-section [buttonText]="event.sponsor"></app-user-section>
+              <div class="community-wrapper__button-container">
+                <app-standart-button theme = 'light' buttonText="Перейти"></app-standart-button>
+              </div>
+            </div>
+          </div>
+      
         </div> 
 
         <ion-row class="ion-justify-content-center" style="display: none;">

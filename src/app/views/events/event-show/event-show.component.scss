@@ -207,7 +207,9 @@ ion-content{
     }
   }
 }
-
+.main-content__community{
+  padding-top: 1rem;
+}
 .place-skelet {
   border-radius: 6px;
   height: 60px;
@@ -258,11 +260,18 @@ ion-content{
 }
 .title {
   text-align: start;
-  font-family: 'Montserrat-SemiBold';
-  font-size: 40px;
-  font-weight: 500;
-}
+  font-family: var(--font-bold);
+  font-size: 20px;
+  color: #1C2226;
 
+}
+.community-wrapper{
+  padding-top: 1rem;
+}
+.community-wrapper__button-container{
+  padding-top: 1rem;
+  max-width: 181px;
+}
 .events-map-container {
   display: block;
 }

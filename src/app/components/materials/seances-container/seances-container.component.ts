@@ -44,7 +44,6 @@ export class SeancesContainerComponent implements OnInit {
   }
   setDateFilter(event: any) {
     this.templateDate = event
-    console.log(this.templateDate)
     this.viewSeances = []
     this.calendarFilter = event
     this.seances.forEach((seance: any) => {
