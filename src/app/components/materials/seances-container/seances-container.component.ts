@@ -30,6 +30,7 @@ export class SeancesContainerComponent implements OnInit {
     return minSeance
   }
   setDateMinSeance(seance: any) {
+   
     this.calendarFilter = {
       dateStart: moment(seance.split(' ')[0]),
       dateEnd: moment(seance.split(' ')[0]),
