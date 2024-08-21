@@ -1,8 +1,8 @@
 
 <ng-container *ngIf="url !== '/cabinet/events/create'">
   <ion-content>
-    <!-- skeleton animation -->
-    <div class="pb-2rem" class="event-container">
+   
+    <div class="pb-2rem"  class="event-container">
       <ng-container *ngIf="loadingEvent && router.url !== '/cabinet/events/create'">
         <ion-row class="ion-justify-content-center">
           <ion-col size-lg="12" size-md="12" size-xs="12">
@@ -40,87 +40,53 @@
   
       <!-- content -->
       <ng-container *ngIf="event && !loadingEvent">
-        <ion-row class="ion-justify-content-center">
-          <ion-col size-lg="10" size-md="12" size-xs="12" class="">
-  
-            <swiper-container
-            class="swiper-container"
-              #swiper
-              [modules]="swiperModules"
-              autoplay="true"
-              autoplay-delay="5000"
-              autoplay-disableOnInteraction="false"
-              navigation="false"
-              [pagination]="true"
-              [grabCursor]="true"
-              [zoom]="true"
-              [slidesPerView]="1"
-              [centeredSlides]="true"
-              [followFinger]="false"
-              [loop]="true"
-              [initialSlide]="0"
-            >
-              <ng-container *ngIf="event.files && event.files.length; else notFiles">
-                <ng-container *ngFor="let file of event.files">
-                  <swiper-slide style="" class="" *ngIf="file.local === 1">
-                    <img alt="img" src="{{host}}:{{port}}{{file.link}}" /> 
-                    <div class="swiper-container-img_wrapper">
-                    </div>
-                  </swiper-slide>
-  
-                  <swiper-slide  style="" *ngIf="file.local === 0 && file.file_types[0].name === 'image'">
-                    <img alt="img" :src="{{ file.link }}" />
-                    <div class="swiper-container-img_wrapper">
-                    </div>
-                  </swiper-slide>
-  
-                  <!-- видео -->
-                  <swiper-slide  style="" *ngIf="file.local === 0 && file.file_types[0].name === 'video'">
-                    <iframe class="video_content" [src]="getUrlFrame(file.link)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
-                    <div class="swiper-container-img_wrapper">
-                      <div class="swiper-container-header-content">
-  
-                      </div>
-  
-                    </div>
-                  </swiper-slide>
-                </ng-container>
-              </ng-container>
-  
-              <ng-template #notFiles>
-                <swiper-slide><img alt="default img" src="/svg/no-photo.svg" /></swiper-slide>
-              </ng-template>
-            </swiper-container>
-            
-          </ion-col>
-          <div class="event-name-header">
-            {{ event.name }}
-            <h3 class="swiper-container-header-content-time title" style="font-size: 16px;">{{event.date_start | date:'d MMM в HH:mm' }} - {{ event.date_end | date:'d MMM в HH:mm' }}</h3>
-          </div>
-  
-        </ion-row>
-       
-        <div class="social-buttons">
-          <div class="likes">
-            <ion-icon name="chatbox-outline" class="ico"></ion-icon>
-            <span *ngIf="event.comments.length !==0 " >{{ event.comments.length }}</span>
-          </div>
-          <div class="likes">
-            <ion-icon *ngIf="!loadingLike" (click)="toggleLike(event.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
-            <ion-spinner *ngIf="loadingLike"></ion-spinner>
-            <span>{{ startLikesCount }}</span>
-          </div>
-          <div class="likes_star">
-            <ion-icon *ngIf="!loadingFavotire" (click)="toggleFavorite(event.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
-            <ion-spinner *ngIf="loadingFavotire"></ion-spinner>
-          </div>
-          <div class="likes_share">
-            <ion-icon style="margin-left: 4px;" name="share-social-outline" class="ico share"></ion-icon>
-          </div>
-  
+        <app-show-slider [files]="event.files"></app-show-slider>
+
+        <div class="back-button-wrapper">
+          <app-back-button></app-back-button>
         </div>
-  
-        <ion-row class="ion-justify-content-center">
+
+        <div class="social-button-container">
+          <app-circle-button (click)="toggleFavorite(event.id)" [loading]="loadingFavotire" [icon]="favoriteUrl"></app-circle-button>
+          <app-circle-button (click)="toggleLike(event.id)" [loading]="loadingLike" [icon]="likeUrl"></app-circle-button>
+          <app-circle-button icon="assets/icons/share.svg"></app-circle-button>
+        </div>
+
+        <div class="price-container">
+          <span class="price-container__text">{{priceState}}</span>
+          <span class="price-container__text">{{event.date_start | date:'d MMM' }} - {{ event.date_end | date:'d MMM' }}</span>
+        </div>
+        
+        <div class="main-content">
+          <div class="main-content__firt-seance" *ngIf="firstySeance">
+            ближайший сеанс {{firstySeance.seance.date_start|date:'d MMM в HH:mm'}}
+          </div>
+
+          <strong class="main-content__name">{{event.name}}</strong>
+
+          <app-collapsed-text>
+              {{ event.description }}
+          </app-collapsed-text>
+
+          <div class="main-content__shedule">
+            <span  class="title">
+              Расписание
+            </span>
+            <app-place-show-container [priceState]="priceStateForShow" [places]="places" [prices]="this.event.price"></app-place-show-container>
+          </div>
+          <div class="main-content__community">
+            <strong class="title">Сообщество</strong>
+            <div class="community-wrapper">
+              <app-user-section [buttonText]="event.sponsor"></app-user-section>
+              <div class="community-wrapper__button-container">
+                <app-standart-button theme = 'light' buttonText="Перейти"></app-standart-button>
+              </div>
+            </div>
+          </div>
+      
+        </div> 
+
+        <ion-row class="ion-justify-content-center" style="display: none;">
   
           <ion-col size-lg="10" size-md="12" size-xs="12" class="">
             <ion-row class="">

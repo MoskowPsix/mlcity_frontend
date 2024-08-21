@@ -1,0 +1,21 @@
+.not-found-container__img{
+    max-width: 8rem;
+    margin: auto;
+}
+.not-found-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+.not-found-container__text{
+    font-family: var(--font-bold);
+    font-size: 1rem;
+}
+.not-found-container__text-seance{
+    font-family: var(--font-bold);
+    font-size: 0.8rem;
+    color: #3881ffc5;
+    border-bottom: 1px solid #3881ffad;
+}
