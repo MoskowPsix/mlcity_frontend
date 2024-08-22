@@ -33,13 +33,13 @@
 }
 .iframe{
   z-index: 100;
-
+  height: 100%;
   background: #fff;
 }
 .phone-wrapper-img{
   background-position: center;
   background-size: cover;
-  width: 30%;
+  width: clamp(18.75rem, 5.114rem + 68.18vw, 56.25rem);
   height: 100%;
   left: auto;
   right: auto;

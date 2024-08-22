@@ -21,7 +21,7 @@
         <ng-container>
           <img *ngIf="!file" src='assets/images/nophoto.jpg' />
           <img *ngIf="file.file_types[0].name !== 'video'" [src]="checkUrl(file)" />
-          <iframe *ngIf="file.file_types[0].name === 'video'" class="video-content" [src]="iframeUrl(file.link)" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+          <iframe *ngIf="file.file_types[0].name === 'video'" class="video-content" [src]="iframeUrl(file.link)" allow="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
           <div class="darkening-background"></div>
         </ng-container>
       </swiper-slide>
