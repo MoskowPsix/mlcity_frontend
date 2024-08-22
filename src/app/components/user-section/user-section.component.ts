@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { IOrganization } from 'src/app/models/organization'
 import { IUser } from 'src/app/models/user'
 import { environment } from 'src/environments/environment'
 @Component({
@@ -11,6 +12,7 @@ export class UserSectionComponent implements OnInit {
   @Input() user!: IUser
   @Input() type?: string
   @Input() buttonText?: string
+  @Input() organization!: IOrganization
   @Input() fixedImg?: string
   @Input() loadingImg?: boolean
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>()

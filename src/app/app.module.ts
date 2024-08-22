@@ -61,7 +61,7 @@ import { TokenService } from './services/token.service'
 import { UserService } from './services/user.service'
 import { LoadingService } from './services/loading.service'
 import { MapService } from './services/map.service'
-
+import { OrganizationsCardComponent } from './components/organizations-card/organizations-card.component'
 import { environment } from '../environments/environment'
 import { AuthTokenInterceptor } from './auth-token.interceptor'
 
@@ -135,6 +135,8 @@ import { TypesModalComponent } from './components/types-modal/types-modal.compon
 import { CategoryButtonComponent } from './components/materials/category-button/category-button.component'
 import { SeancesContainerComponent } from './components/materials/seances-container/seances-container.component'
 import { SeanceShowComponent } from './components/materials/seance-show/seance-show.component'
+import { OrganizationsSelectContainerComponent } from './components/materials/organizations-select-container/organizations-select-container.component'
+import { OrganizationsGridComponent } from './components/organizations-grid/organizations-grid.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -163,7 +165,6 @@ registerLocaleData(localeRu, 'ru')
     CircleButtonComponent,
     BackButtonComponent,
     RecoveryPasswordComponent,
-    TypesModalComponent,
     SecondHeaderComponent,
     ShowSliderComponent,
     HeaderComponent,
@@ -190,6 +191,7 @@ registerLocaleData(localeRu, 'ru')
     ForbiddenComponent,
     ServerErrorComponent,
     EventShowComponent,
+    OrganizationsSelectContainerComponent,
     EventCreateComponent,
     EventTypeCaruselComponent,
     SightsComponent,
@@ -198,6 +200,7 @@ registerLocaleData(localeRu, 'ru')
     EditSliderComponent,
     SightTypeComponent,
     RoundedButtonComponent,
+    OrganizationsGridComponent,
     SeanceShowComponent,
     ReadMoreComponent,
     FiltersComponent,
@@ -225,6 +228,7 @@ registerLocaleData(localeRu, 'ru')
     NewPriceComponent,
     PlaceInfoComponent,
     SightTypeCaruselComponent,
+    OrganizationsCardComponent,
     SafeUrlPipe,
     SafeUrlPipe2,
     MyEventsComponent,
@@ -250,6 +254,7 @@ registerLocaleData(localeRu, 'ru')
     RangeSelectionButtonComponent,
     CategoryButtonComponent,
     OrganizationCreateComponent,
+    TypesModalComponent,
   ],
   imports: [
     BrowserModule,

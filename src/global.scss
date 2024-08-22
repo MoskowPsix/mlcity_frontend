@@ -78,6 +78,9 @@
     --white-filter: invert(100%) sepia(8%) saturate(7472%) hue-rotate(199deg) brightness(103%) contrast(114%);
     --gray-color:#4C5861;
 }
+
+
+
 @font-face {
 	font-family: 'NunitoSans-Regular';
 	src: url('./assets/fonts/NunitoSans.ttf');
@@ -121,7 +124,9 @@ ion-content {
   --overflow:auto;
   overflow: auto;
   --background: #FAFAFA;
-
+}
+main.inner-scroll.scroll-y{
+    overflow-y:hidden;
 }
 
 body {

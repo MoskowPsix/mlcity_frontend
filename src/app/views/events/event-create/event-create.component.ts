@@ -43,8 +43,10 @@ import { LocationService } from 'src/app/services/location.service'
 import { SightsService } from 'src/app/services/sights.service'
 import { SafeUrlPipe } from './event-create.pipe'
 import { Router } from '@angular/router'
+import { OrganizationService } from 'src/app/services/organization.service'
 import { CreateRulesModalComponent } from 'src/app/components/create-rules-modal/create-rules-modal.component'
 import { maskitoTimeOptionsGenerator } from '@maskito/kit'
+import { IOrganization } from 'src/app/models/organization'
 
 @Component({
   selector: 'app-event-create',
@@ -66,6 +68,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
   currentTime = new Date()
+  organizations: IOrganization[] = []
   @ViewChild('eventName') eventNameElement!: any
   @ViewChild('eventDescription') eventDescriptionElement!: any
   @HostListener('window:resize', ['$event'])
@@ -87,7 +90,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 0
+  stepCurrency: number = 1
   createObj: any = {}
   steps: number = 6
   dataValid: boolean = true
@@ -163,6 +166,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router,
     private yaGeocoderService: YaGeocoderService,
+    private organizationService: OrganizationService,
   ) {}
 
   nextStep() {
@@ -729,7 +733,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
               .split('T')[1]
               .split('+')[0]
               .split(':')[0] + 1
-        
 
           this.createEventForm.value.places[place].value.seances[seans].patchValue({
             dateEnd: splitDate + 'T' + newTime + ':' + splitMinuts + ':' + '00' + '+' + '00',
@@ -1223,6 +1226,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.dateTomorrow.setDate(this.dateTomorrow.getDate() + 1)
   }
   ngOnInit() {
+    this.organizationService
+      .getUserOrganizations()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any) => {
+        console.log(res)
+        this.organizations = res.data.organizations
+      })
     this.setValueDateDefault()
     this.mobileOrNote()
     let locationId: any

@@ -1,0 +1,22 @@
+<ng-container>
+  <label class="label">Организатор</label>
+  <div class="input-container">
+    <input (click)="openOrganiztionsModal()" readonly placeholder="Выберите группу" class="standart-input" name="new_name">
+    <img class="input-container__arrow-img" src="assets/icons/arrow.svg" alt="">
+  </div>
+</ng-container>
+
+<ion-modal (didDismiss)="closeModal()"  [isOpen]="openModal">
+  <ng-template>
+    <ion-toolbar mode="ios">
+      <span class="modal-title">Организатор</span>
+    </ion-toolbar>
+
+    <ion-content>
+      <div class="main-content">
+        <app-organizations-grid [cards]="cards"></app-organizations-grid>
+      </div>
+    </ion-content>
+  </ng-template>
+
+</ion-modal>
