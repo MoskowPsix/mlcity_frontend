@@ -29,8 +29,7 @@ export class SeancesContainerComponent implements OnInit {
     })
     return minSeance
   }
-  setDateMinSeance(seance: any) {
-   
+  async setDateMinSeance(seance: any) {
     this.calendarFilter = {
       dateStart: moment(seance.split(' ')[0]),
       dateEnd: moment(seance.split(' ')[0]),
@@ -39,17 +38,34 @@ export class SeancesContainerComponent implements OnInit {
       dateStart: moment(seance.split(' ')[0]),
       dateEnd: moment(seance.split(' ')[0]),
     }
-    this.seances.forEach((seance: any) => {
-      this.checkSeances(seance)
+    console.time('myFunction')
+
+    // Ожидаем завершения render, если она возвращает промис
+    await this.render()
+
+    console.timeEnd('myFunction')
+  }
+  render() {
+    const filteredSeances = this.seances.filter((seance) => {
+      // Создаем объекты moment из строковых дат и получаем временные метки (timestamps)
+      let dateStart = moment(seance.date_start.split(' ')[0]).valueOf()
+      let dateEnd = moment(seance.date_end.split(' ')[0]).valueOf()
+
+      // Получаем временные метки для начала и конца фильтра
+      let filterStart = moment(this.calendarFilter.dateStart).valueOf()
+      let filterEnd = moment(this.calendarFilter.dateEnd).valueOf()
+
+      // Проверяем, что dateStart и dateEnd попадают в диапазон фильтрации
+      return dateStart >= filterStart && dateEnd <= filterEnd
     })
+    this.viewSeances = filteredSeances
+    console.timeEnd('myFunction')
   }
   setDateFilter(event: any) {
     this.templateDate = event
     this.viewSeances = []
     this.calendarFilter = event
-    this.seances.forEach((seance: any) => {
-      this.checkSeances(seance)
-    })
+    this.render()
     if (this.viewSeances.length == 0) {
       let minSeance = this.searchMinSeance()
       this.calendarFilter = {
@@ -77,6 +93,7 @@ export class SeancesContainerComponent implements OnInit {
   checkSeances(seance: ISeance) {
     let dateStart = moment(seance.date_start.split(' ')[0])
     let dateEnd = moment(seance.date_end.split(' ')[0])
+
     if (dateStart >= moment(this.calendarFilter.dateStart) && dateEnd <= moment(this.calendarFilter.dateEnd)) {
       this.viewSeances.push(seance)
     }

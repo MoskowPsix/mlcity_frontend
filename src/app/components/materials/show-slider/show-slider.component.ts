@@ -1,9 +1,10 @@
-import { Component, inject, Input, OnInit } from '@angular/core'
+import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { IonicSlides } from '@ionic/angular'
 import { register } from 'swiper/element/bundle'
 import { environment } from 'src/environments/environment'
 import { DomSanitizer } from '@angular/platform-browser'
+import Swiper from 'swiper'
 
 register()
 @Component({
@@ -17,6 +18,10 @@ export class ShowSliderComponent implements OnInit {
   swiperModules = [IonicSlides]
   sanitizer: DomSanitizer = inject(DomSanitizer)
 
+  @ViewChild('swiper')
+  swiperRef: ElementRef | undefined
+  swiperIndex: number = 1
+
   checkUrl(file: any) {
     return file.link.includes('https') || file.link.includes('http')
       ? file.link
@@ -26,6 +31,11 @@ export class ShowSliderComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
+  slideChange(event: any) {
+    this.swiperIndex = event.detail[0].activeIndex + 1
+  }
+
   ngOnInit() {
+    console.log(this.swiperRef)
   }
 }
