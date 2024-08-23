@@ -69,6 +69,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   port: string = environment.BACKEND_PORT
   currentTime = new Date()
   organizations: IOrganization[] = []
+
   @ViewChild('eventName') eventNameElement!: any
   @ViewChild('eventDescription') eventDescriptionElement!: any
   @HostListener('window:resize', ['$event'])

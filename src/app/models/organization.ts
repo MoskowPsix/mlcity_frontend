@@ -3,6 +3,7 @@ import { IUser } from './user'
 export interface IOrganization {
   id?: number
   name?: string
+  types?: string
   avatar?: string
   inn?: number
   ogrn?: number

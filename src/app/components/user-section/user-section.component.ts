@@ -16,6 +16,7 @@ export class UserSectionComponent implements OnInit {
   @Input() fixedImg?: string
   @Input() loadingImg?: boolean
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>()
+  @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   public avatarUrl!: string
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   checkAvatar() {
@@ -31,6 +32,9 @@ export class UserSectionComponent implements OnInit {
   }
   click() {
     this.clicked.emit()
+  }
+  emitOrganization(organization: IOrganization){
+    this.selectOrganization.emit(organization)
   }
   ngOnChanges(changes: any) {
     if (this.user) {

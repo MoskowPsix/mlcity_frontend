@@ -17,15 +17,25 @@
 
 
 
+
 .user-section-image{
-    width: 3.75rem;
-    height: 3.75rem;
-    background-size: cover;
-    border-radius: 50%;
-    background-image: url('/assets/images/nophoto.jpg');
+    width: 60px;
+    height: 60px;
+    border-radius: 50px;
+    background: url('/assets/images/nophoto.jpg');
+    background-position: center center;        
+    background-size: cover;      
 }
 .user-section-main{
     display: flex;
+}
+.user-section-main_organization{
+    margin: auto;
+    display: flex;
+    width: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #4c586128;
 }
 .user-section-info{
     display: flex;
@@ -66,6 +76,18 @@
 }
 .user-section-name__organization{
     color: #1C2226;
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-family: var(--font-bold); 
+}
+.category-plug{
+    color: #1C2226;
+    font-size: 0.75rem;
+    font-family: var(--font-regular); 
+}
+.organization-like-button{
+    width: 2rem;
+    height: 2rem;
+    background-color: #DCE9FF;
+    border-radius: 50%;
+    margin-left: 1.5rem;
 }

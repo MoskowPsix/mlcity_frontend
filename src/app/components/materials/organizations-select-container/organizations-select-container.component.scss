@@ -18,6 +18,9 @@ ion-content{
 .main-content{
     
 }
+.toolbar{
+    --background: #FAFBFF;
+}
 .label{
     color: #4C5861;
     font-size: 12px;
@@ -49,6 +52,6 @@ ion-modal{
     --overflow-y: hidden;
 }
 .modal-title{
-    font-family: var(--font-bold);
+    font-family: var(--font-semiBold);
     font-size: 0.75rem;
 }
