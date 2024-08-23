@@ -99,11 +99,12 @@ export class SightsComponent implements OnInit, OnDestroy {
           delay(100),
           retry(3),
           map((response: any) => {
-            this.sightsCity.push(...response.organizations)
+            console.log(response)
+            this.sightsCity.push(...response.organizations.data)
             this.filterService.setSightsCount(response.total)
-            this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(response.sights.next_cursor)
-            response.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
-            response.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
+            this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(response.organizations.next_cursor)
+            response.organizations.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+            response.organizations.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
           }),
           tap((response: any) => {
             this.loadingSightsCity = true

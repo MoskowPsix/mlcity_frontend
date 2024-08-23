@@ -55,12 +55,12 @@ export class MySightsComponent implements OnInit, OnDestroy {
         retry(3),
         map((response: any) => {
           console.log(response)
-          this.sights.push(...response.data)
+          this.sights.push(...response.organizations.data)
           this.spiner = false
 
-          if (response.data.next_cursor != null) {
-            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(response.sights.next_cursor)
-            response.data.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+          if (response.organizations.next_cursor != null) {
+            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(response.organizations.next_cursor)
+            response.organizations.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
           }
         }),
         tap(() => {
