@@ -12,7 +12,6 @@ import { ISightType } from 'src/app/models/sight-type'
 export class OrganizationsGridComponent implements OnInit {
   constructor(private router: Router) {}
   @Input() cards!: IEventType[] | ISightType[] | any[]
-  @Input() isSight: boolean = false
   @Input() spiner!: boolean
   @Output() endScroll: EventEmitter<any> = new EventEmitter()
   myEvents: boolean = false
@@ -21,7 +20,7 @@ export class OrganizationsGridComponent implements OnInit {
   public checkedRout(): void {
     this.myEvents = this.router.url === '/cabinet/events' || this.router.url === '/cabinet/sights'
   }
- 
+
   onIonInfinite(event: any) {
     if (!this.notFound) {
       let trueEvent = event as InfiniteScrollCustomEvent

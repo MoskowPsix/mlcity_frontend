@@ -5,6 +5,7 @@ export interface IOrganization {
   name?: string
   types?: string
   avatar?: string
+  location_id?: number
   inn?: number
   ogrn?: number
   kpp?: number
