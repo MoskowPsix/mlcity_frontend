@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core'
 import { IOrganization } from 'src/app/models/organization'
 
 @Component({
@@ -10,6 +10,16 @@ export class OrganizationsSelectContainerComponent implements OnInit {
   constructor() {}
   openModal: boolean = true
   @Input() cards!: IOrganization[]
+  selected: any = 'Выберите группу'
+  @Input() closeModalValue!: boolean
+  @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
+  emitOrganization(organization: any) {
+    this.selectOrganization.emit(organization)
+    this.selected = organization.name
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.closeModal()
+  }
   openOrganiztionsModal() {
     this.openModal = true
   }

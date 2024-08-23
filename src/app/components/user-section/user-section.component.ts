@@ -33,7 +33,8 @@ export class UserSectionComponent implements OnInit {
   click() {
     this.clicked.emit()
   }
-  emitOrganization(organization: IOrganization){
+  emitOrganization(organization: IOrganization) {
+   
     this.selectOrganization.emit(organization)
   }
   ngOnChanges(changes: any) {

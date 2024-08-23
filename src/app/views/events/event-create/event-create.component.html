@@ -113,14 +113,14 @@
           <ion-column>
             <ion-col>
               <ion-item class="second-step-input-wrapper" fill="outline">
-                <ion-input #eventName fill="solid" style="" size="small" class="nameEvent" formControlName="name" type="text" name="name" placeholder="Название мероприятия" required></ion-input>
+                <ion-input  fill="solid" style="" size="small" class="nameEvent" formControlName="name" type="text" name="name" placeholder="Название мероприятия" required></ion-input>
               </ion-item>
 
                <ion-col *ngIf="createEventForm.controls['name'].invalid && createEventForm.controls['name'].dirty"  class="validation">
                 <ion-note *ngIf="!createEventForm.controls['name'].hasError('minLength')" color="danger">Название мероприятия должно содержать минимум 3 символа</ion-note>
               </ion-col>
              
-                  <app-organizations-select-container  [cards]="organizations"/>
+                  <app-organizations-select-container [closeModalValue]="modalSelectedOrganization" (selectOrganization)="selectOrganization($event)" [cards]="organizations"/>
              
                 <!-- <div *ngIf="createEventForm.controls['sponsor'].invalid && createEventForm.controls['sponsor'].dirty"  class="validation">
                   <ion-note *ngIf="!createEventForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор мероприятия" должно содержать минимум 3 символа</ion-note>

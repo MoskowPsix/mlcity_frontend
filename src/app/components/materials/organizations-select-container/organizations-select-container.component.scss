@@ -16,7 +16,12 @@ ion-content{
     overflow-y: hidden;
 }
 .main-content{
-    
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.create-organization-button{
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
 }
 .toolbar{
     --background: #FAFBFF;
@@ -46,7 +51,7 @@ ion-content{
     transform: rotate(270deg);
 }
 ion-modal{
-    --height:60%;
+    --max-height:50%;
     --width:90%;
     --border-radius: 12px;
     --overflow-y: hidden;

@@ -120,7 +120,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   formData: FormData = new FormData()
   imagesPreview: string[] = []
   locationLoader: boolean = false
-
+  userHasOrganization: boolean = false
   placeArrayForm: any[] = []
   seancesArrayForm: any[] = []
   locations: any[] = []
@@ -140,10 +140,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   DateTimeFormatOptions: any = new Intl.DateTimeFormat('ru', {
     dateStyle: 'short',
   })
-
+  selectedOrganization!: IOrganization
   formatingTimeStart: string = ''
   formatingTimeEnd: string = ''
   //nextButtonDisable: boolean = false
+
+  modalSelectedOrganization!: boolean
 
   placemark!: ymaps.Placemark
   // map!:YaReadyEvent<ymaps.Map>
@@ -182,6 +184,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.count++
   }
 
+  selectOrganization(event: IOrganization) {
+    this.selectedOrganization = event
+    let id = this.selectedOrganization.id
+    this.createEventForm.patchValue({ organization_id: id })
+    this.modalSelectedOrganization = !this.modalSelectedOrganization
+  }
   //поулчаем юзера и устанвлвиаем группы и шаги
   getUserWithSocialAccount() {
     this.userService
@@ -192,7 +200,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }),
         switchMap((user: any) => {
           this.user = user
-          this.createEventForm.patchValue({ sponsor: user?.name })
           return of(user)
         }),
         switchMap((user: any) => {
@@ -642,6 +649,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.formData.append('name', this.createEventForm.controls['name'].value)
     this.formData.append('sponsor', this.createEventForm.controls['sponsor'].value)
     this.formData.append('description', this.createEventForm.controls['description'].value)
+    this.formData.append('organization_id', this.createEventForm.controls['organization_id'].value)
     // this.formData.append('coords', this.createEventForm.controls['coords'].value)
     // this.formData.append('address', this.createEventForm.controls['address'].value)
     // this.formData.append('city', this.city)
@@ -791,7 +799,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       //шаг первый
       case 1:
         //шаг второй
-        if (this.createEventForm.controls['name'].invalid || this.createEventForm.controls['sponsor'].invalid) {
+        if (
+          this.createEventForm.controls['name'].invalid ||
+          (this.userHasOrganization && !this.createEventForm.value.organization_id)
+        ) {
           return true
         } else {
           return false
@@ -1136,6 +1147,16 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.minLengthCityesListError = true
     }
   }
+
+  checkHasUserOrganizations() {
+    this.organizationService
+      .checkHasUserOrganization()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response: any) => {
+        this.userHasOrganization = response.status
+      })
+  }
+
   onClearSearch() {
     this.minLengthCityesListError = false
     this.cityesListLoading = false
@@ -1232,8 +1253,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         console.log(res)
-        this.organizations = res.data.organizations
+        this.organizations = res.organizations.data
       })
+    this.checkHasUserOrganizations()
     this.setValueDateDefault()
     this.mobileOrNote()
     let locationId: any
@@ -1245,6 +1267,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       {
         name: new FormControl('', [Validators.required, Validators.minLength(3)]),
         sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
+        organization_id: new FormControl('', [Validators.required]),
         description: new FormControl('', [Validators.required, Validators.minLength(10)]),
         places: new FormControl([], [Validators.required]),
         type: new FormControl([], [Validators.required]),

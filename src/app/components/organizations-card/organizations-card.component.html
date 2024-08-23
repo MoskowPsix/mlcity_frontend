@@ -1,1 +1,2 @@
-<app-user-section [organization] = "organizationObject"></app-user-section>
+<app-user-section (selectOrganization)="emitOrganization($event)" [organization] = "organizationObject"></app-user-section>
+

@@ -1,4 +1,4 @@
-<ng-container *ngIf="cards.length <= 0 && notFound === false">
+<ng-container *ngIf="notFound === false && !cards.length">
   <div class="main-grid-load">
     <div class="card-wrapper" *ngFor="let key of [1,2,3,4]">
         <ion-skeleton-text [animated]="true" class="card-load">
@@ -11,11 +11,11 @@
   <ion-icon class="dont-found-icon" name="file-tray" color="medium"></ion-icon>
   <p class="dont-found-text">Ничего не найдено.</p>
 </div>   
-<ng-container *ngIf="cards && cards.length > 0 && notFound === false">
+<ng-container *ngIf="cards && notFound === false">
 
-  <ng-container *ngIf="cards.length >= 0">
+  <ng-container *ngIf="cards">
     <div class="main-grid">
-        <app-organizations-card *ngFor="let card of cards; let i = index" [card]="card" [myEvent]="myEvents"></app-organizations-card>
+        <app-organizations-card  (selectOrganization)="emitOrganization($event)" *ngFor="let card of cards; let i = index" [card]="card" [myEvent]="myEvents"></app-organizations-card>
     </div>
     <div class="spiner-container">
       <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>

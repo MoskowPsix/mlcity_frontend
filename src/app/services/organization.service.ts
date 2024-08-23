@@ -17,6 +17,12 @@ export class OrganizationService {
     // Создание организацию
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organization`, body)
   }
+  checkHasUserOrganization() {
+    // Создание организацию
+    return this.http.get<IOrganization[]>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/organizations/check`,
+    )
+  }
   getOrganization(params: IOrganization) {
     // Получаем организации по заданным фильтрами
     return this.http.get<IOrganization[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organization`, {

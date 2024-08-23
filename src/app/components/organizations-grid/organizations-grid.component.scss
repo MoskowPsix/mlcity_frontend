@@ -1,0 +1,16 @@
+
+  .dont-found-text{
+    font-size: 1.3rem;
+    color: var(--font-color);
+    font-family: var(--font-bold);
+  }
+  .dont-found-icon{
+    font-size: 4rem;
+  }
+  .error-box{
+    padding-top: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }

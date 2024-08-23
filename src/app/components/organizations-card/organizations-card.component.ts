@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { IOrganization } from 'src/app/models/organization'
 
 @Component({
@@ -10,11 +10,11 @@ export class OrganizationsCardComponent implements OnInit {
   constructor() {}
   @Input() card!: IOrganization
   organizationObject: any = {}
+  @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
+  emitOrganization(organization: any) {
+    this.selectOrganization.emit(organization)
+  }
   ngOnInit() {
-    console.log(this.card)
-    this.organizationObject = {
-      name: this.card.name,
-      avatar: this.card.avatar,
-    }
+    this.organizationObject = this.card
   }
 }
