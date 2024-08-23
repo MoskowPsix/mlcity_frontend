@@ -22,10 +22,17 @@
 </div> -->
 <div class="calendar-button">
 </div>
-  <div class="rounded-calndar-button" *ngIf="dateStart && dateEnd; else noDates" (click)="picker.open()" >
+  <div [ngClass]="{'rounded-calendar-button':theme === '', 'calendar-light':theme === 'light'}" *ngIf="dateStart && dateEnd; else noDates" (click)="picker.open()" >
     <img class="calendar-icon" src="assets/icons/calendar.svg" alt="">
-    <span *ngIf="dateStart">{{dateStart|date:'d MMM'}}</span> - <span *ngIf="dateEnd !== 'Invalid date'">{{dateEnd| date:'d MMM'}}</span>
+    <ng-container *ngIf="theme !== 'light'">
+      <span *ngIf="dateStart">{{dateStart|date:'d MMM'}}</span> - <span *ngIf="dateEnd !== 'Invalid date'">{{dateEnd| date:'d MMM'}}</span>
+    </ng-container>
+    <ng-container *ngIf="theme === 'light'">
+      <span *ngIf="dateStart">{{dateStart|date:'d MMMM'}}</span> - <span *ngIf="dateEnd !== 'Invalid date'">{{dateEnd| date:'d MMMM'}}</span>
+    </ng-container>
+
   </div>
+
   <ng-template #noDates>
     <app-rounded-button (click)="picker.open()" icon="assets/icons/calendar.svg"></app-rounded-button>
   </ng-template>

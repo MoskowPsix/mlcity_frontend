@@ -10,6 +10,8 @@ export class CircleButtonComponent implements OnInit {
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>()
   @Input() icon: string = ''
   @Input() border: string = ''
+  @Input() changeColor!: string
+  @Input() loading: boolean = false
   click() {
     this.clicked.emit()
   }

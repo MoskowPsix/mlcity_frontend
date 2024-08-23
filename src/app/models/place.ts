@@ -4,6 +4,7 @@ export interface IPlace {
   event_id: number
   sight_id?: number
   location_id: number
+  location?: any[]
   latitude: number
   longitude: number
   address: string

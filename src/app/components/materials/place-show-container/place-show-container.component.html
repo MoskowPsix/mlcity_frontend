@@ -1,0 +1,11 @@
+<ion-accordion-group>
+    <ng-container *ngIf="places.length == 0">
+        <ion-skeleton-text class="place-loading" [animated]="true"  />
+        <ion-skeleton-text class="place-loading" [animated]="true"  />
+        <ion-skeleton-text class="place-loading" [animated]="true"  />
+    </ng-container>
+ 
+    <ng-container *ngIf="places">
+        <app-place-show [priceState]="priceState" [place]="place" *ngFor="let place of places"/>
+    </ng-container>
+</ion-accordion-group>

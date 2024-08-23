@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges } from '@angular/core'
 import { debounceTime } from 'rxjs/operators'
 import { FormControl, FormGroup } from '@angular/forms'
 import { NativeDateAdapter, MatDateFormats, MAT_DATE_LOCALE } from '@angular/material/core'
@@ -26,7 +26,10 @@ export const MY_FORMATS = {
 export class CalendarButtonComponent implements OnInit {
   @Input() outlineIcon: boolean = false
   @Output() setDateEmit: EventEmitter<any> = new EventEmitter()
+  @Output() startDateEmit: EventEmitter<any> = new EventEmitter()
   @Input() storageDate = {}
+  @Input() theme: string = ''
+  @Input() templateDate: any
   openModal: boolean = true
   dateStart: any
   dateEnd: any
@@ -38,7 +41,14 @@ export class CalendarButtonComponent implements OnInit {
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   })
-
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['templateDate'].currentValue) {
+      this.dateRange.value.start = moment(changes['templateDate'].currentValue.dateStart).toDate()
+      this.dateRange.value.end = moment(changes['templateDate'].currentValue.dateStart).toDate()
+      //Дата повторяется для того что бы показать конкретный сеанс
+      this.renderForTemplate(changes['templateDate'].currentValue)
+    }
+  }
   openDatepicker() {
     this.openModal = !this.openModal
   }
@@ -46,20 +56,20 @@ export class CalendarButtonComponent implements OnInit {
     this.dateStart = this.filterService.startDate.value
     this.dateEnd = this.filterService.endDate.value
   }
+  renderForTemplate(template: any) {
+    this.dateStart = template.dateStart
+    this.dateEnd = template.dateEnd
+  }
 
   ionViewDidLeave() {
     this.destroy$.next()
     this.destroy$.complete()
   }
   ngOnInit() {
-    // if (this.filterService.getStartDateFromlocalStorage() && this.filterService.getEndDateFromlocalStorage()) {
-    //   this.dateStart = moment(this.filterService.getStartDateFromlocalStorage()).format('MM/DD/YYYY')
-    //   this.dateEnd = moment(this.filterService.getEndDateFromlocalStorage()).format('MM/DD/YYYY')
-    //   this.dateRange.patchValue({
-    //     start: moment(this.filterService.getStartDateFromlocalStorage()).toDate(),
-    //     end: moment(this.filterService.getEndDateFromlocalStorage()).toDate(),
-    //   })
-    // }
+    this.startDateEmit.emit({
+      dateStart: moment(this.filterService.startDate.value).format('MM-DD-YYYY'),
+      dateEnd: moment(this.filterService.endDate.value).format('MM-DD-YYYY'),
+    })
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.render()
     })

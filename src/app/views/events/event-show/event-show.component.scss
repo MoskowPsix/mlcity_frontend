@@ -1,3 +1,74 @@
+.main-content__firt-seance{
+  background: #3880FF;
+  color: #fff;
+  font-family: var(--font-regular);
+  display: inline;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  max-width: 176px;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  font-size:0.7rem;
+  border-radius: 4px;
+}
+
+.main-content{
+  padding: 1rem;
+}
+ion-content{
+ 
+}
+.main-content__name{
+  padding-top: 1rem;
+  display: flex;
+  font-size: 1.5rem;
+  font-family:var(--font-bold)
+}
+.main-content__shedule{
+  padding-top: 1rem;
+}
+
+.back-button-wrapper{
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1;
+}
+.social-button-container{
+  position: absolute;
+  display: flex;
+  gap: 5px;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
+}
+.price-container__text{
+  display: flex;
+  justify-content: center;
+  font-family: var(--font-regular);
+  align-items: center;
+  text-align: center;
+  padding: 7px;
+  font-size: 0.7rem;
+  color: #fff;
+  background-color: #1c2226d5;
+  display: inline;
+  border-radius: 8px;
+
+}
+
+.price-container{
+  gap: 5px;
+  position: absolute;
+  top: 11.5rem;
+  z-index: 1;
+  left: 1rem;
+  display: flex;
+}
+
+
+
+
 .ico-small {
   width: 30px;
   height: 30px;
@@ -136,7 +207,9 @@
     }
   }
 }
-
+.main-content__community{
+  padding-top: 1rem;
+}
 .place-skelet {
   border-radius: 6px;
   height: 60px;
@@ -144,6 +217,7 @@
 
 .event-container {
   background-color: white;
+  padding-bottom: 20rem;
 }
 .seances{
   display: block;
@@ -186,11 +260,18 @@
 }
 .title {
   text-align: start;
-  font-family: 'Montserrat-SemiBold';
-  font-size: 40px;
-  font-weight: 500;
-}
+  font-family: var(--font-bold);
+  font-size: 20px;
+  color: #1C2226;
 
+}
+.community-wrapper{
+  padding-top: 1rem;
+}
+.community-wrapper__button-container{
+  padding-top: 1rem;
+  max-width: 181px;
+}
 .events-map-container {
   display: block;
 }
