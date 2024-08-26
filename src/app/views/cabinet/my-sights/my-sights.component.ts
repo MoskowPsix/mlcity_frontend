@@ -4,6 +4,7 @@ import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { SightsService } from 'src/app/services/sights.service'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { ToastService } from 'src/app/services/toast.service'
+import { OrganizationService } from 'src/app/services/organization.service'
 
 @Component({
   selector: 'app-my-events',
@@ -15,9 +16,10 @@ export class MySightsComponent implements OnInit, OnDestroy {
 
   constructor(
     private sightsService: SightsService,
+    private organizationService: OrganizationService,
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
-  ) {}
+  ) { }
   nextPage: boolean = false
   sights: any[] = []
 
@@ -46,21 +48,22 @@ export class MySightsComponent implements OnInit, OnDestroy {
 
   getMySights() {
     this.spiner = true
-    this.sightsService
-      .getSightsForUser(this.queryBuilderService.queryBuilder('sightsPublicForAuthor'))
+    this.organizationService
+      .getUserOrganizations()
       .pipe(
         delay(100),
         retry(3),
-        map((respons: any) => {
-          this.sights.push(...respons.sights.data)
+        map((response: any) => {
+          console.log(response)
+          this.sights.push(...response.organizations.data)
           this.spiner = false
-          if (respons.sights.next_cursor) {
-            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(respons.sights.next_cursor)
+
+          if (response.organizations.next_cursor != null) {
+            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(response.organizations.next_cursor)
+            response.organizations.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
           }
-          respons.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
         }),
         tap(() => {
-          console.log(this.loadSights)
           this.loadSights = true
           this.loadMoreSights = false
         }),

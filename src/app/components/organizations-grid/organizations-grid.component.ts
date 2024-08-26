@@ -13,7 +13,6 @@ import { ISightType } from 'src/app/models/sight-type'
 export class OrganizationsGridComponent implements OnInit {
   constructor(private router: Router) {}
   @Input() cards!: IEventType[] | ISightType[] | any[]
-  @Input() isSight: boolean = false
   @Input() spiner!: boolean
   @Output() endScroll: EventEmitter<any> = new EventEmitter()
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
@@ -23,7 +22,7 @@ export class OrganizationsGridComponent implements OnInit {
   public checkedRout(): void {
     this.myEvents = this.router.url === '/cabinet/events' || this.router.url === '/cabinet/sights'
   }
-  emitOrganization(organization: any) {
+ emitOrganization(organization: any) {
     this.selectOrganization.emit(organization)
   }
   onIonInfinite(event: any) {

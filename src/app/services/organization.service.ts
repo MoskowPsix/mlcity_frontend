@@ -15,7 +15,7 @@ export class OrganizationService {
 
   createOrganization(body: FormData) {
     // Создание организацию
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organization`, body)
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organizations`, body)
   }
   checkHasUserOrganization() {
     // Создание организацию
@@ -23,12 +23,14 @@ export class OrganizationService {
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/organizations/check`,
     )
   }
-  getOrganization(params: IOrganization) {
+
+  getOrganization(params: any) {
     // Получаем организации по заданным фильтрами
-    return this.http.get<IOrganization[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organization`, {
+    return this.http.get<IOrganization[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organizations`, {
       params: params as HttpParams,
     })
   }
+
   getUserOrganizations() {
     // организации пользователя
     let user: any = this.userService.getUser()
