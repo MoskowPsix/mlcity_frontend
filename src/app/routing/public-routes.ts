@@ -18,6 +18,7 @@ import { RecoveryPasswordComponent } from '../views/recovery-password/recovery-p
 import { TestIframeComponent } from '../views/test-iframe/test-iframe.component'
 import { EmailConfirmComponent } from '../views/cabinet/email-confirm/email-confirm.component'
 import { TestPageComponent } from '../views/test-page/test-page.component'
+import { OrganizationShowComponent } from '../views/organization-show/organization-show.component'
 export const publicRoutes: Routes = [
   {
     path: 'test',
@@ -92,6 +93,17 @@ export const publicRoutes: Routes = [
       {
         path: ':name',
         component: SightShowComponent,
+      },
+    ],
+  },
+  {
+    path: 'sights/:id',
+    component: OrganizationShowComponent,
+    canActivate: [CheckAuthCanActiveGuard],
+    children: [
+      {
+        path: ':name',
+        component: OrganizationShowComponent,
       },
     ],
   },

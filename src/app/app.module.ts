@@ -136,6 +136,7 @@ import { CategoryButtonComponent } from './components/materials/category-button/
 import { SeancesContainerComponent } from './components/materials/seances-container/seances-container.component'
 import { SeanceShowComponent } from './components/materials/seance-show/seance-show.component'
 import { OrganizationsSelectContainerComponent } from './components/materials/organizations-select-container/organizations-select-container.component'
+import { OrganizationShowComponent } from './views/organization-show/organization-show.component'
 import { OrganizationsGridComponent } from './components/organizations-grid/organizations-grid.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
@@ -180,6 +181,7 @@ registerLocaleData(localeRu, 'ru')
     MenuAuthComponent,
     PlaceShowContainerComponent,
     PlaceShowComponent,
+    OrganizationShowComponent,
     MenuAuthSidebarComponent,
     FooterComponent,
     UserSectionComponent,
