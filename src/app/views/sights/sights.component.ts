@@ -101,6 +101,9 @@ export class SightsComponent implements OnInit, OnDestroy {
           map((response: any) => {
             console.log(response)
             this.sightsCity.push(...response.organizations.data)
+            if (this.sightsCity.length == 0) {
+              this.notFound = true
+            }
             this.filterService.setSightsCount(response.total)
             this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(response.organizations.next_cursor)
             response.organizations.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
