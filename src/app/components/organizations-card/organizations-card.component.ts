@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { IOrganization } from 'src/app/models/organization'
-
+import { RouterLink } from '@angular/router'
 @Component({
   selector: 'app-organizations-card',
   templateUrl: './organizations-card.component.html',

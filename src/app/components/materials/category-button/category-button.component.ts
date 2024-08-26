@@ -7,7 +7,7 @@ import { SightTypeService } from 'src/app/services/sight-type.service'
 import { remove } from 'lodash'
 import { LoadingService } from 'src/app/services/loading.service'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
-import { Subject, takeUntil } from 'rxjs'
+import { catchError, EMPTY, empty, of, Subject, takeUntil } from 'rxjs'
 
 @Component({
   selector: 'app-category-button',
@@ -19,7 +19,7 @@ export class CategoryButtonComponent implements OnInit {
     private filterService: FilterService,
     private eventTypeService: EventTypeService,
     private sightTypeService: SightTypeService,
-    private loadingService: LoadingService,
+    // private loadingService: LoadingService,
     private switchTypeService: SwitchTypeService,
   ) {}
   public types: any = {
@@ -35,7 +35,7 @@ export class CategoryButtonComponent implements OnInit {
   @Input() currentTypes: IEventType[] | ISightType[] = []
   private readonly destroy$ = new Subject<void>()
   getTypes() {
-    this.loadingService.showLoading()
+    // this.loadingService.showLoading()
     this.eventTypeService
       .getTypes()
       .pipe(takeUntil(this.destroy$))
@@ -47,7 +47,7 @@ export class CategoryButtonComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
         this.types.sights = response.types
-        this.loadingService.hideLoading()
+        // this.loadingService.hideLoading()
       })
   }
 
@@ -80,7 +80,7 @@ export class CategoryButtonComponent implements OnInit {
       case 'events':
         this.selectedTypesId = []
         this.currentTypes = []
-        if(this.filterService.getEventTypesFromlocalStorage()){
+        if (this.filterService.getEventTypesFromlocalStorage()) {
           storageFilterId = this.filterService.getEventTypesFromlocalStorage()?.split(',')
         }
 
@@ -96,9 +96,8 @@ export class CategoryButtonComponent implements OnInit {
               }
             })
           }
-
         }
-        
+
         this.typesForType = this.types.events
         this.openModal = true
         break
@@ -119,7 +118,6 @@ export class CategoryButtonComponent implements OnInit {
               }
             })
           }
-        
         }
         this.typesForType = this.types.sights
         this.openModal = true
@@ -151,21 +149,39 @@ export class CategoryButtonComponent implements OnInit {
 
   ngOnInit() {
     this.getTypes()
-    this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      this.stateType = value
-      this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        if (this.stateType == 'events') {
-          this.storageFilterIdCount = 0
-          this.filterService.getEventTypesFromlocalStorage() && this.filterService?.getEventTypesFromlocalStorage()!.split(',')[0] !== ''
-            ? (this.storageFilterIdCount = this.filterService?.getEventTypesFromlocalStorage()!.split(',').length)
-            : null
-        } else if (this.stateType == 'sights') {
-          this.storageFilterIdCount = 0
-          this.filterService?.getSightTypesFromlocalStorage()?.length && this.filterService?.getSightTypesFromlocalStorage()!.split(',')[0] !== ''
-            ? (this.storageFilterIdCount = this.filterService?.getSightTypesFromlocalStorage()!.split(',').length)
-            : null
-        }
+    this.switchTypeService.currentType
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          // this.loadingService.hideLoading()
+          return of(EMPTY)
+        }),
+      )
+      .subscribe((value: any) => {
+        this.stateType = value
+        this.filterService.changeFilter
+          .pipe(
+            takeUntil(this.destroy$),
+            catchError((err) => {
+              // this.loadingService.hideLoading()
+              return of(EMPTY)
+            }),
+          )
+          .subscribe(() => {
+            if (this.stateType == 'events') {
+              this.storageFilterIdCount = 0
+              this.filterService.getEventTypesFromlocalStorage() &&
+              this.filterService?.getEventTypesFromlocalStorage()!.split(',')[0] !== ''
+                ? (this.storageFilterIdCount = this.filterService?.getEventTypesFromlocalStorage()!.split(',').length)
+                : null
+            } else if (this.stateType == 'sights') {
+              this.storageFilterIdCount = 0
+              this.filterService?.getSightTypesFromlocalStorage()?.length &&
+              this.filterService?.getSightTypesFromlocalStorage()!.split(',')[0] !== ''
+                ? (this.storageFilterIdCount = this.filterService?.getSightTypesFromlocalStorage()!.split(',').length)
+                : null
+            }
+          })
       })
-    })
   }
 }

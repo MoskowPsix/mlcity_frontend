@@ -97,7 +97,7 @@ export const publicRoutes: Routes = [
     ],
   },
   {
-    path: 'sights/:id',
+    path: 'organizations/:id',
     component: OrganizationShowComponent,
     canActivate: [CheckAuthCanActiveGuard],
     children: [

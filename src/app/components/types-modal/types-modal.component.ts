@@ -47,6 +47,7 @@ export class TypesModalComponent implements OnInit {
         })
     } else {
       this.openTypesModal = true
+      this.loadingService.hideLoading()
     }
   }
   addCategory(category: IEventType) {
