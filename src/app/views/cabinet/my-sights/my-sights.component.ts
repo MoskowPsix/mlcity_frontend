@@ -54,8 +54,8 @@ export class MySightsComponent implements OnInit, OnDestroy {
         delay(100),
         retry(3),
         map((response: any) => {
-          console.log(response)
           this.sights.push(...response.sights.data)
+          this.sights.length == 0 ? (this.notFound = true) : (this.notFound = false)
           this.spiner = false
 
           if (response.sights.next_cursor != null) {
