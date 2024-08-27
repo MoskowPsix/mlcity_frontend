@@ -288,11 +288,12 @@ export class EditEventComponent implements OnInit {
       .getEventById(Number(eventId))
       .pipe(
         takeUntil(this.destroy$),
-        tap((res) => {
-          priceArray = res.price
-          typesArray = res.types
-          filesArray = JSON.parse(JSON.stringify(res.files))
-          this.event = JSON.parse(JSON.stringify(res))
+        tap((res: any) => {
+          console.log(res)
+          priceArray = res.event.price
+          typesArray = res.event.types
+          filesArray = JSON.parse(JSON.stringify(res.event.files))
+          this.event = JSON.parse(JSON.stringify(res.event))
         }),
       )
       .subscribe((res: any) => {
@@ -300,13 +301,16 @@ export class EditEventComponent implements OnInit {
         this.getPlaces()
         this.loadingService.hideLoading()
         this.editForm.patchValue({
-          name: res.name,
-          sponsor: res.sponsor,
-          description: res.description,
+          name: res.event.name,
+          sponsor: res.event.sponsor,
+          description: res.event.description,
         })
-        priceArray.forEach((price: any) => {
-          this.editForm.value.price.push(price)
-        })
+        if (priceArray) {
+          priceArray.forEach((price: any) => {
+            this.editForm.value.price.push(price)
+          })
+        }
+
         typesArray.forEach((type: any) => {
           this.previewCategory.push(type)
           this.editForm.value.types.push(type)

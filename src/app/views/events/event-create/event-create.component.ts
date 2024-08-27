@@ -91,7 +91,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 1
+  stepCurrency: number = 0
   createObj: any = {}
   steps: number = 6
   dataValid: boolean = true

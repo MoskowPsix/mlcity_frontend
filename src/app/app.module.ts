@@ -115,7 +115,6 @@ import { CardGridComponent } from './components/card-grid/card-grid.component'
 import { ScrollService } from './services/scroll.service'
 import { StandartButtonComponent } from './components/materials/standart-button/standart-button.component'
 import { StandartButtonLongComponent } from './components/materials/standart-button-long/standart-button-long.component'
-import { ListButtonComponent } from './components/materials/list-button/list-button.component'
 import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
 import { FooterItemComponent } from './components/footer/footer-item/footer-item.component'
 import { TestPageComponent } from './views/test-page/test-page.component'
@@ -216,7 +215,6 @@ registerLocaleData(localeRu, 'ru')
     NewPlaceComponent,
     StandartButtonComponent,
     StandartButtonLongComponent,
-    ListButtonComponent,
     TruncatePipe,
     CreateRulesModalComponent,
     BackButtonDirective,
