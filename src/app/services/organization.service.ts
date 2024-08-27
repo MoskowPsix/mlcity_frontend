@@ -30,6 +30,12 @@ export class OrganizationService {
       params: params as HttpParams,
     })
   }
+  getOrganizationById(id: string) {
+    // Получаем организации по заданным фильтрами
+    return this.http.get<IOrganization>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organizations/${id}`,
+    )
+  }
 
   getUserOrganizations() {
     // организации пользователя

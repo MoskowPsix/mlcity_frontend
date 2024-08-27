@@ -10,6 +10,7 @@ export class EditSliderComponent implements OnInit {
   @Input() files: any[] = []
   @ViewChild('mainPhoto') mainPhoto!: any
   @Output() filesEmit: EventEmitter<any> = new EventEmitter<any>()
+  @Input() type: string = ''
   previews: any[] = []
   deleteFiles: any[] = []
 
@@ -57,8 +58,10 @@ export class EditSliderComponent implements OnInit {
     }
   }
   ngOnInit() {
-    this.files.forEach((file) => {
-      this.previews.push({ id: file.id, link: file.link, name: file.name })
-    })
+    if (this.files) {
+      this.files.forEach((file) => {
+        this.previews.push({ id: file.id, link: file.link, name: file.name })
+      })
+    }
   }
 }

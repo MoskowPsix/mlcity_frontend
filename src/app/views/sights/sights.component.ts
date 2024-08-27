@@ -90,24 +90,24 @@ export class SightsComponent implements OnInit, OnDestroy {
 
   getSightsCity() {
     // this.loadingMoreSightsCity ? (this.loadingSightsCity = true) : (this.loadingSightsCity = false)
-    this.spiner = true
+    this.sightsCity.length > 0 ? (this.spiner = true) : (this.spiner = false) //проверяем что запрос не первый
     this.notFound = false
     if (this.nextPage) {
-      this.organizationService
-        .getOrganization(this.queryBuilderService.queryBuilder('organizationForFeed'))
+      this.sightsService
+        .getSights(this.queryBuilderService.queryBuilder('sightsForTape'))
         .pipe(
           delay(100),
           retry(3),
           map((response: any) => {
             console.log(response)
-            this.sightsCity.push(...response.organizations.data)
+            this.sightsCity.push(...response.sights.data)
             if (this.sightsCity.length == 0) {
               this.notFound = true
             }
             this.filterService.setSightsCount(response.total)
-            this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(response.organizations.next_cursor)
-            response.organizations.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
-            response.organizations.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
+            this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(response.sights.next_cursor)
+            response.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+            response.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
           }),
           tap((response: any) => {
             this.loadingSightsCity = true
@@ -160,7 +160,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   //   ).subscribe()
   // }
 
-  sightsCityLoadingMore() { }
+  sightsCityLoadingMore() {}
 
   onSegmentChanged(event: any) {
     this.segment = event.detail.value
@@ -221,7 +221,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     this.timeStart = new Date().getTime()
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   sightTypesChange(typeId: any) {
     if (typeId !== 'all') {

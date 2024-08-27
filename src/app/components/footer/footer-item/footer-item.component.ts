@@ -10,7 +10,7 @@ import { SwitchTypeService } from 'src/app/services/switch-type.service'
 })
 export class FooterItemComponent implements OnInit {
   @Input() menuItem!: FooterMenu
-  feedLink: string = '/events'
+  feedLink: string = ''
 
   constructor(
     private router: Router,

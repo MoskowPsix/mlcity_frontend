@@ -19,7 +19,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
     private organizationService: OrganizationService,
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
-  ) { }
+  ) {}
   nextPage: boolean = false
   sights: any[] = []
 
@@ -47,20 +47,20 @@ export class MySightsComponent implements OnInit, OnDestroy {
   }
 
   getMySights() {
-    this.spiner = true
-    this.organizationService
-      .getUserOrganizations()
+    this.sights.length > 0 ? (this.spiner = true) : null
+    this.sightsService
+      .getSightsForUser(this.queryBuilderService.queryBuilder('sightsPublicForAuthor'))
       .pipe(
         delay(100),
         retry(3),
         map((response: any) => {
           console.log(response)
-          this.sights.push(...response.organizations.data)
+          this.sights.push(...response.sights.data)
           this.spiner = false
 
-          if (response.organizations.next_cursor != null) {
-            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(response.organizations.next_cursor)
-            response.organizations.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+          if (response.sights.next_cursor != null) {
+            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(response.sights.next_cursor)
+            response.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
           }
         }),
         tap(() => {

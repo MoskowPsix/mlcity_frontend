@@ -22,8 +22,8 @@
 
     <ng-container *ngIf="organization">
       <div (click)="emitOrganization(organization)" class="user-section-main_organization">
-        <img src="{{avatarUrl}}" *ngIf="organization.avatar"  class="user-section-image" >
-        <div *ngIf="!organization.avatar" class="user-section-image"></div>
+        <img src="{{avatarUrl}}" *ngIf="organization.files[0]"  class="user-section-image" >
+        <div *ngIf="!organization.files[0]" class="user-section-image"></div>
         <div class="user-section-info">
             <div class="user-section-name__organization">{{organization.name}}</div>
             <div *ngIf="!organization.types" class="category-plug">Нет категорий</div>

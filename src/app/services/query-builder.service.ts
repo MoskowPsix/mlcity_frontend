@@ -67,7 +67,7 @@ export class QueryBuilderService {
     private mapService: MapService,
     private filterService: FilterService,
     private userService: UserService,
-  ) { }
+  ) {}
 
   getUserID() {
     this.userService
@@ -78,7 +78,7 @@ export class QueryBuilderService {
   }
 
   updateParams() {
-    ; (this.eventTypes = this.filterService.eventTypes.value.toString()),
+    ;(this.eventTypes = this.filterService.eventTypes.value.toString()),
       (this.sightTypes = this.filterService.sightTypes.value.toString()),
       (this.dateStart = this.filterService.startDate.value),
       (this.dateEnd = this.filterService.endDate.value),
@@ -200,6 +200,7 @@ export class QueryBuilderService {
       longitude: this.longitude,
       radius: this.radius,
       sightTypes: this.sightTypes,
+      limit: 8,
       page: this.paginationPublicSightsForTapeCurrentPage.value,
     }
   }
@@ -217,6 +218,7 @@ export class QueryBuilderService {
   buildQuerySightsPublicForAuthor() {
     this.queryParams = {
       page: this.paginationPublicSightsForAuthorCurrentPage.value,
+      limit: 8,
     }
   }
 

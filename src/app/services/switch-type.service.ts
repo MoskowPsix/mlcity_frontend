@@ -13,7 +13,7 @@ export class SwitchTypeService {
     if (this.currentType.value == 'events') {
       this.currentType.next('sights')
       this.link.next('/sights')
-    } else if (this.currentType.value == 'sights') {
+    } else {
       this.currentType.next('events')
       this.link.next('/events')
     }

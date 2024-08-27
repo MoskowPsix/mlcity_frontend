@@ -30,16 +30,25 @@ export class UserSectionComponent implements OnInit {
       this.avatarUrl = this.fixedImg
     }
   }
+  checkAvatarOrganzization() {
+    if (this.organization.files[0] && this.organization.files[0].link.includes('https')) {
+      this.avatarUrl = this.organization.files[0].link
+    } else {
+      this.organization.files[0] ? (this.avatarUrl = `${this.backendUrl}${this.organization.files[0].link}`) : null
+    }
+  }
   click() {
     this.clicked.emit()
   }
   emitOrganization(organization: IOrganization) {
-   
     this.selectOrganization.emit(organization)
   }
   ngOnChanges(changes: any) {
     if (this.user) {
       this.checkAvatar()
+    }
+    if (this.organization) {
+      this.checkAvatarOrganzization()
     }
   }
   ngOnInit() {}

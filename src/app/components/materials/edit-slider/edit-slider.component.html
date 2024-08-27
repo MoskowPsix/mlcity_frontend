@@ -1,19 +1,27 @@
 <!-- Не загруженные данные -->
-<div *ngIf="previews.length > 0" #mainPhoto style="background-image: url({{previews[0].link}});" class="main-photo">
-  <app-back-button></app-back-button>
-</div>
-<div *ngIf="previews.length == 0" #mainPhoto style="background-image: url('/assets/images/nophoto.jpg');" class="main-photo">
-  <app-back-button></app-back-button>
-</div>
-<div class="slider-container">
-  <div (click)="file.click()" class="slider-container-add-button" >
-    <img src="/assets/icons/addPhoto.svg" alt="">
-    <span class="slider-container-add-button_text">Добавить фото</span>
+ <ng-container *ngIf="type === ''">
+  <div *ngIf="previews.length > 0" #mainPhoto style="background-image: url({{previews[0].link}});" class="main-photo">
+    <app-back-button></app-back-button>
   </div>
- 
-  <div (click)="setMainPhoto($event)" *ngFor="let img of previews; let i = index" style="background-image: url({{img.link}});" class="slider-container-item">
-    <div class="delete-button-wrapper"><app-circle-button (click)="deletePreview(img,i)" icon="/assets/icons/trash.svg"></app-circle-button></div>
+  <div *ngIf="previews.length === 0" #mainPhoto style="background-image: url('/assets/images/nophoto.jpg');" class="main-photo">
+    <app-back-button></app-back-button>
   </div>
+  <div class="slider-container">
+    <div (click)="file.click()" class="slider-container-add-button" >
+      <img src="/assets/icons/addPhoto.svg" alt="">
+      <span class="slider-container-add-button_text">Добавить фото</span>
+    </div>
+   
+    <div (click)="setMainPhoto($event)" *ngFor="let img of previews; let i = index" style="background-image: url({{img.link}});" class="slider-container-item">
+      <div class="delete-button-wrapper"><app-circle-button (click)="deletePreview(img,i)" icon="/assets/icons/trash.svg"></app-circle-button></div>
+    </div>
+  </div>
+  <input (change)="fileChanged($event,file)" multiple="multiple" style="opacity: 0;" #file type="file">
+ </ng-container>
 
-</div>
-<input (change)="fileChanged($event,file)" multiple="multiple" style="opacity: 0;" #file type="file">
+<ng-container *ngIf="type === 'l-view'">
+  <div class="slider-container">
+    <div  *ngFor="let img of previews; let i = index" style="background-image: url({{img.link}});" class="slider-container-item"></div>
+    <div *ngIf="previews.length === 0" style="background-image: url('/assets/images/nophoto.jpg');" class="slider-container-item"></div>
+  </div>
+</ng-container>
