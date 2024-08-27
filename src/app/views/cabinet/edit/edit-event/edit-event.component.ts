@@ -240,6 +240,7 @@ export class EditEventComponent implements OnInit {
   }
   getPlaces() {
     let tempPlaceArray: IPlace[] = []
+    console.log(this.event)
     this.eventsService
       .getEventPlaces(this.event.id, {})
       .pipe(
@@ -249,7 +250,6 @@ export class EditEventComponent implements OnInit {
       )
       .subscribe(() => {
         this.copyEvent.places = []
-
         tempPlaceArray.forEach((place: any) => {
           this.placesArray.push(place)
           if (this.copyEvent.places) {

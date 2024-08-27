@@ -13,7 +13,7 @@ import { SightsService } from 'src/app/services/sights.service'
 export class OrganizationShowComponent implements OnInit {
   loading: boolean = true
   id: string = ''
-  organization!: IOrganization
+  organization!: any
   avatarUrl: string = ''
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   private readonly destroy$ = new Subject<void>()
@@ -25,7 +25,6 @@ export class OrganizationShowComponent implements OnInit {
   ionViewWillEnter() {
     this.getOrganizationId()
     this.getOrganization(this.id)
-    
   }
   getOrganizationId() {
     this.id = this.router.snapshot.paramMap.get('id')!
@@ -43,6 +42,7 @@ export class OrganizationShowComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         this.organization = res
+        console.log(this.organization)
         this.checkAvatar()
         this.loading = false
       })

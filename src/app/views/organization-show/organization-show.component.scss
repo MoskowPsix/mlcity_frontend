@@ -68,3 +68,10 @@
     color: #4C5861;
     font-size:0.75rem;
   }
+  .category-button-grid{
+    padding-top: 0.5rem;
+    display: flex;
+    max-width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}

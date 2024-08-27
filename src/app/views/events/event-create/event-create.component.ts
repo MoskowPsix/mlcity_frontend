@@ -185,6 +185,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   selectOrganization(event: IOrganization) {
+    console.log(event)
     this.selectedOrganization = event
     let id = this.selectedOrganization.id
     this.createEventForm.patchValue({ organization_id: id })

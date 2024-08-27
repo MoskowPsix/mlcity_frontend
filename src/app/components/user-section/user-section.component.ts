@@ -34,7 +34,7 @@ export class UserSectionComponent implements OnInit {
     if (this.organization.files[0] && this.organization.files[0].link.includes('https')) {
       this.avatarUrl = this.organization.files[0].link
     } else {
-      this.organization.files[0] ? (this.avatarUrl = `${this.backendUrl}${this.organization.files[0].link}`) : null
+      this.avatarUrl = `${this.backendUrl}${this.organization.files[0].link}`
     }
   }
   click() {
