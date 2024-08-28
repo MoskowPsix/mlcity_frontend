@@ -91,7 +91,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       )
       .subscribe((event: any) => {
         if (event) {
-          this.event = event
+          this.event = event.event
           this.checkPrice()
           // this.places = event.places_full;
         }
@@ -186,8 +186,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.eventsService
         .checkLiked(this.eventId!)
         .pipe(retry(3), takeUntil(this.destroy$))
-        .subscribe((liked: boolean) => {
-          this.like = liked
+        .subscribe((liked: any) => {
+          this.like = liked.is_liked
           this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
         })
   }
@@ -197,8 +197,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.eventsService
         .checkFavorite(this.eventId!)
         .pipe(retry(3), takeUntil(this.destroy$))
-        .subscribe((favorite: boolean) => {
-          this.favorite = favorite
+        .subscribe((favorite: any) => {
+          this.favorite = favorite.is_favorite
           this.favorite
             ? (this.favoriteUrl = 'assets/icons/star-active.svg')
             : (this.favoriteUrl = 'assets/icons/star.svg')
@@ -276,6 +276,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   toggleLike(event_id: number) {
+    console.log(this.event)
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
