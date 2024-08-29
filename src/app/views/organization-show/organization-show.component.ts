@@ -5,6 +5,8 @@ import { IOrganization } from 'src/app/models/organization'
 import { OrganizationService } from 'src/app/services/organization.service'
 import { environment } from 'src/environments/environment'
 import { SightsService } from 'src/app/services/sights.service'
+import { ISight } from 'src/app/models/sight'
+import { take } from 'lodash'
 @Component({
   selector: 'app-organization-show',
   templateUrl: './organization-show.component.html',
@@ -13,7 +15,7 @@ import { SightsService } from 'src/app/services/sights.service'
 export class OrganizationShowComponent implements OnInit {
   loading: boolean = true
   id: string = ''
-  organization!: any
+  sight!: ISight
   avatarUrl: string = ''
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   private readonly destroy$ = new Subject<void>()
@@ -30,21 +32,30 @@ export class OrganizationShowComponent implements OnInit {
     this.id = this.router.snapshot.paramMap.get('id')!
   }
   checkAvatar() {
-    if (this.organization.files[0] && this.organization.files[0].link.includes('https')) {
-      this.avatarUrl = this.organization.files[0].link
+    if (this.sight.files![0] && this.sight.files![0].link.includes('https')) {
+      this.avatarUrl = this.sight.files![0].link
     } else {
-      if (this.organization.files[0]) {
-        this.avatarUrl = `${this.backendUrl}${this.organization.files[0].link}`
+      if (this.sight.files![0]) {
+        this.avatarUrl = `${this.backendUrl}${this.sight.files![0].link}`
       }
     }
+  }
+  getOrganizationEvents() {
+    this.organizationService
+      .getOrganizationEvents(String(this.sight.organization!.id))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((events: any) => {
+        console.log(events)
+      })
   }
   getOrganization(id: string) {
     this.sightsService
       .getSightById(Number(id))
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
-        this.organization = res
-        console.log(this.organization)
+        this.sight = res
+        this.getOrganizationEvents()
+        console.log(this.sight)
         this.checkAvatar()
         this.loading = false
       })

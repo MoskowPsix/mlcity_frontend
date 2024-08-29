@@ -24,6 +24,13 @@ export class OrganizationService {
     )
   }
 
+  // organizations/{organizationId}/events
+  getOrganizationEvents(id: string) {
+    // Получаем организации у сообщества
+    return this.http.get<IOrganization[]>(
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organizations/${id}/events`,
+    )
+  }
   getOrganization(params: any) {
     // Получаем организации по заданным фильтрами
     return this.http.get<IOrganization[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organizations`, {
