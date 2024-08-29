@@ -5,12 +5,9 @@
   <div class="buttons-dekstop">
 
     <div class="buttons-desktop-wrapper">
-
       <div class="btnsWrapperBack">
-
         <ion-button routerLink="/home" class="backButton buttonsNavigate button-cancel">Отмена</ion-button>
       </div>
-
       <div class="btnsWrapper btnsWrapperNext">
         <div class="buttons-wrapper">
           <ion-button disabled="true" class="backButton buttonsNavigate" *ngIf="stepCurrency === stepStart"  (click)="stepPrev()"><ion-icon name="chevron-back" slot="start"></ion-icon>Назад</ion-button>
@@ -20,9 +17,7 @@
           </div>
           <ion-button class="buttonsNavigate" (click)="onSubmit()" *ngIf="stepCurrency === steps-1" type="submit" [disabled]="detectedDataInvalid()"><ion-icon name="checkmark-done-outline" slot="start"></ion-icon>Готово</ion-button>
         </div>
-       
       </div>
-
     </div>
   </div>
 
@@ -118,34 +113,17 @@
           <ion-column>
             <ion-col>
               <ion-item class="second-step-input-wrapper" fill="outline">
-                <ion-input #eventName fill="solid" style="" size="small" class="nameEvent" formControlName="name" type="text" name="name" placeholder="Название мероприятия" required></ion-input>
+                <ion-input  fill="solid" style="" size="small" class="nameEvent" formControlName="name" type="text" name="name" placeholder="Название мероприятия" required></ion-input>
               </ion-item>
 
                <ion-col *ngIf="createEventForm.controls['name'].invalid && createEventForm.controls['name'].dirty"  class="validation">
                 <ion-note *ngIf="!createEventForm.controls['name'].hasError('minLength')" color="danger">Название мероприятия должно содержать минимум 3 символа</ion-note>
               </ion-col>
-
-                <ion-item class="second-step-input-wrapper" fill="outline">
-
-                  <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-                  <ion-input formControlName="sponsor"  type="text" name="sponsor" required  placeholder="Организатор мероприятия"></ion-input>
-                </ion-item>
-                <div *ngIf="createEventForm.controls['sponsor'].invalid && createEventForm.controls['sponsor'].dirty"  class="validation">
+                  <app-organizations-select-container [closeModalValue]="modalSelectedOrganization" (selectOrganization)="selectOrganization($event)" [cards]="organizations"/>
+                <!-- <div *ngIf="createEventForm.controls['sponsor'].invalid && createEventForm.controls['sponsor'].dirty"  class="validation">
                   <ion-note *ngIf="!createEventForm.controls['sponsor'].hasError('minLength')" color="danger">поле "Организатор мероприятия" должно содержать минимум 3 символа</ion-note>
-                </div>
+                </div> -->
             </ion-col>
-                <!-- <ion-item fill="outline">
-                  <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Название мероприятия</ion-label>
-                  <ion-icon name="text-outline" slot="start" size="small" color="primary"></ion-icon>
-                  <ion-input #eventName fill="solid" style="" size="small" class="nameEvent" formControlName="name" type="text" name="name" required></ion-input>
-                </ion-item> -->
-
-                <!-- <ion-item class="" fill="outline">
-                    <ion-label style="color: rgba(114, 114, 114, 0.5);" position="floating">Организатор мероприятия</ion-label>
-                    <ion-icon name="text-outline" slot="start"  size="small" color="primary"></ion-icon>
-                    <ion-input formControlName="sponsor"  type="text" name="sponsor" required></ion-input>
-                </ion-item> -->
-            <!-- Организатор -->
           </ion-column>
 
         </ion-col>

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { IOrganization } from 'src/app/models/organization'
 import { IUser } from 'src/app/models/user'
 import { environment } from 'src/environments/environment'
 @Component({
@@ -11,9 +12,11 @@ export class UserSectionComponent implements OnInit {
   @Input() user!: IUser
   @Input() type?: string
   @Input() buttonText?: string
+  @Input() organization!: IOrganization
   @Input() fixedImg?: string
   @Input() loadingImg?: boolean
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>()
+  @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   public avatarUrl!: string
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   checkAvatar() {
@@ -27,12 +30,25 @@ export class UserSectionComponent implements OnInit {
       this.avatarUrl = this.fixedImg
     }
   }
+  checkAvatarOrganzization() {
+    if (this.organization.files[0] && this.organization.files[0].link.includes('https')) {
+      this.avatarUrl = this.organization.files[0].link
+    } else {
+      this.avatarUrl = `${this.backendUrl}${this.organization.files[0].link}`
+    }
+  }
   click() {
     this.clicked.emit()
+  }
+  emitOrganization(organization: IOrganization) {
+    this.selectOrganization.emit(organization)
   }
   ngOnChanges(changes: any) {
     if (this.user) {
       this.checkAvatar()
+    }
+    if (this.organization) {
+      this.checkAvatarOrganzization()
     }
   }
   ngOnInit() {}

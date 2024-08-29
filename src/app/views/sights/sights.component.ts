@@ -12,6 +12,7 @@ import { NavigationEnd, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
+import { OrganizationService } from 'src/app/services/organization.service'
 
 @Component({
   selector: 'app-sights',
@@ -55,13 +56,13 @@ export class SightsComponent implements OnInit, OnDestroy {
   constructor(
     private sightsService: SightsService,
     private toastService: ToastService,
+    private organizationService: OrganizationService,
 
     private filterService: FilterService,
     private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService,
     private locationService: LocationService,
     private router: Router,
-    private location: Location,
     private titleService: Title,
     private metaService: Meta,
   ) {
@@ -89,7 +90,7 @@ export class SightsComponent implements OnInit, OnDestroy {
 
   getSightsCity() {
     // this.loadingMoreSightsCity ? (this.loadingSightsCity = true) : (this.loadingSightsCity = false)
-    this.spiner = true
+    this.sightsCity.length > 0 ? (this.spiner = true) : (this.spiner = false) //проверяем что запрос не первый
     this.notFound = false
     if (this.nextPage) {
       this.sightsService
@@ -97,14 +98,18 @@ export class SightsComponent implements OnInit, OnDestroy {
         .pipe(
           delay(100),
           retry(3),
-          map((respons: any) => {
-            this.sightsCity.push(...respons.sights.data)
-            this.filterService.setSightsCount(respons.total)
-            this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(respons.sights.next_cursor)
-            respons.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
-            respons.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
+          map((response: any) => {
+            console.log(response)
+            this.sightsCity.push(...response.sights.data)
+            if (this.sightsCity.length == 0) {
+              this.notFound = true
+            }
+            this.filterService.setSightsCount(response.total)
+            this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(response.sights.next_cursor)
+            response.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+            response.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
           }),
-          tap((respons: any) => {
+          tap((response: any) => {
             this.loadingSightsCity = true
             this.loadingMoreSightsCity = false
             if (this.nextPage == null) {
@@ -114,6 +119,7 @@ export class SightsComponent implements OnInit, OnDestroy {
             }
           }),
           catchError((err) => {
+            console.log(err)
             this.toastService.showToast(MessagesErrors.default, 'danger')
             this.loadingSightsCity = false
             return of(EMPTY)
@@ -154,19 +160,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   //   ).subscribe()
   // }
 
-  sightsCityLoadingMore() {
-    // this.loadingMoreSightsCity = true
-    // this.currentPageSightsCity++
-    // // this.queryBuilderService.paginationPublicSightsCityCurrentPage.next(this.currentPageSightsCity)
-    // this.getSightsCity()
-  }
-
-  // sightsGeolocationLoadingMore(){
-  //   this.loadingMoreSightsGeolocation = true
-  //   this.currentPageSightsGeolocation++
-  //   this.queryBuilderService.paginationPublicSightsGeolocationCurrentPage.next(this.currentPageSightsGeolocation)
-  //   this.getSightsGeolocation()
-  // }
+  sightsCityLoadingMore() {}
 
   onSegmentChanged(event: any) {
     this.segment = event.detail.value

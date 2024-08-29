@@ -240,6 +240,7 @@ export class EditEventComponent implements OnInit {
   }
   getPlaces() {
     let tempPlaceArray: IPlace[] = []
+    console.log(this.event)
     this.eventsService
       .getEventPlaces(this.event.id, {})
       .pipe(
@@ -249,7 +250,6 @@ export class EditEventComponent implements OnInit {
       )
       .subscribe(() => {
         this.copyEvent.places = []
-
         tempPlaceArray.forEach((place: any) => {
           this.placesArray.push(place)
           if (this.copyEvent.places) {
@@ -303,13 +303,16 @@ export class EditEventComponent implements OnInit {
         this.getPlaces()
         this.loadingService.hideLoading()
         this.editForm.patchValue({
-          name: res.name,
-          sponsor: res.sponsor,
-          description: res.description,
+          name: res.event.name,
+          sponsor: res.event.sponsor,
+          description: res.event.description,
         })
-        priceArray.forEach((price: any) => {
-          this.editForm.value.price.push(price)
-        })
+        if (priceArray) {
+          priceArray.forEach((price: any) => {
+            this.editForm.value.price.push(price)
+          })
+        }
+
         typesArray.forEach((type: any) => {
           this.previewCategory.push(type)
           this.editForm.value.types.push(type)

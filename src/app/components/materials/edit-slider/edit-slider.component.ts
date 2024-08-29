@@ -1,20 +1,24 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { ToastService } from 'src/app/services/toast.service'
+import { FileService } from 'src/app/services/file.service'
 @Component({
   selector: 'app-edit-slider',
   templateUrl: './edit-slider.component.html',
   styleUrls: ['./edit-slider.component.scss'],
 })
 export class EditSliderComponent implements OnInit {
-  constructor(private toastService: ToastService) {}
+  constructor(
+    private toastService: ToastService,
+    private fileService: FileService,
+  ) {}
   @Input() files: any[] = []
   @ViewChild('mainPhoto') mainPhoto!: any
   @Output() filesEmit: EventEmitter<any> = new EventEmitter<any>()
+  @Input() type: string = ''
   previews: any[] = []
   deleteFiles: any[] = []
 
   fileChanged(event: any, inputBlock: any) {
-    console.log(event)
     // Преобразуем FileList в обычный массив
     let filesArray: File[] = Array.from(event.target.files)
     filesArray.forEach((file: File) => {
@@ -56,9 +60,13 @@ export class EditSliderComponent implements OnInit {
       this.filesEmit.emit(this.files)
     }
   }
+
   ngOnInit() {
-    this.files.forEach((file) => {
-      this.previews.push({ id: file.id, link: file.link, name: file.name })
-    })
+    if (this.files) {
+      this.files.forEach((file) => {
+        let link = this.fileService.checkLinkFile(file)
+        this.previews.push({ id: file.id, link: link, name: file.name })
+      })
+    }
   }
 }

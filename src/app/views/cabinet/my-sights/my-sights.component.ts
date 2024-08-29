@@ -4,6 +4,7 @@ import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { SightsService } from 'src/app/services/sights.service'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { ToastService } from 'src/app/services/toast.service'
+import { OrganizationService } from 'src/app/services/organization.service'
 
 @Component({
   selector: 'app-my-events',
@@ -15,6 +16,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
 
   constructor(
     private sightsService: SightsService,
+    private organizationService: OrganizationService,
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
   ) {}
@@ -45,22 +47,23 @@ export class MySightsComponent implements OnInit, OnDestroy {
   }
 
   getMySights() {
-    this.spiner = true
+    this.sights.length > 0 ? (this.spiner = true) : null
     this.sightsService
       .getSightsForUser(this.queryBuilderService.queryBuilder('sightsPublicForAuthor'))
       .pipe(
         delay(100),
         retry(3),
-        map((respons: any) => {
-          this.sights.push(...respons.sights.data)
+        map((response: any) => {
+          this.sights.push(...response.sights.data)
+          this.sights.length == 0 ? (this.notFound = true) : (this.notFound = false)
           this.spiner = false
-          if (respons.sights.next_cursor) {
-            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(respons.sights.next_cursor)
+
+          if (response.sights.next_cursor != null) {
+            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(response.sights.next_cursor)
+            response.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
           }
-          respons.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
         }),
         tap(() => {
-          console.log(this.loadSights)
           this.loadSights = true
           this.loadMoreSights = false
         }),

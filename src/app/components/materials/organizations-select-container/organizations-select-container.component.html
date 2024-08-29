@@ -1,0 +1,29 @@
+<ng-container>
+  <label class="label">Организатор</label>
+  <div class="input-container">
+    <input (click)="openOrganiztionsModal()" readonly placeholder="Выберите группу" value="{{selected}}" class="standart-input" name="new_name">
+    <img class="input-container__arrow-img" src="assets/icons/arrow.svg" alt="">
+  </div>
+</ng-container>
+
+<ion-modal (didDismiss)="closeModal()"  [isOpen]="openModal">
+  <ng-template> 
+    <ion-toolbar class="toolbar"  mode="ios">
+      <span class="modal-title">Организатор</span>
+    </ion-toolbar>
+
+    <ion-content>
+      <div class="main-content">
+        <div class="create-organization-button">
+          <app-standart-button theme="light" buttonText="Создать группу"></app-standart-button>
+        </div>
+        <app-organizations-grid *ngIf="cards; else notFoundGrid " (selectOrganization)="emitOrganization($event)" [cards]="cards"></app-organizations-grid>
+        <ng-template #notFoundGrid>
+          <app-organizations-grid [notFound]="true" ></app-organizations-grid>
+        </ng-template>
+    
+      </div>
+    </ion-content>
+  </ng-template>
+
+</ion-modal>

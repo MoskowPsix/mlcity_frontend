@@ -1,0 +1,62 @@
+.standart-input{
+    border: 1px solid #4c586141;
+    border-radius: 5px;
+    width: 100%;
+    min-height: 2.25rem;
+    font-size: 12px;
+    padding-left: 0.8rem;
+    transition: 0.1s;
+    outline: none;
+    color: #363d42;
+    
+    font-family: var(--font-regular);
+    background: none;
+}
+ion-content{
+    overflow-y: hidden;
+}
+.main-content{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.create-organization-button{
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+}
+.toolbar{
+    --background: #FAFBFF;
+}
+.label{
+    color: #4C5861;
+    font-size: 12px;
+    margin-bottom: 6px;
+    font-family: var(--font-regular);
+}
+.standart-input:focus{
+    transition: 0.2s;
+    outline: 1px solid #52b1fab0;
+    border-radius: 5px;
+    width: 100%;
+    background: none;
+    min-height: 2.25rem;
+    font-size: 12px;
+    padding-left: 0.8rem;
+    color: #363d42;
+}
+.input-container{
+ display: flex;
+}
+.input-container__arrow-img{
+   margin-left: -1.5rem;
+    transform: rotate(270deg);
+}
+ion-modal{
+    --max-height:50%;
+    --width:90%;
+    --border-radius: 12px;
+    --overflow-y: hidden;
+}
+.modal-title{
+    font-family: var(--font-semiBold);
+    font-size: 0.75rem;
+}

@@ -147,11 +147,20 @@ export class QueryBuilderService {
       case 'sightsForMapModal': // Модальное окно на карте
         this.buildQuerySightsForMapModal()
         break
+      case 'organizationForFeed':
+        this.buildQueryOrganizationForFeed()
+        break
       default:
         this.buildQueryDefault()
         break
     }
     return this.queryParams
+  }
+
+  buildQueryOrganizationForFeed() {
+    this.queryParams = {
+      locationId: this.locationId,
+    }
   }
 
   buildQuerySightsForMapModal() {
@@ -191,6 +200,7 @@ export class QueryBuilderService {
       longitude: this.longitude,
       radius: this.radius,
       sightTypes: this.sightTypes,
+      limit: 8,
       page: this.paginationPublicSightsForTapeCurrentPage.value,
     }
   }
@@ -208,6 +218,7 @@ export class QueryBuilderService {
   buildQuerySightsPublicForAuthor() {
     this.queryParams = {
       page: this.paginationPublicSightsForAuthorCurrentPage.value,
+      limit: 8,
     }
   }
 

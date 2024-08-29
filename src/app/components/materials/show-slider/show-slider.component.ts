@@ -36,6 +36,6 @@ export class ShowSliderComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.swiperRef)
+   
   }
 }

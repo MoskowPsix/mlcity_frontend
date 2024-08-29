@@ -111,7 +111,7 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
       this.itemSecondText?.nativeElement,
     )
   }
-  ngOnDestroy(): void {}
+
   ngOnInit() {
     if (this.router.url != '/sights') {
       this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -136,7 +136,8 @@ export class TypeSwitherComponent implements OnInit, OnChanges {
         }
       })
     } else {
-      this.switchTypeService.currentType.next(this.sight)
+      this.switchTypeService.currentType.next('sights')
+      // this.switchTypeService.currentType.next(this.sight)
       this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value) => {
         this.type = value
         if (

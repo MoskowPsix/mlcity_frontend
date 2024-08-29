@@ -61,7 +61,7 @@ import { TokenService } from './services/token.service'
 import { UserService } from './services/user.service'
 import { LoadingService } from './services/loading.service'
 import { MapService } from './services/map.service'
-
+import { OrganizationsCardComponent } from './components/organizations-card/organizations-card.component'
 import { environment } from '../environments/environment'
 import { AuthTokenInterceptor } from './auth-token.interceptor'
 
@@ -115,7 +115,6 @@ import { CardGridComponent } from './components/card-grid/card-grid.component'
 import { ScrollService } from './services/scroll.service'
 import { StandartButtonComponent } from './components/materials/standart-button/standart-button.component'
 import { StandartButtonLongComponent } from './components/materials/standart-button-long/standart-button-long.component'
-import { ListButtonComponent } from './components/materials/list-button/list-button.component'
 import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
 import { FooterItemComponent } from './components/footer/footer-item/footer-item.component'
 import { TestPageComponent } from './views/test-page/test-page.component'
@@ -135,6 +134,9 @@ import { TypesModalComponent } from './components/types-modal/types-modal.compon
 import { CategoryButtonComponent } from './components/materials/category-button/category-button.component'
 import { SeancesContainerComponent } from './components/materials/seances-container/seances-container.component'
 import { SeanceShowComponent } from './components/materials/seance-show/seance-show.component'
+import { OrganizationsSelectContainerComponent } from './components/materials/organizations-select-container/organizations-select-container.component'
+import { OrganizationShowComponent } from './views/organization-show/organization-show.component'
+import { OrganizationsGridComponent } from './components/organizations-grid/organizations-grid.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -163,7 +165,6 @@ registerLocaleData(localeRu, 'ru')
     CircleButtonComponent,
     BackButtonComponent,
     RecoveryPasswordComponent,
-    TypesModalComponent,
     SecondHeaderComponent,
     ShowSliderComponent,
     HeaderComponent,
@@ -179,6 +180,7 @@ registerLocaleData(localeRu, 'ru')
     MenuAuthComponent,
     PlaceShowContainerComponent,
     PlaceShowComponent,
+    OrganizationShowComponent,
     MenuAuthSidebarComponent,
     FooterComponent,
     UserSectionComponent,
@@ -190,6 +192,7 @@ registerLocaleData(localeRu, 'ru')
     ForbiddenComponent,
     ServerErrorComponent,
     EventShowComponent,
+    OrganizationsSelectContainerComponent,
     EventCreateComponent,
     EventTypeCaruselComponent,
     SightsComponent,
@@ -198,6 +201,7 @@ registerLocaleData(localeRu, 'ru')
     EditSliderComponent,
     SightTypeComponent,
     RoundedButtonComponent,
+    OrganizationsGridComponent,
     SeanceShowComponent,
     ReadMoreComponent,
     FiltersComponent,
@@ -211,7 +215,6 @@ registerLocaleData(localeRu, 'ru')
     NewPlaceComponent,
     StandartButtonComponent,
     StandartButtonLongComponent,
-    ListButtonComponent,
     TruncatePipe,
     CreateRulesModalComponent,
     BackButtonDirective,
@@ -225,6 +228,7 @@ registerLocaleData(localeRu, 'ru')
     NewPriceComponent,
     PlaceInfoComponent,
     SightTypeCaruselComponent,
+    OrganizationsCardComponent,
     SafeUrlPipe,
     SafeUrlPipe2,
     MyEventsComponent,
@@ -250,6 +254,7 @@ registerLocaleData(localeRu, 'ru')
     RangeSelectionButtonComponent,
     CategoryButtonComponent,
     OrganizationCreateComponent,
+    TypesModalComponent,
   ],
   imports: [
     BrowserModule,
