@@ -102,6 +102,9 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     Отказ: '#E83940',
     Черновик: '#4C5861',
   }
+  placeHolderImage: string = '/assets/images/nophoto.jpg'
+  imageUrl: string = ''
+  imageLoaded: boolean = false
 
   eventNavigation() {
     this.isSight
@@ -183,7 +186,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
         this.toastService.showToast('Было отклонено модератором', 'danger')
         break
       case Statuses.draft:
-          this.toastService.showToast('Находится в черновиках', 'secondary')
+        this.toastService.showToast('Находится в черновиках', 'secondary')
     }
   }
 
@@ -356,6 +359,17 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     })
 
     return status
+  }
+
+  changeBackgroundImage() {
+    this.imageLoaded = true
+    this.placeHolderImage = this.event.files[0].link
+
+    setTimeout(() => {
+      this.imageLoaded = false
+    }, 500) // Time in ms should match the CSS transition time
+    
+    console.log(this.placeHolderImage)
   }
 
   ngAfterViewInit(): void {

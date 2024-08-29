@@ -193,6 +193,18 @@ ion-card-subtitle {
   color: white;
   text-align: center;
   position: relative;
+  transition: background-image 0s ease-in-out, opacity 0.5s ease-in-out;
+  opacity: 0;
+}
+
+.card.change-opacity {
+  opacity: 1;
+}
+
+
+
+.image {
+  display: none;
 }
 
 
@@ -284,6 +296,7 @@ ion-card-subtitle {
   gap: 0.313rem;
 
 }
+
 .status-container {
   right: 1rem;
   position: absolute;
