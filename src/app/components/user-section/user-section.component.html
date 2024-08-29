@@ -31,7 +31,13 @@
             <div class="user-section-name__organization">{{organization.name}}</div>
             <div *ngIf="!organization.types" class="category-plug">Нет категорий</div>
         </div>
-        <!-- <button class="organization-like-button" (click)="click()">{{buttonText}}</button> -->
+        <div class="organization-button__wrapper">
+          <ng-content>
+            
+          </ng-content>
+      
+        </div>
+      
       </div>
     
   </ng-container>

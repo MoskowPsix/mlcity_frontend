@@ -25,10 +25,13 @@ export class OrganizationService {
   }
 
   // organizations/{organizationId}/events
-  getOrganizationEvents(id: string) {
+  getOrganizationEvents(id: string, params: any) {
     // Получаем организации у сообщества
     return this.http.get<IOrganization[]>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organizations/${id}/events`,
+      {
+        params: params as HttpParams,
+      },
     )
   }
   getOrganization(params: any) {

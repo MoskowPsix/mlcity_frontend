@@ -22,6 +22,9 @@ export interface IGetEventsAndSights {
   sightIds?: string
   orderBy?: string
   desc?: boolean
+  withFiles?: boolean
+  withPrices?: boolean
+  expired?: boolean //вместе с прошедшими ивентами
 }
 
 //Пример
