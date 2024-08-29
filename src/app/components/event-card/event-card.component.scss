@@ -194,10 +194,23 @@ ion-card-subtitle {
   text-align: center;
   position: relative;
   transition: background-image 0s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.card-img {
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  width: 20.5rem;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  position: relative;
+  transition: background-image 0s ease-in-out, opacity 0.5s ease-in-out;
   opacity: 0;
 }
 
-.card.change-opacity {
+.card-img.change-opacity {
   opacity: 1;
 }
 
