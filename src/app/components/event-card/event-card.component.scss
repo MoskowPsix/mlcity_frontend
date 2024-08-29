@@ -295,8 +295,14 @@ ion-card-subtitle {
   padding: 6px;
   padding-left: 0.4rem;
   padding-right: 0.4rem;
-  border-radius: 50%;
-  top: 10.6rem;
+  border-radius: 8px;
+  top: 10.1rem;
+}
+
+.status-text {
+  font-family: var(--font-regular);
+  font-size: small;
+  margin-right: 0.3rem;
 }
 
 .status {
