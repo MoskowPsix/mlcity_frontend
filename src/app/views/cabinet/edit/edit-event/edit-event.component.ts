@@ -288,7 +288,9 @@ export class EditEventComponent implements OnInit {
       .getEventById(Number(eventId))
       .pipe(
         takeUntil(this.destroy$),
-        tap((res) => {
+        tap((res: any) => {
+          console.log(res)
+          res = res.event
           priceArray = res.price
           typesArray = res.types
           filesArray = JSON.parse(JSON.stringify(res.files))
@@ -296,6 +298,7 @@ export class EditEventComponent implements OnInit {
         }),
       )
       .subscribe((res: any) => {
+        res = res.event
         this.copyEvent = _.cloneDeep(this.event)
         this.getPlaces()
         this.loadingService.hideLoading()
