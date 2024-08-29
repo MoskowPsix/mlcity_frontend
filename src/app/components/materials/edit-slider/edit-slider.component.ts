@@ -65,7 +65,7 @@ export class EditSliderComponent implements OnInit {
     if (this.files) {
       this.files.forEach((file) => {
         let link = this.fileService.checkLinkFile(file)
-        this.previews.push({ id: file.id, link: link, name: file.name })
+        if (link !== '') this.previews.push({ id: file.id, link: link, name: file.name })
       })
     }
   }

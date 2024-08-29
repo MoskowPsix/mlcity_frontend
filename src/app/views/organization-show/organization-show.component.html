@@ -20,12 +20,15 @@
       </ng-container>
       <ng-container *ngIf="!loading">
         <div class="organization-container__organization-section">
-          <img src="{{avatarUrl}}" *ngIf="organization.files[0]" class="organization-avatar"/>
-          <div *ngIf="!organization.files[0]" class="user-section-image"></div>
+          <img src="{{avatarUrl}}" *ngIf="organization.files[0] && organization.files[0].link !==''" class="organization-avatar"/>
+          <div *ngIf="!organization.files[0] || organization.files[0].link ===''" class="user-section-image"></div>
 
           <div class="organization-section__info">
             <div class="organization-section__info__name">{{organization.name}}</div>
-            <app-standart-button theme="light" buttonText = "Управление подписчиками"></app-standart-button>
+            <div class="organization-section__info__button">
+              <app-standart-button theme="light" buttonText = "Управление подписчиками"></app-standart-button>
+            </div>
+           
           </div>
 
         </div>
@@ -39,8 +42,18 @@
           <div class="category-button-grid">
             <ng-container>
                 <app-rounded-button style="pointer-events: none;"  *ngFor="let category of organization.types"  icon="assets/icons/category.svg" type="button" buttonText=" {{category.name}}"></app-rounded-button>
+                <app-rounded-button *ngIf="organization.types.length === 0" style="pointer-events: none;"  icon="assets/icons/category.svg" type="button" buttonText="Прочее"></app-rounded-button>
+                
             </ng-container>
           </div>
+          <app-tabs>
+              <app-tabs-item name="Текущие события">
+                  <app-not-found-content></app-not-found-content>
+              </app-tabs-item>
+              <app-tabs-item name="Прошедшие">
+                <app-not-found-content></app-not-found-content>
+              </app-tabs-item>
+          </app-tabs>
         </div>
       </ng-container>
     </div>
