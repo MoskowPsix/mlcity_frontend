@@ -30,7 +30,8 @@
 }
 .user-section-main_organization{
     margin: auto;
-    display: flex;
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
     width: 100%;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -89,4 +90,9 @@
     background-color: #DCE9FF;
     border-radius: 50%;
     margin-left: 1.5rem;
+}
+.organization-button__wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

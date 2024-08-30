@@ -47,6 +47,7 @@ export class QueryBuilderService {
   public paginationPublicEventsForAuthorCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   public paginataionPublicEventPlacesCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+  public paginataionPublicEventPlacesExpiredCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   public paginationPublicSightsForAuthorCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
@@ -137,6 +138,9 @@ export class QueryBuilderService {
         break
       case 'eventPlaces':
         this.buildQueryEventPlaces()
+        break
+      case 'eventPlacesExpired':
+        this.buildQueryExpiredEventPlaces()
         break
       case 'sightsModalRadiusForMap': //Публичная страница мероприятий /events - вкладка по события городу
         this.buildQuerySightsModalRadiusForMap()
@@ -307,6 +311,17 @@ export class QueryBuilderService {
     this.queryParams = {
       locationId: this.locationIdForEventShow.value,
       page: this.paginataionPublicEventPlacesCurrentPage.value,
+      withFiles: true,
+      withPrices: true,
+    }
+  }
+  buildQueryExpiredEventPlaces() {
+    this.queryParams = {
+      locationId: this.locationIdForEventShow.value,
+      page: this.paginataionPublicEventPlacesExpiredCurrentPage.value,
+      withFiles: true,
+      withPrices: true,
+      expired: true,
     }
   }
 

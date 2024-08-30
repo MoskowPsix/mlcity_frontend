@@ -76,7 +76,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(() => {
-        if (this.sights.length == 0) {
+        if (this.sights && this.sights.length == 0) {
           this.notFound = true
         }
       })

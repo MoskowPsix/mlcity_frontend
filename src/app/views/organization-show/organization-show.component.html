@@ -3,7 +3,7 @@
         <div class="header-container">
           <app-back-button></app-back-button>
             <div class="header-container-tittle">
-              Группа
+              Сообщество
             </div> 
         </div>
     </app-second-header>
@@ -20,27 +20,41 @@
       </ng-container>
       <ng-container *ngIf="!loading">
         <div class="organization-container__organization-section">
-          <img src="{{avatarUrl}}" *ngIf="organization.files[0]" class="organization-avatar"/>
-          <div *ngIf="!organization.files[0]" class="user-section-image"></div>
+          <img src="{{avatarUrl}}" *ngIf="sight.files![0] && sight.files![0].link !==''" class="organization-avatar"/>
+          <div *ngIf="!sight.files![0] || sight.files![0].link ===''" class="user-section-image"></div>
 
           <div class="organization-section__info">
-            <div class="organization-section__info__name">{{organization.name}}</div>
-            <app-standart-button theme="light" buttonText = "Управление подписчиками"></app-standart-button>
+            <div class="organization-section__info__name">{{sight.name}}</div>
+            <div class="organization-section__info__button">
+              <app-standart-button theme="light" buttonText = "Управление подписчиками"></app-standart-button>
+            </div>
+           
           </div>
 
         </div>
         <div class="organization-container__slider-wrapper">
-          <app-edit-slider [files]="organization.files" type="l-view"></app-edit-slider>
+          <app-edit-slider [files]="sight.files!" type="l-view"></app-edit-slider>
         </div>
         <div class="organization-container__description">
-          {{organization.description}} 
+          {{sight.description}} 
         </div>
         <div class="organization-container__category-container">
           <div class="category-button-grid">
             <ng-container>
-                <app-rounded-button style="pointer-events: none;"  *ngFor="let category of organization.types"  icon="assets/icons/category.svg" type="button" buttonText=" {{category.name}}"></app-rounded-button>
+                <app-rounded-button style="pointer-events: none;"  *ngFor="let category of sight.types"  icon="assets/icons/category.svg" type="button" buttonText=" {{category.name}}"></app-rounded-button>
+                <app-rounded-button *ngIf="sight.types!.length === 0" style="pointer-events: none;"  icon="assets/icons/category.svg" type="button" buttonText="Прочее"></app-rounded-button>
             </ng-container>
           </div>
+          <app-tabs>
+              <app-tabs-item name="Текущие события">
+                <app-card-grid [notFound]="notFound" (endScroll)="getOrganizationEvents()" [spiner]="spiner" [cards]="events"></app-card-grid>
+              </app-tabs-item>
+              <app-tabs-item name="Прошедшие">
+                <div class="not-found-container"> 
+                  <app-card-grid [notFound]="notFoundExpired" (endScroll)="getOrganizationEventsExpired()" [spiner]="spinerExpired" [cards]="eventsExpired"></app-card-grid>
+                </div>
+              </app-tabs-item>
+          </app-tabs>
         </div>
       </ng-container>
     </div>

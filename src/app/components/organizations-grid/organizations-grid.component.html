@@ -15,7 +15,9 @@
 
   <ng-container *ngIf="cards">
     <div class="main-grid">
-        <app-organizations-card  (selectOrganization)="emitOrganization($event)" *ngFor="let card of cards; let i = index" [card]="card" [myEvent]="myEvents"></app-organizations-card>
+        <app-organizations-card [buttonType]= "buttonType"  (selectOrganization)="emitOrganization($event)" *ngFor="let card of cards; let i = index" [card]="card" [myEvent]="myEvents">
+            
+        </app-organizations-card>
     </div>
     <div class="spiner-container">
       <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>

@@ -52,7 +52,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     private helpers: HelpersService,
     private datePipe: DatePipe,
     private router: Router,
-  ) { }
+  ) {}
 
   private readonly destroy$ = new Subject<void>()
 
@@ -338,9 +338,13 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       for (let i = 0; i < this.event.price.length; i++) {
         this.prices.push(Number(this.event.price[i].cost_rub))
       }
-
-      this.minPrice = Math.min(...this.prices)
-      this.maxPrice = Math.max(...this.prices)
+      if (this.prices.length > 0) {
+        this.minPrice = Math.min(...this.prices)
+        this.maxPrice = Math.max(...this.prices)
+      } else {
+        this.minPrice = 0
+        this.maxPrice = 0
+      }
     }
   }
 

@@ -41,7 +41,7 @@
 .organization-section__info__name{
     color: #1C2226;
     font-family: var(--font-bold);
-    font-size: 16px;
+    font-size: 14px;
     padding-bottom: 6px;
 }
 .organization-section__info__button{
@@ -63,7 +63,8 @@
     background-position: center center;        
     background-size: cover;      
 }
-.organization-container__description{ 
+.organization-container__description{
+    padding-top: 1rem; 
     font-family: var(--font-regular);
     color: #4C5861;
     font-size:0.75rem;
@@ -74,4 +75,10 @@
     max-width: 100%;
     flex-wrap: wrap;
     gap: 0.5rem;
+}
+.organization-section__info__button{
+   width: 196px;
+}
+.not-found-container{
+    padding-top: 2rem;
 }

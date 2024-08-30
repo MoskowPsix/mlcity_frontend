@@ -35,6 +35,7 @@ import { FooterComponent } from './components/footer/footer.component'
 import { AboutComponent } from './views/about/about.component'
 import { SecondHeaderComponent } from './components/second-header/second-header.component'
 import { NotFoundComponent } from './views/errors/not-found/not-found.component'
+import { NotFoundContentComponent } from './components/materials/not-found-content/not-found-content.component'
 import { ForbiddenComponent } from './views/errors/forbidden/forbidden.component'
 import { ServerErrorComponent } from './views/errors/server-error/server-error.component'
 import { EventShowComponent } from './views/events/event-show/event-show.component'
@@ -48,6 +49,7 @@ import { FiltersComponent } from './components/filters/filters.component'
 import { FiltersNotButtonComponent } from './components/filters_not_button/filters_not_button.component'
 import { CalendulaComponent } from './components/calendula/calendula.component'
 import { NoDataComponent } from './components/no-data/no-data.component'
+
 import { EventCardComponent } from './components/event-card/event-card.component'
 import { FavoritesComponent } from './views/cabinet/favorites/favorites.component'
 import { CommentsListComponent } from './components/comments-list/comments-list.component'
@@ -137,6 +139,8 @@ import { SeanceShowComponent } from './components/materials/seance-show/seance-s
 import { OrganizationsSelectContainerComponent } from './components/materials/organizations-select-container/organizations-select-container.component'
 import { OrganizationShowComponent } from './views/organization-show/organization-show.component'
 import { OrganizationsGridComponent } from './components/organizations-grid/organizations-grid.component'
+import { TabsComponent } from './components/materials/tabs/tabs.component'
+import { TabsItemComponent } from './components/materials/tabs-item/tabs-item.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -184,7 +188,9 @@ registerLocaleData(localeRu, 'ru')
     MenuAuthSidebarComponent,
     FooterComponent,
     UserSectionComponent,
+    TabsComponent,
     SeancesContainerComponent,
+    TabsItemComponent,
     EmailConfirmComponent,
     ExitButtonComponent,
     AboutComponent,
@@ -198,6 +204,7 @@ registerLocaleData(localeRu, 'ru')
     SightsComponent,
     SightShowComponent,
     SightCreateComponent,
+    NotFoundContentComponent,
     EditSliderComponent,
     SightTypeComponent,
     RoundedButtonComponent,
