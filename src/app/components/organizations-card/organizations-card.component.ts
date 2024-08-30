@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router'
 export class OrganizationsCardComponent implements OnInit {
   constructor() {}
   @Input() card!: IOrganization
+  @Input() buttonType: string = ''
   organizationObject: any = {}
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   emitOrganization(organization: any) {

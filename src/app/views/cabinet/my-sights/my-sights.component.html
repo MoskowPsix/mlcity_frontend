@@ -5,6 +5,6 @@
         Мои сообщества <app-rounded-button routerLink="/cabinet/sights/create" icon="assets/icons/create.svg" buttonText="Создать"></app-rounded-button>
       </ng-container>
     </app-second-header>
-    <app-organizations-grid [notFound]="notFound"  (endScroll)="getMySights()" [spiner]="spiner" [cards]="sights"/>
+    <app-organizations-grid buttonType="edit" [notFound]="notFound"  (endScroll)="getMySights()" [spiner]="spiner" [cards]="sights"/>
   </ion-content>
 </ion-content>

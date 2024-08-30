@@ -1,4 +1,4 @@
     <app-user-section routerLink="/organizations/{{card.id}}"  (selectOrganization)="emitOrganization($event)" [organization] = "organizationObject">
-        <app-circle-button icon="/assets/icons/menu-pen.svg"></app-circle-button>
+        <app-circle-button *ngIf="buttonType === 'edit'" icon="/assets/icons/menu-pen.svg"></app-circle-button>
     </app-user-section>
 

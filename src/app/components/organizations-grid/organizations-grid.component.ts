@@ -14,6 +14,7 @@ export class OrganizationsGridComponent implements OnInit {
   constructor(private router: Router) {}
   @Input() cards!: IEventType[] | ISightType[] | any[]
   @Input() spiner!: boolean
+  @Input() buttonType: string = ''
   @Output() endScroll: EventEmitter<any> = new EventEmitter()
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   myEvents: boolean = false
