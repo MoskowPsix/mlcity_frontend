@@ -14,6 +14,7 @@ export interface ISight {
   location: any[]
   latitude: number
   longitude: number
+  location_id: number
   type?: number
   status?: number
   files?: any[]

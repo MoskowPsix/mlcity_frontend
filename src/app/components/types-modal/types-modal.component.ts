@@ -20,8 +20,7 @@ export class TypesModalComponent implements OnInit {
   @Output() closeModalEmit: EventEmitter<any> = new EventEmitter()
   @Output() addCategories: EventEmitter<any> = new EventEmitter()
   @Output() deleteCategories: EventEmitter<any> = new EventEmitter()
-  @Input() allTypes: any
-
+  @Input() allTypes: any = []
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   clickCategoryEmit = new EventEmitter()
   closeModal() {

@@ -16,7 +16,7 @@
       <div class="delete-button-wrapper"><app-circle-button (click)="deletePreview(img,i)" icon="/assets/icons/trash.svg"></app-circle-button></div>
     </div>
   </div>
-  <input (change)="fileChanged($event,file)" multiple="multiple" style="opacity: 0;" #file type="file">
+  <input (change)="fileChanged($event,file)" multiple="multiple" style="opacity: 0; position: absolute;" #file type="file">
  </ng-container>
 
 <ng-container *ngIf="type === 'l-view'">
