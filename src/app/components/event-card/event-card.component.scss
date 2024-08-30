@@ -208,6 +208,7 @@ ion-card-subtitle {
   position: relative;
   transition: background-image 0s ease-in-out, opacity 0.5s ease-in-out;
   opacity: 0;
+  background-image: url('/assets/images/nophoto.jpg');
 }
 
 .card-img.change-opacity {
