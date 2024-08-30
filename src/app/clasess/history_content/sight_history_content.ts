@@ -36,5 +36,6 @@ export class SightHistoryContent extends HistoryContent {
         history_files: this.files,
         history_types: this.types,
       },
+    }
   }
 }

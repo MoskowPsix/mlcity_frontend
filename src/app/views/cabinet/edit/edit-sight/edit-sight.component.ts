@@ -14,6 +14,8 @@ import { ISight } from 'src/app/models/sight'
 import { SightTypeService } from 'src/app/services/sight-type.service'
 import { types } from 'util'
 import { IPlace } from 'src/app/models/place'
+import _ from 'lodash'
+import { serialize } from 'object-to-formdata'
 
 @Component({
   selector: 'app-edit-sight',
@@ -27,12 +29,25 @@ export class EditSightComponent implements OnInit {
   previewCategory: any = []
   allTypes: any[] = []
   place!: any
+  options: object = {
+    indexes: true,
+    indices: true,
+    nullsAsUndefineds: false,
+    booleansAsIntegers: false,
+    allowEmptyArrays: false,
+    noAttributesWithArrayNotation: false,
+    noFilesWithArrayNotation: false,
+    dotsForObjectNotation: false,
+  }
   openTypesModalValue: boolean = false
+
   constructor(
     private sightsService: SightsService,
     private activatedRoute: ActivatedRoute,
     private loadingService: LoadingService,
     private sightTypeService: SightTypeService,
+    private editService: EditService,
+    private toastService: ToastService,
   ) {}
 
   ionViewWillEnter(): void {
@@ -52,9 +67,9 @@ export class EditSightComponent implements OnInit {
           adress: this.organization.address,
           lalitude: this.organization.latitude,
           longitude: this.organization.longitude,
-          types: this.organization.types,
+          types: _.cloneDeep(this.organization.types),
           location_id: this.organization.location_id,
-          files: res.files,
+          files: _.cloneDeep(res.files),
         })
         this.place = {
           address: this.organization.address,
@@ -103,9 +118,29 @@ export class EditSightComponent implements OnInit {
     this.openTypesModalValue = false
   }
   submitForm() {
-    console.log(this.editForm.value)
+    console.log(this.organization, this.editForm.value)
     let sight_history_content = new SightHistoryContent()
-    console.log(sight_history_content.merge(this.organization, this.editForm.value))
+    let result = sight_history_content.merge(this.organization, _.cloneDeep(this.editForm.value))
+    this.editService
+      .sendEditSight(serialize(result, this.options))
+      .pipe(
+        catchError((err: any) => {
+          this.loadingService.hideLoading()
+
+          if (err.status == 403) {
+            this.toastService.showToast('Событие уже находится на модерации', 'warning')
+          } else {
+            this.toastService.showToast('Что-то пошло не так', 'error')
+          }
+          return of(EMPTY)
+        }),
+      )
+      .subscribe((res: any) => {
+        this.loadingService.hideLoading()
+        if (res.status == 'success') {
+          this.toastService.showToast('Сообщество отправленно на проверку', 'success')
+        }
+      })
   }
   ngOnInit() {
     this.sightTypeService
