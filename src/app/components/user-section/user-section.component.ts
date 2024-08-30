@@ -31,10 +31,12 @@ export class UserSectionComponent implements OnInit {
     }
   }
   checkAvatarOrganzization() {
-    if (this.organization.files[0] && this.organization.files[0].link.includes('https')) {
-      this.avatarUrl = this.organization.files[0].link
-    } else {
-      this.avatarUrl = `${this.backendUrl}${this.organization.files[0].link}`
+    if (this.organization.files[0]) {
+      if (this.organization.files[0] && this.organization.files[0].link.includes('https')) {
+        this.avatarUrl = this.organization.files[0].link
+      } else {
+        this.avatarUrl = `${this.backendUrl}${this.organization.files[0].link}`
+      }
     }
   }
   click() {
