@@ -21,6 +21,8 @@ import { MapService } from 'src/app/services/map.service'
 import { YaReadyEvent } from 'angular8-yandex-maps'
 import { SliderComponent } from '@angular-slider/ngx-slider/slider.component'
 import { SearchFirstySeanceService } from 'src/app/services/search-firsty-seance.service'
+import { ISight } from 'src/app/models/sight'
+import { IOrganization } from 'src/app/models/organization'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -65,6 +67,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
   priceState: string = ''
   priceStateForShow: string = ''
   @Input() createObj: any = {}
+  organization!: IOrganization
+
   constructor(
     private route: ActivatedRoute,
     private eventsService: EventsService,
@@ -79,7 +83,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private locationService: LocationService,
     private mapService: MapService,
-  ) {}
+  ) { }
 
   getEvent() {
     this.eventsService
@@ -101,6 +105,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
           content: event.description,
         })
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
+        this.eventsService
+          .getOrganization(this.event.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((response: any) => {
+            this.organization = response.organization
+          })
       })
   }
 
@@ -275,6 +285,16 @@ export class EventShowComponent implements OnInit, OnDestroy {
     }
   }
 
+  getOrganization() {
+    this.eventsService
+      .getOrganization(this.event.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any) => {
+        console.log(res)
+        this.organization = res.organization
+      })
+  }
+
   toggleLike(event_id: number) {
     console.log(this.event)
     if (!this.userAuth) {
@@ -325,7 +345,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       })
     }
   }
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngOnDestroy() {
     // отписываемся от всех подписок
