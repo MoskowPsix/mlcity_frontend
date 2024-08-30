@@ -10,7 +10,7 @@ import { InfiniteScrollCustomEvent } from '@ionic/angular'
 })
 export class CardGridComponent implements OnInit {
   constructor(private router: Router) {}
-  @Input() cards!: IEventType[] | ISightType[] | any[]
+  @Input() cards: IEventType[] | ISightType[] | any[] = []
   @Input() isSight: boolean = false
   @Input() spiner!: boolean
   @Output() endScroll: EventEmitter<any> = new EventEmitter()
@@ -27,9 +27,11 @@ export class CardGridComponent implements OnInit {
     // }
   }
   onIonInfinite(event: any) {
-    let trueEvent = event as InfiniteScrollCustomEvent
-    this.endScroll.emit()
-    trueEvent.target.complete()
+    if (!this.notFound) {
+      let trueEvent = event as InfiniteScrollCustomEvent
+      this.endScroll.emit()
+      trueEvent.target.complete()
+    }
   }
   scrollPaginate() {}
   ngOnInit() {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core'
 import { IPlace } from 'src/app/models/place'
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps'
 import { LocationService } from 'src/app/services/location.service'
@@ -33,15 +33,26 @@ export class AddressInputComponent implements OnInit {
   addressForm!: FormGroup
   public addressChange: BehaviorSubject<boolean> = new BehaviorSubject(true)
   setFirstCoords() {
-    if (this.place.latitude) {
+    if (this.place && this.place.latitude) {
       this.coords = [this.place.latitude, this.place.longitude]
     } else {
       this.coords = [55.751574, 37.573856] // Москва по умолчанию
+    }
+    this.setAdress()
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.setFirstCoords()
+    if (this.map) {
+      setTimeout(() => {
+        this.addPlacemark(this.coords)
+      }, 0)
     }
   }
   emitForm() {
     this.addressEditEmit.emit(this.addressForm.value)
   }
+
   onMapReady(event: YaReadyEvent<ymaps.Map>) {
     this.map = event
     this.addPlacemark(this.coords)
@@ -82,6 +93,7 @@ export class AddressInputComponent implements OnInit {
         tap((result: any) => {
           const firstGeoObject = result.geoObjects.get(0)
           // this.address = firstGeoObject.getAddressLine()
+
           this.addressForm.value.address = firstGeoObject.getAddressLine()
         }),
       )
@@ -103,7 +115,10 @@ export class AddressInputComponent implements OnInit {
       })
   }
   ngAfterViewInit() {
-    this.setFormInLoad()
+    this.setFirstCoords()
+    if (this.place) {
+      this.setFormInLoad()
+    }
   }
   testLog() {
     console.log(this.addressForm.value)
@@ -112,6 +127,7 @@ export class AddressInputComponent implements OnInit {
     this.setLongitudelatitude()
     this.setAdress()
   }
+
   ngOnInit() {
     this.addressForm = new FormGroup({
       placeId: new FormControl(this.placeId, [Validators.required]),
@@ -120,6 +136,5 @@ export class AddressInputComponent implements OnInit {
       latitude: new FormControl('', [Validators.required]),
       location_id: new FormControl('', [Validators.required]),
     })
-    this.setFirstCoords()
   }
 }

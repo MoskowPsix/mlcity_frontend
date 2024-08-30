@@ -79,7 +79,7 @@
             <div class="step-first">
               <span class="email-add-text">Вам на почту {{this.emailForm.value.email}} был отпрвлен код, пожалуйста введите его ниже</span>
                 <form class="email-form" [formGroup]="emailForm"> 
-                  <app-code-input (codeRetry)="codeRetry()" [timerSecondsCount]="timer" (code)="submitCode($event)" type="button" [setFocused]="false"></app-code-input>
+                  <app-code-input  (codeRetry)="codeRetry()" [timerSecondsCount]="timer" (code)="submitCode($event)" type="button" [setFocused]="false"></app-code-input>
                 </form>
             </div>
           </div>    

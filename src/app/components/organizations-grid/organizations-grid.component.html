@@ -1,0 +1,30 @@
+<ng-container *ngIf="notFound === false && !cards.length">
+  <div class="main-grid-load">
+    <div class="card-wrapper" *ngFor="let key of [1,2,3,4]">
+        <ion-skeleton-text [animated]="true" class="card-load">
+        </ion-skeleton-text>
+    </div>
+  </div>
+
+</ng-container>
+<div *ngIf="notFound" class="error-box">
+  <ion-icon class="dont-found-icon" name="file-tray" color="medium"></ion-icon>
+  <p class="dont-found-text">Ничего не найдено.</p>
+</div>   
+<ng-container *ngIf="cards && notFound === false">
+
+  <ng-container *ngIf="cards">
+    <div class="main-grid">
+        <app-organizations-card [extensialClick]="extensialClick" [buttonType]= "buttonType"  (selectOrganization)="emitOrganization($event)" *ngFor="let card of cards; let i = index" [card]="card" [myEvent]="myEvents">
+            
+        </app-organizations-card>
+    </div>
+    <div class="spiner-container">
+      <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>
+    </div>
+    <ion-infinite-scroll *ngIf="cards.length > 0 && notFound === false" (ionInfinite)="onIonInfinite($event)">
+      <ion-infinite-scroll-content ></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ng-container>
+</ng-container>
+

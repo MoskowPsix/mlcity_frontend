@@ -1,0 +1,25 @@
+<div *ngIf="seance" class="seance-container">
+  <div class="seance-container_content">
+    <div>
+      <div class="seance-container_content__info">
+       <div *ngIf="seance.date_start" class="date-seance">
+          <div class="date-seance__day-month">
+            {{seance.date_start | date:'d MMM'}}
+          </div>
+          <div class="date-seance__time">
+            в {{seance.date_start | date:'HH:mm'}}
+          </div>
+       </div>
+       <div class="price-seance">
+          {{priceState}}
+       </div>
+       <div class="buy-ticket-seance-button">
+        <app-standart-button  buttonText="Купить" type="button" theme ="standart"></app-standart-button>
+       </div>
+      </div>
+      <img class="seance-container-content__border-img" src="/assets/icons/seance-border.png" alt="">
+    </div>
+      
+  </div>
+</div>
+

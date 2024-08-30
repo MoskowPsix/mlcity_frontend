@@ -1,0 +1,38 @@
+.range-container {
+  width: 2.2rem;
+  height: 2rem;
+  background-color:white;
+  border-radius: 36px;
+  transition: 0.5s ease-in-out;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.circle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.circle_container.active {
+  padding-left: 0.325rem;
+}
+
+.range-container.active {
+  width: 13rem;
+}
+
+.range-element {
+  text-align: center;
+  min-width: 100%;
+  color: var(--font-color);
+  font-family: var(--font-bold);
+  font-size: 0.75rem;
+}
+
+.range-element.active {
+  background-color: var(--blue-light-color);
+  border-radius: 32px;
+  color: var(--blue-color);
+  padding: 4px;
+}

@@ -43,8 +43,10 @@ import { LocationService } from 'src/app/services/location.service'
 import { SightsService } from 'src/app/services/sights.service'
 import { SafeUrlPipe } from './event-create.pipe'
 import { Router } from '@angular/router'
+import { OrganizationService } from 'src/app/services/organization.service'
 import { CreateRulesModalComponent } from 'src/app/components/create-rules-modal/create-rules-modal.component'
 import { maskitoTimeOptionsGenerator } from '@maskito/kit'
+import { IOrganization } from 'src/app/models/organization'
 
 @Component({
   selector: 'app-event-create',
@@ -66,6 +68,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
   currentTime = new Date()
+  organizations: IOrganization[] = []
+
   @ViewChild('eventName') eventNameElement!: any
   @ViewChild('eventDescription') eventDescriptionElement!: any
   @HostListener('window:resize', ['$event'])
@@ -116,7 +120,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   formData: FormData = new FormData()
   imagesPreview: string[] = []
   locationLoader: boolean = false
-
+  userHasOrganization: boolean = false
   placeArrayForm: any[] = []
   seancesArrayForm: any[] = []
   locations: any[] = []
@@ -136,10 +140,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   DateTimeFormatOptions: any = new Intl.DateTimeFormat('ru', {
     dateStyle: 'short',
   })
-
+  selectedOrganization!: IOrganization
   formatingTimeStart: string = ''
   formatingTimeEnd: string = ''
   //nextButtonDisable: boolean = false
+
+  modalSelectedOrganization!: boolean
 
   placemark!: ymaps.Placemark
   // map!:YaReadyEvent<ymaps.Map>
@@ -163,6 +169,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router,
     private yaGeocoderService: YaGeocoderService,
+    private organizationService: OrganizationService,
   ) {}
 
   nextStep() {
@@ -177,6 +184,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.count++
   }
 
+  selectOrganization(event: IOrganization) {
+    console.log(event)
+    this.selectedOrganization = event
+    let id = this.selectedOrganization.id
+    this.createEventForm.patchValue({ organization_id: id })
+    this.modalSelectedOrganization = !this.modalSelectedOrganization
+  }
   //поулчаем юзера и устанвлвиаем группы и шаги
   getUserWithSocialAccount() {
     this.userService
@@ -187,7 +201,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }),
         switchMap((user: any) => {
           this.user = user
-          this.createEventForm.patchValue({ sponsor: user?.name })
           return of(user)
         }),
         switchMap((user: any) => {
@@ -637,6 +650,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.formData.append('name', this.createEventForm.controls['name'].value)
     this.formData.append('sponsor', this.createEventForm.controls['sponsor'].value)
     this.formData.append('description', this.createEventForm.controls['description'].value)
+    this.formData.append('organization_id', this.createEventForm.controls['organization_id'].value)
     // this.formData.append('coords', this.createEventForm.controls['coords'].value)
     // this.formData.append('address', this.createEventForm.controls['address'].value)
     // this.formData.append('city', this.city)
@@ -729,7 +743,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
               .split('T')[1]
               .split('+')[0]
               .split(':')[0] + 1
-        
 
           this.createEventForm.value.places[place].value.seances[seans].patchValue({
             dateEnd: splitDate + 'T' + newTime + ':' + splitMinuts + ':' + '00' + '+' + '00',
@@ -787,7 +800,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       //шаг первый
       case 1:
         //шаг второй
-        if (this.createEventForm.controls['name'].invalid || this.createEventForm.controls['sponsor'].invalid) {
+        if (
+          this.createEventForm.controls['name'].invalid ||
+          (this.userHasOrganization && !this.createEventForm.value.organization_id)
+        ) {
           return true
         } else {
           return false
@@ -1132,6 +1148,16 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.minLengthCityesListError = true
     }
   }
+
+  checkHasUserOrganizations() {
+    this.organizationService
+      .checkHasUserOrganization()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response: any) => {
+        this.userHasOrganization = response.status
+      })
+  }
+
   onClearSearch() {
     this.minLengthCityesListError = false
     this.cityesListLoading = false
@@ -1223,6 +1249,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.dateTomorrow.setDate(this.dateTomorrow.getDate() + 1)
   }
   ngOnInit() {
+    this.organizationService
+      .getUserOrganizations()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any) => {
+        console.log(res)
+        this.organizations = res.organizations.data
+      })
+    this.checkHasUserOrganizations()
     this.setValueDateDefault()
     this.mobileOrNote()
     let locationId: any
@@ -1234,6 +1268,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       {
         name: new FormControl('', [Validators.required, Validators.minLength(3)]),
         sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
+        organization_id: new FormControl('', [Validators.required]),
         description: new FormControl('', [Validators.required, Validators.minLength(10)]),
         places: new FormControl([], [Validators.required]),
         type: new FormControl([], [Validators.required]),

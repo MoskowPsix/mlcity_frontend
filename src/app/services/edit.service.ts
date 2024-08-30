@@ -11,4 +11,7 @@ export class EditService {
   sendEditEvent(event: any) {
     return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/history-content`, event)
   }
+  sendEditSight(event: any) {
+    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/history-content`, event)
+  }
 }

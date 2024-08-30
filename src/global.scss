@@ -43,6 +43,8 @@
   font-family: 'NunitoSans';
   src: url('./assets/fonts/NunitoSans.ttf');
 }
+
+
 @font-face {
   font-family: 'NunitoSans-SemiBold';
   src: url('./assets/fonts/NunitoSans-SemiBold.ttf');
@@ -71,12 +73,21 @@
     --orange-color: #f7ab31;
     --orange-filter: brightness(0) saturate(100%) invert(76%) sepia(67%) saturate(4165%) hue-rotate(2deg) brightness(104%) contrast(108%);
     --blue-color:#3880FF;
+    --blue-light-color:#DCE9FF;
     --blue-filter: invert(42%) sepia(79%) saturate(2572%) hue-rotate(204deg) brightness(100%) contrast(104%)
     --white-filter: invert(100%) sepia(8%) saturate(7472%) hue-rotate(199deg) brightness(103%) contrast(114%);
+    --gray-color:#4C5861;
 }
+
+
+
 @font-face {
 	font-family: 'NunitoSans-Regular';
-	src: url('./assets/fonts/NunitoSans-Regular.ttf');
+	src: url('./assets/fonts/NunitoSans.ttf');
+}
+@font-face {
+	font-family: 'NunitoSans-Light';
+	src: url('./assets/fonts/NunitoSans.ttf');
 }
 
 @font-face {
@@ -89,14 +100,22 @@
     src: url('/assets/fonts/static/NunitoSans_7pt-SemiBold.ttf');
 }
 @font-face {
+    font-family: "NunitoSans-Bold";
+    src: url('/assets/fonts/static/NunitoSans_7pt-Bold.ttf');
+}
+@font-face {
     font-family: "NunitoSans-Regular";
     src: url('/assets/fonts/static/NunitoSans_7pt-Regular.ttf');
 }
 
 
 
+
+
 :root{
-    --font-bold:'NunitoSans-SemiBold';
+    --font-light:'NunitoSans-Light';
+    --font-bold:'NunitoSans-Bold';
+    --font-semiBold:'NunitoSans-SemiBold';
     --font-regular:'NunitoSans-Regular';
     --font-color:#4C5861;
     --font-color-dark:#1C2226;
@@ -108,7 +127,9 @@ ion-content {
   --overflow:auto;
   overflow: auto;
   --background: #FAFAFA;
-
+}
+main.inner-scroll.scroll-y{
+    overflow-y:hidden;
 }
 
 body {
@@ -169,7 +190,7 @@ ion-content{
 }
 
 .cluster {
-    font-size: 0.75rem;
+    font-size: 1rem;
     // background-color: var(--orange-color);
     display:flex;
     text-align: center;

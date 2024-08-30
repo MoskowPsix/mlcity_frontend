@@ -30,6 +30,7 @@ import { CommentsService } from 'src/app/services/comments.service'
 import numeral from 'numeral'
 import { HelpersService } from 'src/app/services/helpers.service'
 import { Router } from '@angular/router'
+import { Statuses } from 'src/app/enums/statuses-new'
 register()
 
 @Component({
@@ -94,6 +95,16 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   prices: number[] = []
   minPrice: number = 0
   maxPrice: number = 0
+  statusColor: Record<string, string> = {
+    Новое: '#3880FF',
+    Изменено: '#F99011',
+    Опубликовано: '#22CA3D',
+    Отказ: '#E83940',
+    Черновик: '#4C5861',
+  }
+  placeHolderImage: string = '/assets/images/nophoto.jpg'
+  imageUrl: string = ''
+  imageLoaded: boolean = false
 
   eventNavigation() {
     this.isSight
@@ -101,7 +112,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       : this.router.navigate(['/events', this.event.id, this.slugName])
   }
   eventNavigationEdit() {
-    
     this.isSight
       ? this.router.navigate(['/cabinet/sights/edit', this.event.id])
       : this.router.navigate(['/cabinet/events/edit', this.event.id])
@@ -158,7 +168,27 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  test() {}
+  showInfoAboutStatus() {
+    switch (this.getLastStatus().name) {
+      case Statuses.new:
+        this.toastService.showToast('Находится на рассмотрении', 'primary')
+        break
+      case Statuses.changed:
+        this.toastService.showToast('Находится на модерации', 'warning')
+        break
+      case Statuses.published:
+        this.toastService.showToast('Находится в активном состоянии', 'success')
+        break
+      case Statuses.blocked:
+        this.toastService.showToast('На данный момент заблокированно', 'danger')
+        break
+      case Statuses.denied:
+        this.toastService.showToast('Было отклонено модератором', 'danger')
+        break
+      case Statuses.draft:
+        this.toastService.showToast('Находится в черновиках', 'secondary')
+    }
+  }
 
   getUrlFrame(url: string) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
@@ -304,14 +334,46 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   findPrice() {
-    if (!this.isSight) {
+    if (!this.isSight && this.event.price) {
       for (let i = 0; i < this.event.price.length; i++) {
         this.prices.push(Number(this.event.price[i].cost_rub))
       }
-
-      this.minPrice = Math.min(...this.prices)
-      this.maxPrice = Math.max(...this.prices)
+      if (this.prices.length > 0) {
+        this.minPrice = Math.min(...this.prices)
+        this.maxPrice = Math.max(...this.prices)
+      } else {
+        this.minPrice = 0
+        this.maxPrice = 0
+      }
     }
+  }
+
+  getLastStatusColor() {
+    let status: string = this.getLastStatus().name
+
+    return this.statusColor[status]
+  }
+
+  getLastStatus() {
+    let status: any
+    this.event.statuses.forEach((element: any) => {
+      if (element.pivot.last) {
+        status = element
+      }
+    })
+
+    return status
+  }
+
+  changeBackgroundImage() {
+    this.imageLoaded = true
+    this.placeHolderImage = this.event.files[0].link
+
+    setTimeout(() => {
+      this.imageLoaded = false
+
+    }, 500) // Time in ms should match the CSS transition time
+
   }
 
   ngAfterViewInit(): void {
@@ -330,45 +392,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.swiper?.update()
   }
-
-  // scrollEvent = (): void => {
-
-  //   const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
-  //   if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {
-  //     if (!this.viewElementTimeStart){
-  //       this.viewElementTimeStart = new Date().getTime()
-  //     }
-  //   } else if ((this.viewElementTimeStart && !this.viewElement) || ((this.viewElementTimeStart && !this.viewElement) && (boundingClientRect.width === 0 && boundingClientRect.width === 0))) {
-  //     this.viewElementTimeEnd = new Date().getTime()
-  //     let time: any
-  //     time = (new Date().getTime() - this.viewElementTimeStart)/1000
-  //     if (time > 3.141) {
-  //       if (this.isSight) {
-  //         this.sightsService.addView(this.event.id, time).pipe(
-  //           delay(100),
-  //           retry(3),
-  //           catchError((err) =>{
-  //             return of(EMPTY)
-  //           }),
-  //           takeUntil(this.destroy$)
-  //         ).subscribe()
-  //       } else {
-  //         this.eventsService.addView(this.event.id, time).pipe(
-  //           delay(100),
-  //           retry(3),
-  //           catchError((err) =>{
-  //             return of(EMPTY)
-  //           }),
-  //           takeUntil(this.destroy$)
-  //         ).subscribe()
-  //       }
-  //       this.viewElement = true
-  //     }
-  //     this.viewElementTimeStart = 0
-  //     this.viewElementTimeEnd = 0
-  //   }
-  //   //console.log(boundingClientRect)
-  // }
 
   toggleComment() {
     this.loadingComment = true

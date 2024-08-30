@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  HostListener,
-  ViewChild,
-} from '@angular/core'
+import { Component, OnInit, OnDestroy, HostListener, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router'
 import { EMPTY, Subject, catchError, filter, of, takeUntil } from 'rxjs'
@@ -21,13 +15,9 @@ import { Location } from '@angular/common'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
 import { RecoveryPasswordService } from 'src/app/services/recovery-password.service'
-import {
-  SignInWithApple,
-  SignInWithAppleResponse,
-  SignInWithAppleOptions,
-} from '@capacitor-community/apple-sign-in'
+import { SignInWithApple, SignInWithAppleResponse, SignInWithAppleOptions } from '@capacitor-community/apple-sign-in'
 import { Capacitor } from '@capacitor/core'
-
+import { MobileOrNoteService } from 'src/app/services/mobile-or-note.service'
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -49,6 +39,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   timer: any
   timerReady: boolean = true
   seconds: number = 60
+  target: string = ''
+  mobile: boolean = false
   closeRecoveryModal: boolean = true
   modalPass: boolean = false
   presentingElement: undefined
@@ -67,6 +59,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private actionSheetCtrl: ActionSheetController,
     private location: Location,
     private titleService: Title,
+    private mobileOrNoteService: MobileOrNoteService,
     private metaService: Meta,
     private recoveryPasswordService: RecoveryPasswordService,
   ) {
@@ -76,17 +69,30 @@ export class LoginComponent implements OnInit, OnDestroy {
       content: 'Вход на сайт.',
     })
   }
+  @HostListener('window:resize', ['$event'])
+  mobileOrNote() {
+    switch (Capacitor.getPlatform()) {
+      case 'ios':
+        this.mobile = true
+        break
+      case 'android':
+        this.mobile = true
+        break
+      case 'web':
+        this.mobile = false
+        break
+    }
 
+    if (this.mobile == true) {
+      this.target = '_self'
+    } else if (this.mobile == false) {
+      this.target = '_blank'
+    }
+  }
   loginPhone() {
     this.formSetPassword = new FormGroup({
-      number: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
-      password_retry: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      number: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      password_retry: new FormControl('', [Validators.required, Validators.minLength(3)]),
     })
   }
   setPass() {
@@ -230,10 +236,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe((res: any) => {
         this.closeRecoveryModal = !this.closeRecoveryModal
         if (res.status) {
-          this.toastService.showToast(
-            'Ссылка была отправлена на почту',
-            'success',
-          )
+          this.toastService.showToast('Ссылка была отправлена на почту', 'success')
         }
 
         this.loadingService.hideLoading()
@@ -242,10 +245,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   errorResponseAfterLogin(err: any) {
     this.loadingService.hideLoading()
-    this.toastService.showToast(
-      err.error.message || MessagesErrors.default,
-      'warning',
-    )
+    this.toastService.showToast(err.error.message || MessagesErrors.default, 'warning')
     this.loginForm.enable()
   }
 
@@ -283,10 +283,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             .pipe(
               takeUntil(this.destroy$),
               catchError((err) => {
-                this.toastService.showToast(
-                  'При авторизвции apple что-то пошло не так',
-                  'warning',
-                )
+                this.toastService.showToast('При авторизвции apple что-то пошло не так', 'warning')
                 return of(EMPTY)
               }),
             )
@@ -296,10 +293,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         })
         .catch((e) => {
           console.log(e)
-          this.toastService.showToast(
-            'При авторизвции apple что-то пошло не так',
-            'warning',
-          )
+          this.toastService.showToast('При авторизвции apple что-то пошло не так', 'warning')
           return of(EMPTY)
         })
     } else {
@@ -308,44 +302,26 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.mobileOrNote()
     //Создаем поля для формы
     this.loginForm = new FormGroup({
-      name: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(50),
-      ]),
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(3)]),
     })
 
     this.formSetPassword = new FormGroup({
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
-      password_retry: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      password: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      password_retry: new FormControl('', [Validators.required, Validators.minLength(3)]),
     })
 
     this.recoveryForm = new FormGroup({
-      email: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(50),
-      ]),
+      email: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
     })
 
     //Получаем ид юзера и параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.token = params['user_id']
-      this.token
-        ? this.loginAfterSocial(this.token)
-        : this.loginAfterSocial('no')
+      this.token ? this.loginAfterSocial(this.token) : this.loginAfterSocial('no')
     })
 
     // this.loginAfterSocial(this.user_id)

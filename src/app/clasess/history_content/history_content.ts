@@ -19,10 +19,9 @@ export class HistoryContent {
   protected description!: string
   protected materials!: string
   protected sponsor!: string
-  protected files: IFile[] = []
+  protected files: IFile[] | FormData = []
   protected types: ISightType[] | IEventType[] = []
   protected price: object[] = []
-
 
   /**
    * @param origin any оригинальный объект событий или мест
@@ -205,7 +204,7 @@ export class HistoryContent {
       if (editedPrice.on_delete != null && editedPrice.on_delete) {
         let priceOnDelete = {
           price_id: editedPrice.id,
-          on_delete: true
+          on_delete: true,
         }
         this.price.push(priceOnDelete)
 
@@ -216,7 +215,7 @@ export class HistoryContent {
 
       if (originalPrice != undefined && !isEqual(editedPrice, originalPrice)) {
         let changedPrice: EditedPrice = {
-          price_id: editedPrice.id
+          price_id: editedPrice.id,
         }
 
         if (!isEqual(editedPrice.cost_rub, originalPrice.cost_rub)) {

@@ -1,0 +1,17 @@
+<ng-container >
+  <div>
+        <app-calendar-button (startDateEmit)="setStartDate($event)" [templateDate]="templateDate" (setDateEmit)="setDateFilter($event)" theme='light'></app-calendar-button>
+        <div *ngIf="!viewSeances.length" class="not-found-container">
+          <img class="not-found-container__img" src="assets/icons/not-found-seances.svg" alt="">
+          <span class="not-found-container__text">На эту дату ничего не найдено</span>
+          <span (click)="setDateMinSeance(minSeance)" *ngIf="minSeance" class="not-found-container__text-seance">Ближайший сеанс {{minSeance | date:'dd MMM yyyy '}}г.</span>
+        </div>
+        <ng-container *ngIf="seances">
+          <ng-container *ngFor="let seance of viewSeances">
+            <app-seance-show [priceState]="priceState" [seance]="seance" ></app-seance-show>
+          </ng-container>
+        </ng-container>
+  
+  </div>
+</ng-container>
+

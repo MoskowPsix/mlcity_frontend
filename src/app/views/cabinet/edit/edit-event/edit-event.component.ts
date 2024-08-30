@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { catchError, EMPTY, of, Subject, takeUntil, tap } from 'rxjs'
 import { IEvent } from 'src/app/models/event'
 import { EventsService } from 'src/app/services/events.service'
@@ -15,6 +15,7 @@ import { EventHistoryContent } from 'src/app/clasess/history_content/event_histo
 import { EditService } from 'src/app/services/edit.service'
 import { ToastService } from 'src/app/services/toast.service'
 import _ from 'lodash'
+import { serialize } from 'object-to-formdata'
 interface InvalidForm {
   name: boolean
   sponsor: boolean
@@ -42,6 +43,7 @@ export class EditEventComponent implements OnInit {
     private eventsService: EventsService,
     private loadingService: LoadingService,
     private editService: EditService,
+    private router: Router,
   ) {}
   private readonly destroy$ = new Subject<void>()
   event!: IEvent
@@ -55,6 +57,17 @@ export class EditEventComponent implements OnInit {
   submitButtonState: boolean = false
   copyEvent: any
   freeEntry: boolean = true
+  formData: FormData = new FormData()
+  options: object = {
+    indexes: true,
+    indices: true,
+    nullsAsUndefineds: false,
+    booleansAsIntegers: false,
+    allowEmptyArrays: false,
+    noAttributesWithArrayNotation: false,
+    noFilesWithArrayNotation: false,
+    dotsForObjectNotation: false,
+  }
 
   invalidForm: InvalidForm = {
     name: false,
@@ -94,7 +107,6 @@ export class EditEventComponent implements OnInit {
       descriptions: '',
     })
   }
-  ngAfterViewInit(): void {}
   deletePrice(event: any) {
     if (event.id) {
       let index = this.editForm.value.price.map((e: any) => e.id).indexOf(event.id)
@@ -229,6 +241,7 @@ export class EditEventComponent implements OnInit {
   }
   getPlaces() {
     let tempPlaceArray: IPlace[] = []
+    console.log(this.event)
     this.eventsService
       .getEventPlaces(this.event.id, {})
       .pipe(
@@ -238,7 +251,6 @@ export class EditEventComponent implements OnInit {
       )
       .subscribe(() => {
         this.copyEvent.places = []
-
         tempPlaceArray.forEach((place: any) => {
           this.placesArray.push(place)
           if (this.copyEvent.places) {
@@ -277,7 +289,9 @@ export class EditEventComponent implements OnInit {
       .getEventById(Number(eventId))
       .pipe(
         takeUntil(this.destroy$),
-        tap((res) => {
+        tap((res: any) => {
+          console.log(res)
+          res = res.event
           priceArray = res.price
           typesArray = res.types
           filesArray = JSON.parse(JSON.stringify(res.files))
@@ -285,6 +299,7 @@ export class EditEventComponent implements OnInit {
         }),
       )
       .subscribe((res: any) => {
+        res = res.event
         this.copyEvent = _.cloneDeep(this.event)
         this.getPlaces()
         this.loadingService.hideLoading()
@@ -293,9 +308,12 @@ export class EditEventComponent implements OnInit {
           sponsor: res.sponsor,
           description: res.description,
         })
-        priceArray.forEach((price: any) => {
-          this.editForm.value.price.push(price)
-        })
+        if (priceArray) {
+          priceArray.forEach((price: any) => {
+            this.editForm.value.price.push(price)
+          })
+        }
+
         typesArray.forEach((type: any) => {
           this.previewCategory.push(type)
           this.editForm.value.types.push(type)
@@ -456,30 +474,34 @@ export class EditEventComponent implements OnInit {
       if (this.submitButtonState) {
         return
       }
-      this.submitButtonState = true
-      this.loadingService.showLoading()
+      // this.submitButtonState = true
+      // this.loadingService.showLoading()
       this.clearFormOfTempData()
-      console.log(this.editForm.value)
       let historyContent = new EventHistoryContent()
+      let result = historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value))
       this.editService
-        .sendEditEvent(historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value)))
+        .sendEditEvent(serialize(result, this.options))
         .pipe(
           catchError((err: any) => {
             this.submitButtonState = false
             this.loadingService.hideLoading()
+            this.formData = new FormData()
             if (err.status == 403) {
               this.toastService.showToast('Событие уже находится на модерации', 'warning')
+            } else {
+              this.toastService.showToast('Что-то пошло не так', 'error')
             }
             return of(EMPTY)
           }),
         )
         .subscribe((res: any) => {
+          this.formData = new FormData()
           this.submitButtonState = false
           this.loadingService.hideLoading()
           if (res.status == 'success') {
             this.toastService.showToast('Событие отправленно на проверку', 'success')
+            this.router.navigate(['/cabinet/events'])
           }
-          console.log(res)
         })
     }
   }

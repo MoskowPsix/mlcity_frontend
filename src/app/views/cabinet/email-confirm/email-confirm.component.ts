@@ -32,7 +32,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
   public willRequestToGetCode: boolean = false
   public emailConfirm: boolean = false
   public codeFocused!: boolean
-  public timer: number = 0
+  public timer: number = 120
   public user: IUser = {
     id: 0,
     name: '',

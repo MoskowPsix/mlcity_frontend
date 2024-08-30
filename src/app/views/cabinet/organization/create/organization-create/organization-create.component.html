@@ -1,0 +1,12 @@
+<ion-content>
+  <div class="content-container">
+    <form [formGroup]="createForm" action="" class="create-form">
+      <app-standart-input [invalid]="!createForm.controls['name'].valid" [label]="'Название Сообщества'" [control]="createForm.get('name')"></app-standart-input>
+      <app-standart-input [invalid]="!createForm.controls['locationId'].valid" [label]="'Выбор города:'" [control]="createForm.get('locationId')"></app-standart-input>
+      <app-standart-rich-input [invalid]="!createForm.controls['description'].valid"  [label]="'Описание Сообщества'" [control]=""></app-standart-rich-input>
+      <div class="save-button-wrapper">
+        <app-standart-button (click)="submitCreate()" buttonText="Создать сообщество" type="button" theme="standart"></app-standart-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

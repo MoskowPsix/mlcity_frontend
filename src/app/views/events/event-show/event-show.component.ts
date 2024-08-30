@@ -1,26 +1,6 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
-  ChangeDetectorRef,
-  Output,
-  Input,
-} from '@angular/core'
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Output, Input, inject } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
-import {
-  Subject,
-  takeUntil,
-  tap,
-  retry,
-  catchError,
-  of,
-  EMPTY,
-  map,
-  delay,
-  filter,
-  timeInterval,
-} from 'rxjs'
+import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter, timeInterval } from 'rxjs'
 import { EventsService } from 'src/app/services/events.service'
 import { IonicSlides } from '@ionic/angular'
 import { register } from 'swiper/element/bundle'
@@ -39,7 +19,10 @@ import { FilterService } from 'src/app/services/filter.service'
 import { LocationService } from 'src/app/services/location.service'
 import { MapService } from 'src/app/services/map.service'
 import { YaReadyEvent } from 'angular8-yandex-maps'
-
+import { SliderComponent } from '@angular-slider/ngx-slider/slider.component'
+import { SearchFirstySeanceService } from 'src/app/services/search-firsty-seance.service'
+import { ISight } from 'src/app/models/sight'
+import { IOrganization } from 'src/app/models/organization'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -58,7 +41,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
 
-
   user?: any
   eventId?: number
   event?: any
@@ -69,7 +51,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   favorite: boolean = false
   loadingFavotire: boolean = false
-
+  firstySeance: any
   like: boolean = false
   loadingLike: boolean = false
   startLikesCount: number = 0
@@ -78,8 +60,15 @@ export class EventShowComponent implements OnInit, OnDestroy {
   map!: YaReadyEvent<ymaps.Map>
 
   showRout: boolean = false
+  searchFirstySeanceService: SearchFirstySeanceService = inject(SearchFirstySeanceService)
   url: any = ''
+  likeUrl: string = ''
+  favoriteUrl: string = ''
+  priceState: string = ''
+  priceStateForShow: string = ''
   @Input() createObj: any = {}
+  organization!: IOrganization
+
   constructor(
     private route: ActivatedRoute,
     private eventsService: EventsService,
@@ -94,8 +83,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private locationService: LocationService,
     private mapService: MapService,
-  ) {
-  }
+  ) { }
 
   getEvent() {
     this.eventsService
@@ -107,7 +95,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
       )
       .subscribe((event: any) => {
         if (event) {
-          this.event = event
+          this.event = event.event
+          this.checkPrice()
           // this.places = event.places_full;
         }
         this.titleService.setTitle(event.name)
@@ -115,9 +104,13 @@ export class EventShowComponent implements OnInit, OnDestroy {
           name: 'description',
           content: event.description,
         })
-        this.startLikesCount = this.event?.likes
-          ? this.event.likes.vk_count + this.event.likes.local_count
-          : 0
+        this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
+        this.eventsService
+          .getOrganization(this.event.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((response: any) => {
+            this.organization = response.organization
+          })
       })
   }
 
@@ -134,9 +127,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe(async (response: any) => {
-        await this.queryBuilderService.locationIdForEventShow.next(
-          response.location.id,
-        )
+        await this.queryBuilderService.locationIdForEventShow.next(response.location.id)
         await this.getEventPlaces()
       })
   }
@@ -145,10 +136,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     if (this.loadMore) {
       this.loadPlace = true
       this.eventsService
-        .getEventPlaces(
-          this.eventId,
-          this.queryBuilderService.queryBuilder('eventPlaces'),
-        )
+        .getEventPlaces(this.eventId)
         .pipe(
           delay(100),
           retry(3),
@@ -161,12 +149,11 @@ export class EventShowComponent implements OnInit, OnDestroy {
         )
         .subscribe((response: any) => {
           this.places.push(...response.places.data)
-          this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
-            response.places.next_cursor,
-          )
-          response.places.next_cursor
-            ? (this.loadMore = true)
-            : (this.loadMore = false)
+          this.searchFirstySeanceService.searchSeance(this.places).then((res) => {
+            this.firstySeance = res
+          })
+          this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(response.places.next_cursor)
+          response.places.next_cursor ? (this.loadMore = true) : (this.loadMore = false)
           this.cdr.detectChanges()
         })
     }
@@ -209,8 +196,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.eventsService
         .checkLiked(this.eventId!)
         .pipe(retry(3), takeUntil(this.destroy$))
-        .subscribe((liked: boolean) => {
-          this.like = liked
+        .subscribe((liked: any) => {
+          this.like = liked.is_liked
+          this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
         })
   }
 
@@ -219,11 +207,50 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.eventsService
         .checkFavorite(this.eventId!)
         .pipe(retry(3), takeUntil(this.destroy$))
-        .subscribe((favorite: boolean) => {
-          this.favorite = favorite
+        .subscribe((favorite: any) => {
+          this.favorite = favorite.is_favorite
+          this.favorite
+            ? (this.favoriteUrl = 'assets/icons/star-active.svg')
+            : (this.favoriteUrl = 'assets/icons/star.svg')
         })
   }
 
+  checkPrice() {
+    let prices = this.event.price
+    if (prices && prices.length != 0) {
+      if (prices[0].cost_rub == 0 && prices[0].cost_rub == prices[prices.length - 1].cost_rub) {
+        this.priceState = 'Бесплатно'
+        this.priceStateForShow = 'Бесплатно'
+      }
+      if (prices[0].cost_rub == prices[prices.length - 1].cost_rub && prices[0] !== 0) {
+        this.priceState = prices[0].cost_rub + '₽'
+        this.priceStateForShow = prices[0].cost_rub + '₽'
+      }
+      if (prices[0] != prices[prices.length] && prices[0] !== 0) {
+        this.priceState = prices[0].cost_rub
+        let minPrice = prices[0].cost_rub
+        let maxPrice = prices[0].cost_rub
+        prices.forEach((price: any) => {
+          price.cost_rub < minPrice ? (minPrice = price.cost_rub) : null
+          price.cost_rub > maxPrice ? (maxPrice = price.cost_rub) : null
+        })
+        if (minPrice == 0 && maxPrice == 0) {
+          this.priceState = 'Бесплатно'
+          this.priceStateForShow = 'Бесплатно'
+        } else {
+          this.priceState = 'от ' + minPrice + '₽'
+          this.priceStateForShow = 'от ' + minPrice + '₽' + ' до ' + maxPrice + '₽'
+        }
+      }
+    } else {
+      this.priceState = 'Бесплатно'
+      this.priceStateForShow = 'Бесплатно'
+    }
+  }
+
+  clearDescription() {
+    return this.sanitizer.bypassSecurityTrustHtml(this.event.description)
+  }
   // onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
   //   let icoLink = this.event && this.event.types && this.event.types.length ? this.host + ':' + this.port + this.event.types[0].ico : ''
 
@@ -246,6 +273,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .pipe(
           tap(() => {
             this.favorite = !this.favorite
+            this.favorite
+              ? (this.favoriteUrl = 'assets/icons/star-active.svg')
+              : (this.favoriteUrl = 'assets/icons/star.svg')
+            this.loadingLike = false
             this.loadingFavotire = false
           }),
           catchError((err) => {
@@ -258,21 +289,30 @@ export class EventShowComponent implements OnInit, OnDestroy {
     }
   }
 
+  getOrganization() {
+    this.eventsService
+      .getOrganization(this.event.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any) => {
+        console.log(res)
+        this.organization = res.organization
+      })
+  }
+
   toggleLike(event_id: number) {
+    console.log(this.event)
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
       this.loadingLike = true // для отображения спинера
+
       this.eventsService
         .toggleLike(event_id)
         .pipe(
           tap(() => {
             this.like = !this.like
-            this.like
-              ? this.startLikesCount++
-              : this.startLikesCount !== 0
-                ? this.startLikesCount--
-                : 0
+            this.like ? this.startLikesCount++ : this.startLikesCount !== 0 ? this.startLikesCount-- : 0
+            this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
             this.loadingLike = false
           }),
           catchError((err) => {
@@ -285,33 +325,31 @@ export class EventShowComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
+    this.favorite ? (this.favoriteUrl = 'assets/icons/star-active.svg') : (this.favoriteUrl = 'assets/icons/star.svg')
     //Получаем ид ивента из параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
     })
+
     this.userAuth = this.authService.getAuthState()
     if (this.router.url !== '/cabinet/events/create') {
       this.getEvent()
       this.checkLiked()
       this.checFavorite()
-      this.filterService.locationId
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          this.loadMore = true
-          this.locationId = Number(value)
-          this.places = []
-          this.setLocationForPlaces()
-        })
-      this.router.events
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((value: any) => {
-          this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(
-            '',
-          )
-        })
+      this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        this.loadMore = true
+        this.locationId = Number(value)
+        this.places = []
+        this.setLocationForPlaces()
+      })
+      this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+        this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
+      })
     }
   }
+  ngOnInit() { }
 
   ngOnDestroy() {
     // отписываемся от всех подписок

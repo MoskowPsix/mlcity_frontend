@@ -9,17 +9,17 @@ import { ContactsComponent } from './views/contacts/contacts.component'
 import { DropDownButtonComponent } from './components/drop-down-button/drop-down-button.component'
 import { UserSectionComponent } from './components/user-section/user-section.component'
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientJsonpModule } from '@angular/common/http'
-
 import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular'
-
+import { register } from 'swiper/element/bundle'
 import { AppRoutingModule } from './routing/app-routing.module'
-
+register()
 import { AngularYandexMapsModule, YaConfig } from 'angular8-yandex-maps'
 import { EditEventComponent } from './views/cabinet/edit/edit-event/edit-event.component'
 import { EditSightComponent } from './views/cabinet/edit/edit-sight/edit-sight.component'
 import { AppComponent } from './app.component'
 import { EventsComponent } from './views/events/events.component'
-
+import { PlaceShowComponent } from './components/materials/place-show/place-show.component'
+import { PlaceShowContainerComponent } from './components/materials/place-show-container/place-show-container.component'
 import { CabinetComponent } from './views/cabinet/cabinet.component'
 import { HomeComponent } from './views/home/HomeComponent'
 import { EmailConfirmComponent } from './views/cabinet/email-confirm/email-confirm.component'
@@ -35,6 +35,7 @@ import { FooterComponent } from './components/footer/footer.component'
 import { AboutComponent } from './views/about/about.component'
 import { SecondHeaderComponent } from './components/second-header/second-header.component'
 import { NotFoundComponent } from './views/errors/not-found/not-found.component'
+import { NotFoundContentComponent } from './components/materials/not-found-content/not-found-content.component'
 import { ForbiddenComponent } from './views/errors/forbidden/forbidden.component'
 import { ServerErrorComponent } from './views/errors/server-error/server-error.component'
 import { EventShowComponent } from './views/events/event-show/event-show.component'
@@ -48,6 +49,7 @@ import { FiltersComponent } from './components/filters/filters.component'
 import { FiltersNotButtonComponent } from './components/filters_not_button/filters_not_button.component'
 import { CalendulaComponent } from './components/calendula/calendula.component'
 import { NoDataComponent } from './components/no-data/no-data.component'
+
 import { EventCardComponent } from './components/event-card/event-card.component'
 import { FavoritesComponent } from './views/cabinet/favorites/favorites.component'
 import { CommentsListComponent } from './components/comments-list/comments-list.component'
@@ -61,7 +63,7 @@ import { TokenService } from './services/token.service'
 import { UserService } from './services/user.service'
 import { LoadingService } from './services/loading.service'
 import { MapService } from './services/map.service'
-
+import { OrganizationsCardComponent } from './components/organizations-card/organizations-card.component'
 import { environment } from '../environments/environment'
 import { AuthTokenInterceptor } from './auth-token.interceptor'
 
@@ -95,7 +97,7 @@ import { MaskitoModule } from '@maskito/angular'
 import { ProfileItemComponent } from './components/profile-item/profile-item.component'
 import { ExitButtonComponent } from './components/exit-button/exit-button.component'
 import { MatDatepickerModule } from '@angular/material/datepicker'
-import { MatNativeDateModule } from '@angular/material/core'
+import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { EdditSightComponent } from './views/cabinet/my-sights/edit-sight/eddit-sight.component'
 import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.component'
@@ -115,21 +117,45 @@ import { CardGridComponent } from './components/card-grid/card-grid.component'
 import { ScrollService } from './services/scroll.service'
 import { StandartButtonComponent } from './components/materials/standart-button/standart-button.component'
 import { StandartButtonLongComponent } from './components/materials/standart-button-long/standart-button-long.component'
-import { ListButtonComponent } from './components/materials/list-button/list-button.component'
 import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
 import { FooterItemComponent } from './components/footer/footer-item/footer-item.component'
 import { TestPageComponent } from './views/test-page/test-page.component'
 import { TypeSwitherComponent } from './components/type-swither/type-swither.component'
 import { SwitchTypeService } from './services/switch-type.service'
+import { CalendarButtonComponent } from './components/calendar/calendar-button/calendar-button.component'
+import { CalendarComponent } from './components/calendar/calendar.component'
+import { MatInputModule } from '@angular/material/input'
+import { OrganizationCreateComponent } from './views/cabinet/organization/create/organization-create/organization-create.component'
+import { ShowSliderComponent } from './components/materials/show-slider/show-slider.component'
 import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
 import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
 import { AddressInputComponent } from './components/address-input/address-input.component'
 import { RoundedButtonComponent } from './components/materials/rounded-button/rounded-button.component'
+import { RangeSelectionButtonComponent } from './components/materials/range-selection-button/range-selection-button.component'
+import { TypesModalComponent } from './components/types-modal/types-modal.component'
+import { CategoryButtonComponent } from './components/materials/category-button/category-button.component'
+import { SeancesContainerComponent } from './components/materials/seances-container/seances-container.component'
+import { SeanceShowComponent } from './components/materials/seance-show/seance-show.component'
+import { OrganizationsSelectContainerComponent } from './components/materials/organizations-select-container/organizations-select-container.component'
+import { OrganizationShowComponent } from './views/organization-show/organization-show.component'
+import { OrganizationsGridComponent } from './components/organizations-grid/organizations-grid.component'
+import { TabsComponent } from './components/materials/tabs/tabs.component'
+import { TabsItemComponent } from './components/materials/tabs-item/tabs-item.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
 }
-
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+}
 registerLocaleData(localeRu, 'ru')
 
 @NgModule({
@@ -144,6 +170,7 @@ registerLocaleData(localeRu, 'ru')
     BackButtonComponent,
     RecoveryPasswordComponent,
     SecondHeaderComponent,
+    ShowSliderComponent,
     HeaderComponent,
     CodeInputComponent,
     AddressInputComponent,
@@ -155,9 +182,15 @@ registerLocaleData(localeRu, 'ru')
     DropdownPopupComponent,
     StandartInputComponent,
     MenuAuthComponent,
+    PlaceShowContainerComponent,
+    PlaceShowComponent,
+    OrganizationShowComponent,
     MenuAuthSidebarComponent,
     FooterComponent,
     UserSectionComponent,
+    TabsComponent,
+    SeancesContainerComponent,
+    TabsItemComponent,
     EmailConfirmComponent,
     ExitButtonComponent,
     AboutComponent,
@@ -165,14 +198,18 @@ registerLocaleData(localeRu, 'ru')
     ForbiddenComponent,
     ServerErrorComponent,
     EventShowComponent,
+    OrganizationsSelectContainerComponent,
     EventCreateComponent,
     EventTypeCaruselComponent,
     SightsComponent,
     SightShowComponent,
     SightCreateComponent,
+    NotFoundContentComponent,
     EditSliderComponent,
     SightTypeComponent,
     RoundedButtonComponent,
+    OrganizationsGridComponent,
+    SeanceShowComponent,
     ReadMoreComponent,
     FiltersComponent,
     ProfileItemComponent,
@@ -185,7 +222,6 @@ registerLocaleData(localeRu, 'ru')
     NewPlaceComponent,
     StandartButtonComponent,
     StandartButtonLongComponent,
-    ListButtonComponent,
     TruncatePipe,
     CreateRulesModalComponent,
     BackButtonDirective,
@@ -199,6 +235,7 @@ registerLocaleData(localeRu, 'ru')
     NewPriceComponent,
     PlaceInfoComponent,
     SightTypeCaruselComponent,
+    OrganizationsCardComponent,
     SafeUrlPipe,
     SafeUrlPipe2,
     MyEventsComponent,
@@ -217,8 +254,14 @@ registerLocaleData(localeRu, 'ru')
     UpdateVersionModalComponent,
     ModalCheckEmailComponent,
     FooterItemComponent,
-    TestPageComponent,
     TypeSwitherComponent,
+    CalendarButtonComponent,
+    CalendarComponent,
+    TestPageComponent,
+    RangeSelectionButtonComponent,
+    CategoryButtonComponent,
+    OrganizationCreateComponent,
+    TypesModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -234,9 +277,11 @@ registerLocaleData(localeRu, 'ru')
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
     AuthService,

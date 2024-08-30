@@ -26,57 +26,43 @@ export class QueryBuilderService {
 
   public eventIds: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationModalEventsCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationModalEventsCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationModalSightsCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationModalSightsCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationPublicEventsCityCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicEventsCityCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
   //public paginationPublicEventsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicSightsRadiusPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
-  public paginationPublicEventsRadiusPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicSightsRadiusPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+  public paginationPublicEventsRadiusPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   // public paginationPublicEventsGeolocationCurrentPage!: BehaviorSubject<string>
   //public paginationPublicEventsGeolocationTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicEventsFavoritesCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicEventsFavoritesCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationPublicSightsCityCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicSightsCityCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
   //public paginationPublicSightsCityTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicEventsForAuthorCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicEventsForAuthorCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginataionPublicEventPlacesCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginataionPublicEventPlacesCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+  public paginataionPublicEventPlacesExpiredCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationPublicSightsForAuthorCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicSightsForAuthorCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   // public paginationPublicSightsGeolocationCurrentPage!: BehaviorSubject<string>
   //public paginationPublicSightsGeolocatioTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
-  public paginationPublicSightsFavoritesCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicSightsFavoritesCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationEventsInSightCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationEventsInSightCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationPublicEventsForTapeCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicEventsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public paginationPublicSightsForTapeCurrentPage: BehaviorSubject<string> =
-    new BehaviorSubject<string>('')
+  public paginationPublicSightsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
-  public locationIdForEventShow: BehaviorSubject<number> =
-    new BehaviorSubject<number>(0)
+  public locationIdForEventShow: BehaviorSubject<number> = new BehaviorSubject<number>(0)
 
   constructor(
     private mapService: MapService,
@@ -87,11 +73,7 @@ export class QueryBuilderService {
   getUserID() {
     this.userService
       .getUser()
-      .pipe(
-        tap((user) =>
-          user && user.id ? (this.userID = user.id) : (this.userID = 0),
-        ),
-      )
+      .pipe(tap((user) => (user && user.id ? (this.userID = user.id) : (this.userID = 0))))
       .subscribe()
       .unsubscribe()
   }
@@ -157,6 +139,9 @@ export class QueryBuilderService {
       case 'eventPlaces':
         this.buildQueryEventPlaces()
         break
+      case 'eventPlacesExpired':
+        this.buildQueryExpiredEventPlaces()
+        break
       case 'sightsModalRadiusForMap': //Публичная страница мероприятий /events - вкладка по события городу
         this.buildQuerySightsModalRadiusForMap()
         break
@@ -166,11 +151,20 @@ export class QueryBuilderService {
       case 'sightsForMapModal': // Модальное окно на карте
         this.buildQuerySightsForMapModal()
         break
+      case 'organizationForFeed':
+        this.buildQueryOrganizationForFeed()
+        break
       default:
         this.buildQueryDefault()
         break
     }
     return this.queryParams
+  }
+
+  buildQueryOrganizationForFeed() {
+    this.queryParams = {
+      locationId: this.locationId,
+    }
   }
 
   buildQuerySightsForMapModal() {
@@ -210,6 +204,7 @@ export class QueryBuilderService {
       longitude: this.longitude,
       radius: this.radius,
       sightTypes: this.sightTypes,
+      limit: 8,
       page: this.paginationPublicSightsForTapeCurrentPage.value,
     }
   }
@@ -227,6 +222,7 @@ export class QueryBuilderService {
   buildQuerySightsPublicForAuthor() {
     this.queryParams = {
       page: this.paginationPublicSightsForAuthorCurrentPage.value,
+      limit: 8,
     }
   }
 
@@ -315,6 +311,17 @@ export class QueryBuilderService {
     this.queryParams = {
       locationId: this.locationIdForEventShow.value,
       page: this.paginataionPublicEventPlacesCurrentPage.value,
+      withFiles: true,
+      withPrices: true,
+    }
+  }
+  buildQueryExpiredEventPlaces() {
+    this.queryParams = {
+      locationId: this.locationIdForEventShow.value,
+      page: this.paginataionPublicEventPlacesExpiredCurrentPage.value,
+      withFiles: true,
+      withPrices: true,
+      expired: true,
     }
   }
 

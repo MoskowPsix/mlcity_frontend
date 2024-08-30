@@ -1,0 +1,47 @@
+<!-- <div class="calendar-button-container" (click)="picker.open()">
+  <div>
+      <img *ngIf="!outlineIcon; else outline" src="/assets/icons/new_calendar.svg" class="date-picker-icon">
+
+      <ng-template #outline>
+        <img src="/assets/icons/new_calendar-outline.svg" class="date-picker-icon">
+      </ng-template>
+  </div>
+
+  <div class="date-text">
+    1 янв. - 30 янв.
+  </div>
+
+  <div class="calendar-container">
+      <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+        <input style="display: none;" matStartDate formControlName="start" placeholder="Start date">
+        <input style="display: none;" matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+  </div>
+
+</div> -->
+<div class="calendar-button">
+</div>
+  <div [ngClass]="{'rounded-calendar-button':theme === '', 'calendar-light':theme === 'light'}" *ngIf="dateStart && dateEnd; else noDates" (click)="picker.open()" >
+    <img class="calendar-icon" src="assets/icons/calendar.svg" alt="">
+    <ng-container *ngIf="theme !== 'light'">
+      <span *ngIf="dateStart">{{dateStart|date:'d MMM'}}</span> - <span *ngIf="dateEnd !== 'Invalid date'">{{dateEnd| date:'d MMM'}}</span>
+    </ng-container>
+    <ng-container *ngIf="theme === 'light'">
+      <span *ngIf="dateStart">{{dateStart|date:'d MMMM'}}</span> - <span *ngIf="dateEnd !== 'Invalid date'">{{dateEnd| date:'d MMMM'}}</span>
+    </ng-container>
+
+  </div>
+
+  <ng-template #noDates>
+    <app-rounded-button (click)="picker.open()" icon="assets/icons/calendar.svg"></app-rounded-button>
+  </ng-template>
+
+   <div style="opacity: 0;" class="calendar-container">
+    <mat-date-range-input  [formGroup]="dateRange" [rangePicker]="picker">
+      <input  style="display: none;" matStartDate formControlName="start" placeholder="Start date">
+      <input style="display: none;" matEndDate formControlName="end" placeholder="End date">
+    </mat-date-range-input>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+</div>
+

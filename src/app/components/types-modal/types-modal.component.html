@@ -1,0 +1,20 @@
+<ion-modal mode="ios" (didDismiss)="closeModal()"  [isOpen]="openTypesModal">
+        <ng-template>
+            <ion-toolbar mode="ios">
+                <ion-title mode="ios" class="category-modal-header-text">Выберите типы</ion-title>
+            </ion-toolbar>
+            <ion-content>
+                <div class="category-modal-grid">
+                    <ng-container *ngIf="allTypes && allTypes.length > 0">
+                        <ng-container *ngFor="let category of allTypes" >
+                            <div (click)="clickCategory(category)"  [ngClass]="{'category-modal-grid-item_active': checkCategory(category), 'category-modal-grid-item': !checkCategory(category)}" >
+                                <img class="category-icon" src="{{backendUrl}}{{category.ico}}" alt="">
+                                <span class="category-text">{{category.name}}</span>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </ion-content>
+        </ng-template>
+ </ion-modal>
+

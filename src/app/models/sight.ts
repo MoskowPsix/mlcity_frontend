@@ -1,6 +1,9 @@
 // export interface IEvents {
 //     vkPost: string
 //     vkIdPost: string
+
+import { IOrganization } from './organization'
+
 // }
 export interface ISight {
   id: number
@@ -11,9 +14,11 @@ export interface ISight {
   location: any[]
   latitude: number
   longitude: number
+  location_id: number
   type?: number
   status?: number
   files?: any[]
+  organization?: IOrganization
   types?: any[]
   likes?: any
   price?: string

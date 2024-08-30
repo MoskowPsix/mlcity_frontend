@@ -1,172 +1,38 @@
-<ion-content id="topEv" #lentEvent 
-[scrollEvents]="true"
-(ionScroll)="scrollPaginate()"
->
-  
-  <!-- <div id="header-anchor">35454</div> -->
- 
-  <ion-grid class="mb-6-5rem">
-    <!-- <ion-row class="ion-justify-content-center">
-      <ion-col size-lg="8" size-md="12" size-xs="12">
-        <ion-segment mode="ios" value="eventsCitySegment"  (ionChange)="onSegmentChanged($event)" class="segments">
-          <ion-segment-button value="eventsCitySegment">
-            <ion-label class="segment-title">
-              <ion-icon name="balloon" color="primary"></ion-icon>
-              События
-            </ion-label>
-            <span class="note">Город: {{ city }}</span>
-
-          </ion-segment-button>
-          <ion-segment-button value="eventsGeolocationSegment">
-            <ion-label class="segment-title">
-              <ion-icon name="location" color="primary"></ion-icon>
-              События
-            </ion-label>
-            <span class="note">рядом с вами</span>
-          </ion-segment-button>
-        </ion-segment>
-      </ion-col>
-    </ion-row> -->
-
-      <!-- <div class="ion-padding" slot="content"> -->
-        <div class="carusel-wrapper_flex" #headerWrapper>
-          <div >
-            <ng-container>
-              <app-event-type-carusel (typeOutput)="eventTypesChange($event)" [type_id]="eventTypeId"></app-event-type-carusel>
-            </ng-container>
-            <ng-container >
-              <app-calendula (dateOutput)="setDate($event)" [date]="date"/>
-            </ng-container>
-
+<ion-content id="topEv" #lentEvent [scrollEvents]="true">
+        <div  #ContentCol>
+          <div class="carusel-wrapper_flex" #headerWrapper>
+            <app-second-header size="xxl" img="/assets/images/tape.png">
+              <div class="header-top-container" header-top>
+                <app-type-swither (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
+                <app-category-button stateType="Event"></app-category-button>
+              </div>
+              <div class="header-bottom-container" header-bottom>
+                   События 
+                <app-calendar-button (setDateEmit)="setDate($event)"></app-calendar-button>
+              </div>
+            </app-second-header>
           </div>
+          
+          <div class="grid-wrapper">
+            <app-card-grid [notFound]="notFound" [spiner]="spiner" [cards]="eventsCity" (endScroll)="getEventsCity()"></app-card-grid>
+          </div>
+        
         </div>
-
-      <!-- </div> -->
-    
-      <div #test >
    
-    <ion-row class="ion-justify-content-center" style="padding-top: var(--ion-safe-area-top,0);">
-      <ion-col size-lg="10" size-md="12" size-xs="12">
-        <!-- <div [hidden]="segment !== 'eventsCitySegment'" class="segment-box"> -->
-        <div class="segment-box" #ContentCol>
-
-          <ng-container >
-            <div class="wrapper-grid">
-              <app-card-grid [cards]="eventsCity" (endScroll)="eventsCityLoadingMore()"></app-card-grid>
-            </div>
-     
-            <!-- <ion-grid #cardContainer  class="events-grid ion-align-content-start">
-              <ion-row>
-                <ion-col size="1" *ngFor="let event of eventsCity; let i = index">
-                  <app-event-card  [event]="event" id="{{event.id}}"></app-event-card>
-                </ion-col>
-
-                    <div #widgetsContent>
-                    </div>
-
+    <!-- <ion-row class="ion-justify-content-center" style="padding-top: var(--ion-safe-area-top,0);">
+        <ion-col size-lg="10" size-md="12" size-xs="12">
+          <div class="segment-box" #ContentCol>
+              <div class="wrapper-grid">
+                <app-card-grid [cards]="eventsCity" (endScroll)="eventsCityLoadingMore()"></app-card-grid>
+              </div>
+            <ng-container *ngIf="loadingMoreEventsCity">
+              <ion-row class="ion-justify-content-center">
+                <ion-spinner class="ion-margin-vertical"></ion-spinner>
               </ion-row>
-
-            </ion-grid> -->
-          </ng-container>
-<!-- 
-          <ng-container *ngIf="!loadingEventsCity">
-            <ion-row style="padding-top: var(--ion-safe-area-top,0);" class="ion-justify-content-center">
-              <ion-col size-lg="4" size-md="6" size-xs="12">
-                <ion-card *ngFor="let key of [1,2]" style="border-radius: 0.8rem;">
-                  <ion-skeleton-text [animated]="true" style="height: 25rem;"></ion-skeleton-text>
-                  <ion-card-header>
-                    <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
-                    <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text></ion-card-subtitle>
-                  </ion-card-header>
-
-                  <ion-card-content>
-                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
-                  </ion-card-content>
-                </ion-card>
-              </ion-col>
-            </ion-row>
-          </ng-container> -->
-
-          <!-- <ng-container *ngIf="!loadingMoreEventsCity">
-            <div *ngIf="nextPage" class="ion-margin-horizontal">
-              <ion-button expand="block" (click)="eventsCityLoadingMore()" [disabled]="loadingMoreEventsCity">
-                <ion-icon *ngIf="!loadingMoreEventsCity" slot="start" name="reload-outline"></ion-icon>
-                <span>Загрузить еще</span>
-              </ion-button>
-            </div>
-          </ng-container> -->
-
-          <ng-container *ngIf="loadingMoreEventsCity">
-            <ion-row class="ion-justify-content-center">
-              <ion-spinner class="ion-margin-vertical"></ion-spinner>
-            </ion-row>
-          </ng-container>
-        </div>
-
-        <!-- <div [hidden]="segment !== 'eventsGeolocationSegment'" class="segment-box">
-          <ng-container *ngIf="!loadingEventsGeolocation">
-            <ion-row class="ion-justify-content-center">
-              <ion-col *ngFor="let key of [1,2,3,4,5,6]" size-lg="4" size-md="6" size-xs="12">
-                <ion-card>
-                  <ion-skeleton-text [animated]="true" style="height: 10rem;"></ion-skeleton-text>
-                  <ion-card-header>
-                    <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text></ion-card-subtitle>
-                    <ion-card-subtitle><ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text></ion-card-subtitle>
-                  </ion-card-header>
-
-                  <ion-card-content>
-                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-                    <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
-                  </ion-card-content>
-                </ion-card>
-              </ion-col>
-            </ion-row>
-          </ng-container>
-
-          <ng-container *ngIf="loadingEventsGeolocation">
-            <ion-col class="ion-justify-content-start">
-              <ion-row>
-                <ion-col size-xl="4" size-lg="4" size-md="4">
-                    <div class="ion-align-item-center">
-                      <app-filters-not-button></app-filters-not-button>
-                    </div>
-                  </ion-col>
-                <ion-col size-xl="4" size-lg="5" size-md="5" size-xs="12" class="app-event-card">
-                  <app-event-card *ngFor="let event of eventsGeolocation; let i = index" [event]="event"></app-event-card>
-                  <ng-container *ngIf="!eventsGeolocation.length && loadingEventsGeolocation">
-                    <app-no-data/>
-                  </ng-container>
-                </ion-col>
-              </ion-row>
-            </ion-col>
-          </ng-container>
-
-          <ng-container *ngIf="!loadingMoreEventsGeolocation">
-            <div *ngIf="currentPageEventsGeolocation !== totalPagesEventsGeolocation" class="ion-margin-horizontal">
-              <ion-button expand="block" (click)="eventsGeolocationLoadingMore()" [disabled]="loadingMoreEventsGeolocation">
-                <ion-icon *ngIf="!loadingMoreEventsGeolocation" slot="start" name="reload-outline"></ion-icon>
-                <span>Загрузить еще</span>
-              </ion-button>
-            </div>
-          </ng-container>
-
-          <ng-container *ngIf="loadingMoreEventsGeolocation">
-            <ion-row class="ion-justify-content-center">
-              <ion-spinner class="ion-margin-vertical"></ion-spinner>
-            </ion-row>
-          </ng-container>
-        </div> -->
-      </ion-col>
-    </ion-row>
-      </div>
-  </ion-grid>
+            </ng-container>
+          </div>
+        </ion-col>
+      </ion-row>
 
   <ng-container *ngIf="!eventsCity.length && loadingEventsCity">
     <app-no-data/>
@@ -174,6 +40,6 @@
 
     <a routerLink="." fragment="header-anchor" class="scroll-up" [hidden]="scrollUpState" (click)="scrollUp()">
         <ion-icon size="large" name="chevron-up"></ion-icon>
-    </a>
+    </a> -->
 
 </ion-content>
