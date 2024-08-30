@@ -5,7 +5,7 @@
           <!-- <img class="card image" (load)="changeBackgroundImage()" [src]="event.files[0].link"> -->
             <div class="card"  [class.change-opacity]="imageLoaded" *ngIf="event.files[0].local === 0 && event.files[0].file_types[0].name === 'image'; else isLocal" style="background-image: url('{{event.files[0].link}} '); position: absolute;"></div>
             <ng-template #isLocal>
-              <img>
+            
               <div class="card" [class.change-opacity]="imageLoaded" *ngIf="event.files[0].local === 1; else isVideo" style="background-image: url('{{host}}:{{port}}{{event.files[0].link}} '); position: absolute;"></div>
             </ng-template>
           <ng-template #isVideo>
