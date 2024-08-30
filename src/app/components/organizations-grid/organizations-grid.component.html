@@ -15,7 +15,7 @@
 
   <ng-container *ngIf="cards">
     <div class="main-grid">
-        <app-organizations-card [buttonType]= "buttonType"  (selectOrganization)="emitOrganization($event)" *ngFor="let card of cards; let i = index" [card]="card" [myEvent]="myEvents">
+        <app-organizations-card [extensialClick]="extensialClick" [buttonType]= "buttonType"  (selectOrganization)="emitOrganization($event)" *ngFor="let card of cards; let i = index" [card]="card" [myEvent]="myEvents">
             
         </app-organizations-card>
     </div>

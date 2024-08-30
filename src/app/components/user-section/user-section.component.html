@@ -24,11 +24,11 @@
       <div (click)="emitOrganization(organization)" class="user-section-main_organization">
     
         <ng-container>
-          <img routerLink="/organizations/{{organization.id}}" src="{{avatarUrl}}" *ngIf=" organization.files && organization.files[0] && organization.files[0].link !== '' "  class="user-section-image" >
-          <div routerLink="/organizations/{{organization.id}}" *ngIf="!organization.files[0] || organization.files[0].link === '' " class="user-section-image"></div>
+          <img (click)="redirect()" src="{{avatarUrl}}" *ngIf=" organization.files && organization.files[0] && organization.files[0].link !== '' "  class="user-section-image" >
+          <div (click)="redirect()" *ngIf="!organization.files[0] || organization.files[0].link === '' " class="user-section-image"></div>
         </ng-container>
    
-        <div routerLink="/organizations/{{organization.id}}" class="user-section-info">
+        <div (click)="redirect()" class="user-section-info">
             <div class="user-section-name__organization">{{organization.name}}</div>
             <div *ngIf="!organization.types" class="category-plug">Нет категорий</div>
         </div>

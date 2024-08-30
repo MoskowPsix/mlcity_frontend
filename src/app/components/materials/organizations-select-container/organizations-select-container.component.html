@@ -17,9 +17,9 @@
         <div class="create-organization-button">
           <app-standart-button theme="light" buttonText="Создать группу"></app-standart-button>
         </div>
-        <app-organizations-grid *ngIf="cards; else notFoundGrid " (selectOrganization)="emitOrganization($event)" [cards]="cards"></app-organizations-grid>
+        <app-organizations-grid [extensialClick]="false" *ngIf="cards; else notFoundGrid " (selectOrganization)="emitOrganization($event)" [cards]="cards"></app-organizations-grid>
         <ng-template #notFoundGrid>
-          <app-organizations-grid [notFound]="true" ></app-organizations-grid>
+          <app-organizations-grid [extensialClick]="false" [notFound]="true" ></app-organizations-grid>
         </ng-template>
     
       </div>

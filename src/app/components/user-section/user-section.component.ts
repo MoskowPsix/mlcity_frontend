@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Route, Router } from '@angular/router'
 import { IOrganization } from 'src/app/models/organization'
 import { IUser } from 'src/app/models/user'
 import { environment } from 'src/environments/environment'
@@ -8,12 +9,13 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./user-section.component.scss'],
 })
 export class UserSectionComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
   @Input() user!: IUser
   @Input() type?: string
   @Input() buttonText?: string
   @Input() organization!: IOrganization
   @Input() fixedImg?: string
+  @Input() extensialClick: boolean = true
   @Input() loadingImg?: boolean
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>()
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
@@ -44,6 +46,11 @@ export class UserSectionComponent implements OnInit {
   }
   emitOrganization(organization: IOrganization) {
     this.selectOrganization.emit(organization)
+  }
+  redirect() {
+    if (this.extensialClick) {
+      this.router.navigate([`/organizations/${this.organization.id}`])
+    }
   }
   ngOnChanges(changes: any) {
     if (this.user) {

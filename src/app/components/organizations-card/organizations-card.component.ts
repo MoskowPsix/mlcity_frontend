@@ -10,6 +10,7 @@ export class OrganizationsCardComponent implements OnInit {
   constructor() {}
   @Input() card!: IOrganization
   @Input() buttonType: string = ''
+  @Input() extensialClick: boolean = true
   organizationObject: any = {}
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   emitOrganization(organization: any) {
