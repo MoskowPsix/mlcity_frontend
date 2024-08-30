@@ -247,6 +247,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.priceStateForShow = 'Бесплатно'
     }
   }
+
+  clearDescription() {
+    return this.sanitizer.bypassSecurityTrustHtml(this.event.description)
+  }
   // onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
   //   let icoLink = this.event && this.event.types && this.event.types.length ? this.host + ':' + this.port + this.event.types[0].ico : ''
 
