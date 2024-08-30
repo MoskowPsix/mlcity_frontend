@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { catchError, EMPTY, of, Subject, takeUntil, tap } from 'rxjs'
 import { IEvent } from 'src/app/models/event'
 import { EventsService } from 'src/app/services/events.service'
@@ -43,6 +43,7 @@ export class EditEventComponent implements OnInit {
     private eventsService: EventsService,
     private loadingService: LoadingService,
     private editService: EditService,
+    private router: Router,
   ) {}
   private readonly destroy$ = new Subject<void>()
   event!: IEvent
@@ -290,20 +291,22 @@ export class EditEventComponent implements OnInit {
         takeUntil(this.destroy$),
         tap((res: any) => {
           console.log(res)
-          priceArray = res.event.price
-          typesArray = res.event.types
-          filesArray = JSON.parse(JSON.stringify(res.event.files))
-          this.event = JSON.parse(JSON.stringify(res.event))
+          res = res.event
+          priceArray = res.price
+          typesArray = res.types
+          filesArray = JSON.parse(JSON.stringify(res.files))
+          this.event = JSON.parse(JSON.stringify(res))
         }),
       )
       .subscribe((res: any) => {
+        res = res.event
         this.copyEvent = _.cloneDeep(this.event)
         this.getPlaces()
         this.loadingService.hideLoading()
         this.editForm.patchValue({
-          name: res.event.name,
-          sponsor: res.event.sponsor,
-          description: res.event.description,
+          name: res.name,
+          sponsor: res.sponsor,
+          description: res.description,
         })
         if (priceArray) {
           priceArray.forEach((price: any) => {
@@ -497,6 +500,7 @@ export class EditEventComponent implements OnInit {
           this.loadingService.hideLoading()
           if (res.status == 'success') {
             this.toastService.showToast('Событие отправленно на проверку', 'success')
+            this.router.navigate(['/cabinet/events'])
           }
         })
     }

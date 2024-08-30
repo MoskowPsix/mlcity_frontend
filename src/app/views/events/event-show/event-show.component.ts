@@ -21,6 +21,8 @@ import { MapService } from 'src/app/services/map.service'
 import { YaReadyEvent } from 'angular8-yandex-maps'
 import { SliderComponent } from '@angular-slider/ngx-slider/slider.component'
 import { SearchFirstySeanceService } from 'src/app/services/search-firsty-seance.service'
+import { ISight } from 'src/app/models/sight'
+import { IOrganization } from 'src/app/models/organization'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -65,6 +67,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
   priceState: string = ''
   priceStateForShow: string = ''
   @Input() createObj: any = {}
+  organization!: IOrganization
+
   constructor(
     private route: ActivatedRoute,
     private eventsService: EventsService,
@@ -79,7 +83,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private locationService: LocationService,
     private mapService: MapService,
-  ) {}
+  ) { }
 
   getEvent() {
     this.eventsService
@@ -101,6 +105,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
           content: event.description,
         })
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
+        this.eventsService
+          .getOrganization(this.event.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((response: any) => {
+            this.organization = response.organization
+          })
       })
   }
 
@@ -186,8 +196,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.eventsService
         .checkLiked(this.eventId!)
         .pipe(retry(3), takeUntil(this.destroy$))
-        .subscribe((liked: boolean) => {
-          this.like = liked
+        .subscribe((liked: any) => {
+          this.like = liked.is_liked
           this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
         })
   }
@@ -197,8 +207,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.eventsService
         .checkFavorite(this.eventId!)
         .pipe(retry(3), takeUntil(this.destroy$))
-        .subscribe((favorite: boolean) => {
-          this.favorite = favorite
+        .subscribe((favorite: any) => {
+          this.favorite = favorite.is_favorite
           this.favorite
             ? (this.favoriteUrl = 'assets/icons/star-active.svg')
             : (this.favoriteUrl = 'assets/icons/star.svg')
@@ -236,6 +246,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.priceState = 'Бесплатно'
       this.priceStateForShow = 'Бесплатно'
     }
+  }
+
+  clearDescription() {
+    return this.sanitizer.bypassSecurityTrustHtml(this.event.description)
   }
   // onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
   //   let icoLink = this.event && this.event.types && this.event.types.length ? this.host + ':' + this.port + this.event.types[0].ico : ''
@@ -275,7 +289,18 @@ export class EventShowComponent implements OnInit, OnDestroy {
     }
   }
 
+  getOrganization() {
+    this.eventsService
+      .getOrganization(this.event.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any) => {
+        console.log(res)
+        this.organization = res.organization
+      })
+  }
+
   toggleLike(event_id: number) {
+    console.log(this.event)
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
@@ -324,7 +349,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       })
     }
   }
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngOnDestroy() {
     // отписываемся от всех подписок

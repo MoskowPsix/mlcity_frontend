@@ -1,11 +1,12 @@
   <div class="card-wrapper">
 
       <ng-container>
-        <div *ngIf="event.files && event.files.length > 0 && event.files[0].link !== '' ; else emptyFiles">
-            <div class="card" *ngIf="event.files[0].local === 0 && event.files[0].file_types[0].name === 'image'; else isLocal" style="background-image: url('{{event.files[0].link}} '); position: absolute;"></div>
+        <div *ngIf="event.files.length > 0 && event.files[0].link !== '' ; else emptyFiles">
+          <!-- <img class="card image" (load)="changeBackgroundImage()" [src]="event.files[0].link"> -->
+            <div class="card"  [class.change-opacity]="imageLoaded" *ngIf="event.files[0].local === 0 && event.files[0].file_types[0].name === 'image'; else isLocal" style="background-image: url('{{event.files[0].link}} '); position: absolute;"></div>
             <ng-template #isLocal>
-              <div class="card" *ngIf="event.files[0].local === 1; else isVideo" style="background-image: url('{{host}}:{{port}}{{event.files[0].link}} '); position: absolute;"></div>
-
+              <img>
+              <div class="card" [class.change-opacity]="imageLoaded" *ngIf="event.files[0].local === 1; else isVideo" style="background-image: url('{{host}}:{{port}}{{event.files[0].link}} '); position: absolute;"></div>
             </ng-template>
           <ng-template #isVideo>
             <iframe [src]="event.files[0].link + '&autoplay=1&mute=1&loop=1'|safeVideoByUrl" allow="encrypted-media; fullscreen; picture-in-picture; loop" loop autoplay width="100%" height="100%" frameborder="0" ></iframe>
@@ -18,7 +19,8 @@
         <div *ngIf="myEvent" class="edit-button">
           <app-circle-button (click)="eventNavigationEdit()"  icon="/assets/icons/menu-pen.svg" border="dark-all" ></app-circle-button>
         </div>
-        <div  *ngIf="myEvent"class="status-container" (click)="showInfoAboutStatus()">
+        <div  *ngIf="myEvent && getLastStatus()"class="status-container" (click)="showInfoAboutStatus()">
+          <div class="status-text" [ngStyle]="{'color': getLastStatusColor()}">{{ getLastStatus().name }}</div>
           <div class="status" [ngStyle]="{'background-color': getLastStatusColor()}"></div>
         </div>
 

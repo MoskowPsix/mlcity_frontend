@@ -155,6 +155,10 @@ export class EventsService {
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/view`, params)
   }
 
+  getOrganization(id: number) {
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}/organization`)
+  }
+
   private errorHandler(error: HttpErrorResponse) {
     //this.errorService.handle(error.message)
     return throwError(() => error.message)

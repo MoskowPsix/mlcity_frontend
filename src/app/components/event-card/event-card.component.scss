@@ -193,6 +193,32 @@ ion-card-subtitle {
   color: white;
   text-align: center;
   position: relative;
+  transition: background-image 0s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.card-img {
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  width: 20.5rem;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  position: relative;
+  transition: background-image 0s ease-in-out, opacity 0.5s ease-in-out;
+  opacity: 0;
+  background-image: url('/assets/images/nophoto.jpg');
+}
+
+.card-img.change-opacity {
+  opacity: 1;
+}
+
+
+
+.image {
+  display: none;
 }
 
 
@@ -284,6 +310,7 @@ ion-card-subtitle {
   gap: 0.313rem;
 
 }
+
 .status-container {
   right: 1rem;
   position: absolute;
@@ -295,8 +322,14 @@ ion-card-subtitle {
   padding: 6px;
   padding-left: 0.4rem;
   padding-right: 0.4rem;
-  border-radius: 50%;
-  top: 10.6rem;
+  border-radius: 8px;
+  top: 10.1rem;
+}
+
+.status-text {
+  font-family: var(--font-regular);
+  font-size: small;
+  margin-right: 0.3rem;
 }
 
 .status {

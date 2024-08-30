@@ -420,10 +420,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             sightIds.push(e.get('target').options._options.balloonContent.id)
           }
           this.activePlacemark = e.get('target')
-          e.get('target').options._options.balloonContent.type == 'event'
-            ? (this.activeIcoLink = this.host + ':' + this.port + e.get('target').options._options.balloonContent.ico)
-            : (this.activeIcoLink =
-                this.host + ':' + this.port + e.get('target').options._options.balloonContent.types[0].ico)
 
           console.log(e.get('target').options._options.balloonContent.type)
           switch (e.get('target').options._options.balloonContent.type) {
@@ -925,10 +921,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.modalEventShowOpen = value
       if (!value && this.activePlacemark) {
         // убираем активный класс у кастомного маркера при закрытие модалки
-        this.activePlacemark.options.set(
-          'iconContentLayout',
-          ymaps.templateLayoutFactory.createClass(`<div class="marker"><img src="${this.activeIcoLink}"/></div>`),
-        )
         this.setMapData()
       }
       if (!value && this.activeClaster) {
