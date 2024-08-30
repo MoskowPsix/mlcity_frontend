@@ -22,6 +22,7 @@ export class OrganizationShowComponent implements OnInit {
   events: IEvent[] = []
   eventsExpired: IEvent[] = []
   notFound: boolean = false
+  notFoundExpired: boolean = false
   nextPage: boolean = true
   nextPageExpired: boolean = true
   spiner: boolean = false
@@ -61,18 +62,17 @@ export class OrganizationShowComponent implements OnInit {
         .pipe(takeUntil(this.destroy$))
         .subscribe((res: any) => {
           this.eventsExpired.push(...res.events.data)
-          console.log(res)
           res.events.next_cursor
-            ? this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(res.events.next_cursor)
-            : this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
+            ? this.queryBuilderService.paginataionPublicEventPlacesExpiredCurrentPage.next(res.events.next_cursor)
+            : this.queryBuilderService.paginataionPublicEventPlacesExpiredCurrentPage.next('')
           if (res.events.next_cursor == null) {
-            this.nextPage = false
-            this.spiner = false
+            this.nextPageExpired = false
+            this.spinerExpired = false
           } else {
-            this.nextPage = true
-            this.spiner = false
+            this.nextPageExpired = true
+            this.nextPageExpired = false
           }
-          this.events.length ? (this.notFound = false) : (this.notFound = true)
+          this.eventsExpired.length ? (this.notFoundExpired = false) : (this.notFoundExpired = true)
         })
     }
   }
@@ -87,7 +87,6 @@ export class OrganizationShowComponent implements OnInit {
         .pipe(takeUntil(this.destroy$))
         .subscribe((res: any) => {
           this.events.push(...res.events.data)
-          console.log(res)
           res.events.next_cursor
             ? this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(res.events.next_cursor)
             : this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
@@ -109,7 +108,7 @@ export class OrganizationShowComponent implements OnInit {
       .subscribe((res: any) => {
         this.sight = res
         this.getOrganizationEvents()
-        console.log(this.sight)
+        this.getOrganizationEventsExpired()
         this.checkAvatar()
         this.loading = false
       })
