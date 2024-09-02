@@ -126,7 +126,7 @@ ion-content {
   // --offset-bottom: 85%!important;
   --overflow:auto;
   overflow: auto;
-  --background: #dfdddd5c;
+  --background: #e7e7e71c;
 }
 main.inner-scroll.scroll-y{
     overflow-y:hidden;
@@ -159,9 +159,7 @@ ion-content {
 
 }
 
-ion-item-divider{
-    background-color: #fff;
-}
+
 ion-label{
     background:none;
 }
@@ -185,7 +183,6 @@ ion-toolbar {
   transform: rotate(0);
 }
 ion-content{
-    background: #fff;
     --padding-top: var(--ion-safe-area-top, 0);
 }
 
@@ -360,7 +357,7 @@ input::-webkit-inner-spin-button {
 }
 
 .inner-scroll{
-    background-color: red;
+   
     padding: 0;
   }
 @keyframes pulsate{

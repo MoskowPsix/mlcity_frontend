@@ -83,7 +83,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private locationService: LocationService,
     private mapService: MapService,
-  ) { }
+  ) {}
 
   getEvent() {
     this.eventsService
@@ -209,9 +209,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .pipe(retry(3), takeUntil(this.destroy$))
         .subscribe((favorite: any) => {
           this.favorite = favorite.is_favorite
-          this.favorite
-            ? (this.favoriteUrl = 'assets/icons/star-active.svg')
-            : (this.favoriteUrl = 'assets/icons/star.svg')
+          this.favorite ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
         })
   }
 
@@ -273,9 +271,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .pipe(
           tap(() => {
             this.favorite = !this.favorite
-            this.favorite
-              ? (this.favoriteUrl = 'assets/icons/star-active.svg')
-              : (this.favoriteUrl = 'assets/icons/star.svg')
+            this.favorite ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
             this.loadingLike = false
             this.loadingFavotire = false
           }),
@@ -326,8 +322,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
+    this.loadingFavotire = true
     this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
     this.favorite ? (this.favoriteUrl = 'assets/icons/star-active.svg') : (this.favoriteUrl = 'assets/icons/star.svg')
+
     //Получаем ид ивента из параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
@@ -338,6 +336,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.getEvent()
       this.checkLiked()
       this.checFavorite()
+      this.loadingFavotire = false
       this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
         this.loadMore = true
         this.locationId = Number(value)
@@ -349,7 +348,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       })
     }
   }
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngOnDestroy() {
     // отписываемся от всех подписок

@@ -45,6 +45,12 @@
                 <app-rounded-button *ngIf="sight.types!.length === 0" style="pointer-events: none;"  icon="assets/icons/category.svg" type="button" buttonText="Прочее"></app-rounded-button>
             </ng-container>
           </div>
+          <div class="organization-container__map">
+            <ion-accordion-group>
+              <app-place-show priceState="dont-price" [place]="place" priceState='dont-price'></app-place-show>
+            </ion-accordion-group>
+          </div>
+         
           <app-tabs>
               <app-tabs-item name="Текущие события">
                 <app-card-grid [notFound]="notFound" (endScroll)="getOrganizationEvents()" [spiner]="spiner" [cards]="events"></app-card-grid>

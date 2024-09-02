@@ -24,6 +24,7 @@ export class OrganizationShowComponent implements OnInit {
   notFound: boolean = false
   notFoundExpired: boolean = false
   nextPage: boolean = true
+  place!: any
   nextPageExpired: boolean = true
   spiner: boolean = false
   spinerExpired: boolean = false
@@ -111,6 +112,11 @@ export class OrganizationShowComponent implements OnInit {
         this.getOrganizationEventsExpired()
         this.checkAvatar()
         this.loading = false
+        this.place = {
+          address: this.sight.address,
+          latitude: this.sight.latitude,
+          longitude: this.sight.longitude,
+        }
       })
   }
   ngOnInit() {}

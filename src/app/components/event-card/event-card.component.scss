@@ -185,7 +185,7 @@ ion-card-subtitle {
 
 .card {
   background-repeat: no-repeat;
-  border-radius: 10px;
+  border-radius: 10px 10px 0px 0px;
   width: 20.5rem;
   height: 200px;
   background-size: cover;
@@ -339,8 +339,16 @@ ion-card-subtitle {
   border-radius: 50%;
 }
 .event-name{
-  margin-top: 0.5rem;
+  margin-top: -0.5rem;
+  padding-top: 1rem;
+  min-height: 2rem;
+  border-radius: 10px;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  width: 20.5rem;
   color: var(--font-color-dark);
   font-size:1rem;
   font-family: var(--font-bold);
+  background: #ffffff87;
+
 }
