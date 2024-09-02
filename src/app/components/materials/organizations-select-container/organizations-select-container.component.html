@@ -1,7 +1,7 @@
 <ng-container>
   <label class="label">Организатор</label>
   <div class="input-container">
-    <input (click)="openOrganiztionsModal()" readonly placeholder="Выберите группу" value="{{selected}}" class="standart-input" name="new_name">
+    <input (click)="openOrganiztionsModal()" readonly placeholder="Выберите сообщество" value="{{selected}}" class="standart-input" name="new_name">
     <img class="input-container__arrow-img" src="assets/icons/arrow.svg" alt="">
   </div>
 </ng-container>
@@ -14,9 +14,7 @@
 
     <ion-content>
       <div class="main-content">
-        <div class="create-organization-button">
-          <app-standart-button theme="light" buttonText="Создать группу"></app-standart-button>
-        </div>
+       
         <app-organizations-grid [extensialClick]="false" *ngIf="cards; else notFoundGrid " (selectOrganization)="emitOrganization($event)" [cards]="cards"></app-organizations-grid>
         <ng-template #notFoundGrid>
           <app-organizations-grid [extensialClick]="false" [notFound]="true" ></app-organizations-grid>

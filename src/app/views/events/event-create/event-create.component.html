@@ -136,7 +136,7 @@
             <ion-content>
                 <ion-list>
                     <ion-list-header>
-                      <ion-label class="modalLabel">Выберите группу, из которой следует загрузить посты</ion-label>
+                      <ion-label class="modalLabel">Выберите сообщество, из которой следует загрузить посты</ion-label>
                     </ion-list-header>
 
                     <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event); openModalPost($event); saveChangeId()" [allowEmptySelection]="true" [value]="vkGroupSelected">
@@ -180,7 +180,7 @@
                   <ng-template>
                       <ion-content>
                         <ion-button class="backToGroupBtn" (click)="closeModalPost()">
-                          Вернутся к выбору группы
+                          Вернутся к выбору сообщества
                         </ion-button>
                         <ion-list-header>
                           <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
@@ -307,7 +307,7 @@
                         <ng-template #notSelectedGroup>
                           <ion-row>
                             <ion-list-header>
-                              <ion-note color="medium" class="ion-padding-vertical">Вы не выбрали группу, для выбора вернитесь назад и выберите группу (шаг 1)</ion-note>
+                              <ion-note color="medium" class="ion-padding-vertical">Вы не выбрали сообщество, для выбора вернитесь назад и выберите сообщество (шаг 1)</ion-note>
                             </ion-list-header>
                           </ion-row>
                         </ng-template>
@@ -609,7 +609,7 @@
                           <ion-col style="display: flex; justify-content: space-between;">
       <!-- пк версия датайм -->
                             <ion-row class="date-start">
-                              <ion-list-header style="text-align: center;"><ion-label>Начало сеанса: </ion-label></ion-list-header>
+                              <ion-list-header style="text-align: center;"><ion-label>Начало мероприятия: </ion-label></ion-list-header>
                               <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 50%;"
                                 datetime="{{'eventStart-'+i+'-'+i_s}}"
                                 class="ion-margin-vertical"
@@ -634,7 +634,7 @@
                               </ion-modal>
                             </ion-row>
                             <ion-row class="date-end">
-                                  <ion-list-header style="text-align: center;"><ion-label>Конец сеанса: </ion-label></ion-list-header>
+                                  <ion-list-header style="text-align: center;"><ion-label>Конец мероприятия: </ion-label></ion-list-header>
                                   <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 50%;"
                                     datetime="{{'eventEnd-'+i+'-'+i_s}}"
                                     class="ion-margin-vertical"
@@ -663,7 +663,7 @@
                       </ion-card>
                     </ion-item >
                     <ion-chip color="primary" class="ion-justify-item-center" (click)="addSeances(i)">
-                      <ion-label>Добавить сеанс</ion-label>
+                      <ion-label>Добавить время проведения</ion-label>
                       <ion-icon name="add-outline"></ion-icon>
                     </ion-chip>
                   </ion-list>
@@ -741,7 +741,7 @@
                           <ion-label style="color:black;"><h2>Сеанс {{i_s+1}}</h2></ion-label>
                           <ion-chip color="danger"(click)="deleteSeanceForm(i, i_s)">Удалить</ion-chip>
                         </ion-item>
-                        <ion-col style="display: flex; justify-content: center; align-items: center;" >Начало сеанса</ion-col>
+                        <ion-col style="display: flex; justify-content: center; align-items: center;" >Начало мероприятия</ion-col>
                         <div class="time-input-wrapper">
                           <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 50%;"
                           datetime="{{'eventStart-'+i+'-'+i_s}}"
@@ -766,7 +766,7 @@
                                 </ng-template>
                               </ion-modal>
                         <ion-col style="margin-top: -1rem;">
-                          <ion-col style="display: flex; justify-content: center; align-items: center;" >Конец сеанса</ion-col>
+                          <ion-col style="display: flex; justify-content: center; align-items: center;" >Конец мероприятия</ion-col>
                           <div class="time-input-wrapper">
                               <ion-datetime-button style="display: flex; justify-content: center; align-items: center; width: 50%;"
                               datetime="{{'eventEnd-'+i+'-'+i_s}}"
@@ -794,7 +794,7 @@
                     </ion-item>
                     <ion-col style="display: flex; justify-content: center; align-items: center;">
                       <ion-button (click)="addSeances(i)">
-                        Добавить сеанс
+                        Добавить мероприятия
                       </ion-button>
                     </ion-col>
                   </div>
