@@ -128,7 +128,7 @@ export class EditSightComponent implements OnInit {
           this.loadingService.hideLoading()
 
           if (err.status == 403) {
-            this.toastService.showToast('Событие уже находится на модерации', 'warning')
+            this.toastService.showToast('Сообщество уже находится на модерации', 'warning')
           } else {
             this.toastService.showToast('Что-то пошло не так', 'error')
           }
