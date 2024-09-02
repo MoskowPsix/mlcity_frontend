@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { catchError, EMPTY, of, Subject, takeUntil, tap } from 'rxjs'
 import { LoadingService } from 'src/app/services/loading.service'
 import { fileTypeValidator } from 'src/app/validators/file-type.validators'
@@ -48,7 +48,8 @@ export class EditSightComponent implements OnInit {
     private sightTypeService: SightTypeService,
     private editService: EditService,
     private toastService: ToastService,
-  ) {}
+    private router: Router,
+  ) { }
 
   ionViewWillEnter(): void {
     this.previewCategory = []
@@ -128,7 +129,7 @@ export class EditSightComponent implements OnInit {
           this.loadingService.hideLoading()
 
           if (err.status == 403) {
-            this.toastService.showToast('Событие уже находится на модерации', 'warning')
+            this.toastService.showToast('Сообщество уже находится на модерации', 'warning')
           } else {
             this.toastService.showToast('Что-то пошло не так', 'error')
           }
@@ -139,6 +140,7 @@ export class EditSightComponent implements OnInit {
         this.loadingService.hideLoading()
         if (res.status == 'success') {
           this.toastService.showToast('Сообщество отправленно на проверку', 'success')
+          this.router.navigate(['/cabinet/sights'])
         }
       })
   }
