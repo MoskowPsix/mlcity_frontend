@@ -38,7 +38,7 @@ export class OrganizationShowComponent implements OnInit {
   ) {}
   ionViewWillEnter() {
     this.getOrganizationId()
-    this.getOrganization(this.id)
+    this.id ? this.getOrganization(this.id) : null
   }
   getOrganizationId() {
     this.id = this.router.snapshot.paramMap.get('id')!
@@ -80,6 +80,7 @@ export class OrganizationShowComponent implements OnInit {
   getOrganizationEvents() {
     if (this.nextPage) {
       this.spiner = true
+      console.log(this.sight)
       this.organizationService
         .getOrganizationEvents(
           String(this.sight.organization!.id),
@@ -107,7 +108,7 @@ export class OrganizationShowComponent implements OnInit {
       .getSightById(Number(id))
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
-        this.sight = res
+        this.sight = res.sight
         this.getOrganizationEvents()
         this.getOrganizationEventsExpired()
         this.checkAvatar()

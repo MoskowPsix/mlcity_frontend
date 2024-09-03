@@ -214,6 +214,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   checkPrice() {
+    let pricesValue: any = []
+    this.event.price.forEach((price: any) => {
+      pricesValue.push(price.cost_rub)
+    })
     let prices = this.event.price
     let pricesLenght = prices.length - 1
     console.log(prices[pricesLenght])
@@ -227,12 +231,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.priceStateForShow = `Бесплатно`
       }
       if (prices[pricesLenght].cost_rub != prices[0].cost_rub && prices[0].cost_rub) {
-        let minPrice = prices[0].cost_rub
-        let maxPrice = prices[0].cost_rub
-        prices.forEach((price: any) => {
-          price.cost_rub < minPrice ? (minPrice = price.cost_rub) : null
-          price.cost_rub > maxPrice ? (maxPrice = price.cost_rub) : null
-        })
+        let minPrice
+        let maxPrice
+        minPrice = Math.min(...pricesValue)
+        maxPrice = Math.max(...pricesValue)
         this.priceState = `От ${minPrice}`
         this.priceStateForShow = `От ${minPrice}₽ до ${maxPrice}₽`
       }

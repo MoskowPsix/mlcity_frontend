@@ -10,7 +10,7 @@ import { EditService } from 'src/app/services/edit.service'
 import { SightHistoryContent } from 'src/app/clasess/history_content/sight_history_content'
 import { ToastService } from 'src/app/services/toast.service'
 import { SightsService } from 'src/app/services/sights.service'
-import { ISight } from 'src/app/models/sight'
+
 import { SightTypeService } from 'src/app/services/sight-type.service'
 import { types } from 'util'
 import { IPlace } from 'src/app/models/place'
@@ -24,7 +24,7 @@ import { serialize } from 'object-to-formdata'
 })
 export class EditSightComponent implements OnInit {
   private readonly destroy$ = new Subject<void>()
-  organization!: ISight
+  organization!: any
   editForm!: FormGroup
   previewCategory: any = []
   allTypes: any[] = []
@@ -49,7 +49,7 @@ export class EditSightComponent implements OnInit {
     private editService: EditService,
     private toastService: ToastService,
     private router: Router,
-  ) { }
+  ) {}
 
   ionViewWillEnter(): void {
     this.previewCategory = []
@@ -59,8 +59,8 @@ export class EditSightComponent implements OnInit {
     this.sightsService
       .getSightById(Number(eventId))
       .pipe(takeUntil(this.destroy$))
-      .subscribe((res) => {
-        this.organization = res
+      .subscribe((res: any) => {
+        this.organization = res.sight
         this.loadingService.hideLoading()
         this.editForm.patchValue({
           name: this.organization.name,
