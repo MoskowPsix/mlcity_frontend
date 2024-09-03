@@ -103,11 +103,12 @@ export class OrganizationShowComponent implements OnInit {
     }
   }
   getOrganization(id: string) {
+    console.log(id)
     this.sightsService
       .getSightById(Number(id))
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
-        this.sight = res
+        this.sight = res.sight
         this.getOrganizationEvents()
         this.getOrganizationEventsExpired()
         this.checkAvatar()

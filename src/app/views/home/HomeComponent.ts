@@ -61,6 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('calendula') calendula!: ElementRef
   @ViewChild('calendulaWrapper') calendulaWrapper!: ElementRef
   host: string = environment.BACKEND_URL
+  type: any
   port: string = environment.BACKEND_PORT
   renderSwitcher: boolean = false
   clustererOptions: ymaps.IClustererOptions = {
@@ -421,7 +422,8 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
           this.activePlacemark = e.get('target')
 
-          console.log(e.get('target').options._options.balloonContent.type)
+          this.type = e.get('target').options._options.balloonContent.type
+
           switch (e.get('target').options._options.balloonContent.type) {
             case 'event':
               e.get('target').options.set(
@@ -479,7 +481,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         response.events.next_cursor
           ? this.queryBuilderService.paginationModalEventsCurrentPage.next(response.events.next_cursor)
           : null
-        this.modalContent.push(...response.events.data)
+        this.modalContent = response.events.data
       })
   }
 
@@ -1029,7 +1031,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   //   this.setTypeState(value)
   // })
   // window.addEventListener('scroll', this.nextPageModal, true)
-
+  closeModal() {
+    console.log('close modal')
+    this.modalEventShowOpen = false
+  }
   ionViewDidLeave() {
     this.destroy$.next()
     this.destroy$.complete()

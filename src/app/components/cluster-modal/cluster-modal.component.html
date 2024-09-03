@@ -1,0 +1,21 @@
+<ion-modal (ionModalDidDismiss)="closeModal()"  [isOpen]="openModal" id="modalEventShow" [initialBreakpoint]="0.8">
+  <div class="bg"></div>
+  <ng-template #ContentModal>
+    <ion-header color="black">
+      <ion-toolbar>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModal()">Закрыть</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ng-container *ngIf="type=== 'events'">
+        <app-card-grid [cards]="modalContent"></app-card-grid>
+      </ng-container>
+      <ng-container *ngIf="type=== 'sights'">
+        <app-organizations-grid [cards]="modalContent"></app-organizations-grid>
+      </ng-container>
+
+    </ion-content>
+  </ng-template>
+</ion-modal>
