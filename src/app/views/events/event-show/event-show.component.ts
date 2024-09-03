@@ -236,6 +236,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.priceState = `От ${minPrice}`
         this.priceStateForShow = `От ${minPrice}₽ до ${maxPrice}₽`
       }
+    } else {
+      this.priceState = `Бесплатно`
+      this.priceStateForShow = `Бесплатно`
     }
     // if (prices && prices.length != 0) {
     //   if (prices[0].cost_rub == 0 && prices[0].cost_rub == prices[prices.length - 1].cost_rub) {

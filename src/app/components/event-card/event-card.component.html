@@ -18,6 +18,7 @@
 
         <div *ngIf="myEvent" class="edit-button">
           <app-circle-button (click)="eventNavigationEdit()"  icon="/assets/icons/menu-pen.svg" border="dark-all" ></app-circle-button>
+          <app-circle-button (click)="eventNavigationEdit()"  icon="/assets/icons/trash.svg" border="" ></app-circle-button>
         </div>
         <div  *ngIf="myEvent && getLastStatus()"class="status-container" (click)="showInfoAboutStatus()">
           <div class="status-text" [ngStyle]="{'color': getLastStatusColor()}">{{ getLastStatus().name }}</div>
