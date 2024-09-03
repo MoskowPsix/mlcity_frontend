@@ -215,35 +215,58 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   checkPrice() {
     let prices = this.event.price
+    let pricesLenght = prices.length - 1
+    console.log(prices[pricesLenght])
     if (prices && prices.length != 0) {
-      if (prices[0].cost_rub == 0 && prices[0].cost_rub == prices[prices.length - 1].cost_rub) {
-        this.priceState = 'Бесплатно'
-        this.priceStateForShow = 'Бесплатно'
+      if (prices[pricesLenght].cost_rub == prices[0].cost_rub && prices[0].cost_rub !== 0) {
+        this.priceState = `${prices[0].cost_rub}₽`
+        this.priceStateForShow = `${prices[0].cost_rub} ₽`
       }
-      if (prices[0].cost_rub == prices[prices.length - 1].cost_rub && prices[0] !== 0) {
-        this.priceState = prices[0].cost_rub + '₽'
-        this.priceStateForShow = prices[0].cost_rub + '₽'
+      if (prices[pricesLenght].cost_rub == prices[0].cost_rub && prices[0].cost_rub == 0) {
+        this.priceState = `Бесплатно`
+        this.priceStateForShow = `Бесплатно`
       }
-      if (prices[0] != prices[prices.length] && prices[0] !== 0) {
-        this.priceState = prices[0].cost_rub
+      if (prices[pricesLenght].cost_rub != prices[0].cost_rub && prices[0].cost_rub) {
         let minPrice = prices[0].cost_rub
         let maxPrice = prices[0].cost_rub
         prices.forEach((price: any) => {
           price.cost_rub < minPrice ? (minPrice = price.cost_rub) : null
           price.cost_rub > maxPrice ? (maxPrice = price.cost_rub) : null
         })
-        if (minPrice == 0 && maxPrice == 0) {
-          this.priceState = 'Бесплатно'
-          this.priceStateForShow = 'Бесплатно'
-        } else {
-          this.priceState = 'от ' + minPrice + '₽'
-          this.priceStateForShow = 'от ' + minPrice + '₽' + ' до ' + maxPrice + '₽'
-        }
+        this.priceState = `От ${minPrice}`
+        this.priceStateForShow = `От ${minPrice}₽ до ${maxPrice}₽`
       }
-    } else {
-      this.priceState = 'Бесплатно'
-      this.priceStateForShow = 'Бесплатно'
     }
+    // if (prices && prices.length != 0) {
+    //   if (prices[0].cost_rub == 0 && prices[0].cost_rub == prices[prices.length - 1].cost_rub) {
+    //     this.priceState = 'Бесплатно'
+    //     this.priceStateForShow = 'Бесплатно'
+    //   }
+    //   if (prices[0].cost_rub == prices[prices.length - 1].cost_rub && prices[0] !== 0) {
+    //     this.priceState = prices[0].cost_rub + '₽'
+    //     this.priceStateForShow = prices[0].cost_rub + '₽'
+    //   }
+    //   if (prices[0] != prices[prices.length - 1] && prices[0] !== 0) {
+    //     this.priceState = prices[0].cost_rub
+    //     let minPrice = prices[0].cost_rub
+    //     let maxPrice = prices[0].cost_rub
+    //     prices.forEach((price: any) => {
+    //       price.cost_rub < minPrice ? (minPrice = price.cost_rub) : null
+    //       price.cost_rub > maxPrice ? (maxPrice = price.cost_rub) : null
+    //     })
+
+    //     if (minPrice == 0 && maxPrice == 0) {
+    //       this.priceState = 'Бесплатно'
+    //       this.priceStateForShow = 'Бесплатно'
+    //     } else if (minPrice == maxPrice && maxPrice != 0) {
+    //       this.priceState = 'от ' + minPrice + '₽'
+    //       this.priceStateForShow = 'от ' + minPrice + '₽' + ' до ' + maxPrice + '₽'
+    //     }
+    //   }
+    // } else {
+    //   this.priceState = 'Бесплатно'
+    //   this.priceStateForShow = 'Бесплатно'
+    // }
   }
 
   clearDescription() {
