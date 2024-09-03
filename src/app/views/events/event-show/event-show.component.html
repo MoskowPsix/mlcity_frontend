@@ -62,7 +62,12 @@
           </div>
 
           <strong class="main-content__name">{{event.name}}</strong>
-
+          <div class="category-button-grid">
+            <ng-container>
+                <app-rounded-button style="pointer-events: none;"  *ngFor="let category of event.types"  icon="assets/icons/category.svg" type="button" buttonText=" {{category.name}}"></app-rounded-button>
+                <app-rounded-button *ngIf="event.types!.length === 0" style="pointer-events: none;"  icon="assets/icons/category.svg" type="button" buttonText="Прочее"></app-rounded-button>
+            </ng-container>
+          </div>
           <app-collapsed-text>
               <div [innerHTML]="clearDescription()"></div>
           </app-collapsed-text>
