@@ -5,6 +5,7 @@ import { LoadingService } from 'src/app/services/loading.service'
 import { EventTypeService } from 'src/app/services/event-type.service'
 import { EventEmitter } from '@angular/core'
 import { EventType } from '@angular/router'
+import { Subject, takeUntil } from 'rxjs'
 @Component({
   selector: 'app-types-modal',
   templateUrl: './types-modal.component.html',
@@ -23,6 +24,7 @@ export class TypesModalComponent implements OnInit {
   @Input() allTypes: any = []
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   clickCategoryEmit = new EventEmitter()
+  private readonly destroy$ = new Subject<void>()
   closeModal() {
     this.closeModalEmit.emit(false)
   }
@@ -36,7 +38,7 @@ export class TypesModalComponent implements OnInit {
       this.loadingService.showLoading()
       this.eventTypeService
         .getTypes()
-        .pipe()
+        .pipe(takeUntil(this.destroy$))
         .subscribe((res: any) => {
           this.allTypes = res.types
           this.loadingService.hideLoading()

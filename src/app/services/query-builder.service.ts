@@ -171,6 +171,7 @@ export class QueryBuilderService {
     this.queryParams = {
       sightIds: this.sightIds.value,
       page: this.paginationModalSightsCurrentPage.value,
+      limit: 8,
     }
   }
 

@@ -161,7 +161,7 @@ export class EditEventComponent implements OnInit {
       this.loadingService.showLoading()
       this.eventTypeService
         .getTypes()
-        .pipe()
+        .pipe(takeUntil(this.destroy$))
         .subscribe((res: any) => {
           this.allTypes = res.types
           this.loadingService.hideLoading()

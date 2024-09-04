@@ -12,19 +12,26 @@ export class ClusterModalComponent implements OnInit {
   constructor(private switchTypeService: SwitchTypeService) {}
   @Input() openModal: boolean = false
   @Output() closeModalEmit: EventEmitter<any> = new EventEmitter()
+  @Output() paginateEvents: EventEmitter<any> = new EventEmitter()
+  @Output() paginateSight: EventEmitter<any> = new EventEmitter()
   @Input() modalContent: any = []
+  @Input() spiner!: boolean
   type: string = ''
+
   private readonly destroy$ = new Subject<void>()
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.modalContent)
-  }
+  ngOnChanges(changes: SimpleChanges): void {}
   closeModal() {
     this.closeModalEmit.emit()
+  }
+  endScrollingEvent() {
+    this.paginateEvents.emit()
+  }
+  endScrollingSight() {
+    this.paginateSight.emit()
   }
   ngOnInit() {
     this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.type = value
-      console.log(this.type)
     })
   }
 }

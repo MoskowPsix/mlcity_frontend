@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core'
 import { RulesModalCheckService } from 'src/app/services/rules-modal-check.service'
 import { Input } from '@angular/core'
+import { Subject, takeUntil } from 'rxjs'
 @Component({
   selector: 'app-create-rules-modal',
   templateUrl: './create-rules-modal.component.html',
@@ -11,6 +12,7 @@ export class CreateRulesModalComponent implements OnInit {
   mobile: boolean = false
   userReadRules: boolean = false
   openModal: boolean = false
+  private readonly destroy$ = new Subject<void>()
   @Input() agreement_id: any
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
@@ -31,7 +33,7 @@ export class CreateRulesModalComponent implements OnInit {
     accept.agreement_id = this.agreement_id
     this.rulesModalCheckService
       .setAgreements(accept)
-      .pipe()
+      .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         this.openModal = false
       })
@@ -46,7 +48,7 @@ export class CreateRulesModalComponent implements OnInit {
     this.rulesModalCheckService.getSightOrEvent(this.agreement_id)
     this.rulesModalCheckService
       .getAgreements()
-      .pipe()
+      .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         if (res.message == 'user dont accept this agreement') {
           this.openModal = true
