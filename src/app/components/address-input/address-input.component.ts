@@ -119,6 +119,7 @@ export class AddressInputComponent implements OnInit {
     this.setFirstCoords()
     if (this.place) {
       this.setFormInLoad()
+      this.testLog()
     }
   }
   testLog() {

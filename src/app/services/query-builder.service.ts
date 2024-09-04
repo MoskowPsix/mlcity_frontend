@@ -314,6 +314,7 @@ export class QueryBuilderService {
       page: this.paginataionPublicEventPlacesCurrentPage.value,
       withFiles: true,
       withPrices: true,
+      expired: false,
     }
   }
   buildQueryExpiredEventPlaces() {
