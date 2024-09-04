@@ -143,6 +143,7 @@ import { OrganizationsGridComponent } from './components/organizations-grid/orga
 import { TabsComponent } from './components/materials/tabs/tabs.component'
 import { TabsItemComponent } from './components/materials/tabs-item/tabs-item.component'
 import { NgxDocViewerModule } from 'ngx-doc-viewer'
+import { ClusterModalComponent } from './components/cluster-modal/cluster-modal.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -174,6 +175,7 @@ registerLocaleData(localeRu, 'ru')
     RecoveryPasswordComponent,
     SecondHeaderComponent,
     ShowSliderComponent,
+    ClusterModalComponent,
     HeaderComponent,
     CodeInputComponent,
     AddressInputComponent,

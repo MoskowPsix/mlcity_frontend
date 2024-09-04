@@ -3,7 +3,7 @@ import { IPlace } from 'src/app/models/place'
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps'
 import { LocationService } from 'src/app/services/location.service'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { BehaviorSubject, tap } from 'rxjs'
+import { BehaviorSubject, Subject, takeUntil, tap } from 'rxjs'
 @Component({
   selector: 'app-address-input',
   templateUrl: './address-input.component.html',
@@ -28,6 +28,7 @@ export class AddressInputComponent implements OnInit {
   @Input() placeId!: string
   @Output() addressEditEmit = new EventEmitter()
   placemark!: ymaps.Placemark
+  private readonly destroy$ = new Subject<void>()
   map: any
   address: any
   addressForm!: FormGroup
@@ -63,7 +64,7 @@ export class AddressInputComponent implements OnInit {
       let geocodeResult = this.yaGeocoderService.geocode(this.address, {
         results: 1,
       })
-      geocodeResult.pipe().subscribe((result: any) => {
+      geocodeResult.pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
         const firstGeoObject = result.geoObjects.get(0)
         this.coords = firstGeoObject.geometry.getCoordinates()
         this.setLongitudelatitude()
@@ -108,7 +109,7 @@ export class AddressInputComponent implements OnInit {
   setLocationId() {
     this.locationService
       .getLocationByCoords(this.coords)
-      .pipe()
+      .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         this.addressForm.value.location_id = res.location.id
         this.emitForm()

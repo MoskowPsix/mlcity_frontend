@@ -99,10 +99,7 @@ export class SettingsComponent implements OnInit {
               this.authService.logout()
             }
             this.loadingService.hideLoading()
-            this.toastService.showToast(
-              'Убедитесь что поле Имя не пустое',
-              'danger',
-            )
+            this.toastService.showToast('Убедитесь что поле Имя не пустое', 'danger')
             return of(EMPTY)
           }),
         )
@@ -119,7 +116,7 @@ export class SettingsComponent implements OnInit {
   }
 
   checkEmail() {
-    this.navigationService.modalAuthEmail.pipe().subscribe(() => {
+    this.navigationService.modalAuthEmail.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.email = this.navigationService.modalAuthEmail.value
     })
   }
@@ -127,8 +124,7 @@ export class SettingsComponent implements OnInit {
   checkPassword() {
     if (
       this.passwordResetForm.valid ||
-      this.passwordResetForm.value.new_password !==
-        this.passwordResetForm.value.retry_password
+      this.passwordResetForm.value.new_password !== this.passwordResetForm.value.retry_password
     ) {
       this.passwordError = 'ошибка'
     } else {
@@ -171,10 +167,7 @@ export class SettingsComponent implements OnInit {
             )
             .subscribe((res: any) => {
               this.loadingService.hideLoading()
-              this.toastService.showToast(
-                'Ссылка для смены пароля была отправлена вам на почту',
-                'success',
-              )
+              this.toastService.showToast('Ссылка для смены пароля была отправлена вам на почту', 'success')
             })
         } else {
           this.loadingService.hideLoading()
@@ -207,22 +200,10 @@ export class SettingsComponent implements OnInit {
     this.isMobile = this.platform.is('mobile')
     this.getUser()
     this.passwordResetForm = new FormGroup({
-      old_password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
-      old_password_plug: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
-      new_password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
-      retry_password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
+      old_password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      old_password_plug: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      new_password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      retry_password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     })
     this.resetForm = new FormGroup({
       new_name: new FormControl(this.user.name, [Validators.minLength(1)]),
