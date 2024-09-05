@@ -18,6 +18,7 @@ import { UserService } from 'src/app/services/user.service'
 import { MaskitoOptions } from '@maskito/core'
 import { EventTypeService } from 'src/app/services/event-type.service'
 import { IEventType } from 'src/app/models/event-type'
+import { Location } from '@angular/common'
 import { IStatus } from 'src/app/models/status'
 import { environment } from 'src/environments/environment'
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps'
@@ -91,9 +92,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 0
+  stepCurrency: number = 1
   createObj: any = {}
-  steps: number = 6
   dataValid: boolean = true
   openModalImgs: boolean = false
   openModalPostValue: boolean = false
@@ -131,7 +131,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   sightsList: any[] = []
   dectedDataIvalid: boolean = false
   priceArrayForm: any[] = []
-
+  maxStepsCount:number = 6
   isNextButtonClicked: boolean = false
   placeValid: boolean = false
   seansValid: boolean = false
@@ -169,15 +169,24 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private router: Router,
     private yaGeocoderService: YaGeocoderService,
     private organizationService: OrganizationService,
+    private location: Location
   ) {}
 
-  nextStep() {
-    this.isNextButtonClicked = true
-
-    // setTimeout(() => {
-    //   this.isNextButtonClicked = false;
-    // }, 10000);
+ //Клик по кнопке веперед
+ stepNext() {
+  if(this.stepCurrency <= this.maxStepsCount){
+    this.stepCurrency++
   }
+}
+
+//Клик по нкопке назад
+stepPrev() {
+  if(this.stepCurrency < 0){
+    this.stepCurrency--
+  }else{
+    this.location.back()
+  }
+}
 
   onAdd(event: Event) {
     this.count++
@@ -687,31 +696,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     return this.formData
   }
 
-  //Клик по кнопке веперед
-  stepNext() {
-    this.stepCurrency++
-    if (this.stepCurrency == 1) {
-      setTimeout(() => {
-        this.eventNameElement.setFocus()
-      }, 500)
-    }
-  }
+  
 
-  //Клик по нкопке назад
-  stepPrev() {
-    this.createFormCount == 0
-    this.stepCurrency--
-  }
-
-  //Клик по шагу в баре
-  goToStep(step: number) {
-    if (this.stepCurrency !== step) {
-      this.stepCurrency = step
-
-      //this.disabledNextButton()
-      this.stepIsValid()
-    }
-  }
 
   testTime(event: any, place: any, seans: any, param: any) {
     if (param === 'start') {
