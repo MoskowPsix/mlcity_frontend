@@ -92,7 +92,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 1
+  stepCurrency: number = 2
   createObj: any = {}
   dataValid: boolean = true
   openModalImgs: boolean = false
@@ -176,12 +176,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
  stepNext() {
   if(this.stepCurrency <= this.maxStepsCount){
     this.stepCurrency++
+    console.log(this.stepCurrency)
   }
 }
 
 //Клик по нкопке назад
 stepPrev() {
-  if(this.stepCurrency < 0){
+  if(this.stepCurrency > 0){
     this.stepCurrency--
   }else{
     this.location.back()
@@ -272,7 +273,11 @@ stepPrev() {
   openModalImgsFnc() {
     this.openModalImgs = true
   }
-
+  reset(){
+    this.createEventForm.reset()
+    this.stepCurrency = 1
+    this.location.back()
+  }
   closeModalImgsFnc() {
     this.openModalImgs = false
   }

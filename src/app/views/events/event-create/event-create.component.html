@@ -9,31 +9,37 @@
   </app-second-header>
   <div class="main-content">
     <app-step-container [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency">
-      <app-step-container-item stepNum="1">
-        
+      <app-step-container-item [stepCurrency]="stepCurrency" stepNum="1">
+        <div class="main-content__step-wrapper">
+          <app-standart-input [label]="'Название события'" [control] = "createEventForm.get('name')"></app-standart-input>
+          <div class="organization-select-wrapper">
+            <app-organizations-select-container [closeModalValue]="modalSelectedOrganization" (selectOrganization)="selectOrganization($event)" [cards]="organizations"/>
+          </div>
+            <app-types [buttonClicked]="currentType" [types]="types" (typeOutput)="receiveType($event)"></app-types>
+        </div>
       </app-step-container-item>
-
-      <app-step-container-item stepNum="2">
-
-      </app-step-container-item>
-
-      <app-step-container-item stepNum="3">
-
-      </app-step-container-item>
-
-      <app-step-container-item stepNum="4">
-
-      </app-step-container-item>
-
-      <app-step-container-item stepNum="5">
-
-      </app-step-container-item>
-
-      <app-step-container-item stepNum="6">
-
+      <app-step-container-item [stepCurrency]="stepCurrency" stepNum="2">
+        <div class="main-content__step-wrapper">
+          <div class="load-for-vk-button-wrapper">
+            <app-standart-button buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+          </div>
+          <div class="label">Обложка</div>
+          <div class="cover-add-button" >
+            <img src="/assets/icons/addPhoto.svg" alt="">
+            <span class="cover-add-button_text">Добавить фото</span>
+          </div>
+          <app-edit-slider type="create"></app-edit-slider>
+          <app-standart-rich-input [label]="'Описание'" [control] = "createEventForm.get('description')"></app-standart-rich-input>
+        </div>
       </app-step-container-item>
     </app-step-container>
-    <app-standart-button (click)="stepNext()" buttonText="Далее" theme="standart"></app-standart-button>
+
+    <div class="navigate-buttons-container">
+      <app-standart-button (click)="stepNext()" buttonText="Далее" theme="standart"></app-standart-button>
+      <div class="cancel-wrapper">
+        <app-standart-button (click)="reset()" buttonText="Отмена" theme="light"></app-standart-button>
+      </div>
+    </div>
   </div>
 
 </ion-content>
