@@ -156,7 +156,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private sightServices: SightsService,
     private locationServices: LocationService,
     private filterService: FilterService,
-    private cdr: ChangeDetectorRef,
     private authService: AuthService,
     private eventsService: EventsService,
     private loadingService: LoadingService,
@@ -654,7 +653,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     // this.formData.append('coords', this.createEventForm.controls['coords'].value)
     // this.formData.append('address', this.createEventForm.controls['address'].value)
     // this.formData.append('city', this.city)
-    this.formData.append('type[]', this.createEventForm.controls['type'].value)
+    this.formData.append('type', this.createEventForm.controls['type'].value)
     this.formData.append('status', this.createEventForm.controls['status'].value)
 
     this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
