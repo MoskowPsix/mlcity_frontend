@@ -502,7 +502,9 @@ export class EditEventComponent implements OnInit {
           this.loadingService.hideLoading()
           if (res.status == 'success') {
             this.toastService.showToast('Событие отправленно на проверку', 'success')
-            this.router.navigate(['/cabinet/events'])
+            this.router.navigate(['/cabinet/events']).then(() => {
+              window.location.reload()
+            })
           }
         })
     }
