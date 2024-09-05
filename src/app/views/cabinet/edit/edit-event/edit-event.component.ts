@@ -161,7 +161,7 @@ export class EditEventComponent implements OnInit {
       this.loadingService.showLoading()
       this.eventTypeService
         .getTypes()
-        .pipe()
+        .pipe(takeUntil(this.destroy$))
         .subscribe((res: any) => {
           this.allTypes = res.types
           this.loadingService.hideLoading()
@@ -477,11 +477,13 @@ export class EditEventComponent implements OnInit {
       // this.submitButtonState = true
       // this.loadingService.showLoading()
       this.clearFormOfTempData()
+      console.log(this.editForm.value)
       let historyContent = new EventHistoryContent()
       let result = historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value))
       this.editService
         .sendEditEvent(serialize(result, this.options))
         .pipe(
+          takeUntil(this.destroy$),
           catchError((err: any) => {
             this.submitButtonState = false
             this.loadingService.hideLoading()

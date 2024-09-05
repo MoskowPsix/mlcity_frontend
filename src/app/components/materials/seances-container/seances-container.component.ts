@@ -38,12 +38,10 @@ export class SeancesContainerComponent implements OnInit {
       dateStart: moment(seance.split(' ')[0]),
       dateEnd: moment(seance.split(' ')[0]),
     }
-    console.time('myFunction')
 
     // Ожидаем завершения render, если она возвращает промис
     await this.render()
 
-    console.timeEnd('myFunction')
   }
   render() {
     const filteredSeances = this.seances.filter((seance) => {
@@ -59,7 +57,7 @@ export class SeancesContainerComponent implements OnInit {
       return dateStart >= filterStart && dateEnd <= filterEnd
     })
     this.viewSeances = filteredSeances
-    console.timeEnd('myFunction')
+
   }
   setDateFilter(event: any) {
     this.templateDate = event
@@ -83,11 +81,15 @@ export class SeancesContainerComponent implements OnInit {
     })
     if (this.viewSeances.length == 0) {
       let minSeance = this.searchMinSeance()
-      this.calendarFilter = {
-        dateStart: moment(minSeance.date_start.split(' ')[0]),
-        dateEnd: moment(minSeance.date_end.split(' ')[0]),
+      if (minSeance) {
+        this.calendarFilter = {
+          dateStart: moment(minSeance.date_start.split(' ')[0]),
+          dateEnd: moment(minSeance.date_end.split(' ')[0]),
+        }
+        this.minSeance = minSeance.date_start
+      } else {
+        this.seances[this.seances.length - 1].date_start
       }
-      this.minSeance = minSeance.date_start
     }
   }
   checkSeances(seance: ISeance) {

@@ -104,6 +104,7 @@ export class OrganizationShowComponent implements OnInit {
     }
   }
   getOrganization(id: string) {
+    console.log(id)
     this.sightsService
       .getSightById(Number(id))
       .pipe(takeUntil(this.destroy$))

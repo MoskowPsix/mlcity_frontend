@@ -171,6 +171,7 @@ export class QueryBuilderService {
     this.queryParams = {
       sightIds: this.sightIds.value,
       page: this.paginationModalSightsCurrentPage.value,
+      limit: 8,
     }
   }
 
@@ -313,6 +314,7 @@ export class QueryBuilderService {
       page: this.paginataionPublicEventPlacesCurrentPage.value,
       withFiles: true,
       withPrices: true,
+      expired: false,
     }
   }
   buildQueryExpiredEventPlaces() {

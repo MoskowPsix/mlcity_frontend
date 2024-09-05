@@ -124,7 +124,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
         if (res.status == 'success') {
           this.userService
             .getUserById()
-            .pipe()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((user: any) => {
               let tempUser: IUser = user.user
               this.userService.setUserToLocalStorage(tempUser)
