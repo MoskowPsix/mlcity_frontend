@@ -1,5 +1,5 @@
 <ion-content>
-  <app-edit-slider  *ngIf="this.organization && this.organization.files" (filesEmit)="changeFiles($event)" [files]="this.editForm.value.files"></app-edit-slider>
+  <app-edit-slider  *ngIf="this.organization && this.organization.files" (filesEmit)="changeFiles($event)" [files]="this.organization.files"></app-edit-slider>
   <div class="main-content">
     <app-standart-input [label]="'Название сообщества'" [control] = "editForm.get('name')"></app-standart-input>
     <app-standart-rich-input  [label]="'Описание'" [control] = "editForm.get('description')"></app-standart-rich-input>
