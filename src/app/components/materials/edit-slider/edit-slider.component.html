@@ -27,7 +27,7 @@
       <span class="slider-container-add-button_text">Добавить фото</span>
     </div>
    
-    <div (click)="setMainPhoto($event)" *ngFor="let img of previews; let i = index" style="background-image: url({{img.link}});" class="slider-container-item">
+    <div *ngFor="let img of previews; let i = index" style="background-image: url({{img.link}});" class="slider-container-item">
       <div class="delete-button-wrapper"><app-circle-button (click)="deletePreview(img,i)" icon="/assets/icons/trash.svg"></app-circle-button></div>
     </div>
   </div>

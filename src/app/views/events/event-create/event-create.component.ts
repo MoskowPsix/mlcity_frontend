@@ -274,9 +274,10 @@ stepPrev() {
     this.openModalImgs = true
   }
   reset(){
+    this.location.back()
     this.createEventForm.reset()
     this.stepCurrency = 1
-    this.location.back()
+    
   }
   closeModalImgsFnc() {
     this.openModalImgs = false
@@ -585,15 +586,17 @@ stepPrev() {
 
   //Загрузка фото
   onFileChange(event: any) {
-    this.resetUploadInfo()
+    console.log(event)
+    this.uploadFiles = event
+    // this.resetUploadInfo()
 
-    for (var i = 0; i < event.target.files.length; i++) {
-      this.uploadFiles.push(event.target.files[i])
-    }
+    // for (var i = 0; i < event.target.files.length; i++) {
+    //   this.uploadFiles.push(event.target.files[i])
+    // }
 
-    this.createEventForm.patchValue({ files: '' }) // Если не обнулять будет ошибка
+    // this.createEventForm.patchValue({ files: '' }) // Если не обнулять будет ошибка
 
-    this.createImagesPreview()
+    // this.createImagesPreview()
   }
 
   resetUploadInfo() {

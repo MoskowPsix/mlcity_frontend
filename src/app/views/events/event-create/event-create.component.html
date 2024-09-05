@@ -21,14 +21,14 @@
       <app-step-container-item [stepCurrency]="stepCurrency" stepNum="2">
         <div class="main-content__step-wrapper">
           <div class="load-for-vk-button-wrapper">
-            <app-standart-button icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+            <app-standart-button (click)="openModalGroup()" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
           </div>
           <div class="label">Обложка</div>
           <div class="cover-add-button" >
             <img src="/assets/icons/addPhoto.svg" alt="">
             <span class="cover-add-button_text">Добавить фото</span>
           </div>
-          <app-edit-slider type="create"></app-edit-slider>
+          <app-edit-slider type="create" (filesEmit)="onFileChange($event)" [files]="uploadFiles"></app-edit-slider>
           <app-standart-rich-input [label]="'Описание'" [control] = "createEventForm.get('description')"></app-standart-rich-input>
         </div>
       </app-step-container-item>
@@ -43,3 +43,49 @@
   </div>
 
 </ion-content>
+
+
+<ion-modal  class="modal" backdropDismiss="false" [isOpen] ="openModalGroupValue" [canDismiss]="openModalGroupValue">
+  <ng-template>
+    <ion-content>
+        <ion-list>
+            <ion-list-header>
+              <ion-label class="modalLabel">Выберите сообщество, из которой следует загрузить посты</ion-label>
+            </ion-list-header>
+
+            <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event); openModalPost($event); saveChangeId()" [allowEmptySelection]="true" [value]="vkGroupSelected">
+              <ng-container>
+                <ion-item>
+                  <ion-avatar>
+                    <img alt="ava" src="/assets/icons/favicon.png" />
+                  </ion-avatar>
+                  <ion-label class="ion-padding-start">Моя страница</ion-label>
+                  <ion-radio slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
+                </ion-item>
+              </ng-container>
+              <ng-container *ngFor="let group of vkGroups">
+                  <ion-item>
+                    <ion-avatar>
+                      <img alt="ava" src="{{ group.photo_50 }}" />
+                    </ion-avatar>
+                    <ion-label class="ion-padding-start">{{ group.name }}</ion-label>
+                    <ion-radio  slot="end" value="-{{ group.id }}"></ion-radio>
+                  </ion-item>
+              </ng-container>
+            </ion-radio-group>
+            <!-- Грузим чужие посты из вк, временное решение -->
+            <!-- <ng-container>
+              <ion-item>
+                <ion-label class="ion-padding-start">
+                  <ion-input label="Url input" type="text" placeholder="URL группы" (ionChange)="onFocusPlace($event)"></ion-input>
+                </ion-label>
+                  <ion-button  (click)="setVkPostsByGroupURL();  stepNext();">Загрузить URL</ion-button>
+              </ion-item>
+            </ng-container> -->
+        </ion-list>
+        <ion-button class="modalBtnBottom" (click)="closeAllModals()">
+          Закрыть
+        </ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>
