@@ -1,5 +1,5 @@
 <div class='user-section-main'>
-  
+
   <ng-container *ngIf="!user && !organization">
     <ion-skeleton-text [animated]="true" class="user-section-image-scleton"></ion-skeleton-text>
     <div class="user-section-info">
@@ -22,25 +22,29 @@
 
     <ng-container *ngIf="organization">
       <div (click)="emitOrganization(organization)" class="user-section-main_organization">
-    
+
         <ng-container>
           <img (click)="redirect()" src="{{avatarUrl}}" *ngIf=" organization.files && organization.files[0] && organization.files[0].link !== '' "  class="user-section-image" >
           <div (click)="redirect()" *ngIf="!organization.files[0] || organization.files[0].link === '' " class="user-section-image"></div>
         </ng-container>
-   
+
         <div (click)="redirect()" class="user-section-info">
             <div class="user-section-name__organization">{{organization.name}}</div>
             <!-- <div *ngIf="!organization.types" class="category-plug">Нет категорий</div> -->
         </div>
+        <div>
+          <p>Афиша: {{organization.afisha7_id}}</p>
+          <p>Наш: {{organization.id}}</p>
+        </div>
 
         <div class="organization-button__wrapper">
           <ng-content>
-            
+
           </ng-content>
-      
+
         </div>
-      
+
       </div>
-    
+
   </ng-container>
 </div>
