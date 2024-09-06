@@ -70,7 +70,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   port: string = environment.BACKEND_PORT
   currentTime = new Date()
   organizations: IOrganization[] = []
-
+  vkFiles: any[] = []
+  allFiles: any[] = []
   @ViewChild('eventName') eventNameElement!: any
   @ViewChild('eventDescription') eventDescriptionElement!: any
   @HostListener('window:resize', ['$event'])
@@ -116,7 +117,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   statusesLoaded: boolean = false
   statusSelected: number | null = null
   city: string = 'Заречный'
-  uploadFiles: string[] = []
+  uploadFiles: any[] = []
   formData: FormData = new FormData()
   imagesPreview: string[] = []
   locationLoader: boolean = false
@@ -124,6 +125,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   placeArrayForm: any[] = []
   seancesArrayForm: any[] = []
   locations: any[] = []
+  coverUrl: string = ''
   cityesListLoading = false
   minLengthCityesListError = false
   cityesList: any[] = []
@@ -131,7 +133,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   sightsList: any[] = []
   dectedDataIvalid: boolean = false
   priceArrayForm: any[] = []
-  maxStepsCount:number = 6
+  maxStepsCount: number = 6
   isNextButtonClicked: boolean = false
   placeValid: boolean = false
   seansValid: boolean = false
@@ -169,32 +171,48 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private router: Router,
     private yaGeocoderService: YaGeocoderService,
     private organizationService: OrganizationService,
-    private location: Location
+    private location: Location,
   ) {}
 
- //Клик по кнопке веперед
- stepNext() {
-  if(this.stepCurrency <= this.maxStepsCount){
-    this.stepCurrency++
-    console.log(this.stepCurrency)
+  //Клик по кнопке веперед
+  stepNext() {
+    if (this.stepCurrency <= this.maxStepsCount) {
+      this.stepCurrency++
+      console.log(this.stepCurrency)
+    }
   }
-}
 
-//Клик по нкопке назад
-stepPrev() {
-  if(this.stepCurrency > 0){
-    this.stepCurrency--
-  }else{
-    this.location.back()
+  //Клик по нкопке назад
+  stepPrev() {
+    if (this.stepCurrency > 0) {
+      this.stepCurrency--
+    } else {
+      this.location.back()
+    }
   }
-}
 
   onAdd(event: Event) {
     this.count++
   }
 
+  deleteVkFiles(event: any) {
+    for (let i = 0; i < this.vkGroupPostSelected.attachments.length; i++) {
+      if (this.vkGroupPostSelected.attachments[i].photo.id == event.name) {
+        this.vkGroupPostSelected.attachments.splice(i, 1)
+      }
+    }
+    for (let i = 0; i < this.vkFiles.length; i++) {
+      if (this.vkFiles[i].name == event.name) {
+        this.vkFiles.splice(i, 1)
+      }
+    }
+
+    this.renderPreview()
+    if (this.allFiles.length == 0) {
+      this.coverUrl = ''
+    }
+  }
   selectOrganization(event: IOrganization) {
-    console.log(event)
     this.selectedOrganization = event
     let id = this.selectedOrganization.id
     this.createEventForm.patchValue({ organization_id: id })
@@ -273,11 +291,10 @@ stepPrev() {
   openModalImgsFnc() {
     this.openModalImgs = true
   }
-  reset(){
+  reset() {
     this.location.back()
     this.createEventForm.reset()
     this.stepCurrency = 1
-    
   }
   closeModalImgsFnc() {
     this.openModalImgs = false
@@ -367,15 +384,27 @@ stepPrev() {
   // }
   //Выбираем пост
   selectedVkGroupPost(post: any) {
+    let tempArray: any[] = []
     if (!post || this.vkGroupPostSelected?.id === post.id) {
       this.vkGroupPostSelected = null
       this.createEventForm.patchValue({ description: '' })
       this.resetUploadInfo()
     } else {
       this.vkGroupPostSelected = post
+      post.attachments.forEach((file: any) => {
+        if (file.type === 'photo') {
+          tempArray.push({
+            link: file.photo.orig_photo.url,
+            name: file.photo.id,
+          })
+        } else {
+        }
+      })
       this.createEventForm.patchValue({
         description: this.vkGroupPostSelected.text,
       })
+      this.vkFiles = tempArray
+      this.renderPreview()
     }
   }
 
@@ -584,10 +613,29 @@ stepPrev() {
     }
   }
 
+  renderPreview() {
+    this.allFiles = this.uploadFiles.concat(this.vkFiles)
+    let reader = new FileReader()
+    if (this.allFiles.length > 0) {
+      if (this.allFiles[0].size) {
+        reader.readAsDataURL(this.allFiles[0])
+        reader.onload = () => {
+          this.coverUrl = reader.result as string
+        }
+      } else {
+        this.coverUrl = this.allFiles[0].link
+      }
+    } else {
+      this.coverUrl = ''
+    }
+  }
   //Загрузка фото
-  onFileChange(event: any) {
-    console.log(event)
+  onFileChange(event: File[]) {
     this.uploadFiles = event
+    this.renderPreview()
+    // console.log(this.uploadFiles)
+    // console.log(event)
+
     // this.resetUploadInfo()
 
     // for (var i = 0; i < event.target.files.length; i++) {
@@ -703,9 +751,6 @@ stepPrev() {
     }
     return this.formData
   }
-
-  
-
 
   testTime(event: any, place: any, seans: any, param: any) {
     if (param === 'start') {
@@ -1246,7 +1291,6 @@ stepPrev() {
       .getUserOrganizations()
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
-        console.log(res)
         this.organizations = res.organizations.data
       })
     this.checkHasUserOrganizations()

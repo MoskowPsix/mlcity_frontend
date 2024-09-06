@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ToastService } from 'src/app/services/toast.service'
 import { FileService } from 'src/app/services/file.service'
 @Component({
@@ -14,31 +14,59 @@ export class EditSliderComponent implements OnInit {
   @Input() files: any[] = []
   @ViewChild('mainPhoto') mainPhoto!: any
   @Output() filesEmit: EventEmitter<any> = new EventEmitter<any>()
+  @Output() deleteVkfilesEmit: EventEmitter<any> = new EventEmitter<any>()
   @Input() type: string = ''
+  @Input() vkFiles: any[] = []
   previews: any[] = []
   deleteFiles: any[] = []
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['vkFiles']) {
+      this.previews.push(...this.vkFiles)
+    }
+  }
+  deleteVkFiles(file: any) {
+    this.deleteVkfilesEmit.emit(file)
+  }
   fileChanged(event: any, inputBlock: any) {
     // Преобразуем FileList в обычный массив
     let filesArray: File[] = Array.from(event.target.files)
-    filesArray.forEach((file: File) => {
-      const reader = new FileReader()
-      reader.onload = (e: any) => {
-        if (this.files.map((e) => e.name).indexOf(file.name) == -1) {
-          this.previews.push({
-            link: e.target.result,
-            name: file.name,
-          })
 
-          this.files.push(file)
-        } else {
-          this.toastService.showToast('Файл уже загружен!', 'warning')
+    // Создаем массив промисов
+    let promises = filesArray.map((file: File) => {
+      return new Promise<void>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = (e: any) => {
+          if (this.files.map((e) => e.name).indexOf(file.name) === -1) {
+            this.previews.push({
+              link: e.target.result,
+              name: file.name,
+            })
+
+            this.files.push(file)
+            console.log('load')
+          } else {
+            this.toastService.showToast('Файл уже загружен!', 'warning')
+          }
+          resolve()
         }
-      }
-      reader.readAsDataURL(file)
+        reader.onerror = (error) => {
+          reject(error)
+        }
+        reader.readAsDataURL(file)
+      })
     })
-    event.target.value = null
-    this.filesEmit.emit(this.files)
+
+    // Дожидаемся завершения всех промисов
+    Promise.all(promises)
+      .then(() => {
+        event.target.value = null
+        this.filesEmit.emit(this.files)
+        console.log('emit')
+      })
+      .catch((error) => {
+        console.error('Error reading files', error)
+      })
   }
 
   setMainPhoto(event: any) {
@@ -54,9 +82,12 @@ export class EditSliderComponent implements OnInit {
       this.filesEmit.emit(this.files)
       this.previews.splice(index, 1)
     } else {
-      let index = this.files.map((e) => e.id).indexOf(file.name)
+      let index = this.files.map((e) => e.name).indexOf(file.name)
       this.files.splice(index, 1)
       this.previews.splice(i, 1)
+      if (!file.size) {
+        this.deleteVkFiles(file)
+      }
       this.filesEmit.emit(this.files)
     }
   }
