@@ -30,6 +30,23 @@
     width: 100%;
    
   }
+  .cover-add-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:200px;
+    background-size: cover;
+    background-position: center;
+    flex-direction: column;
+    border-radius: 5px;
+    min-width:6.625rem;
+    margin-bottom: 0.5rem;
+    background-color: #DCE9FF;  
+  }
+  .cover-add-button_text{
+    color: var(--blue-color);
+    font-size:0.7rem;
+  }
   .label{
     color: #4C5861;
     font-size: 12px;

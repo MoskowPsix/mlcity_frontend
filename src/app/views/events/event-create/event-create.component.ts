@@ -125,7 +125,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   placeArrayForm: any[] = []
   seancesArrayForm: any[] = []
   locations: any[] = []
-  coverUrl: string = ''
+
   cityesListLoading = false
   minLengthCityesListError = false
   cityesList: any[] = []
@@ -207,9 +207,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.renderPreview()
     if (this.allFiles.length == 0) {
-      this.coverUrl = ''
     }
   }
   selectOrganization(event: IOrganization) {
@@ -396,6 +394,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           tempArray.push({
             link: file.photo.orig_photo.url,
             name: file.photo.id,
+            vk: true,
           })
         } else {
         }
@@ -404,7 +403,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         description: this.vkGroupPostSelected.text,
       })
       this.vkFiles = tempArray
-      this.renderPreview()
     }
   }
 
@@ -613,26 +611,25 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  renderPreview() {
-    this.allFiles = this.uploadFiles.concat(this.vkFiles)
-    let reader = new FileReader()
-    if (this.allFiles.length > 0) {
-      if (this.allFiles[0].size) {
-        reader.readAsDataURL(this.allFiles[0])
-        reader.onload = () => {
-          this.coverUrl = reader.result as string
-        }
-      } else {
-        this.coverUrl = this.allFiles[0].link
-      }
-    } else {
-      this.coverUrl = ''
-    }
-  }
+  // renderPreview() {
+  //   this.allFiles = this.uploadFiles.concat(this.vkFiles)
+  //   let reader = new FileReader()
+  //   if (this.allFiles.length > 0) {
+  //     if (this.allFiles[0].size) {
+  //       reader.readAsDataURL(this.allFiles[0])
+  //       reader.onload = () => {
+  //         this.coverUrl = reader.result as string
+  //       }
+  //     } else {
+  //       this.coverUrl = this.allFiles[0].link
+  //     }
+  //   } else {
+  //     this.coverUrl = ''
+  //   }
+  // }
   //Загрузка фото
   onFileChange(event: File[]) {
     this.uploadFiles = event
-    this.renderPreview()
     // console.log(this.uploadFiles)
     // console.log(event)
 

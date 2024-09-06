@@ -23,11 +23,7 @@
           <div class="load-for-vk-button-wrapper">
             <app-standart-button (click)="openModalGroup()" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
           </div>
-          <div class="label">Обложка</div>
-          <div *ngIf="coverUrl" style="background-image: url({{coverUrl}}) ;" class="cover-add-button" >
-          </div>
-          <div *ngIf="!coverUrl" style="background-image: url('assets/images/nophoto.jpg') ;" class="cover-add-button" >
-          </div>
+         
           <app-edit-slider type="create" [vkFiles]="vkFiles" (deleteVkfilesEmit)="deleteVkFiles($event)" (filesEmit)="onFileChange($event)" [previews]="uploadFiles" [files]="uploadFiles" ></app-edit-slider>
           <app-standart-rich-input [label]="'Описание'" [control] = "createEventForm.get('description')"></app-standart-rich-input>
         </div>

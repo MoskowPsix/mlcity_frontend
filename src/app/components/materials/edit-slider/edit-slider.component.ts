@@ -83,11 +83,15 @@ export class EditSliderComponent implements OnInit {
       this.previews.splice(index, 1)
     } else {
       let index = this.files.map((e) => e.name).indexOf(file.name)
-      this.files.splice(index, 1)
-      this.previews.splice(i, 1)
-      if (!file.size) {
+      let previewsIndex = this.previews.map((e) => e.name).indexOf(file.name)
+      if (this.previews[previewsIndex].vk) {
         this.deleteVkFiles(file)
+        this.previews.splice(i, 1)
+      } else {
+        this.files.splice(index, 1)
+        this.previews.splice(i, 1)
       }
+
       this.filesEmit.emit(this.files)
     }
   }
