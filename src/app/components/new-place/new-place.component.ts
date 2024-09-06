@@ -42,11 +42,11 @@ export class NewPlaceComponent implements OnInit {
     }
   }
   ngOnInit() {
-    this.seancesArray = this.place.seances
+    this.place ? (this.seancesArray = this.place.seances) : null
     this.placeForm = new FormGroup({
       address: new FormControl('', [Validators.required]),
     })
-    if (!this.place.id) {
+    if (this.place && !this.place.id) {
       this.addSeance()
     }
   }

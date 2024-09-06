@@ -93,7 +93,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 2
+  stepCurrency: number = 4
   createObj: any = {}
   dataValid: boolean = true
   openModalImgs: boolean = false

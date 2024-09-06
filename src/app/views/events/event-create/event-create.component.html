@@ -23,10 +23,56 @@
           <div class="load-for-vk-button-wrapper">
             <app-standart-button (click)="openModalGroup()" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
           </div>
-         
           <app-edit-slider type="create" [vkFiles]="vkFiles" (deleteVkfilesEmit)="deleteVkFiles($event)" (filesEmit)="onFileChange($event)" [previews]="uploadFiles" [files]="uploadFiles" ></app-edit-slider>
           <app-standart-rich-input [label]="'Описание'" [control] = "createEventForm.get('description')"></app-standart-rich-input>
         </div>
+      </app-step-container-item>
+      <app-step-container-item [stepCurrency]="stepCurrency" stepNum="3">
+        <div class="place-container">
+          <div class="not-found-span-container">
+              <!-- <span class="not-found-span" *ngIf="checkCountPlaces()">Место проведения не добавлено</span> -->
+          </div>
+            <ng-container *ngFor="let place of placeArrayForm; let i = index">
+              <app-new-place 
+                  
+              [placeId]="i"
+              (seanceEmit)="addSeances($event)"
+            >
+          
+            ></app-new-place>
+            </ng-container>
+            
+              <div class="place-wrapper">
+                
+              </div>
+
+      </div>
+      </app-step-container-item>
+      <app-step-container-item [stepCurrency]="stepCurrency" stepNum="4">
+        <div class="prices-container">
+              <!-- <app-standart-input *ngFor="let price of event.price; let i = index" [label]="'Стоимость '+ (i+1)" [control] = "editForm.get('name')"></app-standart-input> -->
+               <ng-container *ngFor="let price of this.createEventForm.value.price; let i = index">
+                  <div class="price-container-item-wrapper">
+                      <app-new-price [form]="createEventForm" *ngIf="!price.on_delete" (deletePriceEmit)="deletePrice($event)" [price]="price"></app-new-price>
+                  </div>
+               </ng-container>
+          <div class="button-conatiner">
+              <div class="button-container-item">
+                <app-standart-button  (click)="addPrice()" buttonText="Добавить" type="button" theme ="light"></app-standart-button>
+              </div>
+          </div>
+          <app-standart-input [label]="'Ссылка на билеты'" placeholder="Введите ссылку на оплату если она есть" [control] = "createEventForm.get('materials')"></app-standart-input>
+          <div class="select-old-wrapper">
+            <ion-select mode="ios"  placeholder="0+">
+              <ion-select-option value="0">0</ion-select-option>
+              <ion-select-option value="6">6</ion-select-option>
+              <ion-select-option value="12">12</ion-select-option>
+              <ion-select-option value="16">16</ion-select-option>
+              <ion-select-option value="18">18</ion-select-option>
+            </ion-select>
+          </div>
+         
+      </div>
       </app-step-container-item>
     </app-step-container>
 
