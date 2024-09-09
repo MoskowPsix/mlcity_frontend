@@ -64,7 +64,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
 
   count: number = 0
-  //@Input() type?: number
+
   mobile: boolean = false
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
@@ -93,7 +93,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 4
+  stepCurrency: number = 1
   createObj: any = {}
   dataValid: boolean = true
   openModalImgs: boolean = false
@@ -133,7 +133,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   sightsList: any[] = []
   dectedDataIvalid: boolean = false
   priceArrayForm: any[] = []
-  maxStepsCount: number = 6
+  entranceFree: boolean = true
+  maxStepsCount: number = 4
   isNextButtonClicked: boolean = false
   placeValid: boolean = false
   seansValid: boolean = false
@@ -145,12 +146,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   selectedOrganization!: IOrganization
   formatingTimeStart: string = ''
   formatingTimeEnd: string = ''
-  //nextButtonDisable: boolean = false
 
   modalSelectedOrganization!: boolean
 
   placemark!: ymaps.Placemark
-  // map!:YaReadyEvent<ymaps.Map>
+
   maps: any[] = []
   createEventForm: FormGroup = new FormGroup({})
 
@@ -166,10 +166,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     private vkService: VkService,
     private eventTypeService: EventTypeService,
     private statusesService: StatusesService,
-    private mapService: MapService,
     private sanitizer: DomSanitizer,
     private router: Router,
-    private yaGeocoderService: YaGeocoderService,
     private organizationService: OrganizationService,
     private location: Location,
   ) {}
@@ -178,13 +176,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   stepNext() {
     if (this.stepCurrency <= this.maxStepsCount) {
       this.stepCurrency++
-      console.log(this.stepCurrency)
     }
   }
 
   //Клик по нкопке назад
   stepPrev() {
-    if (this.stepCurrency > 0) {
+    if (this.stepCurrency - 1 > 0) {
       this.stepCurrency--
     } else {
       this.location.back()
@@ -193,6 +190,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   onAdd(event: Event) {
     this.count++
+  }
+  logForm() {
+    console.log(this.createEventForm.value)
   }
 
   deleteVkFiles(event: any) {
@@ -230,12 +230,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }),
         switchMap((user: any) => {
           if (!user?.social_account || user?.social_account.provider != 'vkontakte') {
-            // this.toastService.showToast(
-            //   MessagesErrors.vkGroupSearch,
-            //   'secondary',
-            // )
           } else {
-            // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
             return this.vkService.getGroups().pipe(
               switchMap((response: any) => {
                 response?.response.items ? this.setVkGroups(response?.response.items) : this.setVkGroups([])
@@ -255,9 +250,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           }
           return of(EMPTY)
         }),
-        tap(() => {
-          this.setSteps()
-        }),
+        tap(() => {}),
         tap(() => {
           this.loadingService.hideLoading()
         }),
@@ -330,18 +323,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.openModalGroupValue = false
   }
 
-  //Устанавливаем шаги
-  setSteps() {
-    // if(this.vkGroups){
-    //   this.stepStart = 1
-    //   this.stepCurrency = 1
-    // } else {
-    //   this.stepStart = 1
-    //   this.stepCurrency = 1
-    //   //this.nextButtonDisable = true
-    // }
-  }
-
   //Выбираем группу
   selectedVkGroup(group_id: any) {
     if (group_id.detail.value) {
@@ -363,23 +344,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         response.response ? (this.vkGroupPostsLoaded = true) : (this.vkGroupPostsLoaded = false) //для скелетной анимации
       })
   }
-  // Грузим посты по URL сообщества
-  // setVkPostsByGroupURL() {
-  //    this.vkService.getGroupeIdUrl(this.inputValue).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-  //     let group_id: number
-  //     group_id = response.response[0].id - response.response[0].id - response.response[0].id
-  //     this.setVkPostsByGroupID(group_id)
-  //   })
-  // }
+
   onFocusPlace(event: any) {
     this.inputValue = event.detail.value
   }
-
-  // getVideo(owner_id: number, video_id: number) {
-  //   let vid = this.vkService.getVideo(owner_id, video_id)
-  //   console.log(vid)
-  //   return vid
-  // }
   //Выбираем пост
   selectedVkGroupPost(post: any) {
     let tempArray: any[] = []
@@ -408,37 +376,73 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Получаем типы мероприятий
   getTypes() {
+    this.loadingService.showLoading()
     this.eventTypeService
       .getTypes()
       .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
         this.types = response.types
+        this.loadingService.hideLoading()
         this.typesLoaded = true
       })
   }
-  setLocationForCoords(coords: number[], num: number) {
-    this.locationLoader = true
-    this.locationServices
-      .getLocationByCoords(coords)
-      .pipe(
-        delay(100),
-        retry(2),
-        catchError((err) => {
-          this.toastService.showToast(MessagesErrors.LocationSearchError, 'warning')
-          this.locationLoader = false
-          return of(EMPTY)
-        }),
-      )
-      .subscribe((response: any) => {
-        this.createEventForm.value.places[num].patchValue({
-          locationId: response.location.id,
-        })
-        this.placeArrayForm[num].city = response.location.name
-        this.placeArrayForm[num].region = response.location.location_parent.name
-        this.locationLoader = false
-      })
-  }
 
+  stepInvalidate() {
+    if (this.createEventForm.value) {
+      switch (this.stepCurrency) {
+        case 1:
+          if (
+            this.createEventForm.value.name.length <= 3 ||
+            !this.createEventForm.value.type.length ||
+            (this.userHasOrganization && !this.createEventForm.value.organization_id)
+          ) {
+            return true
+          } else {
+            return false
+          }
+
+        case 2:
+          return false
+        case 3:
+          let allPlacesValid = true
+          if (this.createEventForm.value.places.length == 0) {
+            allPlacesValid = false
+          }
+          this.createEventForm.value.places.forEach((place: any) => {
+            if (place.seances.length == 0 || place.address.length == 0) {
+              allPlacesValid = false
+            }
+            place.seances.forEach((seance: any) => {
+              if (!seance.date_start) {
+                allPlacesValid = false
+              }
+            })
+          })
+          return !allPlacesValid
+        case 4:
+          if (this.createEventForm.value.price.length > 0) {
+            let freeEntries = true
+            this.createEventForm.value.price.forEach((price: any) => {
+              if (Number(price.cost_rub > 0)) {
+                freeEntries = false
+              }
+            })
+            if (!freeEntries && this.createEventForm.value.materials.length == 0) {
+              return true
+            } else {
+              return false
+            }
+          } else {
+            return false
+          }
+
+        default:
+          return false
+      }
+    } else {
+      return true
+    }
+  }
   //ловим еммит и устанавливаем значение
   receiveType(event: Event) {
     let status = false
@@ -454,16 +458,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.createEventForm.value.type.push(Number(event))
     }
   }
-
-  //Выбор типа
-  // selectedType(type_id: any){
-  //   //костыль на проверку id или icordeon
-  //   if(/^\d+$/.test(type_id.detail.value)){
-  //     type_id.detail.value ? this.typeSelected = type_id.detail.value  :  this.typeSelected =  null
-  //   }
-  //   //Хоть и кринж лютый но работает!!!!!!!!
-  // }
-
+  setValuePrice(event: any) {
+    let id = event.temp_id
+    let index = this.createEventForm.value.price.map((e: any) => e.temp_id).indexOf(event.temp_id)
+    this.createEventForm.value.price[index].cost_rub = event.cost_rub
+    this.createEventForm.value.price[index].descriptions = event.descriptions
+    this.createEventForm.value.price
+  }
   //Получаем статусы и устанавливаем статус по умолчанию
   getStatuses() {
     this.statusesService
@@ -485,163 +486,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       })
   }
 
-  //получаем Place
-  getPlaceId(place: any) {
-    let placeHtml: HTMLElement = place
-    this.placeOpen = placeHtml.id
-
-    this.placesClose[placeHtml.id].open = !this.placesClose[placeHtml.id].open
-  }
   //Выбор типа
   selectedStatus(status_id: any) {
     status_id.detail.value ? (this.statusSelected = status_id.detail.value) : (this.statusSelected = null)
   }
-  //При клике ставим метку, если метка есть, то перемещаем ее
-  onMapClick(e: YaEvent<ymaps.Map>, num: number) {
-    const { target, event } = e
-    this.setLocationForCoords([event.get('coords')[0], event.get('coords')[1]], num)
-    // this.createEventForm.value.places[num].patchValue({address: this.mapService.ReserveGeocoderNative([event.get('coords')[0], event.get('coords')[1]])})
-    this.createEventForm.value.places[num].patchValue({
-      coords: [event.get('coords')[0], event.get('coords')[1]],
-    })
-    // this.createEventForm.value.places[num].value.coords=[event.get('coords')[0].toPrecision(6), event.get('coords')[1].toPrecision(6)]
-    this.maps[num].target.geoObjects.removeAll()
-    this.placemark = new ymaps.Placemark(this.createEventForm.value.places[num].value.coords)
-    this.maps[num].target.geoObjects.add(this.placemark)
-    if (!Capacitor.isNativePlatform()) {
-      this.ReserveGeocoder(num)
-    } else {
-      // this.createEventForm.value.places[num].patchValue({address: this.mapService.ReserveGeocoderNative(this.createEventForm.value.coords)})
-      this.ReserveGeocoder(num)
-    }
-    this.maps[num].target.geoObjects.removeAll()
-    this.maps[num].target.geoObjects.add(new ymaps.Placemark([event.get('coords')[0], event.get('coords')[1]]))
-    this.maps[num].target.setBounds(
-      new ymaps.Placemark([event.get('coords')[0], event.get('coords')[1]]).geometry?.getBounds()!,
-      { checkZoomRange: false },
-    )
-    this.maps[num].target.setZoom(17)
-  }
 
-  // Поиск по улицам
-  onMapReady(e: YaReadyEvent<ymaps.Map>, num: number) {
-    this.maps[num] = e
-    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value) {
-      const coords: number[] = [
-        Number(this.filterService.getLocationLatitudeFromlocalStorage()),
-        Number(this.filterService.getLocationLongitudeFromlocalStorage()),
-      ]
-      this.addPlacemark(coords, num)
-    } else {
-      this.mapService.geolocationMapNative(this.maps[num])
-    }
-    const search = new ymaps.SuggestView('search-map-' + num)
-
-    search.events.add('select', () => {
-      this.ForwardGeocoder(num)
-      if (!Capacitor.isNativePlatform()) {
-        this.ForwardGeocoder(num)
-      } else {
-        // this.createEventForm.value.places[num].value.address=(<HTMLInputElement>document.getElementById("search-map"+num)).value
-        // let coords = this.mapService.ForwardGeocoderNative(this.createEventForm.value.places[num].value.address)
-        // this.addPlacemark(coords!)
-        this.ForwardGeocoder(num)
-      }
-    })
-  }
-
-  //При выборе из выпадающего списка из поиска создает метку по адресу улицы
-  addPlacemark(coords: number[], num: number) {
-    try {
-      this.maps[num].target.geoObjects.removeAll()
-      this.placemark = new ymaps.Placemark(coords)
-      this.maps[num].target.geoObjects.add(this.placemark)
-      // this.createEventForm.value.coords=this.placemark.geometry?.getCoordinates()
-      this.createEventForm.patchValue({
-        coords: this.placemark.geometry?.getCoordinates(),
-      })
-      //центрирование карты по метки и установка зума
-      this.maps[num].target.setBounds(this.placemark.geometry?.getBounds()!, {
-        checkZoomRange: false,
-      })
-      this.maps[num].target.setZoom(17)
-    } catch (error) {}
-  }
-
-  ReserveGeocoder(num: number): void {
-    // Декодирование координат
-    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.places[num].value.coords, {
-      results: 1,
-    })
-    geocodeResult.subscribe((result: any) => {
-      const firstGeoObject = result.geoObjects.get(0)
-
-      //this.city=firstGeoObject.getLocalities(0)[0]
-      this.createEventForm.controls['places'].value[num].patchValue({
-        address: firstGeoObject.getAddressLine(),
-      })
-      //this.createEventForm.value.address = firstGeoObject.getAddressLine()
-    })
-  }
-
-  ForwardGeocoder(num: number): void {
-    this.createEventForm.controls['places'].value[num].patchValue({
-      address: (<HTMLInputElement>document.getElementById('search-map-' + num)).value,
-    })
-    const geocodeResult = this.yaGeocoderService.geocode(this.createEventForm.value.places[num].value.address, {
-      results: 1,
-    })
-    geocodeResult.subscribe((result: any) => {
-      const firstGeoObject = result.geoObjects.get(0)
-      this.addPlacemark(firstGeoObject.geometry.getCoordinates(), num)
-      this.createEventForm.controls['places'].value[num].patchValue({
-        coords: firstGeoObject.geometry.getCoordinates(),
-      })
-      this.setLocationForCoords(firstGeoObject.geometry.getCoordinates(), num)
-      //this.city=firstGeoObject.getLocalities(0)[0]
-    })
-  }
-
-  //очистка поиска на карте
-  clearSearche(event: any, num: number) {
-    if (event.detail.value == 0) {
-      this.createEventForm.patchValue({ coords: [] })
-      this.placemark = new ymaps.Placemark([])
-      this.maps[num].target.geoObjects.removeAll()
-    }
-  }
-
-  // renderPreview() {
-  //   this.allFiles = this.uploadFiles.concat(this.vkFiles)
-  //   let reader = new FileReader()
-  //   if (this.allFiles.length > 0) {
-  //     if (this.allFiles[0].size) {
-  //       reader.readAsDataURL(this.allFiles[0])
-  //       reader.onload = () => {
-  //         this.coverUrl = reader.result as string
-  //       }
-  //     } else {
-  //       this.coverUrl = this.allFiles[0].link
-  //     }
-  //   } else {
-  //     this.coverUrl = ''
-  //   }
-  // }
   //Загрузка фото
   onFileChange(event: File[]) {
     this.uploadFiles = event
-    // console.log(this.uploadFiles)
-    // console.log(event)
-
-    // this.resetUploadInfo()
-
-    // for (var i = 0; i < event.target.files.length; i++) {
-    //   this.uploadFiles.push(event.target.files[i])
-    // }
-
-    // this.createEventForm.patchValue({ files: '' }) // Если не обнулять будет ошибка
-
-    // this.createImagesPreview()
   }
 
   resetUploadInfo() {
@@ -709,114 +561,43 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
 
     this.formData.append('name', this.createEventForm.controls['name'].value)
-    this.formData.append('sponsor', this.createEventForm.controls['sponsor'].value)
-    this.formData.append('description', this.createEventForm.controls['description'].value)
+    this.createEventForm.value.description.length > 0
+      ? this.formData.append('description', this.createEventForm.controls['description'].value)
+      : null
     this.formData.append('organization_id', this.createEventForm.controls['organization_id'].value)
-    // this.formData.append('coords', this.createEventForm.controls['coords'].value)
-    // this.formData.append('address', this.createEventForm.controls['address'].value)
-    // this.formData.append('city', this.city)
+
     this.formData.append('type', this.createEventForm.controls['type'].value)
     this.formData.append('status', this.createEventForm.controls['status'].value)
+    this.formData.append('ageLimit', this.createEventForm.controls['ageLimit'].value)
 
     this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
-      this.formData.append(`prices[${i}][cost_rub]`, item.controls.cors_rub.value)
-      this.formData.append(`prices[${i}][descriptions]`, item.controls.description.value)
+      this.formData.append(`prices[${i}][cost_rub]`, item.cost_rub)
+      this.formData.append(`prices[${i}][descriptions]`, item.descriptions)
     })
 
     this.formData.append('materials', this.createEventForm.controls['materials'].value)
-    this.formData.append('dateStart', this.createEventForm.controls['dateStart'].value)
-    this.formData.append('dateEnd', this.createEventForm.controls['dateEnd'].value)
+    this.formData.append('dateStart', this.createEventForm.value.dateStart)
+    this.formData.append('dateEnd', this.createEventForm.value.dateStart)
     this.formData.append('places[]', this.createEventForm.controls['places'].value)
-
     this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
-      this.formData.append(`places[${i}][address]`, item.controls.address.value)
-      this.formData.append(`places[${i}][coords]`, item.controls.coords.value)
-      this.formData.append(`places[${i}][locationId]`, item.controls.locationId.value)
-      this.formData.append(`places[${i}][sightId]`, item.controls.sight_id.value)
-      item.controls.seances.value.forEach((item_sean: any, i_sean: number) => {
-        this.formData.append(`places[${i}][seances][${i_sean}][dateStart]`, item_sean.controls.dateStart.value)
-        this.formData.append(`places[${i}][seances][${i_sean}][dateEnd]`, item_sean.controls.dateEnd.value)
+      this.formData.append(`places[${i}][address]`, item.address)
+      this.formData.append(`places[${i}][coords]`, item.coords)
+      this.formData.append(`places[${i}][locationId]`, item.location_id)
+      item.seances.forEach((item_sean: any, i_sean: number) => {
+        this.formData.append(`places[${i}][seances][${i_sean}][dateStart]`, item_sean.date_start)
+        this.formData.append(`places[${i}][seances][${i_sean}][dateEnd]`, item_sean.date_start)
       })
     })
 
     this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null)
-    // if (this.vkGroupPostSelected?.likes.count){
-    //   this.formData.append('vkLikesCount', this.vkGroupPostSelected?.likes.count)
-    // }
     if (this.vkGroupSelected && this.vkGroupPostSelected?.id) {
       this.formData.append('vkGroupId', this.vkGroupSelected.toString())
     }
     return this.formData
   }
-
-  testTime(event: any, place: any, seans: any, param: any) {
-    if (param === 'start') {
-      this.formatingTimeStart = this.createEventForm.value.places[place].value.seances[seans].value.dateStart.slice(
-        0,
-        11,
-      )
-      if (event.target.value.length == 5) {
-        this.formatingTimeStart = this.formatingTimeStart + event.target.value + ':00' + '+00:00'
-        this.createEventForm.value.places[place].value.seances[seans].patchValue({
-          dateStart: this.formatingTimeStart,
-        })
-        this.startTime = event.target.value
-        if (
-          this.createEventForm.value.places[place].value.seances[seans].value.dateStart >=
-          this.createEventForm.value.places[place].value.seances[seans].value.dateEnd
-        ) {
-          let splitDate: string =
-            this.createEventForm.value.places[place].value.seances[seans].value.dateStart.split('T')[0]
-          let splitMinuts = this.createEventForm.value.places[place].value.seances[seans].value.dateStart
-            .split('T')[1]
-            .split(':')[1]
-          let splitBelt: string = this.createEventForm.value.places[place].value.seances[seans].value.dateStart
-            .split('T')[1]
-            .split('+')[1]
-          let newTime: number =
-            +this.createEventForm.value.places[place].value.seances[seans].value.dateStart
-              .split('T')[1]
-              .split('+')[0]
-              .split(':')[0] + 1
-
-          this.createEventForm.value.places[place].value.seances[seans].patchValue({
-            dateEnd: splitDate + 'T' + newTime + ':' + splitMinuts + ':' + '00' + '+' + '00',
-          })
-        }
-      }
-    } else if (param === 'end') {
-      this.formatingTimeEnd = this.createEventForm.value.places[place].value.seances[seans].value.dateEnd.slice(0, 11)
-      if (event.target.value.length == 5) {
-        this.formatingTimeEnd = this.formatingTimeEnd + event.target.value + ':00' + '+00:00'
-        this.createEventForm.value.places[place].value.seances[seans].patchValue({
-          dateEnd: this.formatingTimeEnd,
-        })
-        this.startTime = event.target.value
-      }
-    }
+  setAgeLimit(event: any) {
+    this.createEventForm.controls['ageLimit'].setValue(event.target.value)
   }
-
-  testDate(event: any, place: any, seans: any, param: any) {
-    let thisSeansTimeStart = this.createEventForm.value.places[place].value.seances[seans].value.dateStart.split('T')[1]
-    let thisSeansTimeEnd = this.createEventForm.value.places[place].value.seances[seans].value.dateEnd.split('T')[1]
-
-    if (param === 'start') {
-      let str = event.target.value
-      let index = str.indexOf('T')
-      this.formatingTimeStart = str.slice(0, index) + 'T' + thisSeansTimeStart
-      this.createEventForm.value.places[place].value.seances[seans].patchValue({
-        dateStart: this.formatingTimeStart,
-      })
-    } else if (param === 'end') {
-      let str = event.target.value
-      let index = str.indexOf('T')
-      this.formatingTimeEnd = str.slice(0, index) + 'T' + thisSeansTimeEnd
-      this.createEventForm.value.places[place].value.seances[seans].patchValue({
-        dateEnd: this.formatingTimeEnd,
-      })
-    }
-  }
-
   detectedDataInvalid() {
     let dataStart: any = new Date(this.createEventForm.controls['dateStart'].value)
     let dataEnd: any = new Date(this.createEventForm.controls['dateEnd'].value).getTime()
@@ -845,33 +626,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }
       case 2:
         return false
-      // //шаг третий
-      // if(this.uploadFiles.length == 0 && this.createEventForm.controls['description'].invalid ||  this.createEventForm.hasError('dateInvalid')){
-      //   if( dataEnd <= dataEndPlus){
-      //     this.dataValid = false
-      //   }else{
-      //     this.dataValid = true
-      //   }
-      //   // console.log(dataStart)
-      //   // console.log(dataEnd)
 
-      //   return true
-
-      // }
-      // else if(this.uploadFiles.length !== 0){
-      //   console.log('Можно')
-      //   return false
-      // }
-      // else if(this.vkGroupPostSelected.attachments.length >= 1){
-      //   return false
-      // }
-      // else{
-      //   return false
-      // }
       case 3:
-        // let placeValid:boolean = false
-        // let seansValid:boolean = false
-
         this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
           item.controls.seances.value.forEach((item_sean: any, i_sean: number) => {
             if (item_sean.controls.dateStart.value >= item_sean.controls.dateEnd.value) {
@@ -933,8 +689,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
               this.createEventForm.value.dateEnd.split('T')[0] +
               ' ' +
               this.createEventForm.value.dateEnd.split('T')[1].split('+')[0],
-            description: this.createEventForm.value.description,
-            sponsor: this.createEventForm.value.sponsor,
+
             price: this.createEventForm.value.price,
             places: this.createEventForm.value.places,
             files: this.imagesPreview,
@@ -945,20 +700,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         return false
       default:
         return true
-    }
-  }
-
-  createDoubleForm() {}
-
-  getMessage(): string {
-    if (!this.placeValid && !this.seansValid) {
-      return 'Выберите место и время мероприятия, чтобы перейти на следующий шаг'
-    } else if (!this.placeValid) {
-      return 'Выберите место мероприятия, чтобы перейти на следующий шаг'
-    } else if (!this.seansValid) {
-      return 'Выберите время мероприятия, чтобы перейти на следующий шаг'
-    } else {
-      return ''
     }
   }
 
@@ -988,152 +729,98 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  //Проверка шагов и блокировка \ разблокировка кнопок далее \ назад
-  // disabledNextButton(){
-  //   switch (this.stepCurrency) {
-  //     case 1:
-  //     case 2:
-  //     // case 10:
-  //     // case 11:
-  //     // case 12:
-  //      this.nextButtonDisable = false
-  //       break
-  //     case 3:
-  //      this.createEventForm.controls['name'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break
-  //     case 4:
-  //       this.createEventForm.controls['description'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break
-  //     case 6:
-  //       this.createEventForm.hasError('dateInvalid') ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break
-  //     case 7:
-  //       this.createEventForm.controls['sponsor'].invalid  ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break
-  //     case 9:
-  //       !this.createEventForm.controls['coords'].value.length ? this.nextButtonDisable = true : this.nextButtonDisable = false
-  //       break
-  //     default:
-  //       break
-  //   }
-  // }
-
   //Отпрвка формы
 
   onSubmit() {
     this.searchMinSeans()
+    this.createEventForm.value.files = this.uploadFiles
     this.nullPrice()
     //собираем плейсы
     let event = this.createFormData() // собираем формдату
-    this.createEventForm.disable()
     this.loadingService.showLoading()
     this.eventsService
       .create(event)
-      .pipe(
-        tap((res) => {
-          this.loadingService.hideLoading()
-          this.toastService.showToast(MessagesEvents.create, 'success')
-          this.createEventForm.reset()
-          this.resetUploadInfo()
-          this.vkGroupPostSelected = null
-          this.createEventForm.controls['name'].reset()
-          this.createEventForm.controls['description'].reset()
-          // this.createEventForm.controls['address'].reset()
-          // this.createEventForm.controls['coords'].reset()
-          this.createEventForm.controls['files'].reset()
-          this.createEventForm.controls['price'].reset()
-          this.createEventForm.controls['materials'].reset()
-          this.createEventForm.controls['places'].reset()
-          //this.city = ''
-          this.createEventForm.enable()
-          this.stepCurrency = this.stepStart
+      .pipe()
+      .subscribe((res) => {
+        console.log(res)
+      })
+    //отправляем форму
+    // this.createEventForm.disable()
+    // this.loadingService.showLoading()
+    // this.eventsService
+    //   .create(event)
+    //   .pipe(
+    //     tap((res) => {
+    //       this.loadingService.hideLoading()
+    //       this.toastService.showToast(MessagesEvents.create, 'success')
+    //       this.createEventForm.reset()
+    //       this.resetUploadInfo()
+    //       this.vkGroupPostSelected = null
+    //       this.createEventForm.controls['name'].reset()
+    //       this.createEventForm.controls['description'].reset()
+    //       this.createEventForm.controls['files'].reset()
+    //       this.createEventForm.controls['price'].reset()
+    //       this.createEventForm.controls['materials'].reset()
+    //       this.createEventForm.controls['places'].reset()
+    //       this.createEventForm.enable()
+    //       this.stepCurrency = this.stepStart
 
-          this.router.navigate(['/home'])
-        }),
-        catchError((err) => {
-          console.log(err)
-          this.toastService.showToast(err.error.message || MessagesErrors.default, 'danger')
-          this.createEventForm.enable()
-          this.loadingService.hideLoading()
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe()
+    //       this.router.navigate(['/home'])
+    //     }),
+    //     catchError((err) => {
+    //       console.log(err)
+    //       this.toastService.showToast(err.error.message || MessagesErrors.default, 'danger')
+    //       this.createEventForm.enable()
+    //       this.loadingService.hideLoading()
+    //       return of(EMPTY)
+    //     }),
+    //     takeUntil(this.destroy$),
+    //   )
+    //   .subscribe()
   }
 
-  addPlaceForm() {
-    let locId: any
-    let coords: any
-
-    this.placesClose.push({ open: true })
-
+  addPlace() {
+    let tempPlace = {
+      temp_id: this.createEventForm.value.places.length,
+      latitude: '',
+      longitude: '',
+      address: '',
+      seances: [],
+    }
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      locId = value
+      let locId = value
       if (value) {
         this.locationServices
           .getLocationsIds(locId)
           .pipe(takeUntil(this.destroy$))
-          .subscribe((response: any) => {
-            coords = [response.location.latitude, response.location.longitude]
-            this.placeArrayForm.push({
-              city: response.location.name,
-              region: response.location.location_parent.name,
-              sight_id: '',
-              sight_name: '',
-              address: '',
-              coords: coords,
-              seances: [{ num_s: 0 }],
-            })
+          .subscribe((responce: any) => {
+            tempPlace.latitude = responce.location.latitude
+            tempPlace.longitude = responce.location.longitude
           })
-      } else {
-        locId = ''
-        coords = ['', '']
-        this.placeArrayForm.push({
-          city: 'Не указан',
-          region: 'Не указан',
-          sight_id: '',
-          sight_name: '',
-          address: '',
-          seances: [{ num_s: 0 }],
-        })
       }
     })
 
-    this.createEventForm.controls['places'].value.push(
-      new FormGroup({
-        sight_id: new FormControl('', [Validators.minLength(1)]),
-        locationId: new FormControl(locId, [Validators.minLength(1), Validators.required]),
-        coords: new FormControl(coords, [Validators.required, Validators.minLength(2)]),
-        address: new FormControl('', [Validators.minLength(1), Validators.required]),
-        seances: new FormControl(
-          [
-            new FormGroup({
-              //заметка
-              dateStart: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00', [
-                Validators.required,
-              ]),
-              dateEnd: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00', [
-                Validators.required,
-              ]),
-            }),
-          ],
-          [Validators.required],
-        ),
-      }),
-    )
+    this.createEventForm.value.places.push(tempPlace)
+  }
+  deletePlace(placeId: any) {
+    this.createEventForm.value.places.splice(placeId, 1)
   }
   addPrice() {
-    this.priceArrayForm.push({ price: '' })
-    this.createEventForm.controls['price'].value.push(
-      new FormGroup({
-        cors_rub: new FormControl('', []),
-        description: new FormControl('', [Validators.required, Validators.minLength(5)]),
-      }),
-    )
+    this.entranceFree = false
+    this.createEventForm.value.price.push({
+      temp_id: this.createEventForm.value.price.length,
+      cost_rub: '',
+      descriptions: '',
+    })
   }
   deletePrice(num: number) {
-    this.createEventForm.controls['price'].value.splice(num, 1)
+    if (this.createEventForm.controls['price'].value.length > 1) {
+      this.createEventForm.controls['price'].value.splice(num, 1)
+    } else {
+      this.entranceFree = true
+      this.createEventForm.controls['price'].value.splice(num, 1)
+      this.entranceFree = true
+    }
   }
 
   deletePlaceForm(num: number) {
@@ -1141,31 +828,40 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.createEventForm.controls['places'].value.splice(num, 1)
   }
 
-  deleteSeanceForm(num: number, num_s: number) {
-    this.placeArrayForm[num].seances.splice(num_s, 1)
-    this.createEventForm.controls['places'].value[num].value.seances.splice(num_s, 1)
-  }
-
-  addSeances(num: number) {
-    this.placeArrayForm[num].seances.push({})
-    this.createEventForm.controls['places'].value[num].controls.seances.value.push(
-      new FormGroup({
-        dateStart: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00', [
-          Validators.required,
-        ]),
-        dateEnd: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00', [Validators.required]),
-      }),
-    )
-  }
-
-  public formatingTimeToInput(str: string, param: string): string | Date {
-    let date: string | Date = ''
-    if (param === 'standart') {
-      date = str.split('+')[0]
-    } else if (param === 'iso') {
-      date = new Date(str.split('+')[0]).toISOString()
+  addSeances(event: number) {
+    // this.placeArrayForm[num].seances.push({})
+    // this.createEventForm.controls['places'].value[num].controls.seances.value.push(
+    //   new FormGroup({
+    //     temp_id: new FormControl(1, [Validators.required]),
+    //     dateStart: new FormControl('', [Validators.required]),
+    //   }),
+    // )
+    if (this.createEventForm.value.places[event].seances) {
+      this.createEventForm.value.places[event].seances.push({
+        temp_id: this.createEventForm.value.places[event].seances.length,
+        date_start: '',
+      })
     }
-    return date
+  }
+  deleteSeances(seance: any) {
+    let seanceIndex = this.createEventForm.value.places[seance.placeId].seances
+      .map((e: any) => e.temp_id)
+      .indexOf(seance.temp_id)
+    this.createEventForm.value.places[seance.placeId].seances.splice(seanceIndex, 1)
+  }
+  editSeances(seance: any) {
+    let seanceIndex = this.createEventForm.value.places[seance.placeId].seances
+      .map((e: any) => e.temp_id)
+      .indexOf(seance.temp_id)
+    this.createEventForm.value.places[seance.placeId].seances[seanceIndex].date_start = seance.date_start
+  }
+  editAddress(event: any) {
+    let index = event.placeId
+    this.createEventForm.value.places[index].location_id = event.location_id
+    this.createEventForm.value.places[index].address = event.address
+    this.createEventForm.value.places[index].coords = [event.latitude, event.longitude]
+    this.createEventForm.value.places[index].latitude = event.latitude
+    this.createEventForm.value.places[index].longitude = event.longitude
   }
 
   getCityes(event: any) {
@@ -1200,89 +896,23 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.sightsListLoading = false
     this.sightsList = []
   }
-  setCityes(item: any, num: number) {
-    this.placeArrayForm[num].city = item.name
-    this.placeArrayForm[num].region = item.location_parent.name
-    this.createEventForm.value.places[num].patchValue({ locationId: item.id })
-    this.maps[num].target.geoObjects.removeAll()
-    // this.placemark = new ymaps.Placemark([item.latitude, item.longitude])
-    this.maps[num].target.geoObjects.add(new ymaps.Placemark([item.latitude, item.longitude]))
-    this.maps[num].target.setBounds(new ymaps.Placemark([item.latitude, item.longitude]).geometry?.getBounds()!, {
-      checkZoomRange: false,
-    })
-    this.maps[num].target.setZoom(17)
-    this.onClearSearch()
-  }
-
-  getSight(event: any, num: number) {
-    if (event.target.value.length >= 3) {
-      this.sightsListLoading = true
-      this.sightServices
-        .getSights({
-          searchText: event.target.value,
-          locationId: this.createEventForm.value.places[num].value.locationId,
-          limit: 100,
-        })
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((response: any) => {
-          this.sightsList = response.sights.data
-          this.sightsListLoading = false
-        })
-    }
-  }
-
-  setSight(item: any, num: number) {
-    this.placeArrayForm[num].sight_name = item.name
-    this.createEventForm.value.places[num].patchValue({
-      sight_id: item.id,
-      coords: [item.latitude, item.longitude],
-      address: item.address,
-    })
-    this.addPlacemark([item.latitude, item.longitude], num)
-    this.onClearSearch()
-  }
 
   //ищем минимальный и максимальный плейс
 
   searchMinSeans() {
-    const pad = (number: any) => (number < 10 ? '0' + number : number)
-    let dateStart = new Date(this.createEventForm.value.places[0].value.seances[0].value.dateStart.split('+')[0])
-
-    let dateEnd = new Date(this.createEventForm.value.places[0].value.seances[0].value.dateEnd.split('+')[0])
-
-    let minSeans: any = {
-      value: {
-        dateStart: `${dateStart.getFullYear()}-${pad(dateStart.getMonth() + 1)}-${pad(dateStart.getDate())}T${pad(dateStart.getHours())}:${pad(dateStart.getMinutes())}:${pad(dateStart.getSeconds())}`,
-        dateEnd: `${dateEnd.getFullYear()}-${pad(dateEnd.getMonth() + 1)}-${pad(dateEnd.getDate())}T${pad(dateEnd.getHours())}:${pad(dateEnd.getMinutes())}:${pad(dateEnd.getSeconds())}`,
-      },
-    }
-
-    let maxSeans: any = {
-      value: {
-        dateStart: `${dateStart.getFullYear()}-${pad(dateStart.getMonth() + 1)}-${pad(dateStart.getDate())}T${pad(dateStart.getHours())}:${pad(dateStart.getMinutes())}:${pad(dateStart.getSeconds())}`,
-        dateEnd: `${dateEnd.getFullYear()}-${pad(dateEnd.getMonth() + 1)}-${pad(dateEnd.getDate())}T${pad(dateEnd.getHours())}:${pad(dateEnd.getMinutes())}:${pad(dateEnd.getSeconds())}`,
-      },
-    }
-    // minSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
-    // maxSeans = this.createEventForm.controls['places'].value[i].controls.seances.value[0]
-    this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
-      item.controls['seances'].value.forEach((item_sean: any, i_sean: number) => {
-        if (item_sean.value.dateStart < minSeans.value.dateStart) {
-          minSeans = item_sean
-        }
-        if (item_sean.value.dateEnd > maxSeans.value.dateEnd) {
-          maxSeans = item_sean
+    let minSeance = this.createEventForm.value.places[0].seances[0].date_start
+    this.createEventForm.value.places.forEach((place: any) => {
+      place.seances.forEach((seance: any) => {
+        if (seance.date_start < minSeance) {
+          minSeance = seance.date_start
         }
       })
     })
+    this.createEventForm.value.dateStart = minSeance
 
-    this.createEventForm.controls['dateStart'].setValue(minSeans.value.dateStart.slice(0, 19))
-    this.createEventForm.controls['dateEnd'].setValue(maxSeans.value.dateEnd.slice(0, 19))
+    this.createEventForm.value.dateEnd = minSeance
   }
 
-  setValueDateDefault() {
-    this.dateTomorrow.setDate(this.dateTomorrow.getDate() + 1)
-  }
   ngOnInit() {
     this.organizationService
       .getUserOrganizations()
@@ -1291,7 +921,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.organizations = res.organizations.data
       })
     this.checkHasUserOrganizations()
-    this.setValueDateDefault()
     this.mobileOrNote()
     let locationId: any
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -1301,28 +930,55 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.createEventForm = new FormGroup(
       {
         name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-        sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
         organization_id: new FormControl('', [Validators.required]),
         description: new FormControl('', [Validators.required, Validators.minLength(10)]),
         places: new FormControl([], [Validators.required]),
         type: new FormControl([], [Validators.required]),
+        ageLimit: new FormControl(0, [Validators.required]),
         status: new FormControl({ value: this.statusSelected, disabled: false }, [Validators.required]),
         files: new FormControl('', fileTypeValidator(['png', 'jpg', 'jpeg'])),
         price: new FormControl([], [Validators.required]),
         materials: new FormControl('', [Validators.minLength(1)]),
-        dateStart: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T12:00:00+00', [
-          Validators.required,
-        ]),
-        dateEnd: new FormControl(this.dateTomorrow.toISOString().split('T')[0] + 'T15:00:00+00', [Validators.required]),
+        dateStart: new FormControl('', [Validators.required]),
+        dateEnd: new FormControl('', [Validators.required]),
       },
       [dateRangeValidator],
     )
 
     this.getUserWithSocialAccount()
-    this.addPlaceForm()
+    this.addPlace()
     this.getTypes()
     this.getStatuses()
-    this.addPrice()
+  }
+  clearFormOfTempData() {
+    // let tempForm = _.cloneDeep(this.editForm)
+    if (this.createEventForm.value.price) {
+      this.createEventForm.value.price.forEach((price: any) => {
+        if (price.temp_id) {
+          delete price.temp_id
+        }
+      })
+    }
+    if (this.createEventForm.value.types) {
+      this.createEventForm.value.types.forEach((type: any) => {
+        if (type.temp_id) {
+          delete type.temp_id
+        }
+      })
+    }
+
+    if (this.createEventForm.value.places) {
+      this.createEventForm.value.places.forEach((place: any) => {
+        if (place.temp_id) {
+          delete place.temp_id
+        }
+        place.seances.forEach((seance: any) => {
+          if (seance.temp_id) {
+            delete seance.temp_id
+          }
+        })
+      })
+    }
   }
 
   ngOnDestroy() {
@@ -1330,15 +986,4 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.destroy$.next()
     this.destroy$.complete()
   }
-  // ngAfterViewInit() {
-  //   register()
-  //   this.cdr.detectChanges()
-  //   // this.swiperRef.changes.pipe(takeUntil(this.destroy$)).subscribe((res:any) => {
-  //   //   this.swiper = res.first.nativeElement.swiper
-  //   //   console.log(res.first.nativeElement.swiper)
-  //   // });
-
-  //   // this.swiper?.update()
-  //   //console.log(this.swiper)
-  // }
 }

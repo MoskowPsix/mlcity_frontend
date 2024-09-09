@@ -53,8 +53,23 @@
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-
-
+.place-container_add-new-place-button{
+  padding-top: 1rem;
+}
+.not-found-span-container{
+  padding-top: 1rem;
+}
+.not-found-span{
+  font-size: 0.75rem;
+  color: #21272b;
+  font-family: var(--font-regular);
+}
+.select-old{
+  padding-top: 0.5rem;
+}
+.button-container-item{
+  padding-top: 0.2rem;
+}
 
 .main-preview {
   display: grid;

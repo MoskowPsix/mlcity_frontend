@@ -26,6 +26,7 @@ export class NewPlaceComponent implements OnInit {
     this.seanceEmit.emit(this.placeId)
   }
   seanceDelete(event: any) {
+    console.log(this.place)
     this.seanceDeleteEmit.emit(event)
   }
   deletePlace() {
