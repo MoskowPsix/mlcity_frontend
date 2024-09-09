@@ -13,7 +13,7 @@
         <div class="main-content__step-wrapper">
           <app-standart-input [label]="'Название события'" [control] = "createEventForm.get('name')"></app-standart-input>
           <div class="organization-select-wrapper">
-            <app-organizations-select-container [closeModalValue]="modalSelectedOrganization" (selectOrganization)="selectOrganization($event)" [cards]="organizations"/>
+            <app-organizations-select-container *ngif="this.userHasOrganization" [closeModalValue]="modalSelectedOrganization" (selectOrganization)="selectOrganization($event)" [cards]="organizations"/>
           </div>
             <app-types [buttonClicked]="currentType" [types]="types" (typeOutput)="receiveType($event)"></app-types>
         </div>
