@@ -101,7 +101,6 @@ export class EditEventComponent implements OnInit {
     this.editForm.value.files = event
   }
   addPrice() {
-
     this.editForm.value.price.push({
       temp_id: this.editForm.value.price.length,
       cost_rub: '',
@@ -220,11 +219,13 @@ export class EditEventComponent implements OnInit {
         .map((e: any) => e.temp_id)
         .indexOf(seanceDate.temp_id)
       this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_start = seanceDate.date_start
+      this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_end = seanceDate.date_start
     } else if (!seanceDate.temp_id && seanceDate.seance) {
       let seanceIndex = this.editForm.value.places[seanceDate.placeId].seances
         .map((e: any) => e.id)
         .indexOf(seanceDate.seance.id)
       this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_start = seanceDate.seance.date_start
+      this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_end = seanceDate.seance.date_start
     }
   }
   deleteSeance(seance: any) {
@@ -308,6 +309,7 @@ export class EditEventComponent implements OnInit {
           name: res.name,
           sponsor: res.sponsor,
           description: res.description,
+          materials: res.materials,
         })
         if (priceArray) {
           priceArray.forEach((price: any) => {
@@ -503,7 +505,9 @@ export class EditEventComponent implements OnInit {
           this.loadingService.hideLoading()
           if (res.status == 'success') {
             this.toastService.showToast('Событие отправленно на проверку', 'success')
-            this.router.navigate(['/cabinet/events'])
+            this.router.navigate(['/cabinet/events']).then(() => {
+              window.location.reload()
+            })
           }
         })
     }
@@ -517,6 +521,7 @@ export class EditEventComponent implements OnInit {
       price: new FormControl([], [Validators.required]),
       types: new FormControl([], [Validators.required]),
       places: new FormControl([], [Validators.required]),
+      materials: new FormControl([], [Validators.required]),
     })
   }
 }

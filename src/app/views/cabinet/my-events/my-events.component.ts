@@ -67,7 +67,9 @@ export class MyEventsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getMyEvents()
   }
-
+  ionViewDidWillLeave() {
+    this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next('')
+  }
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()

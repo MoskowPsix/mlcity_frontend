@@ -176,7 +176,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Клик по кнопке веперед
   stepNext() {
-    if (this.stepCurrency <= this.maxStepsCount) {
+    if (this.stepCurrency <= this.maxStepsCount && !this.stepInvalidate()) {
       this.stepCurrency++
     }
   }
@@ -212,8 +212,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (this.allFiles.length == 0) {
     }
   }
-  selectOrganization(event: IOrganization) {
-    this.selectedOrganization = event
+  selectOrganization(event: any) {
+    console.log(event)
+    this.selectedOrganization = event.organization
     let id = this.selectedOrganization.id
     this.createEventForm.patchValue({ organization_id: id })
     this.modalSelectedOrganization = !this.modalSelectedOrganization
@@ -368,7 +369,17 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             name: file.photo.id,
             vk: true,
           })
+        } else if (file.type === 'video') {
+          if (file.video.image[0]) {
+            console.log()
+            tempArray.push({
+              link: file.video.image[0].url,
+              name: file.video.id,
+              vk: true,
+            })
+          }
         } else {
+          this.toastService.showToast('Тип вложения не поддерживается', 'warning')
         }
       })
       this.createEventForm.patchValue({
@@ -880,7 +891,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((response: any) => {
         this.userHasOrganization = response.status
-        console.log(this.userHasOrganization)
       })
   }
 

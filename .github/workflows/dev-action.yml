@@ -36,6 +36,8 @@ jobs:
           host: ${{ secrets.DEV_HOST }}
           username: ${{ secrets.DEV_USER }}
           key: ${{ secrets.DEV_SSH }}
+          port: ${{ secrets.DEV_SSH_PORT}}
+
 
           script: |
             sudo docker stop dev-vokrug-frontend

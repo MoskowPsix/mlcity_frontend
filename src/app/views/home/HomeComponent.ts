@@ -400,6 +400,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           ],
         },
       })
+
     this.map.target.geoObjects.add(this.objectsInsideCircle)
 
     this.objectsInsideCircle.events.add('click', (e: any) => {

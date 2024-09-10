@@ -46,7 +46,7 @@
         </div>
         <div class="place-container">
           <div class="not-found-span-container">
-            <span class="not-found-span" *ngIf="this.createEventForm.value.places.length === 0">Место проведения не добавлено</span>
+            <span class="not-found-span" *ngIf="this.createEventForm.value && this.createEventForm.value.places.length === 0">Место проведения не добавлено</span>
           </div>
             <ng-container *ngFor="let place of this.createEventForm.value.places; let i = index">
                 <app-new-place 
@@ -90,7 +90,7 @@
           <div class="select-old">
             <div class="label">Возрастное ограничение</div>
             <div class="select-old-wrapper">
-              <ion-select mode="ios" placeholder="0+" (ionChange)="setAgeLimit($event)">
+              <ion-select mode="ios" placeholder="0+" okText="Выбрать возраст" cancelText="Отмена" (ionChange)="setAgeLimit($event)">
                 <ion-select-option value="0">0+</ion-select-option>
                 <ion-select-option value="6">6+</ion-select-option>
                 <ion-select-option value="12">12+</ion-select-option>
@@ -105,7 +105,8 @@
     </app-step-container>
 
     <div class="navigate-buttons-container">
-      <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency !== maxStepsCount" (click)="stepNext()" (click)="logForm()" buttonText="Далее" theme="standart"></app-standart-button>
+      
+      <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency !== maxStepsCount" (click)="stepNext()" buttonText="Далее" theme="standart"></app-standart-button>
       <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency === maxStepsCount" (click)="onSubmit()" buttonText="Создать и открыть" theme="standart"></app-standart-button>
       <div class="cancel-wrapper">
         <app-standart-button (click)="reset()" buttonText="Отмена" theme="light"></app-standart-button>

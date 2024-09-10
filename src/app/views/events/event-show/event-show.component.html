@@ -61,14 +61,16 @@
             ближайший сеанс {{firstySeance.seance.date_start|date:'d MMM в HH:mm'}}
           </div>
 
-          <strong class="main-content__name">{{event.name}}</strong>
           <div class="category-button-grid">
             <ng-container>
                 <app-rounded-button style="pointer-events: none;"  *ngFor="let category of event.types"  icon="assets/icons/category.svg" type="button" buttonText=" {{category.name}}"></app-rounded-button>
                 <app-rounded-button *ngIf="event.types!.length === 0" style="pointer-events: none;"  icon="assets/icons/category.svg" type="button" buttonText="Прочее"></app-rounded-button>
             </ng-container>
           </div>
-          <app-collapsed-text>
+
+          <strong class="main-content__name">{{event.name}}</strong>
+
+          <app-collapsed-text *ngIf="event.description">
               <div [innerHTML]="clearDescription()"></div>
           </app-collapsed-text>
 
@@ -83,7 +85,6 @@
             <div class="community-wrapper">
               <app-user-section [organization]="organization" [buttonText]="event.sponsor"></app-user-section>
               <div class="community-wrapper__button-container">
-                <app-standart-button theme = 'light' buttonText="Перейти"></app-standart-button>
               </div>
             </div>
           </div>
