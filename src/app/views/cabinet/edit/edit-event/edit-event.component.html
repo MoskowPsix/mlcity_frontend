@@ -82,11 +82,13 @@
                 </ng-container>
             </div>
             <app-standart-button (click)="addPlace()" buttonText="Добавить место" type="button" theme ="light"></app-standart-button>
-            <app-standart-input [invalid]="invalidForm.sponsor" [label]="'Организатор'" [control] = "editForm.get('sponsor')"></app-standart-input>
-            <div (click)="submitForm()" class="save-button-wrapper">
-                <app-standart-button  [disabled]="submitButtonState" buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
+            <div  class="save-button-wrapper">
+                <app-standart-button (click)="submitForm()" [disabled]="submitButtonState" buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
+                <div class="delete-button-wrapper">
+                    <app-standart-button  [disabled]="submitButtonState" buttonText="Удалить" type="button" theme ="red"></app-standart-button>
+                </div>
             </div>
-
+          
         </form>
     </div>
 </ion-content>
