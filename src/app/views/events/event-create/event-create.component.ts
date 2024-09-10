@@ -48,6 +48,7 @@ import { OrganizationService } from 'src/app/services/organization.service'
 import { CreateRulesModalComponent } from 'src/app/components/create-rules-modal/create-rules-modal.component'
 import { maskitoTimeOptionsGenerator } from '@maskito/kit'
 import { IOrganization } from 'src/app/models/organization'
+import { Console } from 'console'
 
 @Component({
   selector: 'app-event-create',
@@ -104,6 +105,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   //Создать переменную для постов со страницы
   vkGroupSelected: number | null = null
   vkGroupModalSelected: any = 0
+  checkSocialVk: boolean = false
   vkGroupPosts: any
   vkGroupPostsLoaded: boolean = false
   vkGroupPostsDisabled: boolean = false
@@ -230,9 +232,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         }),
         switchMap((user: any) => {
           if (!user?.social_account || user?.social_account.provider != 'vkontakte') {
+            this.checkSocialVk = false
           } else {
             return this.vkService.getGroups().pipe(
               switchMap((response: any) => {
+                this.checkSocialVk = true
                 response?.response.items ? this.setVkGroups(response?.response.items) : this.setVkGroups([])
                 return of(EMPTY)
               }),
@@ -400,7 +404,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           } else {
             return false
           }
-
         case 2:
           return false
         case 3:
@@ -420,22 +423,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           })
           return !allPlacesValid
         case 4:
-          if (this.createEventForm.value.price.length > 0) {
-            let freeEntries = true
-            this.createEventForm.value.price.forEach((price: any) => {
-              if (Number(price.cost_rub > 0)) {
-                freeEntries = false
-              }
-            })
-            if (!freeEntries && this.createEventForm.value.materials.length == 0) {
-              return true
-            } else {
-              return false
-            }
-          } else {
-            return false
-          }
-
+          return false
         default:
           return false
       }
@@ -569,6 +557,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.formData.append('type', this.createEventForm.controls['type'].value)
     this.formData.append('status', this.createEventForm.controls['status'].value)
     this.formData.append('ageLimit', this.createEventForm.controls['ageLimit'].value)
+    this.formData.append('sponsor', 'Admin')
 
     this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
       this.formData.append(`prices[${i}][cost_rub]`, item.cost_rub)
@@ -581,6 +570,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.formData.append('places[]', this.createEventForm.controls['places'].value)
     this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
       this.formData.append(`places[${i}][address]`, item.address)
+      this.formData.append(`places[${i}][sightId]`, '')
       this.formData.append(`places[${i}][coords]`, item.coords)
       this.formData.append(`places[${i}][locationId]`, item.location_id)
       item.seances.forEach((item_sean: any, i_sean: number) => {
@@ -742,7 +732,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .create(event)
       .pipe()
       .subscribe((res) => {
-        console.log(res)
+        this.loadingService.hideLoading()
+        this.toastService.showToast(MessagesEvents.create, 'success')
+        this.createEventForm.reset()
+        this.resetUploadInfo()
+        this.router.navigate(['/events/' + res.event.id])
       })
     //отправляем форму
     // this.createEventForm.disable()
@@ -886,6 +880,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((response: any) => {
         this.userHasOrganization = response.status
+        console.log(this.userHasOrganization)
       })
   }
 
@@ -913,6 +908,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.createEventForm.value.dateEnd = minSeance
   }
 
+  ionViewDidWillLeave() {
+    this.destroy$.next()
+    this.destroy$.complete()
+    this.stepCurrency = 1
+    this.createEventForm.reset()
+  }
+  ionViewWillEnter() {}
   ngOnInit() {
     this.organizationService
       .getUserOrganizations()

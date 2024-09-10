@@ -10,24 +10,40 @@
   <div class="main-content">
     <app-step-container [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency">
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="1">
+        <div class="step-description">
+          На данном этапе необходимо обязательно указать название вашего мероприятия. 
+          Если вы создаёте мероприятие не в первый раз, выберите своё сообщество. 
+          А так же соответствующие типы мероприятий.
+        </div>
         <div class="main-content__step-wrapper">
           <app-standart-input [label]="'Название события'" [control] = "createEventForm.get('name')"></app-standart-input>
           <div class="organization-select-wrapper">
-            <app-organizations-select-container *ngif="this.userHasOrganization" [closeModalValue]="modalSelectedOrganization" (selectOrganization)="selectOrganization($event)" [cards]="organizations"/>
+            <app-organizations-select-container *ngIf="userHasOrganization" [closeModalValue]="modalSelectedOrganization" (selectOrganization)="selectOrganization($event)" [cards]="organizations"/>
           </div>
             <app-types [buttonClicked]="currentType" [types]="types" (typeOutput)="receiveType($event)"></app-types>
         </div>
       </app-step-container-item>
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="2">
+        <div class="step-description">
+          На этом этапе  по желанию вы можете добавить 
+          фотографии мероприятия или подробное описание,
+           чтобы сделать его более привлекательным.
+        </div>
         <div class="main-content__step-wrapper">
           <div class="load-for-vk-button-wrapper">
-            <app-standart-button (click)="openModalGroup()" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+            <app-standart-button *ngIf="checkSocialVk"  (click)="openModalGroup()" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+            <app-standart-button *ngIf="!checkSocialVk" [disabled]="true" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
           </div>
           <app-edit-slider type="create" [vkFiles]="vkFiles" (deleteVkfilesEmit)="deleteVkFiles($event)" (filesEmit)="onFileChange($event)" [previews]="uploadFiles" [files]="uploadFiles" ></app-edit-slider>
           <app-standart-rich-input [label]="'Описание'" [control] = "createEventForm.get('description')"></app-standart-rich-input>
         </div>
       </app-step-container-item>
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="3">
+        <div class="step-description">
+          На данном этапе обязательно укажите адрес проведения вашего мероприятия. 
+            При необходимости можно добавить несколько адресов.
+           Не забудьте указать точное время начала, чтобы участники смогли спланировать своё посещение.
+        </div>
         <div class="place-container">
           <div class="not-found-span-container">
             <span class="not-found-span" *ngIf="this.createEventForm.value.places.length === 0">Место проведения не добавлено</span>
@@ -50,6 +66,10 @@
       </div>
       </app-step-container-item>
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="4">
+        <div class="step-description">
+          Остался последний шаг. Если ваше мероприятие является платным, добавьте информацию о билетах и, при наличии, укажите ссылку для оплаты.
+           Также, при необходимости, вы можете установить возрастные ограничения для участников.
+        </div>
         <div class="prices-container">
               <!-- <app-standart-input *ngFor="let price of event.price; let i = index" [label]="'Стоимость '+ (i+1)" [control] = "editForm.get('name')"></app-standart-input> -->
                <ng-container *ngFor="let price of this.createEventForm.value.price; let i = index">
