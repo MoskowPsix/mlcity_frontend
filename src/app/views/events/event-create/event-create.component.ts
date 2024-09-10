@@ -212,8 +212,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (this.allFiles.length == 0) {
     }
   }
-  selectOrganization(event: IOrganization) {
-    this.selectedOrganization = event
+  selectOrganization(event: any) {
+    console.log(event)
+    this.selectedOrganization = event.organization
     let id = this.selectedOrganization.id
     this.createEventForm.patchValue({ organization_id: id })
     this.modalSelectedOrganization = !this.modalSelectedOrganization
@@ -368,7 +369,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             name: file.photo.id,
             vk: true,
           })
+        } else if (file.type === 'video') {
+          console.log(file)
         } else {
+          this.toastService.showToast('Тип вложения не поддерживается', 'warning')
         }
       })
       this.createEventForm.patchValue({
