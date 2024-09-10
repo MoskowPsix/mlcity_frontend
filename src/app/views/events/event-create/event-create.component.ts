@@ -880,7 +880,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((response: any) => {
         this.userHasOrganization = response.status
-        console.log(this.userHasOrganization)
       })
   }
 
