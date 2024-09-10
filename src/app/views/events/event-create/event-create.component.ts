@@ -370,7 +370,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             vk: true,
           })
         } else if (file.type === 'video') {
-          console.log(file)
+          if (file.video.image[0]) {
+            console.log()
+            tempArray.push({
+              link: file.video.image[0].url,
+              name: file.video.id,
+              vk: true,
+            })
+          }
         } else {
           this.toastService.showToast('Тип вложения не поддерживается', 'warning')
         }
