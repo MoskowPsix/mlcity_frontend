@@ -19,6 +19,26 @@
   <input (change)="fileChanged($event,file)" multiple="multiple" style="opacity: 0; position: absolute;" #file type="file">
  </ng-container>
 
+ <ng-container *ngIf="type === 'create'">
+  <div class="label">Обложка</div>
+  <div *ngIf="previews[0]" style="background-image: url({{previews[0].link}}) ;" class="cover-add-button" >
+  </div>
+  <div *ngIf="previews.length == 0" style="background-image: url('assets/images/nophoto.jpg') ;" class="cover-add-button" >
+  </div>
+  <div class="label">Фотографии</div>
+  <div class="slider-container_create">
+    <div (click)="file.click()" class="slider-container-add-button" >
+      <img src="/assets/icons/addPhoto.svg" alt="">
+      <span class="slider-container-add-button_text">Добавить фото</span>
+    </div>
+   
+    <div *ngFor="let img of previews; let i = index" style="background-image: url({{img.link}});" class="slider-container-item">
+      <div class="delete-button-wrapper"><app-circle-button (click)="deletePreview(img,i)" icon="/assets/icons/trash.svg"></app-circle-button></div>
+    </div>
+  </div>
+  <input (change)="fileChanged($event,file)" multiple="multiple" style="opacity: 0; position: absolute;" #file type="file">
+ </ng-container>
+
 <ng-container *ngIf="type === 'l-view'">
   <div class="slider-container">
     <ng-container *ngFor="let img of previews; let i = index">

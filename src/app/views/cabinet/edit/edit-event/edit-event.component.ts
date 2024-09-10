@@ -101,6 +101,7 @@ export class EditEventComponent implements OnInit {
     this.editForm.value.files = event
   }
   addPrice() {
+
     this.editForm.value.price.push({
       temp_id: this.editForm.value.price.length,
       cost_rub: '',

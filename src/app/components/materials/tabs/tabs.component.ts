@@ -16,7 +16,7 @@ import { TabsItemComponent } from '../tabs-item/tabs-item.component'
 })
 export class TabsComponent implements OnInit, AfterViewInit {
   @ContentChildren(TabsItemComponent, { read: ElementRef }) tabs!: QueryList<TabsItemComponent> //Получаем из ng-content
-  @ViewChildren('item') tabsView!: QueryList<ElementRef> //Получаем из ng-content
+  @ViewChildren('item') tabsView!: QueryList<ElementRef>
 
   constructor() {}
   tabsItems: any[] = []

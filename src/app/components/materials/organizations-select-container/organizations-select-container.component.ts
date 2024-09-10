@@ -10,7 +10,7 @@ export class OrganizationsSelectContainerComponent implements OnInit {
   constructor() {}
   openModal: boolean = true
   @Input() cards!: IOrganization[]
-  selected: any = 'Выберите группу'
+  selected: any = 'Выберите сообщество'
   @Input() closeModalValue!: boolean
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   emitOrganization(organization: any) {

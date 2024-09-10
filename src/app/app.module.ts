@@ -142,8 +142,11 @@ import { OrganizationShowComponent } from './views/organization-show/organizatio
 import { OrganizationsGridComponent } from './components/organizations-grid/organizations-grid.component'
 import { TabsComponent } from './components/materials/tabs/tabs.component'
 import { TabsItemComponent } from './components/materials/tabs-item/tabs-item.component'
+import { StepContainerComponent } from './components/materials/step-container/step-container.component'
 import { NgxDocViewerModule } from 'ngx-doc-viewer'
 import { ClusterModalComponent } from './components/cluster-modal/cluster-modal.component'
+import { StepContainerItemComponent } from './components/materials/step-container-item/step-container-item.component'
+
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -170,7 +173,7 @@ registerLocaleData(localeRu, 'ru')
     HomeComponent,
     LoginComponent,
     CircleButtonComponent,
-
+    StepContainerItemComponent,
     BackButtonComponent,
     RecoveryPasswordComponent,
     SecondHeaderComponent,
@@ -225,8 +228,10 @@ registerLocaleData(localeRu, 'ru')
     EventCardComponent,
     CommentsListComponent,
     FavoritesComponent,
+
     NewPlaceComponent,
     StandartButtonComponent,
+    StepContainerComponent,
     StandartButtonLongComponent,
     TruncatePipe,
     CreateRulesModalComponent,
