@@ -176,7 +176,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Клик по кнопке веперед
   stepNext() {
-    if (this.stepCurrency <= this.maxStepsCount) {
+    if (this.stepCurrency <= this.maxStepsCount && !this.stepInvalidate()) {
       this.stepCurrency++
     }
   }
