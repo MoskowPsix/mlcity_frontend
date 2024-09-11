@@ -91,6 +91,7 @@ export class AddressInputComponent implements OnInit {
     })
     geocodeResult
       .pipe(
+        takeUntil(this.destroy$),
         tap((result: any) => {
           const firstGeoObject = result.geoObjects.get(0)
           // this.address = firstGeoObject.getAddressLine()
