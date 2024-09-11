@@ -16,6 +16,7 @@ export class UserSectionComponent implements OnInit {
   @Input() organization!: IOrganization
   @Input() fixedImg?: string
   @Input() extensialClick: boolean = true
+  @Input() showCategory: boolean = true
   @Input() loadingImg?: boolean
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>()
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()

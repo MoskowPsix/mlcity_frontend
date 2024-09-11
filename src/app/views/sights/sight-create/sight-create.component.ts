@@ -1,23 +1,6 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectorRef,
-  ViewChild,
-  ElementRef,
-} from '@angular/core'
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core'
 import { trigger, style, animate, transition } from '@angular/animations'
-import {
-  switchMap,
-  tap,
-  of,
-  Subject,
-  takeUntil,
-  catchError,
-  delay,
-  retry,
-  map,
-} from 'rxjs'
+import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry, map } from 'rxjs'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { UserService } from 'src/app/services/user.service'
 import { SightTypeService } from 'src/app/services/sight-type.service'
@@ -54,10 +37,7 @@ import { GeneratePlugSightEventsImgService } from 'src/app/services/generate-plu
   styleUrls: ['./sight-create.component.scss'],
   animations: [
     trigger('fade', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('500ms ease-in', style({ opacity: 1 })),
-      ]),
+      transition(':enter', [style({ opacity: 0 }), animate('500ms ease-in', style({ opacity: 1 }))]),
       transition(':leave', [animate('500ms ease-in', style({ opacity: 0 }))]),
     ]),
   ],
@@ -153,10 +133,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           return of(user)
         }),
         switchMap((user: any) => {
-          if (
-            !user?.social_account ||
-            user?.social_account.provider != 'vkontakte'
-          ) {
+          if (!user?.social_account || user?.social_account.provider != 'vkontakte') {
             // this.toastService.showToast(
             //   MessagesErrors.vkGroupSearch,
             //   'secondary',
@@ -165,17 +142,13 @@ export class SightCreateComponent implements OnInit, OnDestroy {
             // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
             return this.vkService.getGroups().pipe(
               switchMap((response: any) => {
-                response?.response.items
-                  ? this.setVkGroups(response?.response.items)
-                  : this.setVkGroups([])
+                response?.response.items ? this.setVkGroups(response?.response.items) : this.setVkGroups([])
                 return of(EMPTY)
               }),
               catchError((err) => {
                 //Выкидываем на логин если с ВК проблемы
                 this.toastService.showToast(
-                  err.error?.message ||
-                    err.error?.error_msg ||
-                    MessagesErrors.vkTokenError,
+                  err.error?.message || err.error?.error_msg || MessagesErrors.vkTokenError,
                   'danger',
                 )
                 this.loadingService.hideLoading()
@@ -193,12 +166,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           this.loadingService.hideLoading()
         }),
         catchError((err) => {
-          this.toastService.showToast(
-            err.error?.message ||
-              err.error?.error_msg ||
-              MessagesErrors.default,
-            'danger',
-          )
+          this.toastService.showToast(err.error?.message || err.error?.error_msg || MessagesErrors.default, 'danger')
           this.loadingService.hideLoading()
           return of(EMPTY)
         }),
@@ -278,9 +246,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
         this.vkGroupPosts = response.response
-        response.response
-          ? (this.vkGroupPostsLoaded = true)
-          : (this.vkGroupPostsLoaded = false) //для скелетной анимации
+        response.response ? (this.vkGroupPostsLoaded = true) : (this.vkGroupPostsLoaded = false) //для скелетной анимации
       })
   }
 
@@ -291,10 +257,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
         let group_id: number
-        group_id =
-          response.response[0].id -
-          response.response[0].id -
-          response.response[0].id
+        group_id = response.response[0].id - response.response[0].id - response.response[0].id
         this.setVkPostsByGroupID(group_id)
       })
   }
@@ -304,11 +267,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   getUrlVideo(owner_id: number, video_id: number) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
-      'https://vk.com/video_ext.php?oid=' +
-        owner_id +
-        '&id=' +
-        video_id +
-        '&hd=2',
+      'https://vk.com/video_ext.php?oid=' + owner_id + '&id=' + video_id + '&hd=2',
     )
   }
 
@@ -340,9 +299,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Выбор типа
   selectedType(type_id: any) {
     if (/^\d+$/.test(type_id.detail.value)) {
-      type_id.detail.value
-        ? (this.typeSelected = type_id.detail.value)
-        : (this.typeSelected = null)
+      type_id.detail.value ? (this.typeSelected = type_id.detail.value) : (this.typeSelected = null)
     }
   }
 
@@ -369,9 +326,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   //Выбор типа
   selectedStatus(status_id: any) {
-    status_id.detail.value
-      ? (this.statusSelected = status_id.detail.value)
-      : (this.statusSelected = null)
+    status_id.detail.value ? (this.statusSelected = status_id.detail.value) : (this.statusSelected = null)
   }
   getNowCityes() {
     this.cityesListLoading = true
@@ -450,10 +405,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   // Поиск по улицам
   onMapReady(e: YaReadyEvent<ymaps.Map>) {
     this.map = e
-    if (
-      this.filterService.locationLatitude.value &&
-      this.filterService.locationLongitude.value
-    ) {
+    if (this.filterService.locationLatitude.value && this.filterService.locationLongitude.value) {
       const coords: number[] = [
         Number(this.filterService.getLocationLatitudeFromlocalStorage()),
         Number(this.filterService.getLocationLongitudeFromlocalStorage()),
@@ -485,8 +437,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.map.target.geoObjects.removeAll()
       this.placemark = new ymaps.Placemark(coords)
       this.map.target.geoObjects.add(this.placemark)
-      this.createSightForm.value.coords =
-        this.placemark.geometry?.getCoordinates()
+      this.createSightForm.value.coords = this.placemark.geometry?.getCoordinates()
       this.createSightForm.patchValue({
         coords: this.placemark.geometry?.getCoordinates(),
       })
@@ -500,12 +451,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   ReserveGeocoder(): void {
     // Декодирование координат
-    const geocodeResult = this.yaGeocoderService.geocode(
-      this.createSightForm.value.coords,
-      {
-        results: 1,
-      },
-    )
+    const geocodeResult = this.yaGeocoderService.geocode(this.createSightForm.value.coords, {
+      results: 1,
+    })
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0)
 
@@ -524,10 +472,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         delay(100),
         retry(2),
         catchError((err) => {
-          this.toastService.showToast(
-            MessagesErrors.LocationSearchError,
-            'warning',
-          )
+          this.toastService.showToast(MessagesErrors.LocationSearchError, 'warning')
           this.locationLoader = false
           return of(EMPTY)
         }),
@@ -541,22 +486,15 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   ForwardGeocoder(): void {
-    this.createSightForm.value.address = (<HTMLInputElement>(
-      document.getElementById('search-map')
-    )).value
-    const geocodeResult = this.yaGeocoderService.geocode(
-      this.createSightForm.value.address,
-      {
-        results: 1,
-      },
-    )
+    this.createSightForm.value.address = (<HTMLInputElement>document.getElementById('search-map')).value
+    const geocodeResult = this.yaGeocoderService.geocode(this.createSightForm.value.address, {
+      results: 1,
+    })
     geocodeResult.subscribe((result: any) => {
       const firstGeoObject = result.geoObjects.get(0)
       this.addPlacemark(firstGeoObject.geometry.getCoordinates())
       // this.createSightForm.value.patchValue({coords: firstGeoObject.geometry.getCoordinates()})
-      this.createSightForm.controls['coords'].setValue(
-        firstGeoObject.geometry.getCoordinates(),
-      )
+      this.createSightForm.controls['coords'].setValue(firstGeoObject.geometry.getCoordinates())
       this.setLocationForCoords(firstGeoObject.geometry.getCoordinates())
       // this.city=firstGeoObject.getLocalities(0)[0]
     })
@@ -608,10 +546,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   // Заполняем превью фоток
   createImagesPreview() {
-    if (
-      this.uploadFiles &&
-      !this.createSightForm.controls['files_img'].hasError('requiredFileType')
-    ) {
+    if (this.uploadFiles && !this.createSightForm.controls['files_img'].hasError('requiredFileType')) {
       this.loadingService.showLoading()
       this.uploadFiles.forEach((file: any) => {
         let reader = new FileReader()
@@ -629,10 +564,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.createSightForm.controls['price'].value.push(
       new FormGroup({
         cors_rub: new FormControl('', [Validators.required]),
-        description: new FormControl('', [
-          Validators.required,
-          Validators.minLength(5),
-        ]),
+        description: new FormControl('', [Validators.required, Validators.minLength(5)]),
       }),
     )
     this.pricesLock.push({ locked: false })
@@ -643,16 +575,12 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   testPlug() {
-    let generatePlug: GeneratePlugSightEventsImgService =
-      new GeneratePlugSightEventsImgService(this.plug, 'create')
+    let generatePlug: GeneratePlugSightEventsImgService = new GeneratePlugSightEventsImgService(this.plug, 'create')
     generatePlug.generatePlug()
   }
   //формируем дату для отправки на сервер
   createFormData() {
-    if (
-      this.uploadFiles &&
-      !this.createSightForm.controls['files_img'].hasError('requiredFileType')
-    ) {
+    if (this.uploadFiles && !this.createSightForm.controls['files_img'].hasError('requiredFileType')) {
       for (var i = 0; i < this.uploadFiles.length; i++) {
         this.formData.append('localFilesImg[]', this.uploadFiles[i])
       }
@@ -667,11 +595,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         if (attachment.video) {
           this.formData.append(
             'vkFilesVideo[]',
-            'https://vk.com/video_ext.php?oid=' +
-              attachment.video.owner_id +
-              '&id=' +
-              attachment.video.id +
-              '&hd=2',
+            'https://vk.com/video_ext.php?oid=' + attachment.video.owner_id + '&id=' + attachment.video.id + '&hd=2',
           )
         }
         if (attachment.link) {
@@ -681,56 +605,21 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     }
 
     this.formData.append('name', this.createSightForm.controls['name'].value)
-    this.formData.append(
-      'sponsor',
-      this.createSightForm.controls['sponsor'].value,
-    )
-    this.formData.append(
-      'description',
-      this.createSightForm.controls['description'].value,
-    )
-    this.formData.append(
-      'workTime',
-      this.createSightForm.controls['workTime'].value,
-    )
-    this.formData.append(
-      'coords',
-      this.createSightForm.controls['coords'].value,
-    )
-    this.formData.append(
-      'address',
-      this.createSightForm.controls['address'].value,
-    )
+    this.formData.append('sponsor', this.createSightForm.controls['sponsor'].value)
+    this.formData.append('description', this.createSightForm.controls['description'].value)
+    this.formData.append('workTime', this.createSightForm.controls['workTime'].value)
+    this.formData.append('coords', this.createSightForm.controls['coords'].value)
+    this.formData.append('address', this.createSightForm.controls['address'].value)
     //this.formData.append('city', this.city)
-    this.formData.append(
-      'locationId',
-      this.createSightForm.controls['locationId'].value,
-    )
+    this.formData.append('locationId', this.createSightForm.controls['locationId'].value)
     this.formData.append('type[]', this.createSightForm.controls['type'].value)
-    this.formData.append(
-      'status',
-      this.createSightForm.controls['status'].value,
-    )
-    this.createSightForm.controls['price'].value.forEach(
-      (item: any, i: number) => {
-        this.formData.append(
-          `price[${i}][cost_rub]`,
-          item.controls.cors_rub.value,
-        ),
-          this.formData.append(
-            `price[${i}][descriptions]`,
-            item.controls.description.value,
-          )
-      },
-    )
-    this.formData.append(
-      'materials',
-      this.createSightForm.controls['materials'].value,
-    )
-    this.formData.append(
-      'vkPostId',
-      this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null,
-    )
+    this.formData.append('status', this.createSightForm.controls['status'].value)
+    this.createSightForm.controls['price'].value.forEach((item: any, i: number) => {
+      this.formData.append(`price[${i}][cost_rub]`, item.controls.cors_rub.value),
+        this.formData.append(`price[${i}][descriptions]`, item.controls.description.value)
+    })
+    this.formData.append('materials', this.createSightForm.controls['materials'].value)
+    this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null)
     // if (this.vkGroupPostSelected?.likes.count){
     //   this.formData.append('vkLikesCount', this.vkGroupPostSelected?.likes.count)
     // }
@@ -798,10 +687,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         }
       case 1:
         //шаг второй
-        if (
-          this.createSightForm.controls['name'].invalid ||
-          this.createSightForm.controls['sponsor'].invalid
-        ) {
+        if (this.createSightForm.controls['name'].invalid || this.createSightForm.controls['sponsor'].invalid) {
           return true
         } else {
           return false
@@ -811,37 +697,26 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         return false
       case 3:
         //шаг четвёртый
-        if (
-          this.createSightForm.controls['coords'].invalid ||
-          this.createSightForm.controls['address'].invalid
-        ) {
+        if (this.createSightForm.controls['coords'].invalid || this.createSightForm.controls['address'].invalid) {
           return true
         } else {
           return false
         }
       case 4:
         let priceValid: any
-        this.createSightForm.controls['price'].value.forEach(
-          (item: any, i: number) => {
-            if (this.createSightForm.controls['price'].value.length > 1) {
-              priceValid = this.createSightForm.controls['price'].value.every(
-                (item: any) => item.controls['description'].value.length >= 3,
-              )
-            } else if (
-              this.createSightForm.controls['price'].value.length == 1
-            ) {
-              priceValid = true
-            } else {
-              priceValid = false
-            }
-          },
-        )
+        this.createSightForm.controls['price'].value.forEach((item: any, i: number) => {
+          if (this.createSightForm.controls['price'].value.length > 1) {
+            priceValid = this.createSightForm.controls['price'].value.every(
+              (item: any) => item.controls['description'].value.length >= 3,
+            )
+          } else if (this.createSightForm.controls['price'].value.length == 1) {
+            priceValid = true
+          } else {
+            priceValid = false
+          }
+        })
 
-        if (
-          this.createEventForm.invalid ||
-          this.createEventForm.disabled ||
-          !priceValid
-        ) {
+        if (this.createEventForm.invalid || this.createEventForm.disabled || !priceValid) {
           return true
         } else {
           return false
@@ -858,9 +733,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       case 1:
         return this.createSightForm.controls['name'].invalid ? false : true
       case 2:
-        return this.createSightForm.controls['description'].invalid
-          ? false
-          : true
+        return this.createSightForm.controls['description'].invalid ? false : true
       // case 7:
       //   return this.createSightForm.hasError('dateInvalid') ?  false :  true
       case 1:
@@ -904,10 +777,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         }),
         catchError((err) => {
           console.log(err)
-          this.toastService.showToast(
-            err.message || MessagesErrors.default,
-            'danger',
-          )
+          this.toastService.showToast(err.message || MessagesErrors.default, 'danger')
           this.createSightForm.enable()
           this.loadingService.hideLoading()
           return of(EMPTY)
@@ -922,11 +792,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   ngOnInit() {
     let locId: any
     let coords: any
-    this.filterService.locationId
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        locId = value
-      })
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      locId = value
+    })
     this.locationServices
       .getLocationsIds(locId)
       .pipe(takeUntil(this.destroy$))
@@ -936,39 +804,25 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     //Создаем поля для формы
     this.createSightForm = new FormGroup(
       {
-        name: new FormControl('', [
-          Validators.required,
-          Validators.minLength(3),
-        ]),
-        sponsor: new FormControl('', [
-          Validators.required,
-          Validators.minLength(3),
-        ]),
+        name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+        sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
         description: new FormControl('', [Validators.minLength(0)]),
         workTime: new FormControl('', []),
         address: new FormControl('', [Validators.required]),
         locationId: new FormControl('', [Validators.required]),
         coords: new FormControl(coords, [Validators.minLength(2)]),
         type: new FormControl([], [Validators.required]),
-        status: new FormControl(
-          { value: this.statusSelected, disabled: false },
-          [Validators.required],
-        ),
-        files_img: new FormControl(
-          '',
-          fileTypeValidator(['png', 'jpg', 'jpeg']),
-        ),
+        status: new FormControl({ value: this.statusSelected, disabled: false }, [Validators.required]),
+        files_img: new FormControl('', fileTypeValidator(['png', 'jpg', 'jpeg'])),
         price: new FormControl([], [Validators.required]),
         materials: new FormControl(''),
       },
       [dateRangeValidator],
     )
-    this.filterService.locationId
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.locationId = value
-        this.createSightForm.patchValue({ locationId: value })
-      })
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.locationId = value
+      this.createSightForm.patchValue({ locationId: value })
+    })
     this.getUserWithSocialAccount()
     this.getTypes()
     this.getStatuses()

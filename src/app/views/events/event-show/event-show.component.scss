@@ -593,3 +593,10 @@ ion-accordion-group {
     font-size: 18px;
   }
 }
+.category-button-grid{
+  padding-top: 0.5rem;
+  display: flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

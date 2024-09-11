@@ -6,6 +6,7 @@ export interface IOrganization {
   types?: string
   avatar?: string
   files?: any
+  afisha7_id: number
   location_id?: number
   inn?: number
   ogrn?: number

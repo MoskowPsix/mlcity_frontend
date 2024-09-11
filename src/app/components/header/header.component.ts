@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectorRef,
-  HostListener,
-} from '@angular/core'
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener } from '@angular/core'
 import { Subject, takeUntil, catchError, of, EMPTY } from 'rxjs'
 import menuPublicData from '../../../assets/json/menu-public.json'
 import { IMenu } from 'src/app/models/menu'
@@ -90,7 +84,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private locationService: LocationService,
     private switchTypeService: SwitchTypeService,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   getEventService() {
     return this.filterService.eventsCount.value
@@ -159,10 +153,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // this.mapService.ForwardGeocoder(item.name + '' + item.location_parent.name).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
     this.filterService.setLocationLatitudeTolocalStorage(item.latitude)
     this.filterService.setLocationLongitudeTolocalStorage(item.longitude)
-    this.mapService.setLastMapCoordsToLocalStorage(
-      item.latitude,
-      item.longitude,
-    )
+    this.mapService.setLastMapCoordsToLocalStorage(item.latitude, item.longitude)
     this.filterService.changeFilter.next(true)
     // })
     // this.mapService.geolocationCity.next(item.name);
@@ -253,100 +244,82 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.mobileOrNote()
     //Смотрим состояние кнопки назад
-    this.navigationService.showBackButton
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.showBackButton = value
-      })
+    this.navigationService.showBackButton.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.showBackButton = value
+    })
 
     this.locationService.getFavoriteCities().subscribe((response: any) => {
       this.favoriteCities = response.cities
     })
 
     //Подписываемся на состояние модалки поиска города
-    this.navigationService.modalSearchCityesOpen
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.modalSearchCityesOpen = value
-      })
+    this.navigationService.modalSearchCityesOpen.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.modalSearchCityesOpen = value
+    })
 
     //Подписываемся на состояние модалки поиска ивентов и мест
-    this.navigationService.modalSearchEventsOpen
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.modalSearchEventsOpen = value
-      })
+    this.navigationService.modalSearchEventsOpen.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.modalSearchEventsOpen = value
+    })
 
     //Подписываемся на город
-    this.filterService.locationId
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.locationId = value
-        // Запрашиваем локацию по ид если меняется
-        if (value) {
-          this.locationService
-            .getLocationsIds(value)
-            .pipe()
-            .subscribe((response: any) => {
-              // if (this.mapService.geolocationCity.value !== response.location.name) {
-              this.city = response.location.name
-              this.region = response.location.location_parent.name
-              this.filterService.setLocationLatitudeTolocalStorage(
-                response.latitude,
-              )
-              this.filterService.setLocationLongitudeTolocalStorage(
-                response.longitude,
-              )
-              this.cdr.detectChanges()
-              // this.filterService.changeFilter.next(true);
-              // }
-            })
-        }
-      })
+    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.locationId = value
+      // Запрашиваем локацию по ид если меняется
+      if (value) {
+        this.locationService
+          .getLocationsIds(value)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((response: any) => {
+            // if (this.mapService.geolocationCity.value !== response.location.name) {
+            this.city = response.location.name
+            this.region = response.location.location_parent.name
+            this.filterService.setLocationLatitudeTolocalStorage(response.latitude)
+            this.filterService.setLocationLongitudeTolocalStorage(response.longitude)
+            this.cdr.detectChanges()
+            // this.filterService.changeFilter.next(true);
+            // }
+          })
+      }
+    })
 
     //Подписываемся на город из Геолокации
-    this.mapService.geolocationCity
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        //console.log('this.mapService.geolocationCity ',value)
-        this.geolocationCity = value
-        this.cdr.detectChanges()
-      })
+    this.mapService.geolocationCity.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      //console.log('this.mapService.geolocationCity ',value)
+      this.geolocationCity = value
+      this.cdr.detectChanges()
+    })
 
     //Подписываемся на регион из Геолокации
-    this.mapService.geolocationRegion
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.geolocationRegion = value
-        this.cdr.detectChanges()
-      })
+    this.mapService.geolocationRegion.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.geolocationRegion = value
+      this.cdr.detectChanges()
+    })
 
     //Подписываемся на изменение радиуса
-    this.filterService.radius
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.radius = parseInt(value)
-      })
+    this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.radius = parseInt(value)
+    })
 
     //Показывать ли диалог о смене города
-    this.mapService.showChangeCityDialog
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.showChangeCityDialog = value
-      })
+    this.mapService.showChangeCityDialog.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.showChangeCityDialog = value
+    })
 
-    this.locationService
-      .getLocationsIds(this.filterService.locationId.value)
-      .pipe()
-      .subscribe((res) => {
-        this.mapService.circleCenterLatitude.next(res.location.latitude)
-        this.mapService.circleCenterLongitude.next(res.location.longitude)
-        this.filterService.changeFilter.next(true)
-      })
+    if (this.filterService.locationId.value) {
+      this.locationService
+        .getLocationsIds(this.filterService.locationId.value)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res) => {
+          this.mapService.circleCenterLatitude.next(res.location.latitude)
+          this.mapService.circleCenterLongitude.next(res.location.longitude)
+          this.filterService.changeFilter.next(true)
+        })
+    }
 
-    this.filterService.changeFilter.subscribe(() => { })
+    this.filterService.changeFilter.subscribe(() => {})
 
-    this.switchTypeService.link.pipe().subscribe((value:string) => {
+    this.switchTypeService.link.pipe(takeUntil(this.destroy$)).subscribe((value: string) => {
       this.feedLink = value
     })
     //Формируем меню из файла

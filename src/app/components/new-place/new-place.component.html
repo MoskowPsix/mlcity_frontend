@@ -5,7 +5,7 @@
   <div class="place-container">
     <form [formGroup]="placeForm">
       <app-address-input (addressEditEmit)="edditAdress($event)" [place]="place" [placeId]="placeId" label="Адрес"></app-address-input>
-      <div class="not-found-span-container">
+      <div *ngIf="checkCountSeances()"  class="not-found-span-container">
         <span class="not-found-span" *ngIf="checkCountSeances()">Время проведения не добавлено</span>
       </div>
       <ng-container *ngFor="let seance of seancesArray">

@@ -19,6 +19,7 @@ import { TestIframeComponent } from '../views/test-iframe/test-iframe.component'
 import { EmailConfirmComponent } from '../views/cabinet/email-confirm/email-confirm.component'
 import { TestPageComponent } from '../views/test-page/test-page.component'
 import { OrganizationShowComponent } from '../views/organization-show/organization-show.component'
+import { PoliticsDocumentComponent } from '../views/politics-document/politics-document.component'
 export const publicRoutes: Routes = [
   {
     path: 'test',
@@ -42,6 +43,11 @@ export const publicRoutes: Routes = [
   {
     path: 'email-confirm',
     component: EmailConfirmComponent,
+    canActivate: [CheckAuthCanActiveGuard],
+  },
+  {
+    path: 'politics',
+    component: PoliticsDocumentComponent,
     canActivate: [CheckAuthCanActiveGuard],
   },
   {

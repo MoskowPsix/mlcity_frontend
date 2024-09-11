@@ -14,7 +14,7 @@
           {{priceState}}
        </div>
        <div class="buy-ticket-seance-button">
-        <app-standart-button  buttonText="Купить" type="button" theme ="standart"></app-standart-button>
+        <app-standart-button *ngIf="priceState !== 'Бесплатно'"  buttonText="Купить" type="button" theme ="standart"></app-standart-button>
        </div>
       </div>
       <img class="seance-container-content__border-img" src="/assets/icons/seance-border.png" alt="">

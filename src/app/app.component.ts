@@ -61,6 +61,9 @@ export class AppComponent implements OnInit {
     this.mobileOrNote()
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.url = this.router.url
+      if (this.url.includes('/cabinet/sights/edit')) {
+        this.url = '/cabinet/sights/edit'
+      }
       this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.BASE_URL}${this.url}`)
     })
 

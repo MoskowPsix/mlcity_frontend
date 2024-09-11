@@ -1,5 +1,6 @@
 import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { registerLocaleData, DatePipe } from '@angular/common'
+import { PoliticsDocumentComponent } from './views/politics-document/politics-document.component'
 import localeRu from '@angular/common/locales/ru'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -141,6 +142,12 @@ import { OrganizationShowComponent } from './views/organization-show/organizatio
 import { OrganizationsGridComponent } from './components/organizations-grid/organizations-grid.component'
 import { TabsComponent } from './components/materials/tabs/tabs.component'
 import { TabsItemComponent } from './components/materials/tabs-item/tabs-item.component'
+import { StepContainerComponent } from './components/materials/step-container/step-container.component'
+import { NgxDocViewerModule } from 'ngx-doc-viewer'
+import { ClusterModalComponent } from './components/cluster-modal/cluster-modal.component'
+import { StepContainerItemComponent } from './components/materials/step-container-item/step-container-item.component'
+import { ConfirmModalComponent } from './components/materials/confirm-modal/confirm-modal.component'
+
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -167,16 +174,20 @@ registerLocaleData(localeRu, 'ru')
     HomeComponent,
     LoginComponent,
     CircleButtonComponent,
+    StepContainerItemComponent,
     BackButtonComponent,
     RecoveryPasswordComponent,
     SecondHeaderComponent,
     ShowSliderComponent,
+    ConfirmModalComponent,
+    ClusterModalComponent,
     HeaderComponent,
     CodeInputComponent,
     AddressInputComponent,
     EditEventComponent,
     EditSightComponent,
     SidebarComponent,
+    PoliticsDocumentComponent,
     AddEventComponent,
     CardGridComponent,
     DropdownPopupComponent,
@@ -219,8 +230,10 @@ registerLocaleData(localeRu, 'ru')
     EventCardComponent,
     CommentsListComponent,
     FavoritesComponent,
+
     NewPlaceComponent,
     StandartButtonComponent,
+    StepContainerComponent,
     StandartButtonLongComponent,
     TruncatePipe,
     CreateRulesModalComponent,
@@ -272,10 +285,12 @@ registerLocaleData(localeRu, 'ru')
     HttpClientModule,
     NgxSliderModule,
     HttpClientJsonpModule,
+    NgxDocViewerModule,
     ReactiveFormsModule,
     MaskitoModule,
     MatDatepickerModule,
     MatNativeDateModule,
+
     MatFormFieldModule,
     MatInputModule,
   ],

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { catchError, EMPTY, of, Subject, takeUntil, tap } from 'rxjs'
 import { LoadingService } from 'src/app/services/loading.service'
 import { fileTypeValidator } from 'src/app/validators/file-type.validators'
@@ -10,7 +10,7 @@ import { EditService } from 'src/app/services/edit.service'
 import { SightHistoryContent } from 'src/app/clasess/history_content/sight_history_content'
 import { ToastService } from 'src/app/services/toast.service'
 import { SightsService } from 'src/app/services/sights.service'
-import { ISight } from 'src/app/models/sight'
+
 import { SightTypeService } from 'src/app/services/sight-type.service'
 import { types } from 'util'
 import { IPlace } from 'src/app/models/place'
@@ -24,7 +24,7 @@ import { serialize } from 'object-to-formdata'
 })
 export class EditSightComponent implements OnInit {
   private readonly destroy$ = new Subject<void>()
-  organization!: ISight
+  organization!: any
   editForm!: FormGroup
   previewCategory: any = []
   allTypes: any[] = []
@@ -48,41 +48,50 @@ export class EditSightComponent implements OnInit {
     private sightTypeService: SightTypeService,
     private editService: EditService,
     private toastService: ToastService,
-  ) {}
+    private router: Router,
+  ) { }
 
   ionViewWillEnter(): void {
     this.previewCategory = []
+    let filesArray: any = []
 
     const eventId = this.activatedRoute.snapshot.paramMap.get('id')
     this.loadingService.showLoading()
     this.sightsService
       .getSightById(Number(eventId))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((res) => {
-        this.organization = res
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((res: any) => {
+          filesArray = JSON.parse(JSON.stringify(res.sight.files))
+        }),
+      )
+      .subscribe((res: any) => {
+        this.organization = _.cloneDeep(res.sight)
         this.loadingService.hideLoading()
         this.editForm.patchValue({
-          name: this.organization.name,
-          description: this.organization.description,
-          adress: this.organization.address,
-          lalitude: this.organization.latitude,
-          longitude: this.organization.longitude,
-          types: _.cloneDeep(this.organization.types),
-          location_id: this.organization.location_id,
-          files: _.cloneDeep(res.files),
+          name: res.sight.name,
+          description: res.sight.description,
+          address: res.sight.address,
+          latitude: res.sight.latitude,
+          longitude: res.sight.longitude,
+          types: _.cloneDeep(res.sight.types),
+          location_id: res.sight.location_id,
         })
+
         this.place = {
           address: this.organization.address,
           latitude: this.organization.latitude,
           longitude: this.organization.longitude,
         }
-        console.log(this.place)
+
         this.previewCategory.push(...this.organization.types!)
-        console.log(this.organization)
+        filesArray.forEach((file: any) => {
+          this.editForm.value.files.push(JSON.parse(JSON.stringify(file)))
+        })
       })
   }
   changeAdress(event: any) {
-    this.editForm.value.adress = event.address
+    this.editForm.value.address = event.address
     this.editForm.value.latitude = event.latitude
     this.editForm.value.longitude = event.longitude
     this.editForm.value.location_id = event.location_id
@@ -118,8 +127,8 @@ export class EditSightComponent implements OnInit {
     this.openTypesModalValue = false
   }
   submitForm() {
-    console.log(this.organization, this.editForm.value)
     let sight_history_content = new SightHistoryContent()
+    console.log(this.organization, _.cloneDeep(this.editForm.value))
     let result = sight_history_content.merge(this.organization, _.cloneDeep(this.editForm.value))
     this.editService
       .sendEditSight(serialize(result, this.options))
@@ -128,7 +137,7 @@ export class EditSightComponent implements OnInit {
           this.loadingService.hideLoading()
 
           if (err.status == 403) {
-            this.toastService.showToast('Событие уже находится на модерации', 'warning')
+            this.toastService.showToast('Сообщество уже находится на модерации', 'warning')
           } else {
             this.toastService.showToast('Что-то пошло не так', 'error')
           }
@@ -139,6 +148,7 @@ export class EditSightComponent implements OnInit {
         this.loadingService.hideLoading()
         if (res.status == 'success') {
           this.toastService.showToast('Сообщество отправленно на проверку', 'success')
+          this.router.navigate(['/cabinet/sights'])
         }
       })
   }
@@ -154,8 +164,8 @@ export class EditSightComponent implements OnInit {
       description: new FormControl('', [Validators.required, Validators.minLength(3)]),
       files: new FormControl([]),
       types: new FormControl([], [Validators.required]),
-      adress: new FormControl('', [Validators.required]),
-      lalitude: new FormControl('', [Validators.required]),
+      address: new FormControl('', [Validators.required]),
+      latitude: new FormControl('', [Validators.required]),
       longitude: new FormControl('', [Validators.required]),
       location_id: new FormControl('', [Validators.required]),
     })

@@ -122,11 +122,10 @@
 }
 
 ion-content {
-  // overwrite inline styles
-  // --offset-bottom: 85%!important;
   --overflow:auto;
   overflow: auto;
-  --background: #FAFAFA;
+  --padding-top: var(--ion-safe-area-top, 0);
+  --background: #f8f8f8;
 }
 main.inner-scroll.scroll-y{
     overflow-y:hidden;
@@ -155,12 +154,9 @@ ion-list {
     font-size: 1rem;
 }
 
-ion-content {
 
-}
-
-ion-item-divider{
-    background-color: #fff;
+ion-accordion{
+    background: none;
 }
 ion-label{
     background:none;
@@ -183,10 +179,6 @@ ion-toolbar {
 .marker-ico {
   margin:auto;
   transform: rotate(0);
-}
-ion-content{
-    background: #fff;
-    --padding-top: var(--ion-safe-area-top, 0);
 }
 
 .cluster {
@@ -360,7 +352,7 @@ input::-webkit-inner-spin-button {
 }
 
 .inner-scroll{
-    background-color: red;
+   
     padding: 0;
   }
 @keyframes pulsate{
@@ -380,14 +372,6 @@ input::-webkit-inner-spin-button {
 @media screen and (min-width: 0px) and (max-width: 768px) {
 
 
-    // ion-content.md{
-    //     --padding-top: 6rem;
-    // }
-
-    // ion-content.ios{
-    //     --padding-top: 2.5rem;
-    // }
-
     ion-datetime{
        width: auto !important;
     }
@@ -399,10 +383,10 @@ input::-webkit-inner-spin-button {
 }
 
 @media screen and (min-width: 1060px)  {
-    ion-content{
-        --padding-top: 4rem;
-        --padding-bottom: 1rem;
-    }
+    // ion-content{
+    //     --padding-top: 4rem;
+    //     --padding-bottom: 1rem;
+    // }
 
     // ion-modal{
     //     &::part(content){
@@ -472,3 +456,6 @@ input::-webkit-inner-spin-button {
 
 
 
+ion-item-divider{
+    background-color: #fff;
+}

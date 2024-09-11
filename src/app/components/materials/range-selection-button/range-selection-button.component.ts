@@ -15,7 +15,7 @@ export class RangeSelectionButtonComponent implements OnInit {
 
   changeState() {
     this.state = !this.state
-    console.log(this.state)
+    
   }
 
   changeRadius(value: number) {

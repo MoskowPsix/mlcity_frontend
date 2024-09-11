@@ -61,6 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('calendula') calendula!: ElementRef
   @ViewChild('calendulaWrapper') calendulaWrapper!: ElementRef
   host: string = environment.BACKEND_URL
+  type: any
   port: string = environment.BACKEND_PORT
   renderSwitcher: boolean = false
   clustererOptions: ymaps.IClustererOptions = {
@@ -117,13 +118,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightsContentModalTotal: number = 0
   eventsContentModalTotal: number = 0
 
-  sightsModalNextPage!: string
-  eventsModalNextPage!: string
+  sightsModalNextPage: boolean = true
+  eventsModalNextPage: boolean = true
+
+  modalSpiner: boolean = false
 
   modalSwitcherClass: string = 'container-swither'
   modalSwitcherTextClass: string = 'swither-text'
   screenWidth: number = 0
-
+  modalEventWait: boolean = true
+  modalSightWait: boolean = true
   modalEventShowOpen: boolean = false
   modalEventRadiusShowOpen: boolean = false
   modalButtonLoader: boolean = false
@@ -386,6 +390,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         clusterIconLayout: this.createCluster(),
         clusterDisableClickZoom: true,
         hasBalloon: false,
+        gridSize: 96,
         clusterBalloonPanelMaxMapArea: 0,
         clusterOpenBalloonOnClick: true,
         clusterIconShape: {
@@ -396,6 +401,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           ],
         },
       })
+
     this.map.target.geoObjects.add(this.objectsInsideCircle)
 
     this.objectsInsideCircle.events.add('click', (e: any) => {
@@ -421,13 +427,14 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
           this.activePlacemark = e.get('target')
 
-          console.log(e.get('target').options._options.balloonContent.type)
+          this.type = e.get('target').options._options.balloonContent.type
+
           switch (e.get('target').options._options.balloonContent.type) {
             case 'event':
               e.get('target').options.set(
                 'iconContentLayout',
                 ymaps.templateLayoutFactory.createClass(
-                  `<div class="marker event active"> <img src="/assets/icons/ticket.svg"> </div>`,
+                  `<div class="marker event"> <img src="/assets/icons/ticket.svg"> </div>`,
                 ),
               )
               break
@@ -436,7 +443,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               e.get('target').options.set(
                 'iconContentLayout',
                 ymaps.templateLayoutFactory.createClass(
-                  `<div class="marker sight active"> <img src="/assets/icons/ticket.svg"> </div>`,
+                  `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`,
                 ),
               )
               break
@@ -462,52 +469,75 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getEventsForIdsForModal() {
     this.loadModal = true
-    this.eventsService
-      .getEvents(this.queryBuilderService.queryBuilder('eventsForMapModal'))
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError((err) => {
+    if (this.eventsModalNextPage && this.modalEventWait) {
+      this.modalSpiner = true
+      this.modalEventWait = false
+      this.eventsService
+        .getEvents(this.queryBuilderService.queryBuilder('eventsForMapModal'))
+        .pipe(
+          takeUntil(this.destroy$),
+          catchError((err) => {
+            this.loadModal = false
+            this.loadModalMore = false
+            console.log(err)
+            return of(EMPTY)
+          }),
+        )
+        .subscribe((response: any) => {
           this.loadModal = false
           this.loadModalMore = false
-          console.log(err)
-          return of(EMPTY)
-        }),
-      )
-      .subscribe((response: any) => {
-        this.loadModal = false
-        this.loadModalMore = false
-        response.events.next_cursor
-          ? this.queryBuilderService.paginationModalEventsCurrentPage.next(response.events.next_cursor)
-          : null
-        this.modalContent.push(...response.events.data)
-      })
+          this.modalSpiner = false
+
+          if (response.events.next_cursor) {
+            this.queryBuilderService.paginationModalEventsCurrentPage.next(response.events.next_cursor)
+            this.eventsModalNextPage = true
+          } else {
+            this.queryBuilderService.paginationModalEventsCurrentPage.next('')
+            this.eventsModalNextPage = false
+          }
+
+          this.modalContent.push(...response.events.data)
+          this.modalEventWait = true
+        })
+    }
   }
 
   getSightsForIdsForModal() {
     this.loadModal = true
-    this.sightsService
-      .getSights(this.queryBuilderService.queryBuilder('sightsForMapModal'))
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError((err) => {
+
+    if (this.sightsModalNextPage && this.modalSightWait) {
+      this.modalContent.length ? (this.modalSpiner = true) : null
+      this.modalSightWait = false
+      this.sightsService
+        .getSights(this.queryBuilderService.queryBuilder('sightsForMapModal'))
+        .pipe(
+          takeUntil(this.destroy$),
+          catchError((err) => {
+            this.loadModal = false
+            this.loadModalMore = false
+            console.log(err)
+            return of(EMPTY)
+          }),
+        )
+        .subscribe((response: any) => {
+          this.modalSpiner = false
           this.loadModal = false
           this.loadModalMore = false
-          console.log(err)
-          return of(EMPTY)
-        }),
-      )
-      .subscribe((response: any) => {
-        this.loadModal = false
-        this.loadModalMore = false
-        response.sights.next_cursor
-          ? this.queryBuilderService.paginationModalSightsCurrentPage.next(response.sights.next_cursor)
-          : null
-        this.modalContent.push(...response.sights.data)
-      })
+          if (response.sights.next_cursor) {
+            this.sightsModalNextPage = true
+            this.queryBuilderService.paginationModalSightsCurrentPage.next(response.sights.next_cursor)
+          } else {
+            this.sightsModalNextPage = false
+          }
+          response.sights.next_cursor
+          this.modalContent.push(...response.sights.data)
+          this.modalSightWait = true
+        })
+    }
   }
 
   getCurrentBounds() {
-    console.log(this.map.target.getBounds())
+    // console.log(this.map.target.getBounds())
   }
 
   getPlacesIds(id: number, type: string): Observable<any> {
@@ -588,7 +618,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
           if (response.sights.next_cursor != null) {
-            this.sightsModalNextPage = response.sights.next_cursor
+            this.sightsModalNextPage = true
           }
           if (more) {
             this.sightsContentModal.push(...response.sights.data)
@@ -614,9 +644,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
           if (response.events.next_cursor != null) {
-            this.eventsModalNextPage = response.events.next_cursor
+            this.eventsModalNextPage = true
           } else {
-            this.eventsModalNextPage = ''
+            this.eventsModalNextPage = false
           }
 
           if (more) {
@@ -648,9 +678,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.radius < 25 &&
       this.navigationService.appFirstLoading.value
     ) {
-      this.filterService.setRadiusTolocalStorage((++this.radius).toString())
-      this.CirclePoint.geometry?.setRadius(this.radius * 1000)
-      this.getEventsAndSights()
+      // Увеличивает радиус пока не появятся точки
+      // this.filterService.setRadiusTolocalStorage((++this.radius).toString())
+      // this.CirclePoint.geometry?.setRadius(this.radius * 1000)
+      // this.getEventsAndSights()
+      this.navigationService.appFirstLoading.next(false)
+      this.modalButtonLoader = true
+      this.eventsLoading = false
+      this.sightsLoading = false
     } else {
       this.navigationService.appFirstLoading.next(false)
       this.modalButtonLoader = true
@@ -735,8 +770,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   async getEventsAndSights() {
     this.modalButtonLoader = true
-    this.eventsModalNextPage = ''
-    this.sightsModalNextPage = ''
+    this.eventsModalNextPage = true
+    this.sightsModalNextPage = true
     this.eventsContentModal = []
     this.sightsContentModal = []
     const sources: any[] = []
@@ -903,7 +938,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }, 300)
     }
   }
-  ionViewWillEnter() {
+  ionViewWillEnter(): void
+  {
     this.renderSwitcher = !this.renderSwitcher
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -1029,15 +1065,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   //   this.setTypeState(value)
   // })
   // window.addEventListener('scroll', this.nextPageModal, true)
-
+  closeModal() {
+    this.modalEventShowOpen = false
+    this.getEventsAndSights()
+  }
   ionViewDidLeave() {
     this.destroy$.next()
     this.destroy$.complete()
-    console.log('destroy')
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
-    console.log('destroy')
+
     this.destroy$.next()
     this.destroy$.complete()
   }

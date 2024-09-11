@@ -83,7 +83,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private locationService: LocationService,
     private mapService: MapService,
-  ) { }
+  ) {}
 
   getEvent() {
     this.eventsService
@@ -191,61 +191,91 @@ export class EventShowComponent implements OnInit, OnDestroy {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
-  checkLiked() {
-    if (this.userAuth)
-      this.eventsService
-        .checkLiked(this.eventId!)
-        .pipe(retry(3), takeUntil(this.destroy$))
-        .subscribe((liked: any) => {
-          this.like = liked.is_liked
-          this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
-        })
-  }
+  // checkLiked() {
+  //   if (this.userAuth)
+  //     this.eventsService
+  //       .checkLiked(this.eventId!)
+  //       .pipe(retry(3), takeUntil(this.destroy$))
+  //       .subscribe((liked: any) => {
+  //         this.like = liked.is_liked
+  //         this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
+  //       })
+  // }
 
-  checFavorite() {
+  checkFavorite() {
     if (this.userAuth)
       this.eventsService
         .checkFavorite(this.eventId!)
         .pipe(retry(3), takeUntil(this.destroy$))
         .subscribe((favorite: any) => {
           this.favorite = favorite.is_favorite
-          this.favorite
-            ? (this.favoriteUrl = 'assets/icons/star-active.svg')
-            : (this.favoriteUrl = 'assets/icons/star.svg')
+          if (this.favorite === true) {
+            this.likeUrl = 'assets/icons/like-active.svg'
+          } else {
+            this.likeUrl = 'assets/icons/like.svg'
+          }
         })
   }
 
   checkPrice() {
+    let pricesValue: any = []
+    this.event.price.forEach((price: any) => {
+      pricesValue.push(price.cost_rub)
+    })
     let prices = this.event.price
+    let pricesLenght = prices.length - 1
+
     if (prices && prices.length != 0) {
-      if (prices[0].cost_rub == 0 && prices[0].cost_rub == prices[prices.length - 1].cost_rub) {
-        this.priceState = 'Бесплатно'
-        this.priceStateForShow = 'Бесплатно'
+      if (prices[pricesLenght].cost_rub == prices[0].cost_rub && prices[0].cost_rub !== 0) {
+        this.priceState = `${prices[0].cost_rub}₽`
+        this.priceStateForShow = `${prices[0].cost_rub} ₽`
       }
-      if (prices[0].cost_rub == prices[prices.length - 1].cost_rub && prices[0] !== 0) {
-        this.priceState = prices[0].cost_rub + '₽'
-        this.priceStateForShow = prices[0].cost_rub + '₽'
+      if (prices[pricesLenght].cost_rub == prices[0].cost_rub && prices[0].cost_rub == 0) {
+        this.priceState = `Бесплатно`
+        this.priceStateForShow = `Бесплатно`
       }
-      if (prices[0] != prices[prices.length] && prices[0] !== 0) {
-        this.priceState = prices[0].cost_rub
-        let minPrice = prices[0].cost_rub
-        let maxPrice = prices[0].cost_rub
-        prices.forEach((price: any) => {
-          price.cost_rub < minPrice ? (minPrice = price.cost_rub) : null
-          price.cost_rub > maxPrice ? (maxPrice = price.cost_rub) : null
-        })
-        if (minPrice == 0 && maxPrice == 0) {
-          this.priceState = 'Бесплатно'
-          this.priceStateForShow = 'Бесплатно'
-        } else {
-          this.priceState = 'от ' + minPrice + '₽'
-          this.priceStateForShow = 'от ' + minPrice + '₽' + ' до ' + maxPrice + '₽'
-        }
+      if (prices[pricesLenght].cost_rub != prices[0].cost_rub && prices[0].cost_rub) {
+        let minPrice
+        let maxPrice
+        minPrice = Math.min(...pricesValue)
+        maxPrice = Math.max(...pricesValue)
+        this.priceState = `От ${minPrice}`
+        this.priceStateForShow = `От ${minPrice}₽ до ${maxPrice}₽`
       }
     } else {
-      this.priceState = 'Бесплатно'
-      this.priceStateForShow = 'Бесплатно'
+      this.priceState = `Бесплатно`
+      this.priceStateForShow = `Бесплатно`
     }
+    // if (prices && prices.length != 0) {
+    //   if (prices[0].cost_rub == 0 && prices[0].cost_rub == prices[prices.length - 1].cost_rub) {
+    //     this.priceState = 'Бесплатно'
+    //     this.priceStateForShow = 'Бесплатно'
+    //   }
+    //   if (prices[0].cost_rub == prices[prices.length - 1].cost_rub && prices[0] !== 0) {
+    //     this.priceState = prices[0].cost_rub + '₽'
+    //     this.priceStateForShow = prices[0].cost_rub + '₽'
+    //   }
+    //   if (prices[0] != prices[prices.length - 1] && prices[0] !== 0) {
+    //     this.priceState = prices[0].cost_rub
+    //     let minPrice = prices[0].cost_rub
+    //     let maxPrice = prices[0].cost_rub
+    //     prices.forEach((price: any) => {
+    //       price.cost_rub < minPrice ? (minPrice = price.cost_rub) : null
+    //       price.cost_rub > maxPrice ? (maxPrice = price.cost_rub) : null
+    //     })
+
+    //     if (minPrice == 0 && maxPrice == 0) {
+    //       this.priceState = 'Бесплатно'
+    //       this.priceStateForShow = 'Бесплатно'
+    //     } else if (minPrice == maxPrice && maxPrice != 0) {
+    //       this.priceState = 'от ' + minPrice + '₽'
+    //       this.priceStateForShow = 'от ' + minPrice + '₽' + ' до ' + maxPrice + '₽'
+    //     }
+    //   }
+    // } else {
+    //   this.priceState = 'Бесплатно'
+    //   this.priceStateForShow = 'Бесплатно'
+    // }
   }
 
   clearDescription() {
@@ -271,11 +301,15 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.eventsService
         .toggleFavorite(event_id)
         .pipe(
-          tap(() => {
+          tap((res) => {
+           
             this.favorite = !this.favorite
-            this.favorite
-              ? (this.favoriteUrl = 'assets/icons/star-active.svg')
-              : (this.favoriteUrl = 'assets/icons/star.svg')
+
+            if (this.favorite === true) {
+              this.likeUrl = 'assets/icons/like-active.svg'
+            } else {
+              this.likeUrl = 'assets/icons/like.svg'
+            }
             this.loadingLike = false
             this.loadingFavotire = false
           }),
@@ -294,13 +328,11 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .getOrganization(this.event.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
-        console.log(res)
         this.organization = res.organization
       })
   }
 
   toggleLike(event_id: number) {
-    console.log(this.event)
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
@@ -326,8 +358,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
-    this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
-    this.favorite ? (this.favoriteUrl = 'assets/icons/star-active.svg') : (this.favoriteUrl = 'assets/icons/star.svg')
     //Получаем ид ивента из параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
@@ -335,9 +365,11 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
     this.userAuth = this.authService.getAuthState()
     if (this.router.url !== '/cabinet/events/create') {
+      this.loadingFavotire = true
+      // this.favorite ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
       this.getEvent()
-      this.checkLiked()
-      this.checFavorite()
+      this.checkFavorite()
+      this.loadingFavotire = false
       this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
         this.loadMore = true
         this.locationId = Number(value)
@@ -349,7 +381,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       })
     }
   }
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngOnDestroy() {
     // отписываемся от всех подписок

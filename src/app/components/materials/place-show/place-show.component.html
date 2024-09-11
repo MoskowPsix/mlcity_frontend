@@ -1,4 +1,5 @@
-<ion-accordion>
+
+<ion-accordion *ngIf="priceState !== 'dont-price'">
     <ion-item *ngIf="place" class="place-address-container" slot="header">
       <ion-label class="place-adress-container__address-text">{{place.address}}</ion-label>
     </ion-item> 
@@ -19,5 +20,28 @@
         </ya-map>
       </div>
       <app-seances-container [priceState]="priceState" [seances]="place.seances"/>
+    </div>
+</ion-accordion>
+
+<ion-accordion *ngIf="priceState === 'dont-price'">
+    <ion-item *ngIf="place" class="place-address-container" slot="header">
+      <ion-label class="place-adress-container__address-text">{{place.address}}</ion-label>
+    </ion-item> 
+    <div class="place-content-container" slot="content">
+      <div class="place-content-container__map">
+        <ya-map 
+        (ready)="onMapReady($event,place)"
+        [zoom]="15" 
+        [center]="[place.latitude, place.longitude]" 
+        [state]="{controls: []}"
+        [options]="{
+          yandexMapDisablePoiInteractivity: true,
+          minZoom:1,
+          maxZoom:18,
+          suppressMapOpenBlock: true,
+          suppressObsoleteBrowserNotifier: true
+        }">
+        </ya-map>
+      </div>
     </div>
 </ion-accordion>

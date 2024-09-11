@@ -1,17 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import {
-  EMPTY,
-  Subject,
-  catchError,
-  delay,
-  filter,
-  map,
-  of,
-  retry,
-  takeUntil,
-  tap,
-} from 'rxjs'
+import { EMPTY, Subject, catchError, delay, filter, map, of, retry, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { AuthService } from 'src/app/services/auth.service'
 import { ToastService } from 'src/app/services/toast.service'
@@ -63,29 +52,10 @@ export class RegistrationComponent implements OnInit {
   @ViewChild('modal') modal!: IonModal
 
   readonly phoneMask: MaskitoOptions = {
-    mask: [
-      '+',
-      '7',
-      ' ',
-      '(',
-      /\d/,
-      /\d/,
-      /\d/,
-      ')',
-      ' ',
-      /\d/,
-      /\d/,
-      /\d/,
-      '-',
-      /\d/,
-      /\d/,
-      /\d/,
-      /\d/,
-    ],
+    mask: ['+', '7', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
   }
 
-  readonly maskPredicate: MaskitoElementPredicate = async (el: any) =>
-    (el as HTMLIonInputElement).getInputElement()
+  readonly maskPredicate: MaskitoElementPredicate = async (el: any) => (el as HTMLIonInputElement).getInputElement()
 
   readonly maskNumber: MaskitoOptions = {
     mask: [...Array(4).fill(/\d/)],
@@ -112,31 +82,15 @@ export class RegistrationComponent implements OnInit {
   ngOnInit() {
     this.registerForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
-      password_confirmation: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
-      name: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(50),
-      ]),
-      number: new FormControl('', [
-        Validators.minLength(10),
-        Validators.minLength(10),
-      ]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      password_confirmation: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+      number: new FormControl('', [Validators.minLength(10), Validators.minLength(10)]),
       avatar: new FormControl(''),
     })
 
     this.modalForm = new FormGroup({
-      emailConfirmInput: new FormControl('', [
-        Validators.required,
-        Validators.minLength(4),
-      ]),
+      emailConfirmInput: new FormControl('', [Validators.required, Validators.minLength(4)]),
     })
 
     this.OpenPassword('reg_password')
@@ -145,10 +99,7 @@ export class RegistrationComponent implements OnInit {
 
   checkName() {
     this.busyName = this.registerForm.value.name
-    if (
-      this.registerForm.value.name.length != ' ' &&
-      this.registerForm.value.name.length != ''
-    ) {
+    if (this.registerForm.value.name.length != ' ' && this.registerForm.value.name.length != '') {
       if (!this.registerForm.controls['name'].invalid) {
         this.authservice
           .checkName(this.registerForm.value.name)
@@ -203,10 +154,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   checkPassword() {
-    if (
-      this.registerForm.value.password ==
-      this.registerForm.value.password_confirmation
-    ) {
+    if (this.registerForm.value.password == this.registerForm.value.password_confirmation) {
       this.busyPass = true
     } else {
       this.busyPass = false
@@ -273,10 +221,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   CodeCountFn() {
-    if (
-      this.modalForm.value.emailConfirmInput.length >= 3 &&
-      this.codeCount == 1
-    ) {
+    if (this.modalForm.value.emailConfirmInput.length >= 3 && this.codeCount == 1) {
       this.confirmCode = true
       this.codeCount = 0
     }
@@ -329,13 +274,8 @@ export class RegistrationComponent implements OnInit {
             //this.confirmEmail();
             if (respons.status == 'success') {
               this.router.navigate(['/email-confirm'], { replaceUrl: true })
-              this.toastService.showToast(
-                'Вы успешно зарегестрировались!!!',
-                'success',
-              )
-              respons.access_token
-                ? this.loginAfterSocial(respons.access_token)
-                : this.loginAfterSocial('no')
+              this.toastService.showToast('Вы успешно зарегестрировались!!!', 'success')
+              respons.access_token ? this.loginAfterSocial(respons.access_token) : this.loginAfterSocial('no')
             }
             this.loadingService.hideLoading()
             // this.registerForm.disable();
@@ -392,10 +332,7 @@ export class RegistrationComponent implements OnInit {
           minutes--
         }
 
-        let formattedTime =
-          (minutes < 10 ? '0' + minutes : minutes) +
-          ':' +
-          (seconds < 10 ? '0' + seconds : seconds)
+        let formattedTime = (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds)
         this.timerRertyFormated = formattedTime
 
         if (minutes === 0 && seconds === 0) {

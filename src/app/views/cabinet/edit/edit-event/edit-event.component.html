@@ -42,6 +42,7 @@
                     </div>
                 </div>
             </div>
+        
             <div class="prices-container">
                 <div class="not-found-span-container">
                     <span class="not-found-span" *ngIf="checkfreeEntry()">Свободный вход без билетов</span>
@@ -60,6 +61,7 @@
                     </div>
                 </div>
             </div>
+            <app-standart-input [invalid]="invalidForm.name" [label]="'Ссылка на оплату билетов'" [control] = "editForm.get('materials')"></app-standart-input>
             <div class="place-container">
                 <div class="not-found-span-container">
                     <span class="not-found-span" *ngIf="checkCountPlaces()">Место проведения не добавлено</span>
@@ -80,11 +82,16 @@
                 </ng-container>
             </div>
             <app-standart-button (click)="addPlace()" buttonText="Добавить место" type="button" theme ="light"></app-standart-button>
-            <app-standart-input [invalid]="invalidForm.sponsor" [label]="'Организатор'" [control] = "editForm.get('sponsor')"></app-standart-input>
-            <div (click)="submitForm()" class="save-button-wrapper">
-                <app-standart-button  [disabled]="submitButtonState" buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
+            <div  class="save-button-wrapper">
+                <app-standart-button (click)="submitForm()" [disabled]="submitButtonState" buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
+                <div class="delete-button-wrapper">
+                    <app-standart-button (click)="deleteConfirmModal()"  [disabled]="submitButtonState" buttonText="Удалить" type="button" theme ="red"></app-standart-button>
+                </div>
             </div>
-
+            <app-confirm-modal (cancel)="cancelDeleteConfirm()" (confirm)="deleteConfirm()" [openModal]="deleteConfirmValue"></app-confirm-modal>
         </form>
+       
     </div>
+
 </ion-content>
+
