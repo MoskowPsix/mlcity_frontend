@@ -146,6 +146,7 @@ import { StepContainerComponent } from './components/materials/step-container/st
 import { NgxDocViewerModule } from 'ngx-doc-viewer'
 import { ClusterModalComponent } from './components/cluster-modal/cluster-modal.component'
 import { StepContainerItemComponent } from './components/materials/step-container-item/step-container-item.component'
+import { ConfirmModalComponent } from './components/materials/confirm-modal/confirm-modal.component'
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
@@ -178,6 +179,7 @@ registerLocaleData(localeRu, 'ru')
     RecoveryPasswordComponent,
     SecondHeaderComponent,
     ShowSliderComponent,
+    ConfirmModalComponent,
     ClusterModalComponent,
     HeaderComponent,
     CodeInputComponent,

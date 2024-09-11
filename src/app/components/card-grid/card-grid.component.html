@@ -13,8 +13,14 @@
 <ng-container *ngIf="cards.length > 0 && notFound === false">
 
   <ng-container *ngIf="cards.length >= 0">
-    <div class="main-grid">
+    <div *ngIf="!archived" class="main-grid">
         <app-event-card *ngFor="let card of cards; let i = index" [event]="card" [myEvent]="myEvents" [isSight]="isSight"></app-event-card>
+    </div>
+    <div *ngIf="archived" class="main-grid">
+      <ng-container *ngFor="let card of cards; let i = index">
+          <app-event-card *ngIf="checkEventStatus(card)"  [event]="card" [myEvent]="myEvents" [isSight]="isSight"></app-event-card>
+      </ng-container>
+
     </div>
     <div class="spiner-container">
       <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>
