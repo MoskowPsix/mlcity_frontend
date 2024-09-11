@@ -21,14 +21,15 @@ export class EditSliderComponent implements OnInit {
   deleteFiles: any[] = []
 
   ngOnChanges(changes: SimpleChanges): void {
+    let previewsCount = this.previews.length
+    console.log(previewsCount)
     if (changes['vkFiles']) {
-      for (let i = 0; i < this.previews.length; i++) {
-        if (this.previews[i].vk) {
-          console.log(this.previews[i].vk)
-          this.previews.splice(i, 1)
+      for (let i = 0; i < previewsCount; i++) {
+        if (this.previews[i] && this.previews[i].vk) {
+          this.previews.splice(i)
         }
       }
-      this.previews.forEach((file: any, i: number) => {})
+      console.log(this.vkFiles)
       this.previews.push(...this.vkFiles)
     }
   }

@@ -33,6 +33,41 @@
     font-size: 0.75rem;
     transition: 0.3s all;
 }
+.standart-button_red{
+    font-family: var(--font-regular);
+    display: flex;
+    align-items: center;
+    background:none;
+    color: #ff0303;
+    border: 1px solid #ff030381;
+    min-height: 2rem;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 100%;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-size: 0.75rem;
+    transition: 0.3s all;
+}
+.standart-button_red:active{
+    transition: 0.3s all;
+    font-family: var(--font-regular);
+    display: flex;
+    align-items: center;
+    background:#ff0303;
+    color: #fff;
+    border: 1px solid #ff030381;
+    min-height: 2rem;
+    min-width: 100%;
+    border-radius: 5px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-size: 0.75rem;
+    transition: 0.3s all;
+}
 
 .standart-button{
     font-family: var(--font-regular);

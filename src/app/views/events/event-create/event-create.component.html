@@ -46,7 +46,7 @@
         </div>
         <div class="place-container">
           <div class="not-found-span-container">
-            <span class="not-found-span" *ngIf="this.createEventForm.value.places.length === 0">Место проведения не добавлено</span>
+            <span class="not-found-span" *ngIf="this.createEventForm.value && this.createEventForm.value.places.length === 0">Место проведения не добавлено</span>
           </div>
             <ng-container *ngFor="let place of this.createEventForm.value.places; let i = index">
                 <app-new-place 
