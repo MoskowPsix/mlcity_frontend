@@ -248,9 +248,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.showBackButton = value
     })
 
-    this.locationService.getFavoriteCities().subscribe((response: any) => {
-      this.favoriteCities = response.cities
-    })
+    this.locationService
+      .getFavoriteCities()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response: any) => {
+        this.favoriteCities = response.cities
+      })
 
     //Подписываемся на состояние модалки поиска города
     this.navigationService.modalSearchCityesOpen.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -315,7 +318,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.filterService.changeFilter.next(true)
       })
 
-    this.filterService.changeFilter.subscribe(() => {})
+    this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
 
     this.switchTypeService.link.pipe(takeUntil(this.destroy$)).subscribe((value: string) => {
       this.feedLink = value

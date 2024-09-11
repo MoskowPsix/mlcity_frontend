@@ -29,6 +29,9 @@ export class ClusterModalComponent implements OnInit {
   endScrollingSight() {
     this.paginateSight.emit()
   }
+  testLog() {
+    console.log('test-log')
+  }
   ngOnInit() {
     this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.type = value

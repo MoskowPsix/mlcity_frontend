@@ -5,13 +5,11 @@
     <ion-content>
       <div class="main-content">
         <div class="events-wrapper">
-        <ng-container *ngIf="type=== 'events'">
-         
+        <ng-container *ngIf="type === 'events'">
             <app-card-grid [spiner]="spiner"  (endScroll)="endScrollingEvent()" [cards]="modalContent"></app-card-grid>
-       
         </ng-container>
-        <ng-container *ngIf="type=== 'sights'">
-          <app-organizations-grid [spiner]="spiner" (endScroll)="endScrollingSight()" [cards]="modalContent"></app-organizations-grid>
+        <ng-container *ngIf="type === 'sights'">
+          <app-organizations-grid (click)="testLog()" [spiner]="spiner" (endScroll)="endScrollingSight()" [cards]="modalContent"></app-organizations-grid>
         </ng-container>
       </div>
     </div>
