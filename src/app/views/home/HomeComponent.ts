@@ -75,7 +75,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   placemarks_tomorrow: ymaps.Placemark[] = []
   placemarks_week: ymaps.Placemark[] = []
   placemarks_month: ymaps.Placemark[] = []
-  wait: boolean = true
 
   //настройки ползунка радиуса
   options: Options = {
@@ -577,41 +576,33 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getPlaces(): Observable<any> {
     return new Observable((observer) => {
-      if (this.wait) {
-        this.eventsLoading = true
-        this.wait = false
-        this.placeService
-          .getPlaces(this.queryBuilderService.queryBuilder('placesForMap'))
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((response: any) => {
-            this.places = response.places
-            this.wait = true
-            this.cdr.detectChanges()
-            observer.next(EMPTY)
-            observer.complete()
-          })
-      }
+      this.eventsLoading = true
+      this.placeService
+        .getPlaces(this.queryBuilderService.queryBuilder('placesForMap'))
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: any) => {
+          this.places = response.places
+          this.cdr.detectChanges()
+          observer.next(EMPTY)
+          observer.complete()
+        })
     })
   }
 
   getSightsForMap(): Observable<any> {
     return new Observable((observer) => {
-      if (this.wait) {
-        this.wait = false
-        this.sightsLoading = true
-        this.sightsService
-          .getSightsForMap(this.queryBuilderService.queryBuilder('sightsForMap'))
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((response: any) => {
-            this.sights = response.sights
-            this.wait = true
-            this.filterService.setSightsCount(response.sights.length)
-            //this.sightsLoading = false
-            this.cdr.detectChanges()
-            observer.next(EMPTY)
-            observer.complete()
-          })
-      }
+      this.sightsLoading = true
+      this.sightsService
+        .getSightsForMap(this.queryBuilderService.queryBuilder('sightsForMap'))
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: any) => {
+          this.sights = response.sights
+          this.filterService.setSightsCount(response.sights.length)
+          //this.sightsLoading = false
+          this.cdr.detectChanges()
+          observer.next(EMPTY)
+          observer.complete()
+        })
     })
   }
 
@@ -943,8 +934,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       }, 300)
     }
   }
-  ionViewWillEnter(): void
-  {
+  ionViewWillEnter(): void {
     this.renderSwitcher = !this.renderSwitcher
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -1009,7 +999,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     window.addEventListener('scroll', this.nextPageModal, true)
   }
   ngOnInit(): void {}
-  
+
   closeModal() {
     this.modalEventShowOpen = false
     this.getEventsAndSights()
@@ -1017,7 +1007,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   ionViewDidLeave() {
     this.destroy$.next()
     this.destroy$.complete()
-    this.wait = true
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
