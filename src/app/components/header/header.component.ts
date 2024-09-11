@@ -306,14 +306,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.showChangeCityDialog = value
     })
 
-    this.locationService
-      .getLocationsIds(this.filterService.locationId.value)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((res) => {
-        this.mapService.circleCenterLatitude.next(res.location.latitude)
-        this.mapService.circleCenterLongitude.next(res.location.longitude)
-        this.filterService.changeFilter.next(true)
-      })
+    if (this.filterService.locationId.value) {
+      this.locationService
+        .getLocationsIds(this.filterService.locationId.value)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res) => {
+          this.mapService.circleCenterLatitude.next(res.location.latitude)
+          this.mapService.circleCenterLongitude.next(res.location.longitude)
+          this.filterService.changeFilter.next(true)
+        })
+    }
 
     this.filterService.changeFilter.subscribe(() => {})
 
