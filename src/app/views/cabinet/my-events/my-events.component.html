@@ -4,8 +4,10 @@
         Мои мероприятия <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/create.svg" buttonText="Создать"></app-rounded-button>
       </ng-container>
   </app-second-header>
-  <app-card-grid  [archived]="true" [notFound]="notFound" [spiner]="spiner" [cards]="events" (endScroll)="getMyEvents($event)"></app-card-grid>
+  <div class="grid-container">
+    <app-card-grid  [archived]="true" [notFound]="notFound" [spiner]="spiner" [cards]="events" (endScroll)="getMyEvents($event)"></app-card-grid>
+
+  </div>
  
 </ion-content>
-
 

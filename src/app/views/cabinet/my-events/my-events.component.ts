@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
+import { Statuses } from 'src/app/enums/statuses-new'
 import { EventsService } from 'src/app/services/events.service'
 import { FilterService } from 'src/app/services/filter.service'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
@@ -41,7 +42,12 @@ export class MyEventsComponent implements OnInit, OnDestroy {
           delay(100),
           retry(3),
           map((respons: any) => {
-            this.events.push(...respons.events.data)
+            console.log(respons)
+            respons.events.data.forEach((event: any) => {
+              if (this.checkEventStatus(event)) {
+                this.events.push(event)
+              }
+            })
             this.spiner = false
             this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next(respons.events.next_cursor)
             respons.events.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
@@ -51,6 +57,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
             this.loadMoreEvents = false
           }),
           catchError((err) => {
+            console.log(err)
             this.toastService.showToast(MessagesErrors.default, 'danger')
             this.loadEvents = true
             return of(EMPTY)
@@ -58,13 +65,36 @@ export class MyEventsComponent implements OnInit, OnDestroy {
           takeUntil(this.destroy$),
         )
         .subscribe(() => {
+          console.log('я заспавнился')
           if (this.events.length == 0) {
             this.notFound = true
           }
         })
     }
   }
-  ngOnInit() {
+  checkEventStatus(event: any) {
+    let status: any = ''
+    if (event && event.statuses) {
+      event.statuses.forEach((element: any) => {
+        if (element.pivot.last) {
+          status = element
+        }
+      })
+      if (status.name == Statuses.draft) {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return false
+    }
+  }
+
+  ngOnInit() {}
+
+  ionViewWillEnter() {
+    this.events = []
+    this.nextPage = true
     this.getMyEvents()
   }
   ionViewDidWillLeave() {

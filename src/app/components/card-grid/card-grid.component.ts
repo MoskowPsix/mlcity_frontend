@@ -28,23 +28,7 @@ export class CardGridComponent implements OnInit {
     //   this.notFound = 'notfound'
     // }
   }
-  checkEventStatus(event: any) {
-    let status: any = ''
-    if (event && event.statuses) {
-      event.statuses.forEach((element: any) => {
-        if (element.pivot.last) {
-          status = element
-        }
-      })
-      if (status.name == Statuses.draft) {
-        return false
-      } else {
-        return true
-      }
-    } else {
-      return false
-    }
-  }
+
   onIonInfinite(event: any) {
     if (!this.notFound) {
       let trueEvent = event as InfiniteScrollCustomEvent
