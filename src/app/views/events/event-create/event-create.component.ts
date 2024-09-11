@@ -115,6 +115,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   typeSelected: number | null = null
   currentType: any = []
   dateTomorrow = new Date()
+
   statuses: IStatus[] = []
   statusesLoaded: boolean = false
   statusSelected: number | null = null
@@ -741,7 +742,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
     this.eventsService
       .create(event)
-      .pipe()
+      .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesEvents.create, 'success')

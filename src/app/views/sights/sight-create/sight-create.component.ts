@@ -6,6 +6,7 @@ import { UserService } from 'src/app/services/user.service'
 import { SightTypeService } from 'src/app/services/sight-type.service'
 //import { IUser } from 'src/app/models/user';
 import { ISightType } from 'src/app/models/sight-type'
+
 import { IStatus } from 'src/app/models/status'
 import { environment } from 'src/environments/environment'
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps'
@@ -27,7 +28,8 @@ import { VkService } from 'src/app/services/vk.service'
 import { DomSanitizer } from '@angular/platform-browser'
 import { register } from 'swiper/element/bundle'
 import { LocationService } from 'src/app/services/location.service'
-import { Location } from 'src/app/models/location'
+import { Location } from '@angular/common'
+
 import { FilterService } from 'src/app/services/filter.service'
 import { Router } from '@angular/router'
 import { GeneratePlugSightEventsImgService } from 'src/app/services/generate-plug-sight-events-img.service'
@@ -110,6 +112,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private toastService: ToastService,
     private userService: UserService,
+    private locationFromAngular: Location,
     private vkService: VkService,
     private sightTypeService: SightTypeService,
     private statusesService: StatusesService,
@@ -647,7 +650,11 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   //Клик по нкопке назад
   stepPrev() {
-    this.stepCurrency--
+    if (this.stepCurrency - 1 > 0) {
+      this.stepCurrency--
+    } else {
+      this.locationFromAngular.back()
+    }
   }
 
   //отправляем данные

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Subject, takeUntil } from 'rxjs'
 import { FilterService } from 'src/app/services/filter.service'
 
 @Component({
@@ -11,18 +12,18 @@ export class RangeSelectionButtonComponent implements OnInit {
   radiusRange: number[] = [1, 2, 5, 10, 25]
   currentRange!: number
 
+  private readonly destroy$ = new Subject<void>()
   constructor(private filterService: FilterService) {}
 
   changeState() {
     this.state = !this.state
-    
   }
 
   changeRadius(value: number) {
     this.filterService.setRadiusTolocalStorage(`${value}`)
   }
   ngOnInit() {
-    this.filterService.radius.subscribe((radius: string) => {
+    this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((radius: string) => {
       this.currentRange = Number(radius)
     })
   }
