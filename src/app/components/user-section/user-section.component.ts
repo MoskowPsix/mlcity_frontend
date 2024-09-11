@@ -50,7 +50,7 @@ export class UserSectionComponent implements OnInit {
   }
   redirect() {
     if (this.extensialClick) {
-      this.router.navigate([`/organizations/${this.organization.id}`])
+      window.location.href = `/organizations/${this.organization.id}`
     }
   }
   ngOnChanges(changes: any) {
