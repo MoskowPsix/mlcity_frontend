@@ -390,6 +390,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         clusterIconLayout: this.createCluster(),
         clusterDisableClickZoom: true,
         hasBalloon: false,
+        gridSize: 96,
         clusterBalloonPanelMaxMapArea: 0,
         clusterOpenBalloonOnClick: true,
         clusterIconShape: {
@@ -677,9 +678,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.radius < 25 &&
       this.navigationService.appFirstLoading.value
     ) {
-      this.filterService.setRadiusTolocalStorage((++this.radius).toString())
-      this.CirclePoint.geometry?.setRadius(this.radius * 1000)
-      this.getEventsAndSights()
+      // Увеличивает радиус пока не появятся точки
+      // this.filterService.setRadiusTolocalStorage((++this.radius).toString())
+      // this.CirclePoint.geometry?.setRadius(this.radius * 1000)
+      // this.getEventsAndSights()
+      this.navigationService.appFirstLoading.next(false)
+      this.modalButtonLoader = true
+      this.eventsLoading = false
+      this.sightsLoading = false
     } else {
       this.navigationService.appFirstLoading.next(false)
       this.modalButtonLoader = true
@@ -932,7 +938,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }, 300)
     }
   }
-  ionViewWillEnter() {
+  ionViewWillEnter(): void
+  {
     this.renderSwitcher = !this.renderSwitcher
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
