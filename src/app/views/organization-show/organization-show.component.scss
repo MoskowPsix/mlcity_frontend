@@ -11,6 +11,13 @@
 .organization-container{
     padding: 1rem;
 }
+
+.hidden-id {
+  font-family: var(--font-regular);
+  font-size: 0.75rem;
+  color: grey;
+}
+
 .organization-avatar{
     width: 4.438rem;
     height: 4.438rem;
@@ -21,7 +28,7 @@
     align-items: center;
 }
 .organization-container__slider-wrapper{
-    
+
 }
 .organization-section__info{
     padding-left: 10px;
@@ -50,7 +57,7 @@
     border-radius: 5px;
 }
 .organization-section__info__rating{
- 
+
 }
 .organization-avatar{
     background-color: rgba(184, 184, 184, 0.514);
@@ -60,11 +67,11 @@
     height: 4.438rem;
     border-radius: 50px;
     background: url('/assets/images/nophoto.jpg');
-    background-position: center center;        
-    background-size: cover;      
+    background-position: center center;
+    background-size: cover;
 }
 .organization-container__description{
-    padding-top: 1rem; 
+    padding-top: 1rem;
     font-family: var(--font-regular);
     color: #4C5861;
     font-size:0.75rem;

@@ -12,11 +12,17 @@
   border-radius: 4px;
 }
 
+.hidden-id {
+  font-family: var(--font-regular);
+  font-size: 0.75rem;
+  color: grey;
+}
+
 .main-content{
   padding: 1rem;
 }
 ion-content{
- 
+
 }
 .main-content__name{
   padding-top: 1rem;
@@ -568,7 +574,7 @@ ion-accordion-group {
   max-width: 95%;
   display: flex;
   border-bottom: 2px solid rgba(0, 0, 0, 0.096);
- 
+
 }
 .seances-time-container {
   background: none;
