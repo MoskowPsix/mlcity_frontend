@@ -14,6 +14,8 @@ import { IPlace } from 'src/app/models/place'
 import { EventHistoryContent } from 'src/app/clasess/history_content/event_history_content'
 import { EditService } from 'src/app/services/edit.service'
 import { ToastService } from 'src/app/services/toast.service'
+import { StatusesService } from 'src/app/services/statuses.service'
+import { Statuses } from 'src/app/enums/statuses-new'
 import _ from 'lodash'
 import { serialize } from 'object-to-formdata'
 interface InvalidForm {
@@ -43,6 +45,7 @@ export class EditEventComponent implements OnInit {
     private eventsService: EventsService,
     private loadingService: LoadingService,
     private editService: EditService,
+    private statusesService: StatusesService,
     private router: Router,
   ) {}
   private readonly destroy$ = new Subject<void>()
@@ -57,6 +60,7 @@ export class EditEventComponent implements OnInit {
   submitButtonState: boolean = false
   copyEvent: any
   freeEntry: boolean = true
+  deleteConfirmValue: boolean = false
   formData: FormData = new FormData()
   options: object = {
     indexes: true,
@@ -97,6 +101,40 @@ export class EditEventComponent implements OnInit {
       return false
     }
   }
+  deleteConfirmModal() {
+    this.deleteConfirmValue = true
+  }
+  cancelDeleteConfirm() {
+    this.deleteConfirmValue = false
+  }
+  deleteConfirm() {
+    this.deleteConfirmValue = false
+    this.deleteEvenet()
+  }
+  deleteEvenet() {
+    let currentStatusId = 0
+    this.loadingService.showLoading()
+    this.statusesService
+      .getStatuses()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any) => {
+        if (res.statuses && res.statuses.length) {
+          this.eventsService
+            .changeStatusEvent(
+              this.event.id,
+              res.statuses[res.statuses.map((status: any) => status.name).indexOf(Statuses.draft)].id,
+            )
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((res: any) => {
+              console.log(res)
+              this.loadingService.hideLoading()
+              this.toastService.showToast('Событие удалено', 'success')
+              this.router.navigate(['cabinet/events'])
+            })
+        }
+      })
+  }
+
   logFiles(event: any) {
     this.editForm.value.files = event
   }

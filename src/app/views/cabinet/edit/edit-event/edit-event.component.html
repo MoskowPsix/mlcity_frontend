@@ -85,10 +85,13 @@
             <div  class="save-button-wrapper">
                 <app-standart-button (click)="submitForm()" [disabled]="submitButtonState" buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
                 <div class="delete-button-wrapper">
-                    <app-standart-button  [disabled]="submitButtonState" buttonText="Удалить" type="button" theme ="red"></app-standart-button>
+                    <app-standart-button (click)="deleteConfirmModal()"  [disabled]="submitButtonState" buttonText="Удалить" type="button" theme ="red"></app-standart-button>
                 </div>
             </div>
-          
+            <app-confirm-modal (cancel)="cancelDeleteConfirm()" (confirm)="deleteConfirm()" [openModal]="deleteConfirmValue"></app-confirm-modal>
         </form>
+       
     </div>
+
 </ion-content>
+

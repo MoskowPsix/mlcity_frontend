@@ -87,6 +87,11 @@ export class EventsService {
       params: { ...params },
     })
   }
+  changeStatusEvent(id: number, status: number) {
+    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}/statuses/`, {
+      status_id: status,
+    })
+  }
 
   toggleFavorite(event_id: number) {
     const params = {

@@ -3,5 +3,5 @@ export enum Statuses {
   publish = 'Опубликовано',
   denied = '7',
   draft = '4',
-  archive = '6',
+  archive = 'Черновик',
 }
