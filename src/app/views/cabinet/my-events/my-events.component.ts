@@ -42,7 +42,6 @@ export class MyEventsComponent implements OnInit, OnDestroy {
           delay(100),
           retry(3),
           map((respons: any) => {
-            console.log(respons)
             respons.events.data.forEach((event: any) => {
               if (this.checkEventStatus(event)) {
                 this.events.push(event)
@@ -65,7 +64,6 @@ export class MyEventsComponent implements OnInit, OnDestroy {
           takeUntil(this.destroy$),
         )
         .subscribe(() => {
-          console.log('я заспавнился')
           if (this.events.length == 0) {
             this.notFound = true
           }
