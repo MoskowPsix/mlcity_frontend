@@ -568,7 +568,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
     this.formData.append('type', this.createEventForm.controls['type'].value)
     this.formData.append('status', this.createEventForm.controls['status'].value)
-    this.formData.append('ageLimit', this.createEventForm.controls['ageLimit'].value)
+    this.formData.append('age_limit', this.createEventForm.controls['ageLimit'].value)
     this.formData.append('sponsor', 'Admin')
 
     this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {

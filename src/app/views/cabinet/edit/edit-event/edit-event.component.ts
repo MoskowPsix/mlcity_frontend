@@ -96,7 +96,6 @@ export class EditEventComponent implements OnInit {
     }
   }
 
-
   //Модальное окно с потверждением отмены редактирования
   opnModalCancel() {
     this.cancelConfirmValue = true
@@ -152,7 +151,9 @@ export class EditEventComponent implements OnInit {
         }
       })
   }
-  setAgeLimit(event: any) {}
+  setAgeLimit(event: any) {
+    this.editForm.value.age_limit = event.target.value
+  }
 
   logFiles(event: any) {
     this.editForm.value.files = event
@@ -368,6 +369,7 @@ export class EditEventComponent implements OnInit {
           sponsor: res.sponsor,
           description: res.description,
           materials: res.materials,
+          age_limit: res.age_limit,
         })
         if (priceArray) {
           priceArray.forEach((price: any) => {
@@ -441,7 +443,7 @@ export class EditEventComponent implements OnInit {
       addressPlace: false,
     }
     this.invalidForm.name = this.editForm.get('name')!.invalid
-    this.invalidForm.description = this.editForm.get('description')!.invalid
+
     this.invalidForm.sponsor = this.editForm.get('sponsor')!.invalid
     this.editForm.value.types.forEach((type: any) => {
       if (!type.on_delete) {
@@ -531,6 +533,7 @@ export class EditEventComponent implements OnInit {
     }
   }
   submitForm() {
+    this.loadingService.showLoading()
     if (this.checkValidOfForm()) {
       if (this.submitButtonState) {
         return
@@ -559,13 +562,12 @@ export class EditEventComponent implements OnInit {
         )
         .subscribe((res: any) => {
           this.formData = new FormData()
+          this.loadingService.hideLoading()
           this.submitButtonState = false
           this.loadingService.hideLoading()
           if (res.status == 'success') {
             this.toastService.showToast('Событие отправленно на проверку', 'success')
-            this.router.navigate(['/cabinet/events']).then(() => {
-              window.location.reload()
-            })
+            this.router.navigate(['/cabinet/events']).then(() => {})
           }
         })
     }
@@ -580,6 +582,7 @@ export class EditEventComponent implements OnInit {
       types: new FormControl([], [Validators.required]),
       places: new FormControl([], [Validators.required]),
       materials: new FormControl([], [Validators.required]),
+      age_limit: new FormControl([], [Validators.required]),
     })
   }
 }
