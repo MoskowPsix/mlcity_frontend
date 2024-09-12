@@ -1,6 +1,7 @@
 <meta name="description" content="Узнайте какие события и достопремечательности проходят рядом с вами и в вашем городе.">
 
 <ion-content >
+
   <!-- Карта -->
   <div name="map" class="map">
     <ya-map name="map" [@mapAnimate] (ready)="onMapReady($event)"
@@ -31,6 +32,10 @@
           <app-type-swither></app-type-swither>
           <app-category-button ></app-category-button>
       </app-second-header>
+      <div class="map-loaders">
+        <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType === 'sights'"></ion-progress-bar>
+        <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType !== 'sights'"></ion-progress-bar>
+      </div>
     </div>
     <div class="map-tools">
         <app-calendar-button *ngIf="stateType === 'events'" (setDateEmit)="setDate($event)"></app-calendar-button>
