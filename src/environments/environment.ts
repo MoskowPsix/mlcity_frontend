@@ -7,7 +7,7 @@ export const environment = {
   APP_NAME: 'VOKRUG',
   BASE_URL: 'http://dev.mlcity.ru',
   PORT: '8100',
-  BACKEND_URL: 'http://localhost',
+  BACKEND_URL: 'http://dev.mlcity.ru',
   BACKEND_PORT: '8000',
   DOMAIN: 'mlcity.ru',
   appleClientId: 'mlcity.ru',
