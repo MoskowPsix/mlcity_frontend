@@ -61,12 +61,18 @@
   width: 98.5%;
   z-index: 9999;
 }
+.types-wrapper{
+  padding-top: 1rem;
+}
 
 .buttons-dekstop {
   position: fixed;
   top: 6.7em;
   width: 100%;
   z-index: 10000000;
+}
+.name-wraper{
+  padding-bottom: 1rem;
 }
 
 .buttons-desktop-wrapper {

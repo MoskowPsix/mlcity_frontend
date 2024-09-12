@@ -11,22 +11,40 @@
     <app-step-container [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency">
 
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="1">
-          
+        <div class="step-description">
+          На данном этапе необходимо обязательно указать название вашего сообщества.
+          А так же выбрать соответствующие типы.
+        </div>
+        <div class="name-wraper">
+          <app-standart-input [label]="'Название сообщества'" [control] = "createSightForm.get('name')"></app-standart-input>
+        </div>
+  
+        <div class="load-for-vk-button-wrapper">
+          <app-standart-button *ngIf="checkSocialVk"  (click)="openModalGroup()" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+          <app-standart-button *ngIf="!checkSocialVk" [disabled]="true" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+        </div>
+        <app-edit-slider type="create" [vkFiles]="vkFiles" (deleteVkfilesEmit)="deleteVkFiles($event)" (filesEmit)="onFileChange($event)" [previews]="uploadFiles" [files]="uploadFiles" ></app-edit-slider>
+        <app-standart-rich-input [label]="'Описание'" [control] = "createSightForm.get('description')"></app-standart-rich-input>
+        <div class="types-wrapper">
+          <app-types [buttonClicked]="currentType" [types]="types" (typeOutput)="receiveType($event)"></app-types>
+    
+        </div>
+  
       </app-step-container-item>
 
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="2">
 
       </app-step-container-item>
 
-      <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="3">
-
-      </app-step-container-item>
-
-      <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="4">
-
-      </app-step-container-item>
-
     </app-step-container>
+    <div class="navigate-buttons-container">
+      
+      <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency !== maxStepsCount" (click)="stepNext()" buttonText="Далее" theme="standart"></app-standart-button>
+      <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency === maxStepsCount" (click)="onSubmit()" buttonText="Создать и открыть" theme="standart"></app-standart-button>
+      <div class="cancel-wrapper">
+        <app-standart-button (click)="reset()" buttonText="Отмена" theme="light"></app-standart-button>
+      </div>
+    </div>
   </div>
 
 </ion-content>

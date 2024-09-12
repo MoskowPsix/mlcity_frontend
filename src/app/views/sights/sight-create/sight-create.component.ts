@@ -69,9 +69,12 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   vkGroupPostSelected: any = null
   types: ISightType[] = []
   typesLoaded: boolean = false
+  vkFiles: any[] = []
+  checkSocialVk: boolean = false
   typeSelected: number | null = null
   statuses: IStatus[] = []
   openModalPostValue: boolean = false
+  allFiles: any[] = []
   openModalPostCount: number = 0
   openModalGroupValue: boolean = false
   vkGroupModalSelected: any = 0
@@ -81,7 +84,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   region: string = 'Свердловская область'
   location?: Location[] = []
   locationId!: number
-  uploadFiles: string[] = []
+  uploadFiles: any[] = []
   pricesLock: any = []
   formData: FormData = new FormData()
   imagesPreview: string[] = []
@@ -91,7 +94,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   cityesList: any[] = []
   cityesListLoading: boolean = false
   searchCityes: FormControl = new FormControl('')
-  maxStepsCount: number = 4
+  maxStepsCount: number = 2
   priceArrayForm: any[] = []
   createEventForm: FormGroup = new FormGroup({})
 
@@ -137,11 +140,13 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         }),
         switchMap((user: any) => {
           if (!user?.social_account || user?.social_account.provider != 'vkontakte') {
+            this.checkSocialVk = false
             // this.toastService.showToast(
             //   MessagesErrors.vkGroupSearch,
             //   'secondary',
             // )
           } else {
+            this.checkSocialVk = true
             // this.getVkGroups(user.social_account.provider_id, user.social_account.token)
             return this.vkService.getGroups().pipe(
               switchMap((response: any) => {
@@ -199,6 +204,21 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     //   //this.nextButtonDisable = true
     // }
   }
+  deleteVkFiles(event: any) {
+    for (let i = 0; i < this.vkGroupPostSelected.attachments.length; i++) {
+      if (this.vkGroupPostSelected.attachments[i].photo.id == event.name) {
+        this.vkGroupPostSelected.attachments.splice(i, 1)
+      }
+    }
+    for (let i = 0; i < this.vkFiles.length; i++) {
+      if (this.vkFiles[i].name == event.name) {
+        this.vkFiles.splice(i, 1)
+      }
+    }
+
+    if (this.allFiles.length == 0) {
+    }
+  }
 
   //Выбираем группу
   selectedVkGroup(group_id: any) {
@@ -209,6 +229,19 @@ export class SightCreateComponent implements OnInit, OnDestroy {
       this.vkGroupSelected = null
       this.vkGroupPosts = null
     }
+  }
+  stepInvalidate() {
+    return false
+  }
+  stepNext() {
+    if (this.stepCurrency <= this.maxStepsCount && !this.stepInvalidate()) {
+      this.stepCurrency++
+    }
+  }
+  reset() {
+    this.locationFromAngular.back()
+    this.createEventForm.reset()
+    this.stepCurrency = 1
   }
 
   openModalPost(event: any = null) {
@@ -513,15 +546,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   //Загрузка фото
-  onFileChange(sight: any) {
-    this.resetUploadInfo()
-
-    for (var i = 0; i < sight.target.files.length; i++) {
-      this.uploadFiles.push(sight.target.files[i])
-    }
-    this.createSightForm.patchValue({ files: '' }) // Если не обнулять будет ошибка
-
-    this.createImagesPreview()
+  onFileChange(event: File[]) {
+    this.uploadFiles = event
   }
 
   resetUploadInfo() {
@@ -756,44 +782,45 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   //Отпрвка формы
 
   onSubmit() {
-    let sight = this.createFormData() // собираем формдату
-    this.createSightForm.disable()
-    this.loadingService.showLoading()
-    this.sightsService
-      .create(sight)
-      .pipe(
-        tap((res) => {
-          this.loadingService.hideLoading()
-          //this.createEventForm.reset()
-          this.resetUploadInfo()
-          this.vkGroupPostSelected = null
-          this.createSightForm.controls['name'].reset()
-          this.createSightForm.controls['description'].reset()
-          this.createSightForm.controls['workTime'].reset()
-          this.createSightForm.controls['address'].reset()
-          this.createSightForm.controls['coords'].reset()
-          if (this.createSightForm.value.files) {
-            this.createSightForm.controls['files'].reset()
-          }
-          this.createSightForm.controls['price'].reset()
-          this.createSightForm.controls['materials'].reset()
-          this.createSightForm.controls['locationId'].reset()
-          this.createSightForm.enable()
-          this.stepCurrency = this.stepStart
-          this.router.navigate(['/home'])
-        }),
-        catchError((err) => {
-          console.log(err)
-          this.toastService.showToast(err.message || MessagesErrors.default, 'danger')
-          this.createSightForm.enable()
-          this.loadingService.hideLoading()
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((res) => {
-        this.toastService.showToast(MessagesSights.create, 'success')
-      })
+    this.createSightForm.value.files = this.uploadFiles
+    // let sight = this.createFormData() // собираем формдату
+    // this.createSightForm.disable()
+    // this.loadingService.showLoading()
+    // this.sightsService
+    //   .create(sight)
+    //   .pipe(
+    //     tap((res) => {
+    //       this.loadingService.hideLoading()
+    //       //this.createEventForm.reset()
+    //       this.resetUploadInfo()
+    //       this.vkGroupPostSelected = null
+    //       this.createSightForm.controls['name'].reset()
+    //       this.createSightForm.controls['description'].reset()
+    //       this.createSightForm.controls['workTime'].reset()
+    //       this.createSightForm.controls['address'].reset()
+    //       this.createSightForm.controls['coords'].reset()
+    //       if (this.createSightForm.value.files) {
+    //         this.createSightForm.controls['files'].reset()
+    //       }
+    //       this.createSightForm.controls['price'].reset()
+    //       this.createSightForm.controls['materials'].reset()
+    //       this.createSightForm.controls['locationId'].reset()
+    //       this.createSightForm.enable()
+    //       this.stepCurrency = this.stepStart
+    //       this.router.navigate(['/home'])
+    //     }),
+    //     catchError((err) => {
+    //       console.log(err)
+    //       this.toastService.showToast(err.message || MessagesErrors.default, 'danger')
+    //       this.createSightForm.enable()
+    //       this.loadingService.hideLoading()
+    //       return of(EMPTY)
+    //     }),
+    //     takeUntil(this.destroy$),
+    //   )
+    //   .subscribe((res) => {
+    //     this.toastService.showToast(MessagesSights.create, 'success')
+    //   })
   }
 
   ngOnInit() {
