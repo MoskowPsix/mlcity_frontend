@@ -12,6 +12,10 @@
 .place-wrapper{
 
 }
+.select-old-wrapper{
+    max-width: 4.5rem;
+    border-radius: 1px solid gray;
+}
 .category-container{
     padding-top: 1rem;
 }
@@ -137,4 +141,14 @@ ion-modal{
     font-size: 0.75rem;
     color: #21272b;
     font-family: var(--font-regular);
+}
+.save-button-wrapper_container{
+    display: flex;
+    gap: 2%;
+}
+.save-button-wrapper_container_item{
+    width: 50%;
+}
+.label{
+    padding-top: 0.5rem;
 }

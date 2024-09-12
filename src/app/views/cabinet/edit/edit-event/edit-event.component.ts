@@ -61,6 +61,7 @@ export class EditEventComponent implements OnInit {
   copyEvent: any
   freeEntry: boolean = true
   deleteConfirmValue: boolean = false
+  cancelConfirmValue: boolean = false
   formData: FormData = new FormData()
   options: object = {
     indexes: true,
@@ -94,6 +95,23 @@ export class EditEventComponent implements OnInit {
       return false
     }
   }
+
+
+  //Модальное окно с потверждением отмены редактирования
+  opnModalCancel() {
+    this.cancelConfirmValue = true
+  }
+  cancelEdit() {
+    this.cancelConfirmValue = false
+  }
+  async cancelConfirm() {
+    this.cancelConfirmValue = false
+    setTimeout(() => {
+      this.router.navigate(['cabinet/events'])
+    }, 0) //убираем асинхронность
+    console.log(this.cancelConfirmValue)
+  }
+  //Проверяем плейсы и прячим их
   checkCountPlaces() {
     if (this.editForm.value.places.map((e: any) => e.on_delete).indexOf(undefined) == -1) {
       return true
@@ -134,6 +152,7 @@ export class EditEventComponent implements OnInit {
         }
       })
   }
+  setAgeLimit(event: any) {}
 
   logFiles(event: any) {
     this.editForm.value.files = event
@@ -281,7 +300,7 @@ export class EditEventComponent implements OnInit {
   }
   getPlaces() {
     let tempPlaceArray: IPlace[] = []
-    console.log(this.event)
+    this.loadingService.showLoading()
     this.eventsService
       .getEventPlaces(this.event.id, {})
       .pipe(
@@ -291,6 +310,7 @@ export class EditEventComponent implements OnInit {
       )
       .subscribe(() => {
         this.copyEvent.places = []
+        this.loadingService.hideLoading()
         tempPlaceArray.forEach((place: any) => {
           this.placesArray.push(place)
           if (this.copyEvent.places) {
