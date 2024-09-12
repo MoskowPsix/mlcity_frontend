@@ -9,7 +9,6 @@
   </app-second-header>
   <div class="main-content">
     <app-step-container [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency">
-
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="1">
         <div class="step-description">
           На данном этапе необходимо обязательно указать название вашего сообщества.
@@ -33,7 +32,14 @@
       </app-step-container-item>
 
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="2">
-
+        <div class="step-description">
+          На данном этапе необходимо обязательно указать адресс вашего сообщества, если его нет просто укажите город.
+          По желанию можете казать дополнительную информацию о себе.
+        </div>
+        <app-address-input (addressEditEmit)="edditAdress($event)" label="Адрес"></app-address-input>
+        <app-standart-input label="Ссылка на вк (необязательно)" [control] = "createSightForm.get('vk')"></app-standart-input>
+        <app-standart-input label="Ссылка на сайт (необязательно)" [control] = "createSightForm.get('site')"></app-standart-input>
+        <app-standart-input label="Телефон (необязательно)" [control] = "createSightForm.get('phone')"></app-standart-input>
       </app-step-container-item>
 
     </app-step-container>
@@ -49,3 +55,206 @@
 
 </ion-content>
 
+<ion-modal class="modal" backdropDismiss="false" [isOpen] ="openModalGroupValue" [canDismiss]="openModalGroupValue">
+  <ng-template>
+
+    <ion-content>
+
+        <ion-list>
+
+            <ion-list-header>
+              <ion-label>Выберите группу, из которой следует загрузить посты</ion-label>
+            </ion-list-header>
+            <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event); openModalPost($event); saveChangeId()" [allowEmptySelection]="true" [value]="vkGroupSelected">
+              <ng-container>
+                <ion-item>
+                  <ion-avatar>
+                    <img alt="ava" src="/assets/icons/favicon.png" />
+                  </ion-avatar>
+                  <ion-label class="ion-padding-start">Моя страница</ion-label>
+                  <ion-radio slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
+                </ion-item>
+              </ng-container>
+              <ng-container *ngFor="let group of vkGroups">
+
+                  <ion-item>
+                    <ion-avatar>
+                      <img alt="ava" src="{{ group.photo_50 }}" />
+                    </ion-avatar>
+                    <ion-label class="ion-padding-start">{{ group.name }}</ion-label>
+
+                    <ion-radio  slot="end" value="-{{ group.id }}"></ion-radio>
+                  </ion-item>
+
+                  <div>
+
+                  </div>
+              </ng-container>
+            </ion-radio-group>
+            <!-- Грузим чужие посты из вк, временное решение -->
+            <!-- <ng-container>
+              <ion-item>
+                <ion-label class="ion-padding-start">
+                  <ion-input label="Url input" type="text" placeholder="URL группы" (ionChange)="onFocusPlace($event)"></ion-input>
+                </ion-label>
+                  <ion-button  (click)="setVkPostsByGroupURL();  stepNext();">Загрузить URL</ion-button>
+              </ion-item>
+            </ng-container> -->
+
+        </ion-list>
+
+        <ion-button  class="modalBtnBottom" (click)="closeModalGroup()">
+          Закрыть
+        </ion-button>
+
+    </ion-content>
+
+  </ng-template>
+
+</ion-modal>
+
+<ion-modal backdropDismiss="false" [isOpen]="openModalPostValue">
+
+  <ng-template>
+      <ion-content>
+        <ion-button (click)="closeModalPost()">
+          Вернутся к выбору группы
+        </ion-button>
+
+        <ion-button (click)="closeAllModals()">
+          Закрыть
+        </ion-button>
+
+        <ion-list-header>
+          <ion-label>Выберите пост, из которого следует загрузить текст и фото (загружены последние 10 постов). Если вы выберите пост, то шаги 4 и 5 (описание мероприятия и загрузка фото) будут скрыты, так как они автоматически заполнятся из поста.</ion-label>
+        </ion-list-header>
+
+        <div *ngIf="vkGroupPosts; else notSelectedGroup">
+          <!-- Скелетна анимация -->
+          <ng-container *ngIf="!vkGroupPostsLoaded">
+            <ng-container *ngFor="let key of [1,2]">
+              <ion-card>
+
+                <ion-item class="ion-margin-end">
+                  <ion-avatar slot="start">
+                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                  </ion-avatar>
+                  <ion-label>
+                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                  </ion-label>
+                </ion-item>
+
+                <ion-card-content>
+                  <ion-skeleton-text [animated]="true" style="height: 100px;"></ion-skeleton-text>
+                </ion-card-content>
+
+                <ion-row class="ion-padding-horizontal">
+                  <ng-container  *ngFor="let key of [1,2,3]">
+                    <ion-col size="4" class="ion-align-self-center ion-justify-content-center">
+                      <ion-skeleton-text [animated]="true" style="height: 80px;"></ion-skeleton-text>
+                    </ion-col>
+                  </ng-container>
+                </ion-row>
+
+              </ion-card>
+
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="vkGroupPostsLoaded">
+            <ng-container *ngFor="let post of vkGroupPosts.items; let i = index">
+              <ion-card *ngIf="!post.copy_history">
+                <ng-container *ngIf="vkGroupPosts.profiles">
+                <ng-container *ngFor="let profile of vkGroupPosts.profiles; index as i" class="card-profile">
+                  <ion-item *ngIf="i === 0" class="ion-margin-end">
+                    <ion-avatar slot="start">
+                      <img alt="ava" src="{{ profile.photo_50 }}" />
+                    </ion-avatar>
+                    <ion-label>{{ profile.first_name }}</ion-label>
+                  </ion-item>
+                </ng-container>
+                </ng-container>
+
+                <ion-card-content *ngIf="post.text">
+                  <app-read-more text="{{ post.text }}"></app-read-more>
+                </ion-card-content>
+                <!-- Фото во вложении -->
+                <swiper-container
+                  #swiper
+                  autoplay="true"
+                  autoplay-delay="5000"
+                  autoplay-disableOnInteraction="false"
+                  navigation="true"
+                  [pagination]="true"
+                  [grabCursor]="true"
+                  [zoom]="false"
+                  [slidesPerView]="1"
+                  [centeredSlides]="true"
+                  [followFinger]="true"
+                  [loop]="true"
+                  [initialSlide]="0"
+                  *ngIf="post.attachments" class="card-container-content">
+                  <ng-container *ngFor="let attachment of post.attachments">
+                    <ng-container *ngIf="attachment.photo" >
+                      <ng-container *ngFor="let photo of attachment.photo.sizes">
+                        <swiper-slide *ngIf="photo.type === 'x'">
+                          <a href="{{photo.url}}" target="_blank"><img alt="ava" [src]="photo.url"/></a>
+                        </swiper-slide>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </swiper-container>
+
+                <ng-container *ngIf="post.attachments" class="card-container-content">
+                  <ng-container *ngFor="let attachment of post.attachments">
+                    <!-- Видео во вложении -->
+                    <ng-container *ngIf="attachment.video" >
+                      <ion-col class="video_col">
+                            <span class="video-title">{{ attachment.video.title }}</span>
+                            <iframe class="video_content" [src]="attachment.video.owner_id | safeVideoById:attachment.video.id" allow="autoplay; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen width="100%" height="100%"></iframe>
+                            <p>Описание видео: </p>
+                            <app-read-more *ngIf="attachment.video.description" text="{{ attachment.video.description }}"></app-read-more>
+                        </ion-col>
+                    </ng-container>
+
+                    <!-- Ссылки во вложении -->
+                    <ion-card ng-container *ngIf="attachment.link">
+                      <ion-item button detail="true" href="{{ attachment.link.url }}" *ngIf="attachment.link">
+                        <ion-thumbnail slot="start">
+                            <img src="{{attachment.link.photo.sizes[1].url}}"/>
+                        </ion-thumbnail>
+                        <ion-label>
+                          <h3>{{ attachment.link.title }}</h3>
+                          <p>{{attachment.link.caption}}</p>
+                        </ion-label>
+                      </ion-item>
+                    </ion-card>
+                  </ng-container>
+                </ng-container>
+
+                <ion-footer>
+                  <div class="ion-text-end">
+                    <ion-button (click)="closeAllModals()" (click)="selectedVkGroupPost(post)" class="ion-margin" [color]="vkGroupPostSelected?.id === post.id ? 'success' : 'medium'">
+                      <ion-icon  *ngIf="vkGroupPostSelected?.id === post.id" name="checkmark-outline" slot="start"></ion-icon>
+                      {{ vkGroupPostSelected?.id === post.id ? 'Выбрано' : 'Выбрать'}}
+                    </ion-button>
+                  </div>
+                </ion-footer>
+              </ion-card>
+
+            </ng-container>
+          </ng-container>
+        </div>
+
+        <ng-template #notSelectedGroup>
+          <ion-row>
+            <ion-list-header>
+              <ion-note color="medium" class="ion-padding-vertical">Вы не выбрали группу, для выбора вернитесь назад и выберите группу (шаг 1)</ion-note>
+            </ion-list-header>
+          </ion-row>
+        </ng-template>
+
+      </ion-content>
+  </ng-template>
+
+</ion-modal>

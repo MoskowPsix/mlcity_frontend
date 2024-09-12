@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core'
+import { Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges } from '@angular/core'
 import { IPlace } from 'src/app/models/place'
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps'
 import { LocationService } from 'src/app/services/location.service'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { BehaviorSubject, Subject, takeUntil, tap } from 'rxjs'
+import { MapService } from 'src/app/services/map.service'
 @Component({
   selector: 'app-address-input',
   templateUrl: './address-input.component.html',
@@ -28,6 +29,7 @@ export class AddressInputComponent implements OnInit {
   @Input() placeId!: string
   @Output() addressEditEmit = new EventEmitter()
   placemark!: ymaps.Placemark
+  mapService: MapService = inject(MapService)
   private readonly destroy$ = new Subject<void>()
   map: any
   address: any
@@ -37,7 +39,18 @@ export class AddressInputComponent implements OnInit {
     if (this.place && this.place.latitude) {
       this.coords = [this.place.latitude, this.place.longitude]
     } else {
-      this.coords = [55.751574, 37.573856] // Москва по умолчанию
+      console.log(this.mapService.getLastMapCoordsFromLocalStorage())
+      if (
+        this.mapService.getLastMapCoordsFromLocalStorage().length !== 0 &&
+        this.mapService.getLastMapCoordsFromLocalStorage()[0] !== 0
+      ) {
+        this.coords = this.mapService.getLastMapCoordsFromLocalStorage()
+        if (this.addressForm) {
+          this.setLongitudelatitude()
+        }
+      } else {
+        this.coords = [55.751574, 37.573856] // Москва по умолчанию
+      }
     }
     this.setAdress()
   }

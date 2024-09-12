@@ -20,7 +20,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
   ) {}
-  nextPage: boolean = false
+  nextPage: boolean = true
   sights: any[] = []
 
   loadSights: boolean = false
@@ -48,38 +48,42 @@ export class MySightsComponent implements OnInit, OnDestroy {
 
   getMySights() {
     this.sights.length > 0 ? (this.spiner = true) : null
-    this.sightsService
-      .getSightsForUser(this.queryBuilderService.queryBuilder('sightsPublicForAuthor'))
-      .pipe(
-        delay(100),
-        retry(3),
-        map((response: any) => {
-          this.sights.push(...response.sights.data)
-          this.sights.length == 0 ? (this.notFound = true) : (this.notFound = false)
-          this.spiner = false
+    if (this.nextPage) {
+      this.sightsService
+        .getSightsForUser(this.queryBuilderService.queryBuilder('sightsPublicForAuthor'))
+        .pipe(
+          delay(100),
+          retry(3),
+          map((response: any) => {
+            this.sights.push(...response.sights.data)
+            this.sights.length == 0 ? (this.notFound = true) : (this.notFound = false)
+            this.spiner = false
 
-          if (response.sights.next_cursor != null) {
-            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(response.sights.next_cursor)
+            if (response.sights.next_cursor != null) {
+              this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(response.sights.next_cursor)
+            }
             response.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+          }),
+          tap(() => {
+            this.loadSights = true
+            this.loadMoreSights = false
+          }),
+          catchError((err) => {
+            this.loadSights = true
+            console.log(err)
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe(() => {
+          if (this.sights && this.sights.length == 0) {
+            this.notFound = true
           }
-        }),
-        tap(() => {
-          this.loadSights = true
-          this.loadMoreSights = false
-        }),
-        catchError((err) => {
-          this.loadSights = true
-          console.log(err)
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(() => {
-        if (this.sights && this.sights.length == 0) {
-          this.notFound = true
-        }
-      })
+        })
+    } else {
+      this.spiner = false
+    }
   }
 
   openModal(sight: any) {
