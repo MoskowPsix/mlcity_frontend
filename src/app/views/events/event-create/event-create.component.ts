@@ -746,9 +746,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesEvents.create, 'success')
-        this.createEventForm.reset()
-        this.resetUploadInfo()
-        this.router.navigate(['/events/' + res.event.id])
+        if (res.event.id) {
+          this.router.navigate(['/events/' + res.event.id])
+        } else {
+          this.router.navigate(['/cabinet/events/'])
+        }
       })
     //отправляем форму
     // this.createEventForm.disable()
@@ -923,6 +925,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.destroy$.next()
     this.destroy$.complete()
     this.stepCurrency = 1
+    this.resetUploadInfo()
     this.createEventForm.reset()
   }
   ionViewWillEnter() {}

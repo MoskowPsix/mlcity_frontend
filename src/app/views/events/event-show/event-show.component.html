@@ -54,6 +54,8 @@
         <div class="price-container">
           <span class="price-container__text">{{priceState}}</span>
           <span class="price-container__text">{{event.date_start | date:'d MMM' }} - {{ event.date_end | date:'d MMM' }}</span>
+          <span *ngIf="event && event.age_limit" class="price-container__text">{{event.age_limit}}</span>
+          <span *ngIf="event && !event.age_limit" class="price-container__text">0+</span>
         </div>
 
         <div class="main-content">
@@ -81,7 +83,7 @@
             <app-place-show-container [priceState]="priceStateForShow" [places]="places" [prices]="this.event.price"></app-place-show-container>
           </div>
           <div class="main-content__community">
-            <strong class="title">Сообщество</strong>
+            <strong class="title">Кто проводит</strong>
             <div class="community-wrapper">
               <app-user-section [organization]="organization" [buttonText]="event.sponsor"></app-user-section>
               <div class="community-wrapper__button-container">
