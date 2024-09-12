@@ -54,7 +54,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   user: any
   currentType: any = []
   stepStart: number = 0
-  stepCurrency: number = 0
+  stepCurrency: number = 1
   steps: number = 5
 
   @ViewChild('sightName') sightNameElement!: any
@@ -91,7 +91,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   cityesList: any[] = []
   cityesListLoading: boolean = false
   searchCityes: FormControl = new FormControl('')
-
+  maxStepsCount: number = 4
   priceArrayForm: any[] = []
   createEventForm: FormGroup = new FormGroup({})
 
