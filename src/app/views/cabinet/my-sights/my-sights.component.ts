@@ -116,6 +116,11 @@ export class MySightsComponent implements OnInit, OnDestroy {
     }
     this.previewPhoto()
   }
+  ionViewWillEnter() {
+    this.sights = []
+    this.nextPage = true
+    this.getMySights()
+  }
 
   previewPhoto() {
     this.imagesPreview.length = 0
@@ -166,9 +171,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
     //  console.log(this.removedImages)
   }
 
-  ngOnInit() {
-    this.getMySights()
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     // отписываемся от всех подписок
