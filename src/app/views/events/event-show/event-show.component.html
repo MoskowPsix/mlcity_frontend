@@ -91,12 +91,11 @@
             </div>
             <div class="hidden-id">ID: №{{ event.id }}</div>
             <div *ngIf="event.afisha7_id" class="hidden-id">Источник: afisha7.ru</div>
+            <div *ngIf="!event.afisha7_id && organization" class="hidden-id">Источник: {{organization.name}}</div>
           </div>
-
         </div>
 
         <ion-row class="ion-justify-content-center" style="display: none;">
-
           <ion-col size-lg="10" size-md="12" size-xs="12" class="">
             <ion-row class="">
               <ion-col size-lg="12" size-md="12" size-xs="12" class="left-block">
