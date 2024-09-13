@@ -35,8 +35,12 @@
   </div>
   
 </ion-col> -->
-<div class="label">Категории</div>
-<div class="category-modal-grid_wrapper">
+<div (click)="hideTypes(arrow, container)" class="label">
+  Категории
+  <img #arrow class="slider-arrow" src="/assets/icons/arrow.svg" alt="">
+</div>
+
+<div #container class="category-modal-grid_wrapper">
   <div class="category-modal-grid">
     <ng-container *ngIf="types">
         <ng-container *ngFor="let category of types" >

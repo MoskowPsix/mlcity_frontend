@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild,
-  ElementRef,
-} from '@angular/core'
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core'
 import { Console } from 'console'
 import { Subject, takeUntil } from 'rxjs'
 import { EventTypeService } from 'src/app/services/event-type.service'
@@ -34,6 +27,11 @@ export class TypesComponent {
   @ViewChild('typeButton')
   typeButton!: ElementRef
   start!: Number
+
+  hideTypes(arrow: HTMLElement, container: HTMLElement) {
+    arrow.classList.toggle('slider-arrow_open')
+    container.classList.toggle('category-modal-grid_wrapper_close')
+  }
 
   addType(id: any) {
     let count: Number = 0
