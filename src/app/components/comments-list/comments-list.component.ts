@@ -49,6 +49,7 @@ export class CommentsListComponent {
       .getUser()
       .pipe(
         //take(1),
+
         tap((user: any) => {
           if (user) {
             this.user_avatar = user.avatar
@@ -59,6 +60,7 @@ export class CommentsListComponent {
             this.user_auth = false
           }
         }),
+        takeUntil(this.destroy$),
       )
       .subscribe()
       .unsubscribe()
@@ -81,11 +83,7 @@ export class CommentsListComponent {
     if (this.createCommentForm.controls['new_comment'].value) {
       if (this.isSight) {
         this.commentsService
-          .addCommentsSight(
-            this.createCommentForm.controls['new_comment'].value,
-            this.event_id,
-            this.comment_id,
-          )
+          .addCommentsSight(this.createCommentForm.controls['new_comment'].value, this.event_id, this.comment_id)
           .pipe(
             catchError((err) => {
               this.createCommentForm.controls['new_comment'].reset()
@@ -121,11 +119,7 @@ export class CommentsListComponent {
           })
       } else {
         this.commentsService
-          .addCommentsEvent(
-            this.createCommentForm.controls['new_comment'].value,
-            this.event_id,
-            this.comment_id,
-          )
+          .addCommentsEvent(this.createCommentForm.controls['new_comment'].value, this.event_id, this.comment_id)
           .pipe(
             catchError((err) => {
               this.createCommentForm.controls['new_comment'].reset()
@@ -154,10 +148,7 @@ export class CommentsListComponent {
 
   updateComment(id: number) {
     this.commentsService
-      .updateCommentId(
-        id,
-        this.createCommentForm.controls['update_comment'].value,
-      )
+      .updateCommentId(id, this.createCommentForm.controls['update_comment'].value)
       .pipe(
         catchError((err) => {
           console.log(err)
@@ -207,10 +198,7 @@ export class CommentsListComponent {
     if (this.createCommentForm.controls['new_comment'].value) {
       if (this.isSight) {
         this.commentsService
-          .addCommentsSight(
-            this.createCommentForm.controls['new_comment'].value,
-            this.event_id,
-          )
+          .addCommentsSight(this.createCommentForm.controls['new_comment'].value, this.event_id)
           .pipe(
             catchError((err) => {
               this.createCommentForm.controls['new_comment'].reset()
@@ -243,10 +231,7 @@ export class CommentsListComponent {
           })
       } else if (!this.isSight) {
         this.commentsService
-          .addCommentsEvent(
-            this.createCommentForm.controls['new_comment'].value,
-            this.event_id,
-          )
+          .addCommentsEvent(this.createCommentForm.controls['new_comment'].value, this.event_id)
           .pipe(
             catchError((err) => {
               this.createCommentForm.controls['new_comment'].reset()

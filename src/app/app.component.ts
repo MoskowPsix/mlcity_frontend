@@ -64,6 +64,9 @@ export class AppComponent implements OnInit {
       if (this.url.includes('/cabinet/sights/edit')) {
         this.url = '/cabinet/sights/edit'
       }
+      if (this.url.includes('/cabinet/events/edit')) {
+        this.url = '/cabinet/events/edit'
+      }
       this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.BASE_URL}${this.url}`)
     })
 

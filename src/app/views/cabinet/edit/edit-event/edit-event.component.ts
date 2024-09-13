@@ -61,6 +61,7 @@ export class EditEventComponent implements OnInit {
   copyEvent: any
   freeEntry: boolean = true
   deleteConfirmValue: boolean = false
+  cancelConfirmValue: boolean = false
   formData: FormData = new FormData()
   options: object = {
     indexes: true,
@@ -94,6 +95,22 @@ export class EditEventComponent implements OnInit {
       return false
     }
   }
+
+  //Модальное окно с потверждением отмены редактирования
+  opnModalCancel() {
+    this.cancelConfirmValue = true
+  }
+  cancelEdit() {
+    this.cancelConfirmValue = false
+  }
+  async cancelConfirm() {
+    this.cancelConfirmValue = false
+    setTimeout(() => {
+      this.router.navigate(['cabinet/events'])
+    }, 0) //убираем асинхронность
+    console.log(this.cancelConfirmValue)
+  }
+  //Проверяем плейсы и прячим их
   checkCountPlaces() {
     if (this.editForm.value.places.map((e: any) => e.on_delete).indexOf(undefined) == -1) {
       return true
@@ -133,6 +150,9 @@ export class EditEventComponent implements OnInit {
             })
         }
       })
+  }
+  setAgeLimit(event: any) {
+    this.editForm.value.age_limit = event.target.value
   }
 
   logFiles(event: any) {
@@ -281,7 +301,7 @@ export class EditEventComponent implements OnInit {
   }
   getPlaces() {
     let tempPlaceArray: IPlace[] = []
-    console.log(this.event)
+    this.loadingService.showLoading()
     this.eventsService
       .getEventPlaces(this.event.id, {})
       .pipe(
@@ -291,6 +311,7 @@ export class EditEventComponent implements OnInit {
       )
       .subscribe(() => {
         this.copyEvent.places = []
+        this.loadingService.hideLoading()
         tempPlaceArray.forEach((place: any) => {
           this.placesArray.push(place)
           if (this.copyEvent.places) {
@@ -348,6 +369,7 @@ export class EditEventComponent implements OnInit {
           sponsor: res.sponsor,
           description: res.description,
           materials: res.materials,
+          age_limit: res.age_limit,
         })
         if (priceArray) {
           priceArray.forEach((price: any) => {
@@ -421,7 +443,7 @@ export class EditEventComponent implements OnInit {
       addressPlace: false,
     }
     this.invalidForm.name = this.editForm.get('name')!.invalid
-    this.invalidForm.description = this.editForm.get('description')!.invalid
+
     this.invalidForm.sponsor = this.editForm.get('sponsor')!.invalid
     this.editForm.value.types.forEach((type: any) => {
       if (!type.on_delete) {
@@ -511,6 +533,7 @@ export class EditEventComponent implements OnInit {
     }
   }
   submitForm() {
+    this.loadingService.showLoading()
     if (this.checkValidOfForm()) {
       if (this.submitButtonState) {
         return
@@ -539,13 +562,12 @@ export class EditEventComponent implements OnInit {
         )
         .subscribe((res: any) => {
           this.formData = new FormData()
+          this.loadingService.hideLoading()
           this.submitButtonState = false
           this.loadingService.hideLoading()
           if (res.status == 'success') {
             this.toastService.showToast('Событие отправленно на проверку', 'success')
-            this.router.navigate(['/cabinet/events']).then(() => {
-              window.location.reload()
-            })
+            this.router.navigate(['/cabinet/events']).then(() => {})
           }
         })
     }
@@ -560,6 +582,7 @@ export class EditEventComponent implements OnInit {
       types: new FormControl([], [Validators.required]),
       places: new FormControl([], [Validators.required]),
       materials: new FormControl([], [Validators.required]),
+      age_limit: new FormControl([], [Validators.required]),
     })
   }
 }

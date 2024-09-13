@@ -61,10 +61,22 @@
                     </div>
                 </div>
             </div>
+            <div class="select-old">
+                <div class="label">Возрастное ограничение</div>
+                <div class="select-old-wrapper">
+                  <ion-select mode="ios" placeholder="0+" okText="Выбрать возраст" cancelText="Отмена" (ionChange)="setAgeLimit($event)">
+                    <ion-select-option value="0">0+</ion-select-option>
+                    <ion-select-option value="6">6+</ion-select-option>
+                    <ion-select-option value="12">12+</ion-select-option>
+                    <ion-select-option value="16">16+</ion-select-option>
+                    <ion-select-option value="18">18+</ion-select-option>
+                  </ion-select>
+                </div>
+              </div>
             <app-standart-input [invalid]="invalidForm.name" [label]="'Ссылка на оплату билетов'" [control] = "editForm.get('materials')"></app-standart-input>
             <div class="place-container">
-                <div class="not-found-span-container">
-                    <span class="not-found-span" *ngIf="checkCountPlaces()">Место проведения не добавлено</span>
+                <div  *ngIf="checkCountPlaces()" class="not-found-span-container">
+                    <span class="not-found-span">Место проведения не добавлено</span>
                 </div>
                 <ng-container *ngFor="let place of this.editForm.value.places; let i = index">
                     <div class="place-wrapper">
@@ -83,12 +95,21 @@
             </div>
             <app-standart-button (click)="addPlace()" buttonText="Добавить место" type="button" theme ="light"></app-standart-button>
             <div  class="save-button-wrapper">
-                <app-standart-button (click)="submitForm()" [disabled]="submitButtonState" buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
+                <div class="save-button-wrapper_container">
+                    <div class="save-button-wrapper_container_item">
+                        <app-standart-button (click)="opnModalCancel()" [disabled]="true" (click)="submitForm()"  buttonText="Отмена" type="button"  theme ="standart" ></app-standart-button>
+                    </div>
+                    <div class="save-button-wrapper_container_item">
+                        <app-standart-button (click)="submitForm()" [disabled]="submitButtonState" buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
+                    </div>
+                </div>
+               
                 <div class="delete-button-wrapper">
                     <app-standart-button (click)="deleteConfirmModal()"  [disabled]="submitButtonState" buttonText="Удалить" type="button" theme ="red"></app-standart-button>
                 </div>
             </div>
             <app-confirm-modal (cancel)="cancelDeleteConfirm()" (confirm)="deleteConfirm()" [openModal]="deleteConfirmValue"></app-confirm-modal>
+            <app-confirm-modal  (cancel)="cancelEdit()" (confirm)="cancelConfirm()" [openModal]="cancelConfirmValue"></app-confirm-modal>
         </form>
        
     </div>

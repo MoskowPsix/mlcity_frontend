@@ -115,6 +115,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   typeSelected: number | null = null
   currentType: any = []
   dateTomorrow = new Date()
+
   statuses: IStatus[] = []
   statusesLoaded: boolean = false
   statusSelected: number | null = null
@@ -567,7 +568,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
     this.formData.append('type', this.createEventForm.controls['type'].value)
     this.formData.append('status', this.createEventForm.controls['status'].value)
-    this.formData.append('ageLimit', this.createEventForm.controls['ageLimit'].value)
+    this.formData.append('age_limit', this.createEventForm.controls['ageLimit'].value)
     this.formData.append('sponsor', 'Admin')
 
     this.createEventForm.controls['price'].value.forEach((item: any, i: number) => {
@@ -741,13 +742,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
     this.eventsService
       .create(event)
-      .pipe()
+      .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesEvents.create, 'success')
-        this.createEventForm.reset()
-        this.resetUploadInfo()
-        this.router.navigate(['/events/' + res.event.id])
+        if (res.event.id) {
+          this.router.navigate(['/events/' + res.event.id])
+        } else {
+          this.router.navigate(['/cabinet/events/'])
+        }
       })
     //отправляем форму
     // this.createEventForm.disable()
@@ -922,6 +925,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.destroy$.next()
     this.destroy$.complete()
     this.stepCurrency = 1
+    this.resetUploadInfo()
     this.createEventForm.reset()
   }
   ionViewWillEnter() {}
