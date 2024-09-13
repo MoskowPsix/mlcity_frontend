@@ -12,6 +12,14 @@
     flex-wrap: wrap;
     gap: 0.5rem;
 }
+.save-button-wrapper_container{
+    display: flex;
+    gap: 2%;
+    padding-bottom: 1rem;
+}
+.save-button-wrapper_container_item{
+    width: 50%;
+}
 .category-container-header{
     color: #4C5861;
     font-family: var(--font-regular);
@@ -34,5 +42,8 @@
 }
 .save-button-wrapper{
     padding-top: 1rem;
-    padding-bottom: 10rem;
+}
+.delete-button-wrapper{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }

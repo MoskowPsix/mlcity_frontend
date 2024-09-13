@@ -5,7 +5,7 @@
     min-height: 2.25rem;
     font-size: 12px;
     padding-left: 0.8rem;
-    padding-left: 0.8rem;
+    padding-right: 1.4rem;
     transition: 0.1s;
     color: #363d42;
     font-family: var(--font-regular);
@@ -18,7 +18,7 @@
     width: 100%;
     min-height: 2.25rem;
     font-size: 12px;
-    padding-left: 0.8rem;
+    padding-right: 1.4rem;
     background: none;
     transition: 0.1s;
     color: #363d42;
@@ -37,6 +37,8 @@
     outline: none;
     border-radius: 5px;
     width: 100%;
+    padding-left: 0.8rem;
+    padding-right: 1.4rem;
     min-height: 2.25rem;
     transition: 0.2s;
     background: none;
@@ -47,6 +49,8 @@
 }
 .standart-input:focus{
     transition: 0.2s;
+    padding-left: 0.8rem;
+    padding-right: 1.4rem;
     outline: 1px solid #52b1fab0;
     border-radius: 5px;
     width: 100%;
@@ -92,6 +96,7 @@
 .standart-input_disabled{
     border: none;
     pointer-events: none;
+    padding-right: 1.4rem;
     border-radius: 5px;
     width: 100%;
     min-height: 2.25rem;

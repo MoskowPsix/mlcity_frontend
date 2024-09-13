@@ -19,6 +19,7 @@ export class HistoryContent {
   protected description!: string
   protected materials!: string
   protected sponsor!: string
+  protected address!: string
   protected files: IFile[] | FormData = []
   protected types: ISightType[] | IEventType[] = []
   protected price: object[] = []
