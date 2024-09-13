@@ -10,12 +10,13 @@ import { EditService } from 'src/app/services/edit.service'
 import { SightHistoryContent } from 'src/app/clasess/history_content/sight_history_content'
 import { ToastService } from 'src/app/services/toast.service'
 import { SightsService } from 'src/app/services/sights.service'
-
+import { StatusesService } from 'src/app/services/statuses.service'
 import { SightTypeService } from 'src/app/services/sight-type.service'
 import { types } from 'util'
 import { IPlace } from 'src/app/models/place'
 import _ from 'lodash'
 import { serialize } from 'object-to-formdata'
+import { Statuses } from 'src/app/enums/statuses-new'
 
 @Component({
   selector: 'app-edit-sight',
@@ -41,7 +42,8 @@ export class EditSightComponent implements OnInit {
     dotsForObjectNotation: false,
   }
   openTypesModalValue: boolean = false
-
+  deleteConfirmValue: boolean = false
+  cancelConfirmValue: boolean = false
   constructor(
     private sightsService: SightsService,
     private activatedRoute: ActivatedRoute,
@@ -50,8 +52,53 @@ export class EditSightComponent implements OnInit {
     private editService: EditService,
     private toastService: ToastService,
     private router: Router,
+    private statusesService: StatusesService,
   ) {}
-
+  deleteConfirm() {
+    this.deleteConfirmValue = false
+    this.deleteSight()
+  }
+  deleteSight() {
+    let currentStatusId = 0
+    this.loadingService.showLoading()
+    this.statusesService
+      .getStatuses()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any) => {
+        if (res.statuses && res.statuses.length) {
+          this.sightsService
+            .changeStatusSight(
+              this.organization.id,
+              res.statuses[res.statuses.map((status: any) => status.name).indexOf(Statuses.draft)].id,
+            )
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((res: any) => {
+              console.log(res)
+              this.loadingService.hideLoading()
+              this.toastService.showToast('Событие удалено', 'success')
+              this.router.navigate(['cabinet/events'])
+            })
+        }
+      })
+  }
+  cancelDeleteConfirm() {
+    this.deleteConfirmValue = false
+  }
+  cancelEdit() {
+    this.cancelConfirmValue = false
+  }
+  cancelConfirm() {
+    this.cancelConfirmValue = false
+    setTimeout(() => {
+      this.router.navigate(['cabinet/sights'])
+    }, 0) //убираем асинхронность
+  }
+  deleteConfirmModal() {
+    this.deleteConfirmValue = true
+  }
+  openModalCancel() {
+    this.cancelConfirmValue = true
+  }
   ionViewWillEnter(): void {
     this.previewCategory = []
     let filesArray: any = []
@@ -129,6 +176,7 @@ export class EditSightComponent implements OnInit {
     this.openTypesModalValue = false
   }
   submitForm() {
+    this.loadingService.showLoading()
     let sight_history_content = new SightHistoryContent()
 
     let result = sight_history_content.merge(this.copyOrganization, _.cloneDeep(this.editForm.value))

@@ -315,8 +315,10 @@ export class EditEventComponent implements OnInit {
         tempPlaceArray.forEach((place: any) => {
           this.placesArray.push(place)
           if (this.copyEvent.places) {
+            this.copyEvent.places.length = 0
             this.copyEvent.places.push(_.cloneDeep(place))
           }
+          this.editForm.value.places.length = 0
           this.editForm.value.places.push(place)
         })
       })
@@ -408,8 +410,9 @@ export class EditEventComponent implements OnInit {
         if (place.temp_id) {
           delete place.temp_id
         }
+
         place.seances.forEach((seance: any) => {
-          if (seance.temp_id) {
+          if (seance.temp_id !== undefined) {
             delete seance.temp_id
           }
         })
@@ -527,8 +530,10 @@ export class EditEventComponent implements OnInit {
       }
     }
     if (fieldsValid && !this.invalidForm.seances.error) {
+      this.loadingService.hideLoading()
       return true
     } else {
+      this.loadingService.hideLoading()
       return false
     }
   }
@@ -538,10 +543,11 @@ export class EditEventComponent implements OnInit {
       if (this.submitButtonState) {
         return
       }
-      // this.submitButtonState = true
-      // this.loadingService.showLoading()
       this.clearFormOfTempData()
       console.log(this.editForm.value)
+      // this.submitButtonState = true
+      // this.loadingService.showLoading()
+
       let historyContent = new EventHistoryContent()
       let result = historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value))
       this.editService

@@ -20,9 +20,20 @@
       </div>
     </div>
     <app-address-input [place]="place" (addressEditEmit)="changeAdress($event)" label="Адрес"></app-address-input>
-    <div  class="save-button-wrapper">
-      <app-standart-button (click)="submitForm()"  buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
-  </div>
+      <div  class="save-button-wrapper">
+        <div class="save-button-wrapper_container">
+            <div class="save-button-wrapper_container_item">
+              <app-standart-button (click)="openModalCancel()"  [disabled]="true" (click)="submitForm()"  buttonText="Отмена" type="button"  theme ="standart" ></app-standart-button>
+            </div>
+            <div class="save-button-wrapper_container_item">
+              <app-standart-button (click)="submitForm()"  buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
+            </div>
+        </div>
+    </div>
+
   </div>
 
 </ion-content>
+
+<app-confirm-modal (cancel)="cancelDeleteConfirm()" (confirm)="deleteConfirm()" [openModal]="deleteConfirmValue"></app-confirm-modal>
+<app-confirm-modal  (cancel)="cancelEdit()" (confirm)="cancelConfirm()" [openModal]="cancelConfirmValue"></app-confirm-modal>
