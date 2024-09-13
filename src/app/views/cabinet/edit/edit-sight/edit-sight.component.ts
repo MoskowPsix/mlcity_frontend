@@ -180,7 +180,7 @@ export class EditSightComponent implements OnInit {
     let sight_history_content = new SightHistoryContent()
 
     let result = sight_history_content.merge(this.copyOrganization, _.cloneDeep(this.editForm.value))
-    console.log(result)
+    console.log(this.copyOrganization, _.cloneDeep(this.editForm.value), result)
     this.editService
       .sendEditSight(serialize(result, this.options))
       .pipe(

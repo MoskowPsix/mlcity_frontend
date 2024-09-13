@@ -19,7 +19,7 @@
           </div>
       </div>
     </div>
-    <app-address-input [place]="place" (addressEditEmit)="changeAdress($event)" label="Адрес"></app-address-input>
+    <app-address-input *ngIf="place" [place]="place" (addressEditEmit)="changeAdress($event)" label="Адрес"></app-address-input>
       <div  class="save-button-wrapper">
         <div class="save-button-wrapper_container">
             <div class="save-button-wrapper_container_item">

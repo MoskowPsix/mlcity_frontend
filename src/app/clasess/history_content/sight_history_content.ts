@@ -17,6 +17,7 @@ export class SightHistoryContent extends HistoryContent {
       'types',
       'latitude',
       'longitude',
+      'address',
     ]
 
     elementsWhatNeedToCompare.forEach((element: string) => {
@@ -35,6 +36,7 @@ export class SightHistoryContent extends HistoryContent {
         longitude: this.longitude,
         history_files: this.files,
         history_types: this.types,
+        address: this.address,
       },
     }
   }
