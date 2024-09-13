@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-        
+
             <div class="prices-container">
                 <div class="not-found-span-container">
                     <span class="not-found-span" *ngIf="checkfreeEntry()">Свободный вход без билетов</span>
@@ -97,13 +97,13 @@
             <div  class="save-button-wrapper">
                 <div class="save-button-wrapper_container">
                     <div class="save-button-wrapper_container_item">
-                        <app-standart-button (click)="opnModalCancel()" [disabled]="true" (click)="submitForm()"  buttonText="Отмена" type="button"  theme ="standart" ></app-standart-button>
+                        <app-standart-button (click)="opnModalCancel()" [disabled]="true"  buttonText="Отмена" type="button"  theme ="standart" ></app-standart-button>
                     </div>
                     <div class="save-button-wrapper_container_item">
                         <app-standart-button (click)="submitForm()" [disabled]="submitButtonState" buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
                     </div>
                 </div>
-               
+
                 <div class="delete-button-wrapper">
                     <app-standart-button (click)="deleteConfirmModal()"  [disabled]="submitButtonState" buttonText="Удалить" type="button" theme ="red"></app-standart-button>
                 </div>
@@ -111,7 +111,7 @@
             <app-confirm-modal (cancel)="cancelDeleteConfirm()" (confirm)="deleteConfirm()" [openModal]="deleteConfirmValue"></app-confirm-modal>
             <app-confirm-modal  (cancel)="cancelEdit()" (confirm)="cancelConfirm()" [openModal]="cancelConfirmValue"></app-confirm-modal>
         </form>
-       
+
     </div>
 
 </ion-content>
