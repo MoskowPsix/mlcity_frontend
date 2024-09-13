@@ -745,7 +745,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesEvents.create, 'success')
         if (res.event.id) {
-          this.router.navigate(['/events/' + res.event.id])
+          this.router.navigate(['/cabinet/events/'])
         } else {
           this.router.navigate(['/cabinet/events/'])
         }
