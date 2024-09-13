@@ -5,7 +5,7 @@ export const environment = {
   YANDEX_METRICA_KEY: 96112606,
   YANDEX_METRICA_ON: true,
   APP_NAME: 'VOKRUG',
-  BASE_URL: 'https://api-dev.vokrug.city',
+  BASE_URL: 'https://dev.vokrug.city',
   PORT: '8100',
   BACKEND_URL: 'https://api-dev.vokrug.city',
   BACKEND_PORT: '443',
