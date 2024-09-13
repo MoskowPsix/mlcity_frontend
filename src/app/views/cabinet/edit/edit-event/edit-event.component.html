@@ -78,7 +78,7 @@
                 <div  *ngIf="checkCountPlaces()" class="not-found-span-container">
                     <span class="not-found-span">Место проведения не добавлено</span>
                 </div>
-                <ng-container *ngFor="let place of this.editForm.value.places; let i = index">
+                <ng-container  *ngFor="let place of this.editForm.value.places; let i = index">
                     <div class="place-wrapper">
                         <app-new-place
                         *ngIf="!place.on_delete"
