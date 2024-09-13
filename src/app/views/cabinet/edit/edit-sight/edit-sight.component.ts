@@ -29,6 +29,7 @@ export class EditSightComponent implements OnInit {
   previewCategory: any = []
   allTypes: any[] = []
   place!: any
+  copyOrganization: any = []
   options: object = {
     indexes: true,
     indices: true,
@@ -49,7 +50,7 @@ export class EditSightComponent implements OnInit {
     private editService: EditService,
     private toastService: ToastService,
     private router: Router,
-  ) { }
+  ) {}
 
   ionViewWillEnter(): void {
     this.previewCategory = []
@@ -67,6 +68,7 @@ export class EditSightComponent implements OnInit {
       )
       .subscribe((res: any) => {
         this.organization = _.cloneDeep(res.sight)
+        this.copyOrganization = _.cloneDeep(this.organization)
         this.loadingService.hideLoading()
         this.editForm.patchValue({
           name: res.sight.name,
@@ -128,8 +130,9 @@ export class EditSightComponent implements OnInit {
   }
   submitForm() {
     let sight_history_content = new SightHistoryContent()
-    console.log(this.organization, _.cloneDeep(this.editForm.value))
-    let result = sight_history_content.merge(this.organization, _.cloneDeep(this.editForm.value))
+
+    let result = sight_history_content.merge(this.copyOrganization, _.cloneDeep(this.editForm.value))
+    console.log(result)
     this.editService
       .sendEditSight(serialize(result, this.options))
       .pipe(

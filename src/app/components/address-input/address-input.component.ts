@@ -86,6 +86,10 @@ export class AddressInputComponent implements OnInit {
       })
     })
   }
+  clearInput(event: HTMLInputElement) {
+    event.value = ''
+    console.log(event.value)
+  }
   addPlacemark(coords: number[]) {
     this.placemark = new ymaps.Placemark(coords)
     this.map.target.geoObjects.add(this.placemark)

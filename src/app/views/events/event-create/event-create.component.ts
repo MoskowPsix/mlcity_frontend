@@ -226,7 +226,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .getUser()
       .pipe(
         tap(() => {
-          this.loadingService.showLoading(MessagesLoading.vkGroupSearch)
+          // this.loadingService.showLoading(MessagesLoading.vkGroupSearch)
         }),
         switchMap((user: any) => {
           this.user = user
@@ -248,7 +248,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
                   err.error?.message || err.error?.error_msg || MessagesErrors.vkTokenError,
                   'danger',
                 )
-                this.loadingService.hideLoading()
+
                 this.authService.logout()
                 return of(EMPTY)
               }),
@@ -257,12 +257,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           return of(EMPTY)
         }),
         tap(() => {}),
-        tap(() => {
-          this.loadingService.hideLoading()
-        }),
+        tap(() => {}),
         catchError((err) => {
           this.toastService.showToast(err.error?.message || err.error?.error_msg || MessagesErrors.default, 'danger')
-          this.loadingService.hideLoading()
+
           return of(EMPTY)
         }),
         takeUntil(this.destroy$),
