@@ -27,6 +27,7 @@ export class MapService {
   public showChangeCityDialog: BehaviorSubject<boolean> = new BehaviorSubject(false)
 
   public geolocationCity: BehaviorSubject<string> = new BehaviorSubject('')
+  public zoom: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationRegion: BehaviorSubject<string> = new BehaviorSubject('')
@@ -60,6 +61,13 @@ export class MapService {
       })
   }
 
+  setZoom(zoom:number){
+    this.zoom.next(zoom)
+    localStorage.setItem('zoom',String(zoom))
+  }
+  getZoomFromLocalStorage(){
+    return localStorage.getItem('zoom')
+  }
   //Определение геопозиции нативными способами платформы
   async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
     if (!Capacitor.isPluginAvailable('Geolocation')) {

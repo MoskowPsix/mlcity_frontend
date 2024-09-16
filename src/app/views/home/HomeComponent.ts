@@ -92,7 +92,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   doCheckState: boolean = true
 
   myGeo!: ymaps.Placemark
-  minZoom = 10
+  minZoom = 9
   zoom: number = 4
   clusterer!: ymaps.Clusterer
   radius: number = 1
@@ -383,6 +383,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     let eventsIds: any[] = []
     let sightIds: any[] = []
     //При изменении радиуса проверяем метки для показа/скрытия
+    console.log(this.zoom)
     this.objectsInsideCircle = ymaps
       .geoQuery(this.placemarks)
       .searchInside(this.CirclePoint)
@@ -935,16 +936,66 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
   ionViewWillEnter(): void {
+    if(this.mapService.getZoomFromLocalStorage()){
+      switch(Number(this.mapService.getZoomFromLocalStorage())){
+        case 1:
+          this.zoom = 14
+          break;
+        case 2:
+          this.zoom = 13
+          break;
+        case 5:
+          this.zoom = 11.5
+          break;
+        case 10:
+          this.zoom = 10
+          break;
+        case 25:
+          this.zoom = 9
+          break;
+        default:
+        
+        break;
+      }
+    }else{
+      this.zoom = 13
+    }
+ 
     this.renderSwitcher = !this.renderSwitcher
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.eventsContentModal = []
       this.sightsContentModal = []
       this.radius = parseInt(value)
-      if (this.map && this.map.target)
-        this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-          checkZoomRange: true,
-        })
+      console.log(this.CirclePoint.geometry?.getBounds()!)
+      if (this.map && this.map.target){
+        switch(Number(value)){
+          case 1:
+            this.zoom = 14
+            break;
+          case 2:
+            this.zoom = 13
+            break;
+          case 5:
+            this.zoom = 11.5
+            break;
+          case 10:
+            this.zoom = 10
+            break;
+          case 25:
+            this.zoom = 9
+            break;
+          default:
+          
+          break;
+        }
+        this.mapService.setZoom(Number(value))
+        console.log(value)
+        // this.map.target.setBounds(tempArray, {
+        //   checkZoomRange: true,
+        // })
+      }
+      
     })
 
     //Подписываемся на состояние модалки показа ивентов и мест

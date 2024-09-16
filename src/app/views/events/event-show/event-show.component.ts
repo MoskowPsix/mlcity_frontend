@@ -23,6 +23,7 @@ import { SliderComponent } from '@angular-slider/ngx-slider/slider.component'
 import { SearchFirstySeanceService } from 'src/app/services/search-firsty-seance.service'
 import { ISight } from 'src/app/models/sight'
 import { IOrganization } from 'src/app/models/organization'
+import { IEvent } from 'src/app/models/event'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -55,6 +56,11 @@ export class EventShowComponent implements OnInit, OnDestroy {
   like: boolean = false
   loadingLike: boolean = false
   startLikesCount: number = 0
+
+  wait:boolean = true
+  nextPage: boolean = true
+  spiner:boolean =false
+  eventsCity:any = []
 
   locationId!: number
   map!: YaReadyEvent<ymaps.Map>
@@ -201,6 +207,52 @@ export class EventShowComponent implements OnInit, OnDestroy {
   //         this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
   //       })
   // }
+
+  getEventsCity() {
+    if (this.wait) {
+      this.wait = false
+      if (this.nextPage) {
+        this.spiner = true
+        this.eventsService
+          .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
+          .pipe(
+            tap((response: any) => {
+              console.log(response)
+
+              response.events.data.forEach((element:IEvent) => {
+                element.id !== this.event.id ? this.eventsCity.push(element) : null
+                
+              });
+              response.events.next_cursor
+                ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
+                : this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
+              if (response.events.next_cursor == null) {
+                this.nextPage = false
+                this.spiner = false
+              } else {
+                this.nextPage = true
+                this.spiner = false
+              }
+            }),
+            catchError((err) => {
+              this.toastService.showToast(MessagesErrors.default, 'danger')
+          
+              return of(EMPTY)
+            }),
+            takeUntil(this.destroy$),
+          )
+          .subscribe((response: any) => {
+            if (this.eventsCity.length === 0) {
+            }
+            this.wait = true
+            this.spiner = false
+          })
+      } else {
+        this.spiner = false
+      }
+    }
+  }
+
 
   checkFavorite() {
     if (this.userAuth)
@@ -359,6 +411,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   ionViewWillEnter() {
     //Получаем ид ивента из параметра маршрута
+    this.wait = true
+    this.nextPage = true
+    this.eventsCity = []
+    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
     })
@@ -380,6 +436,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
       })
     }
+    this.getEventsCity()
   }
   ngOnInit() {}
 
