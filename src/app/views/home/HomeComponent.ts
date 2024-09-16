@@ -390,7 +390,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         clusterIconLayout: this.createCluster(),
         clusterDisableClickZoom: true,
         hasBalloon: false,
-        gridSize: 96,
+        gridSize: 64,
         clusterBalloonPanelMaxMapArea: 0,
         clusterOpenBalloonOnClick: true,
         clusterIconShape: {
