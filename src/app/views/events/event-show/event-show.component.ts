@@ -62,7 +62,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   showRout: boolean = false
   searchFirstySeanceService: SearchFirstySeanceService = inject(SearchFirstySeanceService)
   url: any = ''
-  likeUrl: string = ''
+  likeUrl: string = 'assets/icons/like.svg'
   favoriteUrl: string = ''
   priceState: string = ''
   priceStateForShow: string = ''

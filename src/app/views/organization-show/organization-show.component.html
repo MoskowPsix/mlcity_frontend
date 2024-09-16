@@ -9,9 +9,9 @@
     </app-second-header>
     <div class="pb-2rem"  class="organization-container">
       <ng-container *ngIf="loading">
-        <div class="organization-container__organization-section">
+        <div class="organization-container__organization-section_loading">
           <ion-skeleton-text class="organization-avatar" [animated]="true" />
-          <div class="organization-section__info">
+          <div class="organization-section__info_loading">
             <ion-skeleton-text class="organization-section__info__name_loading" [animated]="true" />
             <ion-skeleton-text class="organization-section__info__rating_loading" [animated]="true" />
             <ion-skeleton-text class="organization-section__info__button_loading" [animated]="true" />
@@ -20,17 +20,20 @@
       </ng-container>
       <ng-container *ngIf="!loading">
         <div class="organization-container__organization-section">
-          <img src="{{avatarUrl}}" *ngIf="sight.files![0] && sight.files![0].link !==''" class="organization-avatar"/>
-          <div *ngIf="!sight.files![0] || sight.files![0].link ===''" class="user-section-image"></div>
-
           <div class="organization-section__info">
-            <div class="organization-section__info__name">{{sight.name}}</div>
-            <!-- <div class="organization-section__info__button">
-              <app-standart-button theme="light" buttonText = "Управление подписчиками"></app-standart-button>
-            </div> -->
-
+            <img src="{{avatarUrl}}" *ngIf="sight.files![0] && sight.files![0].link !==''" class="organization-avatar"/>
+            <div *ngIf="!sight.files![0] || sight.files![0].link ===''" class="user-section-image"></div>
+            <div class="organization-section__info__name">
+              {{sight.name}}
+              <div>
+                
+              </div>
+            </div>
           </div>
 
+          <div class="social-button-container">
+            <app-circle-button (click)="toggleFavorite(sight.id)" [loading]="loadingFavotire" [icon]="likeUrl"></app-circle-button>
+          </div>
         </div>
         <div class="organization-container__slider-wrapper">
           <app-edit-slider [files]="sight.files!" type="l-view"></app-edit-slider>

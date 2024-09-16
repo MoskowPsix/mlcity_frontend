@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { Subject, takeUntil } from 'rxjs'
+import { catchError, EMPTY, of, retry, Subject, takeUntil, tap } from 'rxjs'
 import { IOrganization } from 'src/app/models/organization'
 import { OrganizationService } from 'src/app/services/organization.service'
 import { environment } from 'src/environments/environment'
@@ -8,7 +8,11 @@ import { SightsService } from 'src/app/services/sights.service'
 import { ISight } from 'src/app/models/sight'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { take } from 'lodash'
+import { ToastService } from 'src/app/services/toast.service'
 import { IEvent } from 'src/app/models/event'
+import { MessagesAuth } from 'src/app/enums/messages-auth'
+import { MessagesErrors } from 'src/app/enums/messages-errors'
+import { AuthService } from 'src/app/services/auth.service'
 @Component({
   selector: 'app-organization-show',
   templateUrl: './organization-show.component.html',
@@ -20,12 +24,16 @@ export class OrganizationShowComponent implements OnInit {
   sight!: ISight
   avatarUrl: string = ''
   events: IEvent[] = []
+  userAuth: boolean = false
   eventsExpired: IEvent[] = []
   notFound: boolean = false
   notFoundExpired: boolean = false
   nextPage: boolean = true
+  likeUrl: string = 'assets/icons/like.svg'
+  loadingFavotire: boolean = false
   place!: any
   nextPageExpired: boolean = true
+  favorite: boolean = false
   spiner: boolean = false
   spinerExpired: boolean = false
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
@@ -35,11 +43,10 @@ export class OrganizationShowComponent implements OnInit {
     private router: ActivatedRoute,
     private organizationService: OrganizationService,
     private queryBuilderService: QueryBuilderService,
+    private toastService:ToastService,
+    private authService:AuthService
   ) {}
-  ionViewWillEnter() {
-    this.getOrganizationId()
-    this.id ? this.getOrganization(this.id) : null
-  }
+
   getOrganizationId() {
     this.id = this.router.snapshot.paramMap.get('id')!
   }
@@ -77,10 +84,39 @@ export class OrganizationShowComponent implements OnInit {
         })
     }
   }
+  toggleFavorite(sight_id:number){
+    if (!this.userAuth) {
+      this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
+    } else {
+      this.loadingFavotire = true // для отображения спинера
+      this.sightsService
+        .toggleFavorite(this.sight.id)
+        .pipe(
+          tap((res) => {
+           
+            this.favorite = !this.favorite
+
+            if (this.favorite === true) {
+              this.likeUrl = 'assets/icons/like-active.svg'
+            } else {
+              this.likeUrl = 'assets/icons/like.svg'
+            }
+            this.loadingFavotire = false
+          }),
+          catchError((err) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            this.loadingFavotire = false
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe()
+    }
+  }
   getOrganizationEvents() {
     if (this.nextPage) {
       this.spiner = true
-      console.log(this.sight)
+
       this.organizationService
         .getOrganizationEvents(
           String(this.sight.organization!.id),
@@ -103,6 +139,26 @@ export class OrganizationShowComponent implements OnInit {
         })
     }
   }
+
+  checkFavorite() {
+    this.loadingFavotire = true
+    if (this.userAuth){
+          this.sightsService
+        .checkFavorite(this.sight.id!)
+        .pipe(retry(3), takeUntil(this.destroy$))
+        .subscribe((favorite: any) => {
+          this.favorite = favorite.is_favorite
+          console.log(favorite)
+          this.loadingFavotire = false
+          if (this.favorite === true) {
+            this.likeUrl = 'assets/icons/like-active.svg'
+          } else {
+            this.likeUrl = 'assets/icons/like.svg'
+          }
+        })
+    }
+  
+  }
   getOrganization(id: string) {
     console.log(id)
     this.sightsService
@@ -113,6 +169,7 @@ export class OrganizationShowComponent implements OnInit {
         this.getOrganizationEvents()
         this.getOrganizationEventsExpired()
         this.checkAvatar()
+        this.checkFavorite()
         this.loading = false
         this.place = {
           address: this.sight.address,
@@ -122,4 +179,9 @@ export class OrganizationShowComponent implements OnInit {
       })
   }
   ngOnInit() {}
+  ionViewWillEnter() {
+    this.getOrganizationId()
+    this.userAuth = this.authService.getAuthState()
+    this.id ? this.getOrganization(this.id) : null
+  }
 }
