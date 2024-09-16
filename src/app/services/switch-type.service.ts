@@ -5,17 +5,26 @@ import { BehaviorSubject } from 'rxjs'
   providedIn: 'root',
 })
 export class SwitchTypeService {
-  public currentType: BehaviorSubject<string> = new BehaviorSubject<string>('events')
-  public link: BehaviorSubject<string> = new BehaviorSubject<string>('/events')
+  public currentType: BehaviorSubject<string> = new BehaviorSubject<string>(this.getTypeFromLocalSorage() || 'events')
+  public link: BehaviorSubject<string> = new BehaviorSubject<string>('/' + this.getTypeFromLocalSorage() || '/events')
   constructor() {}
 
   changeType() {
     if (this.currentType.value == 'events') {
-      this.currentType.next('sights')
+      this.setTypeInLocalSorage('sights')
       this.link.next('/sights')
     } else {
-      this.currentType.next('events')
+      this.setTypeInLocalSorage('events')
       this.link.next('/events')
     }
+  }
+
+  setTypeInLocalSorage(value: string) {
+    this.currentType.next(value)
+    this.link.next('/' + value)
+    localStorage.setItem('type', value)
+  }
+  getTypeFromLocalSorage() {
+    return localStorage.getItem('type') || 'events'
   }
 }
