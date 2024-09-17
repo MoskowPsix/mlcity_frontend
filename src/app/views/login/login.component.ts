@@ -26,7 +26,7 @@ import { MobileOrNoteService } from 'src/app/services/mobile-or-note.service'
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
-
+  urlLogin = window.location.href
   vkontakteAuthUrl: string = environment.vkontakteAuthUrl
   appleAuthUrl: string = environment.appleAuthUrl
   yandexAuthUrl: string = environment.yandexAuthUrl
@@ -166,7 +166,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (token.length >= 47) {
       let token_arr = token.slice(',')
       if (token_arr.length == 2) {
-        window.location.href = 'login' + token_arr[0]
+        setTimeout(() => window.open(environment.BASE_URL + '/login/' + token_arr[0]), 3000)
       } else {
         this.tokenService.setToken(token)
         this.loginForm.disable()
@@ -307,6 +307,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log(window.location.href)
     this.mobileOrNote()
     //Создаем поля для формы
     this.loginForm = new FormGroup({
