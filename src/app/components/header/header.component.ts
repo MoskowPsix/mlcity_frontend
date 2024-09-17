@@ -154,6 +154,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.filterService.setLocationLatitudeTolocalStorage(item.latitude)
     this.filterService.setLocationLongitudeTolocalStorage(item.longitude)
     this.mapService.setLastMapCoordsToLocalStorage(item.latitude, item.longitude)
+    this.filterService.changeCityFilter.next(true)
     this.filterService.changeFilter.next(true)
     // })
     // this.mapService.geolocationCity.next(item.name);

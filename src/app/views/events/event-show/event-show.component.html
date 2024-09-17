@@ -80,7 +80,9 @@
             <span  class="title">
               Где и когда
             </span>
-            <app-place-show-container [priceState]="priceStateForShow" [places]="places" [prices]="this.event.price"></app-place-show-container>
+            <div class="main-content__shedule__address">
+              <app-place-show-container [priceState]="priceStateForShow" [places]="places" [prices]="this.event.price"></app-place-show-container>
+            </div>
           </div>
           <div class="main-content__community">
             <strong class="title">Кто проводит</strong>
@@ -89,11 +91,24 @@
               <div class="community-wrapper__button-container">
               </div>
             </div>
-            <div class="hidden-id">ID: №{{ event.id }}</div>
+            <div class="main-content__recomend">
+              <strong class="title">Рекомендуем</strong>
+              <div class="main-content-recomend-card-wrapper">
+                <ng-container *ngFor="let event of eventsCity">
+                  <app-event-card [event]="event"></app-event-card>
+                </ng-container>
+              </div>
+              
+              
+            </div>  
+            <div class="hidden-id">EID: №{{ event.id }}</div>
             <div *ngIf="event.afisha7_id" class="hidden-id">Источник: afisha7.ru</div>
             <div *ngIf="!event.afisha7_id && organization" class="hidden-id">Источник: {{organization.name}}</div>
           </div>
+         
         </div>
+
+     
 
         <ion-row class="ion-justify-content-center" style="display: none;">
           <ion-col size-lg="10" size-md="12" size-xs="12" class="">

@@ -27,6 +27,7 @@ export class MapService {
   public showChangeCityDialog: BehaviorSubject<boolean> = new BehaviorSubject(false)
 
   public geolocationCity: BehaviorSubject<string> = new BehaviorSubject('')
+  public radius: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationRegion: BehaviorSubject<string> = new BehaviorSubject('')
@@ -60,6 +61,13 @@ export class MapService {
       })
   }
 
+  setRadius(radius:number){
+    this.radius.next(radius)
+    localStorage.setItem('radius',String(radius))
+  }
+  getRadiusFromLocalStorage(){
+    return localStorage.getItem('radius')
+  }
   //Определение геопозиции нативными способами платформы
   async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
     if (!Capacitor.isPluginAvailable('Geolocation')) {
@@ -312,7 +320,8 @@ export class MapService {
     // this.showChangeCityDialog.next(false)
 
     this.filterService.changeFilter.next(true)
-    this.filterService.changeCityFilter.next(true)
+    // this.filterService.changeCityFilter.next(true)
+    console.log(this.filterService.changeCityFilter.value)
   }
 
   hideChangeCityDialog() {
@@ -378,8 +387,9 @@ export class MapService {
       await circlePoint.geometry?.setCoordinates(coords)
       // await this.geolocationMapNative(map, circlePoint);
       map.target.setBounds(circlePoint.geometry?.getBounds()!, {
-        checkZoomRange: true,
+        checkZoomRange: false,
       })
+    
     }
     // await this.geolocationMapNative(map, circlePoint);
     //ветка если юзать this.filterService.saveFilters.value === 1
