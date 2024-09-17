@@ -948,7 +948,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.zoom = 13
           break;
         case 5:
-          this.zoom = 11.5
+          this.zoom = 11.2
           break;
         case 10:
           this.zoom = 10
