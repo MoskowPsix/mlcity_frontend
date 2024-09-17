@@ -164,27 +164,32 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginAfterSocial(token: any) {
     this.onLoading
     if (token.length >= 47) {
-      this.tokenService.setToken(token)
-      this.loginForm.disable()
-      this.loadingService.showLoading()
-      this.userService
-        .getUserById()
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (data: any) => {
-            // let timeZone = new Date().getTimezoneOffset()
-            // let time = Math.ceil(new Date().getTime() / 100000)
-            // let created_time = Math.ceil(new Date(data.user.social_account.created_at).getTime() / 100000)
-            // let now_time = time
-            // if (created_time === now_time) {
-            //   this.modalPass = true
-            // }
-            this.positiveResponseAfterLogin(data)
-          },
-          error: (err) => {
-            this.errorResponseAfterLogin(err)
-          },
-        })
+      let token_arr = token.slice(',')
+      if (token_arr.length == 2) {
+        window.location.href = 'login' + token_arr[0]
+      } else {
+        this.tokenService.setToken(token)
+        this.loginForm.disable()
+        this.loadingService.showLoading()
+        this.userService
+          .getUserById()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (data: any) => {
+              // let timeZone = new Date().getTimezoneOffset()
+              // let time = Math.ceil(new Date().getTime() / 100000)
+              // let created_time = Math.ceil(new Date(data.user.social_account.created_at).getTime() / 100000)
+              // let now_time = time
+              // if (created_time === now_time) {
+              //   this.modalPass = true
+              // }
+              this.positiveResponseAfterLogin(data)
+            },
+            error: (err) => {
+              this.errorResponseAfterLogin(err)
+            },
+          })
+      }
     }
   }
 
@@ -323,8 +328,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.token = params['user_id']
       this.token ? this.loginAfterSocial(this.token) : this.loginAfterSocial('no')
     })
-
-    // this.loginAfterSocial(this.user_id)
     this.MailOrName()
   }
   // async loginVK() {

@@ -44,16 +44,14 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
-      if (!event.url.includes(':' + environment.BACKEND_PORT)) {
-        this.zone.run(() => {
-          const domain = environment.DOMAIN
-          const pathArray = event.url.split(domain)
-          const appPath = pathArray.pop()
-          if (appPath) {
-            this.router.navigateByUrl(String(appPath))
-          }
-        })
-      }
+      this.zone.run(() => {
+        const domain = environment.DOMAIN
+        const pathArray = event.url.split(domain)
+        const appPath = pathArray.pop()
+        if (appPath) {
+          this.router.navigateByUrl(String(appPath))
+        }
+      })
     })
   }
 
