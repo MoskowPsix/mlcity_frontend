@@ -60,6 +60,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() event!: any
   @Input() isSight: boolean = false
   @Input() myEvent: boolean = false
+  @Input() cardSize:string = ''
   comments: boolean = false
   loadingComment: boolean = false
 

@@ -48,6 +48,16 @@ ion-content{
   right: 1rem;
   z-index: 1;
 }
+.main-content__shedule__address{
+  margin-top: 1rem;
+}
+.main-content-recomend-card-wrapper{
+  padding-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-y: auto;
+}
 .price-container__text{
   display: flex;
   justify-content: center;

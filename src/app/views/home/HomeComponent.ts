@@ -92,7 +92,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   doCheckState: boolean = true
 
   myGeo!: ymaps.Placemark
-  minZoom = 10
+  minZoom = 9.4
   zoom: number = 4
   clusterer!: ymaps.Clusterer
   radius: number = 1
@@ -383,6 +383,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     let eventsIds: any[] = []
     let sightIds: any[] = []
     //При изменении радиуса проверяем метки для показа/скрытия
+ 
     this.objectsInsideCircle = ymaps
       .geoQuery(this.placemarks)
       .searchInside(this.CirclePoint)
@@ -466,6 +467,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       }
     })
+    console.log(this.zoom)
   }
 
   getEventsForIdsForModal() {
@@ -575,6 +577,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getPlaces(): Observable<any> {
+  
     return new Observable((observer) => {
       this.eventsLoading = true
       this.placeService
@@ -934,17 +937,47 @@ export class HomeComponent implements OnInit, OnDestroy {
       }, 300)
     }
   }
+
+  setZoomFromRadius(){
+    if(this.mapService.getRadiusFromLocalStorage()){
+      switch(Number(this.mapService.getRadiusFromLocalStorage())){
+        case 1:
+          this.zoom = 14
+          break;
+        case 2:
+          this.zoom = 13
+          break;
+        case 5:
+          this.zoom = 11.7
+          break;
+        case 10:
+          this.zoom = 10.8
+          break;
+        case 25:
+          this.zoom = 9.4
+          break;
+        default:
+        
+        break;
+      }
+    }else{
+      this.zoom = 13
+    }
+  }
   ionViewWillEnter(): void {
+  
     this.renderSwitcher = !this.renderSwitcher
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.eventsContentModal = []
       this.sightsContentModal = []
       this.radius = parseInt(value)
-      if (this.map && this.map.target)
-        this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
-          checkZoomRange: true,
-        })
+      this.mapService.setRadius(Number(value))
+      this.setZoomFromRadius()
+      this.mapService.radius.subscribe((value:any)=>{
+        this.setZoomFromRadius()
+      })
+    
     })
 
     //Подписываемся на состояние модалки показа ивентов и мест
@@ -968,11 +1001,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
+
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      console.log(value)
       if (value === true) {
         this.eventsContentModal = []
         this.sightsContentModal = []
-        this.mapService.positionFilter(this.map, this.CirclePoint)
+        if(this.filterService.changeCityFilter.value == true){
+          this.mapService.positionFilter(this.map, this.CirclePoint)
+        }
         if (this.filterService.locationLatitude && this.filterService.locationLongitude) {
           this.getEventsAndSights()
         }
@@ -1007,6 +1044,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ionViewDidLeave() {
     this.destroy$.next()
     this.destroy$.complete()
+    
   }
   ngOnDestroy() {
     // отписываемся от всех подписок

@@ -129,7 +129,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   getEventsCity() {
-    // this.loadingMoreEventsCity ? (this.loadingEventsCity = true) : (this.loadingEventsCity = false)
     if (this.wait) {
       this.wait = false
       if (this.nextPage) {
