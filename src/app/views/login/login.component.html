@@ -308,7 +308,7 @@
                   </div>
                 </a>
 
-                <a href="{{yandexAuthUrl}}" target="{{target}}">
+                <a *ngIf="platform === 'web'" href="{{yandexAuthUrl}}" target="{{target}}">
                   <div class="yandex-logo-circle">
 
                   </div>

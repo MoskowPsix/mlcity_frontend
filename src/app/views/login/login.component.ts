@@ -26,7 +26,6 @@ import { MobileOrNoteService } from 'src/app/services/mobile-or-note.service'
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
-  urlLogin = window.location.href
   vkontakteAuthUrl: string = environment.vkontakteAuthUrl
   appleAuthUrl: string = environment.appleAuthUrl
   yandexAuthUrl: string = environment.yandexAuthUrl
@@ -47,6 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   errPassword: boolean = false
   formSetPassword!: FormGroup
   appleState: Number = Math.floor(Math.random() * 21)
+  platform: string = Capacitor.getPlatform()
 
   constructor(
     private authService: AuthService,
