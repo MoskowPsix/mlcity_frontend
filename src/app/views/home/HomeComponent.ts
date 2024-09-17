@@ -937,8 +937,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }, 300)
     }
   }
+
   setZoomFromRadius(){
-   
     if(this.mapService.getRadiusFromLocalStorage()){
       switch(Number(this.mapService.getRadiusFromLocalStorage())){
         case 1:
@@ -948,13 +948,13 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.zoom = 13
           break;
         case 5:
-          this.zoom = 11.2
+          this.zoom = 11.7
           break;
         case 10:
-          this.zoom = 10
+          this.zoom = 10.8
           break;
         case 25:
-          this.zoom = 9
+          this.zoom = 9.4
           break;
         default:
         
@@ -973,6 +973,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sightsContentModal = []
       this.radius = parseInt(value)
       this.mapService.setRadius(Number(value))
+      this.setZoomFromRadius()
       this.mapService.radius.subscribe((value:any)=>{
         this.setZoomFromRadius()
       })
