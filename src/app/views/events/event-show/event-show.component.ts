@@ -56,6 +56,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   like: boolean = false
   loadingLike: boolean = false
   startLikesCount: number = 0
+  oldTypes:number[] = []
 
   wait:boolean = true
   nextPage: boolean = true
@@ -117,6 +118,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
           .subscribe((response: any) => {
             this.organization = response.organization
           })
+          this.getEventsCity()
       })
   }
 
@@ -197,22 +199,21 @@ export class EventShowComponent implements OnInit, OnDestroy {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
-  // checkLiked() {
-  //   if (this.userAuth)
-  //     this.eventsService
-  //       .checkLiked(this.eventId!)
-  //       .pipe(retry(3), takeUntil(this.destroy$))
-  //       .subscribe((liked: any) => {
-  //         this.like = liked.is_liked
-  //         this.like ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')
-  //       })
-  // }
 
   getEventsCity() {
-    if (this.wait) {
+    if (this.wait && this.event) {
       this.wait = false
+      this.filterService.getEventTypesFromlocalStorage()?.split(',').forEach((type:string)=>{
+          this.oldTypes.push(Number(type))
+      })
       if (this.nextPage) {
         this.spiner = true
+        console.log(this.event)
+        let newTypes:any = []
+        this.event.types.forEach((type:any) => {
+          newTypes.push(type.id)
+        });
+        this.filterService.eventTypes.next(Array(newTypes))
         this.eventsService
           .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
           .pipe(
@@ -436,7 +437,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
       })
     }
-    this.getEventsCity()
+   
+  }
+  ionViewDidLeave(){
+    this.filterService.eventTypes.next(this.oldTypes)
   }
   ngOnInit() {}
 
