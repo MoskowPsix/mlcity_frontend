@@ -59,6 +59,7 @@ export class OrganizationShowComponent implements OnInit {
       }
     }
   }
+  
   getOrganizationEventsExpired() {
     if (this.nextPageExpired) {
       this.spinerExpired = true
@@ -73,12 +74,12 @@ export class OrganizationShowComponent implements OnInit {
           res.events.next_cursor
             ? this.queryBuilderService.paginataionPublicEventPlacesExpiredCurrentPage.next(res.events.next_cursor)
             : this.queryBuilderService.paginataionPublicEventPlacesExpiredCurrentPage.next('')
-          if (res.events.next_cursor == null) {
-            this.nextPageExpired = false
+          if (res.events.next_cursor) {
+            this.nextPageExpired = true
             this.spinerExpired = false
           } else {
-            this.nextPageExpired = true
             this.nextPageExpired = false
+            this.spinerExpired = false
           }
           this.eventsExpired.length ? (this.notFoundExpired = false) : (this.notFoundExpired = true)
         })
@@ -116,7 +117,6 @@ export class OrganizationShowComponent implements OnInit {
   getOrganizationEvents() {
     if (this.nextPage) {
       this.spiner = true
-
       this.organizationService
         .getOrganizationEvents(
           String(this.sight.organization!.id),
@@ -125,14 +125,15 @@ export class OrganizationShowComponent implements OnInit {
         .pipe(takeUntil(this.destroy$))
         .subscribe((res: any) => {
           this.events.push(...res.events.data)
+        
           res.events.next_cursor
             ? this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(res.events.next_cursor)
             : this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
-          if (res.events.next_cursor == null) {
-            this.nextPage = false
+          if (res.events.next_cursor) {
+            this.nextPage = true
             this.spiner = false
           } else {
-            this.nextPage = true
+            this.nextPage = false
             this.spiner = false
           }
           this.events.length ? (this.notFound = false) : (this.notFound = true)
@@ -145,7 +146,11 @@ export class OrganizationShowComponent implements OnInit {
     if (this.userAuth){
           this.sightsService
         .checkFavorite(this.sight.id!)
-        .pipe(retry(3), takeUntil(this.destroy$))
+        .pipe(retry(3), takeUntil(this.destroy$),catchError((err)=>{
+          this.loadingFavotire = false
+          console.log(err)
+          return EMPTY
+        }))
         .subscribe((favorite: any) => {
           this.favorite = favorite.is_favorite
           console.log(favorite)
@@ -170,6 +175,7 @@ export class OrganizationShowComponent implements OnInit {
         this.getOrganizationEventsExpired()
         this.checkAvatar()
         this.checkFavorite()
+        this.loadingFavotire = false
         this.loading = false
         this.place = {
           address: this.sight.address,
@@ -179,6 +185,7 @@ export class OrganizationShowComponent implements OnInit {
       })
   }
   ngOnInit() {}
+
   ionViewWillEnter() {
     this.getOrganizationId()
     this.userAuth = this.authService.getAuthState()
