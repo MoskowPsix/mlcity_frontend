@@ -53,7 +53,7 @@
               <app-place-show priceState="dont-price" [place]="place" priceState='dont-price'></app-place-show>
             </ion-accordion-group>
           </div>
-          <div class="hidden-id">ID: №{{ sight.id }}</div>
+          <div class="hidden-id">SID: {{ sight.id }}</div>
           <app-tabs>
               <app-tabs-item name="Текущие события">
                 <app-card-grid [notFound]="notFound" (endScroll)="getOrganizationEvents()" [spiner]="spiner" [cards]="events"></app-card-grid>

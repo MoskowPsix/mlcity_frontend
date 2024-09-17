@@ -101,7 +101,7 @@
               
               
             </div>  
-            <div class="hidden-id">EID: №{{ event.id }}</div>
+            <div class="hidden-id">EID: {{ event.id }}</div>
             <div *ngIf="event.afisha7_id" class="hidden-id">Источник: afisha7.ru</div>
             <div *ngIf="!event.afisha7_id && organization" class="hidden-id">Источник: {{organization.name}}</div>
           </div>

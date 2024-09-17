@@ -10,7 +10,7 @@
  
     <section class="content">
         <app-user-section [user]="user"></app-user-section>
-        <div *ngIf="user" class="hidden-id">UID: №{{ user.id }}</div>
+        <div *ngIf="user" class="hidden-id">UID: {{ user.id }}</div>
         <div class="menu">
             <app-profile-item [routing]="'events'" [iconColor]="'#FAEAD7'" [icon]="'/assets/icons/fireOrange.svg'" [name]="'Мои мероприятия'"></app-profile-item>
             <app-profile-item [routing]="'sights'" [iconColor]="'#DCE9FF'" [icon]="'/assets/icons/place.svg'" [name]="'Мои сообщества'"></app-profile-item>
