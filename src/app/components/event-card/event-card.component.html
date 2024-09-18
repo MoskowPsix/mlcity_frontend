@@ -9,7 +9,7 @@
             </ng-template>
           <ng-template #isVideo>
             <div (click)="eventNavigation()"  class="card">
-              <div class="info-wrapper">
+              <div (click)="eventNavigation()" class="info-wrapper">
                 <div class="info-header">
                    <div *ngIf="minPrice !== maxPrice" class="price">
                       от  {{minPrice}}₽
@@ -22,16 +22,16 @@
                    </div>
               </div>
 
-              <div class="info-footer">
-                  <div class="info-text-container" *ngIf="formatedStartDate || formatedEndDate">
-                    <div *ngIf="formatedStartDate !== formatedEndDate" class="info-text">{{formatedStartDate}} - {{formatedEndDate}}</div>
-                    <div *ngIf="formatedStartDate === formatedEndDate" class="info-text">{{' '+formatedStartDate}}</div>
-                  </div>
-              </div>
-
-        </div>
-              <iframe [src]="event.files[0].link + '&autoplay=1&mute=1&loop=1'|safeVideoByUrl" allow="encrypted-media; fullscreen; picture-in-picture; loop" loop autoplay width="100%" height="100%" frameborder="0" ></iframe>
+                <div class="info-footer">
+                    <div class="info-text-container" *ngIf="formatedStartDate || formatedEndDate">
+                      <div *ngIf="formatedStartDate !== formatedEndDate" class="info-text">{{formatedStartDate}} - {{formatedEndDate}}</div>
+                      <div *ngIf="formatedStartDate === formatedEndDate" class="info-text">{{' '+formatedStartDate}}</div>
+                    </div>
+                </div>
             </div>
+                  <iframe (click)="eventNavigation()" [src]="event.files[0].link + '&autoplay=1&mute=1&loop=1'|safeVideoByUrl" allow="encrypted-media; fullscreen; picture-in-picture; loop" loop autoplay width="100%" height="100%" frameborder="0" ></iframe>
+                  <div (click)="eventNavigation()" class="iframe-wrapper"></div>
+          </div>
           </ng-template>
         </div>
         <ng-template #emptyFiles>
@@ -69,7 +69,7 @@
 
           </div>
         </div>
-        <h4 class="event-name">{{event.name}}</h4>
+        <h4 (click)="eventNavigation()" class="event-name">{{event.name}}</h4>
       </ng-container>
   </div>
 
