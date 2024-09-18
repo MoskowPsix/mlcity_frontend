@@ -43,8 +43,8 @@ export class OrganizationShowComponent implements OnInit {
     private router: ActivatedRoute,
     private organizationService: OrganizationService,
     private queryBuilderService: QueryBuilderService,
-    private toastService:ToastService,
-    private authService:AuthService
+    private toastService: ToastService,
+    private authService: AuthService,
   ) {}
 
   getOrganizationId() {
@@ -59,7 +59,7 @@ export class OrganizationShowComponent implements OnInit {
       }
     }
   }
-  
+
   getOrganizationEventsExpired() {
     if (this.nextPageExpired) {
       this.spinerExpired = true
@@ -85,7 +85,7 @@ export class OrganizationShowComponent implements OnInit {
         })
     }
   }
-  toggleFavorite(sight_id:number){
+  toggleFavorite(sight_id: number) {
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
     } else {
@@ -94,7 +94,6 @@ export class OrganizationShowComponent implements OnInit {
         .toggleFavorite(this.sight.id)
         .pipe(
           tap((res) => {
-           
             this.favorite = !this.favorite
 
             if (this.favorite === true) {
@@ -125,7 +124,7 @@ export class OrganizationShowComponent implements OnInit {
         .pipe(takeUntil(this.destroy$))
         .subscribe((res: any) => {
           this.events.push(...res.events.data)
-        
+
           res.events.next_cursor
             ? this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next(res.events.next_cursor)
             : this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
@@ -143,17 +142,20 @@ export class OrganizationShowComponent implements OnInit {
 
   checkFavorite() {
     this.loadingFavotire = true
-    if (this.userAuth){
-          this.sightsService
+    if (this.userAuth) {
+      this.sightsService
         .checkFavorite(this.sight.id!)
-        .pipe(retry(3), takeUntil(this.destroy$),catchError((err)=>{
-          this.loadingFavotire = false
-          console.log(err)
-          return EMPTY
-        }))
+        .pipe(
+          retry(3),
+          takeUntil(this.destroy$),
+          catchError((err) => {
+            this.loadingFavotire = false
+            console.log(err)
+            return EMPTY
+          }),
+        )
         .subscribe((favorite: any) => {
           this.favorite = favorite.is_favorite
-          console.log(favorite)
           this.loadingFavotire = false
           if (this.favorite === true) {
             this.likeUrl = 'assets/icons/like-active.svg'
@@ -162,15 +164,14 @@ export class OrganizationShowComponent implements OnInit {
           }
         })
     }
-  
   }
   getOrganization(id: string) {
-    console.log(id)
     this.sightsService
       .getSightById(Number(id))
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         this.sight = res.sight
+        this.loading = false
         this.getOrganizationEvents()
         this.getOrganizationEventsExpired()
         this.checkAvatar()
