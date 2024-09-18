@@ -12,7 +12,7 @@ export const environment = {
   DOMAIN: 'mlcity.ru',
   appleClientId: 'mlcity.ru',
   appleAuthUrl: 'https://api-dev.vokrug.city/api/social-auth/apple',
-  vkontakteAuthUrl: 'https://api-dev.vokrug.city/api/social-auth/vkontakte',
+  vkontakteAuthUrl: `https://api-dev.vokrug.city/api/social-auth/vkontakte`,
   yandexAuthUrl: 'https://api-dev.vokrug.city/api/social-auth/yandex/',
   vkontakteServiceKey: '7c6d50047c6d50047c6d5004647f7f17fc77c6d7c6d50041fa47869a3cc84a7c0bed429',
 }

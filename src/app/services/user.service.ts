@@ -9,8 +9,7 @@ import { config } from 'process'
   providedIn: 'root',
 })
 export class UserService {
-  public user: BehaviorSubject<IUser | null> =
-    new BehaviorSubject<IUser | null>(this.getUserFromLocalStorage())
+  public user: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(this.getUserFromLocalStorage())
 
   constructor(private http: HttpClient) {}
 
@@ -19,9 +18,7 @@ export class UserService {
   }
 
   getUserById(): Observable<IUser> {
-    return this.http.get<IUser>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users`,
-    )
+    return this.http.get<IUser>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users`)
   }
 
   setUser(user: IUser) {
@@ -44,17 +41,11 @@ export class UserService {
   }
 
   deleteUser() {
-    return this.http.delete<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users`,
-    )
+    return this.http.delete<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users`)
   }
 
   changeName(data: FormData): Observable<any> {
     // return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/profile/users`,{'new_name':data.get('new_name'), 'avatar':data.get('avatar')})
-    return this.http.post<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/profile/users`,
-      data,
-    )
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/profile/users`, data)
   }
-
 }

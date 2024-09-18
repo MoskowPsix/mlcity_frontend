@@ -27,22 +27,10 @@ export class CabinetComponent implements OnInit {
     this.router.navigate(['cabinet/settings'])
   }
   ionViewWillEnter() {
-    this.userService
-      .getUserById()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((res: any) => {
-        this.user = res.user
-        console.log(res.user)
-      })
+    this.user = this.userService.getUserFromLocalStorage()
   }
 
   ngOnInit() {
-    this.userService
-      .getUserById()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((res: any) => {
-        this.user = res.user
-        console.log(res.user)
-      })
+    this.user = this.userService.getUserFromLocalStorage()
   }
 }
