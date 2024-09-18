@@ -46,7 +46,7 @@
           <div class="status" [ngStyle]="{'background-color': getLastStatusColor()}"></div>
         </div>
 
-        <div *ngIf="event.files[0].file_types[0].name !== 'video'" (click)="eventNavigation()" class="card">
+        <div *ngIf=" event.files.length > 0 && event.files[0].file_types[0].name !== 'video'" (click)="eventNavigation()" class="card">
               <div class="info-wrapper">
                   <div class="info-header">
                      <div *ngIf="minPrice !== maxPrice" class="price">
