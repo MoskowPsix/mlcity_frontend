@@ -18,6 +18,7 @@ import { StatusesService } from 'src/app/services/statuses.service'
 import { Statuses } from 'src/app/enums/statuses-new'
 import _ from 'lodash'
 import { serialize } from 'object-to-formdata'
+import moment from 'moment'
 interface InvalidForm {
   name: boolean
   sponsor: boolean
@@ -264,10 +265,12 @@ export class EditEventComponent implements OnInit {
     }
   }
   addSeance(event: any) {
+    let tomorrow = moment().add(1,'days')
     if (this.editForm.value.places[event].seances) {
       this.editForm.value.places[event].seances.push({
         temp_id: this.editForm.value.places[event].seances.length,
-        date_start: '',
+        date_start: tomorrow.format('YYYY-MM-DDTHH:MM'),
+        date_end: tomorrow.format('YYYY-MM-DDTHH:MM'),
       })
     }
   }
