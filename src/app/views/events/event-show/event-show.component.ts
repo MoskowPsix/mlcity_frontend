@@ -24,6 +24,7 @@ import { SearchFirstySeanceService } from 'src/app/services/search-firsty-seance
 import { ISight } from 'src/app/models/sight'
 import { IOrganization } from 'src/app/models/organization'
 import { IEvent } from 'src/app/models/event'
+import { TextFormatService } from 'src/app/services/text-format.service'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -57,6 +58,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
   loadingLike: boolean = false
   startLikesCount: number = 0
   oldTypes:number[] = []
+
+  textFormat:TextFormatService = inject(TextFormatService)
 
   wait:boolean = true
   nextPage: boolean = true
@@ -205,7 +208,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       this.wait = false
       if (this.nextPage) {
         this.spiner = true
-        console.log(this.event)
+      
         let newTypes:any = []
         this.event.types.forEach((type:any) => {
           newTypes.push(type.id)
@@ -215,8 +218,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
           .getEvents(this.queryBuilderService.queryBuilder('eventsForRecomend'))
           .pipe(
             tap((response: any) => {
-              console.log(response)
-
+      
               response.events.data.forEach((element:IEvent) => {
                 element.id !== this.event.id ? this.eventsCity.push(element) : null
                 
@@ -329,7 +331,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   clearDescription() {
-    return this.sanitizer.bypassSecurityTrustHtml(this.event.description)
+    return this.sanitizer.bypassSecurityTrustHtml(this.textFormat.formatingText(this.event.description))
   }
   // onMapReady({target, ymaps}: YaReadyEvent<ymaps.Map>): void {
   //   let icoLink = this.event && this.event.types && this.event.types.length ? this.host + ':' + this.port + this.event.types[0].ico : ''
