@@ -960,7 +960,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         description: new FormControl('', [Validators.required, Validators.minLength(10)]),
         places: new FormControl([], [Validators.required]),
         type: new FormControl([], [Validators.required]),
-        ageLimit: new FormControl(0, [Validators.required]),
+        ageLimit: new FormControl(18, [Validators.required]),
         status: new FormControl({ value: this.statusSelected, disabled: false }, [Validators.required]),
         files: new FormControl('', fileTypeValidator(['png', 'jpg', 'jpeg'])),
         price: new FormControl([], [Validators.required]),
