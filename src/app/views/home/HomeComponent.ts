@@ -409,7 +409,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.modalContent = []
       if (!e.get('target')._clusterBounds) {
         if (e.get('target').properties.get('geoObjects') !== undefined) {
-          console.log(e.get('target').properties.get('geoObjects'))
+          
           e.get('target')
             .properties.get('geoObjects')
             .forEach((element: any) => {
@@ -467,7 +467,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       }
     })
-    console.log(this.zoom)
+
   }
 
   getEventsForIdsForModal() {
@@ -1003,7 +1003,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
 
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      console.log(value)
       if (value === true) {
         this.eventsContentModal = []
         this.sightsContentModal = []

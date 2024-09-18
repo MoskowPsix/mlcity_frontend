@@ -14,6 +14,7 @@ export class QueryBuilderService {
 
   userID: number = 0
   eventTypes?: string
+  eventTypesRecomend?: string
   sightTypes?: string
   dateStart?: string
   dateEnd?: string
@@ -102,6 +103,9 @@ export class QueryBuilderService {
         break
       case 'eventsForTape': //Лента ивентов - /events
         this.buildQueryEventsForTape()
+        break
+      case 'eventsForRecomend': //Лента ивентов - /events
+        this.buildQueryEventsForRecomend()
         break
       case 'sightsForTape': // Лента мест - /sights
         this.buildQuerySightsForTape()
@@ -196,6 +200,22 @@ export class QueryBuilderService {
       desc: true,
     }
   }
+  buildQueryEventsForRecomend(){
+    this.queryParams = {
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
+      latitude: this.latitude,
+      longitude: this.longitude,
+      eventTypes: this.eventTypesRecomend,
+      dateStart: this.dateStart,
+      dateEnd: this.dateEnd,
+      radius: this.radius,
+      page: this.paginationPublicEventsForTapeCurrentPage.value,
+      orderBy: 'date_start',
+      desc: true,
+    }
+  }
+        
 
   buildQuerySightsForTape() {
     this.queryParams = {

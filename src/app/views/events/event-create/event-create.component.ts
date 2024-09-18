@@ -10,6 +10,7 @@ import {
   ElementRef,
   ViewChild,
   HostListener,
+  inject,
 } from '@angular/core'
 import { trigger, style, animate, transition } from '@angular/animations'
 import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry } from 'rxjs'
@@ -49,6 +50,7 @@ import { CreateRulesModalComponent } from 'src/app/components/create-rules-modal
 import { maskitoTimeOptionsGenerator } from '@maskito/kit'
 import { IOrganization } from 'src/app/models/organization'
 import { Console } from 'console'
+import { TextFormatService } from 'src/app/services/text-format.service'
 
 @Component({
   selector: 'app-event-create',
@@ -136,6 +138,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   sightsList: any[] = []
   dectedDataIvalid: boolean = false
   priceArrayForm: any[] = []
+  textFormat:TextFormatService = inject(TextFormatService)
   entranceFree: boolean = true
   maxStepsCount: number = 4
   isNextButtonClicked: boolean = false
@@ -729,12 +732,21 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+  formatingText(){
+    //Форматируем текст пользователя
+    let newDescription = this.textFormat.formatingText(this.createEventForm.value.description)
+    this.createEventForm.value.description = newDescription
+    console.log(newDescription)
+  }
+
   //Отпрвка формы
 
   onSubmit() {
     this.searchMinSeans()
+    this.formatingText()
     this.createEventForm.value.files = this.uploadFiles
     this.nullPrice()
+
     //собираем плейсы
     let event = this.createFormData() // собираем формдату
     this.loadingService.showLoading()
