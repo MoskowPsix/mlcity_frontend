@@ -42,12 +42,12 @@
           {{sight.description}}
         </div>
         <div class="organization-container__category-container">
-          <div class="category-button-grid">
+          <!-- <div class="category-button-grid">
             <ng-container>
                 <app-rounded-button style="pointer-events: none;"  *ngFor="let category of sight.types"  icon="assets/icons/category.svg" type="button" buttonText=" {{category.name}}"></app-rounded-button>
                 <app-rounded-button *ngIf="sight.types!.length === 0" style="pointer-events: none;"  icon="assets/icons/category.svg" type="button" buttonText="Прочее"></app-rounded-button>
             </ng-container>
-          </div>
+          </div> -->
           <div class="organization-container__map">
             <ion-accordion-group>
               <app-place-show priceState="dont-price" [place]="place" priceState='dont-price'></app-place-show>
