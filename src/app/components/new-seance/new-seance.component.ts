@@ -53,5 +53,7 @@ export class NewSeanceComponent implements OnInit {
       })
     }
   }
-  ngOnInit() {}
+  ngOnInit() {
+   
+  }
 }

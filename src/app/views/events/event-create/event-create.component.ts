@@ -51,6 +51,7 @@ import { maskitoTimeOptionsGenerator } from '@maskito/kit'
 import { IOrganization } from 'src/app/models/organization'
 import { Console } from 'console'
 import { TextFormatService } from 'src/app/services/text-format.service'
+import moment from 'moment'
 
 @Component({
   selector: 'app-event-create',
@@ -847,6 +848,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   addSeances(event: number) {
+    let tomorrow = moment().add(1,'days')
     // this.placeArrayForm[num].seances.push({})
     // this.createEventForm.controls['places'].value[num].controls.seances.value.push(
     //   new FormGroup({
@@ -857,7 +859,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (this.createEventForm.value.places[event].seances) {
       this.createEventForm.value.places[event].seances.push({
         temp_id: this.createEventForm.value.places[event].seances.length,
-        date_start: '',
+        date_start: tomorrow.format('YYYY-MM-DDTHH:MM'),
+        date_end: tomorrow.format('YYYY-MM-DDTHH:MM'),
       })
     }
   }
