@@ -203,9 +203,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
   getEventsCity() {
     if (this.wait && this.event) {
       this.wait = false
-      this.filterService.getEventTypesFromlocalStorage()?.split(',').forEach((type:string)=>{
-          this.oldTypes.push(Number(type))
-      })
       if (this.nextPage) {
         this.spiner = true
         console.log(this.event)
@@ -213,9 +210,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.event.types.forEach((type:any) => {
           newTypes.push(type.id)
         });
-        this.filterService.eventTypes.next(Array(newTypes))
+        this.queryBuilderService.eventTypesRecomend =  newTypes
         this.eventsService
-          .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
+          .getEvents(this.queryBuilderService.queryBuilder('eventsForRecomend'))
           .pipe(
             tap((response: any) => {
               console.log(response)
@@ -440,7 +437,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
    
   }
   ionViewDidLeave(){
-    this.filterService.eventTypes.next(this.oldTypes)
+   
   }
   ngOnInit() {}
 
