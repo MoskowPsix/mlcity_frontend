@@ -48,7 +48,7 @@
                 <app-rounded-button *ngIf="sight.types!.length === 0" style="pointer-events: none;"  icon="assets/icons/category.svg" type="button" buttonText="Прочее"></app-rounded-button>
             </ng-container>
           </div> -->
-          <div class="organization-container__map">
+          <div *ngIf="place && place.address" class="organization-container__map">
             <ion-accordion-group>
               <app-place-show priceState="dont-price" [place]="place" priceState='dont-price'></app-place-show>
             </ion-accordion-group>
