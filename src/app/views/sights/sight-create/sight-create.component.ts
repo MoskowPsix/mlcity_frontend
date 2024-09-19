@@ -76,6 +76,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   openModalPostValue: boolean = false
   allFiles: any[] = []
   openModalPostCount: number = 0
+  cancelConfirmValue: boolean = false
   openModalGroupValue: boolean = false
   vkGroupModalSelected: any = 0
   statusesLoaded: boolean = false
@@ -123,6 +124,22 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     private yaGeocoderService: YaGeocoderService,
     private router: Router,
   ) {}
+  //Отмена создания
+  openModalCancel() {
+    this.cancelConfirmValue = true
+  }
+  cancelEdit() {
+    this.cancelConfirmValue = false
+  }
+  async cancelConfirm() {
+    this.cancelConfirmValue = false
+    setTimeout(() => {
+      this.router.navigate(['cabinet/sights'])
+    }, 0) //убираем асинхронность
+    console.log(this.cancelConfirmValue)
+  }
+  
+
 
   // Получаем юзера и устанавливаем группы и шаги
   getUserWithSocialAccount() {
