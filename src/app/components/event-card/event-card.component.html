@@ -1,4 +1,4 @@
-  <div *ngIf="cardSize !== 'l'" class="card-wrapper">
+  <div *ngIf="viewCard" class="card-wrapper">
 
       <ng-container>
         <div *ngIf="event.files.length > 0 && event.files[0].link !== '' ; else emptyFiles">
