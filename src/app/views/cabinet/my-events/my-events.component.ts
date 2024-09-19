@@ -48,6 +48,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
               }
             })
             this.spiner = false
+            console.log(respons.events.next_cursor)
             this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next(respons.events.next_cursor)
             respons.events.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
           }),
@@ -91,6 +92,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
   ngOnInit() {}
 
   ionViewWillEnter() {
+    this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next('')
     this.events = []
     this.nextPage = true
     this.getMyEvents()
