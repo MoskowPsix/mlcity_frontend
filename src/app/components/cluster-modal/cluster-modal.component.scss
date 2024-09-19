@@ -1,5 +1,12 @@
 ion-modal {
     --border-radius: 8px !important;
+     // overwrite inline styles
+  --offset-bottom: auto!important;
+  --overflow: hidden;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   }
 .main-content{
   padding-top: 1rem;
