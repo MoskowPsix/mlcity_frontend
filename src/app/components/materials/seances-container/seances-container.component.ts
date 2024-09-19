@@ -11,6 +11,7 @@ export class SeancesContainerComponent implements OnInit {
   constructor() {}
   @Input() seances!: any[]
   @Input() priceState!: string
+  @Input() buyLink!:string
   templateDate: any
   calendarFilter: any
   viewSeances!: any[]

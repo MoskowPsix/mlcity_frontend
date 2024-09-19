@@ -1,5 +1,5 @@
 
-  <div  class="input-wrapper">
+  <div *ngIf="control"  class="input-wrapper">
     <ng-container *ngIf="invalid && !disabled">
       <label class="label_invalid" for="{{label}}">{{label}}</label>
       <input #input [readonly]="readonly" placeholder="{{placeholder}}" type="{{type}}" name="{{label}}" class="standart-input_inavlid"  [formControl]="control" name="new_name">
@@ -19,3 +19,8 @@
     </ng-container>
   </div>
  
+  <span *ngIf="!control">
+    добавьте formControl - например:
+    <br>
+    app-standart-input [control]="createSightForm.get('site')"
+  </span>

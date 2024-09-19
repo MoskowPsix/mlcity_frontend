@@ -92,6 +92,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   loadingLike: boolean = false
   startLikesCount: number = 0
   vkLikesCount: number | null = null
+  viewCard:boolean = true
   dontEdit: boolean = true
   prices: number[] = []
   minPrice: number = 0
@@ -116,6 +117,24 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isSight
       ? this.router.navigate(['/cabinet/sights/edit', this.event.id])
       : this.router.navigate(['/cabinet/events/edit', this.event.id])
+  }
+
+  checkEventStatus(event: any) {
+    let status: any = ''
+    if (event && event.statuses) {
+      event.statuses.forEach((element: any) => {
+        if (element.pivot.last) {
+          status = element
+        }
+      })
+      if (status.name == Statuses.draft) {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return false
+    }
   }
   blockedRout() {
     this.dontEdit = false
@@ -468,6 +487,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
     this.favorite = this.event.favorites_users_exists!
     this.like = this.event.liked_users_exists!
+    this.viewCard = this.checkEventStatus(this.event)
     // window.addEventListener('scrollend', this.scrollEvent, true);
 
     //КИдаем запрос в ВК чтобы обновить лайки и лайкнуть у нас если юзер лайкнул в ВК

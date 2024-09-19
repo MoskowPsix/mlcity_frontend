@@ -8,7 +8,9 @@
         </div>
         <ng-container *ngIf="seances">
           <ng-container *ngFor="let seance of viewSeances">
-            <app-seance-show [priceState]="priceState" [seance]="seance" ></app-seance-show>
+          
+           
+            <app-seance-show [buyLink]="buyLink" [priceState]="priceState" [seance]="seance" ></app-seance-show>
           </ng-container>
         </ng-container>
   

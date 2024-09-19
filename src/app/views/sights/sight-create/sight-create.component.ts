@@ -691,6 +691,9 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.formData.append('workTime', this.createSightForm.controls['workTime'].value)
     this.formData.append('coords', this.createSightForm.controls['coords'].value)
     this.formData.append('address', this.createSightForm.controls['address'].value)
+    this.formData.append('phone_number', this.createSightForm.controls['phone_number'].value)
+    this.formData.append('email', this.createSightForm.controls['email'].value)
+    this.formData.append('site', this.createSightForm.controls['site'].value)
     //this.formData.append('city', this.city)
     this.formData.append('locationId', this.createSightForm.controls['locationId'].value)
     this.formData.append('type[]', this.createSightForm.controls['type'].value)
@@ -866,8 +869,8 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         files: new FormControl('', fileTypeValidator(['png', 'jpg', 'jpeg'])),
         price: new FormControl([], [Validators.required]),
         materials: new FormControl(''),
-        vk: new FormControl(''),
-        phone: new FormControl(''),
+        phone_number: new FormControl(''),
+        email: new FormControl(''),
         site: new FormControl(''),
 
       },

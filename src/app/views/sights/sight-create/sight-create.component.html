@@ -37,9 +37,8 @@
           По желанию можете казать дополнительную информацию о себе.
         </div>
         <app-address-input (addressEditEmit)="edditAdress($event)" label="Адрес"></app-address-input>
-        <app-standart-input label="Ссылка на вк (необязательно)" [control] = "createSightForm.get('vk')"></app-standart-input>
         <app-standart-input label="Ссылка на сайт (необязательно)" [control] = "createSightForm.get('site')"></app-standart-input>
-        <app-standart-input label="Телефон (необязательно)" [control] = "createSightForm.get('phone')"></app-standart-input>
+        <app-standart-input label="Телефон (необязательно)" [control] = "createSightForm.get('phone_number')"></app-standart-input>
       </app-step-container-item>
 
     </app-step-container>

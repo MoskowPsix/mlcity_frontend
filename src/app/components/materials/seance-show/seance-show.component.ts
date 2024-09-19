@@ -10,6 +10,7 @@ export class SeanceShowComponent implements OnInit {
   constructor() {}
   @Input() seance!: ISeance
   @Input() priceState!: string
+  @Input() buyLink!:string
   ngOnInit() {
 
   }
