@@ -139,6 +139,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   sightsList: any[] = []
   dectedDataIvalid: boolean = false
   priceArrayForm: any[] = []
+  cancelConfirmValue: boolean = false
   textFormat:TextFormatService = inject(TextFormatService)
   entranceFree: boolean = true
   maxStepsCount: number = 4
@@ -917,6 +918,22 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.sightsListLoading = false
     this.sightsList = []
   }
+
+   //Отмена создания
+   openModalCancel() {
+    this.cancelConfirmValue = true
+  }
+  cancelEdit() {
+    this.cancelConfirmValue = false
+  }
+  async cancelConfirm() {
+    this.cancelConfirmValue = false
+    setTimeout(() => {
+      this.router.navigate(['cabinet/events'])
+    }, 0) //убираем асинхронность
+    console.log(this.cancelConfirmValue)
+  }
+  
 
   //ищем минимальный и максимальный плейс
 

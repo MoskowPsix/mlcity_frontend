@@ -109,7 +109,7 @@
       <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency !== maxStepsCount" (click)="stepNext()" buttonText="Далее" theme="standart"></app-standart-button>
       <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency === maxStepsCount" (click)="onSubmit()" buttonText="Сохранить и закрыть" theme="standart"></app-standart-button>
       <div class="cancel-wrapper">
-        <app-standart-button (click)="reset()" buttonText="Отмена" theme="light"></app-standart-button>
+        <app-standart-button (click)="openModalCancel()" buttonText="Отмена" theme="light"></app-standart-button>
       </div>
     </div>
   </div>
@@ -301,3 +301,5 @@
           </ng-template>
 
 </ion-modal>
+
+<app-confirm-modal (cancel)="cancelEdit()" (confirm)="cancelConfirm()" [openModal]="cancelConfirmValue"></app-confirm-modal>
