@@ -3,12 +3,14 @@
     
 }
 .seance-container-content__border-img{
-    width: 100%;
+    min-width: 343px;
     height: 100%;
 }
 
 .seance-container{
     padding-top: 0.75rem;
+    display: flex;
+    justify-content: center;
 }
 .seance-container_content
 {
@@ -17,7 +19,7 @@
 .seance-container_content__info{
     position: absolute;
     display: grid;
-    min-width: 400px;
+    width: 343px;
     min-height:3.85rem;
     grid-template-columns: 25.5% 43% 31%;
 }

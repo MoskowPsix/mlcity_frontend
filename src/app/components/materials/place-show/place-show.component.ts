@@ -11,6 +11,7 @@ export class PlaceShowComponent implements OnInit {
   constructor() {}
   @Input() place!: any
   @Input() priceState!: string
+  @Input() buyLink!:string
   public map!: YaReadyEvent<ymaps.Map>
   onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>, place: any) {
     this.map = { target, ymaps }

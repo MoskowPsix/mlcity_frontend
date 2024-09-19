@@ -6,6 +6,6 @@
     </ng-container>
  
     <ng-container *ngIf="places">
-        <app-place-show [priceState]="priceState" [place]="place" *ngFor="let place of places"/>
+        <app-place-show [buyLink]="buyLink" [priceState]="priceState" [place]="place" *ngFor="let place of places"/>
     </ng-container>
 </ion-accordion-group>
