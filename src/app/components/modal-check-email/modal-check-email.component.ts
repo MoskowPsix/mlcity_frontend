@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { catchError, delay, EMPTY, map, of, Subject, takeUntil } from 'rxjs'
 import { NavigationService } from 'src/app/services/navigation.service'
 import { MaskitoOptions, MaskitoElementPredicate } from '@maskito/core'
@@ -39,16 +32,15 @@ export class ModalCheckEmailComponent implements OnInit {
   public userEmailConfirm: boolean = false
   public codeFocused!: boolean
   public currentStep: number = 0
-  
+
   public leftPosotion: number = 0
   ngAfterViewInit() {
     this.codeFocused = true
   }
   ngOnChange() {}
   checkEmail() {
-    this.userEmail = this.userService.getUserFromLocalStorage().email !== null
-    this.userEmailConfirm =
-      this.userService.getUserFromLocalStorage().email_verified_at !== null
+    this.userEmail = this.userService.getUserFromLocalStorage()?.email !== null
+    this.userEmailConfirm = this.userService.getUserFromLocalStorage()?.email_verified_at !== null
   }
   submitCode(event: any) {
     console.log(event)

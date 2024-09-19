@@ -307,7 +307,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(window.location.href)
     this.mobileOrNote()
     //Создаем поля для формы
     this.loginForm = new FormGroup({

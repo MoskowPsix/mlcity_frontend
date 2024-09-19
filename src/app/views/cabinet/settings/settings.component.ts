@@ -110,6 +110,7 @@ export class SettingsComponent implements OnInit {
             this.previewPhotoUrl = ''
             this.loadingService.hideLoading()
             this.toastService.showToast('Данные обновлены!', 'success')
+            this.router.navigate(['cabinet'])
           }
         })
     }
