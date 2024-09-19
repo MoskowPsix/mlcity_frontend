@@ -335,6 +335,8 @@ export class QueryBuilderService {
       withFiles: true,
       withPrices: true,
       expired: false,
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
     }
   }
   buildQueryExpiredEventPlaces() {
@@ -344,6 +346,8 @@ export class QueryBuilderService {
       withFiles: true,
       withPrices: true,
       expired: true,
+      statuses: [Statuses.publish].join(','),
+      statusLast: true,
     }
   }
 
