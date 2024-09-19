@@ -1,7 +1,9 @@
 <ion-modal (ionModalDidDismiss)="closeModal()"  [isOpen]="openModal" id="modalEventShow" #modal [initialBreakpoint]="0.8">
   <div class="bg"></div>
   <ng-template #ContentModal>
- 
+
+     <img (click)="closeModal()" class="header-modal_close" src="assets/icons/close.svg" alt="">
+   
     <ion-content class="ion-padding">
       <div class="main-content">
         <div class="events-wrapper">
