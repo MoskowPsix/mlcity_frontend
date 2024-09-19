@@ -82,6 +82,10 @@ export class SightsService {
     })
   }
 
+  deleteSight(id:number){
+    return this.http.delete(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/organizations/${id}`)
+  }
+
   checkLiked(sight_id: number) {
     return this.http.get<boolean>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/${sight_id}/check-user-liked`,

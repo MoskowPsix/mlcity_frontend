@@ -15,8 +15,10 @@ import { SightTypeService } from 'src/app/services/sight-type.service'
 import { types } from 'util'
 import { IPlace } from 'src/app/models/place'
 import _ from 'lodash'
+
 import { serialize } from 'object-to-formdata'
 import { Statuses } from 'src/app/enums/statuses-new'
+import { MessagesErrors } from 'src/app/enums/messages-errors'
 
 @Component({
   selector: 'app-edit-sight',
@@ -61,25 +63,23 @@ export class EditSightComponent implements OnInit {
   deleteSight() {
     let currentStatusId = 0
     this.loadingService.showLoading()
-    this.statusesService
-      .getStatuses()
-      .pipe(takeUntil(this.destroy$))
+    //Здесь мы редактируем sight но переменная называется organization и в себе отдельно хранит организацию
+    // Для удаления нам нужно отправить именно id сообщества
+    this.sightsService.deleteSight(this.organization.organization.id).pipe(takeUntil(this.destroy$),catchError((err)=>{
+      console.log(err)
+      this.loadingService.hideLoading()
+      if(err.status == 400){
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+      }
+      return EMPTY
+    }))
       .subscribe((res: any) => {
-        if (res.statuses && res.statuses.length) {
-          this.sightsService
-            .changeStatusSight(
-              this.organization.id,
-              res.statuses[res.statuses.map((status: any) => status.name).indexOf(Statuses.draft)].id,
-            )
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((res: any) => {
               console.log(res)
               this.loadingService.hideLoading()
-              this.toastService.showToast('Событие удалено', 'success')
-              this.router.navigate(['cabinet/events'])
-            })
+              this.toastService.showToast('Сообщество успешно удалено', 'success')
+              this.router.navigate(['cabinet/sights'])
         }
-      })
+      )
   }
   cancelDeleteConfirm() {
     this.deleteConfirmValue = false
