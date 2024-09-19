@@ -59,6 +59,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
   startLikesCount: number = 0
   oldTypes:number[] = []
 
+  ageLimit:string = ''
+
   textFormat:TextFormatService = inject(TextFormatService)
 
   wait:boolean = true
@@ -107,9 +109,14 @@ export class EventShowComponent implements OnInit, OnDestroy {
         if (event) {
           this.event = event.event
           this.checkPrice()
+          if(this.event.age_limit){
+            this.ageLimit = this.event.age_limit.split('+')[0]
+          }
+        
           // this.places = event.places_full;
         }
         this.titleService.setTitle(event.name)
+        
         this.metaService.updateTag({
           name: 'description',
           content: event.description,
