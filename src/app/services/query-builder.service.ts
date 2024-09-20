@@ -181,7 +181,7 @@ export class QueryBuilderService {
 
   buildQueryEventsForMapModal() {
     this.queryParams = {
-
+      eventIds: this.eventIds.value,
       page: this.paginationModalEventsCurrentPage.value,
     }
   }
