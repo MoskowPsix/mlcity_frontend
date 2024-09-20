@@ -220,7 +220,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.event.types.forEach((type:any) => {
           newTypes.push(type.id)
         });
-        this.queryBuilderService.eventTypesRecomend =  newTypes
+        
+        this.queryBuilderService.eventTypesRecomend =  newTypes.join(',')
         this.eventsService
           .getEvents(this.queryBuilderService.queryBuilder('eventsForRecomend'))
           .pipe(
