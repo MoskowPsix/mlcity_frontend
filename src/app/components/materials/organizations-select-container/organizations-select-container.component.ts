@@ -14,6 +14,7 @@ export class OrganizationsSelectContainerComponent implements OnInit {
   @Input() closeModalValue!: boolean
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   emitOrganization(organization: any) {
+    console.log(organization)
     this.selectOrganization.emit(organization)
     this.selected = organization.name
   }

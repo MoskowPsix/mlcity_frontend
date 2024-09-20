@@ -11,8 +11,8 @@
     <app-step-container [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency">
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="1">
         <div class="step-description">
-          На данном этапе необходимо обязательно указать название вашего мероприятия. 
-          Если вы создаёте мероприятие не в первый раз, выберите своё сообщество. 
+          На данном этапе необходимо обязательно указать название вашего мероприятия.
+          Если вы создаёте мероприятие не в первый раз, выберите своё сообщество.
           А так же соответствующие типы мероприятий.
         </div>
         <div class="main-content__step-wrapper">
@@ -25,7 +25,7 @@
       </app-step-container-item>
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="2">
         <div class="step-description">
-          На этом этапе  по желанию вы можете добавить 
+          На этом этапе  по желанию вы можете добавить
           фотографии мероприятия или подробное описание,
            чтобы сделать его более привлекательным.
         </div>
@@ -40,7 +40,7 @@
       </app-step-container-item>
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="3">
         <div class="step-description">
-          На данном этапе обязательно укажите адрес проведения вашего мероприятия. 
+          На данном этапе обязательно укажите адрес проведения вашего мероприятия.
             При необходимости можно добавить несколько адресов.
            Не забудьте указать точное время начала, чтобы участники смогли спланировать своё посещение.
         </div>
@@ -49,7 +49,7 @@
             <span class="not-found-span" *ngIf="this.createEventForm.value && this.createEventForm.value.places.length === 0">Место проведения не добавлено</span>
           </div>
             <ng-container *ngFor="let place of this.createEventForm.value.places; let i = index">
-                <app-new-place 
+                <app-new-place
                 [placeId]="i"
                 (addressEditEmit)="editAddress($event)"
                 (placeDeleteEmit)="deletePlace($event)"
@@ -99,13 +99,13 @@
               </ion-select>
             </div>
           </div>
-         
+
       </div>
       </app-step-container-item>
     </app-step-container>
 
     <div class="navigate-buttons-container">
-      
+
       <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency !== maxStepsCount" (click)="stepNext()" buttonText="Далее" theme="standart"></app-standart-button>
       <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency === maxStepsCount" (click)="onSubmit()" buttonText="Сохранить и закрыть" theme="standart"></app-standart-button>
       <div class="cancel-wrapper">
@@ -137,6 +137,7 @@
               <ng-container *ngFor="let group of vkGroups">
                   <ion-item>
                     <ion-avatar>
+                      <img alt="ava" src="{{ group.photo_50 }}" />
                       <img alt="ava" src="{{ group.photo_50 }}" />
                     </ion-avatar>
                     <ion-label class="ion-padding-start">{{ group.name }}</ion-label>

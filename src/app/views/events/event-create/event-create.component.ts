@@ -199,9 +199,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   onAdd(event: Event) {
     this.count++
   }
-  logForm() {
-    console.log(this.createEventForm.value)
-  }
+  // logForm() {
+  //   console.log(this.createEventForm.value)
+  // }
 
   deleteVkFiles(event: any) {
     for (let i = 0; i < this.vkGroupPostSelected.attachments.length; i++) {
@@ -219,9 +219,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
   selectOrganization(event: any) {
-    console.log(event)
     this.selectedOrganization = event.organization
     let id = this.selectedOrganization.id
+    if (event.vk_group_id) {
+      this.vkGroupSelected = event.vk_group_id
+      this.setVkPostsByGroupID(event.vk_group_id)
+      this.openModalPostValue = true
+      this.checkSocialVk = false
+    }
     this.createEventForm.patchValue({ organization_id: id })
     this.modalSelectedOrganization = !this.modalSelectedOrganization
   }
@@ -375,7 +380,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           })
         } else if (file.type === 'video') {
           if (file.video.image[0]) {
-            console.log()
             tempArray.push({
               link: file.video.image[0].url,
               name: file.video.id,
@@ -738,7 +742,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     //Форматируем текст пользователя
     let newDescription = this.textFormat.formatingText(this.createEventForm.value.description)
     this.createEventForm.value.description = newDescription
-    console.log(newDescription)
   }
 
   //Отпрвка формы
@@ -931,9 +934,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.router.navigate(['cabinet/events'])
     }, 0) //убираем асинхронность
-    console.log(this.cancelConfirmValue)
   }
-  
+
 
   //ищем минимальный и максимальный плейс
 
