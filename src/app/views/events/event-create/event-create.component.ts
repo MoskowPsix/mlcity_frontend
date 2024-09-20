@@ -597,8 +597,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.formData.append(`places[${i}][seances][${i_sean}][dateEnd]`, item_sean.date_start)
       })
     })
-
-    this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : null)
+    console.log(this.vkGroupPostSelected?.id)
+    this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : '')
     if (this.vkGroupSelected && this.vkGroupPostSelected?.id) {
       this.formData.append('vkGroupId', this.vkGroupSelected.toString())
     }
