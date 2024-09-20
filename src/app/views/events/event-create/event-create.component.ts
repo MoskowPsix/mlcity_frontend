@@ -219,14 +219,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
   selectOrganization(event: any) {
-    this.selectedOrganization = event.organization
+
+    this.selectedOrganization = event
     let id = this.selectedOrganization.id
-    if (event.vk_group_id) {
-      this.vkGroupSelected = event.vk_group_id
-      this.setVkPostsByGroupID(event.vk_group_id)
-      this.openModalPostValue = true
-      this.checkSocialVk = false
-    }
+   
     this.createEventForm.patchValue({ organization_id: id })
     this.modalSelectedOrganization = !this.modalSelectedOrganization
   }
@@ -326,6 +322,15 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   openModalGroup() {
     this.openModalGroupValue = true
+    let event:any = this.selectedOrganization
+    console.log(event)
+    console.log(event.vk_group_id)
+    if (event.vk_group_id) {
+      console.log(event.vk_group_id)
+      this.vkGroupSelected = event.vk_group_id
+      this.setVkPostsByGroupID(event.vk_group_id)
+      this.openModalPostValue = true
+    }
   }
 
   closeModalGroup() {

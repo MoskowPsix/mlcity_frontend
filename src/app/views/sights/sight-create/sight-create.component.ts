@@ -917,16 +917,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.createSightForm.reset()
   }
 
-  //функция добавления цен
-  // addPrice() {
-  //   this.priceArrayForm.push({price: ''})
-  //   this.createEventForm.controls['price'].value.push(
-  //     new FormGroup({
-  //       cors_rub: new FormControl('', [Validators.required]),
-  //       description: new FormControl('', [Validators.required, Validators.minLength(5)]),
-  //     })
-  //   )
-  // }
+ 
 
   ngOnDestroy() {
     // отписываемся от всех подписок

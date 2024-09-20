@@ -16,4 +16,6 @@ export interface IOrganization {
   description?: string
   user?: IUser
   users?: IUser[]
+  vk_post_id:number,
+  vk_group_id:number
 }
