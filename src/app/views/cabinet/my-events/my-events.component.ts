@@ -68,6 +68,10 @@ export class MyEventsComponent implements OnInit, OnDestroy {
           if (this.events.length == 0) {
             this.notFound = true
           }
+          if(this.events.length < 12  && !this.notFound){
+            this.getMyEvents()
+          }
+
         })
     }
   }

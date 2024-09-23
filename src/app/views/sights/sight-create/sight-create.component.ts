@@ -812,7 +812,12 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
     this.sightsService
       .create(sight)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.destroy$),catchError((err)=>{
+        console.log(err)
+        this.toastService.showToast(err.error.message,'danger')
+        this.loadingService.hideLoading()
+        return EMPTY
+      }))
       .subscribe((res) => {
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesSights.create, 'success')
