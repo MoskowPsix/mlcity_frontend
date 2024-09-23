@@ -155,6 +155,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
               this.willRequestToGetCode = false
               console.log(err)
               this.loadingService.hideLoading()
+              this.toastService.showToast(err.error.message,'danger')
               if (err.status !== 400) {
               } else {
                 this.toastService.showToast(`Попробуйте позже`, 'danger')
