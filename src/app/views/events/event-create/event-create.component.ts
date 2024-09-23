@@ -131,7 +131,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   placeArrayForm: any[] = []
   seancesArrayForm: any[] = []
   locations: any[] = []
-
+  selectedOrganizationMore:any
   cityesListLoading = false
   minLengthCityesListError = false
   cityesList: any[] = []
@@ -185,6 +185,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (this.stepCurrency <= this.maxStepsCount && !this.stepInvalidate()) {
       this.stepCurrency++
     }
+    if(this.stepCurrency == 3 && this.createEventForm.value.places.length == 0){
+      this.addPlace()
+    }
   }
 
   //Клик по нкопке назад
@@ -219,6 +222,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
   selectOrganization(event: any) {
+    this.selectedOrganizationMore = event
     this.selectedOrganization = event.organization
     let id = this.selectedOrganization.id
     if (event.vk_group_id) {
@@ -803,13 +807,26 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   addPlace() {
-    let tempPlace = {
-      temp_id: this.createEventForm.value.places.length,
-      latitude: '',
-      longitude: '',
-      address: '',
-      seances: [],
+    console.log(this.selectedOrganizationMore)
+    let tempPlace:any
+    if(!this.selectedOrganizationMore || !this.selectedOrganizationMore.address){
+      tempPlace = {
+        temp_id: this.createEventForm.value.places.length,
+        latitude: '',
+        longitude: '',
+        address: '',
+        seances: [],
+      }
+    }else{
+      tempPlace = {
+        temp_id: this.createEventForm.value.places.length,
+        latitude: this.selectedOrganizationMore.latitude,
+        longitude: this.selectedOrganizationMore.longitude,
+        address: this.selectedOrganizationMore.address,
+        seances: [],
+      }
     }
+   
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       let locId = value
       if (value) {
@@ -994,7 +1011,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     )
 
     this.getUserWithSocialAccount()
-    this.addPlace()
     this.getTypes()
     this.getStatuses()
   }

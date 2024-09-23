@@ -744,6 +744,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         this.sightDescriptionElement.setFocus()
       }, 500)
     }
+    
   }
 
   //Клик по нкопке назад
@@ -902,7 +903,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.getStatuses()
     this.getNowCityes()
     this.addPrice()
-    this.loadingService.showLoading()
+    
     this.getTypes()
     //this.getLocations()
     // this.placemark= new ymaps.Placemark(this.createSightForm.value.coords)
