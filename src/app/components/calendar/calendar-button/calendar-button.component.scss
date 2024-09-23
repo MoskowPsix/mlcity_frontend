@@ -9,6 +9,15 @@
   align-items: center;
   justify-content: center;
 }
+.datepicker-buttons-wrapper{
+  display: flex;
+}
+.mat-datepicker-actions {
+  justify-content: flex-start;
+}
+mat-datepicker-actions{
+  justify-content: flex-start;
+}
 
 .calendar-container {
   position: absolute;

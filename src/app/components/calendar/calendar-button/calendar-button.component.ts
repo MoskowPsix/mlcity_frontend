@@ -35,7 +35,11 @@ export class CalendarButtonComponent implements OnInit {
   dateEnd: any
   filterService: FilterService = inject(FilterService)
   private readonly destroy$ = new Subject<void>()
-  constructor() {}
+  constructor (private dateAdapter: DateAdapter<Date>,) 
+  {
+      this.dateAdapter.getFirstDayOfWeek = () => 1;
+    }
+  
 
   dateRange = new FormGroup({
     start: new FormControl<Date | null>(null),
