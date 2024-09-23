@@ -67,14 +67,13 @@
 
             </div>
 
-            <ion-item>
-              <ion-checkbox id="check" [value]="privacyCheck" (ionChange)="privacyCheck = !privacyCheck"  slot="start"></ion-checkbox>
-              <label for="check">
-                <span>Я ознакомлен с <a target="_blank" href="/politics">пользовательским соглашением</a> </span>
-              </label>
-
-            </ion-item>
-
+            <div class="user-agreement">
+              <ion-item>
+                <ion-checkbox id="check" [value]="privacyCheck" (ionChange)="privacyCheck = !privacyCheck"  slot="start"></ion-checkbox>
+              </ion-item>
+              <span >Я ознакомлен с <div routerLink="/politics">пользовательским соглашением</div> </span>
+            </div>
+            
             <ion-div class="Login_btns_content">
 
               <ion-list>
