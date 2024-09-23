@@ -36,7 +36,7 @@ jobs:
         run: touch $HOME/key.pem && chmod 600 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
       - name: Deploy to server
         if: success()
-        run: cd www && rsync -e "ssh -p 22 -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
+        run: cd www && rsync -e "ssh -p ${{secrets.SSH_PORT}} -i $HOME/key.pem -o StrictHostKeyChecking=no" --archive --compress --delete . ${{secrets.SSH_USER}}@${{secrets.HOST}}:${{secrets.PROJECT_FOLDER}}
 
   build-deploy-android:
     runs-on: ubuntu-latest
