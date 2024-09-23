@@ -33,7 +33,7 @@ jobs:
       - name: Build web app
         run: npm run build
       - name: Add pemission
-        run: chmod ugo+rwx -R /www/
+        run: chmod ugo+rwx -R www
       - name: create ssh key
         run: touch $HOME/key.pem && chmod 600 $HOME/key.pem && echo "${{secrets.SSH_PRIVATE_KEY}}" > $HOME/key.pem && chmod 600 $HOME/key.pem
       - name: Deploy to server
