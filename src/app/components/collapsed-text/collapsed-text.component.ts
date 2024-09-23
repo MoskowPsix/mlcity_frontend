@@ -8,7 +8,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 export class CollapsedTextComponent implements OnInit, AfterViewInit {
   textOpen: boolean = true
   textClass: string = ''
-  disButton: boolean = false
+  disButton: boolean = true
   @ViewChild('contentDescription') contentDescription!: ElementRef
   constructor() {}
 
@@ -27,7 +27,7 @@ export class CollapsedTextComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.contentDescription?.nativeElement?.offsetHeight < 74 ? (this.disButton = false) : (this.disButton = true)
+    this.contentDescription?.nativeElement?.offsetHeight < 50 ? (this.disButton = false) : (this.disButton = true)
   }
 
   ngOnInit() {
