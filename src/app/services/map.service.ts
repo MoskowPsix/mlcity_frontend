@@ -8,14 +8,7 @@ import {
 import { Capacitor } from '@capacitor/core'
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx'
 import { Geolocation } from '@capacitor/geolocation'
-import {
-  BehaviorSubject,
-  catchError,
-  EMPTY,
-  of,
-  Subject,
-  takeUntil,
-} from 'rxjs'
+import { BehaviorSubject, catchError, EMPTY, of, Subject, takeUntil } from 'rxjs'
 import { FilterService } from './filter.service'
 import { NavigationService } from './navigation.service'
 import { LocationService } from './location.service'
@@ -31,11 +24,10 @@ export class MapService {
   public circleCenterLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public circleCenterLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
 
-  public showChangeCityDialog: BehaviorSubject<boolean> = new BehaviorSubject(
-    false,
-  )
+  public showChangeCityDialog: BehaviorSubject<boolean> = new BehaviorSubject(false)
 
   public geolocationCity: BehaviorSubject<string> = new BehaviorSubject('')
+  public radius: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationRegion: BehaviorSubject<string> = new BehaviorSubject('')
@@ -54,7 +46,7 @@ export class MapService {
     private navigationService: NavigationService,
     private locationService: LocationService,
     private toastService: ToastService,
-  ) {}
+  ) { }
 
   //Определение геопозиции с помощью яндекса (платно)
   geolocationMap(event: YaReadyEvent<ymaps.Map>): void {
@@ -69,11 +61,15 @@ export class MapService {
       })
   }
 
+  setRadius(radius:number){
+    this.radius.next(radius)
+    localStorage.setItem('radius',String(radius))
+  }
+  getRadiusFromLocalStorage(){
+    return localStorage.getItem('radius')
+  }
   //Определение геопозиции нативными способами платформы
-  async geolocationMapNative(
-    map: YaReadyEvent<ymaps.Map>,
-    CirclePoint?: ymaps.Circle,
-  ) {
+  async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
     if (!Capacitor.isPluginAvailable('Geolocation')) {
       // await this.setCenterMap(map, CirclePoint);
       return
@@ -108,9 +104,7 @@ export class MapService {
       const canRequest: boolean = await this.locationAccuracy.canRequest()
       //console.log('canrequest: ', canRequest);
       if (canRequest) {
-        await this.locationAccuracy.request(
-          this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY,
-        )
+        await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
         //console.log('Request successful');
         return true
       } else {
@@ -143,9 +137,7 @@ export class MapService {
     try {
       if (this.filterService.getLocationFromlocalStorage()) {
         this.locationService
-          .getLocationsIds(
-            Number(this.filterService.getLocationFromlocalStorage()),
-          )
+          .getLocationsIds(Number(this.filterService.getLocationFromlocalStorage()))
           .pipe(
             takeUntil(this.destroy$),
             catchError((err) => {
@@ -182,12 +174,7 @@ export class MapService {
     return coords
   }
 
-  setPlacemark(
-    map: YaReadyEvent<ymaps.Map>,
-    CirclePoint?: ymaps.Circle,
-    coords?: any,
-    gps?: boolean,
-  ) {
+  setPlacemark(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle, coords?: any, gps?: boolean) {
     // console.log(CirclePoint);
     // await setTimeout(() => {
     //   this.placemark = new ymaps.Placemark(coords, {}, { visible: false });
@@ -253,12 +240,10 @@ export class MapService {
 
   //Нативный поиск координат
   ForwardGeocoderNative(address: string) {
-    this.nativegeocoder
-      .forwardGeocode(address, this.options)
-      .then((result: NativeGeocoderResult[]) => {
-        //console.log('координаты ' + result[0].latitude + ' ' + result[0].longitude)
-        return [Number(result[0].latitude), Number(result[0].longitude)]
-      })
+    this.nativegeocoder.forwardGeocode(address, this.options).then((result: NativeGeocoderResult[]) => {
+      //console.log('координаты ' + result[0].latitude + ' ' + result[0].longitude)
+      return [Number(result[0].latitude), Number(result[0].longitude)]
+    })
     // .catch((error: any) => console.log(error));
   }
 
@@ -276,12 +261,7 @@ export class MapService {
           result[0].subThoroughfare
         // console.log('address' + address)
         //this.searchCity(result[0].locality)
-        this.searchCity(
-          result[0].locality,
-          result[0].administrativeArea,
-          coords[0],
-          coords[1],
-        )
+        this.searchCity(result[0].locality, result[0].administrativeArea, coords[0], coords[1])
         return address
       })
       .catch((error: any) => console.log(error))
@@ -303,12 +283,7 @@ export class MapService {
     })
   }
 
-  searchCity(
-    city: string,
-    region: string,
-    latitude: number,
-    longitude: number,
-  ) {
+  searchCity(city: string, region: string, latitude: number, longitude: number) {
     // console.log(`${city}, ${region}, ${latitude}, ${longitude}`)
     this.geolocationCity.next(city)
     this.geolocationRegion.next(region)
@@ -320,8 +295,7 @@ export class MapService {
       this.showChangeCityDialog.next(true)
     } else if (
       this.geolocationCity.value &&
-      this.filterService.getLocationFromlocalStorage() !==
-        this.geolocationCity.value
+      this.filterService.getLocationFromlocalStorage() !== this.geolocationCity.value
     ) {
       // this.showChangeCityDialog.next(false);
     }
@@ -331,10 +305,7 @@ export class MapService {
   setCoordsFromChangeCityDialog() {
     // Запрашиваем ид
     this.locationService
-      .getLocationByCoords([
-        this.geolocationLatitude.value,
-        this.geolocationLongitude.value,
-      ])
+      .getLocationByCoords([this.geolocationLatitude.value, this.geolocationLongitude.value])
       .pipe()
       .subscribe((response: any) => {
         this.geolocationCity.next(response.location.name)
@@ -343,17 +314,14 @@ export class MapService {
       })
     // this.filterService.setLocationTolocalStorage(this.geolocationCity.value);
     // this.filterService.setLocationTolocalStorage(this.geolocationRegion.value);
-    this.filterService.setLocationLatitudeTolocalStorage(
-      this.geolocationLatitude.value.toString(),
-    )
-    this.filterService.setLocationLongitudeTolocalStorage(
-      this.geolocationLongitude.value.toString(),
-    )
+    this.filterService.setLocationLatitudeTolocalStorage(this.geolocationLatitude.value.toString())
+    this.filterService.setLocationLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
 
     // this.showChangeCityDialog.next(false)
 
     this.filterService.changeFilter.next(true)
-    this.filterService.changeCityFilter.next(true)
+    // this.filterService.changeCityFilter.next(true)
+    console.log(this.filterService.changeCityFilter.value)
   }
 
   hideChangeCityDialog() {
@@ -419,8 +387,9 @@ export class MapService {
       await circlePoint.geometry?.setCoordinates(coords)
       // await this.geolocationMapNative(map, circlePoint);
       map.target.setBounds(circlePoint.geometry?.getBounds()!, {
-        checkZoomRange: true,
+        checkZoomRange: false,
       })
+    
     }
     // await this.geolocationMapNative(map, circlePoint);
     //ветка если юзать this.filterService.saveFilters.value === 1

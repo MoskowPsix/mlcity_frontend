@@ -1,0 +1,97 @@
+.calendar-button-container {
+  width: 8.125rem;
+  height: 2rem;
+  margin-top: 50%;
+  margin-left: 50%;
+  border-radius: 16px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.datepicker-buttons-wrapper{
+  display: flex;
+}
+.mat-datepicker-actions {
+  justify-content: flex-start;
+}
+mat-datepicker-actions{
+  justify-content: flex-start;
+}
+
+.calendar-container {
+  position: absolute;
+
+}
+
+.date-text {
+  margin-left: 0.25rem;
+  color: #4C5861;
+  font-size: 0.75rem;
+  font-family: 'NunitoSans-SemiBold';
+}
+
+.date-picker-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.datetime {
+  display: none;
+}
+
+.action-button {
+  margin-top: 0.7rem;
+  margin-bottom: 0.3rem;
+  height: 2rem;
+  $button-padding: 0.8rem;
+  border: 1px solid rgba($color: #4C5861, $alpha: 0.2);
+  padding-left: $button-padding;
+  padding-right: $button-padding;
+  border-radius: 8px;
+  color: #4C5861;
+  font-size: 0.75rem;
+  font-family: 'NunitoSans-SemiBold';
+}
+.rounded-calendar-button{
+  background-color: #fff;
+  font-size: 0.75rem;
+  color: var(--font-color);
+  min-width: 2rem;
+  padding-left: 0.6rem;
+  gap: 3px;
+  padding-right: 0.6rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  text-align: center;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s;
+  display: flex;
+  border-radius: 100px;
+}
+.calendar-light{
+  margin-top: 0.6rem;
+  background-color: #fff;
+  font-size: 0.65rem;
+  font-family: var(--font-bold);
+  color: #4588fc;
+  padding: 6px;
+  max-height: 34px;
+  text-align: center;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--blue-color);
+  transition: 0.2s;
+  display: flex;
+  max-width: 200px;
+  border: 1px solid #3881ff50;
+  .calendar-icon{
+    margin-right: 0.3rem;
+    filter: brightness(0) saturate(100%) invert(41%) sepia(33%) saturate(4003%) hue-rotate(206deg) brightness(102%) contrast(101%);
+  }
+  border-radius: 5px;
+}
+.calendar-icon{
+  margin-right: 0.3rem;
+}

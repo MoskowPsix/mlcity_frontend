@@ -15,6 +15,11 @@ import { CalendulaComponent } from '../components/calendula/calendula.component'
 import { NoPathComponent } from '../views/no-path/no-path.component'
 import { PrivacyComponent } from '../views/privacy/privacy.component'
 import { RecoveryPasswordComponent } from '../views/recovery-password/recovery-password.component'
+import { TestIframeComponent } from '../views/test-iframe/test-iframe.component'
+import { EmailConfirmComponent } from '../views/cabinet/email-confirm/email-confirm.component'
+import { TestPageComponent } from '../views/test-page/test-page.component'
+import { OrganizationShowComponent } from '../views/organization-show/organization-show.component'
+import { PoliticsDocumentComponent } from '../views/politics-document/politics-document.component'
 export const publicRoutes: Routes = [
   {
     path: 'test',
@@ -22,8 +27,27 @@ export const publicRoutes: Routes = [
     canActivate: [CheckAuthCanActiveGuard],
   },
   {
+    path: 'testframe',
+    component: TestIframeComponent,
+    canActivate: [CheckAuthCanActiveGuard],
+  },
+  {
+    path: 'testpage',
+    component: TestPageComponent,
+  },
+  {
     path: 'home',
     component: HomeComponent,
+    canActivate: [CheckAuthCanActiveGuard],
+  },
+  {
+    path: 'email-confirm',
+    component: EmailConfirmComponent,
+    canActivate: [CheckAuthCanActiveGuard],
+  },
+  {
+    path: 'politics',
+    component: PoliticsDocumentComponent,
     canActivate: [CheckAuthCanActiveGuard],
   },
   {
@@ -75,6 +99,17 @@ export const publicRoutes: Routes = [
       {
         path: ':name',
         component: SightShowComponent,
+      },
+    ],
+  },
+  {
+    path: 'organizations/:id',
+    component: OrganizationShowComponent,
+    canActivate: [CheckAuthCanActiveGuard],
+    children: [
+      {
+        path: ':name',
+        component: OrganizationShowComponent,
       },
     ],
   },

@@ -4,7 +4,7 @@ const config: CapacitorConfig = {
   appId: 'mlcity.ru',
   appName: 'Вокруг: События рядом',
   webDir: 'www',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
 };
 
 export default config;

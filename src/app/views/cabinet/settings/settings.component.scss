@@ -14,3 +14,125 @@
   padding-bottom: 20px;
   width: 100%;
 }
+
+.header-plug{
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  padding-bottom:0.625rem;
+  align-items: end;
+  background-color: #4C5861;
+  width: 100%;
+  min-height: 4.6rem;
+  border-radius: 0px 0px 1.5rem 1.5rem;
+}
+.header-tools{
+  color: #fff;
+  font-size: 1.25rem;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.content{
+  padding-top: 1.9rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.menu{
+  padding-top: 1rem;
+}
+.agreement-link{
+  padding-top:1.75rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  color: #000000;
+  font-size: 0.8rem;
+  opacity: 35%;
+}
+.exit-button-wrapper{
+  padding-top: 1.813rem;
+}
+.plug-password-wrapper{
+  transition: 0.5s;
+
+}
+.plug-password-wrapper_active{
+  transition: 0.35s;
+  height: 0;
+  opacity: 0;
+}
+.plug-password-wrapper_none{
+  display: none;
+}
+
+.password-change{
+  margin-top: -2.05rem;
+  right: 1.2rem;
+  position: absolute;
+  background: #DCE9FF;
+  color: #3880FF;
+  font-size: 12px;
+  border-radius: 5px;
+  transition: 0.1s;
+  width: 7.875rem;
+  height:1.875rem;
+}
+.password-active{
+  height:14rem;
+  transition: 0.5s;
+}
+
+.password-change:active{
+  margin-top: -2.05rem;
+  transition: 0.1s;
+  right: 1.2rem;
+  position: absolute;
+  background: #2877ff;
+  color: #ffffff;
+  border-radius: 5px;
+  width: 7.875rem;
+  height:1.875rem;
+}
+.save-wrapper{
+  padding-top: 0.75rem;
+}
+ .password-inputs-wrapper{
+  height: 0;
+  opacity: 0;
+  overflow-y: hidden;
+  transition: 0.7s;
+ }
+ .password-inputs-wrapper_active{
+  height: 14rem;
+  overflow-y: hidden;
+  opacity: 1;
+  transition: 0.7s;
+
+ }
+
+ .content-plug{
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  padding-top: 5rem;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(239 239 239 / 95%);
+ }
+ .content-plug-main{
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 200px;
+
+ }
+ .plug-main-header{
+  font-size: 1.25rem;
+  display: flex;
+  justify-content: center;
+ }
+ .plug-main-img{
+
+ }

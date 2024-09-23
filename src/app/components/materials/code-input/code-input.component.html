@@ -1,0 +1,11 @@
+<div class="code-input">
+  <input [maskito]="maskInput" *ngFor="let input of codeCount; let i = index" (click)="setCurentItemForClick($event)" (input)="nextFocus($event)" #item class="input-item"  id="{{i}}">
+</div>
+<div class="retry-code">
+  <span class="retry-code-text" *ngIf="timer >= 0 && this.timerWait ">Не пришёл код?</span>
+  <span (click)="timerStart()" class="retry-code-text_active" *ngIf="timer === 0 && !this.timerWait">Не пришёл код?</span>
+  <div *ngIf="timer !== 0">
+    <span  class="retry-code-timer">Доступно через {{timer* 1000 | date:'mm:ss' }} секунд</span>
+  </div>
+</div>
+<app-standart-button (click)="setCode()"  buttonText = "Сохранить" type="button" theme ="standart"></app-standart-button>

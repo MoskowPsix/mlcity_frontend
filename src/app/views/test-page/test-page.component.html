@@ -1,0 +1,24 @@
+<ion-content style="background-color: blue;">
+  <!-- <div class="container">
+    <ion-button (click)="checkEditFunc()">Проверить</ion-button>
+  </div> -->
+  <div>
+  </div>
+  <div (click)="changeState(itemfirstText,itemFirstImg,itemSecond,itemSecondImg)" class="switcher">
+      <div class="switcher-content">
+        <div [ngClass]="{'switcher_first': switcherState === false, 'switcher_second': switcherState === true}"></div>
+        <div #item_first class="switcher-item_first">
+          <img #itemFirstImg src="/assets/icons/fire.svg" alt="">
+          <span #itemfirstText>События</span>
+        </div>
+        <div #itemSecond class="switcher-item_second">
+          <img #itemSecondImg src ="/assets/icons/flag.svg" alt="">
+          Места
+        </div>
+      </div>
+  </div>
+
+  <ion-button (click)="openModalFnc()">Открыть модалку</ion-button>
+  <app-types-modal (deleteCategories)="deleteCaategory($event)" (addCategories)="addCaategory($event)" [categories]="categories" (closeModalEmit)="closeModal()" [openTypesModal]="openModal"></app-types-modal>
+</ion-content>
+

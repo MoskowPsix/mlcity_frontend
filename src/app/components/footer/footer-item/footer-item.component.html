@@ -1,0 +1,13 @@
+<div>
+  <div
+    (click)="goToPage(menuItem.path)"
+    [routerLinkActive]="'item-active'"
+    class="item"
+    >
+      <img [src]="menuItem.activeIcon" *ngIf="isActive(); else activeIcon" class="icon active">
+      <ng-template #activeIcon>
+        <img [src]="menuItem.icon" class="icon">
+      </ng-template>
+   <span [ngClass]="{'active': isActive()}" class="title">{{ menuItem.title }}</span>
+  </div>
+</div>

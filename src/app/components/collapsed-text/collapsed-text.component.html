@@ -1,6 +1,5 @@
-<div class="{{textClass}}">
+<div class="{{textClass}}" #contentDescription>
   <ng-content></ng-content>
-
 </div>
 
-<button class="about-button" type="button" (click)="textOpenVariable()">Читать далее</button>
+<button *ngIf="disButton" class="about-button" type="button" (click)="textOpenVariable()">{{textOpen ? 'Свернуть' : 'Читать далее'}}</button>

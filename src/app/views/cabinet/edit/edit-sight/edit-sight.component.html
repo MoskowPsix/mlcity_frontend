@@ -1,0 +1,42 @@
+<ion-content>
+  <app-edit-slider  *ngIf="this.organization && this.organization.files" (filesEmit)="changeFiles($event)" [files]="this.organization.files"></app-edit-slider>
+  <div class="main-content">
+    <app-standart-input [label]="'Название сообщества'" [control] = "editForm.get('name')"></app-standart-input>
+    <app-standart-rich-input  [label]="'Описание'" [control] = "editForm.get('description')"></app-standart-rich-input>
+    <div class="category-container">
+      <span class="category-container-header">Категории</span>
+      <div class="category-button-grid">
+          <span class="not-found-span" *ngIf="previewCategory.length === 0">Не выбрано</span>
+          <ng-container *ngIf="organization && organization.types">
+              <app-rounded-button style="pointer-events: none;"  *ngFor="let category of previewCategory" routerLink="/cabinet/events/create" icon="assets/icons/category.svg" type="button" buttonText="{{category.name}}"></app-rounded-button>
+          </ng-container>
+      </div>
+
+      <div class="button-conatiner">
+          <div class="button-container-item">
+            <app-standart-button (click)="openTypeModal()" buttonText="Изменить" type="button" theme ="light"></app-standart-button>
+            <app-types-modal  [categories]="previewCategory" [allTypes]="allTypes" (addCategories)="addCategory($event)" (deleteCategories)="deleteCategory($event)" [openTypesModal]="openTypesModalValue" (closeModalEmit)="closeModal()"></app-types-modal>
+          </div>
+      </div>
+    </div>
+    <app-address-input *ngIf="place" [place]="place" (addressEditEmit)="changeAdress($event)" label="Адрес"></app-address-input>
+      <div  class="save-button-wrapper">
+        <div class="save-button-wrapper_container">
+            <div class="save-button-wrapper_container_item">
+              <app-standart-button type="button" (click)="openModalCancel()"  [disabled]="true"  buttonText="Отмена" theme ="standart" ></app-standart-button>
+            </div>
+            <div class="save-button-wrapper_container_item">
+              <app-standart-button (click)="submitForm()"  buttonText="Сохранить" type="button" theme ="standart"></app-standart-button>
+            </div>
+        </div>
+        <div class="delete-button-wrapper">
+          <app-standart-button (click)="deleteConfirmModal()"  buttonText="Удалить" type="button" theme ="red"></app-standart-button>
+        </div>
+    </div>
+    
+  </div>
+
+</ion-content>
+
+<app-confirm-modal (cancel)="cancelDeleteConfirm()" (confirm)="deleteConfirm()" [openModal]="deleteConfirmValue"></app-confirm-modal>
+<app-confirm-modal  (cancel)="cancelEdit()" (confirm)="cancelConfirm()" [openModal]="cancelConfirmValue"></app-confirm-modal>

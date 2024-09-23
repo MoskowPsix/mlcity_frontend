@@ -1,13 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
 import { FormControl, FormGroup } from '@angular/forms'
 import { BehaviorSubject, Subject } from 'rxjs'
 
@@ -87,6 +78,7 @@ export class CalendulaComponent implements OnInit, OnChanges {
   }
   onDateOutput() {
     this.dateOutput.emit(this.date)
+    console.log(this.date)
   }
   scrollLeft() {
     this.widgetsContent.nativeElement.scrollTo({
@@ -106,52 +98,24 @@ export class CalendulaComponent implements OnInit, OnChanges {
       this.dateStart = date
       this.dateEnd = date
 
-      this.date.dateStart = new Date(date)
-        .toLocaleDateString('pt-br')
-        .split('/')
-        .reverse()
-        .join('-')
-      this.date.dateEnd = new Date(date)
-        .toLocaleDateString('pt-br')
-        .split('/')
-        .reverse()
-        .join('-')
+      this.date.dateStart = new Date(date).toLocaleDateString('pt-br').split('/').reverse().join('-')
+      this.date.dateEnd = new Date(date).toLocaleDateString('pt-br').split('/').reverse().join('-')
     } else if (this.dateEnd === this.dateStart) {
       if (date < this.dateStart) {
         this.dateEnd = this.dateStart
         this.dateStart = date
-        this.date.dateStart = new Date(date)
-          .toLocaleDateString('pt-br')
-          .split('/')
-          .reverse()
-          .join('-')
-        this.date.dateEnd = new Date(this.dateEnd)
-          .toLocaleDateString('pt-br')
-          .split('/')
-          .reverse()
-          .join('-')
+        this.date.dateStart = new Date(date).toLocaleDateString('pt-br').split('/').reverse().join('-')
+        this.date.dateEnd = new Date(this.dateEnd).toLocaleDateString('pt-br').split('/').reverse().join('-')
       } else if (date > this.dateStart) {
         this.dateEnd = date
-        this.date.dateEnd = new Date(date)
-          .toLocaleDateString('pt-br')
-          .split('/')
-          .reverse()
-          .join('-')
+        this.date.dateEnd = new Date(date).toLocaleDateString('pt-br').split('/').reverse().join('-')
       }
     } else {
       this.dateStart = date
       this.dateEnd = date
 
-      this.date.dateStart = new Date(date)
-        .toLocaleDateString('pt-br')
-        .split('/')
-        .reverse()
-        .join('-')
-      this.date.dateEnd = new Date(date)
-        .toLocaleDateString('pt-br')
-        .split('/')
-        .reverse()
-        .join('-')
+      this.date.dateStart = new Date(date).toLocaleDateString('pt-br').split('/').reverse().join('-')
+      this.date.dateEnd = new Date(date).toLocaleDateString('pt-br').split('/').reverse().join('-')
     }
     this.fixCenterElement(date)
     this.onDateOutput()
@@ -183,15 +147,11 @@ export class CalendulaComponent implements OnInit, OnChanges {
     this.dateStart = new Date(this.date.dateStart).getTime()
     this.dateEnd = new Date(this.date.dateEnd).getTime()
 
-    let now_date: any = new Date(
-      this.getDateYMD(new Date().getTime()),
-    ).getTime()
+    let now_date: any = new Date(this.getDateYMD(new Date().getTime())).getTime()
     let count: number
     for (count = 0; count <= 150; count++) {
       let now_month: any = new Date(now_date).getMonth()
-      if (
-        this.date_full_year.now_year.year === new Date(now_date).getFullYear()
-      ) {
+      if (this.date_full_year.now_year.year === new Date(now_date).getFullYear()) {
         switch (now_month) {
           case 0:
             this.date_full_year.now_year.now_months[0].data.push({
@@ -290,9 +250,7 @@ export class CalendulaComponent implements OnInit, OnChanges {
             })
             break
         }
-      } else if (
-        this.date_full_year.new_year.year === new Date(now_date).getFullYear()
-      ) {
+      } else if (this.date_full_year.new_year.year === new Date(now_date).getFullYear()) {
         switch (now_month) {
           case 0:
             this.date_full_year.new_year.new_months[0].data.push({

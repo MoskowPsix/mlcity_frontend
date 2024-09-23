@@ -1,21 +1,11 @@
 import { Component, OnInit } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { time } from 'console'
-import { env } from 'process'
-import {
-  EMPTY,
-  Subject,
-  Subscription,
-  catchError,
-  takeUntil,
-  of,
-  tap,
-} from 'rxjs'
+import { Router } from '@angular/router'
+import { EMPTY, Subject, Subscription, catchError, takeUntil, of, tap } from 'rxjs'
 import { AuthService } from 'src/app/services/auth.service'
 import { LoadingService } from 'src/app/services/loading.service'
 import { ToastService } from 'src/app/services/toast.service'
 import { UserService } from 'src/app/services/user.service'
-import { fileTypeValidator } from 'src/app/validators/file-type.validators'
 import { environment } from 'src/environments/environment'
 
 @Component({
@@ -36,6 +26,7 @@ export class SettingsProfileComponent implements OnInit {
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
 
   constructor(
+    private router: Router,
     private userService: UserService,
     private toastService: ToastService,
     private loadingService: LoadingService,
@@ -94,10 +85,7 @@ export class SettingsProfileComponent implements OnInit {
               this.authService.logout()
             }
             this.loadingService.hideLoading()
-            this.toastService.showToast(
-              'Убедитесь что поле Имя не пустое',
-              'danger',
-            )
+            this.toastService.showToast('Убедитесь что поле Имя не пустое', 'danger')
             return of(EMPTY)
           }),
         )
@@ -109,6 +97,7 @@ export class SettingsProfileComponent implements OnInit {
             this.loadingService.hideLoading()
             this.toastService.showToast('Данные обновлены!', 'success')
           }
+          console.log(this.router.navigate(['cabinet']))
         })
     }
   }

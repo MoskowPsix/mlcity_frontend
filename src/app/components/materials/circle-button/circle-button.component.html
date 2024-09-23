@@ -1,0 +1,19 @@
+<ng-container *ngIf="border === 'dark'">
+  <button (click)="click()" class="circle-button circle-button_dark-border">
+    <img *ngIf="icon" src="{{icon}}" alt="">
+    <ng-content></ng-content>
+  </button>
+</ng-container>
+<ng-container *ngIf="border === 'dark-all'">
+  <button (click)="click()" class="circle-button_dark-all">
+    <img *ngIf="icon" src="{{icon}}" alt="">
+    <ng-content></ng-content>
+  </button>
+</ng-container>
+<ng-container *ngIf="border === ''">
+  <button (click)="click()" class="circle-button">
+    <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>  
+    <img  style="{{changeColor}}" *ngIf="icon && !loading" src="{{icon}}" alt="">
+    <ng-content></ng-content>
+  </button>
+</ng-container>

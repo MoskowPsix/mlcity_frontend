@@ -1,0 +1,48 @@
+.main-content{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.category-container{
+    padding-top: 1rem;
+}
+
+.category-button-grid{
+    display: flex;
+    max-width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.save-button-wrapper_container{
+    display: flex;
+    gap: 2%;
+}
+.save-button-wrapper_container_item{
+    width: 50%;
+}
+.category-container-header{
+    color: #4C5861;
+    font-family: var(--font-regular);
+    font-size: 0.75rem;
+    display: flex;
+    padding-bottom: 0.5rem;
+}
+.not-found-span{
+    font-size: 0.75rem;
+    color: #21272b;
+    font-family: var(--font-regular);
+}
+.button-conatiner{
+    padding-top:0.75rem;
+    display: flex;
+    gap: 3%;
+}
+.button-container-item{
+    min-width:48.5%;  
+}
+.save-button-wrapper{
+    padding-top: 1rem;
+}
+.delete-button-wrapper{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}

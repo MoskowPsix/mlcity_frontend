@@ -1,4 +1,4 @@
-<ion-content>
+<!-- <ion-content>
     <ion-grid>
       <ion-row>
         <ion-col size="3"  class="m">
@@ -12,4 +12,68 @@
       </ion-row>
     </ion-grid>
     
-  </ion-content>
+  </ion-content> -->
+
+  <ion-content>
+    <div class="header-plug">
+        <div class="header-tools">
+            <app-back-button></app-back-button>
+            <span >Редактировать</span>
+            <div style="opacity: 0; pointer-events: none;"><app-circle-button></app-circle-button></div>
+        </div>
+    </div>
+    <!-- <div class="content-plug">
+        <div class="content-plug-main">
+            <div class="plug-main-block-img">
+              <div class="plug-main-header"></div>
+            </div>
+        </div>
+    </div> -->
+    <section class="content">
+        <app-user-section [type] = "'button'" [buttonText]="'Сменить фотографию'" [fixedImg]="previewPhotoUrl" (clicked)="f.click()" [user]="user"></app-user-section>
+        <ng-container>
+            <form class="form" [formGroup]="resetForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+                      <input class="ion-hide" #f type="file" (change)="onFileSelected($event)"   accept="image/png, image/jpeg">
+                      <app-standart-input [label]="'Имя'"  [control] = "resetForm.get('new_name')"  [readonly]="false"></app-standart-input>
+                      <!-- <app-standart-button buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button> -->
+            </form>
+
+            <form [formGroup]="passwordResetForm" action="" class="password-form">
+              <div #plug class="plug-password-wrapper">
+                <app-standart-input type="password" [disabled]="true" placeholder="•••••••••••" [label]="'Пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="true"></app-standart-input >
+                <button (click)="openPasswordBlock()" class="password-change">Сменить</button>
+              </div>
+
+              <div #passwordBlock class="password-inputs-wrapper">
+                <app-standart-input [invalid]="passwordResetForm.get('old_password')!.invalid && passwordError !==''" [openPassword]="true" type="password"  placeholder="•••••••••••" [label]="'Старый пароль'" [control] = "passwordResetForm.get('old_password')" [readonly]="false"></app-standart-input >
+                <app-standart-input [invalid]="passwordResetForm.get('new_password')!.invalid && passwordError !=='' || passwordError !==''" [openPassword]="true" type="password"  placeholder="•••••••••••" [label]="'Новый пароль'" [control] = "passwordResetForm.get('new_password')" [readonly]="false"></app-standart-input >
+                <app-standart-input  [invalid]="passwordResetForm.get('retry_password')!.invalid && passwordError !=='' || passwordError !==''" [openPassword]="true" type="password"  placeholder="•••••••••••" [label]="'Повторите пароль'" [control] = "passwordResetForm.get('retry_password')" [readonly]="false"></app-standart-input >
+              </div>
+            </form>
+            <div class="save-wrapper">
+              <app-standart-button (click)="onSubmit()" *ngIf="!passwordChange" buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button>
+              <!-- <app-standart-button  *ngIf="passwordChange" (click)="submitPassword()" buttonText = "Сохранить" type="button" theme ="standart"></app-standart-button> -->
+
+            </div>
+        </ng-container>
+        
+        <!-- Модальное окно удаления профиля -->
+        
+        <ion-modal #modal style="--height: auto;" trigger="open-modal" [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+          <ng-template>
+            <ion-header>
+              <ion-toolbar>
+                <ion-title >Удалить свой профиль?</ion-title>
+                <!-- <ion-buttons slot="end">
+                  <ion-button (click)="modal.dismiss()">Close</ion-button>
+                </ion-buttons> -->
+              </ion-toolbar>
+            </ion-header>
+              <ion-button (click)="deleteUser(); modal.dismiss()" color="danger" fill="solid">Удалить профиль</ion-button>
+              <ion-button (click)="modal.dismiss()">Отмена</ion-button>
+          </ng-template>
+        </ion-modal>
+        
+    </section>
+        
+</ion-content>

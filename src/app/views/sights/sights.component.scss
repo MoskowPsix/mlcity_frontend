@@ -25,8 +25,23 @@ app-sight-type-carusel {
   right: 4rem;
 }
 
+.header-top-container{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.header-bottom-container{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
 .segment-box {
   animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+.grid-wrapper{
+  padding-top: 13rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 ion-segment-button {

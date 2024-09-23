@@ -1,0 +1,62 @@
+.place-header{
+    color: #4C5861;
+    font-family: var(--font-regular);
+    font-size: 0.75rem;
+    display: flex;
+    padding-bottom: 0.3rem;
+}
+.place-container{
+    min-height:13rem;
+    border: 1px solid #4642422b;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 5px;
+}
+.button-conatiner{
+    padding-top:0.75rem;
+    gap: 3%;
+    padding-bottom: 0.75rem;
+}
+.button-container-item{
+    min-width:48.5%;  
+}
+.delete-button{
+    margin-top: 0.19rem;
+    width: 2rem;
+    margin-top: -1rem;
+    border-radius: 2px;
+    transition: 0.2s;
+    background: #DCE9FF;
+    right: 2.3rem;
+    z-index: 2;
+    height: 1.8rem;
+}
+.delete-button:active{
+    margin-top: 0.19rem;
+    width: 2rem;
+    margin-top: -1rem;
+    border-radius: 2px;
+    transition: 0.2s;
+   background: #b0c6eb;
+    right: 2.3rem;
+    z-index: 2;
+    height: 1.8rem;
+}
+.delete-img{
+    filter: brightness(0) saturate(100%) invert(39%) sepia(25%) saturate(2348%) hue-rotate(190deg) brightness(112%) contrast(105%);
+}
+.not-found-span-container{
+    padding-top: 1rem;
+}
+.not-found-span{
+    font-size: 0.75rem;
+    color: #21272b;
+    font-family: var(--font-regular);
+}
+.place-header-container{
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}

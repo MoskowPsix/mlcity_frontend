@@ -1,0 +1,112 @@
+.header-container{
+    display: grid;
+    grid-template-columns: 0.5fr 3fr 0.5fr;
+    width: 100%;
+    justify-content: center;
+}
+.header-container-tittle{
+    text-align: center;
+    font-family: var(--font-bold);
+}
+.organization-container{
+    padding: 1rem;
+}
+
+.hidden-id {
+  font-family: var(--font-regular);
+  font-size: 0.6rem;
+  color: grey;
+}
+
+.organization-avatar{
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+}
+.organization-container__organization-section{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+ 
+}
+.organization-container__slider-wrapper{
+    margin-left: -1rem;
+}
+.organization-section__info{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.organization-section__info__name_loading{
+    width: 138px;
+    height: 16px;
+}
+.organization-section__info__button_loading{
+    width: 196px;
+    height: 32px;
+    border-radius: 5px;
+}
+.organization-section__info__rating_loading{
+    width: 98px;
+}
+.organization-section__info__name{
+    color: #1C2226;
+    font-family: var(--font-bold);
+    font-size: 14px;
+    padding-bottom: 6px;
+    margin-right: 1rem;
+}
+.organization-section__info__button{
+    width: 196px;
+    height: 32px;
+    border-radius: 5px;
+}
+.organization-container__organization-section_loading{
+   display: flex;
+}
+.organization-section__info_loading{
+    margin-left: 10px;
+}
+.organization-section__info__rating{
+
+}
+.organization-avatar{
+    background-color: rgba(184, 184, 184, 0.514);
+}
+.user-section-image{
+    width: 4.438rem;
+    height: 4.438rem;
+    border-radius: 50px;
+    background: url('/assets/images/nophoto.jpg');
+    background-position: center center;
+    background-size: cover;
+}
+.organization-container__description{
+    padding-top: 1rem;
+    font-family: var(--font-regular);
+    color: #4C5861;
+    font-size:0.75rem;
+  }
+  .category-button-grid{
+    padding-top: 0.5rem;
+    display: flex;
+    max-width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.organization-section__info__button{
+   width: 196px;
+}
+.not-found-container{
+    padding-top: 2rem;
+}
+.organization-container__map{
+    padding-top: 1rem;
+}
+
+.social-button-container{
+    display: flex;
+    gap: 5px;
+    align-items: end;
+    justify-content: end;
+}

@@ -58,25 +58,21 @@ export class EventsService {
     // ).subscribe().unsubscribe();
   }
 
-  getEvents(params: IGetEventsAndSights) {
+  getEvents(params: IGetEventsAndSights,) {
     //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
-    return this.http.get<IEvent[]>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`,
-      { params: { ...params } },
-    )
+    return this.http.post<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`, {
+        ...params
+    })
   }
 
   getEventPlaces(id?: number, params?: IGetEventsAndSights) {
-    return this.http.get<IPlace[]>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}/places`,
-      { params: { ...params } },
-    )
+    return this.http.get<IPlace[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}/places`, {
+      params: { ...params },
+    })
   }
 
   getEventById(id: number) {
-    return this.http.get<IEvent>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}`,
-    )
+    return this.http.get<IEvent>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}`)
   }
 
   getEventsFavorites(params: any) {
@@ -87,10 +83,14 @@ export class EventsService {
     )
   }
   getEventsForUser(params: IGetEventsAndSights) {
-    return this.http.get<IEvent[]>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events-for-author`,
-      { params: { ...params } },
-    )
+    return this.http.get<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events-for-author`, {
+      params: { ...params },
+    })
+  }
+  changeStatusEvent(id: number, status: number) {
+    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}/statuses/`, {
+      status_id: status,
+    })
   }
 
   toggleFavorite(event_id: number) {
@@ -149,10 +149,7 @@ export class EventsService {
   }
 
   create(event: FormData) {
-    return this.http.post<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/create`,
-      event,
-    )
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/create`, event)
   }
 
   addView(id: number, time: number) {
@@ -160,10 +157,11 @@ export class EventsService {
       event_id: id,
       time: time,
     }
-    return this.http.post<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/view`,
-      params,
-    )
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/view`, params)
+  }
+
+  getOrganization(id: number) {
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}/organization`)
   }
 
   private errorHandler(error: HttpErrorResponse) {

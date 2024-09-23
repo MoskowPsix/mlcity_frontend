@@ -1,0 +1,26 @@
+.exit-button-main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 2rem;
+    width: 100%;
+    background: none;
+    border: 1px solid #e8393f60;
+    color: #E83940;
+    font-size: 0.75rem;
+    transition: 0.2s;
+    border-radius: 5px;
+}
+.exit-button-main:active{
+    transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 2rem;
+    width: 100%;
+    background: #E83940;
+    border: none;
+    color: #fff;
+    font-size: 0.75rem;
+    border-radius: 5px;
+}

@@ -14,12 +14,20 @@ import { SettingsProfileComponent } from '../views/cabinet/settings/settings-pro
 import { SettingsPrivacyComponent } from '../views/cabinet/settings/settings-privacy/settings-privacy.component'
 import { MyEventsComponent } from '../views/cabinet/my-events/my-events.component'
 import { MySightsComponent } from '../views/cabinet/my-sights/my-sights.component'
-import { EdditSightComponent } from '../views/cabinet/my-sights/edit-sight/eddit-sight.component'
+import { EditSightComponent } from '../views/cabinet/edit/edit-sight/edit-sight.component'
+import { EditEventComponent } from '../views/cabinet/edit/edit-event/edit-event.component'
+import { EmailConfirmGuard } from '../guards/confirm-email.guard'
+import { OrganizationCreateComponent } from '../views/cabinet/organization/create/organization-create/organization-create.component'
 
 export const privateRoutes: Routes = [
   {
     path: 'cabinet',
     component: CabinetComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'cabinet/organizations/create',
+    component: OrganizationCreateComponent,
     canActivate: [AuthGuard],
   },
   // children: [
@@ -97,8 +105,13 @@ export const privateRoutes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'cabinet/sights/:id/edit',
-    component: EdditSightComponent,
+    path: 'cabinet/sights/edit/:id',
+    component: EditSightComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'cabinet/events/edit/:id',
+    component: EditEventComponent,
     canActivate: [AuthGuard],
   },
   {

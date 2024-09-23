@@ -1,0 +1,33 @@
+<!-- <div (click)="switchType()" class="content-container">
+  <div [@contentContainerAnimate]="type" class="types-container">
+    <div [@eventTypeAnimate]="type === sight" class="event-container" [class.active]="type === event">
+      <img [class.active]="type === event" class="fire-icon-orange" src="/assets/icons/fire.svg">
+      <p *ngIf="type === event" class="selected-type-text">
+        События
+      </p>
+    </div>
+
+    <div [@sightTypeAnimate]="type === event" [class.active]="type === sight" class="sight-container">
+      <img [class.active]="type === sight" class="flag-icon white-color" src="/assets/icons/flag.svg">
+      <p  *ngIf="type === sight" class="selected-type-text">
+        Места
+      </p>
+    </div>
+  </div>
+</div> -->
+<div #switcher (click)="switchType(switcher,itemFirstText,itemFirstImg,itemSecond,itemSecondImg,itemSecondText)" class="switcher">
+  <div class="switcher-content">
+    <div  [ngClass]="switcherClass"></div>
+    <!-- {'switcher_first': this.type === event, 'switcher_second': this.type === sight} -->
+    
+    <div #item_first class="switcher-item_first">
+      <img class="fire" #itemFirstImg src="/assets/icons/fire.svg" alt="">
+      <span #itemFirstText>События</span>
+    </div>
+    <div #itemSecond class="switcher-item_second">
+      <img #itemSecondImg src ="/assets/icons/flag.svg" alt="">
+      <span #itemSecondText>Места</span>
+      
+    </div>
+  </div>
+</div>

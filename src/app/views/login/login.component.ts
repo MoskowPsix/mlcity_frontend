@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  HostListener,
-  ViewChild,
-} from '@angular/core'
+import { Component, OnInit, OnDestroy, HostListener, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router'
 import { EMPTY, Subject, catchError, filter, of, takeUntil } from 'rxjs'
@@ -18,17 +12,12 @@ import { MessagesAuth } from 'src/app/enums/messages-auth'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { ActionSheetController } from '@ionic/angular'
 import { Location } from '@angular/common'
-import { Metrika } from 'ng-yandex-metrika'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
 import { RecoveryPasswordService } from 'src/app/services/recovery-password.service'
-import {
-  SignInWithApple,
-  SignInWithAppleResponse,
-  SignInWithAppleOptions,
-} from '@capacitor-community/apple-sign-in'
+import { SignInWithApple, SignInWithAppleResponse, SignInWithAppleOptions } from '@capacitor-community/apple-sign-in'
 import { Capacitor } from '@capacitor/core'
-
+import { MobileOrNoteService } from 'src/app/services/mobile-or-note.service'
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -37,7 +26,6 @@ import { Capacitor } from '@capacitor/core'
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
-
   vkontakteAuthUrl: string = environment.vkontakteAuthUrl
   appleAuthUrl: string = environment.appleAuthUrl
   yandexAuthUrl: string = environment.yandexAuthUrl
@@ -50,12 +38,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   timer: any
   timerReady: boolean = true
   seconds: number = 60
+  target: string = ''
+  mobile: boolean = false
   closeRecoveryModal: boolean = true
   modalPass: boolean = false
   presentingElement: undefined
   errPassword: boolean = false
   formSetPassword!: FormGroup
   appleState: Number = Math.floor(Math.random() * 21)
+  platform: string = Capacitor.getPlatform()
 
   constructor(
     private authService: AuthService,
@@ -66,9 +57,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private actionSheetCtrl: ActionSheetController,
-    private metrika: Metrika,
     private location: Location,
     private titleService: Title,
+    private mobileOrNoteService: MobileOrNoteService,
     private metaService: Meta,
     private recoveryPasswordService: RecoveryPasswordService,
   ) {
@@ -77,31 +68,31 @@ export class LoginComponent implements OnInit, OnDestroy {
       name: 'description',
       content: 'Вход на сайт.',
     })
-
-    // let prevPath = this.location.path();
-    // this.router
-    // .events
-    //   .pipe(filter(event => (event instanceof NavigationEnd)))
-    //   .subscribe(() => {
-    //     const newPath = location.path();
-    //     this.metrika.hit(newPath, {
-    //       referer: prevPath,
-    //       callback: () => { console.log('hit end'); }
-    //     });
-    //     prevPath = newPath;
-    //   });
   }
+  @HostListener('window:resize', ['$event'])
+  mobileOrNote() {
+    switch (Capacitor.getPlatform()) {
+      case 'ios':
+        this.mobile = true
+        break
+      case 'android':
+        this.mobile = true
+        break
+      case 'web':
+        this.mobile = false
+        break
+    }
 
+    if (this.mobile == true) {
+      this.target = '_self'
+    } else if (this.mobile == false) {
+      this.target = '_blank'
+    }
+  }
   loginPhone() {
     this.formSetPassword = new FormGroup({
-      number: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
-      password_retry: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      number: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      password_retry: new FormControl('', [Validators.required, Validators.minLength(3)]),
     })
   }
   setPass() {
@@ -173,27 +164,32 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginAfterSocial(token: any) {
     this.onLoading
     if (token.length >= 47) {
-      this.tokenService.setToken(token)
-      this.loginForm.disable()
-      this.loadingService.showLoading()
-      this.userService
-        .getUserById()
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (data: any) => {
-            // let timeZone = new Date().getTimezoneOffset()
-            // let time = Math.ceil(new Date().getTime() / 100000)
-            // let created_time = Math.ceil(new Date(data.user.social_account.created_at).getTime() / 100000)
-            // let now_time = time
-            // if (created_time === now_time) {
-            //   this.modalPass = true
-            // }
-            this.positiveResponseAfterLogin(data)
-          },
-          error: (err) => {
-            this.errorResponseAfterLogin(err)
-          },
-        })
+      let token_arr = token.slice(',')
+      if (token_arr.length == 2) {
+        setTimeout(() => window.open(environment.BASE_URL + '/login/' + token_arr[0]), 3000)
+      } else {
+        this.tokenService.setToken(token)
+        this.loginForm.disable()
+        this.loadingService.showLoading()
+        this.userService
+          .getUserById()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (data: any) => {
+              // let timeZone = new Date().getTimezoneOffset()
+              // let time = Math.ceil(new Date().getTime() / 100000)
+              // let created_time = Math.ceil(new Date(data.user.social_account.created_at).getTime() / 100000)
+              // let now_time = time
+              // if (created_time === now_time) {
+              //   this.modalPass = true
+              // }
+              this.positiveResponseAfterLogin(data)
+            },
+            error: (err) => {
+              this.errorResponseAfterLogin(err)
+            },
+          })
+      }
     }
   }
 
@@ -245,10 +241,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe((res: any) => {
         this.closeRecoveryModal = !this.closeRecoveryModal
         if (res.status) {
-          this.toastService.showToast(
-            'Ссылка была отправлена на почту',
-            'success',
-          )
+          this.toastService.showToast('Ссылка была отправлена на почту', 'success')
         }
 
         this.loadingService.hideLoading()
@@ -257,10 +250,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   errorResponseAfterLogin(err: any) {
     this.loadingService.hideLoading()
-    this.toastService.showToast(
-      err.error.message || MessagesErrors.default,
-      'warning',
-    )
+    this.toastService.showToast(err.error.message || MessagesErrors.default, 'warning')
     this.loginForm.enable()
   }
 
@@ -298,10 +288,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             .pipe(
               takeUntil(this.destroy$),
               catchError((err) => {
-                this.toastService.showToast(
-                  'При авторизвции apple что-то пошло не так',
-                  'warning',
-                )
+                this.toastService.showToast('При авторизвции apple что-то пошло не так', 'warning')
                 return of(EMPTY)
               }),
             )
@@ -311,10 +298,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         })
         .catch((e) => {
           console.log(e)
-          this.toastService.showToast(
-            'При авторизвции apple что-то пошло не так',
-            'warning',
-          )
+          this.toastService.showToast('При авторизвции apple что-то пошло не так', 'warning')
           return of(EMPTY)
         })
     } else {
@@ -323,47 +307,27 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.mobileOrNote()
     //Создаем поля для формы
     this.loginForm = new FormGroup({
-      name: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(50),
-      ]),
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(3)]),
     })
 
     this.formSetPassword = new FormGroup({
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
-      password_retry: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      password: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      password_retry: new FormControl('', [Validators.required, Validators.minLength(3)]),
     })
 
     this.recoveryForm = new FormGroup({
-      email: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(50),
-      ]),
+      email: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
     })
 
     //Получаем ид юзера и параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.token = params['user_id']
-      this.token
-        ? this.loginAfterSocial(this.token)
-        : this.loginAfterSocial('no')
+      this.token ? this.loginAfterSocial(this.token) : this.loginAfterSocial('no')
     })
-
-    // this.loginAfterSocial(this.user_id)
     this.MailOrName()
   }
   // async loginVK() {

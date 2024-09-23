@@ -10,18 +10,9 @@ import {
   ChangeDetectionStrategy,
   NgZone,
 } from '@angular/core'
-import {
-  catchError,
-  delay,
-  EMPTY,
-  map,
-  of,
-  retry,
-  Subject,
-  switchMap,
-  takeUntil,
-  tap,
-} from 'rxjs'
+
+import { DatePipe } from '@angular/common'
+import { catchError, delay, EMPTY, map, of, retry, Subject, switchMap, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { MessagesAuth } from 'src/app/enums/messages-auth'
 import { AuthService } from 'src/app/services/auth.service'
@@ -38,6 +29,8 @@ import { SightsService } from 'src/app/services/sights.service'
 import { CommentsService } from 'src/app/services/comments.service'
 import numeral from 'numeral'
 import { HelpersService } from 'src/app/services/helpers.service'
+import { Router } from '@angular/router'
+import { Statuses } from 'src/app/enums/statuses-new'
 register()
 
 @Component({
@@ -57,6 +50,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
     private helpers: HelpersService,
+    private datePipe: DatePipe,
+    private router: Router,
   ) {}
 
   private readonly destroy$ = new Subject<void>()
@@ -64,6 +59,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() callFromCabinet: boolean = true
   @Input() event!: any
   @Input() isSight: boolean = false
+  @Input() myEvent: boolean = false
+  @Input() cardSize:string = ''
   comments: boolean = false
   loadingComment: boolean = false
 
@@ -83,23 +80,65 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   swiperModules = [IonicSlides]
 
   userAuth: boolean = false
-
+  formatedStartDate!: any
+  formatedEndDate!: any
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
 
   favorite: boolean = false
   loadingFavotire: boolean = false
-
+  url!: string
   like: boolean = false
   loadingLike: boolean = false
   startLikesCount: number = 0
   vkLikesCount: number | null = null
-  //windowComment: boolean = false
-
+  viewCard:boolean = true
+  dontEdit: boolean = true
   prices: number[] = []
   minPrice: number = 0
   maxPrice: number = 0
+  statusColor: Record<string, string> = {
+    Новое: '#3880FF',
+    Изменено: '#F99011',
+    Опубликовано: '#22CA3D',
+    Отказ: '#E83940',
+    Черновик: '#4C5861',
+  }
+  placeHolderImage: string = '/assets/images/nophoto.jpg'
+  imageUrl: string = ''
+  imageLoaded: boolean = false
 
+  eventNavigation() {
+    this.isSight
+      ? this.router.navigate(['/sights', this.event.id, this.slugName])
+      : this.router.navigate(['/events', this.event.id, this.slugName])
+  }
+  eventNavigationEdit() {
+    this.isSight
+      ? this.router.navigate(['/cabinet/sights/edit', this.event.id])
+      : this.router.navigate(['/cabinet/events/edit', this.event.id])
+  }
+
+  checkEventStatus(event: any) {
+    let status: any = ''
+    if (event && event.statuses) {
+      event.statuses.forEach((element: any) => {
+        if (element.pivot.last) {
+          status = element
+        }
+      })
+      if (status.name == Statuses.draft) {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return false
+    }
+  }
+  blockedRout() {
+    this.dontEdit = false
+  }
   toggleFavorite(event_id: number) {
     if (!this.userAuth) {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
@@ -111,9 +150,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           .pipe(
             tap(() => {
               this.favorite = !this.favorite
-              this.favorite
-                ? this.event.favorites_users_count++
-                : this.event.favorites_users_count--
+              this.favorite ? this.event.favorites_users_count++ : this.event.favorites_users_count--
               this.loadingFavotire = false
             }),
             tap(() => {
@@ -133,9 +170,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           .pipe(
             tap(() => {
               this.favorite = !this.favorite
-              this.favorite
-                ? this.event.favorites_users_count++
-                : this.event.favorites_users_count--
+              this.favorite ? this.event.favorites_users_count++ : this.event.favorites_users_count--
 
               this.loadingFavotire = false
             }),
@@ -150,6 +185,28 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           )
           .subscribe()
       }
+    }
+  }
+
+  showInfoAboutStatus() {
+    switch (this.getLastStatus().name) {
+      case Statuses.new:
+        this.toastService.showToast('Находится на рассмотрении', 'primary')
+        break
+      case Statuses.changed:
+        this.toastService.showToast('Находится на модерации', 'warning')
+        break
+      case Statuses.published:
+        this.toastService.showToast('Находится в активном состоянии', 'success')
+        break
+      case Statuses.blocked:
+        this.toastService.showToast('На данный момент заблокированно', 'danger')
+        break
+      case Statuses.denied:
+        this.toastService.showToast('Было отклонено модератором', 'danger')
+        break
+      case Statuses.draft:
+        this.toastService.showToast('Находится в черновиках', 'secondary')
     }
   }
 
@@ -168,9 +225,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           .pipe(
             tap(() => {
               this.like = !this.like
-              this.like
-                ? this.event.liked_users_count++
-                : this.event.liked_users_count--
+              this.like ? this.event.liked_users_count++ : this.event.liked_users_count--
               this.loadingLike = false
             }),
             tap(() => {
@@ -190,9 +245,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           .pipe(
             tap(() => {
               this.like = !this.like
-              this.like
-                ? this.event.liked_users_count++
-                : this.event.liked_users_count--
+              this.like ? this.event.liked_users_count++ : this.event.liked_users_count--
               this.loadingLike = false
             }),
             tap(() => {
@@ -214,9 +267,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       .getPostGroup(vk_group_id, vk_post_id)
       .pipe(
         delay(100),
-        map((res) =>
-          res.response && res.response.length ? res.response[0].likes.count : 0,
-        ),
+        map((res) => (res.response && res.response.length ? res.response[0].likes.count : 0)),
         switchMap((count) => {
           //if (count !== 0){
           this.eventsService
@@ -225,10 +276,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
               // обновляем на беке  кол-во вк лайков
               catchError((err) => {
                 //console.log(err)
-                this.toastService.showToast(
-                  MessagesErrors.vkLikesError,
-                  'secondary',
-                )
+                this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
                 return of(EMPTY)
               }),
               takeUntil(this.destroy$),
@@ -238,8 +286,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           return of(count)
         }),
         tap((count) => {
-          if (this.event.likes !== null)
-            this.startLikesCount = this.event.likes.local_count + count // обновляем лайки в представлении
+          if (this.event.likes !== null) this.startLikesCount = this.event.likes.local_count + count // обновляем лайки в представлении
         }),
         catchError((err) => {
           //console.log(err)
@@ -307,31 +354,46 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   findPrice() {
-    if (!this.isSight) {
+    if (!this.isSight && this.event.price) {
       for (let i = 0; i < this.event.price.length; i++) {
         this.prices.push(Number(this.event.price[i].cost_rub))
       }
-      this.minPrice = Math.min(...this.prices)
-      this.maxPrice = Math.max(...this.prices)
+      if (this.prices.length > 0) {
+        this.minPrice = Math.min(...this.prices)
+        this.maxPrice = Math.max(...this.prices)
+      } else {
+        this.minPrice = 0
+        this.maxPrice = 0
+      }
     }
   }
 
-  ngOnInit() {
-    this.userAuth = this.authService.getAuthState()
-    this.findPrice()
-    this.slugName = this.helpers.translit(this.event.name)
-    this.startLikesCount = this.event.likes
-      ? this.event.likes.vk_count + this.event.likes.local_count
-      : 0
-    this.favorite = this.event.favorites_users_exists!
-    this.like = this.event.liked_users_exists!
-    // window.addEventListener('scrollend', this.scrollEvent, true);
+  getLastStatusColor() {
+    let status: string = this.getLastStatus().name
 
-    //КИдаем запрос в ВК чтобы обновить лайки и лайкнуть у нас если юзер лайкнул в ВК
-    if (this.event.vk_group_id && this.event.vk_post_id) {
-      this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
-      this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
-    }
+    return this.statusColor[status]
+  }
+
+  getLastStatus() {
+    let status: any
+    this.event.statuses.forEach((element: any) => {
+      if (element.pivot.last) {
+        status = element
+      }
+    })
+
+    return status
+  }
+
+  changeBackgroundImage() {
+    this.imageLoaded = true
+    this.placeHolderImage = this.event.files[0].link
+
+    setTimeout(() => {
+      this.imageLoaded = false
+
+    }, 500) // Time in ms should match the CSS transition time
+
   }
 
   ngAfterViewInit(): void {
@@ -350,45 +412,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.swiper?.update()
   }
-
-  // scrollEvent = (): void => {
-
-  //   const boundingClientRect = this.elementRef?.nativeElement.getBoundingClientRect();
-  //   if (boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight))/2 && boundingClientRect.top < window.innerHeight/2  && !this.viewElement && boundingClientRect.width !== 0 && boundingClientRect.width !== 0) {
-  //     if (!this.viewElementTimeStart){
-  //       this.viewElementTimeStart = new Date().getTime()
-  //     }
-  //   } else if ((this.viewElementTimeStart && !this.viewElement) || ((this.viewElementTimeStart && !this.viewElement) && (boundingClientRect.width === 0 && boundingClientRect.width === 0))) {
-  //     this.viewElementTimeEnd = new Date().getTime()
-  //     let time: any
-  //     time = (new Date().getTime() - this.viewElementTimeStart)/1000
-  //     if (time > 3.141) {
-  //       if (this.isSight) {
-  //         this.sightsService.addView(this.event.id, time).pipe(
-  //           delay(100),
-  //           retry(3),
-  //           catchError((err) =>{
-  //             return of(EMPTY)
-  //           }),
-  //           takeUntil(this.destroy$)
-  //         ).subscribe()
-  //       } else {
-  //         this.eventsService.addView(this.event.id, time).pipe(
-  //           delay(100),
-  //           retry(3),
-  //           catchError((err) =>{
-  //             return of(EMPTY)
-  //           }),
-  //           takeUntil(this.destroy$)
-  //         ).subscribe()
-  //       }
-  //       this.viewElement = true
-  //     }
-  //     this.viewElementTimeStart = 0
-  //     this.viewElementTimeEnd = 0
-  //   }
-  //   //console.log(boundingClientRect)
-  // }
 
   toggleComment() {
     this.loadingComment = true
@@ -452,5 +475,25 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     //console.log(this.event.id)
     this.destroy$.next()
     this.destroy$.complete()
+  }
+  ngOnInit() {
+    this.formatedStartDate = this.datePipe.transform(this.event.date_start, 'dd-MMM')
+
+    this.formatedEndDate = this.datePipe.transform(this.event.date_end, 'dd-MMM')
+
+    this.userAuth = this.authService.getAuthState()
+    this.findPrice()
+    this.slugName = this.helpers.translit(this.event.name)
+    this.startLikesCount = this.event.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
+    this.favorite = this.event.favorites_users_exists!
+    this.like = this.event.liked_users_exists!
+    this.viewCard = this.checkEventStatus(this.event)
+    // window.addEventListener('scrollend', this.scrollEvent, true);
+
+    //КИдаем запрос в ВК чтобы обновить лайки и лайкнуть у нас если юзер лайкнул в ВК
+    if (this.event.vk_group_id && this.event.vk_post_id) {
+      this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
+      this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
+    }
   }
 }

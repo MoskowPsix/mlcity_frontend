@@ -1,10 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { EMPTY, Observable } from 'rxjs'
+import { FooterMenu } from 'src/app/models/footer-menu'
 import { AuthService } from 'src/app/services/auth.service'
-import { FilterService } from 'src/app/services/filter.service'
 import { UserService } from 'src/app/services/user.service'
 import { environment } from 'src/environments/environment'
+import footerMenuData from '../../../assets/json/menu-footer.json'
 
 @Component({
   selector: 'app-footer',
@@ -18,13 +18,13 @@ export class FooterComponent implements OnInit {
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
 
   isAuth: boolean = false
+  menu!: FooterMenu[]
   avatarUrl!: string
   user!: any
   mobile: boolean = false
   currentRout = this.router
   constructor(
     private router: Router,
-    private filterService: FilterService,
     private authService: AuthService,
     private userService: UserService,
     //private authService: AuthService,
@@ -39,17 +39,6 @@ export class FooterComponent implements OnInit {
     } else {
       this.mobile = false
     }
-  }
-  getEventService() {
-    return this.filterService.eventsCount.value
-  }
-
-  getSightService() {
-    return this.filterService.sightsCount.value
-  }
-
-  getFavoritesService() {
-    return this.filterService.favoritesCount.value
   }
   checkAuthenticated() {
     this.authService.authenticationState.subscribe((res: boolean) => {
@@ -71,21 +60,20 @@ export class FooterComponent implements OnInit {
     })
   }
 
-  // currentYear = new Date().getFullYear();
-  // appName = environment.APP_NAME
-  // isAuthenticated: boolean = false
-  // subscription_1!: Subscription
-
-  //Проверяем авторизован ли пользователь
-  // checkAuthenticated(){
-  //   this.subscription_1 = this.authService.authenticationState.subscribe(
-  //     ((res: boolean) => {
-  //        this.isAuthenticated = res;
-  //     })
-  //   );
-  // }
+  isActiveRoute(path: string): boolean {
+    if (
+      this.router.url.includes(path) ||
+      this.router.url.includes('sights') ||
+      this.router.url.includes('events')
+    ) {
+      console.log(path, this.router.url)
+      return true
+    }
+    return false
+  }
 
   ngOnInit() {
+    this.menu = footerMenuData
     this.getUser()
     this.checkAuthenticated()
     this.mobileOrNote()

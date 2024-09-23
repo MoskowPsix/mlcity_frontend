@@ -7,12 +7,13 @@
         </button>
         <ng-container >
           <div class="cal-wrapper">
-            <mat-date-range-input style="height: 0px; width: 0px;" [rangePicker]="pickerArh" [formGroup]="range">
+            <!-- <mat-date-range-input style="height: 0px; width: 0px;" [rangePicker]="pickerArh" [formGroup]="range">
               <input  style="height: 0px; width: 0px;" matStartDate required formControlName="start" >
               <input  style="height: 0px; width: 0px;" matEndDate required formControlName="end">
             </mat-date-range-input>
             <mat-datepicker-toggle  [for]="pickerArh"></mat-datepicker-toggle>            
-            <mat-date-range-picker #pickerArh></mat-date-range-picker>
+            <mat-date-range-picker #pickerArh></mat-date-range-picker> -->
+             <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/calendar.svg"></app-rounded-button>
           </div>
          
         </ng-container>

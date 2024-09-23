@@ -1,0 +1,27 @@
+<ng-container *ngIf="cards.length <= 0 && notFound === false">
+  <div class="main-grid-load">
+    <div class="card-wrapper" *ngFor="let key of [1,2,3,4]">
+        <ion-skeleton-text [animated]="true" class="card-load">
+        </ion-skeleton-text>
+    </div>
+  </div>
+</ng-container>
+
+<div *ngIf="notFound" class="error-box">
+  <app-not-found-content></app-not-found-content>
+</div>   
+<ng-container *ngIf="cards.length > 0 && notFound === false">
+
+  <ng-container *ngIf="cards.length >= 0">
+    <div class="main-grid">
+        <app-event-card *ngFor="let card of cards; let i = index" [event]="card" [myEvent]="myEvents" [isSight]="isSight"></app-event-card>
+    </div>
+    <div class="spiner-container">
+      <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>
+    </div>
+    <ion-infinite-scroll *ngIf="cards.length > 0 && notFound === false" (ionInfinite)="onIonInfinite($event)">
+      <ion-infinite-scroll-content ></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ng-container>
+</ng-container>
+

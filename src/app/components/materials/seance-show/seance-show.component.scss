@@ -1,0 +1,62 @@
+.seance-container{
+    
+    
+}
+.seance-container-content__border-img{
+    min-width: 343px;
+    height: 100%;
+}
+
+.seance-container{
+    padding-top: 0.75rem;
+    display: flex;
+    justify-content: center;
+}
+.seance-container_content
+{
+    max-width: 400px;
+}
+.seance-container_content__info{
+    position: absolute;
+    display: grid;
+    width: 343px;
+    min-height:3.85rem;
+    grid-template-columns: 25.5% 43% 31%;
+}
+.buy-ticket-seance-button{
+    padding-left: 0.7rem;
+    padding-right: 0.5rem;
+    display: grid;
+    align-items: center;
+    place-self: center;
+    min-width: 100%;
+}
+.date-seance{
+    padding-left: 0.5rem;
+    display: grid;
+    align-items: center;
+    place-self: center;
+    min-width: 100%;
+}
+.date-seance__day-month{
+    color: var(--gray-color);
+    font-family: var(--font-bold);
+    font-size: 0.75rem;
+}
+.date-seance__time{
+    padding-top: 0.2rem;
+    font-size: 0.75rem;
+    color: var(--gray-color);
+    font-family: var(--font-regular);
+}
+.price-seance{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    place-self: center;
+    min-width: 100%;
+    width: 100%;
+    font-size: 0.85rem;
+    color: var(--gray-color);
+    font-family: var(--font-bold);
+}

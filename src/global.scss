@@ -26,43 +26,111 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-
-
 @font-face {
-	font-family: 'Montserrat-Thin'; 
-	src: url('./assets/fonts/Montserrat-Thin.ttf'); 
+	font-family: 'Montserrat-Thin';
+	src: url('./assets/fonts/Montserrat-Thin.ttf');
 }
 
 @font-face {
-	font-family: 'Montserrat-SemiBold'; 
-	src: url('./assets/fonts/Montserrat-SemiBold.ttf'); 
+	font-family: 'Montserrat-SemiBold';
+	src: url('./assets/fonts/Montserrat-SemiBold.ttf');
 }
 @font-face {
-	font-family: 'Montserrat-Bold'; 
-	src: url('./assets/fonts/Montserrat-Bold.ttf'); 
+  font-family: 'NunitoSans-Italic';
+  src: url('./assets/fonts/NunitoSans-Italic.ttf');
+}
+@font-face {
+  font-family: 'NunitoSans';
+  src: url('./assets/fonts/NunitoSans.ttf');
+}
+
+
+@font-face {
+  font-family: 'NunitoSans-SemiBold';
+  src: url('./assets/fonts/NunitoSans-SemiBold.ttf');
+}
+@font-face {
+	font-family: 'Montserrat-Bold';
+	src: url('./assets/fonts/Montserrat-Bold.ttf');
 }
 
 @font-face {
-	font-family: 'Montserrat-Regular'; 
-	src: url('./assets/fonts/Montserrat-Regular.ttf'); 
+	font-family: 'Montserrat-Regular';
+	src: url('./assets/fonts/Montserrat-Regular.ttf');
 }
 
 @font-face {
-	font-family: 'Montserrat-Medium'; 
-	src: url('./assets/fonts/Montserrat-Medium.ttf'); 
+	font-family: 'Montserrat-Medium';
+	src: url('./assets/fonts/Montserrat-Medium.ttf');
 }
 
 @font-face {
-	font-family: 'Montserrat-Light'; 
-	src: url('./assets/fonts/Montserrat-Light.ttf'); 
+	font-family: 'Montserrat-Light';
+	src: url('./assets/fonts/Montserrat-Light.ttf');
+}
+
+:root {
+    --orange-color: #f7ab31;
+    --orange-filter: brightness(0) saturate(100%) invert(76%) sepia(67%) saturate(4165%) hue-rotate(2deg) brightness(104%) contrast(108%);
+    --blue-color:#3880FF;
+    --blue-light-color:#DCE9FF;
+    --blue-filter: invert(42%) sepia(79%) saturate(2572%) hue-rotate(204deg) brightness(100%) contrast(104%)
+    --white-filter: invert(100%) sepia(8%) saturate(7472%) hue-rotate(199deg) brightness(103%) contrast(114%);
+    --gray-color:#4C5861;
 }
 
 
 
-// ion-content{
-//     --padding-top: 110px !important;
-//     --padding-bottom: 65px !important;
-// }
+@font-face {
+	font-family: 'NunitoSans-Regular';
+	src: url('./assets/fonts/NunitoSans.ttf');
+}
+@font-face {
+	font-family: 'NunitoSans-Light';
+	src: url('./assets/fonts/NunitoSans.ttf');
+}
+
+@font-face {
+	font-family: 'NunitoSans-SemiBold';
+	src: url('./assets/fonts/NunitoSans-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: "NunitoSans-SemiBold";
+    src: url('/assets/fonts/static/NunitoSans_7pt-SemiBold.ttf');
+}
+@font-face {
+    font-family: "NunitoSans-Bold";
+    src: url('/assets/fonts/static/NunitoSans_7pt-Bold.ttf');
+}
+@font-face {
+    font-family: "NunitoSans-Regular";
+    src: url('/assets/fonts/static/NunitoSans_7pt-Regular.ttf');
+}
+
+
+
+
+
+:root{
+    --font-light:'NunitoSans-Light';
+    --font-bold:'NunitoSans-Bold';
+    --font-semiBold:'NunitoSans-SemiBold';
+    --font-regular:'NunitoSans-Regular';
+    --font-color:#4C5861;
+    --font-color-dark:#1C2226;
+}
+
+ion-content {
+  --overflow:auto;
+  overflow: auto;
+  --padding-top: var(--ion-safe-area-top, 0);
+  --background: #f8f8f8;
+}
+main.inner-scroll.scroll-y{
+    overflow-y:hidden;
+}
+
 body {
     background-color: #edeef0;
 }
@@ -81,17 +149,23 @@ body {
 .mb-6-5rem{
     margin-bottom: 6.5rem;
 }
+
+.label{
+    color: #4C5861;
+    font-size: 12px;
+    margin-bottom: 6px;
+    font-family: var(--font-regular);
+  }
 ion-list {
     font-family: 'Montserrat-regular';
     font-size: 1rem;
 }
-
-ion-content {
-    
+.main-content{
+    background: #f8f8f8;
 }
 
-ion-item-divider{
-    background-color: #fff;
+ion-accordion{
+    background: none;
 }
 ion-label{
     background:none;
@@ -115,32 +189,68 @@ ion-toolbar {
   margin:auto;
   transform: rotate(0);
 }
-ion-content{
-    background: #fff;
-    --padding-top: var(--ion-safe-area-top, 0);
+
+.cluster {
+    font-size: 1rem;
+    // background-color: var(--orange-color);
+    display:flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border: 3px solid white;
+    border-radius: 50%;
 }
 
 .marker {
+    transition: all 1s ease;
     position: absolute;
-    width: 40px;
-    height: 40px;
-    border: 4px solid #008aed;
-    box-shadow: -2px 2px 2px #aaaaaa;
-    border-radius: 50% 50% 50% 0;
+    width: 36px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    border: 2px solid white;
+    border-radius: 100%;
     transform: rotate(-45deg);
-    background: #fff;
     margin:-15px 0px 0px -10px;
+}
+
+.marker.event {
+  background: var(--orange-color);
+}
+
+.marker.sight {
+  background-color: var(--blue-color);
+}
+
+.marker > img {
+  width: 16px;
+  height: 14px;
+  transform: rotate(45deg);
+}
+
+.marker-icon {
+  background-image: url('/assets/icons/ticket.svg');
+}
+
+.test {
+
 }
 
 .marker.now {
     position: absolute;
-    width: 40px;
-    height: 40px;
-    border: 4px solid #008aed;
+    width: 50px;
+    height: 50px;
+    border: 1px solid white;
     box-shadow: -2px 2px 2px #aaaaaa;
     border-radius: 50% 50% 50% 0;
     transform: rotate(-45deg);
-    background: #fff;
+    background: var(--blue-color);
     margin:-15px 0px 0px -10px;
 }
 
@@ -169,21 +279,35 @@ ion-content{
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
+@keyframes fadeIn {
+  0% {
+    width: 36px;
+    height: 36px;
+  }
+
+  50% {
+    width: 39px;
+    height: 39px;
+  }
+
+  100% {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 .marker.active {
-    width: 60px;
-    height: 60px;
-    border: 4px solid #f902fd;
-    margin:-40px 0px 0px -20px;
+    animation: fadeIn 2s infinite;
+}
+
+.cluster.active {
+  animation: fadeIn 2s infinite;
 }
 
 .marker.active > img {
-  width: 75%;
-  height: 75%;
-  position: absolute;
-  top: 50%;
-  left: 53%;
-  filter: invert(63%) sepia(65%) saturate(6812%) hue-rotate(205deg) brightness(100%) contrast(103%);
-  transform: translate(-50%, -50%) rotate(45deg);
+  width: 24px;
+  height: 18px;
+  transform: rotate(45deg);
 }
 
 .marker:after{
@@ -200,16 +324,6 @@ ion-content{
     rotate: 90deg;
     box-shadow: 1px 1px 1px 1px #89849b;
     animation-delay: 1.1s;
-}
-.marker > img {
-    width: 75%;
-    height: 75%;
-    position: absolute;
-    top: 50%;
-    left: 53%;
-    filter: invert(63%) sepia(65%) saturate(6812%) hue-rotate(205deg) brightness(100%) contrast(103%);
-    transform: translate(-50%, -50%) rotate(45deg);
-    // padding: 7px 0 0 7px;
 }
 
 
@@ -240,9 +354,14 @@ swiper-slide {
         border-radius: 2%;
     }
 }
+// убираем стрелки у input
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
 
 .inner-scroll{
-    background-color: red;
+   
     padding: 0;
   }
 @keyframes pulsate{
@@ -260,15 +379,7 @@ swiper-slide {
 }
 
 @media screen and (min-width: 0px) and (max-width: 768px) {
-   
 
-    // ion-content.md{
-    //     --padding-top: 6rem;
-    // }
-
-    // ion-content.ios{
-    //     --padding-top: 2.5rem;
-    // }
 
     ion-datetime{
        width: auto !important;
@@ -281,10 +392,10 @@ swiper-slide {
 }
 
 @media screen and (min-width: 1060px)  {
-    ion-content{
-        --padding-top: 4rem;
-        --padding-bottom: 1rem;
-    }
+    // ion-content{
+    //     --padding-top: 4rem;
+    //     --padding-bottom: 1rem;
+    // }
 
     // ion-modal{
     //     &::part(content){
@@ -350,4 +461,10 @@ swiper-slide {
 .last-header_small{
     font-family:Montserrat-SemiBold;
     font-size: 16px;
+}
+
+
+
+ion-item-divider{
+    background-color: #fff;
 }

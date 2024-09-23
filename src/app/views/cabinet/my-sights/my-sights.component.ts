@@ -1,26 +1,10 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core'
-import {
-  EMPTY,
-  Subject,
-  catchError,
-  delay,
-  map,
-  of,
-  retry,
-  takeUntil,
-  tap,
-} from 'rxjs'
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { SightsService } from 'src/app/services/sights.service'
-import { FilterService } from 'src/app/services/filter.service'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { ToastService } from 'src/app/services/toast.service'
+import { OrganizationService } from 'src/app/services/organization.service'
 
 @Component({
   selector: 'app-my-events',
@@ -32,10 +16,11 @@ export class MySightsComponent implements OnInit, OnDestroy {
 
   constructor(
     private sightsService: SightsService,
+    private organizationService: OrganizationService,
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
   ) {}
-  nextPage: boolean = false
+  nextPage: boolean = true
   sights: any[] = []
 
   loadSights: boolean = false
@@ -47,9 +32,11 @@ export class MySightsComponent implements OnInit, OnDestroy {
   MainImgSrc: any = ''
   addNewFile: boolean = false
   previewPhotoUrl!: string
+  spiner: boolean = false
   uploadFiles: File[] = []
   imagesPreview: any[] = []
   removedImages: string[] = []
+  notFound: boolean = false
 
   @ViewChild('idImgList') idImgList!: ElementRef
   @ViewChild('widgetsContent') widgetsContent!: ElementRef
@@ -60,36 +47,43 @@ export class MySightsComponent implements OnInit, OnDestroy {
   }
 
   getMySights() {
-    this.sightsService
-      .getSightsForUser(
-        this.queryBuilderService.queryBuilder('sightsPublicForAuthor'),
-      )
-      .pipe(
-        delay(100),
-        retry(3),
-        map((respons: any) => {
-          this.sights.push(...respons.sights.data)
-          if (respons.events.next_cursor) {
-            this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(
-              respons.events.next_cursor,
-            )
+    this.sights.length > 0 ? (this.spiner = true) : null
+    if (this.nextPage) {
+      this.sightsService
+        .getSightsForUser(this.queryBuilderService.queryBuilder('sightsPublicForAuthor'))
+        .pipe(
+          delay(100),
+          retry(3),
+          map((response: any) => {
+            this.sights.push(...response.sights.data)
+            this.sights.length == 0 ? (this.notFound = true) : (this.notFound = false)
+            this.spiner = false
+
+            if (response.sights.next_cursor != null) {
+              this.queryBuilderService.paginationPublicSightsForAuthorCurrentPage.next(response.sights.next_cursor)
+            }
+            response.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
+          }),
+          tap(() => {
+            this.loadSights = true
+            this.loadMoreSights = false
+          }),
+          catchError((err) => {
+            this.loadSights = true
+            console.log(err)
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            return of(EMPTY)
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe(() => {
+          if (this.sights && this.sights.length == 0) {
+            this.notFound = true
           }
-          respons.events.next_cursor
-            ? (this.nextPage = true)
-            : (this.nextPage = false)
-        }),
-        tap(() => {
-          this.loadSights = true
-          this.loadMoreSights = false
-        }),
-        catchError((err) => {
-          this.loadSights = true
-          this.toastService.showToast(MessagesErrors.default, 'danger')
-          return of(EMPTY)
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe()
+        })
+    } else {
+      this.spiner = false
+    }
   }
 
   openModal(sight: any) {
@@ -121,6 +115,11 @@ export class MySightsComponent implements OnInit, OnDestroy {
       this.uploadFiles.push(event.target.files[i])
     }
     this.previewPhoto()
+  }
+  ionViewWillEnter() {
+    this.sights = []
+    this.nextPage = true
+    this.getMySights()
   }
 
   previewPhoto() {
@@ -161,9 +160,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
       if (indexPreview !== -1) {
         this.imagesPreview.splice(indexPreview, 1)
       }
-      const indexFile = this.uploadFiles.findIndex(
-        (image) => image.name === imgName,
-      ) // ищем файл с именем картинки
+      const indexFile = this.uploadFiles.findIndex((image) => image.name === imgName) // ищем файл с именем картинки
 
       if (indexFile !== -1) {
         //удаляем из массива загруженых файлов, иначе перерисует картинки
@@ -174,9 +171,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
     //  console.log(this.removedImages)
   }
 
-  ngOnInit() {
-    this.getMySights()
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     // отписываемся от всех подписок

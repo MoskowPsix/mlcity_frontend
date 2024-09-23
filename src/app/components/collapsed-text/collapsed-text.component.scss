@@ -1,24 +1,24 @@
 .main-conteiner_collapsed {
-  margin-top: 1rem;
-
-  font-family: 'Montserrat-Light';
+  font-family: var(--font-regular);
   line-height: 1.5;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
+  font-size: 0.85rem;
 }
 
 .main-conteiner {
-  margin-top: 1rem;
-
-  font-family: 'Montserrat-Light';
+  font-size: 0.85rem;
+  font-family: var(--font-light);
+  color: var(--gray);
   line-height: 1.5;
 }
 
 .about-button {
-  font-family: 'Montserrat-Regular';
+  font-family: var(--font-regular);
   line-height: 1.5;
+  font-size: 0.75rem;
   margin-right: -1rem;
   background: none;
   color: #0066ff;

@@ -16,7 +16,7 @@
                     <img *ngIf="false"alt="logo" src="/svg/no-photo.svg" />
 
                     <ion-label class="Login_logo_text">
-                      mlcity
+                      ВОКРУГ
                     </ion-label>
 
                   </ion-div>
@@ -43,7 +43,6 @@
                       <ion-item>
                             <ion-input formControlName="email" class="Login_inputs emailclass InputDontButton"  type="text" placeholder="E-mail" required>
                               <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
-
                             </ion-input>
                       </ion-item>
 
@@ -71,7 +70,7 @@
             <ion-item>
               <ion-checkbox id="check" [value]="privacyCheck" (ionChange)="privacyCheck = !privacyCheck"  slot="start"></ion-checkbox>
               <label for="check">
-                <span>Я ознакомлен с <a href="{{host}}:{{port}}/storage/privacy/Соглашение 2024г.docx">политикой</a> конфиденциальности.</span>
+                <span>Я ознакомлен с <a target="_blank" href="/politics">пользовательским соглашением</a> </span>
               </label>
 
             </ion-item>
@@ -105,7 +104,7 @@
 
             <!-- test -->
 
-            <ion-modal #modal backdropDismiss="false" [isOpen] = "submitResponce">
+            <!-- <ion-modal #modal backdropDismiss="false" [isOpen] = "submitResponce">
 
               <ng-template>
                   <ion-content>
@@ -170,7 +169,7 @@
                   </ion-content>
               </ng-template>
 
-            </ion-modal>
+            </ion-modal> -->
 
               <ion-list class="LoginWith_list">
 

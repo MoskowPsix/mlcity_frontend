@@ -1,0 +1,198 @@
+
+  .spiner-container{
+    display: flex;
+    justify-content: center;
+  }
+  .main-grid-load {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 21rem);
+    gap: 33px;
+    
+    margin: auto;
+    justify-content: center;
+  }
+  
+  .card-wrapper {
+    position: relative;
+  }
+  
+  .card {
+    border-radius: 10px;
+    width: 20.5rem;
+    height: 200px;
+    background-size: 100%;
+    background-position: center;
+    color: white;
+    text-align: center;
+    position: relative;
+  }
+  .card-load{
+  
+    border-radius: 10px;
+    width: 20.5rem;
+    height: 200px;
+   
+  }
+  
+  
+  
+  .info-wrapper {
+    pointer-events: none;
+    border-radius: 10px;
+    position: absolute;
+    background-color: none;
+    width: 20.5rem;
+    height: 200px;
+    z-index: 2;
+  }
+  
+  .price {
+    font-size: 0.8rem;
+    text-align: center;
+    background-color: #1C2226;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    min-width: 3.75rem;
+    height: 1.438rem;
+  }
+  .price-load{
+    font-size: 0.8rem;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    width: 3.75rem;
+    height: 1.438rem;
+  }
+  
+  .edit-button {
+    right: 1rem;
+    top: 0.5rem;
+    position: absolute;
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    transition: 0.3s all;
+    height: 2rem;
+    background-color: #F98F11;
+    border-radius: 50%;
+  }
+  .edit-button-load {
+    right: 1rem;
+    top: 0.5rem;
+    position: absolute;
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    transition: 0.3s all;
+    height: 2rem;
+    border-radius: 50%;
+  }
+  
+  .edit-button:hover {
+    transition: 0.3s all;
+    background-color: #fcac4b;
+  }
+  
+  .info-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0 auto;
+  }
+  
+  .info-wrapper {
+  
+    padding-right: 0.625rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+  
+  .info-footer {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.5rem;
+    position: absolute;
+    bottom: 0;
+  
+  }
+  
+  .info-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 0.7rem;
+    color: #fff;
+    background-color: #1c2226d5;
+    min-width: 3.125rem;
+    height: 1.438rem;
+    border-radius: 4px;
+  }
+  .info-text-load {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 0.7rem;
+    color: #fff;
+    min-width: 3.125rem;
+    height: 1.438rem;
+    border-radius: 4px;
+  }
+  
+  .info-text-container {
+    display: flex;
+    gap: 0.313rem;
+  
+  }
+  .dont-found-icon{
+    font-size: 4rem;
+  }
+  .error-box{
+    padding-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  .dont-found-text{
+    font-size: 1.3rem;
+    color: var(--font-color);
+    font-family: var(--font-bold);
+  }
+  .main-grid {
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+    overflow-y: hidden;
+    padding-bottom: 2rem;
+    background: none;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-x: hidden;
+  }
+  @media screen, (min-width: 750px) { 
+    .main-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 21rem);
+      gap: 10px;
+      padding: 10px;
+      justify-content: center;
+      overflow-y: hidden;
+      padding-bottom: 2rem;
+      background: none;
+      margin-left: auto;
+      margin-right: auto;
+    }
+   }
