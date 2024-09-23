@@ -25,6 +25,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
   events: any[] = []
   spiner: boolean = false
   loadEvents: boolean = false
+  wait:boolean = false
   loadMoreEvents: boolean = false
   notFound!: boolean
   eventsLoadingMore() {
@@ -33,7 +34,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
   }
 
   getMyEvents(event?: any) {
-    if (this.nextPage) {
+    if (this.nextPage && !this.spiner) {
       this.notFound = false
       this.spiner = true
       this.eventService
@@ -97,12 +98,13 @@ export class MyEventsComponent implements OnInit, OnDestroy {
 
   ionViewWillEnter() {
     this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next('')
-    this.events = []
     this.nextPage = true
     this.getMyEvents()
   }
-  ionViewDidWillLeave() {
+  ionViewDidLeave() {
     this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next('')
+    this.events = []
+    console.log('я умер')
   }
   ngOnDestroy() {
     // отписываемся от всех подписок

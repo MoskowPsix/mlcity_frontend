@@ -194,6 +194,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
             finalize(() => {}),
             takeUntil(this.destroy$),
             catchError((err: any) => {
+              
               this.loadingService.hideLoading()
               if (err.status !== 400) {
               } else {
