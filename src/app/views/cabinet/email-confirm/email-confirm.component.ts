@@ -5,7 +5,6 @@ import { catchError, EMPTY, finalize, of, Subject, takeUntil, tap } from 'rxjs'
 import { IUser } from 'src/app/models/user'
 import { AuthService } from 'src/app/services/auth.service'
 import { LoadingService } from 'src/app/services/loading.service'
-import { NavigationService } from 'src/app/services/navigation.service'
 import { ToastService } from 'src/app/services/toast.service'
 import { UserService } from 'src/app/services/user.service'
 
@@ -18,7 +17,6 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private loadingService: LoadingService,
-    private navigationService: NavigationService,
     private authService: AuthService,
     private router: Router,
     private toastService: ToastService,

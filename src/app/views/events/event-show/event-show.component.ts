@@ -447,9 +447,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.places = []
         this.setLocationForPlaces()
       })
-      this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
-        this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
-      })
+      // this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      //   this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
+      // })
     }
    
   }
