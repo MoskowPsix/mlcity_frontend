@@ -16,17 +16,15 @@ export class CardGridComponent implements OnInit {
   @Input() spiner!: boolean
   @Input() archived: boolean = false
   @Output() endScroll: EventEmitter<any> = new EventEmitter()
+  @Output() eventClicked: EventEmitter<any> = new EventEmitter()
   myEvents: boolean = false
   @Input() notFound: any = false
   public checkedRout(): void {
     this.myEvents = this.router.url === '/cabinet/events' || this.router.url === '/cabinet/sights'
   }
-  ngOnChanges(): void {
-    // if (this.cards.length != 0) {
-    //   this.notFound = true
-    // } else {
-    //   this.notFound = 'notfound'
-    // }
+
+  eventNavigation(event: any){
+    this.eventClicked.emit(event)
   }
 
   onIonInfinite(event: any) {
