@@ -40,7 +40,7 @@
 
       <!-- content -->
       <ng-container *ngIf="event && !loadingEvent">
-        <app-show-slider [files]="event.files"></app-show-slider>
+        <app-show-slider (click)="openImagesModalFunction()" [files]="event.files"></app-show-slider>
 
         <div class="back-button-wrapper">
           <app-back-button></app-back-button>
@@ -392,3 +392,5 @@
       </div>
    </ion-col>
 </ng-container>
+
+<app-images-modal [openModal]="openImagesModal" (closeModalEmit)="closeImagesModal()" *ngIf="event && !loadingEvent" [imagesPathArray]="event.files"></app-images-modal>

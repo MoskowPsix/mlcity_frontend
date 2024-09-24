@@ -16,6 +16,7 @@ import { AppRoutingModule } from './routing/app-routing.module'
 register()
 import { AngularYandexMapsModule, YaConfig } from 'angular8-yandex-maps'
 import { EditEventComponent } from './views/cabinet/edit/edit-event/edit-event.component'
+import { ImagesModalComponent } from './components/materials/images-modal/images-modal.component'
 import { EditSightComponent } from './views/cabinet/edit/edit-sight/edit-sight.component'
 import { AppComponent } from './app.component'
 import { EventsComponent } from './views/events/events.component'
@@ -188,6 +189,7 @@ registerLocaleData(localeRu, 'ru')
     EditSightComponent,
     SidebarComponent,
     PoliticsDocumentComponent,
+    ImagesModalComponent,
     AddEventComponent,
     CardGridComponent,
     DropdownPopupComponent,
@@ -201,6 +203,7 @@ registerLocaleData(localeRu, 'ru')
     UserSectionComponent,
     TabsComponent,
     SeancesContainerComponent,
+
     TabsItemComponent,
     EmailConfirmComponent,
     ExitButtonComponent,

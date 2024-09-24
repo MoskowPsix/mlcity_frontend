@@ -1,0 +1,33 @@
+<ion-modal [isOpen]="openModal">
+  <ng-template>
+    <ion-content>
+        <div class="main-content">
+          <div class="close-button-wrapper">
+            <app-circle-button (click)="closeModal()" icon="/assets/icons/close.svg"></app-circle-button>
+          </div>
+          <div>
+              <swiper-container
+              class="swiper-container"
+              [pagination]="false"
+              [grabCursor]="true"
+              [slidesPerView]="1"
+              [centeredSlides]="true"
+              [followFinger]="false"
+              [initialSlide]="0"
+              (swiperslidechange)="slideChange($event)">
+
+              <ng-container *ngFor ="let file of imagesPathArray">
+                <swiper-slide>
+                  <ng-container>
+                    <img *ngIf="file.file_types[0].name !== 'video'" [src]="checkUrl(file)" />
+                    <iframe *ngIf="file.file_types[0].name === 'video'" class="video-content" [src]="iframeUrl(file.link)" allow="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+                  </ng-container>
+                </swiper-slide>
+              </ng-container>
+            </swiper-container>
+            <div class="swiper-index">{{swiperIndex}}/{{imagesPathArray.length}}</div>
+          </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
