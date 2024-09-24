@@ -1,0 +1,45 @@
+swiper-slide{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+swiper-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+} 
+.swiper-index{
+    color: #fff;
+    bottom: 0;
+    font-family: var(--font-regular);
+    z-index: 100;
+}
+.main-content{
+    background: #484848;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.swiper-index{
+    padding-top: 1rem;
+    letter-spacing: 4px;
+    display: flex;
+    justify-content: center;
+}
+.close-modal-button{
+    background: none;
+}
+.close-modal-button img{
+    max-height: 2rem;
+}
+.close-button-wrapper{
+    left: 0.5rem;
+    position: absolute;
+    top: 1rem;
+}
+swiper-slide img{
+    border-radius: 0%;
+}

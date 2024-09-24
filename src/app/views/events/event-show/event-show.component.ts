@@ -46,6 +46,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   user?: any
   eventId?: number
   event?: any
+  openImagesModal:boolean = false
   places: any[] = []
   loadingEvent: boolean = true
   loadPlace: boolean = false
@@ -275,6 +276,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
             this.likeUrl = 'assets/icons/like.svg'
           }
         })
+  }
+  closeImagesModal(){
+    this.openImagesModal = false
+  }
+  openImagesModalFunction(){
+    this.openImagesModal = true
   }
 
   checkPrice() {
