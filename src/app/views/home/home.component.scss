@@ -23,6 +23,7 @@
   padding-right: 1rem;
   padding-left: 1rem;
   top:clamp(5rem, -0.051rem + 16.16vw, 9rem);
+  padding-top:  var(--ion-safe-area-top);
 }
 
 .map-loaders{

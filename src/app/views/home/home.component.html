@@ -37,7 +37,7 @@
         <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType !== 'sights'"></ion-progress-bar>
       </div>
     </div>
-    <div class="map-tools">
+    <div  class="map-tools">
         <app-calendar-button *ngIf="stateType === 'events'" (setDateEmit)="setDate($event)"></app-calendar-button>
         <app-calendar-button style="opacity: 0; pointer-events: none;" *ngIf="stateType === 'sights'" ></app-calendar-button>
         <app-range-selection-button/>
