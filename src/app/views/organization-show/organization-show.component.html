@@ -68,3 +68,4 @@
       </ng-container>
     </div>
 </ion-content>
+<app-images-modal [openModal]="openImagesModal" (closeModalEmit)="closeImagesModal()" *ngIf="sight" [imagesPathArray]="sight.files"></app-images-modal>
