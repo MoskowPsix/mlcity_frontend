@@ -1,8 +1,5 @@
 <ion-modal mode="ios" (didDismiss)="closeModal()"  [isOpen]="openTypesModal">
         <ng-template>
-            <ion-toolbar mode="ios">
-                <ion-title mode="ios" class="category-modal-header-text">Выберите типы</ion-title>
-            </ion-toolbar>
             <ion-content>
                 <div class="category-modal-grid">
                     <ng-container *ngIf="allTypes && allTypes.length > 0">

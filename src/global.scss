@@ -127,6 +127,13 @@ ion-content {
   --padding-top: var(--ion-safe-area-top, 0);
   --background: #f8f8f8;
 }
+ion-modal ion-content {
+    --overflow:auto;
+    overflow: auto;
+    --padding-top: 0rem;
+    padding-top: 0rem;
+    --background: #f8f8f8;
+  }
 main.inner-scroll.scroll-y{
     overflow-y:hidden;
 }
