@@ -35,6 +35,7 @@ ion-content{
 }
 
 .back-button-wrapper{
+  padding-top:  var(--ion-safe-area-top);
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -42,6 +43,8 @@ ion-content{
 }
 .social-button-container{
   position: absolute;
+  padding-top:  var(--ion-safe-area-top);
+  font-family: var(--font-regular);
   display: flex;
   gap: 5px;
   top: 1rem;
@@ -76,6 +79,8 @@ ion-content{
 .price-container{
   gap: 5px;
   position: absolute;
+  padding-top:  var(--ion-safe-area-top);
+  font-family: var(--font-regular);
   top: 11.5rem;
   z-index: 1;
   left: 1rem;
@@ -152,6 +157,7 @@ ion-content{
   display: flex;
   align-items: center;
   position: absolute;
+  
   width: auto;
   pointer-events: none;
   height: 100%;
@@ -234,6 +240,7 @@ ion-content{
 .event-container {
   background-color: none;
   height: 100%;
+  
 }
 .seances{
   display: block;

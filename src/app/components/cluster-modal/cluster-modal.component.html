@@ -3,12 +3,12 @@
   <ng-template #ContentModal>
 
      <img (click)="closeModal()" class="header-modal_close" src="assets/icons/close.svg" alt="">
-   
+
     <ion-content class="ion-padding">
       <div class="main-content">
         <div class="events-wrapper">
         <ng-container *ngIf="type === 'events'">
-            <app-card-grid [spiner]="spiner"  (endScroll)="endScrollingEvent()" [cards]="modalContent"></app-card-grid>
+            <app-card-grid (eventClicked)="eventNavigation($event)" [spiner]="spiner"  (endScroll)="endScrollingEvent()" [cards]="modalContent"></app-card-grid>
         </ng-container>
         <ng-container *ngIf="type === 'sights'">
           <app-organizations-grid (click)="testLog()" [spiner]="spiner" (endScroll)="endScrollingSight()" [cards]="modalContent"></app-organizations-grid>

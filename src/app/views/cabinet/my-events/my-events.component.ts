@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
 import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { Statuses } from 'src/app/enums/statuses-new'
@@ -20,6 +21,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
     private filterService: FilterService,
+    private router: Router
   ) {}
   nextPage: boolean = true
   events: any[] = []
@@ -27,11 +29,13 @@ export class MyEventsComponent implements OnInit, OnDestroy {
   loadEvents: boolean = false
   loadMoreEvents: boolean = false
   notFound!: boolean
-  eventsLoadingMore() {
+  eventsLoadingMore() { 
     this.loadMoreEvents = true
     this.getMyEvents()
   }
-
+  eventNavigation(event:any){
+    this.router.navigate(['/events',event])
+  }
   getMyEvents(event?: any) {
     if (this.nextPage) {
       this.notFound = false

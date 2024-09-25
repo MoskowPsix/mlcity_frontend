@@ -46,6 +46,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   user?: any
   eventId?: number
   event?: any
+  openImagesModal:boolean = false
   places: any[] = []
   loadingEvent: boolean = true
   loadPlace: boolean = false
@@ -276,6 +277,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
           }
         })
   }
+  closeImagesModal(){
+    this.openImagesModal = false
+  }
+  openImagesModalFunction(){
+    this.openImagesModal = true
+  }
 
   checkPrice() {
     let pricesValue: any = []
@@ -440,9 +447,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
         this.places = []
         this.setLocationForPlaces()
       })
-      this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
-        this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
-      })
+      // this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      //   this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
+      // })
     }
    
   }

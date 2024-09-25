@@ -14,7 +14,7 @@
           </div>
           
           <div class="grid-wrapper">
-            <app-card-grid [notFound]="notFound" [spiner]="spiner" [cards]="eventsCity" (endScroll)="getEventsCity()"></app-card-grid>
+            <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" [spiner]="spiner" [cards]="eventsCity" (endScroll)="getEventsCity()"></app-card-grid>
           </div>
         
         </div>

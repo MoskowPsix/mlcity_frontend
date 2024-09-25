@@ -37,7 +37,7 @@
         <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType !== 'sights'"></ion-progress-bar>
       </div>
     </div>
-    <div class="map-tools">
+    <div  class="map-tools">
         <app-calendar-button *ngIf="stateType === 'events'" (setDateEmit)="setDate($event)"></app-calendar-button>
         <app-calendar-button style="opacity: 0; pointer-events: none;" *ngIf="stateType === 'sights'" ></app-calendar-button>
         <app-range-selection-button/>
@@ -47,7 +47,7 @@
     <div class="geo-container">
       <app-drop-down-button
       [mapClick] = "mapClick"
-       [iconsPathArray]="['assets/icons/map-button.svg','assets/icons/geo-button.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']"
+       [iconsPathArray]="['assets/icons/geo-button.svg','assets/icons/map-arrow.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']"
       (emmitter)="dropButton($event)">
       </app-drop-down-button>
     </div>
@@ -57,7 +57,7 @@
       <!-- Просмотр в радиусе -->
   </div>
 
-  <app-cluster-modal [spiner]="modalSpiner" (paginateSight)="getSightsForIdsForModal()" (paginateEvents)="getEventsForIdsForModal()" [type]="" [modalContent]="modalContent" (closeModalEmit)="closeModal()" [openModal]="modalEventShowOpen"></app-cluster-modal>
+  <app-cluster-modal (eventClicked)="eventNavigation($event)" [spiner]="modalSpiner" (paginateSight)="getSightsForIdsForModal()" (paginateEvents)="getEventsForIdsForModal()" [type]="" [modalContent]="modalContent" (closeModalEmit)="closeModal()" [openModal]="modalEventShowOpen"></app-cluster-modal>
 </ion-content>
 
 <!-- Шкала радиуса -->

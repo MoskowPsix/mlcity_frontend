@@ -23,6 +23,7 @@
   padding-right: 1rem;
   padding-left: 1rem;
   top:clamp(5rem, -0.051rem + 16.16vw, 9rem);
+  padding-top:  var(--ion-safe-area-top);
 }
 
 .map-loaders{
@@ -189,7 +190,7 @@
   }
 
   .geo-container {
-    top: 76%;
+    top: 70%;
   }
 }
 
@@ -401,7 +402,7 @@ ion-spinner {
     top: 45%;
   }
   .geo-container {
-    top: 80%;
+    top: 75%;
   }
 }
 

@@ -1,22 +1,24 @@
 PODS:
-  - Capacitor (5.7.4):
+  - Capacitor (5.7.8):
     - CapacitorCordova
-  - CapacitorApp (5.0.7):
+  - CapacitorApp (5.0.8):
     - Capacitor
-  - CapacitorBrowser (5.2.0):
+  - CapacitorBrowser (5.2.1):
     - Capacitor
   - CapacitorCommunityAppleSignIn (5.0.0):
     - Capacitor
-  - CapacitorCordova (5.7.4)
-  - CapacitorGeolocation (5.0.7):
+  - CapacitorCordova (5.7.8)
+  - CapacitorGeolocation (5.0.8):
     - Capacitor
-  - CapacitorHaptics (5.0.7):
+  - CapacitorHaptics (5.0.8):
     - Capacitor
-  - CapacitorKeyboard (5.0.8):
+  - CapacitorKeyboard (5.0.9):
     - Capacitor
-  - CapacitorStatusBar (5.0.7):
+  - CapacitorLocalNotifications (5.0.8):
     - Capacitor
-  - CordovaPlugins (5.7.4):
+  - CapacitorStatusBar (5.0.8):
+    - Capacitor
+  - CordovaPlugins (5.7.8):
     - CapacitorCordova
 
 DEPENDENCIES:
@@ -28,6 +30,7 @@ DEPENDENCIES:
   - "CapacitorGeolocation (from `../../node_modules/@capacitor/geolocation`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
+  - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
 
@@ -48,23 +51,26 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
+  CapacitorLocalNotifications:
+    :path: "../../node_modules/@capacitor/local-notifications"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
   CordovaPlugins:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: 4fe9adf012caceb4c71ffea2f1f4d005cdcbeea7
-  CapacitorApp: 17fecd0e6cb23feafac7eb0939417389038b0979
-  CapacitorBrowser: a6deae9e5bf87f62b62a753cff7992c5def9e771
+  Capacitor: 747aadb4fa786f460d8cd9d0557cb81440a13747
+  CapacitorApp: 102e553c3b1fdc255969c39aa19b529675690ef4
+  CapacitorBrowser: bac3132be6506411704149f9f2099843ffe470a0
   CapacitorCommunityAppleSignIn: eafdd59b18b38161fa5cceee7b0e31312b122958
-  CapacitorCordova: a6e87fccc0307dee7aec1560ec9398485f2b0ce7
-  CapacitorGeolocation: 918a292459542bcce98433f9e7c7909f8c72838a
-  CapacitorHaptics: 7c7c206f0c96a628fed073830c96d28c4b2e772e
-  CapacitorKeyboard: aec619a578235c6ce279075009a2689c2cf5c42c
-  CapacitorStatusBar: f390fbb49b82ffb754ea4b3cf71dc8b048baf3e7
-  CordovaPlugins: 4b4db6cc2017ad4f6e009eaeb609f7ec57d3277c
+  CapacitorCordova: 31ab98dca2ddcee051027a1afe7e8c85c82f7297
+  CapacitorGeolocation: 0572212732f7ee65828d069a9663a274be89b9fc
+  CapacitorHaptics: f59c880aa8fad7f47bb54b48d6f2d6b26279602a
+  CapacitorKeyboard: f2e78b60a5cb981b4ea9e511e80693ca355169bb
+  CapacitorLocalNotifications: 5827dfaf75a52f7d29ac3a56d92cfc52b5073540
+  CapacitorStatusBar: 51af549cfcf35aac3ab072b062967ae5971ee485
+  CordovaPlugins: 135ac053ebef461be1ddab01e995069f770d1a25
 
-PODFILE CHECKSUM: a884d26da8c45174187cb15b51721c12b4d90de6
+PODFILE CHECKSUM: e47e5bbe3a4e823b648d44895a3dbeea421d3057
 
 COCOAPODS: 1.15.2

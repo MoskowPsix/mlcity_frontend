@@ -9,6 +9,8 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   NgZone,
+  Output,
+  EventEmitter,
 } from '@angular/core'
 
 import { DatePipe } from '@angular/common'
@@ -61,6 +63,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() isSight: boolean = false
   @Input() myEvent: boolean = false
   @Input() cardSize:string = ''
+  @Output() eventClicked: EventEmitter<any> = new EventEmitter()
   comments: boolean = false
   loadingComment: boolean = false
 
@@ -109,9 +112,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   imageLoaded: boolean = false
 
   eventNavigation() {
+
     this.isSight
       ? this.router.navigate(['/sights', this.event.id, this.slugName])
-      : this.router.navigate(['/events', this.event.id, this.slugName])
+      : this.eventClicked.emit(this.event.id)
   }
   eventNavigationEdit() {
     this.isSight

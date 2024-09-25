@@ -122,6 +122,10 @@ export class EventsComponent implements OnInit, OnDestroy {
   scrollUp() {
     document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' })
   }
+  
+  eventNavigation(event:any){
+    this.router.navigate(['/events',event])
+  }
 
   scrollUpCheckState() {
     const boundingClientRect = this.ContentCol?.nativeElement.getBoundingClientRect()
@@ -269,11 +273,11 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.eventsCity = []
     this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
-      if (value.url === '/event') {
-        // this.filterService.changeFilter.next(true)
-      }
-    })
+    // this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+    //   if (value.url === '/event') {
+    //     // this.filterService.changeFilter.next(true)
+    //   }
+    // })
 
     // window.addEventListener("scrollend", this.scrollEvent, true)
 

@@ -1,5 +1,4 @@
 <ion-content>
-  <ion-content>
     <app-second-header size="xxl" img="/assets/images/myEventsHeader.png">
       <ng-container header-bottom>
         Мои сообщества <app-rounded-button routerLink="/cabinet/sights/create" icon="assets/icons/create.svg" buttonText="Создать"></app-rounded-button>
@@ -8,5 +7,4 @@
     <div class="grid-container">
       <app-organizations-grid buttonType="edit" [notFound]="notFound"  (endScroll)="getMySights()" [spiner]="spiner" [cards]="sights"/>
     </div>
-  </ion-content>
 </ion-content>

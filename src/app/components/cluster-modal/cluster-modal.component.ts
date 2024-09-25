@@ -14,12 +14,16 @@ export class ClusterModalComponent implements OnInit {
   @Output() closeModalEmit: EventEmitter<any> = new EventEmitter()
   @Output() paginateEvents: EventEmitter<any> = new EventEmitter()
   @Output() paginateSight: EventEmitter<any> = new EventEmitter()
+  @Output() eventClicked: EventEmitter<any> = new EventEmitter()
   @Input() modalContent: any = []
   @Input() spiner!: boolean
   type: string = ''
 
   private readonly destroy$ = new Subject<void>()
   ngOnChanges(changes: SimpleChanges): void {}
+  eventNavigation(event: any){
+    this.eventClicked.emit(event)
+  }
   closeModal() {
     this.closeModalEmit.emit()
   }

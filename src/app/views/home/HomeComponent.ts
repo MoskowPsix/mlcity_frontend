@@ -606,6 +606,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
   }
 
+  eventNavigation(event: any) {
+    
+    this.closeModal()
+    setTimeout(()=>{
+      this.router.navigate(['/events',event])
+    },0)
+  
+  }
+
+
   getSights(more?: boolean): Observable<any> {
     return new Observable((observer) => {
       this.eventsLoading = true
@@ -763,7 +773,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     })
   }
-
   async getEventsAndSights() {
     this.modalButtonLoader = true
     this.eventsModalNextPage = true
@@ -993,6 +1002,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.modalEventRadiusShowOpen = value
       this.cdr.detectChanges()
     })
+    
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
 
@@ -1035,6 +1045,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getEventsAndSights()
   }
   ionViewDidLeave() {
+    this.navigationService.modalEventShowOpen.next(false)
     this.destroy$.next()
     this.destroy$.complete()
   }
