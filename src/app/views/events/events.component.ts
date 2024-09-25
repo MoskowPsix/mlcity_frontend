@@ -122,6 +122,10 @@ export class EventsComponent implements OnInit, OnDestroy {
   scrollUp() {
     document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' })
   }
+  
+  eventNavigation(event:any){
+    this.router.navigate(['/events',event])
+  }
 
   scrollUpCheckState() {
     const boundingClientRect = this.ContentCol?.nativeElement.getBoundingClientRect()
