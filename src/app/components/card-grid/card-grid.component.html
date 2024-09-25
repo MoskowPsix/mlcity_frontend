@@ -9,12 +9,12 @@
 
 <div *ngIf="notFound" class="error-box">
   <app-not-found-content></app-not-found-content>
-</div>   
+</div>
 <ng-container *ngIf="cards.length > 0 && notFound === false">
 
   <ng-container *ngIf="cards.length >= 0">
     <div class="main-grid">
-        <app-event-card *ngFor="let card of cards; let i = index" [event]="card" [myEvent]="myEvents" [isSight]="isSight"></app-event-card>
+        <app-event-card (eventClicked)="eventNavigation($event)" *ngFor="let card of cards; let i = index" [event]="card" [myEvent]="myEvents" [isSight]="isSight"></app-event-card>
     </div>
     <div class="spiner-container">
       <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>
