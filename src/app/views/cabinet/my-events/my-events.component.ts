@@ -31,7 +31,9 @@ export class MyEventsComponent implements OnInit, OnDestroy {
     this.loadMoreEvents = true
     this.getMyEvents()
   }
-
+  eventNavigation(event:any){
+    this.router.navigate(['/events',event])
+  }
   getMyEvents(event?: any) {
     if (this.nextPage) {
       this.notFound = false

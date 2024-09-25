@@ -31,6 +31,7 @@ export class OrganizationShowComponent implements OnInit {
   nextPage: boolean = true
   likeUrl: string = 'assets/icons/like.svg'
   loadingFavotire: boolean = false
+  openImagesModal: boolean = false
   place!: any
   nextPageExpired: boolean = true
   favorite: boolean = false
@@ -164,6 +165,12 @@ export class OrganizationShowComponent implements OnInit {
           }
         })
     }
+  }
+  closeImagesModal(){
+    this.openImagesModal = false
+  }
+  openImagesModalFunction(){
+    this.openImagesModal = true
   }
   getOrganization(id: string) {
     this.sightsService
