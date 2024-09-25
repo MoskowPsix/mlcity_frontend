@@ -8,7 +8,6 @@ export class TextFormatService {
   constructor() { }
 
   formatingText(text:string): string{
-   let newText =  text.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;')
-    return newText
+   return text.replace(/\n/g, '<br>');
   }
 }
