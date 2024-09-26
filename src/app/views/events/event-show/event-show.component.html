@@ -92,11 +92,11 @@
               <div class="community-wrapper__button-container">
               </div>
             </div>
-            <div class="main-content__recomend">
+            <div *ngIf="eventsCity" class="main-content__recomend">
               <strong class="title">Рекомендуем</strong>
               <div class="main-content-recomend-card-wrapper">
                 <ng-container *ngFor="let event of eventsCity">
-                  <app-event-card [event]="event"></app-event-card>
+                  <app-event-card (eventClicked)="eventNavigation($event)" [event]="event"></app-event-card>
                 </ng-container>
               </div>
               

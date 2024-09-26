@@ -56,11 +56,11 @@
           <div class="hidden-id">SID: {{ sight.id }}</div>
           <app-tabs>
               <app-tabs-item name="Текущие события">
-                <app-card-grid [notFound]="notFound" (endScroll)="getOrganizationEvents()" [spiner]="spiner" [cards]="events"></app-card-grid>
+                <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" (endScroll)="getOrganizationEvents()" [spiner]="spiner" [cards]="events"></app-card-grid>
               </app-tabs-item>
               <app-tabs-item name="Прошедшие">
                 <div class="not-found-container">
-                  <app-card-grid  [notFound]="notFoundExpired" (endScroll)="getOrganizationEventsExpired()" [spiner]="spinerExpired" [cards]="eventsExpired"></app-card-grid>
+                  <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFoundExpired" (endScroll)="getOrganizationEventsExpired()" [spiner]="spinerExpired" [cards]="eventsExpired"></app-card-grid>
                 </div>
               </app-tabs-item>
           </app-tabs>
