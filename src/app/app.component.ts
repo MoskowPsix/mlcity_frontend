@@ -33,9 +33,9 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
-    if (window.innerWidth < 900) {
+    if (window.innerWidth < 1200) {
       this.mobile = true
-    } else if (window.innerWidth > 900) {
+    } else if (window.innerWidth > 1200) {
       this.mobile = false
     } else {
       this.mobile = false
