@@ -393,4 +393,4 @@
    </ion-col>
 </ng-container>
 
-<app-images-modal [openModal]="openImagesModal" (closeModalEmit)="closeImagesModal()" *ngIf="event && !loadingEvent" [imagesPathArray]="event.files"></app-images-modal>
+<app-images-modal *ngIf="event && event.files.length" [openModal]="openImagesModal" (closeModalEmit)="closeImagesModal()" [imagesPathArray]="event.files"></app-images-modal>
