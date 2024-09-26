@@ -122,9 +122,9 @@ export class EventsComponent implements OnInit, OnDestroy {
   scrollUp() {
     document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' })
   }
-  
-  eventNavigation(event:any){
-    this.router.navigate(['/events',event])
+
+  eventNavigation(event: any) {
+    this.router.navigate(['/events', event])
   }
 
   scrollUpCheckState() {
@@ -272,7 +272,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.notFound = false
     this.eventsCity = []
     this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-    this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
+    // this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
     // this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
     //   if (value.url === '/event') {
     //     // this.filterService.changeFilter.next(true)

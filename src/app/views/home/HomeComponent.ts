@@ -10,7 +10,7 @@ import {
   EventEmitter,
 } from '@angular/core'
 import { AngularYandexMapsModule, YaReadyEvent } from 'angular8-yandex-maps'
-import { catchError, EMPTY, of, Subject, takeUntil, forkJoin, Observable } from 'rxjs'
+import { catchError, EMPTY, of, Subject, takeUntil, forkJoin, Observable, Subscribable, Subscription } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { EventsService } from 'src/app/services/events.service'
 import { ToastService } from 'src/app/services/toast.service'
@@ -26,7 +26,7 @@ import { PlaceService } from 'src/app/services/place.service'
 import { IPlace } from 'src/app/models/place'
 import { NavigationEnd, Router } from '@angular/router'
 import { Location } from '@angular/common'
-import { filter } from 'rxjs/operators'
+import { debounceTime, distinctUntilChanged, filter, throttleTime } from 'rxjs/operators'
 import { Options } from '@angular-slider/ngx-slider'
 import { Title } from '@angular/platform-browser'
 import { animate, style, transition, trigger } from '@angular/animations'
@@ -110,6 +110,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   eventsLoading: boolean = false
   sightsLoading: boolean = false
+  placeSubscribe!: Subscription
+  sightSubscribe!: Subscription
+
   stateType: string = 'events'
 
   sightTypeId: any
@@ -577,9 +580,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   getPlaces(): Observable<any> {
     return new Observable((observer) => {
       this.eventsLoading = true
-      this.placeService
+      if (this.placeSubscribe) {
+        this.placeSubscribe.unsubscribe()
+      }
+      this.placeSubscribe = this.placeService
         .getPlaces(this.queryBuilderService.queryBuilder('placesForMap'))
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntil(this.destroy$), debounceTime(500))
         .subscribe((response: any) => {
           this.places = response.places
           this.cdr.detectChanges()
@@ -592,7 +598,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   getSightsForMap(): Observable<any> {
     return new Observable((observer) => {
       this.sightsLoading = true
-      this.sightsService
+      if (this.sightSubscribe) {
+        this.sightSubscribe.unsubscribe()
+      }
+      this.sightSubscribe = this.sightsService
         .getSightsForMap(this.queryBuilderService.queryBuilder('sightsForMap'))
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
@@ -607,14 +616,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   eventNavigation(event: any) {
-    
     this.closeModal()
-    setTimeout(()=>{
-      this.router.navigate(['/events',event])
-    },0)
-  
+    setTimeout(() => {
+      this.router.navigate(['/events', event])
+    }, 0)
   }
-
 
   getSights(more?: boolean): Observable<any> {
     return new Observable((observer) => {
@@ -1002,10 +1008,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.modalEventRadiusShowOpen = value
       this.cdr.detectChanges()
     })
-    
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
-
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value === true) {
         this.eventsContentModal = []
