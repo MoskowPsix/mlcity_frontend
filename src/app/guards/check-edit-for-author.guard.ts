@@ -83,6 +83,7 @@ export class checkEditForAuthorGuard implements CanActivate {
     if (true) {
       return true
     } else {
+      //проверяем в подписке на получение ивента или сообщества
       return false
     }
   }
