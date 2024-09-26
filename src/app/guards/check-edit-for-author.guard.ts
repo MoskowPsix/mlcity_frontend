@@ -3,6 +3,7 @@ import { UserService } from '../services/user.service'
 import { EventsService } from '../services/events.service'
 import { SightsService } from '../services/sights.service'
 import { ActivatedRoute } from '@angular/router'
+import { ToastService } from '../services/toast.service'
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -19,22 +20,26 @@ import { Observable, Subject, takeUntil } from 'rxjs'
 export class checkEditForAuthorGuard implements CanActivate {
   private readonly destroy$ = new Subject<void>()
   constructor() {}
-  userService:UserService = inject(UserService)
-  eventsService:EventsService = inject(EventsService)
-  sightsService:SightsService = inject(SightsService)
-  router:Router = inject(Router)
-  activatedRoute:ActivatedRoute = inject(ActivatedRoute)
-  url!:string
+  userService: UserService = inject(UserService)
+  eventsService: EventsService = inject(EventsService)
+  sightsService: SightsService = inject(SightsService)
+  activatedRoute: ActivatedRoute = inject(ActivatedRoute)
+  toastService: ToastService = inject(ToastService)
+  router: Router = inject(Router)
+  url!: string
 
-  userId!:number
-  editObjectId!:number
-  getUserId(){
-    this.userService.getUser().pipe(takeUntil((this.destroy$))).subscribe((res:any)=>{
-      this.userId = res.id
-    })
+  userId!: number
+  editObjectUserId!: number
+  getUserId() {
+    this.userService
+      .getUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any) => {
+        this.userId = res.id
+      })
   }
-  checkRouter(){
-    this.url = this.router.url
+  checkRouter(route: any) {
+    this.url = route._routerState.url
     if (this.url.includes('/cabinet/sights/edit')) {
       this.url = '/cabinet/sights/edit'
     }
@@ -43,31 +48,42 @@ export class checkEditForAuthorGuard implements CanActivate {
     }
   }
 
-  getEditObjectId(){
-    console.log(this.router.url)
-      if(this.url && this.url == '/cabinet/sights/edit'){
-        let sightId = this.activatedRoute.snapshot.paramMap.get('id')!
-        this.sightsService.getSightById(Number(sightId)).pipe(takeUntil(this.destroy$)).subscribe((res:any)=>{
-          console.log(res)
+  getEditObjectId(route: any) {
+    if (this.url && this.url == '/cabinet/sights/edit') {
+      let sightId = route._routerState.url.split('/')[route._routerState.url.split('/').length - 1]
+      this.sightsService
+        .getSightById(Number(sightId))
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res: any) => {
+          this.editObjectUserId = res.sight.user_id
+          if (this.userId != this.editObjectUserId) {
+            this.router.navigate(['/home'])
+            this.toastService.showToast('Вы не можете редактировать данное сообщество', 'danger')
+          }
         })
-      }
+    } else if (this.url && this.url == '/cabinet/events/edit') {
+      let eventId = route._routerState.url.split('/')[route._routerState.url.split('/').length - 1]
+      this.eventsService
+        .getEventById(Number(eventId))
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res: any) => {
+          this.editObjectUserId = res.event.user_id
+          if (this.userId != this.editObjectUserId) {
+            this.toastService.showToast('Вы не можете редактировать данное событие', 'danger')
+            this.router.navigate(['/home'])
+          }
+        })
+    }
   }
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-      this.getUserId()
-      this.checkRouter()
-      this.getEditObjectId()
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    this.getUserId()
+    this.checkRouter(route)
+    this.getEditObjectId(route)
     if (true) {
       return true
     } else {
-
+      //проверяем в подписке на получение ивента или сообщества
       return false
     }
   }
