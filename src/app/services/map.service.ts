@@ -46,7 +46,7 @@ export class MapService {
     private navigationService: NavigationService,
     private locationService: LocationService,
     private toastService: ToastService,
-  ) { }
+  ) {}
 
   //Определение геопозиции с помощью яндекса (платно)
   geolocationMap(event: YaReadyEvent<ymaps.Map>): void {
@@ -61,11 +61,11 @@ export class MapService {
       })
   }
 
-  setRadius(radius:number){
+  setRadius(radius: number) {
     this.radius.next(radius)
-    localStorage.setItem('radius',String(radius))
+    localStorage.setItem('radius', String(radius))
   }
-  getRadiusFromLocalStorage(){
+  getRadiusFromLocalStorage() {
     return localStorage.getItem('radius')
   }
   //Определение геопозиции нативными способами платформы
@@ -321,7 +321,6 @@ export class MapService {
 
     this.filterService.changeFilter.next(true)
     // this.filterService.changeCityFilter.next(true)
-    console.log(this.filterService.changeCityFilter.value)
   }
 
   hideChangeCityDialog() {
@@ -389,7 +388,6 @@ export class MapService {
       map.target.setBounds(circlePoint.geometry?.getBounds()!, {
         checkZoomRange: false,
       })
-    
     }
     // await this.geolocationMapNative(map, circlePoint);
     //ветка если юзать this.filterService.saveFilters.value === 1
