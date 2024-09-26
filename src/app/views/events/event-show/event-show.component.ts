@@ -150,6 +150,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
         await this.getEventPlaces()
       })
   }
+  eventNavigation(event:any){
+    this.router.navigate(['/events',event])
+  }
 
   getEventPlaces() {
     if (this.loadMore) {

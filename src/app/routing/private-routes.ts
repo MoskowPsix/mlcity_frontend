@@ -18,6 +18,7 @@ import { EditSightComponent } from '../views/cabinet/edit/edit-sight/edit-sight.
 import { EditEventComponent } from '../views/cabinet/edit/edit-event/edit-event.component'
 import { EmailConfirmGuard } from '../guards/confirm-email.guard'
 import { OrganizationCreateComponent } from '../views/cabinet/organization/create/organization-create/organization-create.component'
+import { checkEditForAuthorGuard } from '../guards/check-edit-for-author.guard'
 
 export const privateRoutes: Routes = [
   {
@@ -107,12 +108,12 @@ export const privateRoutes: Routes = [
   {
     path: 'cabinet/sights/edit/:id',
     component: EditSightComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,checkEditForAuthorGuard],
   },
   {
     path: 'cabinet/events/edit/:id',
     component: EditEventComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,checkEditForAuthorGuard],
   },
   {
     path: 'cabinet/sights',

@@ -1,5 +1,6 @@
 <ion-modal mode="ios" (didDismiss)="closeModal()"  [isOpen]="openTypesModal">
         <ng-template>
+            <img (click)="closeModal()" class="header-modal_close" src="assets/icons/close.svg" alt="">
             <ion-content>
                 <div class="category-modal-grid">
                     <ng-container *ngIf="allTypes && allTypes.length > 0">

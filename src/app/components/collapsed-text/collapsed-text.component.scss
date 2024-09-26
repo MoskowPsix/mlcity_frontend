@@ -1,11 +1,13 @@
 .main-conteiner_collapsed {
-  font-family: var(--font-regular);
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-  font-size: 0.85rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    font-size: 0.75rem;
+    font-size: 0.85rem;
+    font-family: var(--font-light);
+    color: var(--gray);
+    line-height: 1.5;
 }
 
 .main-conteiner {
