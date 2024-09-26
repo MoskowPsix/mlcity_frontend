@@ -69,3 +69,12 @@ ion-modal{
       gap: 0.5rem;
       grid-template-columns: repeat(3, 6rem);
   }
+  .header-modal_close{
+    width: 1rem;
+    height: 1rem;
+    position: absolute;
+    right: 1rem;
+    margin-top: 0.5rem;
+    z-index: 100;
+    margin-left: auto;
+  }
