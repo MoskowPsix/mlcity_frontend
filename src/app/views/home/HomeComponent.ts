@@ -625,6 +625,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 0)
   }
 
+  organizationNavigation(event:any){
+    console.log(event)
+    this.closeModal()
+    setTimeout(() => {
+      this.router.navigate(['/organizations', event])
+    }, 0)
+  }
   getSights(more?: boolean): Observable<any> {
     return new Observable((observer) => {
       this.eventsLoading = true

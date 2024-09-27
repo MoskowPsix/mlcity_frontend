@@ -38,18 +38,23 @@
       </div>
     </div>
     <div  class="map-tools">
-        <app-calendar-button *ngIf="stateType === 'events'" (setDateEmit)="setDate($event)"></app-calendar-button>
+        <div *ngIf="stateType === 'events'" class="calendar-container">
+          <app-calendar-button  (setDateEmit)="setDate($event)"></app-calendar-button>
+        </div>
         <app-calendar-button style="opacity: 0; pointer-events: none;" *ngIf="stateType === 'sights'" ></app-calendar-button>
-        <app-range-selection-button/>
+        <div class="radius-container"><app-range-selection-button/></div>
+
     </div>
 
     <!-- Кнопка геопозиции -->
     <div class="geo-container">
-      <app-drop-down-button
-      [mapClick] = "mapClick"
-       [iconsPathArray]="['assets/icons/geo-button.svg','assets/icons/map-arrow.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']"
-      (emmitter)="dropButton($event)">
-      </app-drop-down-button>
+
+        <app-drop-down-button
+        [mapClick] = "mapClick"
+         [iconsPathArray]="['assets/icons/geo-button.svg','assets/icons/map-arrow.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']"
+        (emmitter)="dropButton($event)">
+        </app-drop-down-button>
+
     </div>
 
     <!-- Фильтр радиуса -->
@@ -57,7 +62,7 @@
       <!-- Просмотр в радиусе -->
   </div>
 
-  <app-cluster-modal (eventClicked)="eventNavigation($event)" [spiner]="modalSpiner" (paginateSight)="getSightsForIdsForModal()" (paginateEvents)="getEventsForIdsForModal()" [type]="" [modalContent]="modalContent" (closeModalEmit)="closeModal()" [openModal]="modalEventShowOpen"></app-cluster-modal>
+  <app-cluster-modal (organizationClicked)="organizationNavigation($event)" (eventClicked)="eventNavigation($event)" [spiner]="modalSpiner" (paginateSight)="getSightsForIdsForModal()" (paginateEvents)="getEventsForIdsForModal()" [type]="" [modalContent]="modalContent" (closeModalEmit)="closeModal()" [openModal]="modalEventShowOpen"></app-cluster-modal>
 </ion-content>
 
 <!-- Шкала радиуса -->
