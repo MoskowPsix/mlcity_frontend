@@ -12,7 +12,7 @@ import { PasswordReset } from '../models/password-reset'
 
 @Injectable()
 export class AuthService {
-  authenticationState = new BehaviorSubject(false)
+  authenticationState: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   //authenticationState: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
 
   constructor(

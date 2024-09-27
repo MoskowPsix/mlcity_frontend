@@ -33,6 +33,8 @@ import { animate, style, transition, trigger } from '@angular/animations'
 import { LoadingService } from 'src/app/services/loading.service'
 import { LocationService } from 'src/app/services/location.service'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
+import { AuthService } from 'src/app/services/auth.service'
+import { UserPointService } from 'src/app/services/user-point.service'
 
 @Component({
   selector: 'app-home',
@@ -166,6 +168,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private locationService: LocationService,
     private switchTypeService: SwitchTypeService,
+    private authService: AuthService,
   ) {
     this.titleService.setTitle('VOKRUG - Мероприятия и достопремечательности вокруг вас')
     let prevPath = this.location.path()
@@ -858,7 +861,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         break
       case 2:
         this.loadingService.showLoading()
-        if (this.filterService.locationId.value) {
+        if (this.filterService.locationId.value && !this.authService.authenticationState.value) {
           this.locationService
             .getLocationsIds(this.filterService.locationId.value)
             .pipe(
@@ -887,6 +890,10 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.cdr.detectChanges()
               }
             })
+        } else if (this.authService.authenticationState.value) {
+          this.mapService.goHomeCoords()
+          this.loadingService.hideLoading()
+          this.cdr.detectChanges()
         } else {
           this.loadingService.hideLoading()
           this.navigationService.modalSearchCityesOpen.next(true)
