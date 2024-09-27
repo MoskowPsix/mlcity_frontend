@@ -20,6 +20,7 @@ export class OrganizationsGridComponent implements OnInit {
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   myEvents: boolean = false
   @Input() notFound: any = false
+  @Output() organizationClicked:EventEmitter<any> = new EventEmitter()
 
   public checkedRout(): void {
     this.myEvents = this.router.url === '/cabinet/events' || this.router.url === '/cabinet/sights'
@@ -33,6 +34,9 @@ export class OrganizationsGridComponent implements OnInit {
       this.endScroll.emit()
       trueEvent.target.complete()
     }
+  }
+  organizationNavigation(event:any){
+    this.organizationClicked.emit(event)
   }
   scrollPaginate() {}
   ngOnInit() {

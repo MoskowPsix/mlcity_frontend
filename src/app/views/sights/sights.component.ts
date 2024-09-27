@@ -80,7 +80,9 @@ export class SightsComponent implements OnInit, OnDestroy {
         })
     })
   }
-
+  organizationNavigation(event:any){
+    this.router.navigate(['/organizations', event])
+  }
   scrollUp() {
     document.getElementById('topSi')?.scrollTo({ top: 0, behavior: 'smooth' })
   }

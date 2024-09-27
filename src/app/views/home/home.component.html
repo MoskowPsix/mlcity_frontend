@@ -57,7 +57,7 @@
       <!-- Просмотр в радиусе -->
   </div>
 
-  <app-cluster-modal (eventClicked)="eventNavigation($event)" [spiner]="modalSpiner" (paginateSight)="getSightsForIdsForModal()" (paginateEvents)="getEventsForIdsForModal()" [type]="" [modalContent]="modalContent" (closeModalEmit)="closeModal()" [openModal]="modalEventShowOpen"></app-cluster-modal>
+  <app-cluster-modal (organizationClicked)="organizationNavigation($event)" (eventClicked)="eventNavigation($event)" [spiner]="modalSpiner" (paginateSight)="getSightsForIdsForModal()" (paginateEvents)="getEventsForIdsForModal()" [type]="" [modalContent]="modalContent" (closeModalEmit)="closeModal()" [openModal]="modalEventShowOpen"></app-cluster-modal>
 </ion-content>
 
 <!-- Шкала радиуса -->

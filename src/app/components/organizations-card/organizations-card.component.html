@@ -1,4 +1,5 @@
-    <app-user-section  [extensialClick]="extensialClick"  (selectOrganization)="emitOrganization($event)" [organization] = "organizationObject">
-        <app-circle-button routerLink="/cabinet/sights/edit/{{card.id}}"   *ngIf="buttonType === 'edit'" border="dark-all"  icon="/assets/icons/menu-pen.svg"></app-circle-button>
+    
+    <app-user-section (selectOrganization)="organizationNavigation()"  [extensialClick]="extensialClick"  (selectOrganization)="emitOrganization($event)" [organization] = "organizationObject">
+
     </app-user-section>
 

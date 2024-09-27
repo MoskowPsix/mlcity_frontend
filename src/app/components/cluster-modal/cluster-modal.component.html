@@ -11,7 +11,7 @@
             <app-card-grid (eventClicked)="eventNavigation($event)" [spiner]="spiner"  (endScroll)="endScrollingEvent()" [cards]="modalContent"></app-card-grid>
         </ng-container>
         <ng-container *ngIf="type === 'sights'">
-          <app-organizations-grid (click)="testLog()" [spiner]="spiner" (endScroll)="endScrollingSight()" [cards]="modalContent"></app-organizations-grid>
+          <app-organizations-grid (organizationClicked)="organizationNavigation($event)"  [spiner]="spiner" (endScroll)="endScrollingSight()" [cards]="modalContent"></app-organizations-grid>
         </ng-container>
       </div>
     </div>
