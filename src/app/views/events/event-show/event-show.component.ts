@@ -46,7 +46,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   user?: any
   eventId?: number
   event?: any
-  openImagesModal:boolean = false
+  openImagesModal: boolean = false
   places: any[] = []
   loadingEvent: boolean = true
   loadPlace: boolean = false
@@ -58,16 +58,16 @@ export class EventShowComponent implements OnInit, OnDestroy {
   like: boolean = false
   loadingLike: boolean = false
   startLikesCount: number = 0
-  oldTypes:number[] = []
+  oldTypes: number[] = []
 
-  ageLimit:string = ''
+  ageLimit: string = ''
 
-  textFormat:TextFormatService = inject(TextFormatService)
+  textFormat: TextFormatService = inject(TextFormatService)
 
-  wait:boolean = true
+  wait: boolean = true
   nextPage: boolean = true
-  spiner:boolean =false
-  eventsCity:any = []
+  spiner: boolean = false
+  eventsCity: any = []
 
   locationId!: number
   map!: YaReadyEvent<ymaps.Map>
@@ -110,14 +110,14 @@ export class EventShowComponent implements OnInit, OnDestroy {
         if (event) {
           this.event = event.event
           this.checkPrice()
-          if(this.event.age_limit){
+          if (this.event.age_limit) {
             this.ageLimit = this.event.age_limit.split('+')[0]
           }
-        
+
           // this.places = event.places_full;
         }
         this.titleService.setTitle(event.name)
-        
+
         this.metaService.updateTag({
           name: 'description',
           content: event.description,
@@ -129,8 +129,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
           .subscribe((response: any) => {
             this.organization = response.organization
           })
-          this.getEventsCity()
+        this.getEventsCity()
       })
+  }
+
+  goToOrganization(event: any) {
+    this.router.navigate(['/organizations', this.organization.id])
   }
 
   setLocationForPlaces() {
@@ -150,8 +154,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
         await this.getEventPlaces()
       })
   }
-  eventNavigation(event:any){
-    this.router.navigate(['/events',event])
+  eventNavigation(event: any) {
+    this.router.navigate(['/events', event])
   }
 
   getEventPlaces() {
@@ -213,28 +217,25 @@ export class EventShowComponent implements OnInit, OnDestroy {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url)
   }
 
-
   getEventsCity() {
     if (this.wait && this.event) {
       this.wait = false
       if (this.nextPage) {
         this.spiner = true
-      
-        let newTypes:any = []
-        this.event.types.forEach((type:any) => {
+
+        let newTypes: any = []
+        this.event.types.forEach((type: any) => {
           newTypes.push(type.id)
-        });
-        
-        this.queryBuilderService.eventTypesRecomend =  newTypes.join(',')
+        })
+
+        this.queryBuilderService.eventTypesRecomend = newTypes.join(',')
         this.eventsService
           .getEvents(this.queryBuilderService.queryBuilder('eventsForRecomend'))
           .pipe(
             tap((response: any) => {
-      
-              response.events.data.forEach((element:IEvent) => {
+              response.events.data.forEach((element: IEvent) => {
                 element.id !== this.event.id ? this.eventsCity.push(element) : null
-                
-              });
+              })
               response.events.next_cursor
                 ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
                 : this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
@@ -248,7 +249,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
             }),
             catchError((err) => {
               this.toastService.showToast(MessagesErrors.default, 'danger')
-          
+
               return of(EMPTY)
             }),
             takeUntil(this.destroy$),
@@ -265,7 +266,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
     }
   }
 
-
   checkFavorite() {
     if (this.userAuth)
       this.eventsService
@@ -280,10 +280,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
           }
         })
   }
-  closeImagesModal(){
+  closeImagesModal() {
     this.openImagesModal = false
   }
-  openImagesModalFunction(){
+  openImagesModalFunction() {
     this.openImagesModal = true
   }
 
@@ -372,7 +372,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .toggleFavorite(event_id)
         .pipe(
           tap((res) => {
-           
             this.favorite = !this.favorite
 
             if (this.favorite === true) {
@@ -454,11 +453,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
       //   this.queryBuilderService.paginataionPublicEventPlacesCurrentPage.next('')
       // })
     }
-   
   }
-  ionViewDidLeave(){
-   
-  }
+  ionViewDidLeave() {}
   ngOnInit() {}
 
   ngOnDestroy() {
