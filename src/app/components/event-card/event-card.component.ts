@@ -358,10 +358,17 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   findPrice() {
-    if (!this.isSight && this.event.price) {
-      for (let i = 0; i < this.event.price.length; i++) {
-        this.prices.push(Number(this.event.price[i].cost_rub))
+    if (!this.isSight && this.event.price || !this.isSight && this.event.prices) {
+      if(this.event.price){
+        for (let i = 0; i < this.event.price.length; i++) {
+          this.prices.push(Number(this.event.price[i].cost_rub))
+        }
+      }else if(this.event.prices){
+        for (let i = 0; i < this.event.prices.length; i++) {
+          this.prices.push(Number(this.event.prices[i].cost_rub))
+        }
       }
+   
       if (this.prices.length > 0) {
         this.minPrice = Math.min(...this.prices)
         this.maxPrice = Math.max(...this.prices)
