@@ -39,7 +39,7 @@
     </div>
     <div  class="map-tools">
         <div *ngIf="stateType === 'events'" class="calendar-container">
-          <app-calendar-button  (setDateEmit)="setDate($event)"></app-calendar-button>
+          <app-calendar-button style="max-height: 2.5rem;" (setDateEmit)="setDate($event)"></app-calendar-button>
         </div>
         <app-calendar-button style="opacity: 0; pointer-events: none;" *ngIf="stateType === 'sights'" ></app-calendar-button>
         <div class="radius-container"><app-range-selection-button/></div>
