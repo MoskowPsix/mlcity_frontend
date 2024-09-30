@@ -51,7 +51,7 @@
             <ion-row class="ion-justify-content-center">
               <ion-col size-xl="4" size-lg="6" size-md="6" size-xs="12">
                 <div >
-                  <app-event-card *ngFor="let event of events; let i = index" [event]="event" [isSight]="false" [comments]="false"></app-event-card>
+                  <app-event-card  (eventClicked)="eventNavigation($event)" *ngFor="let event of events; let i = index" [event]="event" [isSight]="false" [comments]="false"></app-event-card>
                   <ng-container *ngIf="!events.length && loadingEvents">
                     <app-no-data/>
                   </ng-container>
@@ -104,7 +104,8 @@
               <ion-row class="ion-justify-content-center">
                 <ion-col size-xl="4" size-lg="6" size-md="6" size-xs="12">
                   <div>
-                    <app-event-card *ngFor="let sight of sights; let i = index" [event]="sight" [isSight]="true" [comments]="false"></app-event-card>
+                    <app-organizations-grid buttonType="" [spiner]="spiner" [notFound]="notFound" [cards]="sights"/>
+                    <!-- <app-event-card  *ngFor="let sight of sights; let i = index" [event]="sight" [isSight]="true" [comments]="false"></app-event-card> -->
                     <ng-container *ngIf="!sights.length && loadingSights">
                       <app-no-data/>
                     </ng-container>

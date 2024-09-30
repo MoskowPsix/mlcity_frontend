@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
 import {
   EMPTY,
   Subject,
@@ -35,6 +36,11 @@ export class FavoritesComponent implements OnInit {
   currentPageEvents: number = 1
   currentPageSights: number = 1
 
+  spiner: boolean = false
+
+  router: Router = inject(Router)
+  notFound:boolean = false
+
   segment: string = 'events'
 
   loadingEvents: boolean = false
@@ -50,6 +56,9 @@ export class FavoritesComponent implements OnInit {
     private queryBuilderService: QueryBuilderService,
   ) {}
 
+  organizationNavigation(event: any) {
+    this.router.navigate(['/organizations', event])
+  }
   getEvents() {
     this.loadingMoreEvents
       ? (this.loadingEvents = true)
@@ -78,6 +87,12 @@ export class FavoritesComponent implements OnInit {
       })
   }
 
+  eventNavigation(event:any){
+    console.log(event)
+    setTimeout(() => {
+      this.router.navigate(['/events', event])
+    }, 0)
+  }
   getSights() {
     this.loadingMoreSights
       ? (this.loadingSights = true)
