@@ -58,7 +58,6 @@ export class MapService {
     this.authService.authenticationState.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this.setHomeCoords()
-        console.log('auth sub')
       }
       //   if (value) {
       //     var coords: any = null
@@ -260,7 +259,7 @@ export class MapService {
   async setCenterMap(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
     let coords
     try {
-      if (this.filterService.getLocationFromlocalStorage()) {
+      if (this.filterService.getLocationFromlocalStorage() && !this.authService.authenticationState.value) {
         this.locationService
           .getLocationsIds(Number(this.filterService.getLocationFromlocalStorage()))
           .pipe(
@@ -276,6 +275,11 @@ export class MapService {
             this.circleCenterLongitude.next(coords[1])
             this.setPlacemark(map, CirclePoint, coords!, true)
           })
+      } else if (this.authService.authenticationState.value) {
+        coords = [Number(this.userPointService.homeLatitude.value), Number(this.userPointService.homeLongitude.value)]
+        this.circleCenterLatitude.next(Number(coords[0]))
+        this.circleCenterLongitude.next(Number(coords[1]))
+        this.setPlacemark(map, CirclePoint, coords!, true)
       } else {
         coords = await this.getCurrentLocation()
         this.circleCenterLatitude.next(coords[0])
@@ -476,11 +480,7 @@ export class MapService {
     //if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter.value) {
     //Если первый запуск приложения то устанавливаем геопозицию
     if (this.navigationService.appFirstLoading.value) {
-      if (this.authService.authenticationState.value) {
-        this.setHomeCoords()
-      } else {
-        await this.geolocationMapNative(map, circlePoint)
-      }
+      await this.geolocationMapNative(map, circlePoint)
     }
     // Было ещё в условии: this.filterService.changeCityFilter.value &&
     // Если не первый запуск и менялся фильтр города то перекидываем на город

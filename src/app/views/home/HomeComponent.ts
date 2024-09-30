@@ -10,7 +10,18 @@ import {
   EventEmitter,
 } from '@angular/core'
 import { AngularYandexMapsModule, YaReadyEvent } from 'angular8-yandex-maps'
-import { catchError, EMPTY, of, Subject, takeUntil, forkJoin, Observable, Subscribable, Subscription } from 'rxjs'
+import {
+  catchError,
+  EMPTY,
+  of,
+  Subject,
+  takeUntil,
+  forkJoin,
+  Observable,
+  Subscribable,
+  Subscription,
+  interval,
+} from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { EventsService } from 'src/app/services/events.service'
 import { ToastService } from 'src/app/services/toast.service'
@@ -26,7 +37,7 @@ import { PlaceService } from 'src/app/services/place.service'
 import { IPlace } from 'src/app/models/place'
 import { NavigationEnd, Router } from '@angular/router'
 import { Location } from '@angular/common'
-import { debounceTime, distinctUntilChanged, filter, throttleTime } from 'rxjs/operators'
+import { debounceTime, distinctUntilChanged, filter, take, tap, throttleTime } from 'rxjs/operators'
 import { Options } from '@angular-slider/ngx-slider'
 import { Title } from '@angular/platform-browser'
 import { animate, style, transition, trigger } from '@angular/animations'
@@ -35,6 +46,7 @@ import { LocationService } from 'src/app/services/location.service'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
 import { AuthService } from 'src/app/services/auth.service'
 import { UserPointService } from 'src/app/services/user-point.service'
+import { throttle } from 'lodash'
 
 @Component({
   selector: 'app-home',
@@ -114,6 +126,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightsLoading: boolean = false
   placeSubscribe!: Subscription
   sightSubscribe!: Subscription
+  filterChangeSubscribe!: Subscription
 
   stateType: string = 'events'
 
@@ -588,8 +601,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
       this.placeSubscribe = this.placeService
         .getPlaces(this.queryBuilderService.queryBuilder('placesForMap'))
-        .pipe(takeUntil(this.destroy$), debounceTime(500))
+        .pipe(takeUntil(this.destroy$), throttleTime(300))
         .subscribe((response: any) => {
+          console.trace('Стек вызовов:')
           this.places = response.places
           this.cdr.detectChanges()
           observer.next(EMPTY)
@@ -625,7 +639,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 0)
   }
 
-  organizationNavigation(event:any){
+  organizationNavigation(event: any) {
     console.log(event)
     this.closeModal()
     setTimeout(() => {
@@ -1024,7 +1038,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
-    this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    this.filterService.changeFilter.pipe(takeUntil(this.destroy$), throttleTime(300)).subscribe((value) => {
       if (value === true) {
         this.eventsContentModal = []
         this.sightsContentModal = []
