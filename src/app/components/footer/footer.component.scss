@@ -44,6 +44,7 @@ $font-color: #4c5861;
 @media screen and (min-width: 0px) and (max-width: 1060px) {
   .footer-mobile {
     display: flex;
+    gap: 1rem;
   } /* show it on small screens */
 }
 
