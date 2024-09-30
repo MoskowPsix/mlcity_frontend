@@ -124,14 +124,14 @@ export class FavoritesComponent implements OnInit {
   eventsLoadingMore() {
     this.loadingMoreEvents = true
     this.currentPageEvents++
-    // this.queryBuilderService.paginationPublicEventsFavoritesCurrentPage.next(this.currentPageEvents)
+    this.queryBuilderService.paginationPublicEventsFavoritesCurrentPage.next(String(this.currentPageEvents))
     this.getEvents()
   }
 
   sightsLoadingMore() {
     this.loadingMoreSights = true
     this.currentPageSights++
-    // this.queryBuilderService.paginationPublicSightsFavoritesCurrentPage.next(this.currentPageSights)
+    this.queryBuilderService.paginationPublicSightsFavoritesCurrentPage.next(String(this.currentPageSights))
     this.getSights()
   }
 
@@ -139,9 +139,20 @@ export class FavoritesComponent implements OnInit {
     this.segment = event.detail.value
   }
 
-  ngOnInit() {
+  ionViewWillEnter(){
     this.getEvents()
     this.getSights()
+  }
+  ionViewDidLeave() {
+    this.destroy$.next()
+    this.destroy$.complete()
+    this.queryBuilderService.paginationPublicSightsFavoritesCurrentPage.next('')
+    this.queryBuilderService.paginationPublicEventsFavoritesCurrentPage.next('')
+    this.events = []
+    this.sights = []
+  }
+  ngOnInit() {
+   
   }
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnDestroy() {
