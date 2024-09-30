@@ -48,8 +48,10 @@
 
     <!-- Кнопка геопозиции -->
     <div class="geo-container">
-
-        <app-drop-down-button
+        <div class="geo-container-inside">
+          
+        </div>
+        <app-drop-down-button style="position: absolute; margin-left: 0.313rem;"
         [mapClick] = "mapClick"
          [iconsPathArray]="['assets/icons/geo-button.svg','assets/icons/map-arrow.svg','assets/icons/home-button.svg','assets/icons/search-button.svg']"
         (emmitter)="dropButton($event)">

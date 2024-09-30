@@ -169,18 +169,25 @@
   transition: 1s all;
   cursor: pointer;
 }
-
+.geo-container-inside{
+  height: 100%;
+  background: #4C5861;
+  height: 3.5rem + 0.626rem;
+  margin-top: -0.313rem;
+  border-radius: 50% 0px 0px 50%;
+  width: 3.5rem + 0.626rem;
+  position: absolute;
+  padding-top: 5px;
+}
 .geo-container {
   position: fixed;
   top: 75%;
   right: 0;
-  padding-right: 1rem;
   padding-left: 5px;
   border-radius: 20px 0px 0px 20px;
   padding-top: 5px;
   padding-bottom: 5px;
-  background: #4C5861;
-  margin-right: 4.5rem;
+  margin-right: 3.5rem + 0.626rem;
   z-index: 4;
 }
 
