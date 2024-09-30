@@ -275,7 +275,11 @@ export class MapService {
             this.circleCenterLongitude.next(coords[1])
             this.setPlacemark(map, CirclePoint, coords!, true)
           })
-      } else if (this.authService.authenticationState.value) {
+      } else if (
+        this.authService.authenticationState.value &&
+        this.userPointService.homeLatitude.value &&
+        this.userPointService.homeLongitude.value
+      ) {
         coords = [Number(this.userPointService.homeLatitude.value), Number(this.userPointService.homeLongitude.value)]
         this.circleCenterLatitude.next(Number(coords[0]))
         this.circleCenterLongitude.next(Number(coords[1]))
