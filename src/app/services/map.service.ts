@@ -57,49 +57,51 @@ export class MapService {
   ) {
     this.authService.authenticationState.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
-        var coords: any = null
-        if (this.getPointsSubs) {
-          this.getPointsSubs.unsubscribe()
-        }
-        this.getPointsSubs = this.userPointService
-          .getPoints()
-          .pipe(
-            takeUntil(this.destroy$),
-            catchError(() => of(EMPTY)),
-          )
-          .subscribe((response: any) => {
-            console.log(response)
-            if (response.points.data.length) {
-              coords = {
-                latitude: response.points.data[0].latitude,
-                longitude: response.points.data[0].longitude,
-              }
-              this.userPointService.homeLatitude.next(coords.latitude)
-              this.userPointService.homeLongitude.next(coords.longitude)
-              this.goHomeCoords()
-            } else {
-              const coords = this.getLastMapCoordsFromLocalStorage()
-              let data: FormData = serialize({
-                latitude: coords[0],
-                longitude: coords[1],
-              })
-              this.userPointService
-                .createUserPoint(data)
-                .pipe(
-                  takeUntil(this.destroy$),
-                  catchError(() => {
-                    return of(EMPTY)
-                  }),
-                )
-                .subscribe((response: any) => {
-                  console.log('save coords')
-                  this.userPointService.homeLatitude.next(String(coords[0]))
-                  this.userPointService.homeLongitude.next(String(coords[1]))
-                })
-              // this.createPointSub = this.userPointService.createHomeCoords(Number(coords[0]), Number(coords[1]))
-            }
-          })
+        this.setHomeCoords()
+        console.log('auth sub')
       }
+      //   if (value) {
+      //     var coords: any = null
+      //     if (this.getPointsSubs) {
+      //       this.getPointsSubs.unsubscribe()
+      //     }
+      //     this.getPointsSubs = this.userPointService
+      //       .getPoints()
+      //       .pipe(
+      //         takeUntil(this.destroy$),
+      //         catchError(() => of(EMPTY)),
+      //       )
+      //       .subscribe((response: any) => {
+      //         if (response.points.data.length) {
+      //           coords = {
+      //             latitude: response.points.data[0].latitude,
+      //             longitude: response.points.data[0].longitude,
+      //           }
+      //           this.userPointService.homeLatitude.next(coords.latitude)
+      //           this.userPointService.homeLongitude.next(coords.longitude)
+      //           this.goHomeCoords()
+      //         } else {
+      //           const coords = this.getLastMapCoordsFromLocalStorage()
+      //           let data: FormData = serialize({
+      //             latitude: coords[0],
+      //             longitude: coords[1],
+      //           })
+      //           this.userPointService
+      //             .createUserPoint(data)
+      //             .pipe(
+      //               takeUntil(this.destroy$),
+      //               catchError(() => {
+      //                 return of(EMPTY)
+      //               }),
+      //             )
+      //             .subscribe((response: any) => {
+      //               this.userPointService.homeLatitude.next(String(coords[0]))
+      //               this.userPointService.homeLongitude.next(String(coords[1]))
+      //             })
+      //           // this.createPointSub = this.userPointService.createHomeCoords(Number(coords[0]), Number(coords[1]))
+      //         }
+      //       })
+      //   }
     })
   }
 
@@ -114,7 +116,6 @@ export class MapService {
     this.circleCenterLongitude.next(Number(this.userPointService.homeLongitude.value))
     this.filterService.changeCityFilter.next(true)
     this.filterService.changeFilter.next(true)
-    console.log('По идее авторизовались и переместились')
   }
 
   // Проверка домашних координат и их установка если пользователь авторизован
@@ -130,8 +131,7 @@ export class MapService {
         catchError(() => of(EMPTY)),
       )
       .subscribe((response: any) => {
-        console.log(response)
-        if (response.points.data.length) {
+        if (response?.points?.data.length) {
           coords = {
             latitude: response.points.data[0].latitude,
             longitude: response.points.data[0].longitude,
@@ -143,10 +143,8 @@ export class MapService {
           this.setLastMapCoordsToLocalStorage(coords.latitude, coords.longitude)
           this.circleCenterLatitude.next(coords.latitude)
           this.circleCenterLongitude.next(coords.longitude)
-          console.log(coords)
           this.filterService.changeCityFilter.next(true)
           this.filterService.changeFilter.next(true)
-          console.log('По идее авторизовались и переместились')
         } else {
           const coords = this.getLastMapCoordsFromLocalStorage()
           let data: FormData = serialize({
@@ -162,7 +160,6 @@ export class MapService {
               }),
             )
             .subscribe((response: any) => {
-              console.log('save coords')
               this.userPointService.homeLatitude.next(String(coords[0]))
               this.userPointService.homeLongitude.next(String(coords[1]))
             })
@@ -212,7 +209,6 @@ export class MapService {
       await this.setCenterMap(map, CirclePoint)
     } else {
       //Запускаем поиск геопозиции в мобилах
-      //console.log('ипользуется мобильная версия')
       const status = await this.requestLocationPermission()
       try {
         if (status == 'granted') {
@@ -220,7 +216,6 @@ export class MapService {
         } else {
           //Если запрещен доступ GPS
           let coords = await this.defaultCoords()
-          // console.log("2, " + coords)
           // await this.setCenterMap(map, CirclePoint);
           await this.setPlacemark(map, CirclePoint, coords!, false)
         }
@@ -234,10 +229,8 @@ export class MapService {
   async enableLocation() {
     try {
       const canRequest: boolean = await this.locationAccuracy.canRequest()
-      //console.log('canrequest: ', canRequest);
       if (canRequest) {
         await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
-        //console.log('Request successful');
         return true
       } else {
         return false
@@ -307,7 +300,6 @@ export class MapService {
   }
 
   setPlacemark(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle, coords?: any, gps?: boolean) {
-    // console.log(CirclePoint);
     // await setTimeout(() => {
     //   this.placemark = new ymaps.Placemark(coords, {}, { visible: false });
     // }, 100);
@@ -373,7 +365,6 @@ export class MapService {
   //Нативный поиск координат
   ForwardGeocoderNative(address: string) {
     this.nativegeocoder.forwardGeocode(address, this.options).then((result: NativeGeocoderResult[]) => {
-      //console.log('координаты ' + result[0].latitude + ' ' + result[0].longitude)
       return [Number(result[0].latitude), Number(result[0].longitude)]
     })
     // .catch((error: any) => console.log(error));
