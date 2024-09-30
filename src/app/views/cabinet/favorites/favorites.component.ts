@@ -150,6 +150,10 @@ export class FavoritesComponent implements OnInit {
     this.queryBuilderService.paginationPublicEventsFavoritesCurrentPage.next('')
     this.events = []
     this.sights = []
+    this.loadingMoreEvents = false
+    this.loadingMoreSights = false
+    this.currentPageEvents = 1
+    this.currentPageSights = 1
   }
   ngOnInit() {
    
