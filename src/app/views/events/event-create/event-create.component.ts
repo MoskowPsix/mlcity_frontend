@@ -232,6 +232,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     console.log(event)
     console.log(this.organizations)
     this.selectedName = event.name
+    console.log(this.selectedName)
     this.selectedOrganizationMore = event
     this.selectedOrganization = event.organization
     let id = this.selectedOrganization.id
