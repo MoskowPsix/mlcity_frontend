@@ -131,7 +131,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   placeArrayForm: any[] = []
   seancesArrayForm: any[] = []
   locations: any[] = []
-  selectedOrganizationMore:any
+  selectedOrganizationMore: any
   cityesListLoading = false
   minLengthCityesListError = false
   cityesList: any[] = []
@@ -140,8 +140,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   dectedDataIvalid: boolean = false
   priceArrayForm: any[] = []
   cancelConfirmValue: boolean = false
-  textFormat:TextFormatService = inject(TextFormatService)
+  textFormat: TextFormatService = inject(TextFormatService)
   entranceFree: boolean = true
+  selectedName: string = 'Выберите сообщество'
   maxStepsCount: number = 4
   isNextButtonClicked: boolean = false
   placeValid: boolean = false
@@ -185,7 +186,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (this.stepCurrency <= this.maxStepsCount && !this.stepInvalidate()) {
       this.stepCurrency++
     }
-    if(this.stepCurrency == 3 && this.createEventForm.value.places.length == 0){
+    if (this.stepCurrency == 3 && this.createEventForm.value.places.length == 0) {
       this.addPlace()
     }
   }
@@ -221,7 +222,16 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (this.allFiles.length == 0) {
     }
   }
-  selectOrganization(event: any) {
+  selectOrganization(organztionId: any) {
+    let event: any = ''
+    this.organizations.forEach((item: any) => {
+      if (item.id == organztionId) {
+        event = item
+      }
+    })
+    console.log(event)
+    console.log(this.organizations)
+    this.selectedName = event.name
     this.selectedOrganizationMore = event
     this.selectedOrganization = event.organization
     let id = this.selectedOrganization.id
@@ -742,7 +752,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  formatingText(){
+  formatingText() {
     //Форматируем текст пользователя
     let newDescription = this.textFormat.formatingText(this.createEventForm.value.description)
     this.createEventForm.value.description = newDescription
@@ -808,8 +818,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   addPlace() {
     console.log(this.selectedOrganizationMore)
-    let tempPlace:any
-    if(!this.selectedOrganizationMore || !this.selectedOrganizationMore.address){
+    let tempPlace: any
+    if (!this.selectedOrganizationMore || !this.selectedOrganizationMore.address) {
       tempPlace = {
         temp_id: this.createEventForm.value.places.length,
         latitude: '',
@@ -817,7 +827,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         address: '',
         seances: [],
       }
-    }else{
+    } else {
       tempPlace = {
         temp_id: this.createEventForm.value.places.length,
         latitude: this.selectedOrganizationMore.latitude,
@@ -826,7 +836,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         seances: [],
       }
     }
-   
+
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       let locId = value
       if (value) {
@@ -869,7 +879,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   addSeances(event: number) {
-    let tomorrow = moment().add(1,'days')
+    let tomorrow = moment().add(1, 'days')
     // this.placeArrayForm[num].seances.push({})
     // this.createEventForm.controls['places'].value[num].controls.seances.value.push(
     //   new FormGroup({
@@ -939,8 +949,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.sightsList = []
   }
 
-   //Отмена создания
-   openModalCancel() {
+  //Отмена создания
+  openModalCancel() {
     this.cancelConfirmValue = true
   }
   cancelEdit() {
@@ -952,7 +962,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.router.navigate(['cabinet/events'])
     }, 0) //убираем асинхронность
   }
-
 
   //ищем минимальный и максимальный плейс
 

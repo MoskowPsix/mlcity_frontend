@@ -10,13 +10,13 @@ export class OrganizationsSelectContainerComponent implements OnInit {
   constructor() {}
   openModal: boolean = true
   @Input() cards!: IOrganization[]
-  selected: any = 'Выберите сообщество'
+  @Input() selectedName: any = 'Выберите сообщество'
   @Input() closeModalValue!: boolean
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   emitOrganization(organization: any) {
     console.log(organization)
     this.selectOrganization.emit(organization)
-    this.selected = organization.name
+    this.selectedName = organization.name
   }
   ngOnChanges(changes: SimpleChanges): void {
     this.closeModal()
