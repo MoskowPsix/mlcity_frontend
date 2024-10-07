@@ -603,7 +603,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         .getPlaces(this.queryBuilderService.queryBuilder('placesForMap'))
         .pipe(takeUntil(this.destroy$), throttleTime(300))
         .subscribe((response: any) => {
-          console.trace('Стек вызовов:')
           this.places = response.places
           this.cdr.detectChanges()
           observer.next(EMPTY)
@@ -1003,7 +1002,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.zoom = 13
     }
   }
-  ionViewWillEnter(): void {
+
+  ngOnInit(): void {
+    console.log('home alive')
     this.renderSwitcher = !this.renderSwitcher
     //Подписываемся на изменение радиуса
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -1070,7 +1071,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
     // window.addEventListener('scroll', this.nextPageModal, true)
   }
-  ngOnInit(): void {}
 
   closeModal() {
     this.modalEventShowOpen = false
@@ -1083,7 +1083,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
-
+    console.log('dead')
     this.destroy$.next()
     this.destroy$.complete()
   }

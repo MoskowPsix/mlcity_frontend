@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core'
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router'
+import { PreloadAllModules, RouteReuseStrategy, RouterModule, Routes } from '@angular/router'
 import { authRoutes } from './auth-routes'
 import { errorsRoutes } from './errors-routes copy'
 import { privateRoutes } from './private-routes'
 import { publicRoutes } from './public-routes'
+import { IonicRouteStrategy } from '@ionic/angular'
 
 const routes: Routes = [
   ...publicRoutes,
@@ -13,9 +14,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
-  ],
+  imports: [RouterModule.forRoot(routes, { preloadingStrategy: RouteReuseStrategy })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

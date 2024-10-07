@@ -302,6 +302,7 @@ registerLocaleData(localeRu, 'ru')
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
+  
     AuthService,
     LoadingService,
     TokenService,

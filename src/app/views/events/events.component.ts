@@ -30,6 +30,7 @@ import { Capacitor } from '@capacitor/core'
 import { Router } from '@angular/router'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
 import { CalendarComponent } from 'src/app/components/calendar/calendar.component'
+import { IonContent } from '@ionic/angular'
 register()
 
 @Component({
@@ -71,7 +72,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   currentPageEventsGeolocation: number = 1
 
   nextPage: boolean = true
-
+  @ViewChild(IonContent) ionContent!: IonContent
   timeStart: number = 0
   timeEnd: number = 0
   viewId: number[] = []
@@ -263,14 +264,35 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {}
-  ngOnInit() {}
+  ngOnInit() {
+    this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
+      console.trace()
+      if (value === true) {
+        this.wait = true
+        this.nextPage = true
+        this.notFound = false
+        this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
+        this.eventsCity = []
+        this.eventsGeolocation = []
+        console.log(this.eventsCity)
+        this.getEventsCity()
+        // this.getEventsGeolocation()
+      }
+      this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+    })
+  }
+
   ionViewWillEnter() {
     this.switchTypeService.currentType.value == 'sights' ? this.router.navigate(['/sights']) : null
 
-    this.wait = true
-    this.nextPage = true
-    this.notFound = false
-    this.eventsCity = []
+    this.ionContent.scrollToPoint(0, this.eventsService.eventsLastScrollPositionForTape, 0)
+    this.ionContent.ionScroll.pipe(takeUntil(this.destroy$)).subscribe((event: any) => {
+      this.eventsService.eventsLastScrollPositionForTape = event.detail.scrollTop
+    })
+    // this.wait = true
+    // this.nextPage = true
+    // this.notFound = false
+    // this.eventsCity = []
     this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
     // this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
     // this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
@@ -286,25 +308,11 @@ export class EventsComponent implements OnInit, OnDestroy {
       dateEnd: this.filterService.endDate.value,
     }
     //console.log(this.date)
-    this.eventsCity = []
-    this.eventsGeolocation = []
+    // this.eventsGeolocation = []
     // this.getEventsCity()
     // this.getEventsGeolocation()
 
     //Подписываемся на изменение фильтра
-    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
-      if (value === true) {
-        this.wait = true
-        this.nextPage = true
-        this.notFound = false
-        this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-        this.eventsCity = []
-        this.eventsGeolocation = []
-        this.getEventsCity()
-        // this.getEventsGeolocation()
-      }
-      this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
-    })
 
     //Подписываемся на город
     // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -318,6 +326,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
   ionViewDidLeave() {
     this.destroy$.next()
+    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
     this.destroy$.complete()
   }
   setDate(event: any) {
@@ -330,8 +339,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     // отписываемся от всех подписок
-    this.destroy$.next()
-    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-    this.destroy$.complete()
+   
   }
 }
