@@ -13,6 +13,7 @@ import { Location } from '@angular/common'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
 import { OrganizationService } from 'src/app/services/organization.service'
+import { MapService } from 'src/app/services/map.service'
 
 @Component({
   selector: 'app-sights',
@@ -65,6 +66,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     private router: Router,
     private titleService: Title,
     private metaService: Meta,
+    private mapService: MapService,
   ) {
     this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.locationService
@@ -80,7 +82,7 @@ export class SightsComponent implements OnInit, OnDestroy {
         })
     })
   }
-  organizationNavigation(event:any){
+  organizationNavigation(event: any) {
     this.router.navigate(['/organizations', event])
   }
   scrollUp() {
@@ -137,30 +139,6 @@ export class SightsComponent implements OnInit, OnDestroy {
       this.spiner = false
     }
   }
-
-  // getSightsGeolocation(){
-  //   this.loadingMoreSightsGeolocation ? this.loadingSightsGeolocation = true : this.loadingSightsGeolocation = false
-
-  //   this.sightsService.getSights(this.queryBuilderService.queryBuilder('sightsPublicForGeolocationTab')).pipe(
-  //     delay(100),
-  //     retry(3),
-  //     map((respons:any) => {
-  //       this.sightsGeolocation.push(...respons.sights.data)
-  //       this.totalPagesSightsGeolocation = respons.sights.last_page
-  //       //this.queryBuilderService.paginationPublicEventsCityTotalPages.next(respons.events.last_page)
-  //     }),
-  //     tap(() => {
-  //       this.loadingSightsGeolocation = true
-  //       this.loadingMoreSightsGeolocation = false
-  //     }),
-  //     catchError((err) =>{
-  //       this.toastService.showToast(MessagesErrors.default, 'danger')
-  //       this.loadingSightsGeolocation = false
-  //       return of(EMPTY)
-  //     }),
-  //     takeUntil(this.destroy$)
-  //   ).subscribe()
-  // }
 
   sightsCityLoadingMore() {}
 
@@ -261,6 +239,18 @@ export class SightsComponent implements OnInit, OnDestroy {
       this.sightsCityLoadingMore()
     }
   }
+  changeCity() {
+    const coords = this.mapService.getLastMapCoordsFromLocalStorage()
+    this.locationService
+      .getLocationByCoords(coords)
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError(() => of(EMPTY)),
+      )
+      .subscribe((response: any) => {
+        response?.location?.name ? (this.city = response.location.name) : null
+      })
+  }
 
   ionViewWillEnter() {
     window.addEventListener('scroll', this.scrollPaginate, true)
@@ -278,6 +268,7 @@ export class SightsComponent implements OnInit, OnDestroy {
         this.nextPage = true
         this.notFound = false
         this.getSightsCity()
+        this.changeCity()
       }
       this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
     })
