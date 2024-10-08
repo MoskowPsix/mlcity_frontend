@@ -25,6 +25,8 @@ import { ISight } from 'src/app/models/sight'
 import { IOrganization } from 'src/app/models/organization'
 import { IEvent } from 'src/app/models/event'
 import { TextFormatService } from 'src/app/services/text-format.service'
+import { Share } from '@capacitor/share'
+import { ShareService } from 'src/app/services/share.service'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -96,6 +98,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private locationService: LocationService,
     private mapService: MapService,
+    private shareService: ShareService,
   ) {}
 
   getEvent() {
@@ -133,6 +136,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
       })
   }
 
+  async shareContent() {
+    console.log(this.router.url)
+    this.shareService.shareNowUrl()
+  }
   goToOrganization(event: any) {
     this.router.navigate(['/organizations', this.organization.id])
   }

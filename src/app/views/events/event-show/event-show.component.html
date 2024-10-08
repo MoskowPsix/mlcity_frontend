@@ -48,7 +48,7 @@
 
         <div class="social-button-container">
           <app-circle-button (click)="toggleFavorite(event.id)" [loading]="loadingFavotire" [icon]="likeUrl"></app-circle-button>
-          <app-circle-button icon="assets/icons/share.svg"></app-circle-button>
+          <app-circle-button (click)="shareContent()" icon="assets/icons/share.svg"></app-circle-button>
         </div>
 
         <div class="price-container">
