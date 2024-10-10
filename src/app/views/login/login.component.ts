@@ -221,7 +221,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginForm.enable()
 
     if (!this.modalPass) {
-      this.router.navigate(['home'])
+      this.router.navigate(['events'])
     }
   }
 
