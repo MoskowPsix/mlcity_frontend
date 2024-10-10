@@ -1,0 +1,49 @@
+
+<ion-content [fullscreen]="true">
+
+  <div class="header-wrapper">
+    <app-second-header size="">
+      <div class="header-tools">
+        <app-back-button></app-back-button>
+        <input id="search-map-" class="header-tools__search-input" placeholder="Поиск">
+        <img class="header-tools__search-icon" src="/assets/icons/search.svg" alt="">
+      </div>
+         <!-- Карта -->
+    </app-second-header>
+  </div>
+
+  <div name="map" class="map">
+    <ya-map
+    (ready)="onMapReady($event)"
+    id="map"
+    [center]="coords"
+    (yaclick)="onMapClick($event)"
+    [state]="{controls: ['zoomControl',]}"
+    [options]="{
+      yandexMapDisablePoiInteractivity: true,
+      suppressMapOpenBlock: true,
+      suppressObsoleteBrowserNotifier: true,
+      autoFitToViewport: 'always',
+    }"
+    >
+      <ya-clusterer>
+      </ya-clusterer>
+    </ya-map>
+  </div>
+</ion-content>
+
+<ion-footer >
+  
+    <div class="select-address">
+        <div class="select-address__item_top">
+          Домашний адрес
+          <div class="save-button">
+            <app-standart-button (click)="saveCoords()" buttonText = "Сохранить" type="button" theme ="light"></app-standart-button>
+          </div>
+        </div>
+        <div class="select-address__item_bottom">
+          <div class="address-circle"></div> {{address}}
+        </div>
+    </div>
+
+</ion-footer>

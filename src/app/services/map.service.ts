@@ -150,18 +150,6 @@ export class MapService {
             latitude: coords[0],
             longitude: coords[1],
           })
-          this.userPointService
-            .createUserPoint(data)
-            .pipe(
-              takeUntil(this.destroy$),
-              catchError(() => {
-                return of(EMPTY)
-              }),
-            )
-            .subscribe((response: any) => {
-              this.userPointService.homeLatitude.next(String(coords[0]))
-              this.userPointService.homeLongitude.next(String(coords[1]))
-            })
           // this.createPointSub = this.userPointService.createHomeCoords(Number(coords[0]), Number(coords[1]))
         }
       })
