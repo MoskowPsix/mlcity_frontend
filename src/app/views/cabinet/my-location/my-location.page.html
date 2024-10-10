@@ -24,10 +24,25 @@
       suppressObsoleteBrowserNotifier: true,
       autoFitToViewport: 'always',
     }"
-    
     >
       <ya-clusterer>
       </ya-clusterer>
     </ya-map>
   </div>
 </ion-content>
+
+<ion-footer >
+  
+    <div class="select-address">
+        <div class="select-address__item_top">
+          Домашний адрес
+          <div class="save-button">
+            <app-standart-button buttonText = "Сохранить" type="button" theme ="light"></app-standart-button>
+          </div>
+        </div>
+        <div class="select-address__item_bottom">
+          <div class="address-circle"></div> Выберите домашний адрес
+        </div>
+    </div>
+
+</ion-footer>

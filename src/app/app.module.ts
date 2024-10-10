@@ -114,7 +114,6 @@ import { RulesModalCheckService } from './services/rules-modal-check.service'
 import { MiniCardComponent } from './components/mini-card/mini-card.component'
 import { CardGridComponent } from './components/card-grid/card-grid.component'
 import { ScrollService } from './services/scroll.service'
-import { StandartButtonComponent } from './components/materials/standart-button/standart-button.component'
 import { StandartButtonLongComponent } from './components/materials/standart-button-long/standart-button-long.component'
 import { UpdateVersionModalComponent } from './components/update-version-modal/update-version-modal.component'
 import { FooterItemComponent } from './components/footer/footer-item/footer-item.component'
@@ -145,7 +144,7 @@ import { ClusterModalComponent } from './components/cluster-modal/cluster-modal.
 import { StepContainerItemComponent } from './components/materials/step-container-item/step-container-item.component'
 import { ConfirmModalComponent } from './components/materials/confirm-modal/confirm-modal.component'
 import { SharedModule } from './modules/shared/shared.module'
-import { ButtonsModule } from './modules/shared/buttons.module';
+import { ButtonsModule } from './modules/shared/buttons.module'
 import { MapModule } from './modules/shared/map.module'
 
 const mapConfig: YaConfig = {
@@ -231,7 +230,6 @@ registerLocaleData(localeRu, 'ru')
     FavoritesComponent,
 
     NewPlaceComponent,
-    StandartButtonComponent,
     StepContainerComponent,
     StandartButtonLongComponent,
     TruncatePipe,
