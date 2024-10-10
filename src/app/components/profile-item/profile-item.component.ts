@@ -10,6 +10,7 @@ export class ProfileItemComponent implements OnInit {
   @Input() name!: string
   @Input() icon!: string
   @Input() iconColor!: string
+  @Input() iconFilter!: string
   @Input() routing!: string
   ngOnInit() {}
 }

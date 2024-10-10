@@ -221,7 +221,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginForm.enable()
 
     if (!this.modalPass) {
-      this.router.navigate(['home'])
+      this.router.navigate(['events'])
     }
   }
 
@@ -297,7 +297,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             })
         })
         .catch((e) => {
-          console.log(e)
           this.toastService.showToast('При авторизвции apple что-то пошло не так', 'warning')
           return of(EMPTY)
         })

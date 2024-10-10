@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { catchError, EMPTY, of, retry, Subject, takeUntil, tap } from 'rxjs'
 import { IOrganization } from 'src/app/models/organization'
 import { OrganizationService } from 'src/app/services/organization.service'
@@ -42,6 +42,8 @@ export class OrganizationShowComponent implements OnInit {
   constructor(
     private sightsService: SightsService,
     private router: ActivatedRoute,
+    private routerOnNavigate:Router,
+    //Ещ] один роутер из за того что разные роуты
     private organizationService: OrganizationService,
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
@@ -171,6 +173,9 @@ export class OrganizationShowComponent implements OnInit {
   }
   openImagesModalFunction(){
     this.openImagesModal = true
+  }
+  eventNavigation(event:any){
+    this.routerOnNavigate.navigate(['/events',event])
   }
   getOrganization(id: string) {
     this.sightsService

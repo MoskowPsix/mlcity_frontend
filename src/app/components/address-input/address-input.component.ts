@@ -39,7 +39,6 @@ export class AddressInputComponent implements OnInit {
     if (this.place && this.place.latitude) {
       this.coords = [this.place.latitude, this.place.longitude]
     } else {
-      console.log(this.mapService.getLastMapCoordsFromLocalStorage())
       if (
         this.mapService.getLastMapCoordsFromLocalStorage().length !== 0 &&
         this.mapService.getLastMapCoordsFromLocalStorage()[0] !== 0
@@ -88,7 +87,6 @@ export class AddressInputComponent implements OnInit {
   }
   clearInput(event: HTMLInputElement) {
     event.value = ''
-    console.log(event.value)
   }
   addPlacemark(coords: number[]) {
     this.map.target.geoObjects.removeAll()
@@ -142,7 +140,6 @@ export class AddressInputComponent implements OnInit {
     }
   }
   testLog() {
-    console.log(this.addressForm.value)
   }
   setFormInLoad() {
     this.setLongitudelatitude()

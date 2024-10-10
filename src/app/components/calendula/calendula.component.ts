@@ -73,12 +73,10 @@ export class CalendulaComponent implements OnInit, OnChanges {
     let year = new Date(data).getFullYear()
     let month = new Date(data).getMonth()
     let day = new Date(data).getDate()
-    // console.log(new Date(year, month, day).toISOString())
     return new Date(year, month, day).toISOString()
   }
   onDateOutput() {
     this.dateOutput.emit(this.date)
-    console.log(this.date)
   }
   scrollLeft() {
     this.widgetsContent.nativeElement.scrollTo({

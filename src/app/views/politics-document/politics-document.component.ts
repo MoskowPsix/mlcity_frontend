@@ -11,9 +11,7 @@ export class PoliticsDocumentComponent implements OnInit {
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
 
-  firstFunction(){
-    console.log('First Function')
-  }
+  firstFunction() {}
 
   ngOnInit() {}
 }

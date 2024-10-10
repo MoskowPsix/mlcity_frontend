@@ -5,6 +5,7 @@
     class="item"
     >
       <img [src]="menuItem.activeIcon" *ngIf="isActive(); else activeIcon" class="icon active">
+    
       <ng-template #activeIcon>
         <img [src]="menuItem.icon" class="icon">
       </ng-template>

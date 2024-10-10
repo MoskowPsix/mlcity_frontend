@@ -1,11 +1,11 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core'
 import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { SightsService } from 'src/app/services/sights.service'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { ToastService } from 'src/app/services/toast.service'
 import { OrganizationService } from 'src/app/services/organization.service'
-
+import { Router } from '@angular/router'
 @Component({
   selector: 'app-my-events',
   templateUrl: './my-sights.component.html',
@@ -22,7 +22,7 @@ export class MySightsComponent implements OnInit, OnDestroy {
   ) {}
   nextPage: boolean = true
   sights: any[] = []
-
+  router:Router = inject(Router)
   loadSights: boolean = false
   loadMoreSights: boolean = false
   edditModalOpen: boolean = false
@@ -90,6 +90,12 @@ export class MySightsComponent implements OnInit, OnDestroy {
     this.edditModalOpen = true
     this.sightModal = sight
     this.sightModalArray = this.sightModal.files
+  }
+
+  organizationNavigation(event:any){
+    setTimeout(() => {
+      this.router.navigate(['/organizations', event])
+    }, 0)
   }
 
   mainImg(event: any, img: any = null) {

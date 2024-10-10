@@ -1,7 +1,4 @@
-.seance-container{
-    
-    
-}
+
 .seance-container-content__border-img{
     min-width: 343px;
     height: 100%;
@@ -11,6 +8,14 @@
     padding-top: 0.75rem;
     display: flex;
     justify-content: center;
+}
+@media (min-width: 570px)  {
+    .seance-container{
+        padding-top: 0.75rem;
+        display: flex;
+        justify-content: start;
+        gap: 1rem;
+    }
 }
 .seance-container_content
 {

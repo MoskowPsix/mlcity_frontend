@@ -10,13 +10,13 @@
           <app-category-button stateType="Event"></app-category-button>
         </div>
         <div class="header-bottom-container" header-bottom>
-             Места и сообщества
+          {{ city ? city : '...' }} 
         </div>
       </app-second-header>
     </div>
   </div>
   <div class="grid-wrapper">
-    <app-organizations-grid buttonType="" [spiner]="spiner" (endScroll)="getSightsCity()" [notFound]="notFound" [cards]="sightsCity"/>
+    <app-organizations-grid (organizationClicked)="organizationNavigation($event)" buttonType="" [spiner]="spiner" (endScroll)="getSightsCity()" [notFound]="notFound" [cards]="sightsCity"/>
   </div>
   </div>
   </ion-content>

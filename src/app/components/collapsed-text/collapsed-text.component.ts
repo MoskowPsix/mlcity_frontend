@@ -22,9 +22,7 @@ export class CollapsedTextComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ionViewDidEnter(): void {
-    console.log(this.contentDescription)
-  }
+  ionViewDidEnter(): void {}
 
   ngAfterViewInit(): void {
     this.contentDescription?.nativeElement?.offsetHeight < 50 ? (this.disButton = false) : (this.disButton = true)

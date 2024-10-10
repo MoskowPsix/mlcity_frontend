@@ -21,7 +21,7 @@ export class MyEventsComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
     private filterService: FilterService,
-    private router: Router
+    private router: Router,
   ) {}
   nextPage: boolean = true
   events: any[] = []
@@ -29,12 +29,12 @@ export class MyEventsComponent implements OnInit, OnDestroy {
   loadEvents: boolean = false
   loadMoreEvents: boolean = false
   notFound!: boolean
-  eventsLoadingMore() { 
+  eventsLoadingMore() {
     this.loadMoreEvents = true
     this.getMyEvents()
   }
-  eventNavigation(event:any){
-    this.router.navigate(['/events',event])
+  eventNavigation(event: any) {
+    this.router.navigate(['/events', event])
   }
   getMyEvents(event?: any) {
     if (this.nextPage) {
@@ -52,7 +52,6 @@ export class MyEventsComponent implements OnInit, OnDestroy {
               }
             })
             this.spiner = false
-            console.log(respons.events.next_cursor)
             this.queryBuilderService.paginationPublicEventsForAuthorCurrentPage.next(respons.events.next_cursor)
             respons.events.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
           }),
@@ -72,10 +71,9 @@ export class MyEventsComponent implements OnInit, OnDestroy {
           if (this.events.length == 0) {
             this.notFound = true
           }
-          if(this.events.length < 12  && !this.notFound){
+          if (this.events.length < 12 && !this.notFound) {
             this.getMyEvents()
           }
-
         })
     }
   }

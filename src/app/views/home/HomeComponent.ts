@@ -8,9 +8,21 @@ import {
   NgZone,
   Output,
   EventEmitter,
+  inject,
 } from '@angular/core'
 import { AngularYandexMapsModule, YaReadyEvent } from 'angular8-yandex-maps'
-import { catchError, EMPTY, of, Subject, takeUntil, forkJoin, Observable } from 'rxjs'
+import {
+  catchError,
+  EMPTY,
+  of,
+  Subject,
+  takeUntil,
+  forkJoin,
+  Observable,
+  Subscribable,
+  Subscription,
+  interval,
+} from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { EventsService } from 'src/app/services/events.service'
 import { ToastService } from 'src/app/services/toast.service'
@@ -26,13 +38,16 @@ import { PlaceService } from 'src/app/services/place.service'
 import { IPlace } from 'src/app/models/place'
 import { NavigationEnd, Router } from '@angular/router'
 import { Location } from '@angular/common'
-import { filter } from 'rxjs/operators'
+import { debounceTime, distinctUntilChanged, filter, take, tap, throttleTime } from 'rxjs/operators'
 import { Options } from '@angular-slider/ngx-slider'
 import { Title } from '@angular/platform-browser'
 import { animate, style, transition, trigger } from '@angular/animations'
 import { LoadingService } from 'src/app/services/loading.service'
 import { LocationService } from 'src/app/services/location.service'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
+import { AuthService } from 'src/app/services/auth.service'
+import { UserPointService } from 'src/app/services/user-point.service'
+import { throttle } from 'lodash'
 
 @Component({
   selector: 'app-home',
@@ -110,6 +125,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   eventsLoading: boolean = false
   sightsLoading: boolean = false
+  placeSubscribe!: Subscription
+  sightSubscribe!: Subscription
+  userHaveCoords: boolean = false
+  userPointService: UserPointService = inject(UserPointService)
+  filterChangeSubscribe!: Subscription
+
   stateType: string = 'events'
 
   sightTypeId: any
@@ -163,6 +184,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private locationService: LocationService,
     private switchTypeService: SwitchTypeService,
+    private authService: AuthService,
   ) {
     this.titleService.setTitle('VOKRUG - Мероприятия и достопремечательности вокруг вас')
     let prevPath = this.location.path()
@@ -577,9 +599,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   getPlaces(): Observable<any> {
     return new Observable((observer) => {
       this.eventsLoading = true
-      this.placeService
+      if (this.placeSubscribe) {
+        this.placeSubscribe.unsubscribe()
+      }
+      this.placeSubscribe = this.placeService
         .getPlaces(this.queryBuilderService.queryBuilder('placesForMap'))
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntil(this.destroy$), throttleTime(300))
         .subscribe((response: any) => {
           this.places = response.places
           this.cdr.detectChanges()
@@ -592,7 +617,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   getSightsForMap(): Observable<any> {
     return new Observable((observer) => {
       this.sightsLoading = true
-      this.sightsService
+      if (this.sightSubscribe) {
+        this.sightSubscribe.unsubscribe()
+      }
+      this.sightSubscribe = this.sightsService
         .getSightsForMap(this.queryBuilderService.queryBuilder('sightsForMap'))
         .pipe(takeUntil(this.destroy$))
         .subscribe((response: any) => {
@@ -607,15 +635,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   eventNavigation(event: any) {
-    
     this.closeModal()
-    setTimeout(()=>{
-      this.router.navigate(['/events',event])
-    },0)
-  
+    setTimeout(() => {
+      this.router.navigate(['/events', event])
+    }, 0)
   }
 
-
+  organizationNavigation(event: any) {
+    console.log(event)
+    this.closeModal()
+    setTimeout(() => {
+      this.router.navigate(['/organizations', event])
+    }, 0)
+  }
   getSights(more?: boolean): Observable<any> {
     return new Observable((observer) => {
       this.eventsLoading = true
@@ -852,39 +884,63 @@ export class HomeComponent implements OnInit, OnDestroy {
         break
       case 2:
         this.loadingService.showLoading()
-        if (this.filterService.locationId.value) {
-          this.locationService
-            .getLocationsIds(this.filterService.locationId.value)
-            .pipe(
-              takeUntil(this.destroy$),
-              catchError((err) => {
-                this.toastService.showToast('Город не указан', 'primary')
-                this.loadingService.hideLoading()
-                console.log(err)
-                return of(EMPTY)
-              }),
-            )
-            .subscribe((res: any) => {
-              if (res.location.latitude && res.location.longitude) {
-                this.mapService.circleCenterLatitude.next(res.location.latitude)
-                this.mapService.circleCenterLongitude.next(res.location.longitude)
-                this.mapService.geolocationLatitude.next(res.location.latitude)
-                this.mapService.geolocationLongitude.next(res.location.longitude)
-                this.mapService.setLastMapCoordsToLocalStorage(res.location.latitude, res.location.longitude)
-                // this.map.target.setCenter([
-                //   res.location.latitude,
-                //   res.location.longitude,
-                // ]);
-                this.filterService.changeFilter.next(true)
-                this.filterService.changeCityFilter.next(true)
-                this.loadingService.hideLoading()
-                this.cdr.detectChanges()
-              }
-            })
-        } else {
-          this.loadingService.hideLoading()
-          this.navigationService.modalSearchCityesOpen.next(true)
-        }
+        this.userPointService
+          .getPoints()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((event: any) => {
+            if (event.points.data.length) {
+              this.userHaveCoords = true
+            }
+            this.loadingService.hideLoading()
+            if (
+              this.filterService.locationId.value &&
+              !this.authService.authenticationState.value &&
+              this.userHaveCoords
+            ) {
+              this.locationService
+                .getLocationsIds(this.filterService.locationId.value)
+                .pipe(
+                  takeUntil(this.destroy$),
+                  catchError((err) => {
+                    this.toastService.showToast('Город не указан', 'primary')
+                    this.loadingService.hideLoading()
+                    console.log(err)
+                    
+                    return of(EMPTY)
+                  }),
+                )
+                .subscribe((res: any) => {
+                  if (res.location.latitude && res.location.longitude) {
+                    this.mapService.circleCenterLatitude.next(res.location.latitude)
+                    this.mapService.circleCenterLongitude.next(res.location.longitude)
+                    this.mapService.geolocationLatitude.next(res.location.latitude)
+                    this.mapService.geolocationLongitude.next(res.location.longitude)
+                    this.mapService.setLastMapCoordsToLocalStorage(res.location.latitude, res.location.longitude)
+                    // this.map.target.setCenter([
+                    //   res.location.latitude,
+                    //   res.location.longitude,
+                    // ]);
+                    this.filterService.changeFilter.next(true)
+                    this.filterService.changeCityFilter.next(true)
+                    this.loadingService.hideLoading()
+                    this.cdr.detectChanges()
+                  }
+                })
+            } else if (this.authService.authenticationState.value && this.userHaveCoords) {
+              this.mapService.goHomeCoords()
+              this.loadingService.hideLoading()
+              this.cdr.detectChanges()
+            } else {
+              this.loadingService.hideLoading()
+              this.router.navigate(['/cabinet/location'])
+              this.toastService.showToast('Добавьте домашний адрес', 'warning')
+
+              // this.navigationService.modalSearchCityesOpen.next(true)
+            }
+            this.loadingService.hideLoading()
+          })
+        this.loadingService.showLoading()
+
         break
       case 3:
         this.navigationService.modalSearchCityesOpen.next(true)
@@ -1002,11 +1058,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.modalEventRadiusShowOpen = value
       this.cdr.detectChanges()
     })
-    
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
-
-    this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    this.filterService.changeFilter.pipe(takeUntil(this.destroy$), throttleTime(300)).subscribe((value) => {
       if (value === true) {
         this.eventsContentModal = []
         this.sightsContentModal = []

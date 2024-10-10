@@ -62,7 +62,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() event!: any
   @Input() isSight: boolean = false
   @Input() myEvent: boolean = false
-  @Input() cardSize:string = ''
+  @Input() cardSize: string = ''
   @Output() eventClicked: EventEmitter<any> = new EventEmitter()
   comments: boolean = false
   loadingComment: boolean = false
@@ -95,7 +95,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   loadingLike: boolean = false
   startLikesCount: number = 0
   vkLikesCount: number | null = null
-  viewCard:boolean = true
+  viewCard: boolean = true
   dontEdit: boolean = true
   prices: number[] = []
   minPrice: number = 0
@@ -112,7 +112,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   imageLoaded: boolean = false
 
   eventNavigation() {
-
     this.isSight
       ? this.router.navigate(['/sights', this.event.id, this.slugName])
       : this.eventClicked.emit(this.event.id)
@@ -279,7 +278,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
             .pipe(
               // обновляем на беке  кол-во вк лайков
               catchError((err) => {
-                //console.log(err)
                 this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
                 return of(EMPTY)
               }),
@@ -293,7 +291,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
           if (this.event.likes !== null) this.startLikesCount = this.event.likes.local_count + count // обновляем лайки в представлении
         }),
         catchError((err) => {
-          //console.log(err)
           this.toastService.showToast(MessagesErrors.vkLikesError, 'secondary')
           return of(EMPTY)
         }),
@@ -321,7 +318,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                   }),
                   catchError((err) => {
-                    //console.log(err)
                     return of(EMPTY)
                   }),
                   takeUntil(this.destroy$),
@@ -331,7 +327,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
             return of(EMPTY)
           }),
           catchError((err) => {
-            //console.log(err)
             return of(EMPTY)
           }),
           takeUntil(this.destroy$),
@@ -358,10 +353,17 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   findPrice() {
-    if (!this.isSight && this.event.price) {
-      for (let i = 0; i < this.event.price.length; i++) {
-        this.prices.push(Number(this.event.price[i].cost_rub))
+    if ((!this.isSight && this.event.price) || (!this.isSight && this.event.prices)) {
+      if (this.event.price) {
+        for (let i = 0; i < this.event.price.length; i++) {
+          this.prices.push(Number(this.event.price[i].cost_rub))
+        }
+      } else if (this.event.prices) {
+        for (let i = 0; i < this.event.prices.length; i++) {
+          this.prices.push(Number(this.event.prices[i].cost_rub))
+        }
       }
+
       if (this.prices.length > 0) {
         this.minPrice = Math.min(...this.prices)
         this.maxPrice = Math.max(...this.prices)
@@ -395,9 +397,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     setTimeout(() => {
       this.imageLoaded = false
-
     }, 500) // Time in ms should match the CSS transition time
-
   }
 
   ngAfterViewInit(): void {
@@ -462,10 +462,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
             return of(EMPTY)
           }),
         )
-        .subscribe((response: any) => {
-          // this.event['comments'] = response.comments
-          // console.log(this.event)
-        })
+        .subscribe((response: any) => {})
     } else if (!this.comments && this.event.comments) {
       this.comments = true
       this.loadingComment = false

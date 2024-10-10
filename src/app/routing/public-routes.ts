@@ -10,31 +10,13 @@ import { SupportComponent } from '../views/support/support.component'
 import { CheckAuthCanActiveGuard } from '../guards/check-auth.can-active.guard'
 import { EventShowComponent } from '../views/events/event-show/event-show.component'
 import { SightShowComponent } from '../views/sights/sight-show/sight-show.component'
-import { FiltersNotButtonComponent } from '../components/filters_not_button/filters_not_button.component'
-import { CalendulaComponent } from '../components/calendula/calendula.component'
 import { NoPathComponent } from '../views/no-path/no-path.component'
 import { PrivacyComponent } from '../views/privacy/privacy.component'
 import { RecoveryPasswordComponent } from '../views/recovery-password/recovery-password.component'
-import { TestIframeComponent } from '../views/test-iframe/test-iframe.component'
 import { EmailConfirmComponent } from '../views/cabinet/email-confirm/email-confirm.component'
-import { TestPageComponent } from '../views/test-page/test-page.component'
 import { OrganizationShowComponent } from '../views/organization-show/organization-show.component'
 import { PoliticsDocumentComponent } from '../views/politics-document/politics-document.component'
 export const publicRoutes: Routes = [
-  {
-    path: 'test',
-    component: CalendulaComponent,
-    canActivate: [CheckAuthCanActiveGuard],
-  },
-  {
-    path: 'testframe',
-    component: TestIframeComponent,
-    canActivate: [CheckAuthCanActiveGuard],
-  },
-  {
-    path: 'testpage',
-    component: TestPageComponent,
-  },
   {
     path: 'home',
     component: HomeComponent,

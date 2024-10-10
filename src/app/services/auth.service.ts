@@ -12,13 +12,12 @@ import { PasswordReset } from '../models/password-reset'
 
 @Injectable()
 export class AuthService {
-  authenticationState = new BehaviorSubject(false)
+  authenticationState: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   //authenticationState: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private toastService: ToastService,
     private tokenService: TokenService,
     private userService: UserService,
   ) {}
@@ -31,12 +30,10 @@ export class AuthService {
     let token = this.tokenService.getToken()
     let user = this.userService.getUserFromLocalStorage()
     if (token && user) {
-      //return this.authenticationState.next(true)
-      this.authenticationState.next(true)
+      this.authenticationState.value === false ? this.authenticationState.next(true) : null
       return true
     } else {
-      //return this.authenticationState.next(false)
-      this.authenticationState.next(false)
+      this.authenticationState.value === true ? this.authenticationState.next(false) : null
       return false
     }
 

@@ -9,7 +9,6 @@ export class MobileOrNoteService {
   public mobile: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
-    console.log('test')
     if (window.innerWidth < 900) {
       this.mobile.next(true)
     } else if (window.innerWidth > 900) {

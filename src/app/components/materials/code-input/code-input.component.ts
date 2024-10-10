@@ -105,7 +105,6 @@ export class CodeInputComponent implements OnInit, AfterViewInit {
   }
   ionViewWillEnter() {
     let itemsArray = this.items.toArray()
-    console.log('item')
     itemsArray.forEach((item: any) => {
       item.nativeElement.value = ''
     })

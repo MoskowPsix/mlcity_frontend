@@ -42,11 +42,8 @@ export class ModalCheckEmailComponent implements OnInit {
     this.userEmail = this.userService.getUserFromLocalStorage()?.email !== null
     this.userEmailConfirm = this.userService.getUserFromLocalStorage()?.email_verified_at !== null
   }
-  submitCode(event: any) {
-    console.log(event)
-  }
+  submitCode(event: any) {}
   nextStep(step: HTMLElement) {
-    console.log(step)
     this.leftPosotion += 100
     step.style.transition = '0.2s all'
     this.currentStep++
@@ -54,7 +51,6 @@ export class ModalCheckEmailComponent implements OnInit {
   }
   backStep(step: HTMLElement) {
     this.leftPosotion -= 100
-    console.log(this.leftPosotion)
     step.style.transition = '0.2s all'
     this.currentStep--
     step.style.marginLeft = `-${this.leftPosotion}vw`

@@ -48,13 +48,13 @@
 
         <div class="social-button-container">
           <app-circle-button (click)="toggleFavorite(event.id)" [loading]="loadingFavotire" [icon]="likeUrl"></app-circle-button>
-          <app-circle-button icon="assets/icons/share.svg"></app-circle-button>
+          <app-circle-button (click)="shareContent()" icon="assets/icons/share.svg"></app-circle-button>
         </div>
 
         <div class="price-container">
           <span class="price-container__text">{{priceState}}</span>
           <span class="price-container__text" *ngIf="event.date_start !== event.date_end">{{event.date_start | date:'d MMM' }} - {{ event.date_end | date:'d MMM' }}</span>
-          <span class="price-container__text" *ngIf="event.date_start == event.date_end">{{event.date_start | date:'d MMM' }}</span>
+          <span class="price-container__text" *ngIf="event.date_start === event.date_end">{{event.date_start | date:'d MMM' }}</span>
           <span *ngIf="event && event.age_limit" class="price-container__text">{{ageLimit}}+</span>
           <span *ngIf="event && !event.age_limit" class="price-container__text">0+</span>
         </div>
@@ -88,15 +88,15 @@
           <div class="main-content__community">
             <strong class="title">Кто проводит</strong>
             <div class="community-wrapper">
-              <app-user-section [organization]="organization" [buttonText]="event.sponsor"></app-user-section>
+              <app-user-section [organization]="organization" [buttonText]="event.sponsor" (selectOrganization)="goToOrganization($event)"></app-user-section>
               <div class="community-wrapper__button-container">
               </div>
             </div>
-            <div class="main-content__recomend">
+            <div *ngIf="eventsCity" class="main-content__recomend">
               <strong class="title">Рекомендуем</strong>
               <div class="main-content-recomend-card-wrapper">
                 <ng-container *ngFor="let event of eventsCity">
-                  <app-event-card [event]="event"></app-event-card>
+                  <app-event-card (eventClicked)="eventNavigation($event)" [event]="event"></app-event-card>
                 </ng-container>
               </div>
               
@@ -393,4 +393,4 @@
    </ion-col>
 </ng-container>
 
-<app-images-modal [openModal]="openImagesModal" (closeModalEmit)="closeImagesModal()" *ngIf="event && !loadingEvent" [imagesPathArray]="event.files"></app-images-modal>
+<app-images-modal *ngIf="event && event.files.length" [openModal]="openImagesModal" (closeModalEmit)="closeImagesModal()" [imagesPathArray]="event.files"></app-images-modal>

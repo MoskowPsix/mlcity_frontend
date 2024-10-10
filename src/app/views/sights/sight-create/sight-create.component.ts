@@ -136,10 +136,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.router.navigate(['cabinet/sights'])
     }, 0) //убираем асинхронность
-    console.log(this.cancelConfirmValue)
   }
-  
-
 
   // Получаем юзера и устанавливаем группы и шаги
   getUserWithSocialAccount() {
@@ -210,7 +207,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
   }
 
   edditAdress(event: any) {
-    console.log(event)
     this.createSightForm.patchValue({
       address: event.address,
       latitude: event.latitude,
@@ -370,7 +366,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           })
         } else if (file.type === 'video') {
           if (file.video.image[0]) {
-            console.log()
             tempArray.push({
               link: file.video.image[0].url,
               name: file.video.id,
@@ -744,7 +739,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         this.sightDescriptionElement.setFocus()
       }, 500)
     }
-    
   }
 
   //Клик по нкопке назад
@@ -805,19 +799,21 @@ export class SightCreateComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.createSightForm.value.files = this.uploadFiles
-    console.log(this.createSightForm.value)
     let sight = this.createFormData() // собираем формдату
     this.createSightForm.disable()
 
     this.loadingService.showLoading()
     this.sightsService
       .create(sight)
-      .pipe(takeUntil(this.destroy$),catchError((err)=>{
-        console.log(err)
-        this.toastService.showToast(err.error.message,'danger')
-        this.loadingService.hideLoading()
-        return EMPTY
-      }))
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          console.log(err)
+          this.toastService.showToast(err.error.message, 'danger')
+          this.loadingService.hideLoading()
+          return EMPTY
+        }),
+      )
       .subscribe((res) => {
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesSights.create, 'success')
@@ -895,7 +891,6 @@ export class SightCreateComponent implements OnInit, OnDestroy {
         phone_number: new FormControl(''),
         email: new FormControl(''),
         site: new FormControl(''),
-
       },
       [dateRangeValidator],
     )
@@ -908,7 +903,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
     this.getStatuses()
     this.getNowCityes()
     this.addPrice()
-    
+
     this.getTypes()
     //this.getLocations()
     // this.placemark= new ymaps.Placemark(this.createSightForm.value.coords)

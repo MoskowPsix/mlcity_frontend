@@ -44,6 +44,7 @@
     "@capacitor/ios": "^5.0.0",
     "@capacitor/keyboard": "^5.0.0",
     "@capacitor/local-notifications": "^5.0.8",
+    "@capacitor/share": "^5.0.8",
     "@capacitor/status-bar": "^5.0.0",
     "@ionic/angular": "^6.7.5",
     "@maskito/angular": "^2.3.1",

@@ -122,9 +122,9 @@ export class EventsComponent implements OnInit, OnDestroy {
   scrollUp() {
     document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' })
   }
-  
-  eventNavigation(event:any){
-    this.router.navigate(['/events',event])
+
+  eventNavigation(event: any) {
+    this.router.navigate(['/events', event])
   }
 
   scrollUpCheckState() {
@@ -262,6 +262,19 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.router.navigate(['/sights'])
   }
 
+  changeCity() {
+    const coords = this.mapService.getLastMapCoordsFromLocalStorage()
+    this.locationService
+      .getLocationByCoords(coords)
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError(() => of(EMPTY)),
+      )
+      .subscribe((response: any) => {
+        response?.location?.name ? (this.city = response.location.name) : null
+      })
+  }
+
   ngAfterViewInit() {}
   ngOnInit() {}
   ionViewWillEnter() {
@@ -272,7 +285,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.notFound = false
     this.eventsCity = []
     this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-    this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
+    // this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
     // this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
     //   if (value.url === '/event') {
     //     // this.filterService.changeFilter.next(true)
@@ -301,6 +314,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.eventsCity = []
         this.eventsGeolocation = []
         this.getEventsCity()
+        this.changeCity()
         // this.getEventsGeolocation()
       }
       this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
@@ -308,9 +322,12 @@ export class EventsComponent implements OnInit, OnDestroy {
 
     //Подписываемся на город
     // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    //   this.locationService.getLocationsIds(value).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-    //     this.city = response.location.name
-    //   })
+    //   this.locationService
+    //     .getLocationsIds(value)
+    //     .pipe(takeUntil(this.destroy$))
+    //     .subscribe((response: any) => {
+    //       this.city = response.location.name
+    //     })
     // })
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.eventTypeId = value[0]

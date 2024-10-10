@@ -11,10 +11,14 @@ export class OrganizationsCardComponent implements OnInit {
   @Input() card!: IOrganization
   @Input() buttonType: string = ''
   @Input() extensialClick: boolean = true
+  @Output() organizationClicked: EventEmitter<any> = new EventEmitter()
   organizationObject: any = {}
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   emitOrganization(organization: any) {
-    this.selectOrganization.emit(organization)
+    this.organizationClicked.emit(organization.id)
+  }
+  organizationNavigation(){
+
   }
   ngOnInit() {
     this.organizationObject = this.card

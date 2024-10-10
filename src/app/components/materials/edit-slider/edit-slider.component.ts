@@ -22,14 +22,12 @@ export class EditSliderComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     let previewsCount = this.previews.length
-    console.log(previewsCount)
     if (changes['vkFiles']) {
       for (let i = 0; i < previewsCount; i++) {
         if (this.previews[i] && this.previews[i].vk) {
           this.previews.splice(i)
         }
       }
-      console.log(this.vkFiles)
       this.previews.push(...this.vkFiles)
     }
   }
@@ -52,7 +50,6 @@ export class EditSliderComponent implements OnInit {
             })
 
             this.files.push(file)
-            console.log('load')
           } else {
             this.toastService.showToast('Файл уже загружен!', 'warning')
           }
@@ -70,7 +67,6 @@ export class EditSliderComponent implements OnInit {
       .then(() => {
         event.target.value = null
         this.filesEmit.emit(this.files)
-        console.log('emit')
       })
       .catch((error) => {
         console.error('Error reading files', error)

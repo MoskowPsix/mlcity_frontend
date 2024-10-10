@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { ChangeDetectorRef, Injectable } from '@angular/core'
 import { YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps'
 import {
   NativeGeocoder,
@@ -8,18 +8,24 @@ import {
 import { Capacitor } from '@capacitor/core'
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx'
 import { Geolocation } from '@capacitor/geolocation'
-import { BehaviorSubject, catchError, EMPTY, of, Subject, takeUntil } from 'rxjs'
+import { BehaviorSubject, catchError, EMPTY, of, Subject, Subscription, takeUntil } from 'rxjs'
 import { FilterService } from './filter.service'
 import { NavigationService } from './navigation.service'
 import { LocationService } from './location.service'
 import { ToastService } from './toast.service'
+import { UserPointService } from './user-point.service'
+import { AuthService } from './auth.service'
+import { serialize } from 'object-to-formdata'
 
 @Injectable({
   providedIn: 'root',
 })
 export class MapService {
   private readonly destroy$ = new Subject<void>()
+  private createPointSub!: Subscription
   placemark?: ymaps.Placemark
+
+  getPointsSubs!: Subscription
 
   public circleCenterLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
   public circleCenterLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
@@ -46,7 +52,108 @@ export class MapService {
     private navigationService: NavigationService,
     private locationService: LocationService,
     private toastService: ToastService,
-  ) { }
+    private userPointService: UserPointService,
+    private authService: AuthService,
+  ) {
+    this.authService.authenticationState.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value) {
+        this.setHomeCoords()
+      }
+      //   if (value) {
+      //     var coords: any = null
+      //     if (this.getPointsSubs) {
+      //       this.getPointsSubs.unsubscribe()
+      //     }
+      //     this.getPointsSubs = this.userPointService
+      //       .getPoints()
+      //       .pipe(
+      //         takeUntil(this.destroy$),
+      //         catchError(() => of(EMPTY)),
+      //       )
+      //       .subscribe((response: any) => {
+      //         if (response.points.data.length) {
+      //           coords = {
+      //             latitude: response.points.data[0].latitude,
+      //             longitude: response.points.data[0].longitude,
+      //           }
+      //           this.userPointService.homeLatitude.next(coords.latitude)
+      //           this.userPointService.homeLongitude.next(coords.longitude)
+      //           this.goHomeCoords()
+      //         } else {
+      //           const coords = this.getLastMapCoordsFromLocalStorage()
+      //           let data: FormData = serialize({
+      //             latitude: coords[0],
+      //             longitude: coords[1],
+      //           })
+      //           this.userPointService
+      //             .createUserPoint(data)
+      //             .pipe(
+      //               takeUntil(this.destroy$),
+      //               catchError(() => {
+      //                 return of(EMPTY)
+      //               }),
+      //             )
+      //             .subscribe((response: any) => {
+      //               this.userPointService.homeLatitude.next(String(coords[0]))
+      //               this.userPointService.homeLongitude.next(String(coords[1]))
+      //             })
+      //           // this.createPointSub = this.userPointService.createHomeCoords(Number(coords[0]), Number(coords[1]))
+      //         }
+      //       })
+      //   }
+    })
+  }
+
+  goHomeCoords() {
+    this.filterService.setLocationLatitudeTolocalStorage(String(this.userPointService.homeLatitude.value))
+    this.filterService.setLocationLongitudeTolocalStorage(String(this.userPointService.homeLongitude.value))
+    this.setLastMapCoordsToLocalStorage(
+      this.userPointService.homeLatitude.value,
+      this.userPointService.homeLongitude.value,
+    )
+    this.circleCenterLatitude.next(Number(this.userPointService.homeLatitude.value))
+    this.circleCenterLongitude.next(Number(this.userPointService.homeLongitude.value))
+    this.filterService.changeCityFilter.next(true)
+    this.filterService.changeFilter.next(true)
+  }
+
+  // Проверка домашних координат и их установка если пользователь авторизован
+  public setHomeCoords() {
+    var coords: any = null
+    if (this.getPointsSubs) {
+      this.getPointsSubs.unsubscribe()
+    }
+    this.getPointsSubs = this.userPointService
+      .getPoints()
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError(() => of(EMPTY)),
+      )
+      .subscribe((response: any) => {
+        if (response?.points?.data.length) {
+          coords = {
+            latitude: response.points.data[0].latitude,
+            longitude: response.points.data[0].longitude,
+          }
+          this.userPointService.homeLatitude.next(coords.latitude)
+          this.userPointService.homeLongitude.next(coords.longitude)
+          this.filterService.setLocationLatitudeTolocalStorage(coords.latitude)
+          this.filterService.setLocationLongitudeTolocalStorage(coords.longitude)
+          this.setLastMapCoordsToLocalStorage(coords.latitude, coords.longitude)
+          this.circleCenterLatitude.next(coords.latitude)
+          this.circleCenterLongitude.next(coords.longitude)
+          this.filterService.changeCityFilter.next(true)
+          this.filterService.changeFilter.next(true)
+        } else {
+          const coords = this.getLastMapCoordsFromLocalStorage()
+          let data: FormData = serialize({
+            latitude: coords[0],
+            longitude: coords[1],
+          })
+          // this.createPointSub = this.userPointService.createHomeCoords(Number(coords[0]), Number(coords[1]))
+        }
+      })
+  }
 
   //Определение геопозиции с помощью яндекса (платно)
   geolocationMap(event: YaReadyEvent<ymaps.Map>): void {
@@ -61,15 +168,24 @@ export class MapService {
       })
   }
 
-  setRadius(radius:number){
+  setRadius(radius: number) {
     this.radius.next(radius)
-    localStorage.setItem('radius',String(radius))
+    localStorage.setItem('radius', String(radius))
   }
-  getRadiusFromLocalStorage(){
+  getRadiusFromLocalStorage() {
     return localStorage.getItem('radius')
   }
   //Определение геопозиции нативными способами платформы
   async geolocationMapNative(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
+    // if (this.authService.authenticationState.value) {
+    //   let coords = []
+    //   coords.push(
+    //     parseFloat(this.userPointService.homeLatitude.value!),
+    //     parseFloat(this.userPointService.homeLongitude.value!),
+    //   )
+    //   await this.setPlacemark(map, CirclePoint, coords!, false)
+    //   return
+    // }
     if (!Capacitor.isPluginAvailable('Geolocation')) {
       // await this.setCenterMap(map, CirclePoint);
       return
@@ -80,7 +196,6 @@ export class MapService {
       await this.setCenterMap(map, CirclePoint)
     } else {
       //Запускаем поиск геопозиции в мобилах
-      //console.log('ипользуется мобильная версия')
       const status = await this.requestLocationPermission()
       try {
         if (status == 'granted') {
@@ -88,7 +203,6 @@ export class MapService {
         } else {
           //Если запрещен доступ GPS
           let coords = await this.defaultCoords()
-          // console.log("2, " + coords)
           // await this.setCenterMap(map, CirclePoint);
           await this.setPlacemark(map, CirclePoint, coords!, false)
         }
@@ -102,10 +216,8 @@ export class MapService {
   async enableLocation() {
     try {
       const canRequest: boolean = await this.locationAccuracy.canRequest()
-      //console.log('canrequest: ', canRequest);
       if (canRequest) {
         await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
-        //console.log('Request successful');
         return true
       } else {
         return false
@@ -135,7 +247,7 @@ export class MapService {
   async setCenterMap(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle) {
     let coords
     try {
-      if (this.filterService.getLocationFromlocalStorage()) {
+      if (this.filterService.getLocationFromlocalStorage() && !this.authService.authenticationState.value) {
         this.locationService
           .getLocationsIds(Number(this.filterService.getLocationFromlocalStorage()))
           .pipe(
@@ -151,6 +263,15 @@ export class MapService {
             this.circleCenterLongitude.next(coords[1])
             this.setPlacemark(map, CirclePoint, coords!, true)
           })
+      } else if (
+        this.authService.authenticationState.value &&
+        this.userPointService.homeLatitude.value &&
+        this.userPointService.homeLongitude.value
+      ) {
+        coords = [Number(this.userPointService.homeLatitude.value), Number(this.userPointService.homeLongitude.value)]
+        this.circleCenterLatitude.next(Number(coords[0]))
+        this.circleCenterLongitude.next(Number(coords[1]))
+        this.setPlacemark(map, CirclePoint, coords!, true)
       } else {
         coords = await this.getCurrentLocation()
         this.circleCenterLatitude.next(coords[0])
@@ -175,7 +296,6 @@ export class MapService {
   }
 
   setPlacemark(map: YaReadyEvent<ymaps.Map>, CirclePoint?: ymaps.Circle, coords?: any, gps?: boolean) {
-    // console.log(CirclePoint);
     // await setTimeout(() => {
     //   this.placemark = new ymaps.Placemark(coords, {}, { visible: false });
     // }, 100);
@@ -241,7 +361,6 @@ export class MapService {
   //Нативный поиск координат
   ForwardGeocoderNative(address: string) {
     this.nativegeocoder.forwardGeocode(address, this.options).then((result: NativeGeocoderResult[]) => {
-      //console.log('координаты ' + result[0].latitude + ' ' + result[0].longitude)
       return [Number(result[0].latitude), Number(result[0].longitude)]
     })
     // .catch((error: any) => console.log(error));
@@ -321,7 +440,6 @@ export class MapService {
 
     this.filterService.changeFilter.next(true)
     // this.filterService.changeCityFilter.next(true)
-    console.log(this.filterService.changeCityFilter.value)
   }
 
   hideChangeCityDialog() {
@@ -357,39 +475,14 @@ export class MapService {
       await this.geolocationMapNative(map, circlePoint)
     }
     // Было ещё в условии: this.filterService.changeCityFilter.value &&
-    //Если не первый запуск и менялся фильтр города то перекидываем на город
-
+    // Если не первый запуск и менялся фильтр города то перекидываем на город
     if (!this.navigationService.appFirstLoading.value) {
-      // if (this.filterService.getLocationFromlocalStorage()) {
-      //   const coords: any[] = [0, 0]
-      //   this.locationService
-      //     .getLocationsIds(
-      //       Number(this.filterService.getLocationFromlocalStorage()),
-      //     )
-      //     .pipe(
-      //       takeUntil(this.destroy$),
-      //       catchError((err) => {
-      //         console.log(err)
-      //         return of(EMPTY)
-      //       }),
-      //     )
-      //     .subscribe((response) => {
-      //       console.log(response)
-      //       coords[0] = response.latitude
-      //       coords[1] = response.longitude
-      //     })
-      //   await circlePoint.geometry?.setCoordinates(coords)
-      // } else {
-      //   const coords = await this.getLastMapCoordsFromLocalStorage()
-      //   await circlePoint.geometry?.setCoordinates(coords)
-      // }
-      const coords = await this.getLastMapCoordsFromLocalStorage()
+      let coords = await this.getLastMapCoordsFromLocalStorage()
       await circlePoint.geometry?.setCoordinates(coords)
       // await this.geolocationMapNative(map, circlePoint);
       map.target.setBounds(circlePoint.geometry?.getBounds()!, {
         checkZoomRange: false,
       })
-    
     }
     // await this.geolocationMapNative(map, circlePoint);
     //ветка если юзать this.filterService.saveFilters.value === 1

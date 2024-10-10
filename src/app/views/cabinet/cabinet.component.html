@@ -12,6 +12,7 @@
         <app-user-section [user]="user"></app-user-section>
         <div *ngIf="user" class="hidden-id">UID: {{ user.id }}</div>
         <div class="menu">
+            <app-profile-item [routing]="'location'" [iconColor]="'#DCE9FF'" [icon]="'/assets/icons/home-button.svg'"  [iconFilter]="'brightness(0) saturate(100%) invert(46%) sepia(36%) saturate(5687%) hue-rotate(205deg) brightness(100%) contrast(103%);'" [name]="'Моя локация'"></app-profile-item>
             <app-profile-item [routing]="'events'" [iconColor]="'#FAEAD7'" [icon]="'/assets/icons/fireOrange.svg'" [name]="'Мои мероприятия'"></app-profile-item>
             <app-profile-item [routing]="'sights'" [iconColor]="'#DCE9FF'" [icon]="'/assets/icons/place.svg'" [name]="'Мои сообщества'"></app-profile-item>
             <app-profile-item [routing]="'/contacts'" [iconColor]="'#11f93840'" [icon]="'/assets/icons/subtract.svg'" [name]="'Помощь и обратная связь'"></app-profile-item>

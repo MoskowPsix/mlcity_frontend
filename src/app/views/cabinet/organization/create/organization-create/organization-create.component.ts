@@ -69,7 +69,6 @@ export class OrganizationCreateComponent implements OnInit {
   searchLocation(search: string): void {
     if (search.length >= 3) {
       this.locationService.getLocationsName(search).subscribe((response: any) => {
-        console.log(response)
         // this.locationName = response.location.name
         // this.locationSubName = response.location.location_parent.name
       })
@@ -78,7 +77,6 @@ export class OrganizationCreateComponent implements OnInit {
   setLocationForId(id: number): void {
     if (id) {
       this.locationService.getLocationsIds(id).subscribe((response: any) => {
-        console.log(response)
         this.locationName = response.location.name
         this.locationSubName = response.location.location_parent.name
         this.createForm.patchValue({

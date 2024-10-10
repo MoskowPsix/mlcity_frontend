@@ -253,7 +253,6 @@ export class TestPageComponent implements OnInit {
       ],
     }
     let eventHistoryContent = new EventHistoryContent()
-    console.log(eventHistoryContent.merge(orig, edited))
   }
   ngOnInit(): void {}
 }
