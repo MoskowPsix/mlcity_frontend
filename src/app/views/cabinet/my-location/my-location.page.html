@@ -1,15 +1,33 @@
 
 <ion-content [fullscreen]="true">
 
-  <app-second-header size="">
-    <div class="header-tools">
-      <app-back-button></app-back-button>
-      <input class="header-tools__search-input" placeholder="Поиск">
-      <img class="header-tools__search-icon" src="/assets/icons/search.svg" alt="">
-    </div>
-       <!-- Карта -->
-    <div name="map" class="map">
+  <div class="header-wrapper">
+    <app-second-header size="">
+      <div class="header-tools">
+        <app-back-button></app-back-button>
+        <input class="header-tools__search-input" placeholder="Поиск">
+        <img class="header-tools__search-icon" src="/assets/icons/search.svg" alt="">
+      </div>
+         <!-- Карта -->
+    </app-second-header>
+  </div>
 
-    </div>
-  </app-second-header>
+  <div name="map" class="map">
+    <ya-map
+    
+    id="map"
+    [center]="[0,0]"
+    [state]="{controls: ['zoomControl']}"
+    [options]="{
+      yandexMapDisablePoiInteractivity: true,
+      suppressMapOpenBlock: true,
+      suppressObsoleteBrowserNotifier: true,
+      autoFitToViewport: 'always',
+    }"
+    
+    >
+      <ya-clusterer>
+      </ya-clusterer>
+    </ya-map>
+  </div>
 </ion-content>

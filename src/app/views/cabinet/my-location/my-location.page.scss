@@ -3,6 +3,10 @@
     gap: 0.6rem;
     position: relative;
     width: 100%;
+    z-index: 2;
+}
+ion-content{
+    overflow-y: hidden;
 }
 .header-tools__search-input{
     width: 100%;
@@ -26,4 +30,16 @@
     right: 0.7rem;
     margin-top: 0.3rem;
     width: 1.3rem;
+}
+.map{
+    width: 100%;
+    height: 100%;
+    top: 0;
+    z-index: 1;
+    position: absolute;
+}
+.header-wrapper{
+    position: fixed;
+    width: 100%;
+    z-index: 100000;
 }

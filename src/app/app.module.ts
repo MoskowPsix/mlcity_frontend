@@ -145,7 +145,8 @@ import { ClusterModalComponent } from './components/cluster-modal/cluster-modal.
 import { StepContainerItemComponent } from './components/materials/step-container-item/step-container-item.component'
 import { ConfirmModalComponent } from './components/materials/confirm-modal/confirm-modal.component'
 import { SharedModule } from './modules/shared/shared.module'
-import { ButtonsModule } from './modules/shared/buttons.module'
+import { ButtonsModule } from './modules/shared/buttons.module';
+import { MapModule } from './modules/shared/map.module'
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
@@ -292,6 +293,7 @@ registerLocaleData(localeRu, 'ru')
     MatInputModule,
     SharedModule,
     ButtonsModule,
+    MapModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
