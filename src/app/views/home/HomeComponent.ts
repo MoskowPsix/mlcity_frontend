@@ -8,6 +8,7 @@ import {
   NgZone,
   Output,
   EventEmitter,
+  inject,
 } from '@angular/core'
 import { AngularYandexMapsModule, YaReadyEvent } from 'angular8-yandex-maps'
 import {
@@ -126,6 +127,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightsLoading: boolean = false
   placeSubscribe!: Subscription
   sightSubscribe!: Subscription
+  userHaveCoords: boolean = false
+  userPointService: UserPointService = inject(UserPointService)
   filterChangeSubscribe!: Subscription
 
   stateType: string = 'events'
@@ -603,7 +606,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         .getPlaces(this.queryBuilderService.queryBuilder('placesForMap'))
         .pipe(takeUntil(this.destroy$), throttleTime(300))
         .subscribe((response: any) => {
-          console.trace('Стек вызовов:')
           this.places = response.places
           this.cdr.detectChanges()
           observer.next(EMPTY)
@@ -882,43 +884,61 @@ export class HomeComponent implements OnInit, OnDestroy {
         break
       case 2:
         this.loadingService.showLoading()
-        if (this.filterService.locationId.value && !this.authService.authenticationState.value) {
-          this.locationService
-            .getLocationsIds(this.filterService.locationId.value)
-            .pipe(
-              takeUntil(this.destroy$),
-              catchError((err) => {
-                this.toastService.showToast('Город не указан', 'primary')
-                this.loadingService.hideLoading()
-                console.log(err)
-                return of(EMPTY)
-              }),
-            )
-            .subscribe((res: any) => {
-              if (res.location.latitude && res.location.longitude) {
-                this.mapService.circleCenterLatitude.next(res.location.latitude)
-                this.mapService.circleCenterLongitude.next(res.location.longitude)
-                this.mapService.geolocationLatitude.next(res.location.latitude)
-                this.mapService.geolocationLongitude.next(res.location.longitude)
-                this.mapService.setLastMapCoordsToLocalStorage(res.location.latitude, res.location.longitude)
-                // this.map.target.setCenter([
-                //   res.location.latitude,
-                //   res.location.longitude,
-                // ]);
-                this.filterService.changeFilter.next(true)
-                this.filterService.changeCityFilter.next(true)
-                this.loadingService.hideLoading()
-                this.cdr.detectChanges()
-              }
-            })
-        } else if (this.authService.authenticationState.value) {
-          this.mapService.goHomeCoords()
-          this.loadingService.hideLoading()
-          this.cdr.detectChanges()
-        } else {
-          this.loadingService.hideLoading()
-          this.navigationService.modalSearchCityesOpen.next(true)
-        }
+        this.userPointService
+          .getPoints()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((event: any) => {
+            if (event.points.data.length) {
+              this.userHaveCoords = true
+            }
+            this.loadingService.hideLoading()
+            if (
+              this.filterService.locationId.value &&
+              !this.authService.authenticationState.value &&
+              this.userHaveCoords
+            ) {
+              this.locationService
+                .getLocationsIds(this.filterService.locationId.value)
+                .pipe(
+                  takeUntil(this.destroy$),
+                  catchError((err) => {
+                    this.toastService.showToast('Город не указан', 'primary')
+                    this.loadingService.hideLoading()
+                    console.log(err)
+                    return of(EMPTY)
+                  }),
+                )
+                .subscribe((res: any) => {
+                  if (res.location.latitude && res.location.longitude) {
+                    this.mapService.circleCenterLatitude.next(res.location.latitude)
+                    this.mapService.circleCenterLongitude.next(res.location.longitude)
+                    this.mapService.geolocationLatitude.next(res.location.latitude)
+                    this.mapService.geolocationLongitude.next(res.location.longitude)
+                    this.mapService.setLastMapCoordsToLocalStorage(res.location.latitude, res.location.longitude)
+                    // this.map.target.setCenter([
+                    //   res.location.latitude,
+                    //   res.location.longitude,
+                    // ]);
+                    this.filterService.changeFilter.next(true)
+                    this.filterService.changeCityFilter.next(true)
+                    this.loadingService.hideLoading()
+                    this.cdr.detectChanges()
+                  }
+                })
+            } else if (this.authService.authenticationState.value && this.userHaveCoords) {
+              this.mapService.goHomeCoords()
+              this.loadingService.hideLoading()
+              this.cdr.detectChanges()
+            } else {
+              this.loadingService.hideLoading()
+              this.router.navigate(['/cabinet/location'])
+              this.toastService.showToast('Добавьте домашний адрес', 'warning')
+
+              // this.navigationService.modalSearchCityesOpen.next(true)
+            }
+          })
+        this.loadingService.showLoading()
+
         break
       case 3:
         this.navigationService.modalSearchCityesOpen.next(true)
