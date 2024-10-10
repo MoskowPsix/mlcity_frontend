@@ -1,0 +1,29 @@
+.header-tools{
+    display: flex;
+    gap: 0.6rem;
+    position: relative;
+    width: 100%;
+}
+.header-tools__search-input{
+    width: 100%;
+    border-radius: 100px;
+    height: 2rem;
+    padding-inline-start: 0.875rem; 
+    padding-inline-end:2.2rem ;
+    font-family: var(--font-regular);
+    outline: none;
+    border: none;
+    font-size: 0.75rem;
+    color:#1C2226 ;
+}
+.header-tools__search-input::placeholder{
+    color:#4C5861;
+    font-family: var(--font-regular);
+    font-size: 0.75rem;
+}
+.header-tools__search-icon{
+    position: absolute;
+    right: 0.7rem;
+    margin-top: 0.3rem;
+    width: 1.3rem;
+}

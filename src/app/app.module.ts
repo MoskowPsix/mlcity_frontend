@@ -35,7 +35,6 @@ import { MenuAuthComponent } from './components/menu-auth/menu-auth.component'
 import { MenuAuthSidebarComponent } from './components/menu-auth-sidebar/menu-auth-sidebar.component'
 import { FooterComponent } from './components/footer/footer.component'
 import { AboutComponent } from './views/about/about.component'
-import { SecondHeaderComponent } from './components/second-header/second-header.component'
 import { NotFoundComponent } from './views/errors/not-found/not-found.component'
 import { NotFoundContentComponent } from './components/materials/not-found-content/not-found-content.component'
 import { ForbiddenComponent } from './views/errors/forbidden/forbidden.component'
@@ -51,7 +50,6 @@ import { FiltersComponent } from './components/filters/filters.component'
 import { FiltersNotButtonComponent } from './components/filters_not_button/filters_not_button.component'
 import { CalendulaComponent } from './components/calendula/calendula.component'
 import { NoDataComponent } from './components/no-data/no-data.component'
-
 import { EventCardComponent } from './components/event-card/event-card.component'
 import { FavoritesComponent } from './views/cabinet/favorites/favorites.component'
 import { CommentsListComponent } from './components/comments-list/comments-list.component'
@@ -105,7 +103,6 @@ import { EdditSightComponent } from './views/cabinet/my-sights/edit-sight/eddit-
 import { SightGalleryComponent } from './components/sight-gallery/sight-gallery.component'
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component'
 import { TypesComponent } from './components/types/types.component'
-import { BackButtonComponent } from './components/back-button/back-button.component'
 import { StandartRichInputComponent } from './components/materials/standart-rich-input/standart-rich-input.component'
 import { NgxSliderModule } from '@angular-slider/ngx-slider'
 import { CollapsedTextComponent } from './components/collapsed-text/collapsed-text.component'
@@ -130,7 +127,6 @@ import { MatInputModule } from '@angular/material/input'
 import { OrganizationCreateComponent } from './views/cabinet/organization/create/organization-create/organization-create.component'
 import { ShowSliderComponent } from './components/materials/show-slider/show-slider.component'
 import { TestIframeComponent } from './views/test-iframe/test-iframe.component'
-import { CircleButtonComponent } from './components/materials/circle-button/circle-button.component'
 import { AddressInputComponent } from './components/address-input/address-input.component'
 import { RoundedButtonComponent } from './components/materials/rounded-button/rounded-button.component'
 import { RangeSelectionButtonComponent } from './components/materials/range-selection-button/range-selection-button.component'
@@ -148,6 +144,8 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer'
 import { ClusterModalComponent } from './components/cluster-modal/cluster-modal.component'
 import { StepContainerItemComponent } from './components/materials/step-container-item/step-container-item.component'
 import { ConfirmModalComponent } from './components/materials/confirm-modal/confirm-modal.component'
+import { SharedModule } from './modules/shared/shared.module'
+import { ButtonsModule } from './modules/shared/buttons.module'
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
@@ -174,11 +172,8 @@ registerLocaleData(localeRu, 'ru')
     CabinetComponent,
     HomeComponent,
     LoginComponent,
-    CircleButtonComponent,
     StepContainerItemComponent,
-    BackButtonComponent,
     RecoveryPasswordComponent,
-    SecondHeaderComponent,
     ShowSliderComponent,
     ConfirmModalComponent,
     ClusterModalComponent,
@@ -293,9 +288,10 @@ registerLocaleData(localeRu, 'ru')
     MaskitoModule,
     MatDatepickerModule,
     MatNativeDateModule,
-
     MatFormFieldModule,
     MatInputModule,
+    SharedModule,
+    ButtonsModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },

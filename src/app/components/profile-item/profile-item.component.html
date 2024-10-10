@@ -3,7 +3,7 @@
   <div class="info-wrapper">
     <ng-container>
         <div *ngIf="icon && iconColor" class="item-main-icon-wrapper" [style.background]="iconColor">
-          <img src="{{icon}}" alt="" class="item-main-icon">
+          <img style="filter:{{iconFilter}}" src="{{icon}}" alt="" class="item-main-icon">
         </div>
         <div *ngIf="name" class="icon-name">{{name}}</div>
     </ng-container>
