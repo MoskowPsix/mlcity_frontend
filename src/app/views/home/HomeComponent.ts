@@ -905,6 +905,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                     this.toastService.showToast('Город не указан', 'primary')
                     this.loadingService.hideLoading()
                     console.log(err)
+                    
                     return of(EMPTY)
                   }),
                 )
@@ -936,6 +937,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
               // this.navigationService.modalSearchCityesOpen.next(true)
             }
+            this.loadingService.hideLoading()
           })
         this.loadingService.showLoading()
 
