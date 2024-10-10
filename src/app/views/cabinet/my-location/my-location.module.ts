@@ -9,6 +9,7 @@ import { SecondHeaderComponent } from 'src/app/components/second-header/second-h
 import { SharedModule } from 'src/app/modules/shared/shared.module'
 import { ButtonsModule } from 'src/app/modules/shared/buttons.module'
 import { AngularYandexMapsModule, YaConfig } from 'angular8-yandex-maps'
+
 import { environment } from 'src/environments/environment'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,

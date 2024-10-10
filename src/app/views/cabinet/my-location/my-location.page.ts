@@ -3,6 +3,8 @@ import { UserPointService } from 'src/app/services/user-point.service'
 import { YaEvent, YaGeocoderService, YaReadyEvent } from 'angular8-yandex-maps'
 import { Subject, takeUntil, tap } from 'rxjs'
 import { LoadingService } from 'src/app/services/loading.service'
+import { ToastService } from 'src/app/services/toast.service'
+import { Router } from '@angular/router'
 @Component({
   selector: 'app-my-location',
   templateUrl: './my-location.page.html',
@@ -15,7 +17,10 @@ export class MyLocationPage implements OnInit {
   userPointService: UserPointService = inject(UserPointService)
   yaGeocoderService: YaGeocoderService = inject(YaGeocoderService)
   loadingService: LoadingService = inject(LoadingService)
+  toastService: ToastService = inject(ToastService)
+  router: Router = inject(Router)
   placemark!: ymaps.Placemark
+  point: any = {}
   address: string = 'Выберите домашний адрес'
   private readonly destroy$ = new Subject<void>()
   onMapReady(event: any) {
@@ -44,11 +49,12 @@ export class MyLocationPage implements OnInit {
         this.coords = []
         this.loadingService.hideLoading()
         if (event.points.data && event.points.data.length && event.points.data[0].latitude) {
+          this.point = event.points.data[0]
           this.coords.push(Number(event.points.data[0].latitude))
           this.coords.push(Number(event.points.data[0].longitude))
           this.addPlacemark(this.coords)
           this.setAdress()
-          console.log(this.coords)
+    
         } else {
           if (localStorage.getItem('lastMapLatitude') && localStorage.getItem('lastMapLongitude')) {
             this.coords = [localStorage.getItem('lastMapLatitude'), localStorage.getItem('lastMapLongitude')]
@@ -84,13 +90,41 @@ export class MyLocationPage implements OnInit {
           const firstGeoObject = result.geoObjects.get(0)
           // this.address = firstGeoObject.getAddressLine()
           this.address = firstGeoObject.getAddressLine()
-          console.log(firstGeoObject.getAddressLine())
         }),
       )
       .subscribe((result: any) => {})
   }
-  saveCoords(){
-    
+  setNewUserPoint() {
+    this.userPointService
+      .createUserPoint({ latitude: this.coords[0], longitude: this.coords[1] })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: any) => {
+        this.toastService.showToast('Домашний адрес изменён!', 'success')
+        this.router.navigate(['/home'])
+        this.loadingService.hideLoading()
+      })
+  }
+  saveCoords() {
+    if (this.coords) {
+      if (Number(this.point.latitude) !== this.coords[0] && Number(this.point.longitude) !== this.coords[1]) {
+        this.loadingService.showLoading()
+        if (this.point.id) {
+          this.userPointService
+            .deleteUserPoint(this.point.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((res: any) => {
+              this.setNewUserPoint()
+            })
+        } else {
+          this.setNewUserPoint()
+        }
+      } else {
+        this.toastService.showToast('Такой адресс уже установлен', 'warning')
+      }
+    } else {
+      this.toastService.showToast('Точка не выбрана', 'warning')
+    }
+
   }
   ngOnInit() {
     this.setFirstCoords()
