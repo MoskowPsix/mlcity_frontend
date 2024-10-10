@@ -5,7 +5,7 @@
     <app-second-header size="">
       <div class="header-tools">
         <app-back-button></app-back-button>
-        <input class="header-tools__search-input" placeholder="Поиск">
+        <input id="search-map-" class="header-tools__search-input" placeholder="Поиск">
         <img class="header-tools__search-icon" src="/assets/icons/search.svg" alt="">
       </div>
          <!-- Карта -->
@@ -14,10 +14,11 @@
 
   <div name="map" class="map">
     <ya-map
-    
+    (ready)="onMapReady($event)"
     id="map"
-    [center]="[0,0]"
-    [state]="{controls: ['zoomControl']}"
+    [center]="coords"
+    (yaclick)="onMapClick($event)"
+    [state]="{controls: ['zoomControl',]}"
     [options]="{
       yandexMapDisablePoiInteractivity: true,
       suppressMapOpenBlock: true,
@@ -41,7 +42,7 @@
           </div>
         </div>
         <div class="select-address__item_bottom">
-          <div class="address-circle"></div> Выберите домашний адрес
+          <div class="address-circle"></div> {{address}}
         </div>
     </div>
 
