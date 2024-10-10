@@ -32,7 +32,9 @@
       <app-update-version-modal></app-update-version-modal>
         <ion-router-outlet></ion-router-outlet>
       <ion-footer *ngIf="url !== '/cabinet/events/create' && url !== '/cabinet/sights/create' && url!=='/cabinet/sights/edit' && url!== '/cabinet/events/edit'">
-            <app-footer></app-footer>
+        <ion-toolbar>
+          <app-footer></app-footer>
+        </ion-toolbar>
       </ion-footer>
     <!-- </div> -->
   <!-- </ion-split-pane> -->

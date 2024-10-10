@@ -2,7 +2,7 @@
   <div
     (click)="goToPage(menuItem.path)"
     [routerLinkActive]="'item-active'"
-    [ngClass]="{'item_active': isActive(), 'item':!isActive()}"
+    class="item"
     >
       <img [src]="menuItem.activeIcon" *ngIf="isActive(); else activeIcon" class="icon active">
     
