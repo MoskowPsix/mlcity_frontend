@@ -237,7 +237,6 @@ export class RegistrationComponent implements OnInit {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (data: any) => {
-            console.log(data.user)
             this.positiveResponseAfterLogin(data)
           },
           error: (err) => {

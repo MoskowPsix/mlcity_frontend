@@ -66,7 +66,6 @@ export class FooterComponent implements OnInit {
       this.router.url.includes('sights') ||
       this.router.url.includes('events')
     ) {
-      console.log(path, this.router.url)
       return true
     }
     return false

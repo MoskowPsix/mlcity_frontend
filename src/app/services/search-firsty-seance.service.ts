@@ -65,8 +65,7 @@ export class SearchFirstySeanceService {
             next: () => {
               if (locationPlaces.length != 0) {
                 minSeance = this.searchSeanceForPlaces(locationPlaces)
-                console.log(minSeance)
-                if(minSeance){
+                if (minSeance) {
                   resolve({
                     seance: minSeance.seance,
                     place: minSeance.place,
@@ -74,14 +73,11 @@ export class SearchFirstySeanceService {
                     location_parent: locationParrent,
                   })
                 }
-                
               } else {
                 minSeance = this.searchSeanceForPlaces(places)
-                console.log(minSeance)
-                if(minSeance){
+                if (minSeance) {
                   resolve(minSeance)
                 }
-                
               }
             },
             error: (err) => reject(err),

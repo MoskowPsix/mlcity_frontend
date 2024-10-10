@@ -137,7 +137,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   async shareContent() {
-    console.log(this.router.url)
     this.shareService.shareNowUrl()
   }
   goToOrganization(event: any) {

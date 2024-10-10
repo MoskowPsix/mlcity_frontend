@@ -109,7 +109,6 @@ export class EditEventComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate(['cabinet/events'])
     }, 0) //убираем асинхронность
-    console.log(this.cancelConfirmValue)
   }
   //Проверяем плейсы и прячим их
   checkCountPlaces() {
@@ -144,7 +143,6 @@ export class EditEventComponent implements OnInit {
             )
             .pipe(takeUntil(this.destroy$))
             .subscribe((res: any) => {
-              console.log(res)
               this.loadingService.hideLoading()
               this.toastService.showToast('Событие удалено', 'success')
               this.router.navigate(['cabinet/events'])
@@ -265,7 +263,7 @@ export class EditEventComponent implements OnInit {
     }
   }
   addSeance(event: any) {
-    let tomorrow = moment().add(1,'days')
+    let tomorrow = moment().add(1, 'days')
     if (this.editForm.value.places[event].seances) {
       this.editForm.value.places[event].seances.push({
         temp_id: this.editForm.value.places[event].seances.length,
@@ -356,7 +354,6 @@ export class EditEventComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$),
         tap((res: any) => {
-          console.log(res)
           res = res.event
           priceArray = res.price
           typesArray = res.types
@@ -547,7 +544,6 @@ export class EditEventComponent implements OnInit {
         return
       }
       this.clearFormOfTempData()
-      console.log(this.editForm.value)
       // this.submitButtonState = true
       // this.loadingService.showLoading()
 

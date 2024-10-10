@@ -603,7 +603,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         .getPlaces(this.queryBuilderService.queryBuilder('placesForMap'))
         .pipe(takeUntil(this.destroy$), throttleTime(300))
         .subscribe((response: any) => {
-          console.trace('Стек вызовов:')
           this.places = response.places
           this.cdr.detectChanges()
           observer.next(EMPTY)

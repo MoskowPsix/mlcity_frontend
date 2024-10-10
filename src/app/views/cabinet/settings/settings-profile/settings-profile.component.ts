@@ -97,7 +97,7 @@ export class SettingsProfileComponent implements OnInit {
             this.loadingService.hideLoading()
             this.toastService.showToast('Данные обновлены!', 'success')
           }
-          console.log(this.router.navigate(['cabinet']))
+          this.router.navigate(['cabinet'])
         })
     }
   }

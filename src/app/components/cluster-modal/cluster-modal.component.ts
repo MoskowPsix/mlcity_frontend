@@ -16,16 +16,16 @@ export class ClusterModalComponent implements OnInit {
   @Output() paginateEvents: EventEmitter<any> = new EventEmitter()
   @Output() paginateSight: EventEmitter<any> = new EventEmitter()
   @Output() eventClicked: EventEmitter<any> = new EventEmitter()
-  @Output() organizationClicked:EventEmitter<any> = new EventEmitter()
+  @Output() organizationClicked: EventEmitter<any> = new EventEmitter()
   @Input() modalContent: any = []
   @Input() spiner!: boolean
-  router:Router = inject(Router)
+  router: Router = inject(Router)
   type: string = ''
 
   private readonly destroy$ = new Subject<void>()
   ngOnChanges(changes: SimpleChanges): void {}
- 
-  eventNavigation(event: any){
+
+  eventNavigation(event: any) {
     this.eventClicked.emit(event)
   }
   closeModal() {
@@ -37,12 +37,10 @@ export class ClusterModalComponent implements OnInit {
   endScrollingSight() {
     this.paginateSight.emit()
   }
-  organizationNavigation(event:any){
+  organizationNavigation(event: any) {
     this.organizationClicked.emit(event)
   }
-  testLog() {
-    console.log('test-log')
-  }
+  testLog() {}
   ngOnInit() {
     this.switchTypeService.currentType.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.type = value

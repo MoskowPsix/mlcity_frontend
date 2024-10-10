@@ -229,10 +229,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         event = item
       }
     })
-    console.log(event)
-    console.log(this.organizations)
     this.selectedName = event.name
-    console.log(this.selectedName)
     this.selectedOrganizationMore = event
     this.selectedOrganization = event.organization
     let id = this.selectedOrganization.id
@@ -818,7 +815,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   addPlace() {
-    console.log(this.selectedOrganizationMore)
     let tempPlace: any
     if (!this.selectedOrganizationMore || !this.selectedOrganizationMore.address) {
       tempPlace = {

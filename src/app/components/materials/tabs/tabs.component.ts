@@ -32,9 +32,7 @@ export class TabsComponent implements OnInit, AfterViewInit {
     if (this.tabsItems) {
     }
   }
-  ionViewWillEnter() {
-    console.log('test')
-  }
+  ionViewWillEnter() {}
   setActiveTab(tab: any, itemTab: HTMLElement) {
     this.tabsView.forEach((item: any) => {
       if (tab.name == item.nativeElement.getAttribute('id')) {

@@ -65,21 +65,24 @@ export class EditSightComponent implements OnInit {
     this.loadingService.showLoading()
     //Здесь мы редактируем sight но переменная называется organization и в себе отдельно хранит организацию
     // Для удаления нам нужно отправить именно id сообщества
-    this.sightsService.deleteSight(this.organization.organization.id).pipe(takeUntil(this.destroy$),catchError((err)=>{
-      console.log(err)
-      this.loadingService.hideLoading()
-      if(err.status == 400){
+    this.sightsService
+      .deleteSight(this.organization.organization.id)
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          console.log(err)
+          this.loadingService.hideLoading()
+          if (err.status == 400) {
             this.toastService.showToast(MessagesErrors.default, 'danger')
-      }
-      return EMPTY
-    }))
-      .subscribe((res: any) => {
-              console.log(res)
-              this.loadingService.hideLoading()
-              this.toastService.showToast('Сообщество успешно удалено', 'success')
-              this.router.navigate(['cabinet/sights'])
-        }
+          }
+          return EMPTY
+        }),
       )
+      .subscribe((res: any) => {
+        this.loadingService.hideLoading()
+        this.toastService.showToast('Сообщество успешно удалено', 'success')
+        this.router.navigate(['cabinet/sights'])
+      })
   }
   cancelDeleteConfirm() {
     this.deleteConfirmValue = false
@@ -156,7 +159,6 @@ export class EditSightComponent implements OnInit {
       this.editForm.value.types.splice(index, 1)
     }
     this.previewCategory.splice(event, 1)
-    console.log(this.editForm.value)
   }
   addCategory(event: any) {
     this.previewCategory.push(event)
@@ -180,7 +182,6 @@ export class EditSightComponent implements OnInit {
     let sight_history_content = new SightHistoryContent()
 
     let result = sight_history_content.merge(this.copyOrganization, _.cloneDeep(this.editForm.value))
-    console.log(this.copyOrganization, _.cloneDeep(this.editForm.value), result)
     this.editService
       .sendEditSight(serialize(result, this.options))
       .pipe(

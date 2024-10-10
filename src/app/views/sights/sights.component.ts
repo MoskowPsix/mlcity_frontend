@@ -103,7 +103,6 @@ export class SightsComponent implements OnInit, OnDestroy {
           delay(100),
           retry(3),
           map((response: any) => {
-            console.log(response)
             this.sightsCity.push(...response.sights.data)
             if (this.sightsCity.length == 0) {
               this.notFound = true

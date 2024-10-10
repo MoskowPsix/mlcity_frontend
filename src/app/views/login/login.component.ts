@@ -297,7 +297,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             })
         })
         .catch((e) => {
-          console.log(e)
           this.toastService.showToast('При авторизвции apple что-то пошло не так', 'warning')
           return of(EMPTY)
         })

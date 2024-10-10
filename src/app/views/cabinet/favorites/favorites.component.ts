@@ -1,16 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import {
-  EMPTY,
-  Subject,
-  catchError,
-  delay,
-  map,
-  of,
-  retry,
-  takeUntil,
-  tap,
-} from 'rxjs'
+import { EMPTY, Subject, catchError, delay, map, of, retry, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { IEvent } from 'src/app/models/event'
 import { ISight } from 'src/app/models/sight'
@@ -39,7 +29,7 @@ export class FavoritesComponent implements OnInit {
   spiner: boolean = false
 
   router: Router = inject(Router)
-  notFound:boolean = false
+  notFound: boolean = false
 
   segment: string = 'events'
 
@@ -60,13 +50,9 @@ export class FavoritesComponent implements OnInit {
     this.router.navigate(['/organizations', event])
   }
   getEvents() {
-    this.loadingMoreEvents
-      ? (this.loadingEvents = true)
-      : (this.loadingEvents = false)
+    this.loadingMoreEvents ? (this.loadingEvents = true) : (this.loadingEvents = false)
     this.eventService
-      .getEventsFavorites(
-        this.queryBuilderService.queryBuilder('eventsFavorites'),
-      )
+      .getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites'))
       .pipe(
         delay(100),
         retry(3),
@@ -87,20 +73,15 @@ export class FavoritesComponent implements OnInit {
       })
   }
 
-  eventNavigation(event:any){
-    console.log(event)
+  eventNavigation(event: any) {
     setTimeout(() => {
       this.router.navigate(['/events', event])
     }, 0)
   }
   getSights() {
-    this.loadingMoreSights
-      ? (this.loadingSights = true)
-      : (this.loadingSights = false)
+    this.loadingMoreSights ? (this.loadingSights = true) : (this.loadingSights = false)
     this.sightService
-      .getSightsFavorites(
-        this.queryBuilderService.queryBuilder('sightsFavorites'),
-      )
+      .getSightsFavorites(this.queryBuilderService.queryBuilder('sightsFavorites'))
       .pipe(
         delay(100),
         retry(3),
@@ -139,7 +120,7 @@ export class FavoritesComponent implements OnInit {
     this.segment = event.detail.value
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.getEvents()
     this.getSights()
   }
@@ -155,9 +136,7 @@ export class FavoritesComponent implements OnInit {
     this.currentPageEvents = 1
     this.currentPageSights = 1
   }
-  ngOnInit() {
-   
-  }
+  ngOnInit() {}
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnDestroy() {
     this.destroy$.next()
