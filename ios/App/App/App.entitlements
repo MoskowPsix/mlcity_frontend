@@ -12,6 +12,8 @@
 		<string>applinks:mlcity.ru</string>
 		<string>webcredentials:vokrug.city</string>
 		<string>applinks:vokrug.city</string>
+		<string>webcredentials:www.vokrug.city</string>
+		<string>applinks:www.vokrug.city</string>
 	</array>
 </dict>
 </plist>
