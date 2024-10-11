@@ -325,7 +325,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     //Получаем ид юзера и параметра маршрута
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.token = params['user_id']
-      this.token ? this.loginAfterSocial(this.token) : this.loginAfterSocial('no')
+      this.token ? this.loginAfterSocial(this.token) : null
     })
     this.MailOrName()
   }

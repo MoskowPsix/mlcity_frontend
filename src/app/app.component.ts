@@ -49,7 +49,8 @@ export class AppComponent implements OnInit {
         const pathArray = event.url.split(domain)
         const appPath = pathArray.pop()
         if (appPath) {
-          this.router.navigateByUrl(String(appPath))
+          // this.toast.showToast(appPath, 'error')
+          this.router.navigateByUrl(String(new URL(appPath).pathname))
         }
       })
     })
