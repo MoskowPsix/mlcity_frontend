@@ -105,16 +105,22 @@ export class MapService {
   }
 
   goHomeCoords() {
-    this.filterService.setLocationLatitudeTolocalStorage(String(this.userPointService.homeLatitude.value))
-    this.filterService.setLocationLongitudeTolocalStorage(String(this.userPointService.homeLongitude.value))
-    this.setLastMapCoordsToLocalStorage(
-      this.userPointService.homeLatitude.value,
-      this.userPointService.homeLongitude.value,
-    )
-    this.circleCenterLatitude.next(Number(this.userPointService.homeLatitude.value))
-    this.circleCenterLongitude.next(Number(this.userPointService.homeLongitude.value))
-    this.filterService.changeCityFilter.next(true)
-    this.filterService.changeFilter.next(true)
+    console.log(this.userPointService.homeLatitude.value)
+    if (this.userPointService.homeLatitude.value && this.userPointService.homeLongitude.value) {
+      this.filterService.setLocationLatitudeTolocalStorage(String(this.userPointService.homeLatitude.value))
+      this.filterService.setLocationLongitudeTolocalStorage(String(this.userPointService.homeLongitude.value))
+      this.setLastMapCoordsToLocalStorage(
+        this.userPointService.homeLatitude.value,
+        this.userPointService.homeLongitude.value,
+      )
+      this.circleCenterLatitude.next(Number(this.userPointService.homeLatitude.value))
+      this.circleCenterLongitude.next(Number(this.userPointService.homeLongitude.value))
+      this.filterService.changeCityFilter.next(true)
+      this.filterService.changeFilter.next(true)
+      return true
+    } else {
+      return false
+    }
   }
 
   // Проверка домашних координат и их установка если пользователь авторизован
