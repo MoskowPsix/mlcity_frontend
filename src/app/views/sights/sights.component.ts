@@ -92,6 +92,10 @@ export class SightsComponent implements OnInit, OnDestroy {
     this.router.navigate(['/events'])
   }
 
+  openCitySearch() {
+    this.navigationService.modalSearchCityesOpen.next(true)
+  }
+
   getSightsCity() {
     // this.loadingMoreSightsCity ? (this.loadingSightsCity = true) : (this.loadingSightsCity = false)
     this.sightsCity.length > 0 ? (this.spiner = true) : (this.spiner = false) //проверяем что запрос не первый

@@ -9,7 +9,7 @@
           <app-type-swither (endingSwitchAnimation)="redirectToEvent()"></app-type-swither>
           <app-category-button stateType="Event"></app-category-button>
         </div>
-        <div class="header-bottom-container" header-bottom>
+        <div (click)="openCitySearch()" class="header-bottom-container" header-bottom>
           {{ city ? city : '...' }} 
         </div>
       </app-second-header>

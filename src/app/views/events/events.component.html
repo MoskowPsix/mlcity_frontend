@@ -6,7 +6,7 @@
                 <app-type-swither (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
                 <app-category-button stateType="Event"></app-category-button>
               </div>
-              <div class="header-bottom-container" header-bottom>
+              <div (click)="openCitySearch()" class="header-bottom-container" header-bottom>
                    {{ city ? city : '...' }} 
                 <app-calendar-button (setDateEmit)="setDate($event)"></app-calendar-button>
               </div>

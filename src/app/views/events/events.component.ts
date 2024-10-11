@@ -123,6 +123,10 @@ export class EventsComponent implements OnInit, OnDestroy {
     document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  openCitySearch() {
+    this.navigationService.modalSearchCityesOpen.next(true)
+  }
+
   eventNavigation(event: any) {
     this.router.navigate(['/events', event])
   }
