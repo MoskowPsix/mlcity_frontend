@@ -5,6 +5,7 @@ import { Subject, takeUntil, tap } from 'rxjs'
 import { LoadingService } from 'src/app/services/loading.service'
 import { ToastService } from 'src/app/services/toast.service'
 import { Router } from '@angular/router'
+import { MapService } from 'src/app/services/map.service'
 @Component({
   selector: 'app-my-location',
   templateUrl: './my-location.page.html',
@@ -54,7 +55,6 @@ export class MyLocationPage implements OnInit {
           this.coords.push(Number(event.points.data[0].longitude))
           this.addPlacemark(this.coords)
           this.setAdress()
-    
         } else {
           if (localStorage.getItem('lastMapLatitude') && localStorage.getItem('lastMapLongitude')) {
             this.coords = [localStorage.getItem('lastMapLatitude'), localStorage.getItem('lastMapLongitude')]
@@ -99,6 +99,8 @@ export class MyLocationPage implements OnInit {
       .createUserPoint({ latitude: this.coords[0], longitude: this.coords[1] })
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: any) => {
+        this.userPointService.homeLatitude.next(this.coords[0])
+        this.userPointService.homeLongitude.next(this.coords[1])
         this.toastService.showToast('Домашний адрес изменён!', 'success')
         this.router.navigate(['/home'])
         this.loadingService.hideLoading()
@@ -124,7 +126,6 @@ export class MyLocationPage implements OnInit {
     } else {
       this.toastService.showToast('Точка не выбрана', 'warning')
     }
-
   }
   ngOnInit() {
     this.setFirstCoords()

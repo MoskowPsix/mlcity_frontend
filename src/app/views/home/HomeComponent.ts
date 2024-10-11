@@ -884,63 +884,47 @@ export class HomeComponent implements OnInit, OnDestroy {
         break
       case 2:
         this.loadingService.showLoading()
-        this.userPointService
-          .getPoints()
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((event: any) => {
-            if (event.points.data.length) {
-              this.userHaveCoords = true
-            }
-            this.loadingService.hideLoading()
-            if (
-              this.filterService.locationId.value &&
-              !this.authService.authenticationState.value &&
-              this.userHaveCoords
-            ) {
-              this.locationService
-                .getLocationsIds(this.filterService.locationId.value)
-                .pipe(
-                  takeUntil(this.destroy$),
-                  catchError((err) => {
-                    this.toastService.showToast('Город не указан', 'primary')
-                    this.loadingService.hideLoading()
-                    console.log(err)
-                    
-                    return of(EMPTY)
-                  }),
-                )
-                .subscribe((res: any) => {
-                  if (res.location.latitude && res.location.longitude) {
-                    this.mapService.circleCenterLatitude.next(res.location.latitude)
-                    this.mapService.circleCenterLongitude.next(res.location.longitude)
-                    this.mapService.geolocationLatitude.next(res.location.latitude)
-                    this.mapService.geolocationLongitude.next(res.location.longitude)
-                    this.mapService.setLastMapCoordsToLocalStorage(res.location.latitude, res.location.longitude)
-                    // this.map.target.setCenter([
-                    //   res.location.latitude,
-                    //   res.location.longitude,
-                    // ]);
-                    this.filterService.changeFilter.next(true)
-                    this.filterService.changeCityFilter.next(true)
-                    this.loadingService.hideLoading()
-                    this.cdr.detectChanges()
-                  }
-                })
-            } else if (this.authService.authenticationState.value && this.userHaveCoords) {
-              this.mapService.goHomeCoords()
-              this.loadingService.hideLoading()
-              this.cdr.detectChanges()
-            } else {
-              this.loadingService.hideLoading()
-              this.router.navigate(['/cabinet/location'])
-              this.toastService.showToast('Добавьте домашний адрес', 'warning')
-
-              // this.navigationService.modalSearchCityesOpen.next(true)
-            }
-            this.loadingService.hideLoading()
-          })
-        this.loadingService.showLoading()
-
+        if (this.filterService.locationId.value && !this.authService.authenticationState.value) {
+          this.locationService
+            .getLocationsIds(this.filterService.locationId.value)
+            .pipe(
+              takeUntil(this.destroy$),
+              catchError((err) => {
+                this.toastService.showToast('Город не указан', 'primary')
+                this.loadingService.hideLoading()
+                console.log(err)
+                return of(EMPTY)
+              }),
+            )
+            .subscribe((res: any) => {
+              if (res.location.latitude && res.location.longitude) {
+                this.mapService.circleCenterLatitude.next(res.location.latitude)
+                this.mapService.circleCenterLongitude.next(res.location.longitude)
+                this.mapService.geolocationLatitude.next(res.location.latitude)
+                this.mapService.geolocationLongitude.next(res.location.longitude)
+                this.mapService.setLastMapCoordsToLocalStorage(res.location.latitude, res.location.longitude)
+                // this.map.target.setCenter([
+                //   res.location.latitude,
+                //   res.location.longitude,
+                // ]);
+                this.filterService.changeFilter.next(true)
+                this.filterService.changeCityFilter.next(true)
+                this.loadingService.hideLoading()
+                this.cdr.detectChanges()
+              }
+            })
+        } else if (this.authService.authenticationState.value) {
+          let coordState = this.mapService.goHomeCoords()
+          if (!coordState) {
+            this.router.navigate(['/cabinet/location'])
+            this.toastService.showToast('Добавьте домашний адрес', 'info')
+          }
+          this.loadingService.hideLoading()
+          this.cdr.detectChanges()
+        } else {
+          this.loadingService.hideLoading()
+          this.navigationService.modalSearchCityesOpen.next(true)
+        }
         break
       case 3:
         this.navigationService.modalSearchCityesOpen.next(true)
