@@ -58,10 +58,10 @@ export class EventsService {
     // ).subscribe().unsubscribe();
   }
 
-  getEvents(params: IGetEventsAndSights,) {
+  getEvents(params: IGetEventsAndSights) {
     //Получаем ивенты по заданным фильтрам (IGetEventsAndSights)
     return this.http.post<IEvent[]>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events`, {
-        ...params
+      ...params,
     })
   }
 

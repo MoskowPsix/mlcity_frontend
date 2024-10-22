@@ -30,6 +30,8 @@ import { Capacitor } from '@capacitor/core'
 import { Router } from '@angular/router'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
 import { CalendarComponent } from 'src/app/components/calendar/calendar.component'
+import { IonContent } from '@ionic/angular'
+import { EventsTapeService } from 'src/app/services/events-tape.service'
 register()
 
 @Component({
@@ -44,13 +46,12 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   @ViewChild('ContentCol') ContentCol!: ElementRef
   @ViewChild('headerWrapper') headerWrapper!: ElementRef
-
+  @ViewChild(IonContent) ionContent!: IonContent
   city: string = ''
   segment: string = 'eventsCitySegment'
   isFirstNavigation: any = new BehaviorSubject<boolean>(true)
   date: any
   spiner: boolean = false
-  eventsCity: IEvent[] = []
   eventsGeolocation: IEvent[] = []
   wait: boolean = true
   scrollStart: any
@@ -70,7 +71,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   currentPageEventsCity: number = 1
   currentPageEventsGeolocation: number = 1
 
-  nextPage: boolean = true
 
   timeStart: number = 0
   timeEnd: number = 0
@@ -100,6 +100,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     private locationService: LocationService,
     private router: Router,
+    public eventsTapeService: EventsTapeService,
     private location: Location,
     private titleService: Title,
     private metaService: Meta,
@@ -135,21 +136,22 @@ export class EventsComponent implements OnInit, OnDestroy {
   getEventsCity() {
     if (this.wait) {
       this.wait = false
-      if (this.nextPage) {
+      if (this.eventsTapeService.nextPage) {
         this.spiner = true
         this.eventsService
           .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
           .pipe(
             tap((response: any) => {
-              this.eventsCity.push(...response.events.data)
+              console.log(response)
+              this.eventsTapeService.eventsCity.push(...response.events.data)
               response.events.next_cursor
                 ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
                 : this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
               if (response.events.next_cursor == null) {
-                this.nextPage = false
+                this.eventsTapeService.nextPage = false
                 this.spiner = false
               } else {
-                this.nextPage = true
+                this.eventsTapeService.nextPage = true
                 this.spiner = false
               }
             }),
@@ -161,7 +163,7 @@ export class EventsComponent implements OnInit, OnDestroy {
             takeUntil(this.destroy$),
           )
           .subscribe((response: any) => {
-            if (this.eventsCity.length === 0) {
+            if (this.eventsTapeService.eventsCity.length === 0) {
               this.notFound = true
             }
             this.wait = true
@@ -271,54 +273,54 @@ export class EventsComponent implements OnInit, OnDestroy {
         catchError(() => of(EMPTY)),
       )
       .subscribe((response: any) => {
-        response?.location?.name ? (this.city = response.location.name) : null
+        response?.location?.name ? (this.eventsTapeService.tapeCityName = response.location.name) : null
       })
   }
 
   ngAfterViewInit() {}
   ngOnInit() {}
   ionViewWillEnter() {
+    this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
+    this.ionContent.ionScroll.pipe(takeUntil(this.destroy$)).subscribe((event: any) => {
+      this.eventsTapeService.eventsLastScrollPositionForTape = event.detail.scrollTop
+    })
     this.switchTypeService.currentType.value == 'sights' ? this.router.navigate(['/sights']) : null
-
-    this.wait = true
-    this.nextPage = true
-    this.notFound = false
-    this.eventsCity = []
-    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-    // this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
-    // this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
-    //   if (value.url === '/event') {
-    //     // this.filterService.changeFilter.next(true)
-    //   }
-    // })
-
-    // window.addEventListener("scrollend", this.scrollEvent, true)
+    this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+      if (value.url === '/event') {
+        // this.filterService.changeFilter.next(true)
+      }
+    })
 
     this.date = {
       dateStart: this.filterService.startDate.value,
       dateEnd: this.filterService.endDate.value,
     }
-    //console.log(this.date)
-    this.eventsCity = []
-    this.eventsGeolocation = []
-    // this.getEventsCity()
-    // this.getEventsGeolocation()
-
-    //Подписываемся на изменение фильтра
-    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
-      if (value === true) {
-        this.wait = true
-        this.nextPage = true
-        this.notFound = false
-        this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-        this.eventsCity = []
-        this.eventsGeolocation = []
-        this.getEventsCity()
-        this.changeCity()
-        // this.getEventsGeolocation()
-      }
-      this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
-    })
+    // Подписываемся на изменение фильтра
+    if (!this.eventsTapeService.userHaveSubscribedEvents) {
+      this.wait = true
+      this.eventsTapeService.nextPage = true
+      this.notFound = false
+      this.eventsTapeService.eventsCity = []
+      this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
+      this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
+        this.eventsTapeService.userHaveSubscribedEvents = true
+        if (value === true) {
+          this.wait = true
+          this.eventsTapeService.nextPage = true
+          this.notFound = false
+          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
+          this.eventsTapeService.eventsCity = []
+          this.eventsGeolocation = []
+          this.eventsTapeService.eventsLastScrollPositionForTape = 0
+          this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
+          this.getEventsCity()
+          this.changeCity()
+          // this.getEventsGeolocation()
+        }
+        this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+      })
+    }
 
     //Подписываемся на город
     // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
