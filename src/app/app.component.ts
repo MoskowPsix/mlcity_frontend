@@ -9,6 +9,7 @@ import { CheckVersionService } from './services/check-version.service'
 import { Capacitor } from '@capacitor/core'
 import { StoreInfo } from './models/store-info'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
+import { ScreenOrientation } from '@capacitor/screen-orientation'
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit {
     private toast: ToastService,
     private checkVersionService: CheckVersionService,
   ) {
+    ScreenOrientation.lock({ orientation: 'portrait' })
     this.initializeApp()
   }
   url: any = ''
