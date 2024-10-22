@@ -78,6 +78,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   allFiles: any[] = []
   @ViewChild('eventName') eventNameElement!: any
   @ViewChild('eventDescription') eventDescriptionElement!: any
+  
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
     if (window.innerWidth < 900) {

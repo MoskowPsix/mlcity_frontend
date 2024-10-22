@@ -11,6 +11,7 @@ export class CircleButtonComponent implements OnInit {
   @Input() icon: string = ''
   @Input() border: string = ''
   @Input() changeColor!: string
+  @Input() disabled?: boolean
   @Input() loading: boolean = false
   click() {
     this.clicked.emit()

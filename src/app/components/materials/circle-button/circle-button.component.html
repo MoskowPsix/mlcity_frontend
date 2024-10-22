@@ -1,19 +1,26 @@
-<ng-container *ngIf="border === 'dark'">
+<ng-container *ngIf="border === 'dark' && !disabled">
   <button (click)="click()" class="circle-button circle-button_dark-border">
     <img *ngIf="icon" src="{{icon}}" alt="">
     <ng-content></ng-content>
   </button>
 </ng-container>
-<ng-container *ngIf="border === 'dark-all'">
+<ng-container *ngIf="border === 'dark-all' && !disabled">
   <button (click)="click()" class="circle-button_dark-all">
     <img *ngIf="icon" src="{{icon}}" alt="">
     <ng-content></ng-content>
   </button>
 </ng-container>
-<ng-container *ngIf="border === ''">
+<ng-container *ngIf="border === '' && !disabled">
   <button (click)="click()" class="circle-button">
     <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>  
+    
     <img  style="{{changeColor}}" *ngIf="icon && !loading" src="{{icon}}" alt="">
     <ng-content></ng-content>
+  </button>
+</ng-container>
+<ng-container *ngIf="disabled">
+  <button (click)="click()" class="circle-button__disabled">
+    <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>  
+    <img  style="{{changeColor}}" *ngIf="icon && !loading" src="{{icon}}" alt="">
   </button>
 </ng-container>
