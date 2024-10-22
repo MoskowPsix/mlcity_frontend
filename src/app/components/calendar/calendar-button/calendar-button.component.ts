@@ -35,11 +35,9 @@ export class CalendarButtonComponent implements OnInit {
   dateEnd: any
   filterService: FilterService = inject(FilterService)
   private readonly destroy$ = new Subject<void>()
-  constructor (private dateAdapter: DateAdapter<Date>,) 
-  {
-      this.dateAdapter.getFirstDayOfWeek = () => 1;
-    }
-  
+  constructor(private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.getFirstDayOfWeek = () => 1
+  }
 
   dateRange = new FormGroup({
     start: new FormControl<Date | null>(null),
@@ -71,19 +69,19 @@ export class CalendarButtonComponent implements OnInit {
   }
   ngOnInit() {
     this.startDateEmit.emit({
-      dateStart: moment(this.filterService.startDate.value).format('MM-DD-YYYY'),
-      dateEnd: moment(this.filterService.endDate.value).format('MM-DD-YYYY'),
+      dateStart: moment(this.filterService.startDate.value).format('YYYY-MM-DD'),
+      dateEnd: moment(this.filterService.endDate.value).format('YYYY-MM-DD'),
     })
     this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.render()
     })
     this.dateRange.valueChanges.pipe(takeUntil(this.destroy$), debounceTime(500)).subscribe((values: any) => {
       this.setDateEmit.emit({
-        dateStart: moment(values.start).format('MM-DD-YYYY'),
+        dateStart: moment(values.start).format('YYYY-MM-DD'),
         dateEnd:
           moment(values.end).format('MM-DD-YYYY') !== 'Invalid date'
-            ? moment(values.end).format('MM-DD-YYYY')
-            : moment(values.start).format('MM-DD-YYYY'),
+            ? moment(values.end).format('YYYY-MM-DD')
+            : moment(values.start).format('YYYY-MM-DD'),
       })
     })
   }

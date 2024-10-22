@@ -14,6 +14,8 @@ import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
 import { OrganizationService } from 'src/app/services/organization.service'
 import { MapService } from 'src/app/services/map.service'
+import { SightTapeService } from 'src/app/services/sight-tape.service'
+import { IonContent } from '@ionic/angular'
 
 @Component({
   selector: 'app-sights',
@@ -28,7 +30,6 @@ export class SightsComponent implements OnInit, OnDestroy {
   city: string = ''
   segment: string = 'sightsCitySegment'
 
-  sightsCity: ISight[] = []
   sightsGeolocation: ISight[] = []
   spiner: boolean = false
   notFound: boolean = false
@@ -44,10 +45,10 @@ export class SightsComponent implements OnInit, OnDestroy {
   cardContainer!: ElementRef
   @ViewChild('widgetsContent') widgetsContent!: ElementRef
   @ViewChild('headerWrapper') headerWrapper!: ElementRef
+  @ViewChild(IonContent) ionContent!: IonContent
   viewId: number[] = []
   timeStart: number = 0
 
-  nextPage: boolean = false
   loadTrue: boolean = false
 
   sightTypeId: any
@@ -58,7 +59,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     private sightsService: SightsService,
     private toastService: ToastService,
     private organizationService: OrganizationService,
-
+    public sightTapeService: SightTapeService,
     private filterService: FilterService,
     private queryBuilderService: QueryBuilderService,
     private navigationService: NavigationService,
@@ -98,33 +99,38 @@ export class SightsComponent implements OnInit, OnDestroy {
 
   getSightsCity() {
     // this.loadingMoreSightsCity ? (this.loadingSightsCity = true) : (this.loadingSightsCity = false)
-    this.sightsCity.length > 0 ? (this.spiner = true) : (this.spiner = false) //проверяем что запрос не первый
+    this.sightTapeService.sightsCity.length > 0 ? (this.spiner = true) : (this.spiner = false) //проверяем что запрос не первый
     this.notFound = false
-    if (this.nextPage) {
+    if (this.sightTapeService.nextPage) {
       this.sightsService
         .getSights(this.queryBuilderService.queryBuilder('sightsForTape'))
         .pipe(
           delay(100),
           retry(3),
-          map((response: any) => {
-            this.sightsCity.push(...response.sights.data)
-            if (this.sightsCity.length == 0) {
-              this.notFound = true
-            }
-            this.filterService.setSightsCount(response.total)
-            this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(response.sights.next_cursor)
-            response.sights.next_cursor ? (this.nextPage = true) : (this.nextPage = false)
-            response.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
-          }),
+
           tap((response: any) => {
+            this.sightTapeService.sightsCity.push(...response.sights.data)
             this.loadingSightsCity = true
             this.loadingMoreSightsCity = false
-            if (this.nextPage == null) {
+            if (this.sightTapeService.nextPage == null) {
               this.spiner = false
             } else {
               this.spiner = false
             }
           }),
+          tap((response: any) => {
+            response.sights.next_cursor
+              ? this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(response.sights.next_cursor)
+              : (this.sightTapeService.nextPage = false)
+            response.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
+          }),
+          tap((response: any) => {
+            if (this.sightTapeService.sightsCity.length == 0) {
+              this.notFound = true
+            }
+            this.filterService.setSightsCount(response.total)
+          }),
+
           catchError((err) => {
             console.log(err)
             this.toastService.showToast(MessagesErrors.default, 'danger')
@@ -134,7 +140,7 @@ export class SightsComponent implements OnInit, OnDestroy {
           takeUntil(this.destroy$),
         )
         .subscribe(() => {
-          if (this.sightsCity.length === 0) {
+          if (this.sightTapeService.sightsCity.length === 0) {
             this.notFound = true
           }
         })
@@ -235,7 +241,7 @@ export class SightsComponent implements OnInit, OnDestroy {
     if (
       boundingClientRect.bottom <= window.innerHeight * 2 &&
       !(boundingClientRect.bottom <= window.innerHeight) &&
-      this.sightsCity &&
+      this.sightTapeService.sightsCity &&
       this.loadTrue
     ) {
       this.loadTrue = false
@@ -251,33 +257,39 @@ export class SightsComponent implements OnInit, OnDestroy {
         catchError(() => of(EMPTY)),
       )
       .subscribe((response: any) => {
-        response?.location?.name ? (this.city = response.location.name) : null
+        response?.location?.name ? (this.sightTapeService.tapeCityName = response.location.name) : null
       })
   }
 
   ionViewWillEnter() {
     window.addEventListener('scroll', this.scrollPaginate, true)
     window.addEventListener('scrollend', this.scrollEvent, true)
-    this.sightsCity = []
-    this.sightsGeolocation = []
-    this.nextPage = true
-    this.notFound = false
-    //Подписываемся на изменение фильтра
-    this.filterService.changeFilter.pipe(debounceTime(1000), takeUntil(this.destroy$)).subscribe((value) => {
-      if (value === true) {
-        this.sightsCity = []
-        this.sightsGeolocation = []
-        this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next('')
-        this.nextPage = true
-        this.notFound = false
-        this.getSightsCity()
-        this.changeCity()
-      }
-      this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+    this.ionContent.scrollToPoint(0, this.sightTapeService.eventsLastScrollPositionForTape, 0)
+    this.ionContent.ionScroll.pipe(takeUntil(this.destroy$)).subscribe((event: any) => {
+      this.sightTapeService.eventsLastScrollPositionForTape = event.detail.scrollTop
     })
-    this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
-      this.sightTypeId = value[0]
-    })
+    if (!this.sightTapeService.userHaveSubscribedEvents) {
+      //Подписываемся на изменение фильтра
+      this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
+        this.sightTapeService.eventsLastScrollPositionForTape = 0
+        this.ionContent.scrollToPoint(0, this.sightTapeService.eventsLastScrollPositionForTape, 0)
+        this.sightTapeService.sightsCity = []
+        if (value === true) {
+          this.sightTapeService.sightsCity = []
+          this.sightsGeolocation = []
+          this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next('')
+          this.sightTapeService.nextPage = true
+          this.notFound = false
+          this.sightTapeService.userHaveSubscribedEvents = true
+          this.getSightsCity()
+          this.changeCity()
+        }
+        this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+      })
+      this.filterService.sightTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
+        this.sightTypeId = value[0]
+      })
+    }
   }
   ionViewDidLeave() {
     this.destroy$.next()
@@ -286,7 +298,6 @@ export class SightsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()
-    this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next('')
     this.destroy$.complete()
   }
 }

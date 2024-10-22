@@ -368,6 +368,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.CirclePoint.options.set('fillOpacity', 0.15)
         this.CirclePoint.options.set('strokeWidth')
         this.getEventsAndSights()
+        this.filterService.changeFilter.next(true)
       }
     })
     this.map.target.controls.remove('zoomControl')

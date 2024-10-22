@@ -1,5 +1,5 @@
 
-<ion-content id="topSi">
+<ion-content [scrollEvents]="true" id="topSi">
   <div #ContentCol>
     <div id="header-anchor"></div>
   <div class="carusel-wrapper_flex" #headerWrapper>
@@ -9,14 +9,14 @@
           <app-type-swither (endingSwitchAnimation)="redirectToEvent()"></app-type-swither>
           <app-category-button stateType="Event"></app-category-button>
         </div>
-        <div (click)="openCitySearch()" class="header-bottom-container" header-bottom>
-          {{ city ? city : '...' }} 
+        <div class="header-bottom-container" header-bottom>
+          {{ sightTapeService.tapeCityName.length ? sightTapeService.tapeCityName : '...' }} 
         </div>
       </app-second-header>
     </div>
   </div>
   <div class="grid-wrapper">
-    <app-organizations-grid (organizationClicked)="organizationNavigation($event)" buttonType="" [spiner]="spiner" (endScroll)="getSightsCity()" [notFound]="notFound" [cards]="sightsCity"/>
+    <app-organizations-grid (organizationClicked)="organizationNavigation($event)" buttonType="" [spiner]="spiner" (endScroll)="getSightsCity()" [notFound]="notFound" [cards]="sightTapeService.sightsCity"/>
   </div>
   </div>
   </ion-content>

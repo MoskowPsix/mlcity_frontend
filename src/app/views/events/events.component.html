@@ -6,15 +6,15 @@
                 <app-type-swither (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
                 <app-category-button stateType="Event"></app-category-button>
               </div>
-              <div (click)="openCitySearch()" class="header-bottom-container" header-bottom>
-                   {{ city ? city : '...' }} 
+              <div class="header-bottom-container" header-bottom>
+                   {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : '...' }} 
                 <app-calendar-button (setDateEmit)="setDate($event)"></app-calendar-button>
               </div>
             </app-second-header>
           </div>
           
           <div class="grid-wrapper">
-            <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" [spiner]="spiner" [cards]="eventsCity" (endScroll)="getEventsCity()"></app-card-grid>
+            <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" [spiner]="spiner" [cards]="eventsTapeService.eventsCity" (endScroll)="getEventsCity()"></app-card-grid>
           </div>
         
         </div>
