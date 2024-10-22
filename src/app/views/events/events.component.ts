@@ -71,7 +71,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   currentPageEventsCity: number = 1
   currentPageEventsGeolocation: number = 1
 
-
   timeStart: number = 0
   timeEnd: number = 0
   viewId: number[] = []
@@ -142,16 +141,19 @@ export class EventsComponent implements OnInit, OnDestroy {
           .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
           .pipe(
             tap((response: any) => {
-              console.log(response)
               this.eventsTapeService.eventsCity.push(...response.events.data)
+            }),
+            tap((response: any) => {
               response.events.next_cursor
                 ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
-                : this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-              if (response.events.next_cursor == null) {
-                this.eventsTapeService.nextPage = false
+                : (this.eventsTapeService.nextPage = false)
+            }),
+            tap((response: any) => {
+              if (response.events.next_cursor) {
+                this.eventsTapeService.nextPage = true
                 this.spiner = false
               } else {
-                this.eventsTapeService.nextPage = true
+                this.eventsTapeService.nextPage = false
                 this.spiner = false
               }
             }),
@@ -285,7 +287,6 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.eventsTapeService.eventsLastScrollPositionForTape = event.detail.scrollTop
     })
     this.switchTypeService.currentType.value == 'sights' ? this.router.navigate(['/sights']) : null
-    this.filterService.changeFilter.pipe(takeUntil(this.destroy$)).subscribe(() => {})
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       if (value.url === '/event') {
         // this.filterService.changeFilter.next(true)
@@ -298,22 +299,24 @@ export class EventsComponent implements OnInit, OnDestroy {
     }
     // Подписываемся на изменение фильтра
     if (!this.eventsTapeService.userHaveSubscribedEvents) {
+      this.eventsTapeService.eventsLastScrollPositionForTape = 0
+      this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
       this.wait = true
-      this.eventsTapeService.nextPage = true
       this.notFound = false
-      this.eventsTapeService.eventsCity = []
-      this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
       this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
+        this.eventsTapeService.eventsCity = []
+        this.eventsTapeService.eventsLastScrollPositionForTape = 0
+        this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
+
         this.eventsTapeService.userHaveSubscribedEvents = true
+        this.wait = true
+        this.eventsTapeService.nextPage = true
         if (value === true) {
-          this.wait = true
-          this.eventsTapeService.nextPage = true
           this.notFound = false
           this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-          this.eventsTapeService.eventsCity = []
+
           this.eventsGeolocation = []
-          this.eventsTapeService.eventsLastScrollPositionForTape = 0
-          this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
+
           this.getEventsCity()
           this.changeCity()
           // this.getEventsGeolocation()
@@ -350,7 +353,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()
-    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
     this.destroy$.complete()
   }
 }

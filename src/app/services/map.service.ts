@@ -209,8 +209,8 @@ export class MapService {
         } else {
           //Если запрещен доступ GPS
           let coords = await this.defaultCoords()
-          // await this.setCenterMap(map, CirclePoint);
-          await this.setPlacemark(map, CirclePoint, coords!, false)
+          await this.setCenterMap(map, CirclePoint)
+          // await this.setPlacemark(map, CirclePoint, coords!, false)
         }
       } catch (e) {
         console.log('Ошибка GPS ' + e, 'warning')
