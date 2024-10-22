@@ -24,7 +24,7 @@ export const environment = {
   YANDEX_METRICA_KEY: 96112606,
   YANDEX_METRICA_ON: true,
   APP_NAME: 'vokrug',
-  BASE_URL: 'http://localhost',
+  BASE_URL: 'http://localhost:4200',
   PORT: '8101',
   BACKEND_URL: 'http://localhost',
   BACKEND_PORT: '8000',
