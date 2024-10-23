@@ -1,71 +1,4 @@
- <!-- <ion-content> -->
 
- <!-- <ion-grid>
-    <ion-row class="ion-justify-content-center ion-margin-top">
-      <img src="/assets/icons/favicon.png" alt="logo" class="logo" />
-    </ion-row>
-
-    <ion-row class="ion-justify-content-center">
-      <h6 class="social-block-title">Войти через соц.сети:</h6>
-    </ion-row>
-
-    <ion-row class="ion-justify-content-center">
-      <a href="{{ vkontakteAuthUrl }}" (click)="onLoading()"><ion-icon class="logo-vk" name="logo-vk"></ion-icon></a> -->
-
-      <!-- коментарий -->
-
-      <!-- <a (click)="loginPhone()"><ion-icon class="logo-telephone" name="call"></ion-icon></a> -->
-
-       <!-- коментарий -->
-
-    <!-- </ion-row>
-
-      <app-telegram-auth-button></app-telegram-auth-button>
-    </ion-row>
-
-    <ion-row class="ion-justify-content-center">
-      <ion-col size-md="3" size-xs="12">
-        <ion-accordion-group class="mt-5">
-          <ion-accordion value="first">
-            <ion-item slot="header" color="light">
-              <ion-label>Войти с помощью email:</ion-label>
-            </ion-item>
-            <div slot="content" class="ion-margin-top">
-              <form [formGroup]="loginForm" (submit)="onSubmitLogin()" enctype="multipart/form-data">
-                <ion-item fill="outline">
-                  <ion-label position="floating">E-mail</ion-label>
-                  <ion-icon name="mail" slot="start" color="primary"></ion-icon>
-                  <ion-input formControlName="email" type="email" name="email" required></ion-input>
-                </ion-item>
-                <div *ngIf="loginForm.controls['email'].invalid && loginForm.controls['email'].touched">
-                  <ion-note *ngIf="loginForm.controls['email'].hasError('email')" color="danger">Введите корректный email</ion-note>
-                  <ion-note *ngIf="loginForm.controls['email'].hasError('required')" color="danger">Поле email не может быть пустым</ion-note>
-                </div>
-
-                <ion-item fill="outline" class="ion-margin-top">
-                  <ion-label position="floating">Пароль</ion-label>
-                  <ion-icon name="lock-closed" slot="start" color="primary"></ion-icon>
-                  <ion-input formControlName="password" type="password" name="password" required></ion-input>
-                </ion-item>
-                <div *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="validation">
-                  <ion-note *ngIf="!loginForm.controls['password'].hasError('minLength')" color="danger">Пароль должен содержать минимум 3 символа</ion-note>
-                  <ion-note *ngIf="loginForm.controls['password'].hasError('required')" color="danger">Поле "Пароль" не может быть пустым</ion-note>
-                </div>
-
-                <ion-button type="submit" size="large" expand="block" class="ion-margin-top" [disabled] ="loginForm.invalid || loginForm.disabled">
-                  <ion-icon name="log-in" slot="start"></ion-icon>
-                  Вход
-                </ion-button>
-
-              </form>
-            </div>
-          </ion-accordion>
-        </ion-accordion-group>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
-
-  <!-- модальное окно с паролем для вк -->
   <ion-modal class="vkPasswordModal" #modal [isOpen]="modalPass" [presentingElement]="presentingElement">
     <ng-template>
       <ion-header>
@@ -124,46 +57,91 @@
     </ng-template>
   </ion-modal>
 
-<!-- коментарий -->
+<ion-content>
+  <form [formGroup]="loginForm" class="login-form" action="">
+    <ion-col class="login-form_logo">
+        <img class="login-form_logo_img" src="/assets/icons/favicon.png" alt="Vokrug">
+    </ion-col>
+    <ion-col class="login-form_inputs">
+      <span class="login-form_inputs_label">Вход</span>
+      <div class="login-form_inputs_container">
+        <app-standart-input (changeInput)="clearErrors()" [invalid]="loginInvalid.name.status" [errorMessage]="loginInvalid.name.message" [label]="'E-mail'" [control] = "loginForm.get('name')"></app-standart-input>
+        <app-standart-input (changeInput)="clearErrors()" [invalid]="loginInvalid.password.status" [errorMessage]="loginInvalid.password.message" [openPassword]="true" type="password"  [label]="'Пароль'" [control] = "loginForm.get('password')"></app-standart-input>
+      </div>
+      <div class="forgot-password-wrapper">
+        <span id="recoveryLink" class="forgot-password-text">Забыл(а) пароль</span>
 
-  <!-- <ion-modal #modalPhone [isOpen]="modalPhone" [presentingElement]="presentingElement">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Установить новый пароль</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="modal.dismiss()">Закрыть</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-item lines="none" [formGroup]="formSetPhone">
-          <ion-col>
-            <ion-item>
-              <ion-label><h2>Введите номертелефона: +7</h2></ion-label>
-              <ion-input
-                label="999 888 77 66"
-                labelPlacement="stacked"
-                type="phone"
-                placeholder="999 888 77 66"
-                formControlName="phone"
-              ></ion-input>
-            </ion-item>
+        <ion-modal class="recovery-modal" trigger="recoveryLink"  >
+          <ng-template>
+            <div class="recovery-main">
+              <p class="recovery-main_label">
+                На указанный вами адрес придёт ссылка для восстановления пароля
+              </p>
+              <div class="recovery-form">
+                <form [formGroup]="recoveryForm" action="">
+                  <app-standart-input  [control]="recoveryForm.get('email')" label="E-mail"></app-standart-input>
+                  <!-- <div class="Login_inputs_main">
+                    <ion-input  formControlName="email"  class="Login_inputs recovery-input" type="email" placeholder="Электронная почта" required>
+                      <img *ngIf="iconState" class="Login_icon recovery-icon" src="/assets/icons/login_mail.svg" alt="">
+                      <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
+                    </ion-input>
+                    <ion-note *ngIf="recoveryForm.controls['email'].hasError('required')" color="danger">Поле email не может быть пустым</ion-note>
+                  </div> -->
+                </form>
+              </div>
+              <div class="recovery-password-buttons">
+                <app-standart-button [disabled]="recoveryForm.invalid || !timerReady" buttonText="Восстановить пароль" theme="standart" (click)="submitRecovery()"></app-standart-button>
+              </div>
+             
+              <div id="recoveryLink" *ngIf="!timerReady" class="password-recovery">доступно через {{seconds * 1000 | date: 'mm:ss' }} </div>
+            </div>
+         
+          </ng-template>
+         
+        </ion-modal>
+      </div>
+    </ion-col>
+    <div class="submit-button-wrapper">
+      <app-standart-button  [disabled]="loginInvalid.localError" (click)="onSubmitLogin()" buttonText="Войти" theme="standart"></app-standart-button>
+    </div>
+  
+    <div class="login-form_footer">
+        <div class="login-form_footer_label">
+            <div class="login-form_footer_label_line"></div>
+            <div class="login-form_footer_label_text">Или</div>
+            <div class="login-form_footer_label_line"></div>
+        </div>
+        <ion-row class="login-form_social-buttons">
+            <div class="login-form_social-buttons_button logo-vk">
+              <a class="login-form_social-buttons_button_link" href="{{vkontakteAuthUrl}}" target="{{target}}" (click)="onLoading();">
+                <div class="logo-vk_container">
+                  <ion-icon class="logo-vk_container_image" name="logo-vk"></ion-icon>
+                </div>
+              </a>
+            </div>
 
-          </ion-col>
-        </ion-item>
-        <ion-item lines="none"><ion-button slot="end" (click)="setPass()">Войти</ion-button></ion-item>
+            <div class="login-form_social-buttons_button logo-apple">
+              <a class="login-form_social-buttons_button_link" (click)="onLoading(); loginApple()">
+                <div class="logo-apple_container">
+                  <ion-icon class="logo-apple_container_image" name="logo-apple"></ion-icon>
+                </div>
+              </a>
+            </div>
 
-      </ion-content>
-    </ng-template>
-  </ion-modal> -->
+            <div class="login-form_social-buttons_button logo-yandex">
+              <a class="login-form_social-buttons_button_link" href="{{vkontakteAuthUrl}}" target="{{target}}" (click)="onLoading();">
+               
+              </a>
+            </div>
+      
+        </ion-row>
+        <div class="login-form_footer_registration">
+          <span routerLink="/registration" class="login-form_footer_registration_text">Нет аккаунта? <span class="login-form_footer_registration_link">Создать аккаунт</span></span>
+        </div>
+    </div>
 
-  <!-- коментарий -->
-
-<!-- </ion-content> -->
-
-<ion-content class="MainBlock">
-  <!-- Обёртка для центрирования -->
+  </form>
+  <!-- Обёртка для центрирования
     <ion-grid class="Login_wrapper">
 
       <form [formGroup]="loginForm" (submit)="onSubmitLogin()" enctype="multipart/form-data">
@@ -207,10 +185,6 @@
                       <ion-note *ngIf="loginForm.controls['name'].hasError('name')" color="danger">Введите корректный email или имя пользователя</ion-note>
                       <ion-note *ngIf="loginForm.controls['name'].hasError('required')" color="danger">Поле не может быть пустым</ion-note>
                     </div>
-                    <!-- <div style="text-align: center;" class="errorEmail" *ngIf="loginForm.controls['name'].invalid && loginForm.controls['name'].touched">
-                      <ion-note *ngIf="loginForm.controls['name'].hasError('name')" color="danger">Введите корректный email или имя пользователя</ion-note>
-                      <ion-note *ngIf="loginForm.controls['name'].hasError('required')" color="danger">Поле не может быть пустым</ion-note>
-                    </div> -->
 
                     <ion-item>
                       <button (click)="openPassword(passwordInput)" type="button" class="password-icon-wrapper" ></button>
@@ -225,32 +199,7 @@
                    
                       <div class="password-recovery" id="recoveryLink">
                         <h6  class="">Забыли пароль?</h6>
-                        <ion-modal class="recovery-modal" trigger="recoveryLink"  >
-                          <ng-template>
-                            <div class="recovery-main">
-                              <p style="width: 90%; font-size: 20pt; color:#129AE4; font-family: 'Montserrat', sans-serif; margin-left: auto; margin-right: auto;">
-                                На указанный вами адрес придёт ссылка
-                              </p>
-                              <div class="recovery-form">
-                                <form [formGroup]="recoveryForm" action="">
-                                  <div class="Login_inputs_main">
-                                    <ion-input  formControlName="email"  class="Login_inputs recovery-input" type="email" placeholder="Электронная почта" required>
-                                      <img *ngIf="iconState" class="Login_icon recovery-icon" src="/assets/icons/login_mail.svg" alt="">
-                                      <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
-                                    </ion-input>
-                                    <ion-note *ngIf="recoveryForm.controls['email'].hasError('required')" color="danger">Поле email не может быть пустым</ion-note>
-                                  </div>
-                                </form>
-                               
-                              </div>
-                              <ion-button [disabled]="recoveryForm.invalid || !timerReady" class="recovery-button" (click)="submitRecovery()">Востановить</ion-button>
-                              <h6 id="recoveryLink" class="password-recovery">Не пришёл код?</h6>
-                              <h6 id="recoveryLink" *ngIf="!timerReady" class="password-recovery">доступно через {{seconds * 1000 | date: 'mm:ss' }} </h6>
-                            </div>
-                         
-                          </ng-template>
-                         
-                        </ion-modal>
+                       
                       </div>
                     
             </ion-list>
@@ -321,82 +270,6 @@
        </ion-row>
 
       </form>
-    </ion-grid>
+    </ion-grid> -->
+
 </ion-content>
-
-  <!-- <ion-modal #modal [isOpen]="modalPass" [presentingElement]="presentingElement">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Установить новый пароль</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="modal.dismiss()">Закрыть</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-item lines="none" [formGroup]="formSetPassword">
-          <ion-col>
-            <ion-item>
-              <ion-label><h2>Введите пароль: </h2></ion-label>
-              <ion-input
-                label="Введите пароль"
-                labelPlacement="stacked"
-                type="password"
-                placeholder="*******"
-                formControlName="password"
-              ></ion-input>
-            </ion-item>
-
-              <ion-item>
-                <ion-label><h2>Повторите пароль: </h2></ion-label>
-                <ion-input
-                label="Повторите введённый пароль"
-                labelPlacement="stacked"
-                type="password"
-                placeholder="*******"
-                formControlName="password_retry"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-item>
-        <ion-item lines="none"><ion-button slot="end" (click)="setPass()">Подтвердить</ion-button></ion-item>
-
-      </ion-content>
-    </ng-template>
-  </ion-modal> -->
-
-  <!-- <ion-modal #modalPhone [isOpen]="modalPhone" [presentingElement]="presentingElement">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Установить новый пароль</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="modal.dismiss()">Закрыть</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-item lines="none" [formGroup]="formSetPhone">
-          <ion-col>
-            <ion-item>
-              <ion-label><h2>Введите номертелефона: +7</h2></ion-label>
-              <ion-input
-                label="999 888 77 66"
-                labelPlacement="stacked"
-                type="phone"
-                placeholder="999 888 77 66"
-                formControlName="phone"
-              ></ion-input>
-            </ion-item>
-
-          </ion-col>
-        </ion-item>
-        <ion-item lines="none"><ion-button slot="end" (click)="setPass()">Войти</ion-button></ion-item>
-
-      </ion-content>
-    </ng-template>
-  </ion-modal> -->
-
-<!-- </ion-content> -->
-

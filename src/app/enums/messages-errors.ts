@@ -6,4 +6,5 @@ export enum MessagesErrors {
   CommentsNoValue = 'Комментарий пуст',
   CommentError = 'Комментарий не опубликован',
   LocationSearchError = 'не согли найти город, попробуйте ещё...',
+  emailNotCorrect = 'Значение поля имя должно быть действительным электронным адресом.',
 }

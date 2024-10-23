@@ -47,6 +47,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   formSetPassword!: FormGroup
   appleState: Number = Math.floor(Math.random() * 21)
   platform: string = Capacitor.getPlatform()
+  loginInvalid = {
+    localError: false,
+    serverError: false,
+    name: {
+      status: false,
+      message: '',
+    },
+    password: {
+      status: false,
+      message: '',
+    },
+  }
 
   constructor(
     private authService: AuthService,
@@ -144,21 +156,30 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmitLogin() {
-    this.loginForm.disable()
-    this.loadingService.showLoading()
-    this.authService
-      .login(this.loginForm.value)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (data: any) => {
-          this.tokenService.setToken(data.access_token)
-          this.positiveResponseAfterLogin(data)
-        },
-        error: (err) => {
-          this.recoveryPasswordChange()
-          this.errorResponseAfterLogin(err)
-        },
-      })
+    this.validateForm()
+    if (!this.loginInvalid.localError) {
+      this.loginForm.disable()
+      this.loadingService.showLoading()
+      this.authService
+        .login(this.loginForm.value)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (data: any) => {
+            this.tokenService.setToken(data.access_token)
+            this.positiveResponseAfterLogin(data)
+          },
+          error: (err) => {
+            this.recoveryPasswordChange()
+            this.errorResponseAfterLogin(err)
+          },
+        })
+    }
+  }
+
+  clearErrors() {
+    if (this.loginInvalid.localError || this.loginInvalid.serverError) {
+      this.validateForm()
+    }
   }
 
   loginAfterSocial(token: any) {
@@ -250,7 +271,18 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   errorResponseAfterLogin(err: any) {
     this.loadingService.hideLoading()
-    this.toastService.showToast(err.error.message || MessagesErrors.default, 'warning')
+    let message = err.error.message
+    // this.toastService.showToast(err.error.message || MessagesErrors.default, 'warning')
+    this.loginInvalid.serverError = true
+    if (message === MessagesErrors.emailNotCorrect) {
+      this.loginInvalid.name.status = true
+      this.loginInvalid.name.message = 'Введите корректный E-mail'
+    }
+    if (message === 'Значение поля имя не существует.') {
+      this.loginInvalid.name.status = true
+      this.loginInvalid.password.status = true
+      this.loginInvalid.password.message = 'Почта или пароль не верный'
+    }
     this.loginForm.enable()
   }
 
@@ -310,12 +342,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     //Создаем поля для формы
     this.loginForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     })
 
     this.formSetPassword = new FormGroup({
-      password: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      password_retry: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      password_retry: new FormControl('', [Validators.required, Validators.minLength(8)]),
     })
 
     this.recoveryForm = new FormGroup({
@@ -329,23 +361,31 @@ export class LoginComponent implements OnInit, OnDestroy {
     })
     this.MailOrName()
   }
-  // async loginVK() {
-  //   VKAuth.initWithId({id: ''})
-  //   VKAuth.auth({ scope: ['offline', 'groups', 'stats', 'wall'] })
-  // //   VKAuth.addListener("vkAuthFinished", (info) => {
-  // //     console.log("vkAuthFinished was fired", JSON.stringify(info, null, 2));
-  // // });
-  //   // .then((res) => {
-  //   //   console.log(res)
-  //   // }).catch((err) => {
-  //   //   console.log(err)
-  //   // })
-  //   document.addEventListener("vkAuthFinis he                      d", (event: any) => {
-  //       const info = event.detail; // Получаем информацию из события
-  //       console.log("vkAuthFinished was fired", JSON.stringify(info, null, 2));
-  //   });
 
-  // }
+  validateForm() {
+    this.loginInvalid.localError = false
+    if (this.loginForm.get('name')?.errors) {
+      this.loginInvalid.localError = true
+      this.loginInvalid.name.status = true
+      this.loginInvalid.name.message = this.loginForm.get('name')?.hasError('required')
+        ? 'Поле не может быть пустым'
+        : 'E-mail должен быть не менее 3 символов'
+    } else {
+      this.loginInvalid.name.status = false
+      this.loginInvalid.name.message = ''
+    }
+
+    if (this.loginForm.get('password')?.errors) {
+      this.loginInvalid.localError = true
+      this.loginInvalid.password.status = true
+      this.loginInvalid.password.message = this.loginForm.get('password')?.hasError('required')
+        ? 'Поле не может быть пустым'
+        : 'Пароль должен быть не менее 8 символов'
+    } else {
+      this.loginInvalid.password.status = false
+      this.loginInvalid.password.message = ''
+    }
+  }
 
   ngOnDestroy() {
     // отписываемся от всех подписок
