@@ -7,6 +7,7 @@ import { IOrganization } from '../models/organization'
 export class SightTapeService {
   eventsLastScrollPositionForTape: number = 0
   userHaveSubscribedEvents: boolean = false
+  wait: boolean = false
   tapeCityName: string = ''
   nextPage: boolean = true
   sightsCity: IOrganization[] = []

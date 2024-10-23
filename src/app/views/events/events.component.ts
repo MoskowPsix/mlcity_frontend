@@ -104,20 +104,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private metaService: Meta,
     private mapService: MapService,
-  ) {
-    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      this.locationService
-        .getLocationsIds(value)
-        .pipe(delay(100), retry(3), takeUntil(this.destroy$))
-        .subscribe((response) => {
-          this.titleService.setTitle('Мероприятия в городе ' + response.location.name)
-          this.metaService.updateTag({
-            name: 'description',
-            content: 'Мероприятия вашего города тут',
-          })
-        })
-    })
-  }
+  ) {}
 
   scrollUp() {
     document.getElementById('topEv')?.scrollTo({ top: 0, behavior: 'smooth' })
@@ -188,10 +175,17 @@ export class EventsComponent implements OnInit, OnDestroy {
       if (this.eventsTapeService.eventsCity.length > 0) {
         this.spiner = true
       }
-      
       this.eventsService
         .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
-        .pipe(debounceTime(1000))
+        .pipe(
+          debounceTime(1000),
+          takeUntil(this.destroy$),
+          catchError((error) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            console.error(error)
+            return EMPTY
+          }),
+        )
         .subscribe((response: any) => {
           //Выключаю спинер
           this.spiner = false
@@ -312,6 +306,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {}
   ngOnInit() {}
   ionViewWillEnter() {
+    this.titleService.setTitle('VOKRUG - Мероприятия вокруг вас')
     this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
     this.ionContent.ionScroll.pipe(takeUntil(this.destroy$)).subscribe((event: any) => {
       this.eventsTapeService.eventsLastScrollPositionForTape = event.detail.scrollTop

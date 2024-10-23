@@ -16,6 +16,7 @@ import { OrganizationService } from 'src/app/services/organization.service'
 import { MapService } from 'src/app/services/map.service'
 import { SightTapeService } from 'src/app/services/sight-tape.service'
 import { IonContent } from '@ionic/angular'
+import { error } from 'console'
 
 @Component({
   selector: 'app-sights',
@@ -69,19 +70,18 @@ export class SightsComponent implements OnInit, OnDestroy {
     private metaService: Meta,
     private mapService: MapService,
   ) {
-    this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      this.locationService
-        .getLocationsIds(value)
-        .pipe(delay(100), retry(3), takeUntil(this.destroy$))
-        .subscribe((response) => {
-          this.titleService.setTitle('Достопримечательности в городе ' + response.location.name)
-
-          this.metaService.updateTag({
-            name: 'description',
-            content: 'Достопримечательности вашего города тут',
-          })
-        })
-    })
+    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    //   this.locationService
+    //     .getLocationsIds(value)
+    //     .pipe(delay(100), retry(3), takeUntil(this.destroy$))
+    //     .subscribe((response) => {
+    //       this.titleService.setTitle('Достопримечательности в городе ' + response.location.name)
+    //       this.metaService.updateTag({
+    //         name: 'description',
+    //         content: 'Достопримечательности вашего города тут',
+    //       })
+    //     })
+    // })
   }
   organizationNavigation(event: any) {
     this.router.navigate(['/organizations', event])
@@ -97,55 +97,90 @@ export class SightsComponent implements OnInit, OnDestroy {
     this.navigationService.modalSearchCityesOpen.next(true)
   }
 
+  // getSightsCity() {
+  //   // this.loadingMoreSightsCity ? (this.loadingSightsCity = true) : (this.loadingSightsCity = false)
+  //   this.sightTapeService.sightsCity.length > 0 ? (this.spiner = true) : (this.spiner = false) //проверяем что запрос не первый
+  //   this.notFound = false
+  //   if (this.sightTapeService.nextPage) {
+  //     this.sightsService
+  //       .getSights(this.queryBuilderService.queryBuilder('sightsForTape'))
+  //       .pipe(
+  //         delay(100),
+  //         retry(3),
+
+  //         tap((response: any) => {
+  //           this.sightTapeService.sightsCity.push(...response.sights.data)
+  //           this.loadingSightsCity = true
+  //           this.loadingMoreSightsCity = false
+  //           if (this.sightTapeService.nextPage == null) {
+  //             this.spiner = false
+  //           } else {
+  //             this.spiner = false
+  //           }
+  //         }),
+  //         tap((response: any) => {
+  //           response.sights.next_cursor
+  //             ? this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(response.sights.next_cursor)
+  //             : (this.sightTapeService.nextPage = false)
+  //           response.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
+  //         }),
+  //         tap((response: any) => {
+  //           if (this.sightTapeService.sightsCity.length == 0) {
+  //             this.notFound = true
+  //           }
+  //           this.filterService.setSightsCount(response.total)
+  //         }),
+
+  //         catchError((err) => {
+  //           console.log(err)
+  //           this.toastService.showToast(MessagesErrors.default, 'danger')
+  //           this.loadingSightsCity = false
+  //           return of(EMPTY)
+  //         }),
+  //         takeUntil(this.destroy$),
+  //       )
+  //       .subscribe(() => {
+  //         if (this.sightTapeService.sightsCity.length === 0) {
+  //           this.notFound = true
+  //         }
+  //       })
+  //   } else {
+  //     this.spiner = false
+  //   }
+  // }
   getSightsCity() {
-    // this.loadingMoreSightsCity ? (this.loadingSightsCity = true) : (this.loadingSightsCity = false)
-    this.sightTapeService.sightsCity.length > 0 ? (this.spiner = true) : (this.spiner = false) //проверяем что запрос не первый
-    this.notFound = false
-    if (this.sightTapeService.nextPage) {
+    if (this.sightTapeService.nextPage && !this.sightTapeService.wait) {
+      this.sightTapeService.wait = true
+      if (this.sightTapeService.sightsCity.length > 0) {
+        this.spiner = true
+      }
       this.sightsService
         .getSights(this.queryBuilderService.queryBuilder('sightsForTape'))
         .pipe(
-          delay(100),
-          retry(3),
-
-          tap((response: any) => {
-            this.sightTapeService.sightsCity.push(...response.sights.data)
-            this.loadingSightsCity = true
-            this.loadingMoreSightsCity = false
-            if (this.sightTapeService.nextPage == null) {
-              this.spiner = false
-            } else {
-              this.spiner = false
-            }
-          }),
-          tap((response: any) => {
-            response.sights.next_cursor
-              ? this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(response.sights.next_cursor)
-              : (this.sightTapeService.nextPage = false)
-            response.sights.next_cursor ? (this.loadTrue = true) : (this.loadTrue = false)
-          }),
-          tap((response: any) => {
-            if (this.sightTapeService.sightsCity.length == 0) {
-              this.notFound = true
-            }
-            this.filterService.setSightsCount(response.total)
-          }),
-
-          catchError((err) => {
-            console.log(err)
-            this.toastService.showToast(MessagesErrors.default, 'danger')
-            this.loadingSightsCity = false
-            return of(EMPTY)
-          }),
+          debounceTime(1000),
           takeUntil(this.destroy$),
+          catchError((error) => {
+            this.toastService.showToast(MessagesErrors.default, 'danger')
+            console.error(error)
+            return EMPTY
+          }),
         )
-        .subscribe(() => {
+        .subscribe((response: any) => {
+          this.spiner = false
+          //Проверяем курсор
+          let cursor = response.sights.next_cursor
+          if (cursor) {
+            this.queryBuilderService.paginationPublicSightsForTapeCurrentPage.next(cursor)
+            this.sightTapeService.nextPage = true
+          } else {
+            this.sightTapeService.nextPage = false
+          }
+          this.sightTapeService.sightsCity.push(...response.sights.data)
           if (this.sightTapeService.sightsCity.length === 0) {
             this.notFound = true
           }
+          this.sightTapeService.wait = false
         })
-    } else {
-      this.spiner = false
     }
   }
 
@@ -262,6 +297,7 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
+    this.titleService.setTitle('VOKRUG - Сообщества вокруг вас')
     window.addEventListener('scroll', this.scrollPaginate, true)
     window.addEventListener('scrollend', this.scrollEvent, true)
     this.ionContent.scrollToPoint(0, this.sightTapeService.eventsLastScrollPositionForTape, 0)
