@@ -188,12 +188,11 @@ export class EventsComponent implements OnInit, OnDestroy {
       if (this.eventsTapeService.eventsCity.length > 0) {
         this.spiner = true
       }
-
+      
       this.eventsService
         .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
         .pipe(debounceTime(1000))
         .subscribe((response: any) => {
-          console.log(response)
           //Выключаю спинер
           this.spiner = false
 
