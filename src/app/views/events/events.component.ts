@@ -136,55 +136,82 @@ export class EventsComponent implements OnInit, OnDestroy {
     boundingClientRect ? (this.scrollUpState = boundingClientRect.y > 0) : (this.scrollUpState = false)
   }
 
-  getEventsCity() {
-    if (this.wait) {
-      this.wait = false
-      if (this.eventsTapeService.nextPage) {
-        this.spiner = true
-        this.eventsService
-          .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
-          .pipe(
-            tap((response: any) => {
-              this.eventsTapeService.eventsCity.push(...response.events.data)
-            }),
-            tap((response: any) => {
-              response.events.next_cursor
-                ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
-                : (this.eventsTapeService.nextPage = false)
-            }),
-            tap((response: any) => {
-              if (response.events.next_cursor) {
-                this.eventsTapeService.nextPage = true
-                this.spiner = false
-              } else {
-                this.eventsTapeService.nextPage = false
-                this.spiner = false
-              }
-            }),
-            catchError((err) => {
-              this.toastService.showToast(MessagesErrors.default, 'danger')
-              this.loadingEventsCity = false
-              return of(EMPTY)
-            }),
-            takeUntil(this.destroy$),
-          )
-          .subscribe((response: any) => {
-            if (this.eventsTapeService.eventsCity.length === 0) {
-              this.notFound = true
-            }
-            this.wait = true
-            this.spiner = false
-          })
-      } else {
-        this.spiner = false
-      }
-    }
-  }
+  // getEventsCity() {
+  //   if (this.wait) {
+  //     this.wait = false
+  //     if (this.eventsTapeService.nextPage) {
+  //       this.spiner = true
+  //       this.eventsService
+  //         .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
+  //         .pipe(
+  //           tap((response: any) => {
+  //             this.eventsTapeService.eventsCity.push(...response.events.data)
+  //           }),
+  //           tap((response: any) => {
+  //             response.events.next_cursor
+  //               ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
+  //               : (this.eventsTapeService.nextPage = false)
+  //           }),
+  //           tap((response: any) => {
+  //             if (response.events.next_cursor) {
+  //               this.eventsTapeService.nextPage = true
+  //               this.spiner = false
+  //             } else {
+  //               this.eventsTapeService.nextPage = false
+  //               this.spiner = false
+  //             }
+  //           }),
+  //           catchError((err) => {
+  //             this.toastService.showToast(MessagesErrors.default, 'danger')
+  //             this.loadingEventsCity = false
+  //             return of(EMPTY)
+  //           }),
+  //           takeUntil(this.destroy$),
+  //         )
+  //         .subscribe((response: any) => {
+  //           if (this.eventsTapeService.eventsCity.length === 0) {
+  //             this.notFound = true
+  //           }
+  //           this.wait = true
+  //           this.spiner = false
+  //         })
+  //     } else {
+  //       this.spiner = false
+  //     }
+  //   }
+  // }
 
-  eventsCityLoadingMore() {
-    this.loadingMoreEventsCity = true
-    this.currentPageEventsCity++
-    this.getEventsCity()
+  getEventsCity() {
+    if (this.eventsTapeService.nextPage && !this.eventsTapeService.wait) {
+      this.eventsTapeService.wait = true
+      //Спинер если запрос не первый
+      if (this.eventsTapeService.eventsCity.length > 0) {
+        this.spiner = true
+      }
+
+      this.eventsService
+        .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
+        .pipe(debounceTime(1000))
+        .subscribe((response: any) => {
+          console.log(response)
+          //Выключаю спинер
+          this.spiner = false
+
+          //Проверяем курсор
+          let cursor = response.events.next_cursor
+          if (cursor) {
+            this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(cursor)
+            this.eventsTapeService.nextPage = true
+          } else {
+            this.eventsTapeService.nextPage = false
+          }
+          this.eventsTapeService.eventsCity.push(...response.events.data)
+          if (this.eventsTapeService.eventsCity.length === 0) {
+            this.notFound = true
+          }
+          this.eventsTapeService.wait = false
+        })
+    }
   }
 
   onSegmentChanged(event: any) {

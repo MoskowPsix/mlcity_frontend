@@ -9,6 +9,7 @@ export class EventsTapeService {
   userHaveSubscribedEvents: boolean = false
   tapeCityName: string = ''
   nextPage: boolean = true
+  wait: boolean = false
   eventsCity: IEvent[] = []
   constructor() {}
 }
