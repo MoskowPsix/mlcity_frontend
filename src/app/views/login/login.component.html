@@ -58,6 +58,15 @@
   </ion-modal>
 
 <ion-content>
+  <app-second-header>
+    <app-back-button></app-back-button>
+    <span class="header-title">
+      Авторизация
+    </span>
+    <div class="next-button-wrapper">
+      <app-circle-button  style="opacity: 0;"icon=""></app-circle-button>
+    </div>
+  </app-second-header>
   <form [formGroup]="loginForm" class="login-form" action="">
     <ion-col class="login-form_logo">
         <img class="login-form_logo_img" src="/assets/icons/favicon.png" alt="Vokrug">
@@ -102,7 +111,7 @@
       </div>
     </ion-col>
     <div class="submit-button-wrapper">
-      <app-standart-button  [disabled]="loginInvalid.localError" (click)="onSubmitLogin()" buttonText="Войти" theme="standart"></app-standart-button>
+      <app-standart-button  [disabled]="loginInvalid.localError" (click)="onSubmitLogin()" buttonText="Вход" theme="standart"></app-standart-button>
     </div>
   
     <div class="login-form_footer">
@@ -128,8 +137,8 @@
               </a>
             </div>
 
-            <div class="login-form_social-buttons_button logo-yandex">
-              <a class="login-form_social-buttons_button_link" href="{{vkontakteAuthUrl}}" target="{{target}}" (click)="onLoading();">
+            <div *ngIf="platform === 'web'"  class="login-form_social-buttons_button logo-yandex">
+              <a class="login-form_social-buttons_button_link" href="{{yandexAuthUrl}}" target="{{target}}" (click)="onLoading();">
                
               </a>
             </div>

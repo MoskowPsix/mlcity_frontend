@@ -49,8 +49,6 @@ export class RegistrationComponent implements OnInit {
   timerRetryButton: boolean = false
   vkontakteAuthUrl: string = environment.vkontakteAuthUrl
 
-  @ViewChild('modal') modal!: IonModal
-
   readonly phoneMask: MaskitoOptions = {
     mask: ['+', '7', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
   }
@@ -93,8 +91,7 @@ export class RegistrationComponent implements OnInit {
       emailConfirmInput: new FormControl('', [Validators.required, Validators.minLength(4)]),
     })
 
-    this.OpenPassword('reg_password')
-    this.OpenPasswordConfirm('confirm_password', event)
+
   }
 
   checkName() {
@@ -117,9 +114,7 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
-  cancel() {
-    this.modal.dismiss(null, 'cancel')
-  }
+  cancel() {}
 
   // checkEmail() {
   //   this.busyEmail = this.registerForm.value.email
@@ -179,18 +174,6 @@ export class RegistrationComponent implements OnInit {
     this.registerForm.value.number = newStr
   }
 
-  OpenPasswordConfirm(input: string, event: any) {
-    let passwordInput: any = document.getElementById(input)
-    let img: any = document.getElementById('eye_img_confirm')
-    if (passwordInput.type === 'password') {
-      passwordInput.type = 'text'
-      img.src = '../assets/icons/eye_open.svg'
-    } else if (passwordInput.type === 'text') {
-      passwordInput.type = 'password'
-      img.src = '../assets/icons/eye_closed.svg'
-    }
-  }
-
   confirmEmail() {
     if (this.modalForm.value.emailConfirmInput.length == 4) {
       this.authservice
@@ -200,7 +183,6 @@ export class RegistrationComponent implements OnInit {
           map((respons: any) => {
             this.cancel()
             if (respons.status === 'success') {
-              this.modal
               this.router.navigate(['cabinet'])
               this.registerForm.reset()
               this.registerForm.enable()
