@@ -20,6 +20,11 @@
 
 .cancel-wrapper{
   padding-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.cancel-wrapper_container{
+  width: 100%;
 }
 .select-old-wrapper{
   max-width: 4.5rem;

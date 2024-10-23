@@ -93,7 +93,12 @@
       <!-- <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency !== maxStepsCount" (click)="stepNext()" buttonText="Далее" theme="standart"></app-standart-button> -->
       <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency === maxStepsCount" (click)="onSubmit()" buttonText="Сохранить и закрыть" theme="standart"></app-standart-button>
       <div class="cancel-wrapper">
-        <app-standart-button (click)="openModalCancel()" buttonText="Отмена" theme="light"></app-standart-button>
+        <div class="cancel-wrapper_container">
+          <app-standart-button (click)="openModalCancel()" buttonText="Отмена" theme="light"></app-standart-button>
+        </div>
+        <div *ngIf="stepCurrency !== maxStepsCount" class="cancel-wrapper_container">
+          <app-standart-button  [disabled]="stepInvalidate()" (click)="stepNext()" buttonText="Далее" theme="standart"></app-standart-button>
+        </div>
       </div>
     </div>
   </div>
