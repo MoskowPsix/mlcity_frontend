@@ -78,7 +78,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   allFiles: any[] = []
   @ViewChild('eventName') eventNameElement!: any
   @ViewChild('eventDescription') eventDescriptionElement!: any
-  
+
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
     if (window.innerWidth < 900) {
@@ -291,6 +291,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .subscribe()
   }
 
+  showVkToast() {
+    this.toastService.showToast('Необходимо авторизоваться через ВК.', 'warning')
+  }
   getUrlVideo(owner_id: number, video_id: number) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       'https://vk.com/video_ext.php?oid=' + owner_id + '&id=' + video_id + '&hd=2',
