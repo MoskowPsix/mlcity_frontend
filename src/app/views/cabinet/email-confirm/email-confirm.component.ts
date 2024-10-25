@@ -239,10 +239,11 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
           this.loadingService.hideLoading()
           return EMPTY
         }),
-        // finalize(() => {
-        //   console.log('вырубаю лоадер')
-        //   this.loadingService.hideLoading()
-        // }),
+        finalize(() => {
+          setTimeout(() => {
+            this.loadingService.hideLoading()
+          }, 100)
+        }),
         takeUntil(this.destroy$),
       )
       .subscribe({
