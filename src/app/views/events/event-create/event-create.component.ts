@@ -234,12 +234,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.selectedOrganizationMore = event
     this.selectedOrganization = event.organization
     let id = this.selectedOrganization.id
-    if (event.vk_group_id) {
-      this.vkGroupSelected = event.vk_group_id
-      this.setVkPostsByGroupID(event.vk_group_id)
-      this.openModalPostValue = true
-      this.checkSocialVk = false
-    }
     this.createEventForm.patchValue({ organization_id: id })
     this.modalSelectedOrganization = !this.modalSelectedOrganization
   }
@@ -980,14 +974,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.createEventForm.value.dateEnd = minSeance
   }
 
-  ionViewDidWillLeave() {
+  ionViewDidLeave() {
     this.destroy$.next()
     this.destroy$.complete()
     this.stepCurrency = 1
+    console.log(this.stepCurrency)
     this.resetUploadInfo()
     this.createEventForm.reset()
   }
-  ionViewWillEnter() {}
   ngOnInit() {
     this.organizationService
       .getUserOrganizations()
