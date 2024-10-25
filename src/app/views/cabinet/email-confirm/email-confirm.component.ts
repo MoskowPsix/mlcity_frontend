@@ -141,7 +141,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
 
   getCode() {
     if (!this.willRequestToGetCode) {
-      // this.loadingService.showLoading()
+      this.loadingService.showLoading()
       this.willRequestToGetCode = true
 
       if (!this.userWithEmail) {
@@ -229,7 +229,6 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
   ionViewDidEnter() {}
   //местный ngOnit
   ionViewWillEnter() {
-    this.loadingService.showLoading()
     this.userService
       .getUserById()
       .pipe(
