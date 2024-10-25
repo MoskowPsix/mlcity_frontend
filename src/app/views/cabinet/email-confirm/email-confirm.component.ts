@@ -230,7 +230,6 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
   //местный ngOnit
   ionViewWillEnter() {
     this.loadingService.showLoading()
-    console.log('врубаю лоадер')
     this.userService
       .getUserById()
       .pipe(
@@ -249,7 +248,6 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
           this.loadingService.hideLoading()
-          console.log('кручу верчу лоадер')
           this.user = res.user
           this.emailForm.patchValue({
             email: this.user.email,

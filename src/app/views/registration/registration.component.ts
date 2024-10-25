@@ -302,7 +302,6 @@ export class RegistrationComponent implements OnInit {
           (this.registartionInvalid.email.message = 'Такая почта уже занята'))
         : null
     }
-    console.log(allErors)
 
     let message = err.error.message
     // this.toastService.showToast(err.error.message || MessagesErrors.default, 'warning')
