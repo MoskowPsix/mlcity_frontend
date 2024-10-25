@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { EMPTY, Subject, catchError, delay, filter, map, of, retry, takeUntil, tap } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
@@ -17,7 +17,7 @@ import { Location } from '@angular/common'
 import { environment } from 'src/environments/environment'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
-
+import { NavController } from '@ionic/angular'
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -45,6 +45,7 @@ export class RegistrationComponent implements OnInit {
   confirmCode: boolean = true
   codeCount: number = 0
   interval: any
+
   timerRertyFormated: any = 0
   timerRetryButton: boolean = false
   vkontakteAuthUrl: string = environment.vkontakteAuthUrl
@@ -87,6 +88,7 @@ export class RegistrationComponent implements OnInit {
     private router: Router,
     private location: Location,
     private titleService: Title,
+    private navController: NavController,
     private metaService: Meta,
   ) {
     this.titleService.setTitle('Регистрация на сайте MLCity.')
@@ -329,7 +331,8 @@ export class RegistrationComponent implements OnInit {
               this.submitResponce = true
               //this.confirmEmail();
               if (respons.status == 'success') {
-                this.router.navigate(['/email-confirm'], { replaceUrl: true })
+                this.navController.navigateForward(['/email-confirm'], { replaceUrl: true })
+
                 this.toastService.showToast('Вы успешно зарегестрировались!!!', 'success')
                 respons.access_token ? this.loginAfterSocial(respons.access_token) : this.loginAfterSocial('no')
               }
@@ -411,5 +414,13 @@ export class RegistrationComponent implements OnInit {
         }),
       )
       .subscribe()
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
+  ionViewDidEnter() {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }
