@@ -48,7 +48,26 @@ export class RegistrationComponent implements OnInit {
   timerRertyFormated: any = 0
   timerRetryButton: boolean = false
   vkontakteAuthUrl: string = environment.vkontakteAuthUrl
-
+  registartionInvalid = {
+    localError: false,
+    serverError: false,
+    email: {
+      status: false,
+      message: '',
+    },
+    name: {
+      status: false,
+      message: '',
+    },
+    password: {
+      status: false,
+      message: '',
+    },
+    passwordRequired: {
+      status: false,
+      message: '',
+    },
+  }
   readonly phoneMask: MaskitoOptions = {
     mask: ['+', '7', ' ', '(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
   }
@@ -79,7 +98,7 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.minLength(3), Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       password_confirmation: new FormControl('', [Validators.required, Validators.minLength(8)]),
       name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
@@ -90,8 +109,6 @@ export class RegistrationComponent implements OnInit {
     this.modalForm = new FormGroup({
       emailConfirmInput: new FormControl('', [Validators.required, Validators.minLength(4)]),
     })
-
-
   }
 
   checkName() {
@@ -114,25 +131,6 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
-  cancel() {}
-
-  // checkEmail() {
-  //   this.busyEmail = this.registerForm.value.email
-  //   if (!this.registerForm.controls['email'].invalid) {
-  //     this.authservice
-  //       .checkEmail(this.registerForm.value.email)
-  //       .pipe(
-  //         map((respons: any) => {
-  //           this.emailBusy = respons.user_email
-  //         }),
-  //         catchError((err) => {
-  //           return of(EMPTY)
-  //         }),
-  //       )
-  //       .subscribe()
-  //   }
-  // }
-
   checkNumber() {
     this.authservice
       .checkNumber(this.registerForm.value.number)
@@ -146,6 +144,55 @@ export class RegistrationComponent implements OnInit {
         takeUntil(this.destroy$),
       )
       .subscribe()
+  }
+
+  validateForm() {
+    this.registartionInvalid.localError = false
+    if (this.registerForm.get('email')?.errors) {
+      this.registartionInvalid.localError = true
+      this.registartionInvalid.email.status = true
+      if (this.registerForm.get('email')?.hasError('required')) {
+        this.registartionInvalid.email.message = 'Поле не может быть пустым'
+      } else if (this.registerForm.get('email')?.hasError('email')) {
+        this.registartionInvalid.email.message = 'Введите корректный E-mail'
+      } else if (this.registerForm.get('email')?.hasError('minLength')) {
+        this.registartionInvalid.email.message = 'E-mail должен быть не менее 3 символов'
+      }
+    } else {
+      this.registartionInvalid.email.status = false
+      this.registartionInvalid.email.message = ''
+    }
+
+    this.registartionInvalid.localError = false
+    if (this.registerForm.get('name')?.errors) {
+      this.registartionInvalid.localError = true
+      this.registartionInvalid.name.status = true
+      this.registartionInvalid.name.message = this.registerForm.get('name')?.hasError('required')
+        ? 'Поле не может быть пустым'
+        : 'Имя должно быть не менее 3 символов'
+    } else {
+      this.registartionInvalid.name.status = false
+      this.registartionInvalid.name.message = ''
+    }
+
+    if (this.registerForm.get('password')?.errors) {
+      this.registartionInvalid.localError = true
+      this.registartionInvalid.password.status = true
+      this.registartionInvalid.password.message = this.registerForm.get('password')?.hasError('required')
+        ? 'Поле не может быть пустым'
+        : 'Пароль должен быть не менее 8 символов'
+    } else {
+      this.registartionInvalid.password.status = false
+      this.registartionInvalid.password.message = ''
+    }
+    if (this.registerForm.value.password !== this.registerForm.value.password_confirmation) {
+      this.registartionInvalid.localError = true
+      this.registartionInvalid.passwordRequired.status = true
+      this.registartionInvalid.passwordRequired.message = 'Пароли не совпадают'
+    } else {
+      this.registartionInvalid.passwordRequired.status = false
+      this.registartionInvalid.passwordRequired.message = ''
+    }
   }
 
   checkPassword() {
@@ -181,7 +228,6 @@ export class RegistrationComponent implements OnInit {
         .pipe(
           delay(100),
           map((respons: any) => {
-            this.cancel()
             if (respons.status === 'success') {
               this.router.navigate(['cabinet'])
               this.registerForm.reset()
@@ -209,6 +255,11 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
+  clearErrors() {
+    if (this.registartionInvalid.localError || this.registartionInvalid.serverError) {
+      this.validateForm()
+    }
+  }
   loginAfterSocial(token: any) {
     if (token.length >= 47) {
       this.tokenService.setToken(token)
@@ -235,43 +286,67 @@ export class RegistrationComponent implements OnInit {
     // this.registerForm.enable()
     // this.router.navigate(['cabinet']);
   }
+  errorResponseAfterRegistration(err: any) {
+    this.registartionInvalid.serverError = true
+    this.loadingService.hideLoading()
+    let allErors = err.error.errors
+    if ((err.status = 422)) {
+      allErors.name
+        ? ((this.registartionInvalid.name.status = true),
+          (this.registartionInvalid.name.message = 'Такое имя уже занято'))
+        : null
+      allErors.email
+        ? ((this.registartionInvalid.email.status = true),
+          (this.registartionInvalid.email.message = 'Такая почта уже занята'))
+        : null
+    }
+    console.log(allErors)
+
+    let message = err.error.message
+    // this.toastService.showToast(err.error.message || MessagesErrors.default, 'warning')
+
+    if (message === MessagesErrors.emailNotCorrect) {
+      this.registartionInvalid.email.status = true
+      this.registartionInvalid.email.message = 'Введите корректный E-mail'
+    }
+  }
 
   async onSubmitReg() {
-    this.loadingService.showLoading()
-    await this.checkPassword()
+    this.validateForm()
+    if (!this.registartionInvalid.localError) {
+      this.loadingService.showLoading()
+      await this.checkPassword()
 
-    await this.checkName()
-    // await this.SubmitPhone()
-    // await this.checkNumber()
+      await this.checkName()
 
-    if (this.emailBusy && this.nameBusy && this.busyPass && this.privacyCheck) {
-      this.authservice
-        .register(this.registerForm.value)
-        .pipe(
-          map((respons: any) => {
-            this.RetryCode()
-            this.timerRetryButton = false
-            this.submitResponce = true
-            //this.confirmEmail();
-            if (respons.status == 'success') {
-              this.router.navigate(['/email-confirm'], { replaceUrl: true })
-              this.toastService.showToast('Вы успешно зарегестрировались!!!', 'success')
-              respons.access_token ? this.loginAfterSocial(respons.access_token) : this.loginAfterSocial('no')
-            }
-            this.loadingService.hideLoading()
-            // this.registerForm.disable();
-          }),
+      if (this.emailBusy) {
+        this.authservice
+          .register(this.registerForm.value)
+          .pipe(
+            map((respons: any) => {
+              this.RetryCode()
+              this.timerRetryButton = false
+              this.submitResponce = true
+              //this.confirmEmail();
+              if (respons.status == 'success') {
+                this.router.navigate(['/email-confirm'], { replaceUrl: true })
+                this.toastService.showToast('Вы успешно зарегестрировались!!!', 'success')
+                respons.access_token ? this.loginAfterSocial(respons.access_token) : this.loginAfterSocial('no')
+              }
+              this.loadingService.hideLoading()
+              // this.registerForm.disable();
+            }),
 
-          tap(() => {}),
-          catchError((err) => {
-            console.log(err)
-            this.loadingService.hideLoading()
-            this.toastService.showToast(err.error.message, 'warning')
-            return of(EMPTY)
-          }),
-          takeUntil(this.destroy$),
-        )
-        .subscribe()
+            tap(() => {}),
+            catchError((err) => {
+              this.errorResponseAfterRegistration(err)
+              this.loadingService.hideLoading()
+              return of(EMPTY)
+            }),
+            takeUntil(this.destroy$),
+          )
+          .subscribe()
+      }
     }
   }
 

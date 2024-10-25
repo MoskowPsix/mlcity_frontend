@@ -16,13 +16,14 @@
       <ion-col class="login-form_inputs">
         <span class="login-form_inputs_label">Регистрация</span>
         <div class="login-form_inputs_container">
-          <app-standart-input   [label]="'E-mail'" [control] = "registerForm.get('name')"></app-standart-input>
-          <app-standart-input   [openPassword]="true" type="password"  [label]="'Пароль'" [control] = "registerForm.get('password')"></app-standart-input>
-          <app-standart-input   [openPassword]="true" type="password"  [label]="'Подтвердите пароль'" [control] = "registerForm.get('password_confirmation')"></app-standart-input>
+          <app-standart-input [errorMessage]="registartionInvalid.name.message" (changeInput)="clearErrors()" [invalid]="registartionInvalid.name.status"  [label]="'Имя'" [control] = "registerForm.get('name')"></app-standart-input>
+          <app-standart-input [errorMessage]="registartionInvalid.email.message" (changeInput)="clearErrors()" [invalid]="registartionInvalid.email.status"  [label]="'E-mail'" [control] = "registerForm.get('email')"></app-standart-input>
+          <app-standart-input [errorMessage]="registartionInvalid.password.message" (changeInput)="clearErrors()" [invalid]="registartionInvalid.password.status"  [openPassword]="true" type="password"  [label]="'Пароль'" [control] = "registerForm.get('password')"></app-standart-input>
+          <app-standart-input [errorMessage]="registartionInvalid.passwordRequired.message" (changeInput)="clearErrors()" [invalid]="registartionInvalid.passwordRequired.status"  [openPassword]="true" type="password"  [label]="'Подтвердите пароль'" [control] = "registerForm.get('password_confirmation')"></app-standart-input>
         </div>
       </ion-col>
       <div class="submit-button-wrapper">
-        <app-standart-button  buttonText="Регистрация" theme="standart"></app-standart-button>
+        <app-standart-button [disabled]="registartionInvalid.localError" (click)="onSubmitReg()"  buttonText="Регистрация" theme="standart"></app-standart-button>
       </div>
     
       <div class="login-form_footer">

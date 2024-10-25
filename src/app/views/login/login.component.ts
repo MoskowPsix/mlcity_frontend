@@ -278,7 +278,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.loginInvalid.name.status = true
       this.loginInvalid.name.message = 'Введите корректный E-mail'
     }
-    if (message === 'Значение поля имя не существует.') {
+    if (message === 'Значение поля имя не существует.' || err.status == '403') {
       this.loginInvalid.name.status = true
       this.loginInvalid.password.status = true
       this.loginInvalid.password.message = 'Почта или пароль не верный'
