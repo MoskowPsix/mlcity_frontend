@@ -169,7 +169,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   // }
 
   getEventsCity() {
-    console.log(this.queryBuilderService.latitude)
     if (this.eventsTapeService.nextPage && !this.eventsTapeService.wait) {
       this.eventsTapeService.wait = true
       //Спинер если запрос не первый
