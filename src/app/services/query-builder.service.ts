@@ -84,8 +84,8 @@ export class QueryBuilderService {
       (this.sightTypes = this.filterService.sightTypes.value.toString()),
       (this.dateStart = this.filterService.startDate.value),
       (this.dateEnd = this.filterService.endDate.value),
-      (this.latitude = this.mapService.circleCenterLatitude.value),
-      (this.longitude = this.mapService.circleCenterLongitude.value),
+      (this.latitude = Number(this.filterService.getLocationLatitudeFromlocalStorage())),
+      (this.longitude = Number(this.filterService.getLocationLongitudeFromlocalStorage())),
       (this.locationId = this.filterService.locationId.value),
       (this.radius = parseInt(this.filterService.radius.value))
     this.getUserID()
@@ -200,7 +200,7 @@ export class QueryBuilderService {
       desc: true,
     }
   }
-  buildQueryEventsForRecomend(){
+  buildQueryEventsForRecomend() {
     this.queryParams = {
       statuses: [Statuses.publish].join(','),
       statusLast: true,
@@ -215,7 +215,6 @@ export class QueryBuilderService {
       desc: true,
     }
   }
-        
 
   buildQuerySightsForTape() {
     this.queryParams = {
