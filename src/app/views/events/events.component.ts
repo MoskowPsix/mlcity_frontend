@@ -11,7 +11,7 @@ import {
   inject,
 } from '@angular/core'
 
-import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime, filter, last } from 'rxjs'
+import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime, filter, last, finalize } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { IEvent } from 'src/app/models/event'
 import { EventsService } from 'src/app/services/events.service'
@@ -170,7 +170,6 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   getEventsCity() {
     this.updateCoordinates().then(()=>{
-      console.log(this.mapService.getLastMapCoordsFromLocalStorage())
       if (this.eventsTapeService.nextPage && !this.eventsTapeService.wait) {
         this.eventsTapeService.wait = true
         //Спинер если запрос не первый
@@ -182,6 +181,11 @@ export class EventsComponent implements OnInit, OnDestroy {
           .pipe(
             debounceTime(1000),
             takeUntil(this.destroy$),
+            finalize(() => {
+              if (this.eventsTapeService.eventsCity.length === 0) {
+                this.notFound = true
+              }
+            }),
             catchError((error) => {
               this.toastService.showToast(MessagesErrors.default, 'danger')
               console.error(error)
@@ -189,10 +193,9 @@ export class EventsComponent implements OnInit, OnDestroy {
             }),
           )
           .subscribe((response: any) => {
-            console.log(response)
             //Выключаю спинер
             this.spiner = false
-  
+
             //Проверяем курсор
             let cursor = response.events.next_cursor
             if (cursor) {
@@ -202,14 +205,12 @@ export class EventsComponent implements OnInit, OnDestroy {
               this.eventsTapeService.nextPage = false
             }
             this.eventsTapeService.eventsCity.push(...response.events.data)
-            if (this.eventsTapeService.eventsCity.length === 0) {
-              this.notFound = true
-            }
+
             this.eventsTapeService.wait = false
           })
       }
     })
-   
+
   }
 
   onSegmentChanged(event: any) {
