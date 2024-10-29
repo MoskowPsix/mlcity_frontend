@@ -169,42 +169,47 @@ export class EventsComponent implements OnInit, OnDestroy {
   // }
 
   getEventsCity() {
-    if (this.eventsTapeService.nextPage && !this.eventsTapeService.wait) {
-      this.eventsTapeService.wait = true
-      //Спинер если запрос не первый
-      if (this.eventsTapeService.eventsCity.length > 0) {
-        this.spiner = true
+    this.updateCoordinates().then(()=>{
+      console.log(this.mapService.getLastMapCoordsFromLocalStorage())
+      if (this.eventsTapeService.nextPage && !this.eventsTapeService.wait) {
+        this.eventsTapeService.wait = true
+        //Спинер если запрос не первый
+        if (this.eventsTapeService.eventsCity.length > 0) {
+          this.spiner = true
+        }
+        this.eventsService
+          .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
+          .pipe(
+            debounceTime(1000),
+            takeUntil(this.destroy$),
+            catchError((error) => {
+              this.toastService.showToast(MessagesErrors.default, 'danger')
+              console.error(error)
+              return EMPTY
+            }),
+          )
+          .subscribe((response: any) => {
+            console.log(response)
+            //Выключаю спинер
+            this.spiner = false
+  
+            //Проверяем курсор
+            let cursor = response.events.next_cursor
+            if (cursor) {
+              this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(cursor)
+              this.eventsTapeService.nextPage = true
+            } else {
+              this.eventsTapeService.nextPage = false
+            }
+            this.eventsTapeService.eventsCity.push(...response.events.data)
+            if (this.eventsTapeService.eventsCity.length === 0) {
+              this.notFound = true
+            }
+            this.eventsTapeService.wait = false
+          })
       }
-      this.eventsService
-        .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
-        .pipe(
-          debounceTime(1000),
-          takeUntil(this.destroy$),
-          catchError((error) => {
-            this.toastService.showToast(MessagesErrors.default, 'danger')
-            console.error(error)
-            return EMPTY
-          }),
-        )
-        .subscribe((response: any) => {
-          //Выключаю спинер
-          this.spiner = false
-
-          //Проверяем курсор
-          let cursor = response.events.next_cursor
-          if (cursor) {
-            this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(cursor)
-            this.eventsTapeService.nextPage = true
-          } else {
-            this.eventsTapeService.nextPage = false
-          }
-          this.eventsTapeService.eventsCity.push(...response.events.data)
-          if (this.eventsTapeService.eventsCity.length === 0) {
-            this.notFound = true
-          }
-          this.eventsTapeService.wait = false
-        })
-    }
+    })
+   
   }
 
   onSegmentChanged(event: any) {
@@ -306,8 +311,9 @@ export class EventsComponent implements OnInit, OnDestroy {
   updateCoordinates() {
     return new Promise<void>((resolve) => {
       if (this.filterService.getLocationLatitudeFromlocalStorage()) {
-        this.queryBuilderService.latitude = Number(this.filterService.getLocationLatitudeFromlocalStorage())
-        this.queryBuilderService.longitude = Number(this.filterService.getLocationLongitudeFromlocalStorage())
+        this.mapService.circleCenterLatitude.next(this.mapService.getLastMapCoordsFromLocalStorage()[0])
+        this.mapService.circleCenterLongitude.next(this.mapService.getLastMapCoordsFromLocalStorage()[1])
+        console.log()
       } else {
         this.filterService.setLocationLatitudeTolocalStorage('0')
         this.filterService.setLocationLongitudeTolocalStorage('0')

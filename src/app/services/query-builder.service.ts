@@ -84,8 +84,8 @@ export class QueryBuilderService {
       (this.sightTypes = this.filterService.sightTypes.value.toString()),
       (this.dateStart = this.filterService.startDate.value),
       (this.dateEnd = this.filterService.endDate.value),
-      (this.latitude = Number(this.filterService.getLocationLatitudeFromlocalStorage())),
-      (this.longitude = Number(this.filterService.getLocationLongitudeFromlocalStorage())),
+      (this.latitude = this.mapService.circleCenterLatitude.value),
+      (this.longitude = this.mapService.circleCenterLongitude.value),
       (this.locationId = this.filterService.locationId.value),
       (this.radius = parseInt(this.filterService.radius.value))
     this.getUserID()
