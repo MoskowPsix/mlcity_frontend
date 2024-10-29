@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, Output } from '@angular/core'
 import { FormControl } from '@angular/forms'
+import { EventEmitter } from '@angular/core'
 
 @Component({
   selector: 'app-standart-input',
@@ -17,6 +18,11 @@ export class StandartInputComponent implements OnInit {
   @Input() openPassword: boolean = false
   @Input() invalid: boolean = false
   @Input() disabled: boolean = false
+  @Input() errorMessage: string = ''
+  @Output() changeInput: EventEmitter<string> = new EventEmitter()
+  emitInput(event: any): void {
+    this.changeInput.emit(event)
+  }
 
   ngOnChanges() {}
   openPasword(input: any) {

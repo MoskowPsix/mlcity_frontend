@@ -1,3 +1,21 @@
 .segments {
   background-color: #ced4e0;
 }
+.switcher-container{
+  width: 82%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+.header-title{
+  font-size: 1.25rem;
+  font-family: var(--font-bold);
+}
+.switcher-wrapper{}
+
+.grid-wrapper{
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}

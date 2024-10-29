@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router'
-import { catchError, EMPTY, finalize, of, Subject, takeUntil, tap } from 'rxjs'
+import { catchError, debounceTime, EMPTY, finalize, of, Subject, takeUntil, tap } from 'rxjs'
 import { IUser } from 'src/app/models/user'
 import { AuthService } from 'src/app/services/auth.service'
 import { LoadingService } from 'src/app/services/loading.service'
@@ -153,7 +153,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
               this.willRequestToGetCode = false
               console.log(err)
               this.loadingService.hideLoading()
-              this.toastService.showToast(err.error.message,'danger')
+              this.toastService.showToast(err.error.message, 'danger')
               if (err.status !== 400) {
               } else {
                 this.toastService.showToast(`Попробуйте позже`, 'danger')
@@ -227,18 +227,27 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {}
   ionViewDidEnter() {}
-
   //местный ngOnit
   ionViewWillEnter() {
-    this.loadingService.showLoading()
     this.userService
       .getUserById()
       .pipe(
-        finalize(() => {}),
+        debounceTime(300),
+        tap(() => {}),
+        catchError((err: any) => {
+          this.loadingService.hideLoading()
+          return EMPTY
+        }),
+        finalize(() => {
+          setTimeout(() => {
+            this.loadingService.hideLoading()
+          }, 100)
+        }),
         takeUntil(this.destroy$),
       )
       .subscribe({
         next: (res: any) => {
+          this.loadingService.hideLoading()
           this.user = res.user
           this.emailForm.patchValue({
             email: this.user.email,
@@ -250,7 +259,6 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
           }
           this.emailConfirm = this.user.email_verified_at !== null
           this.step.nativeElement.style.marginLeft = '0px'
-          this.loadingService.hideLoading()
         },
       })
   }

@@ -1,288 +1,158 @@
-// .logo{
-//     height: 6rem;
-// }
-
-// .logo-vk{
-//     font-size: 4rem;
-//     cursor: pointer;
-//     color: #3880ff;
-// }
-// .logo-telephone {
-//     padding: 0.4rem;
-//     padding-left: 2rem;
-//     font-size: 3.1rem;
-//     cursor: pointer;
-//     color: #3880ff;
-// }
-
-// .social-block-title{
-//     display: flex;
-//     align-items: center;
-//     color:#6b7280
-// }
-
-// ion-modal {
-// --height: 30%;
-// }
-
-// @font-face
-//     font-family: 'Montserrat', sans-serif;
-//     src: url(./assets/fonts/Montserrat-Bold.ttf) format('truetype');
-// }
-
-ion-list {
-  background: none;
-}
-ion-input {
-  margin-top: 10px;
-  background-color: #fff;
-  --padding-left: 20px;
-}
-
-* {
-}
-
-.MainBlock {
+ion-content {
+  // overwrite inline styles
+  --overflow: auto;
   overflow: auto;
-  --min-height: 80vh;
-  background: none;
-  border: none;
-
-  .Login_wrapper {
-    ion-item {
-      --border-style: none;
-      --background: none;
-    }
-    margin-top: 42px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.login-form{
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 5rem;
+  .login-form_logo{
+    padding-top: 6.25rem;
     display: flex;
+    justify-content: center;
+    .login-form_logo_img{
+      width:clamp(6.1rem, 5.409rem + 3.45vw, 8rem);
+    }
+  }
+  .login-form_inputs{
+    padding-top: 3rem;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 75vh;
-    margin-bottom: 10rem;
-    .LoginMainBlock {
-      --webkit-appearance: none;
-      background-color: #fff;
-      width: 366px;
-      border: 1px solid #cdcdcd;
-      border-radius: 17px;
+    .login-form_inputs_container{
+      width: 100%;
+    }
+    .login-form_inputs_label{
+      font-family: var(--font-bold);
+      font-size: 1.25rem;
+    }
+  }
+  .forgot-password-wrapper{
+    display: flex;
+    padding-top: 0.5rem;
+    align-items: end;
+    justify-content: end;
+    width: 100%;
+    .forgot-password-text{
+      font-family: var(--font-regular);
+      font-size: 0.75rem;
+      color: #4C5861;
+      opacity: 55%;
+    }
+  }
+  .submit-button-wrapper{
+    padding-top:0.4rem;
+  }
 
-      .header-md::after {
-        left: 0;
-        bottom: -5px;
-        background-position: left 0 top -2px;
-        position: absolute;
+  .login-form_footer{
+
+    padding-top: 2.5rem;
+
+    .login-form_footer_label{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    
+      .login-form_footer_label_line{
         width: 100%;
-        height: 5px;
-        background-image: none;
-        background-repeat: repeat-x;
-        content: '';
+        height:0.125rem;
+        background-color: #4c586159;
+        opacity: 55%;
+      }
+      .login-form_footer_label_text{
+        padding-right: 1.5rem;
+        padding-left: 1.5rem;
+        font-family: 0.75rem;
+        color: #4C5861;
+        font-family: var(--font-regular);
+        opacity: 55%;
       }
 
-      .LoginMainBlock_header {
-        margin-top: 18px;
-        display: flex;
-        max-height: 99px;
-        justify-content: center;
-
-        .Login_main_link {
-          max-height: 99px;
-        }
-
-        .Login_main_link {
-        }
-
-        .Login_logo {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-width: 85px;
-          min-height: 85px;
-
-          .Login_logo_wrapper {
-            display: flex;
-            img {
-              max-width: 100px;
-              max-height: 100px;
-            }
-
-            .Login_logo_text {
-              text-transform: uppercase;
-              margin-top: 3px;
-
-              font-weight: 800;
-              font-size: 45.4pt;
-              color: #007bbe;
-              margin-top: 10px;
-            }
-          }
-        }
-      }
-
-      .Login_inputs_main {
-        .Login_inputs {
-          border: 1px solid #e0e0e0;
-          border-radius: 3px;
-          width: 320px;
-          background: none;
-
-          .Login_icon {
-            background: none;
-            margin-left: 10px;
-            margin-right: 10px;
-            width: 25px;
-            height: 25px;
-            fill: #007bbe;
-          }
-        }
-
-        ion-item.sc-ion-input-md-h:not(.item-label),
-        ion-item:not(.item-label) .sc-ion-input-md-h {
-          --padding-start: 15px;
-        }
-      }
-
-      .Login_btns_content {
-        .Login_btns {
-          width: 320px;
-          --background: #007bbe;
-        }
-
-        .CreateAcc_btn {
-          --background: #056193;
-        }
-      }
     }
 
-    .LoginWith_list {
+    .login-form_social-buttons{
       display: flex;
-      padding-bottom: 10px;
+      width: 100%;
+      padding-top: 2.5rem;
       justify-content: center;
       align-items: center;
-      width: 100%;
-      flex-direction: column;
-
-      .LoginWith_list_text {
-
-        margin-bottom: 2rem;
-        color: #007bbe;
-      }
-
-      .logo-vk {
-        color: #2787f5;
-      }
-
-      .vk_logo_circle {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #2787f5;
-        width: 56px;
-        height: 56px;
+      gap: 0.8rem;
+      .login-form_social-buttons_button{
+        width: 3.5rem;
+        height: 3.5rem;
         border-radius: 50%;
-
-        .vk_logo_quad {
+        .login-form_social-buttons_button_link{
+          width: 100%;
+          height: 100%;
           display: flex;
-          justify-content: center;
           align-items: center;
-          border-radius: 8px;
-          width: 30px;
-          height: 30px;
-          background-color: #fff;
-
-          .logo-vk {
-            width: 22px;
-            height: 22px;
+          justify-content: center;
+          img{
+            width: 1.25rem;
+            height: 1.25rem;
           }
         }
       }
     }
+    .login-form_footer_registration{
+      padding-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .login-form_footer_registration_text{
+        font-size:0.75rem;
+        font-family: var(--font-regular);
+        color: var(--gray-color);
+        cursor: pointer;
+      }
+      .login-form_footer_registration_link{
+        font-size:0.75rem;
+        font-family: var(--font-regular);
+        color: var(--blue-color);
+        cursor: pointer;
+      }
+    }
+   
   }
-
-  .InputDontButton {
-  }
+  
 }
-
-ion-modal {
-  --display: flex;
-  --border-radius: 17px;
-  --max-width: 386px;
-  --height: 630px;
-}
-
-.vkPasswordModal {
-  --max-width: 80rem;
-  --height: 480px;
-  ion-item {
-    margin-bottom: 1rem;
-    --padding: 0;
-  }
-
-  .vkPasswordModalMainWrapper {
-    display: flex;
-    justify-content: center;
-  }
-
-  .vkPasswordModalMain {
-  }
-
-  .vkPasswordModalNote {
-    padding: 12px;
-    color: #222427a3;
-    font-weight: 500;
-    font-size: 14px;
-    margin-top: 2vh;
-    border-radius: 6px 6px 0px 6px;
-  }
-}
-
-.password-icon-wrapper{
-  cursor: pointer;
-  z-index: 1000;
-  position: absolute;
-  width:3rem;
-  top: 0.5rem;
-  height: 90%;
- opacity: 0;
-}
-.vkPasswordModalHeader {
-}
-
-.apple-logo-circle {
+.logo-vk_container{
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  margin-left: 1rem;
-  .logo-apple-icon {
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  .logo-vk_container_image{
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.logo-apple_container{
+  .logo-apple_container_image{
     margin: auto;
-    color: black;
+    color: #000;
     width: 30px;
     height: 30px;
   }
 }
-
-.yandex-logo-circle {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 1rem;
+.logo-vk{
+  background-color:#2787f5;
+}
+.logo-apple{
+  background-color: #f0f0f0;
+}
+.logo-yandex{
   background-image: url("data:image/svg+xml,%3Csvg%20width='56'%20height='56'%20viewBox='0%200%2044%2044'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3E%3Crect%20width='44'%20height='44'%20fill='%23FC3F1D'/%3E%3Cpath%20d='M24.7407%2033.9778H29.0889V9.04443H22.7592C16.3929%209.04443%2013.0538%2012.303%2013.0538%2017.1176C13.0538%2021.2731%2015.2187%2023.6163%2019.0532%2026.1609L21.3832%2027.6987L18.3927%2025.1907L12.4667%2033.9778H17.1818L23.5115%2024.5317L21.3098%2023.0671C18.6496%2021.2731%2017.3469%2019.8818%2017.3469%2016.8613C17.3469%2014.2068%2019.2183%2012.4128%2022.7776%2012.4128H24.7223V33.9778H24.7407Z'%20fill='white'/%3E%3C/svg%3E%0A");
-
 }
-.password-recovery{
-  font-family: 'Montserrat-regular';
-  cursor: pointer;
-  display: flex;
-  color:rgb(1, 131, 201);
-  justify-content: center;
 
-}
 .recovery-form{
   margin-top: 0 auto;
   width: 90%;
@@ -309,8 +179,32 @@ ion-modal {
   flex-direction: column;
 }
 .recovery-modal{
-  --height:25rem;
+  --height:22rem;
+  --max-width: 386px;
+  --border-radius: 17px;
 }
 .recovery-icon{
   margin-left: 1rem;
+}
+.password-recovery{
+  font-family: var(--font-regular);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.75rem;
+  padding-top: 0.5rem;
+  color: var(--blue-color);
+  justify-content: center;
+}
+.recovery-password-buttons{
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.recovery-main_label{
+  width: 90%;
+   font-size: 16pt; 
+   color:var(--dark-gray-color); 
+   font-family: var(--font-regular);
+  margin-left: auto; 
+  margin-right: auto;
 }

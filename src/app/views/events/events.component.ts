@@ -303,6 +303,20 @@ export class EventsComponent implements OnInit, OnDestroy {
       })
   }
 
+  updateCoordinates() {
+    return new Promise<void>((resolve) => {
+      if (this.filterService.getLocationLatitudeFromlocalStorage()) {
+        this.queryBuilderService.latitude = Number(this.filterService.getLocationLatitudeFromlocalStorage())
+        this.queryBuilderService.longitude = Number(this.filterService.getLocationLongitudeFromlocalStorage())
+      } else {
+        this.filterService.setLocationLatitudeTolocalStorage('0')
+        this.filterService.setLocationLongitudeTolocalStorage('0')
+      }
+
+      resolve() // Успешно завершили обновление
+    })
+  }
+
   ngAfterViewInit() {}
   ngOnInit() {}
   ionViewWillEnter() {
@@ -341,8 +355,10 @@ export class EventsComponent implements OnInit, OnDestroy {
           this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
 
           this.eventsGeolocation = []
+          this.updateCoordinates().then(() => {
+            this.getEventsCity()
+          })
 
-          this.getEventsCity()
           this.changeCity()
           // this.getEventsGeolocation()
         }

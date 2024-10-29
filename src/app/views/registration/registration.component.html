@@ -1,197 +1,52 @@
-<ng-container>
-  <ion-content class="MainBlock">
-    <!-- Обёртка для центрирования -->
-      <ion-grid class="Login_wrapper">
 
-        <form [formGroup] = 'registerForm' (ngSubmit)="onSubmitReg()">
-         <ion-row class="LoginMainBlock">
-            <div class="LoginMainBlock_header" style="margin:auto; padding-top:0.3rem;">
-              <ion-router-link class="Login_main_link" routerLink="/home">
-
-                <div class="Login_logo">
-
-                  <ion-div class="Login_logo_wrapper">
-
-                    <img *ngIf="true" src="/assets/icons/favicon.png" alt="">
-                    <img *ngIf="false"alt="logo" src="/svg/no-photo.svg" />
-
-                    <ion-label class="Login_logo_text">
-                      ВОКРУГ
-                    </ion-label>
-
-                  </ion-div>
-
-                </div>
-              </ion-router-link>
-
-            </div>
-
-            <div class="Login_inputs_main">
-
-              <ion-list style="text-align: center;">
-
-                      <ion-item class="inputDontButton">
-                            <ion-input formControlName="name" class="Login_inputs InputDontButton" type="text" placeholder="Имя" [value]="registerForm.value.name" required>
-                              <img class="Login_icon" src="/assets/icons/user.svg" alt="">
-
-                            </ion-input>
-
-                      </ion-item>
-
-                      <ion-note *ngIf="!nameBusy" style="text-align: center;" color="danger">{{busyName}} уже занято, попробуйте другое</ion-note>
-                      
-                      <ion-item>
-                            <ion-input formControlName="email" class="Login_inputs emailclass InputDontButton"  type="text" placeholder="E-mail" required>
-                              <img class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
-                            </ion-input>
-                      </ion-item>
-
-                      <ion-note *ngIf="!emailBusy" style="text-align: center;" color="danger"> Ваш E-mail уже зарегестрирован</ion-note>
-
-                      <ion-item>
-                            <ion-input clear-on-edit = "false" formControlName="password" id="reg_password" class="Login_inputs" type="text" placeholder="Пароль" [value]="registerForm.value.password" required>
-                              <button type="button" style="background: none;"><img id="eye_img" (click) = "OpenPassword('reg_password')" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
-                            </ion-input>
-                      </ion-item>
-                      <ion-item>
-                            <ion-input clear-on-edit = "false" formControlName="password_confirmation" class ="Login_inputs reg_password_verfi"  type="text" id="confirm_password"  placeholder="Подтверждение пароля">
-                              <button type="button" style="background: none;"><img id="eye_img_confirm" (click) = "OpenPasswordConfirm('confirm_password', $event)" class="Login_icon" src="/assets/icons/eye_open.svg" alt=""></button>
-                            </ion-input>
-
-                      </ion-item>
-                      <ion-note *ngIf="(registerForm.value.password.length < 8 && registerForm.value.password.length > 0) || (registerForm.value.password_confirmation.length < 8 && registerForm.value.password_confirmation.length > 0)" color="danger">Пароль должен содержать минимум 8 символов</ion-note>
-
-                      <!-- <ion-note *ngIf="!busyPass" style="text-align: center;" color="danger">Пароли не совпадают</ion-note> -->
-
-                  </ion-list>
-
-            </div>
-
-            <div class="user-agreement">
-              <ion-item>
-                <ion-checkbox id="check" [value]="privacyCheck" (ionChange)="privacyCheck = !privacyCheck"  slot="start"></ion-checkbox>
-              </ion-item>
-              <span >Я ознакомлен с <div routerLink="/politics">пользовательским соглашением</div> </span>
-            </div>
-            
-            <ion-div class="Login_btns_content">
-
-              <ion-list>
-
-                <ion-item>
-
-                      <ion-button  [disabled]="registerForm.invalid || registerForm.disabled && busyPass === false || privacyCheck===false" type="submit" class="Login_btns">
-                          Зарегестрироваться
-                      </ion-button>
-
-                </ion-item>
-
-                <ion-router-link class="Login_main_link" routerLink="/login">
-                  <ion-item>
-
-                  <ion-button class="Login_btns CreateAcc_btn">
-                      Войти в аккаунт
-                  </ion-button>
-
-                  </ion-item>
-
-                </ion-router-link>
-
-               </ion-list>
-
-            </ion-div>
-
-            <!-- test -->
-
-            <!-- <ion-modal #modal backdropDismiss="false" [isOpen] = "submitResponce">
-
-              <ng-template>
-                  <ion-content>
-
-                      <ion-div  style="display: flex; justify-content: center; margin-top: -50px;">
-                          <ion-div style="display: flex;" class="Login_logo_wrapper">
-
-                            <img style="width: 100px; height: 100px;" *ngIf="true" src="/assets/icons/favicon.png" alt="">
-                            <img style="width: 100px; height: 100px;"  *ngIf="false"alt="logo" src="/svg/no-photo.svg" />
-
-                            <ion-label style="
-
-                            text-transform: uppercase;
-                            margin-top: 10px;
-                            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-                            font-weight: 800;
-                            font-size: 45.4pt;
-                            color: #007BBE;
-
-                            " class="Login_logo_text">
-                              mlcity
-                            </ion-label>
-
-                          </ion-div>
-
-                      </ion-div>
-
-                      <ion-col style="display: flex; justify-content: center; align-items: center; height: 100%;" class="ion-justify-content-center">
-
-                          <p style="width: 90%; margin-left: 30px; font-size: 27pt; color:#129AE4; font-family: 'Montserrat', sans-serif; margin-left: auto; margin-right: auto;">
-                            Введите код, отправленный вам на почту
-                          </p>
-
-                      </ion-col>
-                      <form [formGroup] = "modalForm"  style="width: 90%; display: flex; flex-direction: column; justify-content: center; align-items: center;" action="">
-
-                        <ion-input (input) = "CodeCountFn()" [maskito] = "maskNumber" [maskitoElement]="maskPredicate"  maxlength= 4  inputmode="numeric" (ionChange) ="confirmEmail()" id="ModalInput" class="ModalInput" formControlName = "emailConfirmInput"  #inputId style=" letter-spacing:40px; font-size: 50pt;  margin-left: 70px;"></ion-input>
-                        <div style="display: flex; justify-content: center;  margin-left: 25px">
-                          <div style="width: 70px;; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
-                          <div style="width: 70px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
-                          <div style="width: 70px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
-                          <div style="width: 70px; margin-left: 10px; height: 3px; background-color: #007BBE; border-radius: 17px;"></div>
-
-                        </div>
-                        <ion-note *ngIf="!confirmCode" style="text-align: center; width: 100%; font-size: 16pt; margin-top: 20px; margin-left: 30px;" color="danger">Код не верный</ion-note>
-
-                        <ion-div [hidden]="timerRetryButton" style="background: none; border:none; box-shadow: none; margin-top: 60px; margin-left: 30px; --font-size: 16pt;" >
-                           <ion-note  style="text-transform: none; text-align: center; font-size: 16pt; margin-top: 10px; color:#357fa7; margin-left: 30px; ">Не пришёл код?</ion-note>
-                           <div style="margin-top: 20px;">
-
-                            <ion-note *ngIf="timerRertyFormated"  style="text-transform: none; text-align: center; font-size: 15pt; margin-top: 20px;  color:#6CA9CA" >Доступно через: {{timerRertyFormated}}  </ion-note>
-
-                           </div>
-
-                        </ion-div>
-
-                        <ion-div *ngIf="timerRetryButton" style="display: flex; justify-content: center; margin-left: 30px; margin-top: 10px;">
-                          <ion-button (click) = "RertryCodeBtn()" style="margin-top: 60px;">Отправить код ещё раз</ion-button>
-                        </ion-div>
-
-                      </form>
-                  </ion-content>
-              </ng-template>
-
-            </ion-modal> -->
-
-              <ion-list class="LoginWith_list">
-
-                       <h6 class="LoginWith_list_text">Войти с помощью</h6>
-
-                <ion-item>
-
-                  <a href="{{ vkontakteAuthUrl }}">
-
-                    <ion-div class="vk_logo_circle">
-                       <ion-div class="vk_logo_quad">
-                        <ion-icon class="logo-vk" name="logo-vk"></ion-icon>
-                       </ion-div>
-                    </ion-div>
-                  </a>
-              </ion-item>
-
-              </ion-list>
-
-         </ion-row>
-
-        </form>
-      </ion-grid>
+  <ion-content>
+    <app-second-header>
+      <app-back-button></app-back-button>
+      <span class="header-title">
+        Авторизация
+      </span>
+      <div class="next-button-wrapper">
+        <app-circle-button  style="opacity: 0;"icon=""></app-circle-button>
+      </div>
+    </app-second-header>
+    <form [formGroup]="registerForm" class="login-form" action="">
+      <ion-col class="login-form_logo">
+          <img class="login-form_logo_img" src="/assets/icons/favicon.png" alt="Vokrug">
+      </ion-col>
+      <ion-col class="login-form_inputs">
+        <span class="login-form_inputs_label">Регистрация</span>
+        <div class="login-form_inputs_container">
+          <app-standart-input [errorMessage]="registartionInvalid.name.message" (changeInput)="clearErrors()" [invalid]="registartionInvalid.name.status"  [label]="'Имя'" [control] = "registerForm.get('name')"></app-standart-input>
+          <app-standart-input [errorMessage]="registartionInvalid.email.message" (changeInput)="clearErrors()" [invalid]="registartionInvalid.email.status"  [label]="'E-mail'" [control] = "registerForm.get('email')"></app-standart-input>
+          <app-standart-input [errorMessage]="registartionInvalid.password.message" (changeInput)="clearErrors()" [invalid]="registartionInvalid.password.status"  [openPassword]="true" type="password"  [label]="'Пароль'" [control] = "registerForm.get('password')"></app-standart-input>
+          <app-standart-input [errorMessage]="registartionInvalid.passwordRequired.message" (changeInput)="clearErrors()" [invalid]="registartionInvalid.passwordRequired.status"  [openPassword]="true" type="password"  [label]="'Подтвердите пароль'" [control] = "registerForm.get('password_confirmation')"></app-standart-input>
+        </div>
+      </ion-col>
+      <div class="submit-button-wrapper">
+        <app-standart-button [disabled]="registartionInvalid.localError" (click)="onSubmitReg()"  buttonText="Регистрация" theme="standart"></app-standart-button>
+      </div>
+    
+      <div class="login-form_footer">
+          <div class="login-form_footer_label">
+              <div class="login-form_footer_label_line"></div>
+              <div class="login-form_footer_label_text">Или</div>
+              <div class="login-form_footer_label_line"></div>
+          </div>
+          <ion-row class="login-form_social-buttons">
+              <div class="login-form_social-buttons_button logo-vk">
+                <a class="login-form_social-buttons_button_link" href="{{vkontakteAuthUrl}}">
+                  <div class="logo-vk_container">
+                    <ion-icon class="logo-vk_container_image" name="logo-vk"></ion-icon>
+                  </div>
+                </a>
+              </div>
+        
+          </ion-row>
+          <div class="login-form_footer_registration">
+            <span routerLink="/login" class="login-form_footer_registration_text">Уже есть аккаунт? <span class="login-form_footer_registration_link">Войти</span></span>
+          </div>
+      </div>
+  
+    </form>
   </ion-content>
 
-</ng-container>
