@@ -183,7 +183,7 @@ export class EventsComponent implements OnInit, OnDestroy {
             takeUntil(this.destroy$),
             finalize(() => {
               if (this.eventsTapeService.eventsCity.length === 0) {
-                this.notFound = true
+                this.eventsTapeService.notFound = true
               }
             }),
             catchError((error) => {
@@ -348,7 +348,7 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.eventsTapeService.eventsLastScrollPositionForTape = 0
       this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
       this.wait = true
-      this.notFound = false
+      this.eventsTapeService.notFound = false
       this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
         this.eventsTapeService.eventsCity = []
         this.eventsTapeService.eventsLastScrollPositionForTape = 0
@@ -358,7 +358,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.wait = true
         this.eventsTapeService.nextPage = true
         if (value === true) {
-          this.notFound = false
+          this.eventsTapeService.notFound = false
           this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
 
           this.eventsGeolocation = []
