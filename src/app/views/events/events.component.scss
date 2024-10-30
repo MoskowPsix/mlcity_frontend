@@ -11,20 +11,31 @@ app-event-type-carusel {
 
 .segments {
   background-color: #ced4e0;
- 
+
 }
 
 .header-top-container{
   display: flex;
+}
+.header-tools_wrapper{
+  padding-left: 1rem;
+  padding-right: 1rem;
+  position: absolute;
+  right: 0;
+  top: 1rem;
   width: 100%;
-  justify-content: space-between;
 }
 .header-bottom-container{
   cursor: pointer;
+  padding-left:1rem;
+  padding-top: 0.5rem;
+  background: #f8f8f8;
+  padding-right: 1rem;
   display: flex;
   width: 100%;
+  font-family: var(--font-bold);
   justify-content: space-between;
-  font-size: clamp(0.875rem, -1.469rem + 12.5vw, 1.1rem);
+  font-size: clamp(0.875rem, -1.469rem + 12.5vw, 1.3rem);
 }
 .segment-title {
   color: black;
@@ -41,7 +52,7 @@ app-event-type-carusel {
 }
 
 .grid-wrapper{
-  padding-top: 13rem;
+  padding-top: 7rem;
 }
 .main-grid-load{
   overflow-y: hidden;

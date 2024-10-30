@@ -1,0 +1,9 @@
+<div class="input-container">
+  <div  [ngClass]="{'input-wrapper':active, 'input-wrapper_litle':!active}">
+    <input #input class="search-input" inputmode ="search" placeholder="Поиск">
+    <div class="search-icon">
+      <app-circle-button (click)="changeInput(input)"  icon="/assets/icons/search.svg"></app-circle-button>
+    </div>
+  </div>
+</div>
+
