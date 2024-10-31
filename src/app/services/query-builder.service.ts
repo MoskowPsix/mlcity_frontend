@@ -22,6 +22,8 @@ export class QueryBuilderService {
   longitude?: number
   locationId?: number
   radius?: number
+  columns?: string[]
+  textForSearch?: string
 
   public sightIds: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
@@ -100,6 +102,9 @@ export class QueryBuilderService {
         break
       case 'eventsForMap': //Главная страница - карта /home
         this.buildQueryEventsForMap()
+        break
+      case 'eventsForSearch': //поиск мероприятий
+        this.buildQueryEventsForSearch()
         break
       case 'eventsForTape': //Лента ивентов - /events
         this.buildQueryEventsForTape()
@@ -183,6 +188,12 @@ export class QueryBuilderService {
     this.queryParams = {
       eventIds: this.eventIds.value,
       page: this.paginationModalEventsCurrentPage.value,
+    }
+  }
+  buildQueryEventsForSearch() {
+    this.queryParams = {
+      columns: this.columns,
+      text: this.textForSearch,
     }
   }
   buildQueryEventsForTape() {

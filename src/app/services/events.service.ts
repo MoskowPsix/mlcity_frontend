@@ -24,7 +24,7 @@ export class EventsService {
   private user_id: number = 0
 
   getEventsForSearch(text: string, params: IGetEventsAndSights) {
-    return this.http.get(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/search/${text}`, {
+    return this.http.get(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/search/text`, {
       params: { ...params },
     })
   }

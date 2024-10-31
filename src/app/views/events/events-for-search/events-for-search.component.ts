@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router'
 import { IEvent } from 'src/app/models/event'
 import { FilterService } from 'src/app/services/filter.service'
 import { MapService } from 'src/app/services/map.service'
+import { QueryBuilderService } from 'src/app/services/query-builder.service'
+import { EventsService } from 'src/app/services/events.service'
+import { promises } from 'dns'
 @Component({
   selector: 'app-events-for-search',
   templateUrl: './events-for-search.component.html',
@@ -15,6 +18,8 @@ export class EventsForSearchComponent implements OnInit {
     private activatedRouter: ActivatedRoute,
     private filterService: FilterService,
     private mapService: MapService,
+    private queryBuilderService: QueryBuilderService,
+    private eventsService: EventsService,
   ) {}
   text: string = ''
   notFound: boolean = false
@@ -22,9 +27,28 @@ export class EventsForSearchComponent implements OnInit {
   cards: IEvent[] = []
   searchActive: boolean = true
   ngOnInit() {}
+  getEvents() {
+    console.log(this.queryBuilderService.textForSearch)
+    this.eventsService
+      .getEventsForSearch(this.text, this.queryBuilderService.queryBuilder('eventsForSearch'))
+      .pipe()
+      .subscribe((res: any) => {
+        console.log(res)
+      })
+  }
+  setParams() {
+    return new Promise<void>((resolve) => {
+      this.queryBuilderService.columns = ['name']
+      this.queryBuilderService.textForSearch = this.text
+      resolve()
+    })
+  }
   ionViewWillEnter() {
     this.text = this.activatedRouter.snapshot.params['text']
     console.log(this.text)
+    this.setParams().then(() => {
+      this.getEvents()
+    })
   }
   searchNavigate(event: any) {
     this.router.navigate(['/events/search/', event])
