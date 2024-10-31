@@ -2,10 +2,10 @@
 
           <div class="carusel-wrapper_flex" #headerWrapper>
             <app-second-header>
-                    <!-- <app-type-swither (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
-                    <app-category-button stateType="Event"></app-category-button> -->
+                    <app-type-swither (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
+                    <app-category-button stateType="Event"></app-category-button>
                     <div class="header-tools_wrapper">
-                      <app-search-button></app-search-button>
+                      <app-search-button [active]="searchActive" (changeState)="changeSearch()" (changeSearch)="searchNavigate($event)"></app-search-button>
                     </div>
 
             </app-second-header>

@@ -146,6 +146,7 @@ import { ConfirmModalComponent } from './components/materials/confirm-modal/conf
 import { SharedModule } from './modules/shared/shared.module'
 import { ButtonsModule } from './modules/shared/buttons.module'
 import { MapModule } from './modules/shared/map.module'
+import { EventsForSearchComponent } from './views/events/events-for-search/events-for-search.component'
 
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
@@ -202,6 +203,7 @@ registerLocaleData(localeRu, 'ru')
     TabsItemComponent,
     EmailConfirmComponent,
     ExitButtonComponent,
+    EventsForSearchComponent,
     AboutComponent,
     NotFoundComponent,
     ForbiddenComponent,

@@ -65,6 +65,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   loadingEventsCity: boolean = false
   loadingEventsGeolocation: boolean = false
 
+  searchActive:boolean = false
+
   loadingMoreEventsCity: boolean = false
   loadingMoreEventsGeolocation: boolean = false
 
@@ -112,6 +114,10 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   openCitySearch() {
     this.navigationService.modalSearchCityesOpen.next(true)
+  }
+
+  searchNavigate(event: any){
+    this.router.navigate(['/events/search/', event])
   }
 
   eventNavigation(event: any) {
@@ -309,6 +315,10 @@ export class EventsComponent implements OnInit, OnDestroy {
       })
   }
 
+  changeSearch(){
+    this.searchActive = !this.searchActive
+  }
+
   updateCoordinates() {
     return new Promise<void>((resolve) => {
       if (this.filterService.getLocationLatitudeFromlocalStorage()) {
@@ -327,6 +337,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {}
   ngOnInit() {}
   ionViewWillEnter() {
+    this.searchActive = false
     this.titleService.setTitle('VOKRUG - Мероприятия вокруг вас')
     this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
     this.ionContent.ionScroll.pipe(takeUntil(this.destroy$)).subscribe((event: any) => {
