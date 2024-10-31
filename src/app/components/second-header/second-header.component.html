@@ -6,6 +6,14 @@
   </div>
 </div>
 
+<ng-container *ngIf="size === 'clear'">
+  <div *ngIf="size === 'clear'" class="header-plug">
+    <ng-content  select="[header-clear]">
+
+    </ng-content>
+</div>
+</ng-container>
+
 <div *ngIf="size === 'xxl' || size ==='xxl_n'" class="header-plug_xxl" style="background-image: url({{img}});">
   <div class="header-tools_xxl">
     <div  class="header-tools-top-container">
@@ -16,3 +24,4 @@
     </ng-content>
   </div>
 </div>
+

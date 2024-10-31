@@ -1,5 +1,8 @@
 .search-input{
-  width: 100%;
+  opacity: 1;
+  transform: scaleX(1); /* Разворачиваем элемент по горизонтали */
+  width: 100%; /* Устанавливаем ширину только при открытии */
+  transform-origin: right;
   border-radius: 100px;
   height: 2rem;
   padding-inline-start: 0.875rem;
@@ -10,18 +13,21 @@
   opacity: 1;
   display: block;
   font-size: 0.75rem;
+  margin-right: -1.2rem;
   opacity: 1;
-  transition: 0.7s all;
+  transition: opacity 0.3s ease, transform 0.5s ease;
+  
   color:#1C2226 ;
 }
-.search-icon{
+
+.search-icon_active{
   position: absolute;
-  right: 1.6rem;
+  right: clamp(0.5rem, 0.318rem + 0.91vw, 1rem);
 }
 .input-wrapper{
   justify-content: end;
   align-items: end;
-  display: flex;
+  display: contents;
   width:100%;
   transition: 0.5s all;
 }
@@ -29,26 +35,58 @@
   justify-content: end;
   align-items: end;
   display: flex;
+  display: contents;
   width:100%;
-  transition: 0.5s all;
+  transition: 0.3s all;
   .search-input{
-    width: 0%;
+    opacity: 0;
+    transform: scaleX(0); /* Сжатие по горизонтали */
+    transform-origin: right;
+    transition: opacity 0.3s ease, transform 0.5s ease;
     height: 2rem;
     padding-inline-start: 0rem;
     padding-inline-end:0rem ;
     font-family: var(--font-regular);
     outline: none;
     border: none;
+    border-radius: 100px;
     display: block;
     font-size: 0rem;
     color:#1C2226 ;
   }
 }
 
+.search-button{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    transition: 0.2s all;
+    align-items: center;
+    border-radius: 50%;
+    right:clamp(0.5rem, 0.318rem + 0.91vw, 1rem);
+    background-color: #fff;
+    width: 2rem;
+    height: 2rem;
+}
+.search-button_active{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s all;
+    transform: scale(1);
+    top: 0.7rem;
+    border-radius:50%;
+    right:clamp(0.5rem, 0.318rem + 0.91vw, 1rem);
+    background-color: #fff;
+    width: 3rem;
+    height:3rem;
+}
 .input-container{
   width: 100%;
   display: flex;
-  padding-left: 1rem;
+  padding-left: 0rem;
+  margin-left: -0.6rem;
   padding-right: 1rem;
   justify-content: end;
   align-items: end;

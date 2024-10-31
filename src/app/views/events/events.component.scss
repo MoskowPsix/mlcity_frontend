@@ -17,10 +17,33 @@ app-event-type-carusel {
 .header-top-container{
   display: flex;
 }
-.header-tools_wrapper{
-  right: 0;
-  top: 1rem;
+.header-tools_top{
+  display: contents;
+  opacity: 1;
+  justify-content: space-between;
+  transition: 0.3s;
   width: 100%;
+}
+
+.header{
+  display: flex;
+  width: 94%;
+  height: 2.1rem;
+  justify-content: space-between;
+}
+.header_full{
+  height: 2.1rem;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.header-tools_search{
+  max-width: 100%;
+  right: 0;
+}
+.header-tools_search-active{
+  width: 100%;
+  right: 0;
 }
 .header-bottom-container{
   cursor: pointer;

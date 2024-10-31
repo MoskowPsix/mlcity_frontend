@@ -1,59 +1,78 @@
-import { Router } from '@angular/router';
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { Router } from '@angular/router'
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  Renderer2,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core'
+import { promises } from 'dns'
 
 @Component({
   selector: 'app-search-button',
   templateUrl: './search-button.component.html',
   styleUrls: ['./search-button.component.scss'],
 })
-export class SearchButtonComponent  implements OnInit {
+export class SearchButtonComponent implements OnInit {
   constructor(private render: Renderer2) {}
   @Input() active: boolean = false
   @Input() value: string = ''
   @Output() changeState: EventEmitter<any> = new EventEmitter()
   @Output() changeSearch: EventEmitter<string> = new EventEmitter()
   @ViewChild('input') input!: ElementRef
+  searchButtonClass: string = 'search-button'
+  inputWrapperClass: string = 'input-wrapper_litle'
   wait: boolean = false
 
-  changeInput(event: HTMLInputElement){
-    if (!this.wait) {
-      this.wait = true
-      setTimeout(() =>{
-        this.wait = false
-      },500)
+  emitState() {
+    this.changeState.emit(this.active)
+  }
 
-      if (this.active) {
-        setTimeout(()=>{
-          event.style.pointerEvents = 'none'
-        }, 500)
-        setTimeout(()=>{
-             event.style.opacity = '0'
-        },280)
-
-      } else {
-        setTimeout(() => {
-          event.style.pointerEvents = 'all'
-          event.focus()
-          event.addEventListener('keypress', (key) => {
-            if (key.key === 'Enter') {
-              const inputValue = event.value
-              this.changeSearch.emit(event.value)
+  renderActive() {
+    let event = this.input.nativeElement
+    if (this.active) {
+      this.searchButtonClass = 'search-button_active'
+      setTimeout(() => {
+        this.inputWrapperClass = 'input-wrapper'
+        event.addEventListener('keypress', (key: any) => {
+          if (key.key === 'Enter') {
+            const inputValue = event.value
+            this.changeSearch.emit(event.value)
           }
-          })
-        }, 500)
-          event.style.opacity = '1'
+        })
+      }, 100)
+      event.focus()
+    }
+  }
+  renderNonActive() {
+    let event = this.input.nativeElement
+    if (!this.active) {
+      this.inputWrapperClass = 'input-wrapper_litle'
+      setTimeout(() => {
+        this.searchButtonClass = 'search-button'
+      }, 100)
+    }
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.input && this.input.nativeElement) {
+      if (this.active) {
+        this.renderActive()
+      } else {
+        this.renderNonActive()
       }
-      this.changeState.emit()
     }
-    }
+  }
 
   ngAfterViewInit() {
     this.render.listen(this.input.nativeElement, 'keypress', (key) => {
       if (key.key === 'Enter') {
         this.changeSearch.emit(this.input.nativeElement.value)
-    }
+      }
     })
   }
   ngOnInit() {}
-
 }

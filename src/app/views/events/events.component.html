@@ -1,19 +1,25 @@
 <ion-content id="topEv" #lentEvent [scrollEvents]="true">
 
           <div class="carusel-wrapper_flex" #headerWrapper>
-            <app-second-header>
-                    <app-type-swither (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
-                    <app-category-button stateType="Event"></app-category-button>
-                    <div class="header-tools_wrapper">
-                      <app-search-button [active]="searchActive" (changeState)="changeSearch()" (changeSearch)="searchNavigate($event)"></app-search-button>
-                    </div>
-
+            <app-second-header size="clear">
+              <div #headerBlock  header-clear [ngClass]="headerClassName">
+                <div #headerTools class="header-tools_top">
+                  <app-type-swither #typeSwitcher (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
+                  <app-category-button #categoryButton stateType="Event"></app-category-button>
+                </div>
+                <div #headerToolsSearch class="header-tools_search">
+                  <div>
+                    <app-search-button [active]="searchActive" (changeState)="changeSearch()" (changeSearch)="searchNavigate($event)"></app-search-button>
+                  </div>
+                </div>
+              </div>
+                   
             </app-second-header>
+            
             <div class="header-bottom-container">
               <div (click)="openCitySearch()">
                     {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : '...' }}
               </div>
-
               <div class="calendar-container">
                 <app-calendar-button (setDateEmit)="setDate($event)"></app-calendar-button>
               </div>
