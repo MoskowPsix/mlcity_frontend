@@ -251,7 +251,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   searchActiveRender() {
-    console.log('рендерю')
     const children = this.headerTools.nativeElement.children
     const headerToolsSearchElement: HTMLElement = this.headerToolsSearch.nativeElement
     this.searchActive = !this.searchActive

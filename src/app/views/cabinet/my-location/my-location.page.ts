@@ -22,7 +22,7 @@ export class MyLocationPage implements OnInit {
   router: Router = inject(Router)
   placemark!: ymaps.Placemark
   point: any = {}
-  address: string = 'Выберите домашний адрес'
+  address: string = ''
   private readonly destroy$ = new Subject<void>()
   onMapReady(event: any) {
     this.map = event
@@ -40,6 +40,9 @@ export class MyLocationPage implements OnInit {
         this.addPlacemark(this.coords)
       })
     })
+  }
+  clearInput(event: HTMLInputElement) {
+    event.value = ''
   }
   setFirstCoords() {
     this.loadingService.showLoading()

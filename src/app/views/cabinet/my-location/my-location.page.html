@@ -1,40 +1,47 @@
 
 <ion-content [fullscreen]="true">
-
-  <div class="header-wrapper">
     <app-second-header size="">
-      <div class="header-tools">
         <app-back-button></app-back-button>
-        <input id="search-map-" class="header-tools__search-input" placeholder="Поиск">
-        <img class="header-tools__search-icon" src="/assets/icons/search.svg" alt="">
-      </div>
-         <!-- Карта -->
+        <span class="header-title">
+          Моя локация
+        </span>
+        <app-circle-button  style="opacity: 0;"icon=""></app-circle-button>
     </app-second-header>
+  <div class="main">
+    <label class="label" for="Адрес">Адрес</label>
+    <input #input value="{{address}}" id="search-map-" placeholder="Поиск адреса" type="" name="Адрес" class="standart-input" name="new_name">
+    <button type="button" (click)="clearInput(input)" class="clear-input">
+      <img class="clear-input__img" src="/assets/icons/close.svg" alt="">
+    </button>
+    <div class="map">
+      <ya-map
+      (ready)="onMapReady($event)"
+      id="map"
+      [center]="coords"
+      (yaclick)="onMapClick($event)"
+      [state]="{controls: ['zoomControl',]}"
+      [options]="{
+        yandexMapDisablePoiInteractivity: true,
+        suppressMapOpenBlock: true,
+        suppressObsoleteBrowserNotifier: true,
+        autoFitToViewport: 'always',
+      }"
+      >
+        <ya-clusterer>
+        </ya-clusterer>
+      </ya-map>
+    </div>
+    <div class="save-button_wrapper">
+      <app-standart-button (click)="saveCoords()" buttonText="Сохранить" theme="standart"></app-standart-button>
+      <app-standart-button  buttonText="Отмена" theme="light"></app-standart-button>
+    </div>
   </div>
-
-  <div name="map" class="map">
-    <ya-map
-    (ready)="onMapReady($event)"
-    id="map"
-    [center]="coords"
-    (yaclick)="onMapClick($event)"
-    [state]="{controls: ['zoomControl',]}"
-    [options]="{
-      yandexMapDisablePoiInteractivity: true,
-      suppressMapOpenBlock: true,
-      suppressObsoleteBrowserNotifier: true,
-      autoFitToViewport: 'always',
-    }"
-    >
-      <ya-clusterer>
-      </ya-clusterer>
-    </ya-map>
-  </div>
+  
 </ion-content>
 
 <ion-footer >
   
-    <div class="select-address">
+    <!-- <div class="select-address">
         <div class="select-address__item_top">
           Домашний адрес
           <div class="save-button">
@@ -44,6 +51,6 @@
         <div class="select-address__item_bottom">
           <div class="address-circle"></div> {{address}}
         </div>
-    </div>
+    </div> -->
 
 </ion-footer>

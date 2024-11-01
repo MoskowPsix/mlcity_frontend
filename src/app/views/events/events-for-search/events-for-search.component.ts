@@ -9,6 +9,7 @@ import { EventsService } from 'src/app/services/events.service'
 import { promises } from 'dns'
 import { finalize } from 'rxjs'
 import { ToastService } from 'src/app/services/toast.service'
+import { EventsForSearchTapeService } from './events-for-search-tape.service'
 @Component({
   selector: 'app-events-for-search',
   templateUrl: './events-for-search.component.html',
@@ -23,6 +24,7 @@ export class EventsForSearchComponent implements OnInit {
     private queryBuilderService: QueryBuilderService,
     private eventsService: EventsService,
     private toastService: ToastService,
+    public eventsForSearchTapeService: EventsForSearchTapeService,
   ) {}
   text: string = ''
   notFound: boolean = false
@@ -71,14 +73,13 @@ export class EventsForSearchComponent implements OnInit {
   }
   setParams() {
     return new Promise<void>((resolve) => {
-      this.queryBuilderService.columns = ['name', 'description']
-      this.queryBuilderService.textForSearch = this.text
+      this.queryBuilderService.columns = ['name']
+      this.queryBuilderService.textForSearch = this.eventsForSearchTapeService.text
       resolve()
     })
   }
 
   searchNavigate(event: any) {
-    console.log('меньше трёх символов')
     if (event.length >= 3) {
       this.router.navigate(['/events/search/', event])
     } else {
@@ -90,14 +91,17 @@ export class EventsForSearchComponent implements OnInit {
   }
 
   eventNavigation(event: any) {
-    
+    this.router.navigate(['/events', event])
   }
   ionViewWillEnter() {
-    this.clearTemp()
     this.text = this.activatedRouter.snapshot.params['text']
-    this.setParams().then(() => {
-      this.getEvents()
-    })
+    if (this.eventsForSearchTapeService.text !== this.text) {
+      this.eventsForSearchTapeService.text = this.text
+      this.clearTemp()
+      this.setParams().then(() => {
+        this.getEvents()
+      })
+    }
   }
   ionViewDidLeave() {}
 }
