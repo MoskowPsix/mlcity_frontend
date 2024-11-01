@@ -25,6 +25,8 @@ export interface IGetEventsAndSights {
   withFiles?: boolean
   withPrices?: boolean
   expired?: boolean //вместе с прошедшими ивентами
+  latitude_position?: number
+  longitude_position?: number
 }
 
 //Пример
