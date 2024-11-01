@@ -1,22 +1,33 @@
 <ion-content id="topEv" #lentEvent [scrollEvents]="true">
-        <div  #ContentCol>
+
           <div class="carusel-wrapper_flex" #headerWrapper>
-            <app-second-header size="xxl" img="/assets/images/tape.png">
-              <div class="header-top-container" header-top>
-                <app-type-swither (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
-                <app-category-button stateType="Event"></app-category-button>
+            <app-second-header size="clear">
+              <div #headerBlock  header-clear [ngClass]="headerClassName">
+                <div #headerTools class="header-tools_top">
+                  <app-type-swither #typeSwitcher (endingSwitchAnimation)="redirectToSight()"></app-type-swither>
+                  <app-category-button #categoryButton stateType="Event"></app-category-button>
+                </div>
+                <div #headerToolsSearch class="header-tools_search">
+                  <div>
+                    <app-search-button [active]="searchActive" (changeState)="changeSearch()" (changeSearch)="searchNavigate($event)"></app-search-button>
+                  </div>
+                </div>
               </div>
-              <div (click)="openCitySearch()" class="header-bottom-container" header-bottom>
-                   {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : '...' }}
+                   
+            </app-second-header>
+            
+            <div class="header-bottom-container">
+              <div (click)="openCitySearch()">
+                    {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : '...' }}
+              </div>
+              <div class="calendar-container">
                 <app-calendar-button (setDateEmit)="setDate($event)"></app-calendar-button>
               </div>
-            </app-second-header>
+            </div>
           </div>
 
           <div class="grid-wrapper">
-            <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="eventsTapeService.notFound" [spiner]="spiner" [cards]="eventsTapeService.eventsCity" (endScroll)="getEventsCity()"></app-card-grid>
+            <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" [spiner]="spiner" [cards]="eventsTapeService.eventsCity" (endScroll)="getEventsCity()"></app-card-grid>
           </div>
-
-        </div>
 
 </ion-content>

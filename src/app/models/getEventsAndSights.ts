@@ -22,8 +22,10 @@ export interface IGetEventsAndSights {
   sightIds?: string
   orderBy?: string
   desc?: boolean
+  columns?: any
   withFiles?: boolean
   withPrices?: boolean
+  text?: string
   expired?: boolean //вместе с прошедшими ивентами
   latitude_position?: number
   longitude_position?: number

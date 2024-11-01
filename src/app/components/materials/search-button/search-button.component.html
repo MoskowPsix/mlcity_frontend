@@ -1,0 +1,12 @@
+<div style="width: 100%;">
+  <div class="input-container">
+    <div  [ngClass]="inputWrapperClass">
+      <input #input value={{value}} class="search-input" inputmode ="search" placeholder="Поиск">
+      <div [ngClass]="searchButtonClass" (click)="emitState()" class="search-button">
+        <img src="/assets/icons/search.svg" alt="">
+      </div>
+    </div>
+  </div>
+  
+</div>
+

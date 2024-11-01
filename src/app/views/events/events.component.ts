@@ -11,7 +11,21 @@ import {
   inject,
 } from '@angular/core'
 
-import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime, filter, last, finalize } from 'rxjs'
+import {
+  catchError,
+  delay,
+  EMPTY,
+  map,
+  of,
+  retry,
+  Subject,
+  takeUntil,
+  tap,
+  debounceTime,
+  filter,
+  last,
+  finalize,
+} from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { IEvent } from 'src/app/models/event'
 import { EventsService } from 'src/app/services/events.service'
@@ -53,6 +67,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   date: any
   spiner: boolean = false
   eventsGeolocation: IEvent[] = []
+  headerClassName: string = 'header'
   wait: boolean = true
   scrollStart: any
   switchTypeService: SwitchTypeService = inject(SwitchTypeService)
@@ -61,9 +76,14 @@ export class EventsComponent implements OnInit, OnDestroy {
   cardContainer!: ElementRef
   @ViewChild('widgetsContent') widgetsContent!: ElementRef
   @ViewChild('lentEvent') lent!: ElementRef
+  @ViewChild('headerTools') headerTools!: ElementRef
+  @ViewChild('headerBlock') header!: ElementRef
+  @ViewChild('headerToolsSearch') headerToolsSearch!: ElementRef
 
   loadingEventsCity: boolean = false
   loadingEventsGeolocation: boolean = false
+
+  searchActive: boolean = false
 
   loadingMoreEventsCity: boolean = false
   loadingMoreEventsGeolocation: boolean = false
@@ -114,6 +134,10 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.navigationService.modalSearchCityesOpen.next(true)
   }
 
+  searchNavigate(event: any) {
+    this.router.navigate(['/events/search/', event])
+  }
+
   eventNavigation(event: any) {
     this.router.navigate(['/events', event])
   }
@@ -123,53 +147,8 @@ export class EventsComponent implements OnInit, OnDestroy {
     boundingClientRect ? (this.scrollUpState = boundingClientRect.y > 0) : (this.scrollUpState = false)
   }
 
-  // getEventsCity() {
-  //   if (this.wait) {
-  //     this.wait = false
-  //     if (this.eventsTapeService.nextPage) {
-  //       this.spiner = true
-  //       this.eventsService
-  //         .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
-  //         .pipe(
-  //           tap((response: any) => {
-  //             this.eventsTapeService.eventsCity.push(...response.events.data)
-  //           }),
-  //           tap((response: any) => {
-  //             response.events.next_cursor
-  //               ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
-  //               : (this.eventsTapeService.nextPage = false)
-  //           }),
-  //           tap((response: any) => {
-  //             if (response.events.next_cursor) {
-  //               this.eventsTapeService.nextPage = true
-  //               this.spiner = false
-  //             } else {
-  //               this.eventsTapeService.nextPage = false
-  //               this.spiner = false
-  //             }
-  //           }),
-  //           catchError((err) => {
-  //             this.toastService.showToast(MessagesErrors.default, 'danger')
-  //             this.loadingEventsCity = false
-  //             return of(EMPTY)
-  //           }),
-  //           takeUntil(this.destroy$),
-  //         )
-  //         .subscribe((response: any) => {
-  //           if (this.eventsTapeService.eventsCity.length === 0) {
-  //             this.notFound = true
-  //           }
-  //           this.wait = true
-  //           this.spiner = false
-  //         })
-  //     } else {
-  //       this.spiner = false
-  //     }
-  //   }
-  // }
-
   getEventsCity() {
-    this.updateCoordinates().then(()=>{
+    this.updateCoordinates().then(() => {
       if (this.eventsTapeService.nextPage && !this.eventsTapeService.wait) {
         this.eventsTapeService.wait = true
         //Спинер если запрос не первый
@@ -210,51 +189,13 @@ export class EventsComponent implements OnInit, OnDestroy {
           })
       }
     })
-
   }
 
   onSegmentChanged(event: any) {
     this.segment = event.detail.value
   }
 
-  scrollEvent = (): void => {
-    // this.scrollUpCheckState()
-    // let viewElement: boolean = false
-    // for (let i = 0; i < this.widgetsContent.nativeElement.children.length; i++) {
-    //   const boundingClientRect = this.widgetsContent.nativeElement.children[i].getBoundingClientRect()
-    //   if (
-    //     boundingClientRect.top > (window.innerHeight - (window.innerHeight + window.innerHeight)) / 2 &&
-    //     boundingClientRect.top < window.innerHeight / 2 &&
-    //     !viewElement &&
-    //     boundingClientRect.width !== 0 &&
-    //     boundingClientRect.width !== 0
-    //   ) {
-    //     this.viewId.push(this.widgetsContent.nativeElement.children[i].id)
-    //     if (this.timeStart == 0) {
-    //       this.timeStart = new Date().getTime()
-    //     } else {
-    //       let time = (new Date().getTime() - this.timeStart) / 1000
-    //       if (time >= 3.14) {
-    //         let id = this.viewId[this.viewId.length - 2]
-    //         this.eventsService
-    //           .addView(id, time)
-    //           .pipe(
-    //             delay(100),
-    //             retry(1),
-    //             catchError((err) => {
-    //               return of(EMPTY)
-    //             }),
-    //             takeUntil(this.destroy$),
-    //           )
-    //           .subscribe()
-    //       }
-    //       this.timeStart = 0
-    //       this.timerReload()
-    //     }
-    //   }
-    // }
-    // viewElement = true
-  }
+  scrollEvent = (): void => {}
 
   carusel(status: string) {
     if (status == 'hidden') {
@@ -307,6 +248,47 @@ export class EventsComponent implements OnInit, OnDestroy {
       .subscribe((response: any) => {
         response?.location?.name ? (this.eventsTapeService.tapeCityName = response.location.name) : null
       })
+  }
+
+  searchActiveRender() {
+    const children = this.headerTools.nativeElement.children
+    const headerToolsSearchElement: HTMLElement = this.headerToolsSearch.nativeElement
+    this.searchActive = !this.searchActive
+
+    setTimeout(() => {
+      headerToolsSearchElement.className = 'header-tools_search'
+      this.headerTools.nativeElement.style.display = 'contents'
+    }, 300)
+    setTimeout(() => {
+      Array.from(children).forEach((child: any) => {
+        this.headerClassName = 'header'
+        child.style.opacity = '1'
+      })
+    }, 330)
+  }
+  searchNoneActiveRender() {
+    const children = this.headerTools.nativeElement.children
+    const headerToolsSearchElement: HTMLElement = this.headerToolsSearch.nativeElement
+    Array.from(children).forEach((child: any) => {
+      child.style.opacity = '1'
+      child.style.transition = '0.3s all'
+      child.style.opacity = '0'
+    })
+    setTimeout(() => {
+      this.headerClassName = 'header_full'
+      this.headerTools.nativeElement.style.display = 'none'
+      headerToolsSearchElement.className = 'header-tools_search-active'
+      this.searchActive = !this.searchActive
+    }, 300)
+  }
+  changeSearch() {
+    const children = this.headerTools.nativeElement.children
+    const headerToolsSearchElement: HTMLElement = this.headerToolsSearch.nativeElement
+    if (!this.searchActive) {
+      this.searchNoneActiveRender()
+    } else {
+      this.searchActiveRender()
+    }
   }
 
   updateCoordinates() {
@@ -387,6 +369,8 @@ export class EventsComponent implements OnInit, OnDestroy {
     })
   }
   ionViewDidLeave() {
+    this.searchActiveRender()
+    this.searchActive = false
     this.destroy$.next()
     this.destroy$.complete()
   }
