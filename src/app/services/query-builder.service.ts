@@ -22,6 +22,8 @@ export class QueryBuilderService {
   longitude?: number
   locationId?: number
   radius?: number
+  latitudePosition?: number
+  longitudePosition?: number
 
   public sightIds: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
@@ -87,7 +89,9 @@ export class QueryBuilderService {
       (this.latitude = this.mapService.circleCenterLatitude.value),
       (this.longitude = this.mapService.circleCenterLongitude.value),
       (this.locationId = this.filterService.locationId.value),
-      (this.radius = parseInt(this.filterService.radius.value))
+      (this.radius = parseInt(this.filterService.radius.value)),
+      (this.latitudePosition = this.mapService.getLastMapCoordsFromLocalStorage()[0]),
+      (this.longitudePosition = this.mapService.getLastMapCoordsFromLocalStorage()[1])
     this.getUserID()
   }
 
@@ -198,6 +202,8 @@ export class QueryBuilderService {
       page: this.paginationPublicEventsForTapeCurrentPage.value,
       orderBy: 'date_start',
       desc: true,
+      latitude_position: this.latitudePosition,
+      longitude_position: this.longitudePosition,
     }
   }
   buildQueryEventsForRecomend() {
@@ -226,6 +232,8 @@ export class QueryBuilderService {
       sightTypes: this.sightTypes,
       limit: 8,
       page: this.paginationPublicSightsForTapeCurrentPage.value,
+      latitude_position: this.latitudePosition,
+      longitude_position: this.longitudePosition,
     }
   }
 
