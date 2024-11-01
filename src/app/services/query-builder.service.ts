@@ -24,6 +24,8 @@ export class QueryBuilderService {
   radius?: number
   latitudePosition?: number
   longitudePosition?: number
+  columns?: any
+  textForSearch?: string
 
   public sightIds: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
@@ -62,6 +64,8 @@ export class QueryBuilderService {
   public paginationEventsInSightCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   public paginationPublicEventsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+  public paginationPublicEventsForTapeRecomendate: BehaviorSubject<string> = new BehaviorSubject<string>('')
+  public paginationPublicEventsForSearchCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   public paginationPublicSightsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
@@ -104,6 +108,9 @@ export class QueryBuilderService {
         break
       case 'eventsForMap': //Главная страница - карта /home
         this.buildQueryEventsForMap()
+        break
+      case 'eventsForSearch': //поиск мероприятий
+        this.buildQueryEventsForSearch()
         break
       case 'eventsForTape': //Лента ивентов - /events
         this.buildQueryEventsForTape()
@@ -189,6 +196,13 @@ export class QueryBuilderService {
       page: this.paginationModalEventsCurrentPage.value,
     }
   }
+  buildQueryEventsForSearch() {
+    this.queryParams = {
+      columns: this.columns,
+      text: this.textForSearch,
+      page: this.paginationPublicEventsForSearchCurrentPage.value,
+    }
+  }
   buildQueryEventsForTape() {
     this.queryParams = {
       statuses: [Statuses.publish].join(','),
@@ -216,7 +230,7 @@ export class QueryBuilderService {
       dateStart: this.dateStart,
       dateEnd: this.dateEnd,
       radius: this.radius,
-      page: this.paginationPublicEventsForTapeCurrentPage.value,
+      page: this.paginationPublicEventsForTapeRecomendate.value,
       orderBy: 'date_start',
       desc: true,
     }

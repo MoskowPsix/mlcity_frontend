@@ -13,45 +13,32 @@ app-event-type-carusel {
   background-color: #ced4e0;
 
 }
-
-.header-top-container{
-  display: flex;
-}
 .header-tools_top{
-  display: contents;
+  display: block;
   opacity: 1;
   justify-content: space-between;
   transition: 0.3s;
   width: 100%;
 }
-
-.header{
+.header-top-container{
   display: flex;
-  width: 94%;
-  height: 2.1rem;
-  justify-content: space-between;
 }
-.header_full{
-  height: 2.1rem;
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-}
-.header-tools_search{
-  max-width: 100%;
+.header-tools_wrapper{
+  padding-left: 1rem;
+  padding-right: 1rem;
+  position: absolute;
   right: 0;
-}
-.header-tools_search-active{
+  top: 1rem;
   width: 100%;
-  right: 0;
 }
 .header-bottom-container{
   cursor: pointer;
   padding-left:1rem;
   padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  color: var(--dark-gray-color);
   background: #f8f8f8;
   padding-right: 1rem;
-  display: flex;
   width: 100%;
   font-family: var(--font-bold);
   justify-content: space-between;
@@ -72,7 +59,7 @@ app-event-type-carusel {
 }
 
 .grid-wrapper{
-  padding-top: 7rem;
+  padding-top: 4rem;
 }
 .main-grid-load{
   overflow-y: hidden;

@@ -16,6 +16,7 @@ import { RecoveryPasswordComponent } from '../views/recovery-password/recovery-p
 import { EmailConfirmComponent } from '../views/cabinet/email-confirm/email-confirm.component'
 import { OrganizationShowComponent } from '../views/organization-show/organization-show.component'
 import { PoliticsDocumentComponent } from '../views/politics-document/politics-document.component'
+import { EventsForSearchComponent } from '../views/events/events-for-search/events-for-search.component'
 export const publicRoutes: Routes = [
   {
     path: 'home',
@@ -49,6 +50,11 @@ export const publicRoutes: Routes = [
   {
     path: 'recovery/:code',
     component: RecoveryPasswordComponent,
+  },
+  {
+    path: 'events/search/:text',
+    // pathMatch: 'full',
+    component: EventsForSearchComponent,
   },
   {
     path: 'events/:id',

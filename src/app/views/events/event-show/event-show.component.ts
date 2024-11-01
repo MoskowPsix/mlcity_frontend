@@ -242,9 +242,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
               response.events.data.forEach((element: IEvent) => {
                 element.id !== this.event.id ? this.eventsCity.push(element) : null
               })
-              response.events.next_cursor
-                ? this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(response.events.next_cursor)
-                : this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
               if (response.events.next_cursor == null) {
                 this.nextPage = false
                 this.spiner = false
@@ -437,7 +434,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.wait = true
     this.nextPage = true
     this.eventsCity = []
-    this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
+    this.queryBuilderService.paginationPublicEventsForTapeRecomendate.next('')
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
     })

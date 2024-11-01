@@ -1,6 +1,6 @@
 .header-plug{
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left:clamp(0.5rem, 0.318rem + 0.91vw, 1rem);
+    padding-right: clamp(0.5rem, 0.318rem + 0.91vw, 1rem);
     display: flex;
     padding-bottom:0.625rem;
     align-items: end;

@@ -5,9 +5,10 @@ import { CircleButtonComponent } from 'src/app/components/materials/circle-butto
 import { IonSpinner } from '@ionic/angular'
 import { IonicModule } from '@ionic/angular'
 import { StandartButtonComponent } from 'src/app/components/materials/standart-button/standart-button.component'
+import { SearchButtonComponent } from 'src/app/components/materials/search-button/search-button.component'
 @NgModule({
-  declarations: [BackButtonComponent, CircleButtonComponent, StandartButtonComponent],
+  declarations: [BackButtonComponent, CircleButtonComponent, StandartButtonComponent, SearchButtonComponent],
   imports: [CommonModule, IonicModule],
-  exports: [BackButtonComponent, CircleButtonComponent, StandartButtonComponent],
+  exports: [BackButtonComponent, CircleButtonComponent, StandartButtonComponent, SearchButtonComponent],
 })
 export class ButtonsModule {}

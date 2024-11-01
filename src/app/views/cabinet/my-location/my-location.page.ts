@@ -22,7 +22,8 @@ export class MyLocationPage implements OnInit {
   router: Router = inject(Router)
   placemark!: ymaps.Placemark
   point: any = {}
-  address: string = 'Выберите домашний адрес'
+  address: string = ''
+  cancelConfirmValue: boolean = false
   private readonly destroy$ = new Subject<void>()
   onMapReady(event: any) {
     this.map = event
@@ -40,6 +41,21 @@ export class MyLocationPage implements OnInit {
         this.addPlacemark(this.coords)
       })
     })
+  }
+  clearInput(event: HTMLInputElement) {
+    event.value = ''
+  }
+
+  openModalCancel() {
+    this.cancelConfirmValue = true
+  }
+  cancelEdit() {
+    this.cancelConfirmValue = false
+  }
+  async cancelConfirm() {
+    setTimeout(() => {
+      this.router.navigate(['/cabinet'])
+    }, 0) //убираем асинхронность
   }
   setFirstCoords() {
     this.loadingService.showLoading()

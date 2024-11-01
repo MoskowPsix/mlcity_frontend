@@ -1,0 +1,18 @@
+<ion-content id="topEv" #lentEvent [scrollEvents]="true">
+
+  <div class="carusel-wrapper_flex" #headerWrapper>
+    <app-second-header size="clear">
+            <div header-clear  class="header-tools_top">
+              <app-search-button [value]="text" [active]="searchActive" (changeState)="changeSearch()" (changeSearch)="searchNavigate($event)"></app-search-button>
+            </div>
+    </app-second-header>
+  </div>
+
+  <div class="grid-wrapper">
+    <div class="header-bottom-container">
+      Результаты поиска: «{{text}}»
+    </div>
+    <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" [spiner]="spiner" [cards]="cards"  (endScroll)="getEvents()"></app-card-grid>
+  </div>
+
+</ion-content>
