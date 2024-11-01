@@ -7,10 +7,12 @@
             </div>
     </app-second-header>
   </div>
-  
 
   <div class="grid-wrapper">
-    <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" [spiner]="spiner" [cards]="cards"></app-card-grid>
+    <div class="header-bottom-container">
+      Результаты поиска: «{{text}}»
+    </div>
+    <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" [spiner]="spiner" [cards]="cards"  (endScroll)="getEvents()"></app-card-grid>
   </div>
 
 </ion-content>

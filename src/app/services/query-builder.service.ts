@@ -22,7 +22,7 @@ export class QueryBuilderService {
   longitude?: number
   locationId?: number
   radius?: number
-  columns?: string[]
+  columns?: any
   textForSearch?: string
 
   public sightIds: BehaviorSubject<string> = new BehaviorSubject<string>('')
@@ -62,6 +62,7 @@ export class QueryBuilderService {
   public paginationEventsInSightCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   public paginationPublicEventsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+  public paginationPublicEventsForSearchCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   public paginationPublicSightsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
@@ -194,6 +195,7 @@ export class QueryBuilderService {
     this.queryParams = {
       columns: this.columns,
       text: this.textForSearch,
+      page: this.paginationPublicEventsForSearchCurrentPage.value,
     }
   }
   buildQueryEventsForTape() {

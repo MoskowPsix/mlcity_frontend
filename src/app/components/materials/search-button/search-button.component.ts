@@ -24,6 +24,7 @@ export class SearchButtonComponent implements OnInit {
   @Output() changeState: EventEmitter<any> = new EventEmitter()
   @Output() changeSearch: EventEmitter<string> = new EventEmitter()
   @ViewChild('input') input!: ElementRef
+  subscribesInput: boolean = false
   searchButtonClass: string = 'search-button'
   inputWrapperClass: string = 'input-wrapper_litle'
   wait: boolean = false
@@ -38,12 +39,15 @@ export class SearchButtonComponent implements OnInit {
       this.searchButtonClass = 'search-button_active'
       setTimeout(() => {
         this.inputWrapperClass = 'input-wrapper'
-        event.addEventListener('keypress', (key: any) => {
-          if (key.key === 'Enter') {
-            const inputValue = event.value
-            this.changeSearch.emit(event.value)
-          }
-        })
+        if (!this.subscribesInput) {
+          this.subscribesInput = true
+          event.addEventListener('keypress', (key: any) => {
+            if (key.key === 'Enter') {
+              const inputValue = event.value
+              this.changeSearch.emit(event.value)
+            }
+          })
+        }
       }, 100)
       event.focus()
     }
@@ -68,11 +72,14 @@ export class SearchButtonComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.render.listen(this.input.nativeElement, 'keypress', (key) => {
-      if (key.key === 'Enter') {
-        this.changeSearch.emit(this.input.nativeElement.value)
-      }
-    })
+    if (!this.subscribesInput) {
+      this.subscribesInput = true
+      this.render.listen(this.input.nativeElement, 'keypress', (key) => {
+        if (key.key === 'Enter') {
+          this.changeSearch.emit(this.input.nativeElement.value)
+        }
+      })
+    }
   }
   ngOnInit() {}
 }

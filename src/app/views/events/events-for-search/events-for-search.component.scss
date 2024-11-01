@@ -35,9 +35,10 @@ app-event-type-carusel {
   cursor: pointer;
   padding-left:1rem;
   padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  color: var(--dark-gray-color);
   background: #f8f8f8;
   padding-right: 1rem;
-  display: flex;
   width: 100%;
   font-family: var(--font-bold);
   justify-content: space-between;
@@ -58,7 +59,7 @@ app-event-type-carusel {
 }
 
 .grid-wrapper{
-  padding-top: 7rem;
+  padding-top: 4rem;
 }
 .main-grid-load{
   overflow-y: hidden;

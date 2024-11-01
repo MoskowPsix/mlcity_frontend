@@ -22,7 +22,7 @@ export interface IGetEventsAndSights {
   sightIds?: string
   orderBy?: string
   desc?: boolean
-  columns?: string[]
+  columns?: any
   withFiles?: boolean
   withPrices?: boolean
   text?: string
