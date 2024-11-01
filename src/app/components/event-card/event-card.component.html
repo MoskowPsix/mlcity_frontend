@@ -58,6 +58,9 @@
                      <div *ngIf="minPrice === maxPrice && minPrice === 0" class="price">
                         Бесплатно
                      </div>
+                     <div *ngIf="event.distance" class="distance">
+                      {{distanceCurrent(event.distance)}}
+                    </div>
                 </div>
 
                 <div class="info-footer">
@@ -72,9 +75,4 @@
         <h4 (click)="eventNavigation()" class="event-name">{{event.name}}</h4>
       </ng-container>
   </div>
-
-
-
-
-
  

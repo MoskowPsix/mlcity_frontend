@@ -111,6 +111,13 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   imageUrl: string = ''
   imageLoaded: boolean = false
 
+  distanceCurrent(distance: number) {
+    if (distance < 1) {
+      return Math.round(distance * 10) * 100 + 'м.'
+    } else {
+      return Math.round(distance) + 'км.'
+    }
+  }
   eventNavigation() {
     this.isSight
       ? this.router.navigate(['/sights', this.event.id, this.slugName])

@@ -11,6 +11,7 @@ export interface IGetEventsAndSights {
   location?: any[]
   latitude?: number // широта геопозиции
   longitude?: number // долгота геопозиции
+  distance?: number
   searchText?: string
   forEventPage?: boolean // для отправки координат для страницы мероприятия
   dateStart?: string // дата начала события / места - отправляется совместно с dateEnd
