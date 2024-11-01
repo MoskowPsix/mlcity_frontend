@@ -64,6 +64,7 @@ export class QueryBuilderService {
   public paginationEventsInSightCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   public paginationPublicEventsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+  public paginationPublicEventsForTapeRecomendate: BehaviorSubject<string> = new BehaviorSubject<string>('')
   public paginationPublicEventsForSearchCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   public paginationPublicSightsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
@@ -229,7 +230,7 @@ export class QueryBuilderService {
       dateStart: this.dateStart,
       dateEnd: this.dateEnd,
       radius: this.radius,
-      page: this.paginationPublicEventsForTapeCurrentPage.value,
+      page: this.paginationPublicEventsForTapeRecomendate.value,
       orderBy: 'date_start',
       desc: true,
     }
