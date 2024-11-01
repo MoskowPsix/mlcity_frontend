@@ -108,6 +108,23 @@ ion-card-subtitle {
   padding-left: 0.5rem;
 }
 
+.distance {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 0.625rem;
+  font-family: var(--font-bold);
+  text-align: center;
+  background-color: #1c2226b6;
+  color: #fff;
+  border-radius: 10px 10px 10px 10px;
+  min-width: 3.75rem;
+  height: 1.438rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
 .edit-button {
   right: 1rem;
   top: 0.5rem;
