@@ -28,7 +28,7 @@
     <div class="spiner-container">
       <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>
     </div>
-    <ng-container *ngIf="!stopScroll">
+    <ng-container >
       <ion-infinite-scroll *ngIf="cards.length > 0 && notFound === false || separatorCards.length > 0" (ionInfinite)="onIonInfinite($event)">
         <ion-infinite-scroll-content ></ion-infinite-scroll-content>
       </ion-infinite-scroll>

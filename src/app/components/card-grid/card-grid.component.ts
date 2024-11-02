@@ -30,7 +30,7 @@ export class CardGridComponent implements OnInit {
   }
 
   onIonInfinite(event: any) {
-    if (!this.notFound) {
+    if (!this.notFound || this.separatorCards.length !== 0) {
       let trueEvent = event as InfiniteScrollCustomEvent
       this.endScroll.emit()
       trueEvent.target.complete()
