@@ -24,13 +24,22 @@ export class SearchButtonComponent implements OnInit {
   @Output() changeState: EventEmitter<any> = new EventEmitter()
   @Output() changeSearch: EventEmitter<string> = new EventEmitter()
   @ViewChild('input') input!: ElementRef
+  @ViewChild('closeButton') closeButton!: ElementRef
   subscribesInput: boolean = false
   searchButtonClass: string = 'search-button'
+  closeButtonClass: string = 'close-button'
   inputWrapperClass: string = 'input-wrapper_litle'
   wait: boolean = false
 
   emitState() {
     this.changeState.emit(this.active)
+  }
+  emitStateInButton() {
+    if (!this.active) {
+      this.emitState()
+    } else {
+      this.changeSearch.emit(this.input.nativeElement.value)
+    }
   }
 
   renderActive() {
@@ -39,6 +48,11 @@ export class SearchButtonComponent implements OnInit {
       this.searchButtonClass = 'search-button_active'
       setTimeout(() => {
         this.inputWrapperClass = 'input-wrapper'
+        this.closeButton.nativeElement.style.display = 'block'
+        setTimeout(() => {
+          this.closeButtonClass = 'close-button_active'
+        }, 100)
+
         if (!this.subscribesInput) {
           this.subscribesInput = true
           event.addEventListener('keypress', (key: any) => {
@@ -57,6 +71,11 @@ export class SearchButtonComponent implements OnInit {
     if (!this.active) {
       this.inputWrapperClass = 'input-wrapper_litle'
       setTimeout(() => {
+        this.closeButtonClass = 'close-button'
+        setTimeout(() => {
+          this.closeButton.nativeElement.style.display = 'none'
+        }, 200)
+
         this.searchButtonClass = 'search-button'
       }, 100)
     }

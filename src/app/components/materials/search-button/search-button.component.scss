@@ -1,4 +1,5 @@
 .search-input{
+  padding-left: 1rem;
   opacity: 1;
   transform: scaleX(1); /* Разворачиваем элемент по горизонтали */
   width: 100%; /* Устанавливаем ширину только при открытии */
@@ -13,10 +14,8 @@
   opacity: 1;
   display: block;
   font-size: 0.75rem;
-  margin-right: -1.2rem;
   opacity: 1;
   transition: opacity 0.3s ease, transform 0.5s ease;
-  
   color:#1C2226 ;
 }
 
@@ -85,9 +84,18 @@
 .input-container{
   width: 100%;
   display: flex;
+  gap: 0.5rem;
   padding-left: 0rem;
-  margin-left: -0.6rem;
   padding-right: 1rem;
   justify-content: end;
   align-items: end;
+}
+
+.close-button{
+  opacity: 0;
+  transition: 0.2s;
+}
+.close-button_active{
+  opacity: 1;
+  transition: 0.2s;
 }

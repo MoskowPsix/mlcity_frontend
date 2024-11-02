@@ -10,6 +10,7 @@ import { promises } from 'dns'
 import { finalize } from 'rxjs'
 import { ToastService } from 'src/app/services/toast.service'
 import { EventsForSearchTapeService } from './events-for-search-tape.service'
+import { Location } from '@angular/common'
 @Component({
   selector: 'app-events-for-search',
   templateUrl: './events-for-search.component.html',
@@ -25,6 +26,7 @@ export class EventsForSearchComponent implements OnInit {
     private eventsService: EventsService,
     private toastService: ToastService,
     public eventsForSearchTapeService: EventsForSearchTapeService,
+    private location: Location,
   ) {}
   text: string = ''
   notFound: boolean = false
@@ -87,7 +89,7 @@ export class EventsForSearchComponent implements OnInit {
     }
   }
   changeSearch() {
-    this.searchActive = !this.searchActive
+    this.location.back()
   }
 
   eventNavigation(event: any) {
