@@ -148,7 +148,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   getEventsCity() {
-    console.log('separartor')
     this.updateCoordinates().then(() => {
       if (this.eventsTapeService.nextPage && !this.eventsTapeService.wait) {
         this.eventsTapeService.wait = true
@@ -183,7 +182,6 @@ export class EventsComponent implements OnInit, OnDestroy {
               this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(cursor)
               this.eventsTapeService.nextPage = true
             } else {
-              console.log(cursor)
               this.eventsTapeService.nextPage = false
             }
             if (
@@ -201,8 +199,6 @@ export class EventsComponent implements OnInit, OnDestroy {
                 }
               })
             } else {
-              console.log(Number(this.filterService.getRadiusFromlocalStorage()))
-              console.log(response.events.data[0])
               this.eventsTapeService.eventsSeparator.push(...response.events.data)
             }
 
@@ -317,7 +313,6 @@ export class EventsComponent implements OnInit, OnDestroy {
       if (this.filterService.getLocationLatitudeFromlocalStorage()) {
         this.mapService.circleCenterLatitude.next(this.mapService.getLastMapCoordsFromLocalStorage()[0])
         this.mapService.circleCenterLongitude.next(this.mapService.getLastMapCoordsFromLocalStorage()[1])
-        console.log()
       } else {
         this.filterService.setLocationLatitudeTolocalStorage('0')
         this.filterService.setLocationLongitudeTolocalStorage('0')
