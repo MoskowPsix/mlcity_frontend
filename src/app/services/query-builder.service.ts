@@ -244,7 +244,7 @@ export class QueryBuilderService {
       longitude: this.longitude,
       radius: this.radius,
       sightTypes: this.sightTypes,
-      limit: 8,
+      limit: 14,
       page: this.paginationPublicSightsForTapeCurrentPage.value,
       latitude_position: this.latitudePosition,
       longitude_position: this.longitudePosition,

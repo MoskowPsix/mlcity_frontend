@@ -32,15 +32,21 @@ app-sight-type-carusel {
 }
 .header-bottom-container{
   cursor: pointer;
+  padding-left:1rem;
+  padding-top: 0.5rem;
+  background: #f8f8f8;
+  padding-right: 1rem;
   display: flex;
   width: 100%;
+  font-family: var(--font-bold);
   justify-content: space-between;
+  font-size: clamp(0.875rem, -1.469rem + 12.5vw, 1.3rem);
 }
 .segment-box {
   animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
 .grid-wrapper{
-  padding-top: 13rem;
+  padding-top: 7rem;
   padding-left: 1rem;
   padding-right: 1rem;
 }

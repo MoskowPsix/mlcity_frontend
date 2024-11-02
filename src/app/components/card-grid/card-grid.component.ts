@@ -14,6 +14,8 @@ export class CardGridComponent implements OnInit {
   @Input() cards: IEventType[] | ISightType[] | any[] = []
   @Input() isSight: boolean = false
   @Input() spiner!: boolean
+  @Input() separatorCards: IEventType[] | ISightType[] | any[] = []
+  @Input() stopScroll: boolean = false
   @Input() archived: boolean = false
   @Output() endScroll: EventEmitter<any> = new EventEmitter()
   @Output() eventClicked: EventEmitter<any> = new EventEmitter()
@@ -23,7 +25,7 @@ export class CardGridComponent implements OnInit {
     this.myEvents = this.router.url === '/cabinet/events' || this.router.url === '/cabinet/sights'
   }
 
-  eventNavigation(event: any){
+  eventNavigation(event: any) {
     this.eventClicked.emit(event)
   }
 

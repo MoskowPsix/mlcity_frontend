@@ -1,4 +1,4 @@
-import { NotFoundComponent } from './../views/errors/not-found/not-found.component';
+import { NotFoundComponent } from './../views/errors/not-found/not-found.component'
 import { Injectable } from '@angular/core'
 import { IEvent } from '../models/event'
 
@@ -11,7 +11,8 @@ export class EventsTapeService {
   tapeCityName: string = ''
   nextPage: boolean = true
   wait: boolean = false
-  notFound:boolean = false
+  notFound: boolean = false
   eventsCity: IEvent[] = []
+  eventsSeparator: IEvent[] = []
   constructor() {}
 }

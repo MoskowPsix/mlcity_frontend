@@ -163,6 +163,7 @@ export class EventsComponent implements OnInit, OnDestroy {
             finalize(() => {
               if (this.eventsTapeService.eventsCity.length === 0) {
                 this.eventsTapeService.notFound = true
+                console.log(this.eventsTapeService.eventsCity)
               }
             }),
             catchError((error) => {
@@ -181,9 +182,28 @@ export class EventsComponent implements OnInit, OnDestroy {
               this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next(cursor)
               this.eventsTapeService.nextPage = true
             } else {
+              console.log(cursor)
               this.eventsTapeService.nextPage = false
             }
-            this.eventsTapeService.eventsCity.push(...response.events.data)
+            if (
+              response.events.data[0] &&
+              response.events.data[0].distance < Number(this.filterService.getRadiusFromlocalStorage())
+            ) {
+              response.events.data.forEach((event: any) => {
+                if (event.distance < Number(this.filterService.getRadiusFromlocalStorage())) {
+                  this.eventsTapeService.eventsCity.push(event)
+                } else {
+                  this.eventsTapeService.eventsSeparator.push(event)
+                  if (this.eventsTapeService.eventsSeparator.length < 8) {
+                    this.getEventsCity()
+                  }
+                }
+              })
+            } else {
+              console.log(Number(this.filterService.getRadiusFromlocalStorage()))
+              console.log(response.events.data[0])
+              this.eventsTapeService.eventsSeparator.push(...response.events.data)
+            }
 
             this.eventsTapeService.wait = false
           })
@@ -333,6 +353,7 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.eventsTapeService.notFound = false
       this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
         this.eventsTapeService.eventsCity = []
+        this.eventsTapeService.eventsSeparator = []
         this.eventsTapeService.eventsLastScrollPositionForTape = 0
         this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
 

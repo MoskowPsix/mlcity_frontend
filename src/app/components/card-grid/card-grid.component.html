@@ -10,18 +10,30 @@
 <div *ngIf="notFound" class="error-box">
   <app-not-found-content></app-not-found-content>
 </div>
-<ng-container *ngIf="cards.length > 0 && notFound === false">
+<ng-container *ngIf="cards.length > 0 && notFound === false || separatorCards.length > 0 " >
 
-  <ng-container *ngIf="cards.length >= 0">
+  <ng-container *ngIf="cards.length >= 0 || separatorCards.length > 0">
     <div class="main-grid">
         <app-event-card (eventClicked)="eventNavigation($event)" *ngFor="let card of cards; let i = index" [event]="card" [myEvent]="myEvents" [isSight]="isSight"></app-event-card>
     </div>
+    <ng-container *ngIf="separatorCards.length > 0">
+      <div class="separator">
+        Мероприятия за вашим радиусом
+      </div>
+      <div class="main-grid">
+        <app-event-card (eventClicked)="eventNavigation($event)" *ngFor="let card of separatorCards; let i = index" [event]="card" [myEvent]="myEvents" [isSight]="isSight"></app-event-card>
+    </div>
+    </ng-container>
+
     <div class="spiner-container">
       <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>
     </div>
-    <ion-infinite-scroll *ngIf="cards.length > 0 && notFound === false" (ionInfinite)="onIonInfinite($event)">
-      <ion-infinite-scroll-content ></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+    <ng-container *ngIf="!stopScroll">
+      <ion-infinite-scroll *ngIf="cards.length > 0 && notFound === false || separatorCards.length > 0" (ionInfinite)="onIonInfinite($event)">
+        <ion-infinite-scroll-content ></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </ng-container>
+   
   </ng-container>
 </ng-container>
 
