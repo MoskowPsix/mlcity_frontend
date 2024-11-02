@@ -16,7 +16,7 @@ import { EditService } from 'src/app/services/edit.service'
 import { ToastService } from 'src/app/services/toast.service'
 import { StatusesService } from 'src/app/services/statuses.service'
 import { Statuses } from 'src/app/enums/statuses-new'
-import _ from 'lodash'
+import _, { min } from 'lodash'
 import { serialize } from 'object-to-formdata'
 import moment from 'moment'
 interface InvalidForm {
@@ -286,6 +286,7 @@ export class EditEventComponent implements OnInit {
       this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_start = seanceDate.seance.date_start
       this.editForm.value.places[seanceDate.placeId].seances[seanceIndex].date_end = seanceDate.seance.date_start
     }
+    this.searchDateStart()
   }
   deleteSeance(seance: any) {
     if (seance.temp_id || (seance.temp_id == 0 && seance.temp_id != null)) {
@@ -537,6 +538,29 @@ export class EditEventComponent implements OnInit {
       return false
     }
   }
+
+  searchDateStart() {
+    let minSeance = this.editForm.value.places[0].seances[0].date_start
+    let maxSeance = this.editForm.value.places[0].seances.date_start
+
+    this.editForm.value.places.forEach((place: any) => {
+      if (place.seances) {
+        place.seances.forEach((seance: any) => {
+          if (seance.date_start < minSeance) {
+            minSeance = seance.date_start
+          }
+          if (seance.date_start > maxSeance) {
+            maxSeance = seance.date_start
+          }
+        })
+      }
+    })
+    this.editForm.patchValue({
+      dateStart: minSeance,
+      dateEnd: maxSeance,
+    })
+    console.log(this.editForm.value.date_start)
+  }
   submitForm() {
     this.loadingService.showLoading()
     if (this.checkValidOfForm()) {
@@ -546,7 +570,7 @@ export class EditEventComponent implements OnInit {
       this.clearFormOfTempData()
       // this.submitButtonState = true
       // this.loadingService.showLoading()
-
+      this.searchDateStart()
       let historyContent = new EventHistoryContent()
       let result = historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value))
       this.editService
@@ -582,6 +606,8 @@ export class EditEventComponent implements OnInit {
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       sponsor: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      dateStart: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      dateEnd: new FormControl('', [Validators.required, Validators.minLength(3)]),
       files: new FormControl([]),
       price: new FormControl([], [Validators.required]),
       types: new FormControl([], [Validators.required]),

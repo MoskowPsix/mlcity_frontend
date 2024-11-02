@@ -595,7 +595,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
     this.formData.append('materials', this.createEventForm.controls['materials'].value)
     this.formData.append('dateStart', this.createEventForm.value.dateStart)
-    this.formData.append('dateEnd', this.createEventForm.value.dateStart)
+    this.formData.append('dateEnd', this.createEventForm.value.dateEnd)
     this.formData.append('places[]', this.createEventForm.controls['places'].value)
     this.createEventForm.controls['places'].value.forEach((item: any, i: number) => {
       this.formData.append(`places[${i}][address]`, item.address)
@@ -962,16 +962,20 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   searchMinSeans() {
     let minSeance = this.createEventForm.value.places[0].seances[0].date_start
+    let maxSeance = this.createEventForm.value.places[0].seances[0].date_start
     this.createEventForm.value.places.forEach((place: any) => {
       place.seances.forEach((seance: any) => {
         if (seance.date_start < minSeance) {
           minSeance = seance.date_start
         }
+        if (seance.date_start > maxSeance) {
+          maxSeance = seance.date_start
+        }
       })
     })
     this.createEventForm.value.dateStart = minSeance
 
-    this.createEventForm.value.dateEnd = minSeance
+    this.createEventForm.value.dateEnd = maxSeance
   }
 
   ionViewDidLeave() {
