@@ -619,10 +619,23 @@ ion-accordion-group {
     font-size: 18px;
   }
 }
+.category-button-grid_wrapper{
+  display: flex;
+  justify-content: space-between;
+}
 .category-button-grid{
   padding-top: 0.5rem;
   display: flex;
-  max-width: 100%;
+  max-width: 80%;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+.views-container__views{
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  font-family: var(--font-regular);
+  color: grey;
 }

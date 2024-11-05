@@ -27,6 +27,7 @@ import { IEvent } from 'src/app/models/event'
 import { TextFormatService } from 'src/app/services/text-format.service'
 import { Share } from '@capacitor/share'
 import { ShareService } from 'src/app/services/share.service'
+import { ViewsService } from 'src/app/services/views.service'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -94,6 +95,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     public router: Router,
     private titleService: Title,
+    private viewsService: ViewsService,
     private metaService: Meta,
     private filterService: FilterService,
     private locationService: LocationService,
@@ -438,7 +440,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
     })
-
+    this.viewsService
+      .addViewInEvent(String(this.eventId))
+      .pipe()
+      .subscribe((res: any) => {
+        console.log(res)
+      })
     this.userAuth = this.authService.getAuthState()
     if (this.router.url !== '/cabinet/events/create') {
       this.loadingFavotire = true

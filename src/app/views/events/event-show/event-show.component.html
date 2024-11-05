@@ -63,12 +63,19 @@
           <div class="main-content__firt-seance" *ngIf="firstySeance">
             ближайший сеанс {{firstySeance.seance.date_start|date:'d MMM в HH:mm'}}
           </div>
-
-          <div class="category-button-grid">
-            <ng-container>
-                <app-rounded-button style="pointer-events: none;"  *ngFor="let category of event.types"  icon="assets/icons/category.svg" type="button" buttonText=" {{category.name}}"></app-rounded-button>
-                <app-rounded-button *ngIf="event.types!.length === 0" style="pointer-events: none;"  icon="assets/icons/category.svg" type="button" buttonText="Прочее"></app-rounded-button>
-            </ng-container>
+          <div class="category-button-grid_wrapper">
+            <div class="category-button-grid">
+              <ng-container>
+                  <app-rounded-button style="pointer-events: none;"  *ngFor="let category of event.types"  icon="assets/icons/category.svg" type="button" buttonText=" {{category.name}}"></app-rounded-button>
+                  <app-rounded-button *ngIf="event.types!.length === 0" style="pointer-events: none;"  icon="assets/icons/category.svg" type="button" buttonText="Прочее"></app-rounded-button>
+              </ng-container>
+            </div>
+            <div *ngIf="event.views && event.views.count" class="views-container">
+              <div class="views-container__views">
+                <img class="open-input-icon" src="/assets/icons/open-input.svg" alt="">
+                <div class="views-container__views__count">{{event.views.count}}</div>
+              </div>
+            </div>
           </div>
 
           <strong class="main-content__name">{{event.name}}</strong>
