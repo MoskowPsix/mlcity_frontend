@@ -28,6 +28,10 @@ export class EventsService {
       ...params,
     })
   }
+
+  getLikedUsersById(id: string) {
+    return this.http.get(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/${id}/favorites-users`)
+  }
   getUserId() {
     const user = this.userService.getUserFromLocalStorage()
     if (user) {

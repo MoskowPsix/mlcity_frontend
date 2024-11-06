@@ -15,4 +15,11 @@ export class FileService {
       return `${this.backendUrl}${file.link}`
     }
   }
+  checkLinkString(string: string): string {
+    if (string && string.includes('https')) {
+      return string
+    } else {
+      return `${this.backendUrl}${string}`
+    }
+  }
 }

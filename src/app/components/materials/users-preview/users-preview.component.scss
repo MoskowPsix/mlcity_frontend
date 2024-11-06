@@ -1,10 +1,12 @@
 .users_avatars-user{
-    background-color: rgb(192, 191, 191);
     width: 2rem;
     height: 2rem;
+    object-fit: cover;
+    background-position: center;
+    background-size: cover;
     border-radius: 50%;
     box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
-    margin-right: -1rem;
+    margin-right: -0.4rem;
 }
 .users_avatars{
     display: flex;
@@ -23,5 +25,26 @@
     font-size: 0.65rem;
     border-radius: 50%;
     box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
-    margin-right: -1rem;
+    margin-right: -0.4rem;
+}
+.user-modal-header_close-image{
+    width: 1rem;
+    height: 1rem;
+}
+ion-modal{
+  
+    --background:#fff;
+}
+.modal-content{
+    background:#fff;
+}
+ion-toolbar{
+    --border:none;
+}
+.user-modal-header{
+    display: flex;
+   
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-bold);
 }

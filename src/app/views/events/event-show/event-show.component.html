@@ -79,16 +79,15 @@
           </div>
 
           <strong class="main-content__name">{{event.name}}</strong>
-          <div class="users">
-            <span  class="title users-title">
-              Участники <div class="users-count">3</div>
-            </span>
-            <app-users-preview></app-users-preview>
-          </div>
-
           <app-collapsed-text *ngIf="event.description">
-              <div [innerHTML]="clearDescription()"></div>
+            <div [innerHTML]="clearDescription()"></div>
           </app-collapsed-text>
+          <div *ngIf="event.favoritesUsers && usersInFavorite.length" class="users">
+            <span class="title users-title">
+              Участники <div class="users-count">{{usersCount}}</div>
+            </span>
+            <app-users-preview [fullValueUsers]="event.favoritesUsers" [users]="usersInFavorite" [moreCount]="usersCount" [openUsersModal]="openUserModalValue" (closeModalEmit)="closeStateUsersModal()" (openModalEmit)="openStateUsersModal()"></app-users-preview>
+          </div>
 
           <div class="main-content__shedule">
             <span  class="title">
