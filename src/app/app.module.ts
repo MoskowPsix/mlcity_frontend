@@ -66,6 +66,7 @@ import { MapService } from './services/map.service'
 import { OrganizationsCardComponent } from './components/organizations-card/organizations-card.component'
 import { environment } from '../environments/environment'
 import { AuthTokenInterceptor } from './auth-token.interceptor'
+import { UsersPreviewComponent } from './components/materials/users-preview/users-preview.component'
 
 import { AuthGuard } from './guards/auth.guard'
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard'
@@ -182,6 +183,7 @@ registerLocaleData(localeRu, 'ru')
     CodeInputComponent,
     AddressInputComponent,
     EditEventComponent,
+    UsersPreviewComponent,
     EditSightComponent,
     SidebarComponent,
     PoliticsDocumentComponent,

@@ -1,0 +1,27 @@
+.users_avatars-user{
+    background-color: rgb(192, 191, 191);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
+    margin-right: -1rem;
+}
+.users_avatars{
+    display: flex;
+    padding-top: 0.5rem;
+}
+.users_avatars-user-more{
+    background-color: rgb(255, 255, 255);
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    text-align: center;
+    color: gray;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-bold);
+    font-size: 0.65rem;
+    border-radius: 50%;
+    box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
+    margin-right: -1rem;
+}
