@@ -69,6 +69,10 @@ export class AuthService {
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/register`, data)
   }
 
+  registerGuest() {
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/register/guest`, {})
+  }
+
   setPassword(pass: any[]): Observable<IUser> {
     const params = pass
     return this.getCSRF().pipe(

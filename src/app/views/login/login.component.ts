@@ -176,6 +176,24 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
+  loginGuest() {
+    this.loginForm.disable()
+    this.loadingService.showLoading()
+    this.authService
+      .registerGuest()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: any) => {
+          this.tokenService.setToken(data.access_token)
+          this.positiveResponseAfterLogin(data)
+        },
+        error: (err) => {
+          this.recoveryPasswordChange()
+          this.errorResponseAfterLogin(err)
+        },
+      })
+  }
+
   clearErrors() {
     if (this.loginInvalid.localError || this.loginInvalid.serverError) {
       this.validateForm()
