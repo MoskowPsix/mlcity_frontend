@@ -21,8 +21,21 @@
                 </div>
             </ion-toolbar>
           </ion-header>
+         
       <ion-content class="" class="ion-padding">
-        asdas
+        <div class="card-grid">
+            <ng-container *ngIf="users.length" >
+                <app-user-section *ngFor="let user of users" [user]="user"></app-user-section>
+            </ng-container>
+        </div>
+        <ng-container >
+            <ion-infinite-scroll *ngIf="users.length > 0" (ionInfinite)="onIonInfinite($event)">
+              <ion-infinite-scroll-content ></ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+          </ng-container>       
+          <div class="spiner-container">
+            <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>
+          </div>
       </ion-content>
     </ng-template>
 </ion-modal>

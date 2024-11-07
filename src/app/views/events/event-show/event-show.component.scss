@@ -103,9 +103,25 @@ ion-content{
   display: flex;
 }
 
+.footer-ios ion-toolbar:first-of-type {
+  /* --border-width: 0.55px 0 0; */
+  border: none;
+}
 
-
-
+.favorite-button_bottom{
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 1rem;
+  background: var(--background-color);
+  padding-right: 1rem;
+}
+ion-footer{
+  --background: none;
+}
 .ico-small {
   width: 30px;
   height: 30px;

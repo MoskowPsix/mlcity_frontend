@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Output, Input, inject } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
-import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter, timeInterval } from 'rxjs'
+import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter, timeInterval, finalize } from 'rxjs'
 import { EventsService } from 'src/app/services/events.service'
 import { IonicSlides } from '@ionic/angular'
 import { register } from 'swiper/element/bundle'
@@ -56,11 +56,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
   loadingEvent: boolean = true
   loadPlace: boolean = false
   loadMore: boolean = true
-
+  nextPageFavoritesUser:boolean = true
+  nextPageSpiner:boolean = false
   usersCount: string = '0'
 
   favorite: boolean = false
-
+  favoriteCheked:boolean = false
   usersInFavorite: IUser[] = []
 
   loadingFavotire: boolean = false
@@ -166,16 +167,39 @@ export class EventShowComponent implements OnInit, OnDestroy {
     console.log('closing state')
     this.openUserModalValue = false
   }
+  clearTempUsersFavorites(){
+    this.nextPageFavoritesUser = true
+    this.nextPageSpiner = false
+    this.usersInFavorite = []
+  }
   getFavoritesUsers() {
-    this.queryBuilderService.paginationUsersFavoritesCurrentPage.next('')
+   if(this.nextPageFavoritesUser){
+    console.log(this.nextPageFavoritesUser)
+    if(this.usersInFavorite.length > 1){
+      this.nextPageSpiner = true
+    }
     this.eventsService
       .getLikedUsersById(String(this.eventId))
-      .pipe()
+      .pipe(
+        finalize(()=>{
+          this.nextPageSpiner = false
+        })
+      )
       .subscribe((res: any) => {
-        console.log(res.events.data)
-        this.usersInFavorite = res.events.data
+       
+        this.usersInFavorite.push(...res.events.data) 
         this.usersCount = this.event.favoritesUsers
+        if(res.next_cursor){
+          console.log(res.next_cursor)
+          this.queryBuilderService.paginationUsersFavoritesCurrentPage.next(res.next_cursor)
+          this.nextPageFavoritesUser = true
+        }else{
+          this.nextPageFavoritesUser = false
+          console.log(res.next_cursor)
+        }
       })
+   }
+    
   }
 
   setLocationForPlaces() {
@@ -305,12 +329,14 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   checkFavorite() {
+    this.clearTempUsersFavorites()
     this.getFavoritesUsers()
     if (this.userAuth)
       this.eventsService
         .checkFavorite(this.eventId!)
         .pipe(retry(3), takeUntil(this.destroy$))
         .subscribe((favorite: any) => {
+          this.favoriteCheked = true
           this.favorite = favorite.is_favorite
           if (this.favorite === true) {
             this.likeUrl = 'assets/icons/like-active.svg'
@@ -412,7 +438,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .pipe(
           tap((res) => {
             this.favorite = !this.favorite
-            this.getFavoritesUsers()
+          
             if (this.favorite === true) {
               this.likeUrl = 'assets/icons/like-active.svg'
             } else {
@@ -421,6 +447,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
             this.loadingLike = false
             this.loadingFavotire = false
           }),
+          finalize(
+            ()=>{
+              this.clearTempUsersFavorites()
+              this.getFavoritesUsers()
+            }
+          ),
           catchError((err) => {
             this.toastService.showToast(MessagesErrors.default, 'danger')
             return of(EMPTY)
@@ -469,10 +501,11 @@ export class EventShowComponent implements OnInit, OnDestroy {
     //Получаем ид ивента из параметра маршрута
     this.wait = true
     this.nextPage = true
-
+    this.nextPageFavoritesUser = true
     this.eventsCity = []
     this.setUsersCount()
     this.queryBuilderService.paginationPublicEventsForTapeRecomendate.next('')
+    this.queryBuilderService.paginationUsersFavoritesCurrentPage.next('')
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
     })

@@ -82,11 +82,11 @@
           <app-collapsed-text *ngIf="event.description">
             <div [innerHTML]="clearDescription()"></div>
           </app-collapsed-text>
-          <div *ngIf="event.favoritesUsers && usersInFavorite.length" class="users">
+          <div *ngIf="usersInFavorite.length" class="users">
             <span class="title users-title">
               Участники <div class="users-count">{{usersCount}}</div>
             </span>
-            <app-users-preview [fullValueUsers]="event.favoritesUsers" [users]="usersInFavorite" [moreCount]="usersCount" [openUsersModal]="openUserModalValue" (closeModalEmit)="closeStateUsersModal()" (openModalEmit)="openStateUsersModal()"></app-users-preview>
+            <app-users-preview [spiner]="nextPageSpiner" (endScroll)="getFavoritesUsers()" [fullValueUsers]="event.favoritesUsers" [users]="usersInFavorite" [moreCount]="usersCount" [openUsersModal]="openUserModalValue" (closeModalEmit)="closeStateUsersModal()" (openModalEmit)="openStateUsersModal()"></app-users-preview>
           </div>
 
           <div class="main-content__shedule">
@@ -404,7 +404,11 @@
       </div>
    </ion-col>
 </ng-container>
-<ion-footer>
-    <ion-toolbar></ion-toolbar>
+<ion-footer class="ion-no-border">
+    <div *ngIf="!this.favorite && favoriteCheked"  class="favorite-button_bottom">
+      <ion-spinner *ngIf="loadingFavotire" name="crescent"></ion-spinner>  
+      <app-standart-button (click)="toggleFavorite(event.id)" style="width: 100%;" *ngIf="!loadingFavotire" buttonText="Я пойду" icon="assets/icons/like.svg" theme="standart"></app-standart-button>
+    </div>
+     
 </ion-footer>
 <app-images-modal *ngIf="event && event.files.length" [openModal]="openImagesModal" (closeModalEmit)="closeImagesModal()" [imagesPathArray]="event.files"></app-images-modal>
