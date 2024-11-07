@@ -31,7 +31,8 @@
 
       <app-update-version-modal></app-update-version-modal>
         <ion-router-outlet></ion-router-outlet>
-      <ion-footer *ngIf="url !== '/cabinet/events/create' && url !== '/cabinet/sights/create' && url!=='/cabinet/sights/edit' && url!== '/cabinet/events/edit' && url !== '/cabinet/location' " >
+      <ion-footer *ngIf="url !== '/cabinet/events/create' && url !== '/cabinet/sights/create'
+       && url!=='/cabinet/sights/edit' && url!== '/cabinet/events/edit' && url !== '/cabinet/location' && url !=='/events/number' " >
         <ion-toolbar>
           <app-footer></app-footer>
         </ion-toolbar>

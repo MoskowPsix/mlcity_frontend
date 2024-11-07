@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Output, Input, inject } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
-import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter, timeInterval } from 'rxjs'
+import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter, timeInterval, finalize } from 'rxjs'
 import { EventsService } from 'src/app/services/events.service'
 import { IonicSlides } from '@ionic/angular'
 import { register } from 'swiper/element/bundle'
@@ -28,6 +28,8 @@ import { TextFormatService } from 'src/app/services/text-format.service'
 import { Share } from '@capacitor/share'
 import { ShareService } from 'src/app/services/share.service'
 import { ViewsService } from 'src/app/services/views.service'
+import { NumbersService } from 'src/app/services/numbers.service'
+import { IUser } from 'src/app/models/user'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -54,15 +56,21 @@ export class EventShowComponent implements OnInit, OnDestroy {
   loadingEvent: boolean = true
   loadPlace: boolean = false
   loadMore: boolean = true
+  nextPageFavoritesUser:boolean = true
+  nextPageSpiner:boolean = false
+  usersCount: string = '0'
 
   favorite: boolean = false
+  favoriteCheked:boolean = false
+  usersInFavorite: IUser[] = []
+
   loadingFavotire: boolean = false
   firstySeance: any
   like: boolean = false
   loadingLike: boolean = false
   startLikesCount: number = 0
   oldTypes: number[] = []
-
+  openUserModalValue: boolean = false
   ageLimit: string = ''
 
   textFormat: TextFormatService = inject(TextFormatService)
@@ -101,6 +109,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private locationService: LocationService,
     private mapService: MapService,
     private shareService: ShareService,
+    private numbersService: NumbersService,
   ) {}
 
   getEvent() {
@@ -114,6 +123,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         if (event) {
           this.event = event.event
+          this.setUsersCount()
           this.checkPrice()
           if (this.event.age_limit) {
             this.ageLimit = this.event.age_limit.split('+')[0]
@@ -143,6 +153,48 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
   goToOrganization(event: any) {
     this.router.navigate(['/organizations', this.organization.id])
+  }
+
+  setUsersCount() {
+      this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
+    }
+  
+  openStateUsersModal() {
+    this.openUserModalValue = true
+  }
+  closeStateUsersModal() {
+    this.openUserModalValue = false
+  }
+  clearTempUsersFavorites(){
+    this.nextPageFavoritesUser = true
+    this.nextPageSpiner = false
+    this.usersInFavorite = []
+  }
+  getFavoritesUsers() {
+   if(this.nextPageFavoritesUser){
+    if(this.usersInFavorite.length > 1){
+      this.nextPageSpiner = true
+    }
+    this.eventsService
+      .getLikedUsersById(String(this.eventId))
+      .pipe(
+        finalize(()=>{
+          this.nextPageSpiner = false
+        })
+      )
+      .subscribe((res: any) => {
+       
+        this.usersInFavorite.push(...res.events.data) 
+       
+        if(res.next_cursor){
+          this.queryBuilderService.paginationUsersFavoritesCurrentPage.next(res.next_cursor)
+          this.nextPageFavoritesUser = true
+        }else{
+          this.nextPageFavoritesUser = false
+        }
+      })
+   }
+    
   }
 
   setLocationForPlaces() {
@@ -272,11 +324,14 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   checkFavorite() {
+    this.clearTempUsersFavorites()
+    this.getFavoritesUsers()
     if (this.userAuth)
       this.eventsService
         .checkFavorite(this.eventId!)
         .pipe(retry(3), takeUntil(this.destroy$))
         .subscribe((favorite: any) => {
+          this.favoriteCheked = true
           this.favorite = favorite.is_favorite
           if (this.favorite === true) {
             this.likeUrl = 'assets/icons/like-active.svg'
@@ -378,7 +433,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .pipe(
           tap((res) => {
             this.favorite = !this.favorite
-
+          
             if (this.favorite === true) {
               this.likeUrl = 'assets/icons/like-active.svg'
             } else {
@@ -387,6 +442,13 @@ export class EventShowComponent implements OnInit, OnDestroy {
             this.loadingLike = false
             this.loadingFavotire = false
           }),
+          finalize(
+            ()=>{
+              this.getEvent()
+              this.clearTempUsersFavorites()
+              this.getFavoritesUsers()
+            }
+          ),
           catchError((err) => {
             this.toastService.showToast(MessagesErrors.default, 'danger')
             return of(EMPTY)
@@ -435,17 +497,18 @@ export class EventShowComponent implements OnInit, OnDestroy {
     //Получаем ид ивента из параметра маршрута
     this.wait = true
     this.nextPage = true
+    this.nextPageFavoritesUser = true
     this.eventsCity = []
+   
     this.queryBuilderService.paginationPublicEventsForTapeRecomendate.next('')
+    this.queryBuilderService.paginationUsersFavoritesCurrentPage.next('')
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
     })
     this.viewsService
       .addViewInEvent(String(this.eventId))
       .pipe()
-      .subscribe((res: any) => {
-        console.log(res)
-      })
+      .subscribe((res: any) => {})
     this.userAuth = this.authService.getAuthState()
     if (this.router.url !== '/cabinet/events/create') {
       this.loadingFavotire = true

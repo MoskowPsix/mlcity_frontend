@@ -19,7 +19,9 @@
         }">
         </ya-map>
       </div>
-      <app-standart-button buttonText="Проложить маршрут" theme="standart" (clicked)="goToPoint()"></app-standart-button>
+      <div class="button-wrapper">
+        <app-standart-button  buttonText="Проложить маршрут" theme="standart" (clicked)="goToPoint()"></app-standart-button>
+      </div>
       <app-seances-container [buyLink]="buyLink" [priceState]="priceState" [seances]="place.seances"/>
     </div>
 </ion-accordion>
@@ -44,6 +46,8 @@
         }">
         </ya-map>
       </div>
-      <app-standart-button buttonText="Проложить маршрут" theme="standart" (clicked)="goToPoint()"></app-standart-button>
+      <div class="button-wrapper">
+        <app-standart-button buttonText="Проложить маршрут" theme="standart" (clicked)="goToPoint()"></app-standart-button>
+      </div>
     </div>
 </ion-accordion>

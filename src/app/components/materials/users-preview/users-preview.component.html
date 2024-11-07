@@ -1,0 +1,41 @@
+<div class="users">
+    <div class="users_avatars" (click)="openModal()">
+        <ng-container *ngFor="let user of usersPreview">
+            <div *ngIf="user.avatar" style="background-image:url('{{fileService.checkLinkString(user.avatar)}}');" class="users_avatars-user"></div>
+            <!-- fileService.checkLinkFile -->
+        </ng-container>
+       
+        <div *ngIf="moreCount" class="users_avatars-user-more">+{{moreCount}}</div>
+    </div>
+</div>
+
+<!-- <ion-modal  class="modal" backdropDismiss="false" [isOpen] ="true" [canDismiss]="openModalGroupValue"></ion-modal> -->
+
+<ion-modal (willDismiss)="closeModal()" mode="ios" class="modal" [isOpen] ="openUsersModal">
+    <ng-template>
+        <ion-header>
+            <ion-toolbar>
+                <div class="user-modal-header">
+                    <img (click)="closeModal()" class="user-modal-header_close-image" src="assets/icons/close.svg" alt="">
+                    Участники {{fullValueUsers}}
+                </div>
+            </ion-toolbar>
+          </ion-header>
+         
+      <ion-content class="" class="ion-padding">
+        <div class="card-grid">
+            <ng-container *ngIf="users.length" >
+                <app-user-section *ngFor="let user of users" [user]="user"></app-user-section>
+            </ng-container>
+        </div>
+        <ng-container >
+            <ion-infinite-scroll *ngIf="users.length > 0" (ionInfinite)="onIonInfinite($event)">
+              <ion-infinite-scroll-content ></ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+          </ng-container>       
+          <div class="spiner-container">
+            <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>
+          </div>
+      </ion-content>
+    </ng-template>
+</ion-modal>

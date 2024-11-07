@@ -66,6 +66,7 @@ export class QueryBuilderService {
   public paginationPublicEventsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
   public paginationPublicEventsForTapeRecomendate: BehaviorSubject<string> = new BehaviorSubject<string>('')
   public paginationPublicEventsForSearchCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+  public paginationUsersFavoritesCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
   public paginationPublicSightsForTapeCurrentPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
@@ -157,6 +158,8 @@ export class QueryBuilderService {
       case 'eventPlacesExpired':
         this.buildQueryExpiredEventPlaces()
         break
+      case 'usersFavorites':
+        break
       case 'sightsModalRadiusForMap': //Публичная страница мероприятий /events - вкладка по события городу
         this.buildQuerySightsModalRadiusForMap()
         break
@@ -187,6 +190,13 @@ export class QueryBuilderService {
       sightIds: this.sightIds.value,
       page: this.paginationModalSightsCurrentPage.value,
       limit: 10,
+    }
+  }
+
+  buildQueryUsersFavorites() {
+    this.queryParams = {
+      page: this.paginationUsersFavoritesCurrentPage.value,
+      limit: 20,
     }
   }
 
