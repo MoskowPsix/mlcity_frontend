@@ -123,7 +123,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         if (event) {
           this.event = event.event
-
+          this.setUsersCount()
           this.checkPrice()
           if (this.event.age_limit) {
             this.ageLimit = this.event.age_limit.split('+')[0]
@@ -156,15 +156,13 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   setUsersCount() {
-    if (Number(this.usersCount) >= 1000) {
-      this.usersCount = this.numbersService.changeDischarge(Number(this.usersCount))
+      this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
     }
-  }
+  
   openStateUsersModal() {
     this.openUserModalValue = true
   }
   closeStateUsersModal() {
-    console.log('closing state')
     this.openUserModalValue = false
   }
   clearTempUsersFavorites(){
@@ -174,7 +172,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
   getFavoritesUsers() {
    if(this.nextPageFavoritesUser){
-    console.log(this.nextPageFavoritesUser)
     if(this.usersInFavorite.length > 1){
       this.nextPageSpiner = true
     }
@@ -188,14 +185,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((res: any) => {
        
         this.usersInFavorite.push(...res.events.data) 
-        this.usersCount = this.event.favoritesUsers
+       
         if(res.next_cursor){
-          console.log(res.next_cursor)
           this.queryBuilderService.paginationUsersFavoritesCurrentPage.next(res.next_cursor)
           this.nextPageFavoritesUser = true
         }else{
           this.nextPageFavoritesUser = false
-          console.log(res.next_cursor)
         }
       })
    }
@@ -449,6 +444,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
           }),
           finalize(
             ()=>{
+              this.getEvent()
               this.clearTempUsersFavorites()
               this.getFavoritesUsers()
             }
@@ -503,7 +499,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.nextPage = true
     this.nextPageFavoritesUser = true
     this.eventsCity = []
-    this.setUsersCount()
+   
     this.queryBuilderService.paginationPublicEventsForTapeRecomendate.next('')
     this.queryBuilderService.paginationUsersFavoritesCurrentPage.next('')
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
