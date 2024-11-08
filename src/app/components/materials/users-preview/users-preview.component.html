@@ -2,6 +2,10 @@
     <div class="users_avatars" (click)="openModal()">
         <ng-container *ngFor="let user of usersPreview">
             <div *ngIf="user.avatar" style="background-image:url('{{fileService.checkLinkString(user.avatar)}}');" class="users_avatars-user"></div>
+            <div *ngIf="!user.avatar" class="user-no-photo">
+                <ion-icon class="user-no-photo_image"  name="person-circle"></ion-icon>
+            </div>
+
             <!-- fileService.checkLinkFile -->
         </ng-container>
        

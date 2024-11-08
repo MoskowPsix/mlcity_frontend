@@ -56,12 +56,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
   loadingEvent: boolean = true
   loadPlace: boolean = false
   loadMore: boolean = true
-  nextPageFavoritesUser:boolean = true
-  nextPageSpiner:boolean = false
+  nextPageFavoritesUser: boolean = true
+  nextPageSpiner: boolean = false
   usersCount: string = '0'
 
   favorite: boolean = false
-  favoriteCheked:boolean = false
+  favoriteCheked: boolean = false
   usersInFavorite: IUser[] = []
 
   loadingFavotire: boolean = false
@@ -156,45 +156,43 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   setUsersCount() {
-      this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
-    }
-  
+    this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
+  }
+
   openStateUsersModal() {
     this.openUserModalValue = true
   }
   closeStateUsersModal() {
     this.openUserModalValue = false
   }
-  clearTempUsersFavorites(){
+  clearTempUsersFavorites() {
     this.nextPageFavoritesUser = true
     this.nextPageSpiner = false
     this.usersInFavorite = []
   }
   getFavoritesUsers() {
-   if(this.nextPageFavoritesUser){
-    if(this.usersInFavorite.length > 1){
-      this.nextPageSpiner = true
-    }
-    this.eventsService
-      .getLikedUsersById(String(this.eventId))
-      .pipe(
-        finalize(()=>{
-          this.nextPageSpiner = false
+    if (this.nextPageFavoritesUser) {
+      if (this.usersInFavorite.length > 1) {
+        this.nextPageSpiner = true
+      }
+      this.eventsService
+        .getLikedUsersById(String(this.eventId))
+        .pipe(
+          finalize(() => {
+            this.nextPageSpiner = false
+          }),
+        )
+        .subscribe((res: any) => {
+          this.usersInFavorite.push(...res.events.data)
+
+          if (res.next_cursor) {
+            this.queryBuilderService.paginationUsersFavoritesCurrentPage.next(res.next_cursor)
+            this.nextPageFavoritesUser = true
+          } else {
+            this.nextPageFavoritesUser = false
+          }
         })
-      )
-      .subscribe((res: any) => {
-       
-        this.usersInFavorite.push(...res.events.data) 
-       
-        if(res.next_cursor){
-          this.queryBuilderService.paginationUsersFavoritesCurrentPage.next(res.next_cursor)
-          this.nextPageFavoritesUser = true
-        }else{
-          this.nextPageFavoritesUser = false
-        }
-      })
-   }
-    
+    }
   }
 
   setLocationForPlaces() {
@@ -433,7 +431,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         .pipe(
           tap((res) => {
             this.favorite = !this.favorite
-          
+
             if (this.favorite === true) {
               this.likeUrl = 'assets/icons/like-active.svg'
             } else {
@@ -442,13 +440,11 @@ export class EventShowComponent implements OnInit, OnDestroy {
             this.loadingLike = false
             this.loadingFavotire = false
           }),
-          finalize(
-            ()=>{
-              this.getEvent()
-              this.clearTempUsersFavorites()
-              this.getFavoritesUsers()
-            }
-          ),
+          finalize(() => {
+            this.getEvent()
+            this.clearTempUsersFavorites()
+            this.getFavoritesUsers()
+          }),
           catchError((err) => {
             this.toastService.showToast(MessagesErrors.default, 'danger')
             return of(EMPTY)
@@ -499,7 +495,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.nextPage = true
     this.nextPageFavoritesUser = true
     this.eventsCity = []
-   
+
     this.queryBuilderService.paginationPublicEventsForTapeRecomendate.next('')
     this.queryBuilderService.paginationUsersFavoritesCurrentPage.next('')
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {

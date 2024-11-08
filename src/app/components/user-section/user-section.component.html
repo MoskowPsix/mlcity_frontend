@@ -10,7 +10,9 @@
 
     <ng-container *ngIf="user">
       <img src="{{avatarUrl}}" *ngIf="user.avatar"  class="user-section-image" >
-      <div *ngIf="!user.avatar" class="user-section-image"></div>
+      <div *ngIf="!user.avatar" class="user-section-image">
+        <ion-icon class="user-no-photo_image"  name="person-circle"></ion-icon>
+      </div>
       <div class="user-section-info">
         <ng-container *ngIf="type !== 'button'">
           <div class="user-section-name">{{user.name}}</div>
@@ -25,7 +27,9 @@
 
         <ng-container>
           <img (click)="redirect()" src="{{avatarUrl}}" *ngIf=" organization.files && organization.files[0] && organization.files[0].link !== '' "  class="user-section-image" >
-          <div (click)="redirect()" *ngIf="!organization.files[0] || organization.files[0].link === '' " class="user-section-image"></div>
+          <div (click)="redirect()" *ngIf="!organization.files[0] || organization.files[0].link === '' " class="user-section-image">
+            <ion-icon class="user-no-photo_image"  name="person-circle"></ion-icon>
+          </div>
         </ng-container>
 
         <div (click)="redirect()" class="user-section-info">
