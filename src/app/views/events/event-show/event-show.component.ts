@@ -90,6 +90,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   favoriteUrl: string = ''
   priceState: string = ''
   priceStateForShow: string = ''
+  materialLink: string = ''
   @Input() createObj: any = {}
   organization!: IOrganization
 
@@ -111,6 +112,18 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private shareService: ShareService,
     private numbersService: NumbersService,
   ) {}
+
+  checkMaterialLink() {
+    if (this.event.afisha7_id) {
+      this.materialLink = 'Источник: afisha7.ru'
+    } else if (this.event.min_cult_id) {
+      this.materialLink = 'Источник: mincult'
+    } else if (this.event.cult_id) {
+      this.materialLink = 'Источник: culture.ru'
+    } else {
+      this.materialLink = `Источник: ${this.organization.name}`
+    }
+  }
 
   getEvent() {
     this.eventsService
@@ -143,6 +156,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe((response: any) => {
             this.organization = response.organization
+            this.checkMaterialLink()
           })
         this.getEventsCity()
       })
