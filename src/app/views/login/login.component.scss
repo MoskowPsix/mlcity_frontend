@@ -121,6 +121,15 @@ ion-content {
   }
   
 }
+
+.logo-quest_container{
+  color: rgb(107, 107, 107);
+}
+.logo-quest_container_image{
+  width: 3.5rem;
+  height:3.5rem;
+}
+
 .logo-vk_container{
   display: flex;
   justify-content: center;
@@ -155,6 +164,7 @@ ion-content {
 .logo-guest{
   // background-image: url();
   background-color: #f0f0f0;
+  box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
 }
 
 .recovery-form{

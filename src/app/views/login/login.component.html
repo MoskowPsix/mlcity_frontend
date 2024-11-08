@@ -144,8 +144,8 @@
             </div>
             <div class="login-form_social-buttons_button logo-apple">
               <a class="login-form_social-buttons_button_link" (click)="onLoading(); loginGuest()">
-                <div class="logo-apple_container">
-                  <ion-icon class="logo-apple_container_image" name="person-circle"></ion-icon>
+                <div class="logo-quest_container">
+                  <ion-icon class="logo-quest_container_image" name="person-circle"></ion-icon>
                 </div>
               </a>
             </div>
@@ -157,135 +157,5 @@
     </div>
 
   </form>
-  <!-- Обёртка для центрирования
-    <ion-grid class="Login_wrapper">
-
-      <form [formGroup]="loginForm" (submit)="onSubmitLogin()" enctype="multipart/form-data">
-
-       <ion-row class="LoginMainBlock">
-          <div class="LoginMainBlock_header">
-            <ion-router-link class="Login_main_link" routerLink="/home">
-
-              <div class="Login_logo">
-
-                <ion-item class="Login_logo_wrapper">
-
-                  <img *ngIf="true" src="/assets/icons/favicon.png" alt="">
-                  <img *ngIf="false"alt="logo" src="/svg/no-photo.svg" />
-
-                  <ion-label class="Login_logo_text">
-                  ВОКРУГ
-                  </ion-label>
-
-                </ion-item>
-
-              </div>
-            </ion-router-link>
-
-          </div>
-
-          <div class="Login_inputs_main">
-
-            <ion-list>
-
-                    <ion-item>
-
-                          <ion-input (input)="MailOrName()" formControlName="name" class="Login_inputs" type="email" placeholder="Электронная почта" required>
-                            <img *ngIf="iconState" class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
-                            <img *ngIf="!iconState"class="Login_icon" src="/assets/icons/login_mail.svg" alt="">
-                          </ion-input>
-
-                    </ion-item>
-
-                    <div style="text-align: center;" class="errorEmail" *ngIf="loginForm.controls['name'].invalid && loginForm.controls['name'].touched">
-                      <ion-note *ngIf="loginForm.controls['name'].hasError('name')" color="danger">Введите корректный email или имя пользователя</ion-note>
-                      <ion-note *ngIf="loginForm.controls['name'].hasError('required')" color="danger">Поле не может быть пустым</ion-note>
-                    </div>
-
-                    <ion-item>
-                      <button (click)="openPassword(passwordInput)" type="button" class="password-icon-wrapper" ></button>
-                          <ion-input formControlName="password" class ="Login_inputs" type="password" placeholder="Пароль" #passwordInput>
-                              <img class="Login_icon password-icon" src="/assets/icons/login_password.svg" alt="">
-                          </ion-input>
-                    </ion-item>
-
-                    <div style="text-align: center;" *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="validation">
-                      <ion-note *ngIf="loginForm.controls['password'].hasError('required')" color="danger">Пароль не может быть пустым</ion-note>
-                    </div>
-                   
-                      <div class="password-recovery" id="recoveryLink">
-                        <h6  class="">Забыли пароль?</h6>
-                       
-                      </div>
-                    
-            </ion-list>
-
-          </div>
-
-          <div class="Login_btns_content">
-
-            <ion-list>
-
-              <ion-item>
-
-                    <ion-button type="submit" [disabled]="loginForm.invalid || loginForm.disabled" class="Login_btns">
-                        Вход
-                    </ion-button>
-
-              </ion-item>
-
-              <ion-router-link class="Login_main_link" routerLink="/registration">
-                <ion-item>
-
-                <ion-button class="Login_btns CreateAcc_btn">
-                    Создать аккаунт
-                </ion-button>
-
-                </ion-item>
-
-              </ion-router-link>
-
-             </ion-list>
-
-          </div>
-
-            <ion-list class="LoginWith_list">
-
-                     <h6 class="LoginWith_list_text">Войти с помощью</h6>
-
-              <ion-item>
-
-                <a href="{{vkontakteAuthUrl}}" target="{{target}}" (click)="onLoading();">
-
-                  <div class="vk_logo_circle">
-                     <div class="vk_logo_quad">
-                      <ion-icon class="logo-vk" name="logo-vk"></ion-icon>
-                     </div>
-                  </div>
-                </a>
-
-                <a  (click)="onLoading(); loginApple()">
-
-                  <div class="apple-logo-circle">
-
-                      <ion-icon class="logo-apple-icon" name="logo-apple"></ion-icon>
-
-                  </div>
-                </a>
-
-                <a *ngIf="platform === 'web'" href="{{yandexAuthUrl}}" target="{{target}}">
-                  <div class="yandex-logo-circle">
-
-                  </div>
-                </a>
-
-            </ion-item>
-
-            </ion-list>
-
-       </ion-row>
-
-      </form>
-    </ion-grid> -->
 
 </ion-content>
