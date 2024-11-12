@@ -13,6 +13,7 @@ import { IEvent } from 'src/app/models/event'
 import { MessagesAuth } from 'src/app/enums/messages-auth'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { AuthService } from 'src/app/services/auth.service'
+import { FavoritesTapeService } from '../cabinet/favorites/favorites-tape.service'
 @Component({
   selector: 'app-organization-show',
   templateUrl: './organization-show.component.html',
@@ -42,12 +43,13 @@ export class OrganizationShowComponent implements OnInit {
   constructor(
     private sightsService: SightsService,
     private router: ActivatedRoute,
-    private routerOnNavigate:Router,
+    private routerOnNavigate: Router,
     //Ещ] один роутер из за того что разные роуты
     private organizationService: OrganizationService,
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
     private authService: AuthService,
+    private favoritesTapeService: FavoritesTapeService,
   ) {}
 
   getOrganizationId() {
@@ -88,9 +90,20 @@ export class OrganizationShowComponent implements OnInit {
         })
     }
   }
-  toggleFavorite(sight_id: number) {
+  toggleFavorite(sight: any) {
     if (!this.userAuth) {
-      this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
+      this.favorite = !this.favorite
+      if (this.favorite === true) {
+        this.likeUrl = 'assets/icons/like-active.svg'
+        if (!this.favoritesTapeService.sights.find((item: any) => item.id === sight.id)) {
+          this.favoritesTapeService.sights.push(sight)
+          localStorage.setItem('tempFavoritesSights', JSON.stringify(this.favoritesTapeService.sights))
+        }
+      } else {
+        this.likeUrl = 'assets/icons/like.svg'
+        this.favoritesTapeService.sights = this.favoritesTapeService.sights.filter((item: any) => item.id !== sight.id)
+        localStorage.setItem('tempFavoritesSights', JSON.stringify(this.favoritesTapeService.events))
+      }
     } else {
       this.loadingFavotire = true // для отображения спинера
       this.sightsService
@@ -166,16 +179,22 @@ export class OrganizationShowComponent implements OnInit {
             this.likeUrl = 'assets/icons/like.svg'
           }
         })
+    } else {
+      this.loadingFavotire = false
+      if (this.favoritesTapeService.sights.find((item: any) => item.id == this.sight.id)) {
+        this.favorite = true
+        this.likeUrl = 'assets/icons/like-active.svg'
+      }
     }
   }
-  closeImagesModal(){
+  closeImagesModal() {
     this.openImagesModal = false
   }
-  openImagesModalFunction(){
+  openImagesModalFunction() {
     this.openImagesModal = true
   }
-  eventNavigation(event:any){
-    this.routerOnNavigate.navigate(['/events',event])
+  eventNavigation(event: any) {
+    this.routerOnNavigate.navigate(['/events', event])
   }
   getOrganization(id: string) {
     this.sightsService

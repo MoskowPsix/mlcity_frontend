@@ -1,21 +1,6 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
-  ChangeDetectorRef,
-} from '@angular/core'
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
-import {
-  Subject,
-  takeUntil,
-  tap,
-  retry,
-  catchError,
-  of,
-  EMPTY,
-  filter,
-} from 'rxjs'
+import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, filter } from 'rxjs'
 import { SightsService } from 'src/app/services/sights.service'
 import { IonicSlides } from '@ionic/angular'
 import { register } from 'swiper/element/bundle'
@@ -29,6 +14,7 @@ import { Location } from '@angular/common'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
+import { FavoritesTapeService } from '../../cabinet/favorites/favorites-tape.service'
 
 register()
 @Component({
@@ -74,8 +60,8 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
     private titleService: Title,
     private metaService: Meta,
     private queryBuilderService: QueryBuilderService,
-  ) {
-  }
+    private favoritesTapeService: FavoritesTapeService,
+  ) {}
 
   formatingTime() {
     if (this.workTimeCult) {
@@ -121,38 +107,29 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
             this.workTimeCult = sight.work_time
             this.formatingTime()
           }
-          this.sightsService
-            .getEventInSight(this.sight.id)
-            .subscribe((response: any) => {
-              if (response.events.data.length > 0) {
-                this.eventsInSight = response.events.data
-                this.queryBuilderService.paginationEventsInSightCurrentPage.next(
-                  response.events.next_cursor,
-                )
-                if (response.events.next_cursor == null) {
-                  this.loadMoreEventsInSigthState = true
-                }
+          this.sightsService.getEventInSight(this.sight.id).subscribe((response: any) => {
+            if (response.events.data.length > 0) {
+              this.eventsInSight = response.events.data
+              this.queryBuilderService.paginationEventsInSightCurrentPage.next(response.events.next_cursor)
+              if (response.events.next_cursor == null) {
+                this.loadMoreEventsInSigthState = true
               }
-            })
+            }
+          })
         }
         this.titleService.setTitle(sight.name)
         this.metaService.updateTag({
           name: 'description',
           content: sight.description,
         })
-        this.startLikesCount = this.sight?.likes
-          ? this.sight.likes.vk_count + this.sight.likes.local_count
-          : 0
+        this.startLikesCount = this.sight?.likes ? this.sight.likes.vk_count + this.sight.likes.local_count : 0
       })
   }
 
   loadMoreEventsInSight() {
     this.loadMoreEventsInSigthState = true
     this.sightsService
-      .getEventInSight(
-        this.sight.id,
-        this.queryBuilderService.queryBuilder('buildQueryEventsInSight'),
-      )
+      .getEventInSight(this.sight.id, this.queryBuilderService.queryBuilder('buildQueryEventsInSight'))
       .pipe(
         tap(() => {
           this.loadMoreEventsInSigthState = false
@@ -160,9 +137,7 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe((response: any) => {
         this.eventsInSight.push(...response.events.data)
-        this.queryBuilderService.paginationEventsInSightCurrentPage.next(
-          response.events.data.next_cursor,
-        )
+        this.queryBuilderService.paginationEventsInSightCurrentPage.next(response.events.data.next_cursor)
         if (response.events.data.next_cursor == null) {
           this.loadMoreEventsInSigthState = true
         }
@@ -212,13 +187,23 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
     this.map.target.behaviors.disable('drag')
   }
 
-  toggleFavorite(sight_id: number) {
+  toggleFavorite(sight: any) {
     if (!this.userAuth) {
-      this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
+      console.log('неавторизованный пользователь')
+      this.favorite = !this.favorite
+      if (this.favorite === true) {
+        if (!this.favoritesTapeService.sights.find((item: any) => item.id === sight.id)) {
+          this.favoritesTapeService.sights.push(sight)
+          localStorage.setItem('tempFavoritesSights', JSON.stringify(this.favoritesTapeService.sights))
+        }
+      } else {
+        this.favoritesTapeService.sights = this.favoritesTapeService.sights.filter((item: any) => item.id !== sight.id)
+        localStorage.setItem('tempFavoritesSights', JSON.stringify(this.favoritesTapeService.events))
+      }
     } else {
       this.loadingFavorite = true // для отображения спинера
       this.sightsService
-        .toggleFavorite(sight_id)
+        .toggleFavorite(sight.id)
         .pipe(
           tap(() => {
             this.favorite = !this.favorite
@@ -244,11 +229,7 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
         .pipe(
           tap(() => {
             this.like = !this.like
-            this.like
-              ? this.startLikesCount++
-              : this.startLikesCount !== 0
-                ? this.startLikesCount--
-                : 0
+            this.like ? this.startLikesCount++ : this.startLikesCount !== 0 ? this.startLikesCount-- : 0
             this.loadingLike = false
           }),
           catchError((err) => {

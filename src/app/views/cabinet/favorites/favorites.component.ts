@@ -12,6 +12,7 @@ import { ToastService } from 'src/app/services/toast.service'
 import { FavoritesTapeService } from './favorites-tape.service'
 import { AuthService } from 'src/app/services/auth.service'
 import { promises } from 'dns'
+
 @Component({
   selector: 'app-favorites',
   templateUrl: './favorites.component.html',
@@ -83,7 +84,6 @@ export class FavoritesComponent implements OnInit {
             }),
           )
           .subscribe((response: any) => {
-            console.log(response)
             this.spiner = false
             this.nextEventsPageCount = response.result.current_page + 1
             let lastPage = response.result.last_page
@@ -107,9 +107,7 @@ export class FavoritesComponent implements OnInit {
     this.eventService
       .getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites'))
       .pipe()
-      .subscribe((res: any) => {
-        console.log(res)
-      })
+      .subscribe((res: any) => {})
   }
 
   eventNavigation(event: any) {
@@ -135,7 +133,6 @@ export class FavoritesComponent implements OnInit {
           }),
         )
         .subscribe((response: any) => {
-          console.log(response)
           this.spiner = false
           this.nextSightsPageCount = response.result.current_page + 1
           let lastPage = response.result.last_page
@@ -195,20 +192,32 @@ export class FavoritesComponent implements OnInit {
         this.getEvents()
         this.getSights()
         this.render()
-        console.log('авторизованный пользователь')
       } else {
         this.renderNonAuthEvents()
+        this.renderNonAuthSights()
+        this.render()
       }
     })
   }
 
   renderNonAuthEvents() {
     this.notFound = false
-    this.favoritesTapeService.events = JSON.parse(String(localStorage.getItem('tempFavorites')))
+    if (JSON.parse(String(localStorage.getItem('tempFavorites')))) {
+      this.favoritesTapeService.events = JSON.parse(String(localStorage.getItem('tempFavorites')))
+    }
     if (this.favoritesTapeService.events.length == 0) {
       this.notFound = true
     }
-    console.log('неавторизованный пользователь')
+  }
+  renderNonAuthSights() {
+    this.notFoundSights = false
+    if (JSON.parse(String(localStorage.getItem('tempFavoritesSights')))) {
+      this.favoritesTapeService.sights = JSON.parse(String(localStorage.getItem('tempFavoritesSights')))
+    }
+
+    if (this.favoritesTapeService.sights.length == 0) {
+      this.notFoundSights = true
+    }
   }
   ionViewDidLeave() {
     this.currentPageEvents = 0
@@ -220,7 +229,11 @@ export class FavoritesComponent implements OnInit {
     this.segment = this.switchTypeService.currentType.value
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.switchTypeService.currentType.subscribe((type) => {
+      this.render()
+    })
+  }
 
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngOnDestroy() {

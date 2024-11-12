@@ -9,7 +9,7 @@ export class FavoritesTapeService {
   eventsLastScrollPositionForTape: number = 0
   eventsNextPage: boolean = true
   eventsWait: boolean = false
-  events: IEvent[] = []
+  events: any = []
 
   sightsLastScrollPositionForTape: number = 0
   sightsNextPage: boolean = true
@@ -18,8 +18,13 @@ export class FavoritesTapeService {
 
   constructor(private authService: AuthService) {
     if (!this.authService.getAuthState()) {
-      this.events = JSON.parse(String(localStorage.getItem('tempFavorites'))) || []
-      console.log(this.events)
+      if (JSON.parse(String(localStorage.getItem('tempFavorites')))) {
+        this.events = JSON.parse(String(localStorage.getItem('tempFavorites')))
+      }
+
+      if (JSON.parse(String(localStorage.getItem('tempFavoritesSights')))) {
+        this.sights = JSON.parse(String(localStorage.getItem('tempFavoritesSights')))
+      }
     }
   }
 }
