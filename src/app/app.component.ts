@@ -63,40 +63,8 @@ export class AppComponent implements OnInit {
     })
   }
 
-  checkUser() {
-    let user
-    this.userService
-      .getUser()
-      .pipe()
-      .subscribe((res) => {
-        user = res
-      })
-    if (!user) {
-      this.authService
-        .registerGuest()
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (data: any) => {
-            this.tokenService.setToken(data.access_token)
-            this.positiveResponseAfterLogin(data)
-          },
-          error: (err) => {
-            console.log(err)
-          },
-        })
-    } else {
-      console.log(true)
-    }
-  }
-
-  positiveResponseAfterLogin(data: any) {
-    this.userService.setUser(data.user)
-    localStorage.setItem('quest', 'true')
-  }
-
   async ngOnInit() {
     this.mobileOrNote()
-    this.checkUser()
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.url = this.router.url
       if (this.url.includes('/cabinet/sights/edit')) {

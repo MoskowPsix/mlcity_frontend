@@ -10,7 +10,8 @@ import { SightsService } from 'src/app/services/sights.service'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
 import { ToastService } from 'src/app/services/toast.service'
 import { FavoritesTapeService } from './favorites-tape.service'
-
+import { AuthService } from 'src/app/services/auth.service'
+import { promises } from 'dns'
 @Component({
   selector: 'app-favorites',
   templateUrl: './favorites.component.html',
@@ -41,7 +42,7 @@ export class FavoritesComponent implements OnInit {
 
   loadingMoreEvents: boolean = false
   loadingMoreSights: boolean = false
-
+  authState: boolean = false
   nextEventsPageCount: number = 0
   nextSightsPageCount: number = 0
   favoritesTapeService: FavoritesTapeService = inject(FavoritesTapeService)
@@ -51,45 +52,54 @@ export class FavoritesComponent implements OnInit {
     private eventService: EventsService,
     private toastService: ToastService,
     private queryBuilderService: QueryBuilderService,
+    private authService: AuthService,
   ) {}
 
   organizationNavigation(event: any) {
     this.router.navigate(['/organizations', event])
   }
+  checkUser() {
+    return new Promise<void>((resolve) => {
+      this.authState = this.authService.getAuthState()
+      resolve()
+    })
+  }
   getEvents() {
-    if (this.favoritesTapeService.eventsNextPage && !this.favoritesTapeService.eventsWait) {
-      if (this.favoritesTapeService.events.length > 0) {
-        this.spiner = true
+    if (this.authState) {
+      if (this.favoritesTapeService.eventsNextPage && !this.favoritesTapeService.eventsWait) {
+        if (this.favoritesTapeService.events.length > 0) {
+          this.spiner = true
+        }
+        this.favoritesTapeService.eventsWait = true
+        this.eventService
+          .getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites'))
+          .pipe(
+            debounceTime(1000),
+            takeUntil(this.destroy$),
+            catchError((error) => {
+              this.toastService.showToast(MessagesErrors.default, 'danger')
+              console.error(error)
+              return EMPTY
+            }),
+          )
+          .subscribe((response: any) => {
+            console.log(response)
+            this.spiner = false
+            this.nextEventsPageCount = response.result.current_page + 1
+            let lastPage = response.result.last_page
+            if (this.nextEventsPageCount <= lastPage) {
+              this.queryBuilderService.paginationPublicEventsFavoritesCurrentPage.next(String(this.nextEventsPageCount))
+              this.favoritesTapeService.eventsNextPage = true
+            } else {
+              this.favoritesTapeService.eventsNextPage = false
+            }
+            this.favoritesTapeService.events.push(...response.result.data)
+            if (this.favoritesTapeService.events.length === 0) {
+              this.notFound = true
+            }
+            this.favoritesTapeService.eventsWait = false
+          })
       }
-      this.favoritesTapeService.eventsWait = true
-      this.eventService
-        .getEventsFavorites(this.queryBuilderService.queryBuilder('eventsFavorites'))
-        .pipe(
-          debounceTime(1000),
-          takeUntil(this.destroy$),
-          catchError((error) => {
-            this.toastService.showToast(MessagesErrors.default, 'danger')
-            console.error(error)
-            return EMPTY
-          }),
-        )
-        .subscribe((response: any) => {
-          console.log(response)
-          this.spiner = false
-          this.nextEventsPageCount = response.result.current_page + 1
-          let lastPage = response.result.last_page
-          if (this.nextEventsPageCount <= lastPage) {
-            this.queryBuilderService.paginationPublicEventsFavoritesCurrentPage.next(String(this.nextEventsPageCount))
-            this.favoritesTapeService.eventsNextPage = true
-          } else {
-            this.favoritesTapeService.eventsNextPage = false
-          }
-          this.favoritesTapeService.events.push(...response.result.data)
-          if (this.favoritesTapeService.events.length === 0) {
-            this.notFound = true
-          }
-          this.favoritesTapeService.eventsWait = false
-        })
     }
   }
 
@@ -178,11 +188,27 @@ export class FavoritesComponent implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.eventsTempClear()
-    this.sightsTempClear()
-    this.getEvents()
-    this.getSights()
-    this.render()
+    this.checkUser().then(() => {
+      if (this.authState) {
+        this.eventsTempClear()
+        this.sightsTempClear()
+        this.getEvents()
+        this.getSights()
+        this.render()
+        console.log('авторизованный пользователь')
+      } else {
+        this.renderNonAuthEvents()
+      }
+    })
+  }
+
+  renderNonAuthEvents() {
+    this.notFound = false
+    this.favoritesTapeService.events = JSON.parse(String(localStorage.getItem('tempFavorites')))
+    if (this.favoritesTapeService.events.length == 0) {
+      this.notFound = true
+    }
+    console.log('неавторизованный пользователь')
   }
   ionViewDidLeave() {
     this.currentPageEvents = 0

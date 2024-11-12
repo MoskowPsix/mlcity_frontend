@@ -30,6 +30,7 @@ import { ShareService } from 'src/app/services/share.service'
 import { ViewsService } from 'src/app/services/views.service'
 import { NumbersService } from 'src/app/services/numbers.service'
 import { IUser } from 'src/app/models/user'
+import { FavoritesTapeService } from '../../cabinet/favorites/favorites-tape.service'
 // import { Swiper } from 'swiper/types';
 
 register()
@@ -104,6 +105,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private queryBuilderService: QueryBuilderService,
     public router: Router,
     private titleService: Title,
+    private favoritesTapeService: FavoritesTapeService,
     private viewsService: ViewsService,
     private metaService: Meta,
     private filterService: FilterService,
@@ -338,7 +340,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   checkFavorite() {
     this.clearTempUsersFavorites()
     this.getFavoritesUsers()
-    if (this.userAuth)
+    if (this.userAuth) {
       this.eventsService
         .checkFavorite(this.eventId!)
         .pipe(retry(3), takeUntil(this.destroy$))
@@ -351,6 +353,13 @@ export class EventShowComponent implements OnInit, OnDestroy {
             this.likeUrl = 'assets/icons/like.svg'
           }
         })
+    } else {
+      if (this.favoritesTapeService.events.find((item: any) => item.id == this.eventId)) {
+        this.favoriteCheked = true
+        this.favorite = true
+        this.likeUrl = 'assets/icons/like-active.svg'
+      }
+    }
   }
   closeImagesModal() {
     this.openImagesModal = false
@@ -435,13 +444,24 @@ export class EventShowComponent implements OnInit, OnDestroy {
   //   )
   // }
 
-  toggleFavorite(event_id: number) {
+  toggleFavorite(event: any) {
     if (!this.userAuth) {
-      this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
+      this.favorite = !this.favorite
+      if (this.favorite === true) {
+        this.likeUrl = 'assets/icons/like-active.svg'
+        if (!this.favoritesTapeService.events.find((item: any) => item.id === event.id)) {
+          this.favoritesTapeService.events.push(event)
+          localStorage.setItem('tempFavorites', JSON.stringify(this.favoritesTapeService.events))
+        }
+      } else {
+        this.likeUrl = 'assets/icons/like.svg'
+        this.favoritesTapeService.events = this.favoritesTapeService.events.filter((item: any) => item.id !== event.id)
+        localStorage.setItem('tempFavorites', JSON.stringify(this.favoritesTapeService.events))
+      }
     } else {
       this.loadingFavotire = true // для отображения спинера
       this.eventsService
-        .toggleFavorite(event_id)
+        .toggleFavorite(event.id)
         .pipe(
           tap((res) => {
             this.favorite = !this.favorite

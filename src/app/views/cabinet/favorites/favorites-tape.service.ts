@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { IEvent } from 'src/app/models/event'
 import { ISight } from 'src/app/models/sight'
-
+import { AuthService } from 'src/app/services/auth.service'
 @Injectable({
   providedIn: 'root',
 })
@@ -16,5 +16,10 @@ export class FavoritesTapeService {
   sightsWait: boolean = false
   sights: ISight[] = []
 
-  constructor() {}
+  constructor(private authService: AuthService) {
+    if (!this.authService.getAuthState()) {
+      this.events = JSON.parse(String(localStorage.getItem('tempFavorites'))) || []
+      console.log(this.events)
+    }
+  }
 }
