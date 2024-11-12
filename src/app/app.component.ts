@@ -10,7 +10,9 @@ import { Capacitor } from '@capacitor/core'
 import { StoreInfo } from './models/store-info'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { ScreenOrientation } from '@capacitor/screen-orientation'
-
+import { UserService } from './services/user.service'
+import { AuthService } from './services/auth.service'
+import { TokenService } from './services/token.service'
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -24,6 +26,9 @@ export class AppComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private toast: ToastService,
     private checkVersionService: CheckVersionService,
+    private userService: UserService,
+    private authService: AuthService,
+    private tokenService: TokenService,
   ) {
     ScreenOrientation.lock({ orientation: 'portrait' })
     this.initializeApp()

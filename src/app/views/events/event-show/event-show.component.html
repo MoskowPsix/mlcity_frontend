@@ -47,7 +47,7 @@
         </div>
 
         <div class="social-button-container">
-          <app-circle-button (click)="toggleFavorite(event.id)" [loading]="loadingFavotire" [icon]="likeUrl"></app-circle-button>
+          <app-circle-button (click)="toggleFavorite(event)" [loading]="loadingFavotire" [icon]="likeUrl"></app-circle-button>
           <app-circle-button (click)="shareContent()" icon="assets/icons/share.svg"></app-circle-button>
         </div>
 
@@ -104,7 +104,7 @@
               <div class="community-wrapper__button-container">
               </div>
             </div>
-            <div *ngIf="eventsCity" class="main-content__recomend">
+            <div *ngIf="eventsCity.length" class="main-content__recomend">
               <strong class="title">Рекомендуем</strong>
               <div class="main-content-recomend-card-wrapper">
                 <ng-container *ngFor="let event of eventsCity">
