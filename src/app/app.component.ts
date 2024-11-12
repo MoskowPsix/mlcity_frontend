@@ -91,6 +91,7 @@ export class AppComponent implements OnInit {
 
   positiveResponseAfterLogin(data: any) {
     this.userService.setUser(data.user)
+    localStorage.setItem('quest', 'true')
   }
 
   async ngOnInit() {
