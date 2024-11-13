@@ -71,8 +71,31 @@
                 </div>
 
           </div>
+       
         </div>
-        <h4 (click)="eventNavigation()" class="event-name">{{event.name}}</h4>
+    
+        <div  class="event-name">
+          <h4 (click)="eventNavigation()">{{event.name}}</h4>
+      
+        </div>
+      
       </ng-container>
+
+      <div class="users-info">
+        <div *ngIf="usersViews" class="users-info_views">
+          <div class="users-info_views_icon__wrapper">
+            <img style="filter: brightness(0) saturate(100%) invert(26%) sepia(69%) saturate(0%) hue-rotate(167deg) brightness(93%) contrast(87%);" class="users-info_views_icon" src="/assets/icons/open-input.svg" alt="">
+          </div>
+          {{usersViews}}
+        </div>
+
+        <div *ngIf="usersCount" class="users-info_views">
+          <div class="users-info_views_icon__wrapper">
+            <img class="users-info_views_icon" src="/assets/icons/user.svg" alt="">
+          </div>
+          {{usersCount}}
+        </div>
+        
+      </div>
   </div>
  

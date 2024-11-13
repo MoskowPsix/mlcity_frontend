@@ -92,6 +92,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   priceState: string = ''
   priceStateForShow: string = ''
   materialLink: string = ''
+  usersViews: string = ''
   @Input() createObj: any = {}
   organization!: IOrganization
 
@@ -139,6 +140,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         if (event) {
           this.event = event.event
           this.setUsersCount()
+          this.setUserViews()
           this.checkPrice()
           if (this.event.age_limit) {
             this.ageLimit = this.event.age_limit.split('+')[0]
@@ -173,6 +175,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   setUsersCount() {
     this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
+  }
+  setUserViews() {
+    this.usersViews = this.numbersService.changeDischarge(Number(this.event.views.count))
   }
 
   openStateUsersModal() {

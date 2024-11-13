@@ -11,6 +11,7 @@ import {
   NgZone,
   Output,
   EventEmitter,
+  SimpleChanges,
 } from '@angular/core'
 
 import { DatePipe } from '@angular/common'
@@ -33,6 +34,7 @@ import numeral from 'numeral'
 import { HelpersService } from 'src/app/services/helpers.service'
 import { Router } from '@angular/router'
 import { Statuses } from 'src/app/enums/statuses-new'
+import { NumbersService } from 'src/app/services/numbers.service'
 register()
 
 @Component({
@@ -52,6 +54,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
     private helpers: HelpersService,
+    private numbersService: NumbersService,
     private datePipe: DatePipe,
     private router: Router,
   ) {}
@@ -63,6 +66,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() isSight: boolean = false
   @Input() myEvent: boolean = false
   @Input() cardSize: string = ''
+  @Input() views: number = 0
+  @Input() users: number = 0
   @Output() eventClicked: EventEmitter<any> = new EventEmitter()
   comments: boolean = false
   loadingComment: boolean = false
@@ -97,6 +102,8 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   vkLikesCount: number | null = null
   viewCard: boolean = true
   dontEdit: boolean = true
+  usersCount: string = ''
+  usersViews: string = ''
   prices: number[] = []
   minPrice: number = 0
   maxPrice: number = 0
@@ -128,7 +135,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       ? this.router.navigate(['/cabinet/sights/edit', this.event.id])
       : this.router.navigate(['/cabinet/events/edit', this.event.id])
   }
-
+  ngOnChanges(changes: SimpleChanges): void {
+    this.setUserViews()
+    this.setUsersCount()
+  }
   checkEventStatus(event: any) {
     let status: any = ''
     if (event && event.statuses) {
@@ -146,6 +156,14 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       return false
     }
   }
+
+  setUsersCount() {
+    this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
+  }
+  setUserViews() {
+    this.usersViews = this.numbersService.changeDischarge(Number(this.event.views.count))
+  }
+
   blockedRout() {
     this.dontEdit = false
   }

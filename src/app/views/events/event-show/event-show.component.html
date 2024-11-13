@@ -70,10 +70,10 @@
                   <app-rounded-button *ngIf="event.types!.length === 0" style="pointer-events: none;"  icon="assets/icons/category.svg" type="button" buttonText="Прочее"></app-rounded-button>
               </ng-container>
             </div>
-            <div *ngIf="event.views && event.views.count" class="views-container">
+            <div *ngIf="usersViews" class="views-container">
               <div class="views-container__views">
                 <img class="open-input-icon" src="/assets/icons/open-input.svg" alt="">
-                <div class="views-container__views__count">{{event.views.count}}</div>
+                <div class="views-container__views__count">{{usersViews}}</div>
               </div>
             </div>
           </div>

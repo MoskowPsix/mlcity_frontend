@@ -48,7 +48,7 @@ app-event-type-carusel {
   cursor: pointer;
   padding-left:1rem;
   padding-top: 0.5rem;
-  background: #f8f8f8;
+  background: var(--background-color);
   padding-right: 1rem;
   display: flex;
   width: 100%;
