@@ -14,6 +14,7 @@ export class UserSectionComponent implements OnInit {
   @Input() type?: string
   @Input() buttonText?: string
   @Input() organization!: IOrganization
+  @Input() hideEmail?: boolean = false
   @Input() fixedImg?: string
   @Input() extensialClick: boolean = true
   @Input() showCategory: boolean = true

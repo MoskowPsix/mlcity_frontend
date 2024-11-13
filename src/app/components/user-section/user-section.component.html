@@ -16,7 +16,7 @@
       <div class="user-section-info">
         <ng-container *ngIf="type !== 'button'">
           <div class="user-section-name">{{user.name}}</div>
-          <div class="user-section-email">{{user.email}}</div>
+          <div *ngIf="!hideEmail" class="user-section-email">{{user.email}}</div>
         </ng-container>
           <button class="user-section-button" (click)="click()" *ngIf="type === 'button' && buttonText">{{buttonText}}</button>
       </div>
