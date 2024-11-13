@@ -136,8 +136,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       : this.router.navigate(['/cabinet/events/edit', this.event.id])
   }
   ngOnChanges(changes: SimpleChanges): void {
-    this.setUserViews()
-    this.setUsersCount()
+    if (this.event && this.event.views) {
+      this.setUserViews()
+      this.setUsersCount()
+    }
   }
   checkEventStatus(event: any) {
     let status: any = ''
@@ -158,7 +160,9 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setUsersCount() {
-    this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
+    if (!isNaN(Number(this.numbersService.changeDischarge(Number(this.event.favoritesUsers))))) {
+      this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
+    }
   }
   setUserViews() {
     this.usersViews = this.numbersService.changeDischarge(Number(this.event.views.count))
