@@ -224,8 +224,10 @@ export class EventShowComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe(async (response: any) => {
-        await this.queryBuilderService.locationIdForEventShow.next(response.location.id)
-        await this.getEventPlaces()
+        if (response.location) {
+          await this.queryBuilderService.locationIdForEventShow.next(response.location.id)
+          await this.getEventPlaces()
+        }
       })
   }
   eventNavigation(event: any) {
@@ -354,10 +356,14 @@ export class EventShowComponent implements OnInit, OnDestroy {
           }
         })
     } else {
+      this.favoriteCheked = true
       if (this.favoritesTapeService.events.find((item: any) => item.id == this.eventId)) {
-        this.favoriteCheked = true
         this.favorite = true
+        this.favoriteCheked = true
         this.likeUrl = 'assets/icons/like-active.svg'
+      } else {
+        this.likeUrl = 'assets/icons/like.svg'
+        this.favorite = false
       }
     }
   }
@@ -455,8 +461,15 @@ export class EventShowComponent implements OnInit, OnDestroy {
         }
       } else {
         this.likeUrl = 'assets/icons/like.svg'
-        this.favoritesTapeService.events = this.favoritesTapeService.events.filter((item: any) => item.id !== event.id)
-        localStorage.setItem('tempFavorites', JSON.stringify(this.favoritesTapeService.events))
+        if (this.favoritesTapeService.events.length > 0) {
+          this.favoritesTapeService.events = this.favoritesTapeService.events.filter(
+            (item: any) => item.id !== event.id,
+          )
+          localStorage.setItem('tempFavorites', JSON.stringify(this.favoritesTapeService.events))
+        } else {
+          this.favoritesTapeService.events = []
+          localStorage.setItem('tempFavorites', JSON.stringify(this.favoritesTapeService.events))
+        }
       }
     } else {
       this.loadingFavotire = true // для отображения спинера
@@ -529,6 +542,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.nextPage = true
     this.nextPageFavoritesUser = true
     this.eventsCity = []
+    this.userAuth = this.authService.getAuthState()
 
     this.queryBuilderService.paginationPublicEventsForTapeRecomendate.next('')
     this.queryBuilderService.paginationUsersFavoritesCurrentPage.next('')
@@ -539,7 +553,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .addViewInEvent(String(this.eventId))
       .pipe()
       .subscribe((res: any) => {})
-    this.userAuth = this.authService.getAuthState()
+
     if (this.router.url !== '/cabinet/events/create') {
       this.loadingFavotire = true
       // this.favorite ? (this.likeUrl = 'assets/icons/like-active.svg') : (this.likeUrl = 'assets/icons/like.svg')

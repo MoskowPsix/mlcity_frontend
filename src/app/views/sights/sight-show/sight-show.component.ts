@@ -189,7 +189,6 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
 
   toggleFavorite(sight: any) {
     if (!this.userAuth) {
-      console.log('неавторизованный пользователь')
       this.favorite = !this.favorite
       if (this.favorite === true) {
         if (!this.favoritesTapeService.sights.find((item: any) => item.id === sight.id)) {
@@ -197,8 +196,15 @@ export class SightShowComponent implements OnInit, OnDestroy, AfterViewInit {
           localStorage.setItem('tempFavoritesSights', JSON.stringify(this.favoritesTapeService.sights))
         }
       } else {
-        this.favoritesTapeService.sights = this.favoritesTapeService.sights.filter((item: any) => item.id !== sight.id)
-        localStorage.setItem('tempFavoritesSights', JSON.stringify(this.favoritesTapeService.events))
+        if (this.favoritesTapeService.sights.length > 1) {
+          this.favoritesTapeService.sights = this.favoritesTapeService.sights.filter(
+            (item: any) => item.id !== sight.id,
+          )
+          localStorage.setItem('tempFavoritesSights', JSON.stringify(this.favoritesTapeService.sights))
+        } else {
+          this.favoritesTapeService.sights = []
+          localStorage.setItem('tempFavoritesSights', JSON.stringify(this.favoritesTapeService.sights))
+        }
       }
     } else {
       this.loadingFavorite = true // для отображения спинера

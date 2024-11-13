@@ -406,7 +406,7 @@
 <ion-footer class="ion-no-border">
     <div *ngIf="!this.favorite && favoriteCheked"  class="favorite-button_bottom">
       <ion-spinner *ngIf="loadingFavotire" name="crescent"></ion-spinner>  
-      <app-standart-button (click)="toggleFavorite(event.id)" style="width: 100%;" *ngIf="!loadingFavotire" buttonText="Я пойду" icon="assets/icons/like.svg" theme="standart"></app-standart-button>
+      <app-standart-button (click)="toggleFavorite(event)" style="width: 100%;" *ngIf="!loadingFavotire" buttonText="Я пойду" icon="assets/icons/like.svg" theme="standart"></app-standart-button>
     </div>
      
 </ion-footer>
