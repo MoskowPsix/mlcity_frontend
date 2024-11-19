@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { catchError, EMPTY, of, Subject, takeUntil, tap } from 'rxjs'
+import { catchError, EMPTY, finalize, of, Subject, takeUntil, tap } from 'rxjs'
 import { IEvent } from 'src/app/models/event'
 import { EventsService } from 'src/app/services/events.service'
 import { LoadingService } from 'src/app/services/loading.service'
@@ -141,7 +141,10 @@ export class EditEventComponent implements OnInit {
               this.event.id,
               res.statuses[res.statuses.map((status: any) => status.name).indexOf(Statuses.draft)].id,
             )
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntil(this.destroy$),finalize(()=>{
+              this.loadingService.hideLoading()
+              this.router.navigate(['cabinet/events'])
+            }))
             .subscribe((res: any) => {
               this.loadingService.hideLoading()
               this.toastService.showToast('Событие удалено', 'success')
