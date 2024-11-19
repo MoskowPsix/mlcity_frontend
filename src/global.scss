@@ -70,7 +70,7 @@
 }
 
 :root {
-    --background-color: #ededed;
+    --background-color: #f8f8f8;
     --orange-color: #f7ab31;
     --orange-filter: brightness(0) saturate(100%) invert(76%) sepia(67%) saturate(4165%) hue-rotate(2deg) brightness(104%) contrast(108%);
     --blue-color:#3880FF;
@@ -127,7 +127,7 @@ ion-content {
   --overflow:auto;
   overflow: auto;
   --padding-top: var(--ion-safe-area-top, 0);
-  --background: #ededed;
+  --background: #f8f8f8;
 }
 ion-modal ion-content {
     --overflow:auto;
