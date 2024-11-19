@@ -133,7 +133,12 @@ export class EditEventComponent implements OnInit {
     this.loadingService.showLoading()
     this.statusesService
       .getStatuses()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.destroy$),
+      catchError((err) => {
+        this.loadingService.hideLoading()
+        this.router.navigate(['cabinet/events'])
+        return of(EMPTY)
+      }))
       .subscribe((res: any) => {
         if (res.statuses && res.statuses.length) {
           this.eventsService
@@ -144,6 +149,11 @@ export class EditEventComponent implements OnInit {
             .pipe(takeUntil(this.destroy$),finalize(()=>{
               this.loadingService.hideLoading()
               this.router.navigate(['cabinet/events'])
+            }),
+            catchError((err)=>{
+              this.loadingService.hideLoading()
+              this.router.navigate(['cabinet/events'])
+              return EMPTY
             }))
             .subscribe((res: any) => {
               this.loadingService.hideLoading()
