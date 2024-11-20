@@ -53,19 +53,26 @@
               <app-place-show priceState="dont-price" [place]="place" priceState='dont-price'></app-place-show>
             </ion-accordion-group>
           </div>
-          <div class="hidden-id">SID: {{ sight.id }}</div>
+          
+          <div class="create-button">
+            <app-rounded-button *ngIf="userInSightId === userId" theme='standart' routerLink="/cabinet/events/create"  buttonText="Создать" icon = "assets/icons/create.svg"></app-rounded-button>
+          </div>
           <app-tabs>
               <app-tabs-item name="Текущие события">
                 <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" (endScroll)="getOrganizationEvents()" [spiner]="spiner" [cards]="events"></app-card-grid>
               </app-tabs-item>
+              
               <app-tabs-item name="Прошедшие">
                 <div class="not-found-container">
                   <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFoundExpired" (endScroll)="getOrganizationEventsExpired()" [spiner]="spinerExpired" [cards]="eventsExpired"></app-card-grid>
                 </div>
               </app-tabs-item>
           </app-tabs>
-        </div>
+          <div class="hidden-id">SID: {{ sight.id }}</div>
+      </div>
       </ng-container>
+
     </div>
 </ion-content>
 <app-images-modal  [openModal]="openImagesModal" (closeModalEmit)="closeImagesModal()" *ngIf="sight && sight.files" [imagesPathArray]="sight.files"></app-images-modal>
+

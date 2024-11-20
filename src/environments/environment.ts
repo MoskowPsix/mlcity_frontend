@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   apiKeyYandex: '3a8040b4-161a-485b-b16e-1968065fb4ac',
   apiKeyYandexSubject: '6483f031-ac2f-4600-a338-269045f79ee2',
   YANDEX_METRICA_KEY: 96112606,

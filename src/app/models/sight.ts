@@ -27,4 +27,5 @@ export interface ISight {
   vk_post_id?: number
   comments?: any
   work_time?: any
+  user_id?: any
 }

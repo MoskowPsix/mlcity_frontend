@@ -13,6 +13,8 @@ import { IEvent } from 'src/app/models/event'
 import { MessagesAuth } from 'src/app/enums/messages-auth'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { AuthService } from 'src/app/services/auth.service'
+import { UserService } from 'src/app/services/user.service'
+
 @Component({
   selector: 'app-organization-show',
   templateUrl: './organization-show.component.html',
@@ -20,6 +22,8 @@ import { AuthService } from 'src/app/services/auth.service'
 })
 export class OrganizationShowComponent implements OnInit {
   loading: boolean = true
+  userId!: number
+  userInSightId!: number
   id: string = ''
   sight!: ISight
   avatarUrl: string = ''
@@ -42,13 +46,23 @@ export class OrganizationShowComponent implements OnInit {
   constructor(
     private sightsService: SightsService,
     private router: ActivatedRoute,
-    private routerOnNavigate:Router,
+    private routerOnNavigate: Router,
     //Ещ] один роутер из за того что разные роуты
     private organizationService: OrganizationService,
     private queryBuilderService: QueryBuilderService,
     private toastService: ToastService,
     private authService: AuthService,
+    private UserService: UserService,
   ) {}
+
+  visibilityButtonCreateEvent() {
+    this.userInSightId = this.sight.user_id
+    this.UserService.getUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any) => {
+        this.userId = res.id
+      })
+  }
 
   getOrganizationId() {
     this.id = this.router.snapshot.paramMap.get('id')!
@@ -179,10 +193,11 @@ export class OrganizationShowComponent implements OnInit {
   }
   getOrganization(id: string) {
     this.sightsService
-      .getSightById(Number(id))
+    .getSightById(Number(id))
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         this.sight = res.sight
+        this.visibilityButtonCreateEvent()
         this.loading = false
         this.getOrganizationEvents()
         this.getOrganizationEventsExpired()
@@ -196,6 +211,10 @@ export class OrganizationShowComponent implements OnInit {
           longitude: this.sight.longitude,
         }
       })
+  }
+
+  visibilityButton(){
+    
   }
   ngOnInit() {}
 
