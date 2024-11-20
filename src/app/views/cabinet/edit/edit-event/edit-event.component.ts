@@ -460,8 +460,6 @@ export class EditEventComponent implements OnInit {
       addressPlace: false,
     }
     this.invalidForm.name = this.editForm.get('name')!.invalid
-
-    this.invalidForm.sponsor = this.editForm.get('sponsor')!.invalid
     this.editForm.value.types.forEach((type: any) => {
       if (!type.on_delete) {
         typeCount++
@@ -543,15 +541,22 @@ export class EditEventComponent implements OnInit {
         }
       }
     }
+    console.log(this.invalidForm)
     if (fieldsValid && !this.invalidForm.seances.error) {
-      this.loadingService.hideLoading()
       return true
     } else {
-      this.loadingService.hideLoading()
       return false
     }
+   
   }
 
+  redirect(){
+    return new Promise<void>((resolve, reject) => {
+      this.loadingService.hideLoading()
+      this.toastService.showToast('Событие отправленно на проверку', 'success')
+      this.router.navigate(['/cabinet/events'])
+    })
+  }
   searchDateStart() {
     let minSeance = this.editForm.value.places[0].seances[0].date_start
     let maxSeance = this.editForm.value.places[0].seances.date_start
@@ -575,6 +580,7 @@ export class EditEventComponent implements OnInit {
     console.log(this.editForm.value.date_start)
   }
   submitForm() {
+    console.log(this.checkValidOfForm())
     this.loadingService.showLoading()
     if (this.checkValidOfForm()) {
       if (this.submitButtonState) {
@@ -604,12 +610,10 @@ export class EditEventComponent implements OnInit {
         )
         .subscribe((res: any) => {
           this.formData = new FormData()
-          this.loadingService.hideLoading()
           this.submitButtonState = false
           this.loadingService.hideLoading()
           if (res.status == 'success') {
-            this.toastService.showToast('Событие отправленно на проверку', 'success')
-            this.router.navigate(['/cabinet/events']).then(() => {})
+            this.redirect()
           }
         })
     }
