@@ -113,12 +113,12 @@
                     <span *ngIf="sight.comments.length !==0 " >{{ sight.comments.length }}</span>
                   </div>
                   <div class="likes">
-                    <ion-icon *ngIf="!loadingLike" (click)="toggleLike(sight.id)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
+                    <ion-icon *ngIf="!loadingLike" (click)="toggleLike(sight)" [name]="like ? 'heart' : 'heart-outline'" [color]="like ? 'primary' : ''"  class="ico"></ion-icon>
                     <ion-spinner *ngIf="loadingLike"></ion-spinner>
                     <span>{{ startLikesCount }}</span>
                   </div>
                   <div class="likes_star">
-                    <ion-icon *ngIf="!loadingFavorite" (click)="toggleFavorite(sight.id)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
+                    <ion-icon *ngIf="!loadingFavorite" (click)="toggleFavorite(sight)" [name]="favorite ? 'star' : 'star-outline'" [color]="favorite ? 'warning' : ''" class="ico"></ion-icon>
                     <ion-spinner *ngIf="loadingFavorite"></ion-spinner>
                   </div>
                   <div class="likes_share">

@@ -36,7 +36,6 @@ export const privateRoutes: Routes = [
   {
     path: 'cabinet/favorites',
     component: FavoritesComponent,
-    canActivate: [AuthGuard],
   },
   {
     path: 'cabinet/notifications',
