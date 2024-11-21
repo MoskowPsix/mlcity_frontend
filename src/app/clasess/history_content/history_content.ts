@@ -12,6 +12,13 @@ interface EditedPrice {
   description?: string
 }
 
+interface EditedFile {
+  event_id: number
+  name?: string
+  link?: string
+  local?: number
+  file_types?: object
+}
 export class HistoryContent {
   public origin: any = {}
   public edited: any = {}
@@ -20,7 +27,7 @@ export class HistoryContent {
   protected materials!: string
   protected sponsor!: string
   protected address!: string
-  protected files: IFile[] | FormData = []
+  protected files: object[] = []
   protected types: ISightType[] | IEventType[] = []
   protected price: object[] = []
 
@@ -191,17 +198,20 @@ export class HistoryContent {
     }
   }
 
-  protected compareAndSetPrices() {
+  protected compareAndSetPrices(): void {
+    // Если нет цен, то выходим
     if (this.edited.price == null) {
       return
     }
-
+    // Перебираем цены
     for (let editedPrice of this.edited.price) {
+      // Если новая цена, добавляем просто сразу в массив
       if (editedPrice.id == null) {
         this.price.push(editedPrice)
 
         return
       }
+      // Если цена удалена, добавляем её в массив с флагом удаления
       if (editedPrice.on_delete != null && editedPrice.on_delete) {
         let priceOnDelete = {
           price_id: editedPrice.id,
@@ -213,7 +223,7 @@ export class HistoryContent {
       }
 
       let originalPrice = this.SearchOriginalPrice(editedPrice.id)
-
+      // Если цена изменена, добавляем её в массив с изменением цены
       if (originalPrice != undefined && !isEqual(editedPrice, originalPrice)) {
         let changedPrice: EditedPrice = {
           price_id: editedPrice.id,
@@ -231,7 +241,14 @@ export class HistoryContent {
       }
     }
   }
+  private SearchOriginalFile(fileId: number) {
+    for (let element of this.origin.files)
+      if (element.id == fileId) {
+        return element
+      }
 
+    return undefined
+  }
   private SearchOriginalPrice(priceId: number) {
     for (let element of this.origin.price)
       if (element.id == priceId) {

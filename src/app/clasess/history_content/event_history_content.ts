@@ -182,8 +182,6 @@ export class EventHistoryContent extends HistoryContent {
       this.compareAndSet(element)
     })
     this.compareAndSetPlaces()
-    this.compareAndSetPrices()
-
     return {
       id: this.origin.id,
       type: 'Event',

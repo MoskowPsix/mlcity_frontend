@@ -133,12 +133,14 @@ export class EditEventComponent implements OnInit {
     this.loadingService.showLoading()
     this.statusesService
       .getStatuses()
-      .pipe(takeUntil(this.destroy$),
-      catchError((err) => {
-        this.loadingService.hideLoading()
-        this.router.navigate(['cabinet/events'])
-        return of(EMPTY)
-      }))
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((err) => {
+          this.loadingService.hideLoading()
+          this.router.navigate(['cabinet/events'])
+          return of(EMPTY)
+        }),
+      )
       .subscribe((res: any) => {
         if (res.statuses && res.statuses.length) {
           this.eventsService
@@ -146,15 +148,18 @@ export class EditEventComponent implements OnInit {
               this.event.id,
               res.statuses[res.statuses.map((status: any) => status.name).indexOf(Statuses.draft)].id,
             )
-            .pipe(takeUntil(this.destroy$),finalize(()=>{
-              this.loadingService.hideLoading()
-              this.router.navigate(['cabinet/events'])
-            }),
-            catchError((err)=>{
-              this.loadingService.hideLoading()
-              this.router.navigate(['cabinet/events'])
-              return EMPTY
-            }))
+            .pipe(
+              takeUntil(this.destroy$),
+              finalize(() => {
+                this.loadingService.hideLoading()
+                this.router.navigate(['cabinet/events'])
+              }),
+              catchError((err) => {
+                this.loadingService.hideLoading()
+                this.router.navigate(['cabinet/events'])
+                return EMPTY
+              }),
+            )
             .subscribe((res: any) => {
               this.loadingService.hideLoading()
               this.toastService.showToast('Событие удалено', 'success')
@@ -168,7 +173,7 @@ export class EditEventComponent implements OnInit {
   }
 
   logFiles(event: any) {
-    this.editForm.value.files = event
+    this.editForm.controls['files'].setValue(event)
   }
   addPrice() {
     this.editForm.value.price.push({
@@ -541,16 +546,14 @@ export class EditEventComponent implements OnInit {
         }
       }
     }
-    console.log(this.invalidForm)
     if (fieldsValid && !this.invalidForm.seances.error) {
       return true
     } else {
       return false
     }
-   
   }
 
-  redirect(){
+  redirect() {
     return new Promise<void>((resolve, reject) => {
       this.loadingService.hideLoading()
       this.toastService.showToast('Событие отправленно на проверку', 'success')
@@ -577,10 +580,9 @@ export class EditEventComponent implements OnInit {
       dateStart: minSeance,
       dateEnd: maxSeance,
     })
-    console.log(this.editForm.value.date_start)
+    // console.log(this.editForm.value.date_start)
   }
   submitForm() {
-    console.log(this.checkValidOfForm())
     this.loadingService.showLoading()
     if (this.checkValidOfForm()) {
       if (this.submitButtonState) {
@@ -589,6 +591,7 @@ export class EditEventComponent implements OnInit {
       this.clearFormOfTempData()
       // this.submitButtonState = true
       // this.loadingService.showLoading()
+      // console.log(this.editForm.value)
       this.searchDateStart()
       let historyContent = new EventHistoryContent()
       let result = historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value))
@@ -616,6 +619,7 @@ export class EditEventComponent implements OnInit {
             this.redirect()
           }
         })
+      this.loadingService.hideLoading()
     }
   }
   ngOnInit() {
