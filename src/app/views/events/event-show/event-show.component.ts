@@ -378,8 +378,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
     if (prices && prices.length != 0) {
       if (prices[pricesLenght].cost_rub == prices[0].cost_rub && prices[0].cost_rub !== 0) {
-        this.priceState = `${prices[0].cost_rub}₽`
-        this.priceStateForShow = `${prices[0].cost_rub} ₽`
+        this.priceState = `${prices[0].cost_rub}`
+        this.priceStateForShow = `${prices[0].cost_rub} `
       }
       if (prices[pricesLenght].cost_rub == prices[0].cost_rub && prices[0].cost_rub == 0) {
         this.priceState = `Бесплатно`
@@ -391,7 +391,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
         minPrice = Math.min(...pricesValue)
         maxPrice = Math.max(...pricesValue)
         this.priceState = `От ${minPrice}`
-        this.priceStateForShow = `От ${minPrice}₽ до ${maxPrice}₽`
+        this.priceStateForShow = `От ${minPrice} до ${maxPrice}`
       }
     } else {
       this.priceState = `Бесплатно`
@@ -403,8 +403,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
     //     this.priceStateForShow = 'Бесплатно'
     //   }
     //   if (prices[0].cost_rub == prices[prices.length - 1].cost_rub && prices[0] !== 0) {
-    //     this.priceState = prices[0].cost_rub + '₽'
-    //     this.priceStateForShow = prices[0].cost_rub + '₽'
+    //     this.priceState = prices[0].cost_rub + ''
+    //     this.priceStateForShow = prices[0].cost_rub + ''
     //   }
     //   if (prices[0] != prices[prices.length - 1] && prices[0] !== 0) {
     //     this.priceState = prices[0].cost_rub
@@ -419,8 +419,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
     //       this.priceState = 'Бесплатно'
     //       this.priceStateForShow = 'Бесплатно'
     //     } else if (minPrice == maxPrice && maxPrice != 0) {
-    //       this.priceState = 'от ' + minPrice + '₽'
-    //       this.priceStateForShow = 'от ' + minPrice + '₽' + ' до ' + maxPrice + '₽'
+    //       this.priceState = 'от ' + minPrice + ''
+    //       this.priceStateForShow = 'от ' + minPrice + '' + ' до ' + maxPrice + ''
     //     }
     //   }
     // } else {
