@@ -217,6 +217,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   setLocationForPlaces() {
+    console.log('плейс')
     this.loadPlace = true
     const coords = this.mapService.getLastMapCoordsFromLocalStorage()
     this.locationService
@@ -229,8 +230,11 @@ export class EventShowComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe(async (response: any) => {
+        console.log(response)
         if (response.location) {
           await this.queryBuilderService.locationIdForEventShow.next(response.location.id)
+          await this.getEventPlaces()
+        } else {
           await this.getEventPlaces()
         }
       })
