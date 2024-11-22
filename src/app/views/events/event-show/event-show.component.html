@@ -52,7 +52,7 @@
         </div>
 
         <div class="price-container">
-          <span class="price-container__text">{{priceState}}₽</span>
+          <span class="price-container__text">{{priceState}} <span *ngIf="priceState !=='Бесплатно'">₽</span></span>
           <span class="price-container__text" *ngIf="event.date_start !== event.date_end">{{event.date_start | date:'d MMM' }} - {{ event.date_end | date:'d MMM' }}</span>
           <span class="price-container__text" *ngIf="event.date_start === event.date_end">{{event.date_start | date:'d MMM' }}</span>
           <span *ngIf="event && event.age_limit" class="price-container__text">{{ageLimit}}+</span>
