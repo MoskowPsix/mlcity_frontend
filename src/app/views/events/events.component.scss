@@ -48,13 +48,13 @@ app-event-type-carusel {
   cursor: pointer;
   padding-left:1rem;
   padding-top: 0.5rem;
-  background: #f8f8f8;
+  background: var(--background-color);
   padding-right: 1rem;
   display: flex;
   width: 100%;
   font-family: var(--font-bold);
   justify-content: space-between;
-  font-size: clamp(0.875rem, -1.469rem + 12.5vw, 1.3rem);
+  font-size: clamp(0.875rem, -1.469rem + 12.5vw, 1.1rem);
 }
 .segment-title {
   color: black;
@@ -72,6 +72,7 @@ app-event-type-carusel {
 
 .grid-wrapper{
   padding-top: 7rem;
+  background: #e5e5e559;
 }
 .main-grid-load{
   overflow-y: hidden;

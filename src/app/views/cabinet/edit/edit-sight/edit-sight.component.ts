@@ -11,6 +11,7 @@ import { SightHistoryContent } from 'src/app/clasess/history_content/sight_histo
 import { ToastService } from 'src/app/services/toast.service'
 import { SightsService } from 'src/app/services/sights.service'
 import { StatusesService } from 'src/app/services/statuses.service'
+import { EventsService } from 'src/app/services/events.service'
 import { SightTypeService } from 'src/app/services/sight-type.service'
 import { types } from 'util'
 import { IPlace } from 'src/app/models/place'
@@ -53,6 +54,7 @@ export class EditSightComponent implements OnInit {
     private sightTypeService: SightTypeService,
     private editService: EditService,
     private toastService: ToastService,
+    private eventService: EventsService,
     private router: Router,
     private statusesService: StatusesService,
   ) {}

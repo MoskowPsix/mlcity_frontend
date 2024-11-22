@@ -163,7 +163,6 @@ export class EventsComponent implements OnInit, OnDestroy {
             finalize(() => {
               if (this.eventsTapeService.eventsCity.length === 0) {
                 this.eventsTapeService.notFound = true
-                console.log(this.eventsTapeService.eventsCity)
               }
             }),
             catchError((error) => {
@@ -356,18 +355,18 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.eventsTapeService.userHaveSubscribedEvents = true
         this.wait = true
         this.eventsTapeService.nextPage = true
-        if (value === true) {
-          this.eventsTapeService.notFound = false
-          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
 
-          this.eventsGeolocation = []
-          this.updateCoordinates().then(() => {
-            this.getEventsCity()
-          })
+        this.eventsTapeService.notFound = false
+        this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
 
-          this.changeCity()
-          // this.getEventsGeolocation()
-        }
+        this.eventsGeolocation = []
+        this.updateCoordinates().then(() => {
+          this.getEventsCity()
+        })
+
+        this.changeCity()
+        // this.getEventsGeolocation()
+
         this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
       })
     }

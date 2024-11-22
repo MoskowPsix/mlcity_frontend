@@ -29,7 +29,7 @@
       <ion-content class="" class="ion-padding">
         <div class="card-grid">
             <ng-container *ngIf="users.length" >
-                <app-user-section *ngFor="let user of users" [user]="user"></app-user-section>
+                <app-user-section [hideEmail]= "true" *ngFor="let user of users" [user]="user"></app-user-section>
             </ng-container>
         </div>
         <ng-container >
