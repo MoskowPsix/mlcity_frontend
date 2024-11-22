@@ -97,7 +97,14 @@ export class EditSightComponent implements OnInit {
     }, 0) //убираем асинхронность
   }
   deleteConfirmModal() {
-    this.deleteConfirmValue = true
+    this.sightsService.getEventInSight(this.organization.id).subscribe((res: any) => {
+      if (res.events.data.length) {
+        this.toastService.showToast('Сообщество не может быть удалено, оно связано с событием', 'danger')
+        this.deleteConfirmValue = false
+      } else {
+        this.deleteConfirmValue = true
+      }
+    })
   }
   openModalCancel() {
     this.cancelConfirmValue = true
