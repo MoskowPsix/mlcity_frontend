@@ -35,7 +35,5 @@ export class ShowSliderComponent implements OnInit {
     this.swiperIndex = event.detail[0].activeIndex + 1
   }
 
-  ngOnInit() {
-   
-  }
+  ngOnInit() {}
 }
