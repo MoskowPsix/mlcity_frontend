@@ -36,7 +36,7 @@
           </ng-template>
         </div>
         <ng-template #emptyFiles>
-          <div class="card" style="background-image: url('assets/images/nophoto.jpg'); position: absolute;"></div>
+          <div class="card" style="background-image: url({{host}}:{{port}}{{event.types[0].image_path}}); position: absolute;"></div>
         </ng-template>
 
         <div *ngIf="myEvent" class="edit-button">
