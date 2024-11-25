@@ -173,6 +173,7 @@ export class EditEventComponent implements OnInit {
   }
 
   logFiles(event: any) {
+    console.log(event)
     this.editForm.controls['files'].setValue(event)
   }
   addPrice() {

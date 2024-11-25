@@ -81,19 +81,17 @@ export class EditSliderComponent implements OnInit {
 
   deletePreview(file: any, i: number) {
     if (file.id) {
-      let index = this.files.map((e) => e.id).indexOf(file.id)
-      this.files[index].on_delete = true
-      this.filesEmit.emit(this.files)
-      this.previews.splice(index, 1)
+      this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.id !== file.id)
+      this.files.find((fileArrayItem) => fileArrayItem.id === file.id).on_delete = true
     } else {
       let index = this.files.map((e) => e.name).indexOf(file.name)
-      let previewsIndex = this.previews.map((e) => e.name).indexOf(file.name)
-      if (this.previews[previewsIndex].vk) {
+      let previewsIndex = this.files.find((fileArrayItem) => fileArrayItem.name === file.name)
+      if (previewsIndex.vk) {
         this.deleteVkFiles(file)
-        this.previews.splice(i, 1)
+        this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.name !== file.name)
       } else {
-        this.files.splice(index, 1)
-        this.previews.splice(i, 1)
+        this.files = this.files.filter((fileArrayItem) => fileArrayItem.name !== file.name)
+        this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.name !== file.name)
       }
 
       this.filesEmit.emit(this.files)
