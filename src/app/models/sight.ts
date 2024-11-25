@@ -17,7 +17,7 @@ export interface ISight {
   location_id: number
   type?: number
   status?: number
-  files?: any[]
+  files: any[]
   organization?: IOrganization
   types?: any[]
   likes?: any

@@ -39,11 +39,10 @@
   <input (change)="fileChanged($event,file)" multiple="multiple" style="opacity: 0; position: absolute;" #file type="file" accept="image/*,video/*">
  </ng-container>
 
-<ng-container *ngIf="type === 'l-view'">
+<ng-container *ngIf="type === 'l-view' && !hideLSlider">
   <div class="slider-container">
     <ng-container *ngFor="let img of previews; let i = index">
           <div style="background-image: url({{img.link}});" class="slider-container-item"></div>
     </ng-container>
-    <div *ngIf=" files.length === 0 ||  files[0].link === '' " style="background-image: url('/assets/images/nophoto.jpg');" class="slider-container-item"></div>
   </div>
 </ng-container>

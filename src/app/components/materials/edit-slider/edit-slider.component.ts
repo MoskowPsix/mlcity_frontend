@@ -17,6 +17,7 @@ export class EditSliderComponent implements OnInit {
   @Output() deleteVkfilesEmit: EventEmitter<any> = new EventEmitter<any>()
   @Input() type: string = ''
   @Input() vkFiles: any[] = []
+  @Input() hideLSlider:boolean = false
   previews: any[] = []
   deleteFiles: any[] = []
 

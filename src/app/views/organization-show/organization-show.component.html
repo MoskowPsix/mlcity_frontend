@@ -20,14 +20,13 @@
       </ng-container>
       <ng-container *ngIf="!loading">
         <div class="organization-container__organization-section">
-          <div  class="organization-section__info">
-            <img src="{{avatarUrl}}" *ngIf="sight.files![0] && sight.files![0].link !==''" class="organization-avatar"/>
-            <div *ngIf="!sight.files![0] || sight.files![0].link ===''" class="user-section-image"></div>
+          <div class="organization-section__info">
+            <div [ngClass]="{'organization-avatar':!userPlug, 'organization-avatar_plug':userPlug}">
+              <img class="organization-avatar__image" src="{{avatarUrl}}" />
+           
+            </div>
             <div class="organization-section__info__name">
               {{sight.name}}
-              <div>
-
-              </div>
             </div>
           </div>
 
@@ -36,7 +35,7 @@
           </div>
         </div>
         <div class="organization-container__slider-wrapper">
-          <app-edit-slider (click)="openImagesModalFunction()" [files]="sight.files!" type="l-view"></app-edit-slider>
+          <app-edit-slider [hideLSlider]="!sight.files.length" (click)="openImagesModalFunction()" [files]="sight.files!" type="l-view"></app-edit-slider>
         </div>
         <div class="organization-container__description">
           {{sight.description}}
