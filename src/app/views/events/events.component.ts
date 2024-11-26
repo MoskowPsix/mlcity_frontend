@@ -62,6 +62,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   @ViewChild('headerWrapper') headerWrapper!: ElementRef
   @ViewChild(IonContent) ionContent!: IonContent
   city: string = ''
+  currentRadius!: number
   segment: string = 'eventsCitySegment'
   isFirstNavigation: any = new BehaviorSubject<boolean>(true)
   date: any
@@ -350,15 +351,13 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.eventsTapeService.eventsCity = []
         this.eventsTapeService.eventsSeparator = []
         this.eventsTapeService.eventsLastScrollPositionForTape = 0
+        this.currentRadius = Number(this.filterService.getRadiusFromlocalStorage())
         this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
-
         this.eventsTapeService.userHaveSubscribedEvents = true
         this.wait = true
         this.eventsTapeService.nextPage = true
-
         this.eventsTapeService.notFound = false
         this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-
         this.eventsGeolocation = []
         this.updateCoordinates().then(() => {
           this.getEventsCity()

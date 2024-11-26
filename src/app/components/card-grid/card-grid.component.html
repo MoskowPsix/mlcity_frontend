@@ -18,7 +18,7 @@
     </div>
     <ng-container *ngIf="separatorCards.length > 0">
       <div class="separator">
-        Мероприятия за вашим радиусом
+        События далее {{radius}} км
       </div>
       <div class="main-grid">
         <app-event-card (eventClicked)="eventNavigation($event)" *ngFor="let card of separatorCards; let i = index" [event]="card" [myEvent]="myEvents" [isSight]="isSight"></app-event-card>

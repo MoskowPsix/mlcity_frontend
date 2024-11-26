@@ -27,7 +27,13 @@
           </div>
 
           <div class="grid-wrapper">
-            <app-card-grid (eventClicked)="eventNavigation($event)" [stopScroll]="this.eventsTapeService.nextPage" [notFound]="this.eventsTapeService.notFound" [spiner]="spiner" [cards]="eventsTapeService.eventsCity" [separatorCards]="eventsTapeService.eventsSeparator" (endScroll)="getEventsCity()"></app-card-grid>
+            <app-card-grid (eventClicked)="eventNavigation($event)"
+             [radius]="currentRadius"
+             [stopScroll]="this.eventsTapeService.nextPage" 
+             [notFound]="this.eventsTapeService.notFound" 
+             [spiner]="spiner" [cards]="eventsTapeService.eventsCity" 
+             [separatorCards]="eventsTapeService.eventsSeparator" 
+             (endScroll)="getEventsCity()"></app-card-grid>
           </div>
 
 </ion-content>

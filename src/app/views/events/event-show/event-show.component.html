@@ -405,8 +405,11 @@
 </ng-container>
 <ion-footer class="ion-no-border">
     <div *ngIf="!this.favorite && favoriteCheked"  class="favorite-button_bottom">
-      <ion-spinner *ngIf="loadingFavotire" name="crescent"></ion-spinner>  
-      <app-standart-button (click)="toggleFavorite(event)" style="width: 100%;" *ngIf="!loadingFavotire" buttonText="Я пойду" icon="assets/icons/like.svg" theme="orange"></app-standart-button>
+      <ion-spinner *ngIf="loadingFavotire" name="crescent"></ion-spinner> 
+      <div class="favorite-button_bottom__wrapper">
+        <app-standart-button (click)="toggleFavorite(event)"  *ngIf="!loadingFavotire" buttonText="Я пойду" icon="assets/icons/like.svg" theme="orange"></app-standart-button>
+      </div>
+     
     </div>  
 </ion-footer>
 <app-images-modal *ngIf="event && event.files.length" [openModal]="openImagesModal" (closeModalEmit)="closeImagesModal()" [imagesPathArray]="event.files"></app-images-modal>

@@ -1,3 +1,4 @@
+import { EventsComponent } from './../../views/events/events.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { IEventType } from 'src/app/models/event-type'
 import { ISightType } from 'src/app/models/sight-type'
@@ -21,6 +22,7 @@ export class CardGridComponent implements OnInit {
   @Output() eventClicked: EventEmitter<any> = new EventEmitter()
   myEvents: boolean = false
   @Input() notFound: any = false
+  @Input() radius!: number
   public checkedRout(): void {
     this.myEvents = this.router.url === '/cabinet/events' || this.router.url === '/cabinet/sights'
   }
