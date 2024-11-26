@@ -474,6 +474,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.currentType.push(Number(event))
       this.createEventForm.value.type.push(Number(event))
     }
+    console.log()
   }
   setValuePrice(event: any) {
     let id = event.temp_id

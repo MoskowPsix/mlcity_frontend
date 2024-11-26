@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ToastService } from 'src/app/services/toast.service'
 import { FileService } from 'src/app/services/file.service'
+import { environment } from 'src/environments/environment'
+
+import { IEtypes } from 'src/app/models/etypes'
 @Component({
   selector: 'app-edit-slider',
   templateUrl: './edit-slider.component.html',
@@ -9,15 +12,16 @@ import { FileService } from 'src/app/services/file.service'
 export class EditSliderComponent implements OnInit {
   constructor(
     private toastService: ToastService,
-    private fileService: FileService,
+    public fileService: FileService,
   ) {}
   @Input() files: any[] = []
   @ViewChild('mainPhoto') mainPhoto!: any
   @Output() filesEmit: EventEmitter<any> = new EventEmitter<any>()
   @Output() deleteVkfilesEmit: EventEmitter<any> = new EventEmitter<any>()
   @Input() type: string = ''
+  @Input() categoryType!: any
   @Input() vkFiles: any[] = []
-  @Input() hideLSlider:boolean = false
+  @Input() hideLSlider: boolean = false
   previews: any[] = []
   deleteFiles: any[] = []
 
