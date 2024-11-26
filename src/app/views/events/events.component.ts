@@ -136,7 +136,11 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   searchNavigate(event: any) {
-    this.router.navigate(['/events/search/', event])
+    if (event.length >= 3) {
+      this.router.navigate(['/events/search/', event])
+    } else {
+      this.toastService.showToast('В поле должно быть не менее 3 символов', 'warning')
+    }
   }
 
   eventNavigation(event: any) {

@@ -12,7 +12,7 @@
     <div class="header-bottom-container">
       Результаты поиска: «{{text}}»
     </div>
-    <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" [spiner]="spiner" [cards]="cards"  (endScroll)="getEvents()"></app-card-grid>
+    <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFound" [spiner]="spiner" [cards]="eventsForSearchTapeService.cards"  (endScroll)="getEvents()"></app-card-grid>
   </div>
 
 </ion-content>

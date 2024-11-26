@@ -30,6 +30,7 @@ export class OrganizationShowComponent implements OnInit {
   avatarUrl: string = ''
   events: IEvent[] = []
   userAuth: boolean = false
+  userPlug: boolean = false
   eventsExpired: IEvent[] = []
   notFound: boolean = false
   notFoundExpired: boolean = false
@@ -212,12 +213,17 @@ export class OrganizationShowComponent implements OnInit {
   }
   getOrganization(id: string) {
     this.sightsService
-    .getSightById(Number(id))
+      .getSightById(Number(id))
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
         this.sight = res.sight
         this.visibilityButtonCreateEvent()
         this.loading = false
+        if (this.sight && this.sight!.files.length == 0 && this.sight.types) {
+          console.log(this.sight.types![0].ico)
+          this.avatarUrl = `${this.backendUrl}${this.sight.types![0].ico}`
+          this.userPlug = true
+        }
         this.getOrganizationEvents()
         this.getOrganizationEventsExpired()
         this.checkAvatar()
@@ -232,9 +238,7 @@ export class OrganizationShowComponent implements OnInit {
       })
   }
 
-  visibilityButton(){
-    
-  }
+  visibilityButton() {}
   ngOnInit() {}
 
   ionViewWillEnter() {

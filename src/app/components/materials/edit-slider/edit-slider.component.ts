@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ToastService } from 'src/app/services/toast.service'
 import { FileService } from 'src/app/services/file.service'
+import { environment } from 'src/environments/environment'
+
+import { IEtypes } from 'src/app/models/etypes'
 @Component({
   selector: 'app-edit-slider',
   templateUrl: './edit-slider.component.html',
@@ -9,14 +12,16 @@ import { FileService } from 'src/app/services/file.service'
 export class EditSliderComponent implements OnInit {
   constructor(
     private toastService: ToastService,
-    private fileService: FileService,
+    public fileService: FileService,
   ) {}
   @Input() files: any[] = []
   @ViewChild('mainPhoto') mainPhoto!: any
   @Output() filesEmit: EventEmitter<any> = new EventEmitter<any>()
   @Output() deleteVkfilesEmit: EventEmitter<any> = new EventEmitter<any>()
   @Input() type: string = ''
+  @Input() categoryType!: any
   @Input() vkFiles: any[] = []
+  @Input() hideLSlider: boolean = false
   previews: any[] = []
   deleteFiles: any[] = []
 
@@ -81,19 +86,18 @@ export class EditSliderComponent implements OnInit {
 
   deletePreview(file: any, i: number) {
     if (file.id) {
-      let index = this.files.map((e) => e.id).indexOf(file.id)
-      this.files[index].on_delete = true
+      this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.id !== file.id)
+      this.files.find((fileArrayItem) => fileArrayItem.id === file.id).on_delete = true
       this.filesEmit.emit(this.files)
-      this.previews.splice(index, 1)
     } else {
       let index = this.files.map((e) => e.name).indexOf(file.name)
-      let previewsIndex = this.previews.map((e) => e.name).indexOf(file.name)
-      if (this.previews[previewsIndex].vk) {
+      let previewsIndex = this.files.find((fileArrayItem) => fileArrayItem.name === file.name)
+      if (previewsIndex.vk) {
         this.deleteVkFiles(file)
-        this.previews.splice(i, 1)
+        this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.name !== file.name)
       } else {
-        this.files.splice(index, 1)
-        this.previews.splice(i, 1)
+        this.files = this.files.filter((fileArrayItem) => fileArrayItem.name !== file.name)
+        this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.name !== file.name)
       }
 
       this.filesEmit.emit(this.files)

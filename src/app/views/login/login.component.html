@@ -129,7 +129,7 @@
               </a>
             </div>
 
-            <div class="login-form_social-buttons_button logo-apple">
+            <div *ngIf="platform === 'ios'" class="login-form_social-buttons_button logo-apple">
               <a class="login-form_social-buttons_button_link" (click)="onLoading(); loginApple()">
                 <div class="logo-apple_container">
                   <ion-icon class="logo-apple_container_image" name="logo-apple"></ion-icon>

@@ -3,11 +3,12 @@
       <ng-container>
         <div *ngIf="event.files.length > 0 && event.files[0].link !== '' ; else emptyFiles">
           <!-- <img class="card image" (load)="changeBackgroundImage()" [src]="event.files[0].link"> -->
-            <div class="card"  [class.change-opacity]="imageLoaded" *ngIf="event.files[0].local === 0 && event.files[0].file_types[0].name === 'image'; else isLocal" style="background-image: url('{{event.files[0].link}} '); position: absolute;"></div>
+            <div class="card"  [class.change-opacity]="imageLoaded" *ngIf="event.files[0].local === 0 && event.files[0].file_types[0] && event.files[0].file_types[0].name === 'image'; else isLocal" style="background-image: url('{{event.files[0].link}} '); position: absolute;"></div>
+            <div class="card"  [class.change-opacity]="imageLoaded" *ngIf="event.files[0].local === 0 && !event.files[0].file_types[0]; else isLocal" style="background-image: url('{{event.files[0].link}} '); position: absolute;"></div>
             <ng-template #isLocal>
-              <div class="card" [class.change-opacity]="imageLoaded" *ngIf="event.files[0].local === 1; else isVideo" style="background-image: url('{{host}}:{{port}}{{event.files[0].link}} '); position: absolute;"></div>
+              <div class="card" [class.change-opacity]="imageLoaded" *ngIf="event.files[0].local === 1;" style="background-image: url('{{host}}:{{port}}{{event.files[0].link}} '); position: absolute;"></div>
             </ng-template>
-          <ng-template #isVideo>
+          <ng-template *ngIf="event.files[0].local === 0 && event.files[0].file_types[0] && event.files[0].file_types[0].name === 'video'">
             <div (click)="eventNavigation()"  class="card">
               <div (click)="eventNavigation()" class="info-wrapper">
                 <div class="info-header">
@@ -35,18 +36,46 @@
           </ng-template>
         </div>
         <ng-template #emptyFiles>
-          <div class="card" style="background-image: url('assets/images/nophoto.jpg'); position: absolute;"></div>
+          <div class="card" style="background-image: url({{host}}:{{port}}{{event.types[0].image_path}}); position: absolute;"></div>
         </ng-template>
 
         <div *ngIf="myEvent" class="edit-button">
           <app-circle-button (click)="eventNavigationEdit()"  icon="/assets/icons/menu-pen.svg" border="dark-all" ></app-circle-button>
         </div>
+        
         <div  *ngIf="myEvent && getLastStatus()"class="status-container" (click)="showInfoAboutStatus()">
           <div class="status-text" [ngStyle]="{'color': getLastStatusColor()}">{{ getLastStatus().name }}</div>
           <div class="status" [ngStyle]="{'background-color': getLastStatusColor()}"></div>
         </div>
 
-        <div *ngIf=" event.files.length > 0 && event.files[0].file_types[0].name !== 'video' || event.files.length == 0 " (click)="eventNavigation()" class="card">
+        <div *ngIf=" event.files.length > 0 && event.files[0].file_types[0] && event.files[0].file_types[0].name !== 'video'" (click)="eventNavigation()" class="card">
+              <div class="info-wrapper">
+                  <div class="info-header">
+                     <div *ngIf="minPrice !== maxPrice" class="price">
+                        от  {{minPrice}}₽
+                     </div>
+                     <div *ngIf="minPrice === maxPrice && minPrice !== 0" class="price">
+                        от  {{minPrice}}₽
+                     </div>
+                     <div *ngIf="minPrice === maxPrice && minPrice === 0" class="price">
+                        Бесплатно
+                     </div>
+                     <div *ngIf="event.distance" class="distance">
+                      {{distanceCurrent(event.distance)}}
+                    </div>
+                </div>
+
+                <div class="info-footer">
+                    <div class="info-text-container" *ngIf="formatedStartDate || formatedEndDate">
+                      <div *ngIf="formatedStartDate !== formatedEndDate" class="info-text">{{formatedStartDate}} - {{formatedEndDate}}</div>
+                      <div *ngIf="formatedStartDate === formatedEndDate" class="info-text">{{' '+formatedStartDate}}</div>
+                    </div>
+                </div>
+
+          </div>
+       
+        </div>
+        <div *ngIf=" event.files.length > 0 && !event.files[0].file_types[0] || event.files.length === 0" (click)="eventNavigation()" class="card">
               <div class="info-wrapper">
                   <div class="info-header">
                      <div *ngIf="minPrice !== maxPrice" class="price">

@@ -40,7 +40,7 @@
 
       <!-- content -->
       <ng-container *ngIf="event && !loadingEvent">
-        <app-show-slider (click)="openImagesModalFunction()" [files]="event.files"></app-show-slider>
+        <app-show-slider [categoryType]="event.types[0]" (click)="openImagesModalFunction()" [files]="event.files"></app-show-slider>
 
         <div class="back-button-wrapper">
           <app-back-button></app-back-button>
@@ -100,7 +100,7 @@
           <div class="main-content__community">
             <strong class="title">Кто проводит</strong>
             <div class="community-wrapper">
-              <app-user-section [organization]="organization" [buttonText]="event.sponsor" (selectOrganization)="goToOrganization($event)"></app-user-section>
+              <app-user-section [fixedImg]="" [organization]="organization" [buttonText]="event.sponsor" (selectOrganization)="goToOrganization($event)"></app-user-section>
               <div class="community-wrapper__button-container">
               </div>
             </div>

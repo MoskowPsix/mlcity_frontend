@@ -5,7 +5,7 @@ import { register } from 'swiper/element/bundle'
 import { environment } from 'src/environments/environment'
 import { DomSanitizer } from '@angular/platform-browser'
 import Swiper from 'swiper'
-
+import { FileService } from 'src/app/services/file.service'
 register()
 @Component({
   selector: 'app-show-slider',
@@ -13,8 +13,10 @@ register()
   styleUrls: ['./show-slider.component.scss'],
 })
 export class ShowSliderComponent implements OnInit {
-  constructor() {}
+  constructor(public fileService: FileService) {}
+
   @Input() files?: any[]
+  @Input() categoryType: any
   swiperModules = [IonicSlides]
   sanitizer: DomSanitizer = inject(DomSanitizer)
 

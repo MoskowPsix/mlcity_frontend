@@ -31,7 +31,6 @@ export class EventsForSearchComponent implements OnInit {
   text: string = ''
   notFound: boolean = false
   spiner: boolean = false
-  cards: IEvent[] = []
   searchActive: boolean = true
   wait: boolean = false
   nextPage: boolean = true
@@ -39,14 +38,14 @@ export class EventsForSearchComponent implements OnInit {
 
   clearTemp() {
     this.wait = false
-    this.cards = []
+    this.eventsForSearchTapeService.cards = []
     this.notFound = false
     this.queryBuilderService.paginationPublicEventsForSearchCurrentPage.next('')
     this.nextPage = true
   }
   getEvents() {
     if (!this.wait && this.nextPage) {
-      if (this.cards.length > 0) {
+      if (this.eventsForSearchTapeService.cards.length > 0) {
         this.spiner = true
       }
       this.wait = true
@@ -54,7 +53,7 @@ export class EventsForSearchComponent implements OnInit {
         .getEventsForSearch(this.text, this.queryBuilderService.queryBuilder('eventsForSearch'))
         .pipe(
           finalize(() => {
-            if (this.cards.length === 0) {
+            if (this.eventsForSearchTapeService.cards.length === 0) {
               this.notFound = true
             }
             this.spiner = false
@@ -62,7 +61,7 @@ export class EventsForSearchComponent implements OnInit {
           }),
         )
         .subscribe((res: any) => {
-          this.cards.push(...res.events.data)
+          this.eventsForSearchTapeService.cards.push(...res.events.data)
           let cursor = res.events.next_cursor
           if (cursor) {
             this.queryBuilderService.paginationPublicEventsForSearchCurrentPage.next(cursor)
@@ -103,6 +102,10 @@ export class EventsForSearchComponent implements OnInit {
       this.setParams().then(() => {
         this.getEvents()
       })
+    } else {
+      if (this.eventsForSearchTapeService.cards.length == 0) {
+        this.notFound = true
+      }
     }
   }
   ionViewDidLeave() {}

@@ -139,9 +139,18 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         if (event) {
           this.event = event.event
+          this.eventsService
+            .getOrganization(this.event.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: any) => {
+              this.organization = response.organization
+              console.log(response.organization)
+              this.checkMaterialLink()
+            })
           this.setUsersCount()
           this.setUserViews()
           this.checkPrice()
+
           if (this.event.age_limit) {
             this.ageLimit = this.event.age_limit.split('+')[0]
           }
@@ -155,13 +164,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
           content: event.description,
         })
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
-        this.eventsService
-          .getOrganization(this.event.id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((response: any) => {
-            this.organization = response.organization
-            this.checkMaterialLink()
-          })
+
         this.getEventsCity()
       })
   }
@@ -177,7 +180,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
   }
   setUserViews() {
-    this.usersViews = this.numbersService.changeDischarge(Number(this.event.views.count))
+    if (this.event.views) {
+      this.usersViews = this.numbersService.changeDischarge(Number(this.event.views.count))
+    }
   }
 
   openStateUsersModal() {
@@ -217,7 +222,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   setLocationForPlaces() {
-    console.log('плейс')
     this.loadPlace = true
     const coords = this.mapService.getLastMapCoordsFromLocalStorage()
     this.locationService
@@ -230,7 +234,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe(async (response: any) => {
-        console.log(response)
         if (response.location) {
           await this.queryBuilderService.locationIdForEventShow.next(response.location.id)
           await this.getEventPlaces()
@@ -558,10 +561,12 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.eventId = params['id']
     })
-    this.viewsService
-      .addViewInEvent(String(this.eventId))
-      .pipe()
-      .subscribe((res: any) => {})
+    if (this.authService.getAuthState()) {
+      this.viewsService
+        .addViewInEvent(String(this.eventId))
+        .pipe()
+        .subscribe((res: any) => {})
+    }
 
     if (this.router.url !== '/cabinet/events/create') {
       this.loadingFavotire = true
