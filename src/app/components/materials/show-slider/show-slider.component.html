@@ -12,14 +12,16 @@
       >
  
       <swiper-slide *ngIf="!files?.length">
-          <img  src='assets/images/nophoto.jpg' />
+          <img *ngIf="!categoryType" src='assets/images/nophoto.jpg' />
+          <img *ngIf="categoryType" src='{{this.fileService.checkLinkString(categoryType.image_path)}}' />
           <div class="darkening-background"></div>
       </swiper-slide>
 
     <ng-container *ngFor ="let file of files">
       <swiper-slide>
         <ng-container>
-          <img *ngIf="!file" src='assets/images/nophoto.jpg' />
+          <img *ngIf="!categoryType" src='assets/images/nophoto.jpg' />
+          <img *ngIf="categoryType" src='{{this.fileService.checkLinkString(categoryType.image_path)}}' />
           <img *ngIf="file.file_types[0].name !== 'video'" [src]="checkUrl(file)" />
           <iframe *ngIf="file.file_types[0].name === 'video'" class="video-content" [src]="iframeUrl(file.link)" allow="" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
           <div class="darkening-background"></div>
