@@ -88,6 +88,7 @@ export class EditSliderComponent implements OnInit {
     if (file.id) {
       this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.id !== file.id)
       this.files.find((fileArrayItem) => fileArrayItem.id === file.id).on_delete = true
+      this.filesEmit.emit(this.files)
     } else {
       let index = this.files.map((e) => e.name).indexOf(file.name)
       let previewsIndex = this.files.find((fileArrayItem) => fileArrayItem.name === file.name)
