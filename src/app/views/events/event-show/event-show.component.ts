@@ -139,11 +139,17 @@ export class EventShowComponent implements OnInit, OnDestroy {
       .subscribe((event: any) => {
         if (event) {
           this.event = event.event
-
+          this.eventsService
+            .getOrganization(this.event.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: any) => {
+              this.organization = response.organization
+              this.checkMaterialLink()
+            })
           this.setUsersCount()
           this.setUserViews()
           this.checkPrice()
-          this.checkMaterialLink()
+
           if (this.event.age_limit) {
             this.ageLimit = this.event.age_limit.split('+')[0]
           }
@@ -157,12 +163,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
           content: event.description,
         })
         this.startLikesCount = this.event?.likes ? this.event.likes.vk_count + this.event.likes.local_count : 0
-        this.eventsService
-          .getOrganization(this.event.id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((response: any) => {
-            this.organization = response.organization
-          })
+
         this.getEventsCity()
       })
   }
@@ -220,7 +221,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   setLocationForPlaces() {
-
     this.loadPlace = true
     const coords = this.mapService.getLastMapCoordsFromLocalStorage()
     this.locationService
