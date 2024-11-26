@@ -144,6 +144,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe((response: any) => {
               this.organization = response.organization
+              console.log(response.organization)
               this.checkMaterialLink()
             })
           this.setUsersCount()
