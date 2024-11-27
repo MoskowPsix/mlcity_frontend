@@ -169,11 +169,11 @@ export class EditEventComponent implements OnInit {
       })
   }
   setAgeLimit(event: any) {
-    this.editForm.value.age_limit = event.target.value
+    console.log(event.target.value)
+    this.editForm.controls['age_limit'].setValue(event.target.value)
   }
 
   logFiles(event: any) {
-    console.log(event)
     this.editForm.controls['files'].setValue(event)
   }
   addPrice() {
@@ -385,6 +385,7 @@ export class EditEventComponent implements OnInit {
         res = res.event
         this.copyEvent = _.cloneDeep(this.event)
         this.getPlaces()
+        console.log(res)
         this.loadingService.hideLoading()
         this.editForm.patchValue({
           name: res.name,
@@ -482,13 +483,7 @@ export class EditEventComponent implements OnInit {
           priceCount++
         }
       })
-    if (priceCount > 1) {
-      this.editForm.value.price.forEach((price: any) => {
-        if (price.descriptions === '' && !price.on_delete) {
-          this.invalidForm.price = true
-        }
-      })
-    }
+
     if (this.invalidForm.price) {
       this.toastService.showToast('Если у вас несколько билетов, то описание обязательно', 'warning')
     }
@@ -596,6 +591,8 @@ export class EditEventComponent implements OnInit {
       this.searchDateStart()
       let historyContent = new EventHistoryContent()
       let result = historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value))
+      console.log(this.editForm.value)
+      console.log(result)
       this.editService
         .sendEditEvent(serialize(result, this.options))
         .pipe(
@@ -623,6 +620,7 @@ export class EditEventComponent implements OnInit {
       this.loadingService.hideLoading()
     }
   }
+
   ngOnInit() {
     this.editForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -637,5 +635,8 @@ export class EditEventComponent implements OnInit {
       materials: new FormControl([], [Validators.required]),
       age_limit: new FormControl([], [Validators.required]),
     })
+  }
+  ionViewWillLeave() {
+    this.editForm.reset()
   }
 }

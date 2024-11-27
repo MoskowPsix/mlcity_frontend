@@ -174,6 +174,7 @@ export class EventHistoryContent extends HistoryContent {
       'materials',
       'sponsor',
       'date_start',
+      'age_limit',
       'date_end',
       'types',
       'files',
@@ -182,6 +183,7 @@ export class EventHistoryContent extends HistoryContent {
       this.compareAndSet(element)
     })
     this.compareAndSetPlaces()
+    this.compareAndSetPrices()
     return {
       id: this.origin.id,
       type: 'Event',
@@ -191,6 +193,7 @@ export class EventHistoryContent extends HistoryContent {
         materials: this.materials,
         sponsor: this.sponsor,
         date_start: this.date_start,
+        age_limit: this.age_limit,
         date_end: this.date_end,
         history_files: this.files,
         history_types: this.types,

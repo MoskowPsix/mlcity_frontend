@@ -9,7 +9,7 @@ import { isEqual } from 'lodash'
 interface EditedPrice {
   price_id: number
   cost_rub?: string
-  description?: string
+  descriptions?: string
 }
 
 interface EditedFile {
@@ -27,6 +27,7 @@ export class HistoryContent {
   protected materials!: string
   protected sponsor!: string
   protected address!: string
+  protected age_limit!: number
   protected files: object[] = []
   protected types: ISightType[] | IEventType[] = []
   protected price: object[] = []
@@ -233,8 +234,8 @@ export class HistoryContent {
           changedPrice.cost_rub = editedPrice.cost_rub
         }
 
-        if (!isEqual(editedPrice.description, originalPrice.description)) {
-          changedPrice.description = editedPrice.description
+        if (!isEqual(editedPrice.descriptions, originalPrice.descriptions)) {
+          changedPrice.descriptions = editedPrice.descriptions
         }
 
         this.price.push(changedPrice)

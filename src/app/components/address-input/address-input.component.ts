@@ -111,8 +111,9 @@ export class AddressInputComponent implements OnInit {
         tap((result: any) => {
           const firstGeoObject = result.geoObjects.get(0)
           // this.address = firstGeoObject.getAddressLine()
-
-          this.addressForm.value.address = firstGeoObject.getAddressLine()
+          if (firstGeoObject) {
+            this.addressForm.value.address = firstGeoObject.getAddressLine()
+          }
         }),
       )
       .subscribe((result: any) => {
@@ -139,8 +140,7 @@ export class AddressInputComponent implements OnInit {
       this.testLog()
     }
   }
-  testLog() {
-  }
+  testLog() {}
   setFormInLoad() {
     this.setLongitudelatitude()
     this.setAdress()
