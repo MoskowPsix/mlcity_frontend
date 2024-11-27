@@ -90,8 +90,12 @@ export class EditEventComponent implements OnInit {
   }
   checkfreeEntry() {
     //проверка количества билетов
-    if (this.editForm.value.price.map((e: any) => e.on_delete).indexOf(undefined) == -1) {
-      return true
+    if (this.editForm.value.price) {
+      if (this.editForm.value.price.map((e: any) => e.on_delete).indexOf(undefined) == -1) {
+        return true
+      } else {
+        return false
+      }
     } else {
       return false
     }
@@ -169,7 +173,6 @@ export class EditEventComponent implements OnInit {
       })
   }
   setAgeLimit(event: any) {
-    console.log(event.target.value)
     this.editForm.controls['age_limit'].setValue(event.target.value)
   }
 
@@ -246,8 +249,6 @@ export class EditEventComponent implements OnInit {
           }
         })
     } else {
-      console.log(this.allTypes[this.editForm.value.types[0]])
-      console.log(this.editForm.value.types[0])
       this.openModalCategory = true
     }
   }
@@ -387,7 +388,6 @@ export class EditEventComponent implements OnInit {
         res = res.event
         this.copyEvent = _.cloneDeep(this.event)
         this.getPlaces()
-        console.log(res)
         this.loadingService.hideLoading()
         this.editForm.patchValue({
           name: res.name,
@@ -593,8 +593,6 @@ export class EditEventComponent implements OnInit {
       this.searchDateStart()
       let historyContent = new EventHistoryContent()
       let result = historyContent.merge(this.copyEvent, _.cloneDeep(this.editForm.value))
-      console.log(this.editForm.value)
-      console.log(result)
       this.editService
         .sendEditEvent(serialize(result, this.options))
         .pipe(
@@ -638,7 +636,7 @@ export class EditEventComponent implements OnInit {
       age_limit: new FormControl([], [Validators.required]),
     })
   }
-  ionViewWillLeave() {
-    this.editForm.reset()
+  ionViewDidLeave() {
+    
   }
 }
