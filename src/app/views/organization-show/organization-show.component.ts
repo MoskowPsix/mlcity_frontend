@@ -223,6 +223,7 @@ export class OrganizationShowComponent implements OnInit {
           console.log(this.sight.types![0].ico)
           this.avatarUrl = `${this.backendUrl}${this.sight.types![0].ico}`
           this.userPlug = true
+          console.log(this.userPlug)
         }
         this.getOrganizationEvents()
         this.getOrganizationEventsExpired()

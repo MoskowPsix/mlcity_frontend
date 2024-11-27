@@ -5,7 +5,7 @@
     <span class="header-title">
       Создать
     </span>
-    <app-circle-button icon="/assets/icons/question.svg"></app-circle-button>
+    <app-circle-button style="opacity: 0;" icon="/assets/icons/question.svg"></app-circle-button>
   </app-second-header>
   <div class="main-content">
     <app-step-container [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency">
@@ -46,7 +46,7 @@
       
       <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency !== maxStepsCount" (click)="stepNext()" buttonText="Далее" theme="standart"></app-standart-button>
       <app-standart-button [disabled]="stepInvalidate()" *ngIf="stepCurrency === maxStepsCount" (click)="onSubmit()" buttonText="Создать и открыть" theme="standart"></app-standart-button>
-      <div class="cancel-wrapper">
+      <div class="cancel-wrapper_sight">
         <app-standart-button (click)="openModalCancel()" buttonText="Отмена" theme="light"></app-standart-button>
       </div>
     </div>

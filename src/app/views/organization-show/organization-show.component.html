@@ -21,9 +21,14 @@
       <ng-container *ngIf="!loading">
         <div class="organization-container__organization-section">
           <div class="organization-section__info">
-            <div [ngClass]="{'organization-avatar':!userPlug, 'organization-avatar_plug':userPlug}">
+            <!-- <div [ngClass]="{'organization-avatar':!userPlug, 'organization-avatar_plug':userPlug}">
+              <img [ngClass]="{'organization-avatar__image':!userPlug, 'organization-avatar':userPlug}" src="{{avatarUrl}}" />
+            </div> -->
+            <div *ngIf="!userPlug" class="organization-avatar">
               <img class="organization-avatar__image" src="{{avatarUrl}}" />
-           
+            </div>
+            <div *ngIf="userPlug" class="organization-avatar">
+              <img class="organization-avatar__icon" src="{{avatarUrl}}" />
             </div>
             <div class="organization-section__info__name">
               {{sight.name}}
@@ -37,7 +42,7 @@
         <div class="organization-container__slider-wrapper">
           <app-edit-slider [hideLSlider]="!sight.files.length" (click)="openImagesModalFunction()" [files]="sight.files!" type="l-view"></app-edit-slider>
         </div>
-        <div class="organization-container__description">
+        <div *ngIf="sight.description" class="organization-container__description">
           {{sight.description}}
         </div>
         <div class="organization-container__category-container">
@@ -62,9 +67,7 @@
               </app-tabs-item>
               
               <app-tabs-item name="Прошедшие">
-                <div class="not-found-container">
                   <app-card-grid (eventClicked)="eventNavigation($event)" [notFound]="notFoundExpired" (endScroll)="getOrganizationEventsExpired()" [spiner]="spinerExpired" [cards]="eventsExpired"></app-card-grid>
-                </div>
               </app-tabs-item>
           </app-tabs>
           <div class="hidden-id">SID: {{ sight.id }}</div>
