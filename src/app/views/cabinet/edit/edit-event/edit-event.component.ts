@@ -246,6 +246,8 @@ export class EditEventComponent implements OnInit {
           }
         })
     } else {
+      console.log(this.allTypes[this.editForm.value.types[0]])
+      console.log(this.editForm.value.types[0])
       this.openModalCategory = true
     }
   }

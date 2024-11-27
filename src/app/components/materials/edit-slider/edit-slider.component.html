@@ -3,9 +3,13 @@
   <div *ngIf="previews.length > 0" #mainPhoto style="background-image: url({{previews[0].link}});" class="main-photo">
     <app-back-button></app-back-button>
   </div>
-  <div *ngIf="previews.length === 0" #mainPhoto style="background-image: url('/assets/images/nophoto.jpg');" class="main-photo">
+  <div *ngIf="previews.length == 0 && !categoryType" style="background-image: url('assets/images/nophoto.jpg') ;" class="main-photo" >
     <app-back-button></app-back-button>
   </div>
+  <div *ngIf="previews.length == 0 && categoryType && categoryType.image_path " style="background-image: url('{{this.fileService.checkLinkString( categoryType.image_path)}}') ;" class="main-photo" >
+    <app-back-button></app-back-button>
+  </div>
+
   <div class="slider-container">
     <div (click)="file.click()" class="slider-container-add-button" >
       <img src="/assets/icons/addPhoto.svg" alt="">
@@ -25,6 +29,7 @@
   </div>
   <div *ngIf="previews.length == 0 && !categoryType" style="background-image: url('assets/images/nophoto.jpg') ;" class="cover-add-button" ></div>
   <div *ngIf="previews.length == 0 && categoryType && categoryType.image_path " style="background-image: url('{{this.fileService.checkLinkString( categoryType.image_path)}}') ;" class="cover-add-button" ></div>
+  
   <div class="label">Фотографии</div>
   <div class="slider-container_create">
     <div (click)="file.click()" class="slider-container-add-button" >

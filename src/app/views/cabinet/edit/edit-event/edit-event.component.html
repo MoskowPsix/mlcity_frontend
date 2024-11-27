@@ -1,5 +1,6 @@
 <ion-content *ngIf="editForm">
-    <app-edit-slider *ngIf="this.event && this.event.files" (filesEmit)="logFiles($event)" [files]="this.event.files"></app-edit-slider>
+    <app-edit-slider [categoryType]="this.editForm.value.types[0]" *ngIf="this.event && this.event.files && this.editForm.value.types && this.editForm.value.types[0]" (filesEmit)="logFiles($event)" [files]="this.event.files"></app-edit-slider>
+
     <div class="content-container">
         <form [formGroup]="editForm" action="" class="edit-form">
             <app-standart-input [invalid]="invalidForm.name" [label]="'Название события'" [control] = "editForm.get('name')"></app-standart-input>
