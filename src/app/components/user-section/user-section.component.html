@@ -28,10 +28,11 @@
         <ng-container>
           <img (click)="redirect()" src="{{avatarUrl}}" *ngIf=" organization.files && organization.files[0] && organization.files[0].link !== '' "  class="user-section-image" >
           <div (click)="redirect()" *ngIf="!organization.files[0] || organization.files[0].link === '' " class="user-section-image">
-            <img *ngIf="!organization.files.length  && organization.types &&  organization.types.length && organization.types[0]?.ico; else noCategory" [src]="this.backendUrl + organization.types[0]?.ico" alt="">         
+            
+            <img *ngIf="!organization.files.length  && organization.types &&  organization.types.length && organization.types[0].ico; else noCategory" [src]="this.backendUrl + organization.types[0]?.ico" alt="">         
             <ng-template #noCategory>
               <ng-container *ngIf="!organization.files || !organization.files.length">
-                <img src="{{avatarUrl}}" alt="" class="user-section-image">
+                <img src="assets/images/nophoto.jpg" alt="" class="user-section-image">
               </ng-container>
             </ng-template>
                 
