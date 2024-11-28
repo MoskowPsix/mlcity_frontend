@@ -69,7 +69,7 @@
 
 export const environment = {
   production: true,
-  apiKeyYandex: '226cca4a-d7de-46b5-9bc8-889f70ebfe64',
+  apiKeyYandex: '9a1df530-ff4c-4c63-b19c-ede18479110d',
   apiKeyYandexSubject: '6483f031-ac2f-4600-a338-269045f79ee2',
   YANDEX_METRICA_KEY: 96112606,
   YANDEX_METRICA_ON: true,
