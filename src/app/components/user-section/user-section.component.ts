@@ -23,6 +23,7 @@ export class UserSectionComponent implements OnInit {
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   public avatarUrl!: string
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
+  organizationNoTypesIcoAndFiles: boolean = false
   checkAvatar() {
     if (!this.fixedImg) {
       if (this.user.avatar && this.user.avatar.includes('https')) {
@@ -32,6 +33,17 @@ export class UserSectionComponent implements OnInit {
       }
     } else {
       this.avatarUrl = this.fixedImg
+    }
+  }
+  checkOrganizationNoTypesIcoAndFiles() {
+    if (this.organization) {
+      console.log('Checking organization')
+      if (!this.organization.files && this.organization.types.length && !this.organization.types[0].ico || !this.organization.types.length) {
+        this.organizationNoTypesIcoAndFiles = true
+      }
+      if (this.organization.files.lenght && this.organization.files[0] && !this.organization.files.link) {
+        this.organizationNoTypesIcoAndFiles = true
+      }
     }
   }
   checkAvatarOrganzization() {
@@ -59,6 +71,7 @@ export class UserSectionComponent implements OnInit {
     }
     if (this.organization) {
       this.checkAvatarOrganzization()
+      this.checkOrganizationNoTypesIcoAndFiles()
     }
   }
   ngOnInit() {}

@@ -35,8 +35,8 @@
           </ng-template>
         </div>
         <ng-template #emptyFiles>
-          <div *ngIf="!event.types[0].image_path" class="card" style="background-image: url('assets/images/nophoto.jpg'); position: absolute;"></div>
-          <div *ngIf="event.types[0].image_path" class="card" style="background-image: url('{{host}}:{{port}}{{event.types[0].image_path}}'); position: absolute;"></div>
+          <div *ngIf="event.types && !event.types[0].image_path || !event.types" class="card" style="background-image: url('assets/images/nophoto.jpg'); position: absolute;"></div>
+          <div *ngIf="event.types && event.types[0].image_path" class="card" style="background-image: url('{{host}}:{{port}}{{event.types[0].image_path}}'); position: absolute;"></div>
         </ng-template>
 
         <div *ngIf="myEvent" class="edit-button">

@@ -26,15 +26,22 @@
       <div (click)="emitOrganization(organization)" class="user-section-main_organization">
 
         <ng-container>
-          <img (click)="redirect()" src="{{avatarUrl}}" *ngIf=" organization.files && organization.files[0] && organization.files[0].link !== '' "  class="user-section-image" >
+          <ng-container *ngIf=" organization.files && organization.files[0] && organization.files[0].link !== '' ">
+            <img (click)="redirect()" src="{{avatarUrl}}"   class="user-section-image" >
+          </ng-container>
+          
           <div (click)="redirect()" *ngIf="!organization.files[0] || organization.files[0].link === '' " class="user-section-image">
+            <ng-container *ngIf="!organization.files.length  && organization.types &&  organization.types.length && organization.types[0].ico;">
+              <img  [src]="this.backendUrl + organization.types[0]?.ico" alt="">         
+            </ng-container>
             
-            <img *ngIf="!organization.files.length  && organization.types &&  organization.types.length && organization.types[0].ico; else noCategory" [src]="this.backendUrl + organization.types[0]?.ico" alt="">         
-            <ng-template #noCategory>
-              <ng-container *ngIf="!organization.files || !organization.files.length">
+            <ng-container *ngIf="organization.files.length  && organization.files[0] && !organization.files[0].link && organization.types &&  organization.types.length && organization.types[0].ico;">
+              <img  [src]="this.backendUrl + organization.types[0]?.ico" alt="">         
+            </ng-container>
+     
+              <ng-container *ngIf="organizationNoTypesIcoAndFiles">
                 <img src="assets/images/nophoto.jpg" alt="" class="user-section-image">
               </ng-container>
-            </ng-template>
                 
           </div>
         </ng-container>
