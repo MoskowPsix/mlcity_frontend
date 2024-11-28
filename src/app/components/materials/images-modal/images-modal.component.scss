@@ -10,7 +10,11 @@ swiper-container{
     justify-content: center;
     align-items: center;
     
-} 
+}
+.image-container{
+    display: flex;
+    align-items: center;
+}
 .swiper-index{
     color: #fff;
     bottom: 0;
