@@ -190,7 +190,7 @@ export class EventsComponent implements OnInit, OnDestroy {
             }
             if (
               response.events.data[0] &&
-              response.events.data[0].distance < Number(this.filterService.getRadiusFromlocalStorage())
+              response.events.data[0].distance <= Number(this.filterService.getRadiusFromlocalStorage())
             ) {
               response.events.data.forEach((event: any) => {
                 if (event.distance < Number(this.filterService.getRadiusFromlocalStorage())) {

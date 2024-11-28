@@ -37,8 +37,10 @@ export class UserSectionComponent implements OnInit {
   }
   checkOrganizationNoTypesIcoAndFiles() {
     if (this.organization) {
-      console.log('Checking organization')
-      if (!this.organization.files && this.organization.types.length && !this.organization.types[0].ico || !this.organization.types.length) {
+      if (
+        (!this.organization.files && this.organization.types.length && !this.organization.types[0].ico) ||
+        !this.organization.types.length
+      ) {
         this.organizationNoTypesIcoAndFiles = true
       }
       if (this.organization.files.lenght && this.organization.files[0] && !this.organization.files.link) {

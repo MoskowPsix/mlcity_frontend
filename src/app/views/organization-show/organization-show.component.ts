@@ -15,6 +15,7 @@ import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { AuthService } from 'src/app/services/auth.service'
 import { FavoritesTapeService } from '../cabinet/favorites/favorites-tape.service'
 import { UserService } from 'src/app/services/user.service'
+import { Console } from 'console'
 
 @Component({
   selector: 'app-organization-show',
@@ -81,6 +82,7 @@ export class OrganizationShowComponent implements OnInit {
   }
 
   getOrganizationEventsExpired() {
+    console.log('получаю ивенты внутри')
     if (this.nextPageExpired) {
       this.spinerExpired = true
       this.organizationService
@@ -223,7 +225,9 @@ export class OrganizationShowComponent implements OnInit {
           console.log(this.sight.types![0].ico)
           this.avatarUrl = `${this.backendUrl}${this.sight.types![0].ico}`
           this.userPlug = true
-          console.log(this.userPlug)
+        }
+        if (this.sight && this.sight!.files.length && !this.sight!.files[0].link) {
+          this.userPlug = true
         }
         this.getOrganizationEvents()
         this.getOrganizationEventsExpired()

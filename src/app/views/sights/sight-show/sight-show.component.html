@@ -58,7 +58,7 @@
               [loop]="true"
               [initialSlide]="0"
             >
-              <ng-container *ngIf="sight.files && sight.files.length; else notFiles">
+              <ng-container *ngIf="sight.files && sight.files.length || sight.files && !sight.files[0].link; else notFiles">
                 <ng-container *ngFor="let file of sight.files">
 
                   <swiper-slide style="height: 19rem;" class="" *ngIf="file.local === 1">
