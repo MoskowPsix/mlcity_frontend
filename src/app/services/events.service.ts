@@ -159,12 +159,7 @@ export class EventsService {
   }
 
   create(event: FormData) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data',
-    })
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/create`, event, {
-      headers,
-    })
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/create`, event)
   }
 
   addView(id: number, time: number) {
