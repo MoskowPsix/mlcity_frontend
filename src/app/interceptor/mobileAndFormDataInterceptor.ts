@@ -9,7 +9,7 @@ export class MobileAndFormDataInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let updatedRequest: any = req
-    alert('я работаю')
+
     if (this.platform == 'android') {
       if (req.method == 'POST' && req.body instanceof FormData) {
         updatedRequest = req.clone({
