@@ -9,19 +9,12 @@ export class EditService {
   constructor(private http: HttpClient) {}
 
   sendEditEvent(event: any) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data',
-    })
-    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/history-content`, event, {
-      headers,
-    })
+    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/history-content`, event)
   }
   sendEditSight(event: any) {
     const headers = new HttpHeaders({
       'Content-Type': 'multipart/form-data',
     })
-    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/history-content`, event, {
-      headers,
-    })
+    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/history-content`, event)
   }
 }

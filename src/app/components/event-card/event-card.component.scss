@@ -117,16 +117,13 @@ ion-card-subtitle {
   justify-content: center;
   align-items: center;
   display: flex;
-  font-size: 0.625rem;
   font-family: var(--font-bold);
   text-align: center;
-  background-color: #1c2226b6;
-  color: #fff;
+  color: #1c2226b6;
   border-radius: 10px 10px 10px 10px;
-  min-width: 3.75rem;
+  font-size: 0.8rem;
+  font-family: var(--font-regular);
   height: 1.438rem;
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
 }
 
 .edit-button {
@@ -198,8 +195,12 @@ ion-card-subtitle {
   padding-bottom: 0.2rem;
   background: #fff;
   width: 20.5rem;
-  justify-content: end;
+  justify-content: space-between;
   display: flex;
+}
+.user-info-wrapper{
+  display: flex;
+  gap: 0.2rem;
 }
 .users-info_views{
   display: flex;

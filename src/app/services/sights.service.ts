@@ -140,12 +140,8 @@ export class SightsService {
   }
 
   create(sight: FormData) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data',
-    })
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/create`, sight, {
-      headers,
-    })
+
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/create`, sight)
   }
 
   addView(id: number, time: number) {
