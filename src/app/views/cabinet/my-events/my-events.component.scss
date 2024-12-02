@@ -14,6 +14,16 @@
   margin: auto;
   justify-content: center;
 }
+.header-wrapper{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.25rem;
+  font-family: var(--font-bold);
+  padding-left: 1rem;
+  padding-right:1rem;
+}
 
 .card-wrapper {
   position: relative;
