@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { tap, throwError } from 'rxjs'
 import { environment } from 'src/environments/environment'
@@ -140,7 +140,12 @@ export class SightsService {
   }
 
   create(sight: FormData) {
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/create`, sight)
+    const headers = new HttpHeaders({
+      'Content-Type': 'multipart/form-data',
+    })
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/create`, sight, {
+      headers,
+    })
   }
 
   addView(id: number, time: number) {

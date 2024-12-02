@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http'
 import { tap, throwError } from 'rxjs'
 import { IEvent } from '../models/event'
 import { environment } from 'src/environments/environment'
@@ -7,6 +7,7 @@ import { IGetEventsAndSights } from '../models/getEventsAndSights'
 import { UserService } from './user.service'
 import { IPlace } from '../models/place'
 import { IGetEventPlaces } from '../models/event-places'
+import { options } from 'numeral'
 
 @Injectable({
   providedIn: 'root',
@@ -158,7 +159,12 @@ export class EventsService {
   }
 
   create(event: FormData) {
-    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/create`, event)
+    const headers = new HttpHeaders({
+      'Content-Type': 'multipart/form-data',
+    })
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/events/create`, event, {
+      headers,
+    })
   }
 
   addView(id: number, time: number) {

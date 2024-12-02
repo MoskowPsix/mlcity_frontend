@@ -768,7 +768,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.loadingService.showLoading()
     this.eventsService
       .create(event)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((error: any) => {
+          this.loadingService.hideLoading()
+          return EMPTY
+        }),
+      )
       .subscribe((res) => {
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesEvents.create, 'success')

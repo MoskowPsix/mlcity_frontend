@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { IEvent } from '../models/event'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { environment } from 'src/environments/environment'
 @Injectable({
   providedIn: 'root',
@@ -9,9 +9,19 @@ export class EditService {
   constructor(private http: HttpClient) {}
 
   sendEditEvent(event: any) {
-    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/history-content`, event)
+    const headers = new HttpHeaders({
+      'Content-Type': 'multipart/form-data',
+    })
+    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/history-content`, event, {
+      headers,
+    })
   }
   sendEditSight(event: any) {
-    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/history-content`, event)
+    const headers = new HttpHeaders({
+      'Content-Type': 'multipart/form-data',
+    })
+    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/history-content`, event, {
+      headers,
+    })
   }
 }
