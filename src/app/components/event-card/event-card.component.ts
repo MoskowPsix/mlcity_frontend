@@ -108,7 +108,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   minPrice: number = 0
   maxPrice: number = 0
   statusColor: Record<string, string> = {
-    Новое: '#3880FF',
+    Новое: '#F99011',
     Изменено: '#F99011',
     Опубликовано: '#22CA3D',
     Отказ: '#E83940',
@@ -405,7 +405,9 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getLastStatusColor() {
     let status: string = this.getLastStatus().name
-
+    if (status == Statuses.changed) {
+      return this.statusColor['Изменено']
+    }
     return this.statusColor[status]
   }
 
@@ -413,7 +415,11 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     let status: any
     this.event.statuses.forEach((element: any) => {
       if (element.pivot.last) {
-        status = element
+        if (element.name == Statuses.new) {
+          status = { name: Statuses.changed }
+        } else {
+          status = element
+        }
       }
     })
 
