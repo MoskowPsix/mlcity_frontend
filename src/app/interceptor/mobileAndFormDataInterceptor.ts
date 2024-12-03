@@ -11,12 +11,10 @@ export class MobileAndFormDataInterceptor implements HttpInterceptor {
     let updatedRequest: any = req
 
     if (this.platform == 'android') {
-      this.toastService.showToast('АндроЕд', 'warning')
       if (req.method == 'POST' && req.body instanceof FormData) {
-        this.toastService.showToast('поставил заголовок', 'warning')
         updatedRequest = req.clone({
           setHeaders: {
-            'Content-Type': 'multipart/form-data',
+        
           },
         })
       }
