@@ -3,18 +3,19 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { Observable } from 'rxjs'
 import { Capacitor } from '@capacitor/core'
 import { ToastService } from '../services/toast.service'
+import { uuid } from 'uuidv4'
 @Injectable()
 export class MobileAndFormDataInterceptor implements HttpInterceptor {
   platform: string = Capacitor.getPlatform()
   toastService: ToastService = inject(ToastService)
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let updatedRequest: any = req
-
+    let boundary = '----WebKitFormBoundary' + uuid()
     if (this.platform == 'android') {
       if (req.method == 'POST' && req.body instanceof FormData) {
         updatedRequest = req.clone({
           setHeaders: {
-            'Content-Type': 'multipart/form-data;',
+            'Content-Type': `multipart/form-data;  boundary="${boundary}`,
           },
         })
       }
