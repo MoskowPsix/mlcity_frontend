@@ -1,5 +1,5 @@
 ion-modal{
-    --height: 20rem;
+    --height: 24rem;
     --width: 22rem;
     --border-radius: 16px;
     --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -36,6 +36,19 @@ ion-modal{
           filter: brightness(0) saturate(100%) invert(40%) sepia(96%) saturate(2368%) hue-rotate(206deg) brightness(102%) contrast(103%);
       }
   
+  }
+  .clear-filters{
+    font-size: 0.75rem;
+    color: var(--font-color);
+  }
+  .category-modal-grid-footer{
+    padding-top: 0.8rem;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.8rem;
+    justify-content: center;
   }
   .category-modal-grid-item{
     cursor: pointer;

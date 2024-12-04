@@ -17,4 +17,4 @@
   
 </div>
 
-<app-types-modal [categories]="currentTypes" (deleteCategories)="deleteCaategory($event)" (addCategories)="addCaategory($event)"(closeModalEmit)="closeModal()" [allTypes]="typesForType" [openTypesModal]="openModal"></app-types-modal>
+<app-types-modal [categories]="currentTypes" (clearAllCategoriesEmit)="clearAllCategories()" (deleteCategories)="deleteCaategory($event)" (addCategories)="addCaategory($event)"(closeModalEmit)="closeModal()" [allTypes]="typesForType" [openTypesModal]="openModal"></app-types-modal>
