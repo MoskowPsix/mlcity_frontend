@@ -16,12 +16,11 @@ export class MobileAndFormDataInterceptor implements HttpInterceptor {
   toastService: ToastService = inject(ToastService)
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let updatedRequest: any = req
-    let boundary = '----WebKitFormBoundary' + generateGuid()
     if (this.platform == 'android') {
       if (req.method == 'POST' && req.body instanceof FormData) {
         updatedRequest = req.clone({
           setHeaders: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
           },
         })
       }
