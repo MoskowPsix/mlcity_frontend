@@ -19,9 +19,7 @@ export class MobileAndFormDataInterceptor implements HttpInterceptor {
     if (this.platform == 'android') {
       if (req.method == 'POST' && req.body instanceof FormData) {
         updatedRequest = req.clone({
-          setHeaders: {
-            'Content-Type': 'multipart/form-data',
-          },
+          setHeaders: {},
         })
       }
     }
