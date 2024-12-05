@@ -417,6 +417,9 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       if (element.pivot.last) {
         if (element.name == Statuses.new) {
           status = { name: Statuses.changed }
+        }
+        if (element.name == 'Изменено') {
+          status = { name: Statuses.changed }
         } else {
           status = element
         }
