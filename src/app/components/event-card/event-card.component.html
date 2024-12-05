@@ -48,7 +48,8 @@
           </div>
           <div class="users-info">
             <div *ngIf="event.distance" class="distance">
-              {{distanceCurrent(event.distance)}}
+              {{event.location_name}}.
+              {{distanceCurrent(event.distance)}} 
             </div>
     
             <div class="user-info-wrapper">
@@ -117,6 +118,10 @@
 
       <div class="users-info">
         <div *ngIf="event.distance" class="distance">
+          <div>
+            {{event.location_name}}.
+          </div>
+       
           {{distanceCurrent(event.distance)}}
         </div>
 

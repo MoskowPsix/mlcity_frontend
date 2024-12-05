@@ -147,11 +147,13 @@ ion-card-subtitle {
 
 .distance {
   text-align: center;
-  justify-content: center;
+  
   align-items: center;
   display: flex;
   font-family: var(--font-bold);
   text-align: center;
+  gap: 0.5rem;
+  width: 100%;
   color: #1c2226b6;
   border-radius: 10px 10px 10px 10px;
   font-size: 0.8rem;

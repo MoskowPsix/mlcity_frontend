@@ -161,9 +161,11 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setUsersCount() {
+    console.log(this.event.favoritesUsers)
     if (!isNaN(Number(this.numbersService.changeDischarge(Number(this.event.favoritesUsers))))) {
       this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
     }
+    console.log(this.usersCount)
   }
   setUserViews() {
     this.usersViews = this.numbersService.changeDischarge(Number(this.event.views.count))
