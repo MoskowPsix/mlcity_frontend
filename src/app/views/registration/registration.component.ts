@@ -36,7 +36,6 @@ export class RegistrationComponent implements OnInit {
   emailBusy: boolean = true
   passwordConfirm: boolean = true
   busyName: string = ''
-  busyEmail: string = ''
   busyPass: boolean = true
   submitResponce: boolean = false
   modalOpen: boolean = false

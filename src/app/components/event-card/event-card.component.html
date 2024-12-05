@@ -1,5 +1,19 @@
   <div class="card-wrapper">
-
+      <div [routerLink]="['/organizations/',event.organization.sight.id]" *ngIf="event.organization" class="card-wrapper__organization-name">
+        <ng-container *ngIf="event.organization.files && event.organization.files.length">
+                  <div style="background-image: url('{{event.organization.sight.files[0].link}}');" class="card-wrapper__organization-name__avatar"></div>
+        </ng-container>
+        <ng-container *ngIf="!event.organization.files && event.organization.sight.types">
+                  <div style="background-image: url('{{this.fileService.checkLinkString(event.organization.sight.types[0].ico)}}');" class="card-wrapper__organization-name__avatar_icon"></div>
+        </ng-container>
+        <ng-container *ngIf="!event.organization.files && !event.organization.sight.types">
+                  <div style="background-image: url('/assets/icons/user.svg');" class="card-wrapper__organization-name__avatar_icon"></div>
+        </ng-container>
+        <ng-container *ngIf="event.organization.sight">
+          {{ event.organization.sight.name}}
+        </ng-container>
+        
+      </div>
       <ng-container>
         <div *ngIf="event.files.length > 0 && event.files[0].link !== '' ; else emptyFiles">
           <!-- <img class="card image" (load)="changeBackgroundImage()" [src]="event.files[0].link"> -->

@@ -112,6 +112,39 @@ ion-card-subtitle {
   padding-left: 0.5rem;
 }
 
+.card-wrapper__organization-name{
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  font-family: var(--font-bold);
+  align-items: center;
+  padding-left: 0.4rem;
+  margin-bottom: -0.5rem;
+  border-radius: 10px 10px 0px 0px;
+  background: #fff;
+  width: 20.5rem;
+}
+.card-wrapper__organization-name__avatar{
+  min-width: 1.8rem;
+  max-width: 1.8rem;
+  border-radius: 50%;
+  height: 1.8rem;
+  background-size: contain;
+  background-position: center;
+  background-color: #dddddd;
+}
+.card-wrapper__organization-name__avatar_icon{
+  min-width: 1.8rem;
+  max-width: 1.8rem;
+  border-radius: 50%;
+  background-size: 70%;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 1.8rem;
+  background-color: #dddddd;
+}
+
 .distance {
   text-align: center;
   justify-content: center;

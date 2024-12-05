@@ -25,7 +25,7 @@ import { environment } from 'src/environments/environment'
 import { VkService } from 'src/app/services/vk.service'
 import { IonicSlides } from '@ionic/angular'
 import { DomSanitizer } from '@angular/platform-browser'
-
+import { FileService } from 'src/app/services/file.service'
 import { register } from 'swiper/element/bundle'
 import { Swiper } from 'swiper/types'
 import { SightsService } from 'src/app/services/sights.service'
@@ -55,6 +55,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     private sanitizer: DomSanitizer,
     private helpers: HelpersService,
     private numbersService: NumbersService,
+    public fileService: FileService,
     private datePipe: DatePipe,
     private router: Router,
   ) {}
