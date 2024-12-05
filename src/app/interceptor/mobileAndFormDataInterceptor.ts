@@ -22,7 +22,7 @@ export class MobileAndFormDataInterceptor implements HttpInterceptor {
         updatedRequest = req.clone({
           setHeaders: {
             'Content-Type': 'multipart/form-data',
-            'Accept':'application/json'
+            'enctype': 'multipart/form-data'
           },
         })
       }
