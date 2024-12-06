@@ -1,6 +1,5 @@
 <ion-modal mode="ios" (didDismiss)="closeModal()"  [isOpen]="openTypesModal">
         <ng-template>
-            <img (click)="closeModal()" class="header-modal_close" src="assets/icons/close.svg" alt="">
             <ion-content>
                 <div class="category-modal-grid">
                     <ng-container *ngIf="allTypes && allTypes.length > 0">
@@ -11,6 +10,11 @@
                             </div>
                         </ng-container>
                     </ng-container>
+            
+                </div>
+                <div class="category-modal-grid-footer">
+                    <span (click)="clearAllCategories()" class="clear-filters">Сбросить</span>
+                    <app-standart-button (click)="closeModal()" style="width: 80%;" theme="standart" buttonText="Применить"></app-standart-button>
                 </div>
             </ion-content>
         </ng-template>

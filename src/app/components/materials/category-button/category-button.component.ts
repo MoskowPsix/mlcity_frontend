@@ -73,6 +73,21 @@ export class CategoryButtonComponent implements OnInit {
   //   }
   // }
 
+  clearAllCategories() {
+    this.selectedTypesId = []
+    this.currentTypes = []
+    switch (this.stateType) {
+      case 'events':
+        this.filterService.setEventTypesTolocalStorage([])
+        break
+      case 'sights':
+        this.filterService.setSightTypesTolocalStorage([])
+        break
+    }
+    this.setTypesToStore()
+    this.openModal = false
+  }
+
   openModalFnc() {
     let storageFilterId: any
 

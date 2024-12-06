@@ -1,6 +1,6 @@
 export enum Statuses {
   new = 'Новое',
-  changed = 'Изменено',
+  changed = 'На модерации',
   draft = 'Черновик',
   published = 'Опубликовано',
   blocked = 'Заблокировано',

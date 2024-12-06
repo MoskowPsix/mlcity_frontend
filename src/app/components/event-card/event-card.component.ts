@@ -25,7 +25,7 @@ import { environment } from 'src/environments/environment'
 import { VkService } from 'src/app/services/vk.service'
 import { IonicSlides } from '@ionic/angular'
 import { DomSanitizer } from '@angular/platform-browser'
-
+import { FileService } from 'src/app/services/file.service'
 import { register } from 'swiper/element/bundle'
 import { Swiper } from 'swiper/types'
 import { SightsService } from 'src/app/services/sights.service'
@@ -55,6 +55,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     private sanitizer: DomSanitizer,
     private helpers: HelpersService,
     private numbersService: NumbersService,
+    public fileService: FileService,
     private datePipe: DatePipe,
     private router: Router,
   ) {}
@@ -108,7 +109,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   minPrice: number = 0
   maxPrice: number = 0
   statusColor: Record<string, string> = {
-    Новое: '#3880FF',
+    Новое: '#F99011',
     Изменено: '#F99011',
     Опубликовано: '#22CA3D',
     Отказ: '#E83940',
@@ -405,14 +406,24 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getLastStatusColor() {
     let status: string = this.getLastStatus().name
-
+    if (status == Statuses.changed) {
+      return this.statusColor['Изменено']
+    }
     return this.statusColor[status]
   }
 
   getLastStatus() {
     let status: any
+
     this.event.statuses.forEach((element: any) => {
       if (element.pivot.last) {
+        if (element.name == Statuses.new) {
+          status = { name: Statuses.changed }
+        }
+        if (element.name == 'Изменено') {
+          status = { name: Statuses.changed }
+        }
+      } else {
         status = element
       }
     })

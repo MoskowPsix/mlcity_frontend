@@ -1,9 +1,11 @@
 <ion-content>
   <app-second-header size="">
       <ng-container>
-        <div class="header-wrapper">
-          Мои мероприятия <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/create.svg" buttonText="Создать"></app-rounded-button>
-        </div>
+      
+          <app-back-button></app-back-button>
+          Мои мероприятия
+           <app-rounded-button routerLink="/cabinet/events/create" icon="assets/icons/create.svg" buttonText="Создать"></app-rounded-button>
+       
       </ng-container>
   </app-second-header>
   <div class="grid-container">
