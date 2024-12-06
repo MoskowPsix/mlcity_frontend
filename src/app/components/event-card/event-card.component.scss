@@ -260,6 +260,7 @@ ion-card-subtitle {
   font-family: var(--font-regular);
   color: grey;
   .users-info_views_icon__wrapper{
+    min-width: 1rem;
     font-size: 0.7rem;
     .users-info_views_icon{
       width: 100%;
