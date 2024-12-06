@@ -161,11 +161,9 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setUsersCount() {
-    console.log(this.event.favoritesUsers)
     if (!isNaN(Number(this.numbersService.changeDischarge(Number(this.event.favoritesUsers))))) {
       this.usersCount = this.numbersService.changeDischarge(Number(this.event.favoritesUsers))
     }
-    console.log(this.usersCount)
   }
   setUserViews() {
     this.usersViews = this.numbersService.changeDischarge(Number(this.event.views.count))
@@ -416,6 +414,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getLastStatus() {
     let status: any
+
     this.event.statuses.forEach((element: any) => {
       if (element.pivot.last) {
         if (element.name == Statuses.new) {
@@ -423,9 +422,9 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         if (element.name == 'Изменено') {
           status = { name: Statuses.changed }
-        } else {
-          status = element
         }
+      } else {
+        status = element
       }
     })
 
