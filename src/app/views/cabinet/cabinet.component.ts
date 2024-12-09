@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs'
 import { IUser } from 'src/app/models/user'
 import { AuthService } from 'src/app/services/auth.service'
 import { UserService } from 'src/app/services/user.service'
+import { Device } from '@capacitor/device'
 @Component({
   selector: 'app-cabinet',
   templateUrl: './cabinet.component.html',
