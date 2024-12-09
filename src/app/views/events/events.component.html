@@ -17,7 +17,7 @@
             </app-second-header>
             
             <div class="header-bottom-container">
-              <div (click)="openCitySearch()">
+              <div class="header-bottom-container_city" (click)="openCitySearch()">
                     {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : '...' }}
               </div>
               <div class="calendar-container">

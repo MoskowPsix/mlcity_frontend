@@ -141,17 +141,16 @@ export class CategoryButtonComponent implements OnInit {
   }
   closeModal() {
     this.openModal = false
+    this.setTypesToStore()
   }
   addCaategory(category: any) {
     this.currentTypes.push(category)
     this.selectedTypesId.push(category.id)
-    this.setTypesToStore()
   }
   deleteCaategory(index: any) {
     let categoryId = this.currentTypes[index].id
     remove(this.selectedTypesId, (id) => id === categoryId)
     this.currentTypes.splice(index, 1)
-    this.setTypesToStore()
   }
   ionViewDidLeave() {
     this.destroy$.next()
