@@ -7,10 +7,8 @@ import { environment } from 'src/environments/environment'
 })
 export class SightTypeService {
   constructor(private http: HttpClient) {}
-
+  types: any[] = []
   getTypes() {
-    return this.http.get<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sight-types`,
-    )
+    return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sight-types`)
   }
 }
