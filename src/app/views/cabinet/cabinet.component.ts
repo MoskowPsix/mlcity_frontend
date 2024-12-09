@@ -34,6 +34,7 @@ export class CabinetComponent implements OnInit {
     if (this.platformType == 'web') {
       Device.getInfo().then((device: any) => {
         console.log(device)
+        
         if (device.appVersion) {
           this.appVersion = device.appVersion
         }
