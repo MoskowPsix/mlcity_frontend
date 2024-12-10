@@ -96,6 +96,9 @@
 }
 .save-wrapper{
   padding-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
  .password-inputs-wrapper{
   height: 0;
