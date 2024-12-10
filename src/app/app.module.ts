@@ -148,7 +148,7 @@ import { SharedModule } from './modules/shared/shared.module'
 import { ButtonsModule } from './modules/shared/buttons.module'
 import { MapModule } from './modules/shared/map.module'
 import { EventsForSearchComponent } from './views/events/events-for-search/events-for-search.component'
-
+import { ChangeLocationModalComponent } from './components/change-location-modal/change-location-modal.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -180,6 +180,7 @@ registerLocaleData(localeRu, 'ru')
     ConfirmModalComponent,
     ClusterModalComponent,
     HeaderComponent,
+    ChangeLocationModalComponent,
     CodeInputComponent,
     AddressInputComponent,
     EditEventComponent,

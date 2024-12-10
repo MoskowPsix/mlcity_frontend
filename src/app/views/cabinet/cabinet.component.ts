@@ -19,6 +19,7 @@ export class CabinetComponent implements OnInit {
   ) {}
   user!: IUser
   test: string = 'test'
+  appVersion: any = ''
   platformType: string = Capacitor.getPlatform()
   private readonly destroy$ = new Subject<void>()
   onLogout() {
@@ -29,6 +30,9 @@ export class CabinetComponent implements OnInit {
   }
   ionViewWillEnter() {
     this.user = this.userService.getUserFromLocalStorage()
+    this.platformType = Capacitor.getPlatform()
+    if (this.platformType == 'web') {
+    }
   }
 
   ngOnInit() {

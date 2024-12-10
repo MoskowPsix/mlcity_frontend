@@ -19,6 +19,7 @@ export class NewSeanceComponent implements OnInit {
   @Input() value: string = ''
   @Input() placeId!: number
   @Input() seance: any
+  @Input() step: any
   @Output() seanceDeleteEmit = new EventEmitter()
   @Output() seanceEditEmit = new EventEmitter()
 
@@ -53,7 +54,5 @@ export class NewSeanceComponent implements OnInit {
       })
     }
   }
-  ngOnInit() {
-   
-  }
+  ngOnInit() {}
 }

@@ -881,7 +881,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   }
 
   addSeances(event: number) {
-    let tomorrow = moment().add(1, 'days')
+    let tomorrow = moment().add(1, 'days').set({
+      hour: 12,
+      minute: 0,
+      second: 0,
+    })
     // this.placeArrayForm[num].seances.push({})
     // this.createEventForm.controls['places'].value[num].controls.seances.value.push(
     //   new FormGroup({
@@ -892,8 +896,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (this.createEventForm.value.places[event].seances) {
       this.createEventForm.value.places[event].seances.push({
         temp_id: this.createEventForm.value.places[event].seances.length,
-        date_start: tomorrow.format('YYYY-MM-DDTHH:MM'),
-        date_end: tomorrow.format('YYYY-MM-DDTHH:MM'),
+        date_start: tomorrow.format('YYYY-MM-DDTHH:mm'),
+        date_end: tomorrow.format('YYYY-MM-DDTHH:mm'),
       })
     }
   }

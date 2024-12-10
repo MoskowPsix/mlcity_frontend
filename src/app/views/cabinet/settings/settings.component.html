@@ -53,7 +53,7 @@
             <div class="save-wrapper">
               <app-standart-button (click)="onSubmit()" *ngIf="!passwordChange" buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button>
               <!-- <app-standart-button  *ngIf="passwordChange" (click)="submitPassword()" buttonText = "Сохранить" type="button" theme ="standart"></app-standart-button> -->
-
+              <app-standart-button (click)="deleteUser()" theme = 'red' buttonText="Удалить"></app-standart-button>
             </div>
         </ng-container>
         

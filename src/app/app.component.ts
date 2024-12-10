@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private tokenService: TokenService,
+    private filterService: FilterService,
   ) {
     ScreenOrientation.lock({ orientation: 'portrait' })
     this.initializeApp()
@@ -65,6 +66,8 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.mobileOrNote()
+    this.filterService.setEventTypesTolocalStorage([])
+    this.filterService.setSightTypesTolocalStorage([])
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.url = this.router.url
       if (this.url.includes('/cabinet/sights/edit')) {

@@ -289,8 +289,8 @@ export class EditEventComponent implements OnInit {
     if (this.editForm.value.places[event].seances) {
       this.editForm.value.places[event].seances.push({
         temp_id: this.editForm.value.places[event].seances.length,
-        date_start: tomorrow.format('YYYY-MM-DDTHH:MM'),
-        date_end: tomorrow.format('YYYY-MM-DDTHH:MM'),
+        date_start: tomorrow.format('YYYY-MM-DDTHH:mm'),
+        date_end: tomorrow.format('YYYY-MM-DDTHH:mm'),
       })
     }
   }

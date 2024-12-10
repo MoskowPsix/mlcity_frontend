@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, inject } from '@angular/core'
 import { catchError, delay, EMPTY, map, of, retry, Subject, takeUntil, tap, debounceTime, filter } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { ISight } from 'src/app/models/sight'
@@ -17,7 +17,7 @@ import { MapService } from 'src/app/services/map.service'
 import { SightTapeService } from 'src/app/services/sight-tape.service'
 import { IonContent } from '@ionic/angular'
 import { error } from 'console'
-
+import { SightTypeService } from 'src/app/services/sight-type.service'
 @Component({
   selector: 'app-sights',
   templateUrl: './sights.component.html',
@@ -42,6 +42,8 @@ export class SightsComponent implements OnInit, OnDestroy {
 
   currentPageSightsCity: number = 1
   currentPageSightsGeolocation: number = 1
+
+  sightTypeService: SightTypeService = inject(SightTypeService)
 
   cardContainer!: ElementRef
   @ViewChild('widgetsContent') widgetsContent!: ElementRef
@@ -91,6 +93,25 @@ export class SightsComponent implements OnInit, OnDestroy {
   }
   redirectToEvent() {
     this.router.navigate(['/events'])
+  }
+  renderTypesInMap() {
+    let selectedSightTypes = this.filterService.getSightTypesFromlocalStorage()?.split(',')
+    let showTypes: any = []
+    if (this.sightTypeService.types) {
+      showTypes = this.sightTypeService.types!.filter((type: any) => {
+        return selectedSightTypes!.includes(String(type.id))
+      })
+    }
+    return showTypes
+  }
+
+  deleteTypeInStorage(deleteType: any) {
+    let selectedEventTypes: any = this.filterService.getEventTypesFromlocalStorage()?.split(',')
+    let selectedSightTypes: any = this.filterService.getSightTypesFromlocalStorage()?.split(',')
+    selectedSightTypes = selectedSightTypes!.filter((type: any) => type != String(deleteType.id))
+    selectedSightTypes.forEach((type: any) => Number(type))
+    this.filterService.setSightTypesTolocalStorage(selectedEventTypes)
+    this.filterService.changeFilter.next(true)
   }
 
   openCitySearch() {

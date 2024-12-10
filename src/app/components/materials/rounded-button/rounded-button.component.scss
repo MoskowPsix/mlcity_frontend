@@ -1,8 +1,15 @@
+.close_image{
+    width: 0.4rem;
+    height: 0.4rem;
+    position: absolute;
+    margin-top: -0.3rem;
+    right: 0.2rem;
+}
 .rounded-button{
     background-color: #ffffff;
     font-size: 0.75rem;
     color: var(--font-color);
-    min-width: 2rem;
+    min-width: 3rem;
     padding-left: 0.6rem;
     gap: 3px;
     padding-right: 0.6rem;
@@ -11,9 +18,9 @@
     text-align: center;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
     transition: 0.2s;
     max-height: 34px;
-    display: flex;
     border-radius: 100px;
 }
 .rounded-button_outline{
@@ -32,7 +39,6 @@
     align-items: center;
     transition: 0.2s;
     max-height: 34px;
-    display: flex;
     border-radius: 100px;
 }
 
@@ -51,7 +57,12 @@
     align-items: center;
     transition: 0.2s;
     max-height: 34px;
-    display: flex;
     border-radius: 100px;
     
+}
+.rounded-button__container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
 }

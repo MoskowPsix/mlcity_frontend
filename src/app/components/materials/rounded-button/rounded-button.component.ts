@@ -10,7 +10,8 @@ export class RoundedButtonComponent implements OnInit {
   @Input() buttonText: String = ''
   @Input() icon: String = ''
   @Input() type: String = ''
-  @Input() outline!: boolean 
+  @Input() outline!: boolean
+  @Input() close!: boolean
   @Input() theme: String = 'rounded-button'
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>()
   @Input() disabled: boolean = false

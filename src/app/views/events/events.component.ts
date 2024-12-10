@@ -39,6 +39,7 @@ import { Location } from '@angular/common'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
 import { BehaviorSubject } from 'rxjs'
+import { EventTypeService } from 'src/app/services/event-type.service'
 import { MapService } from 'src/app/services/map.service'
 import { Capacitor } from '@capacitor/core'
 import { Router } from '@angular/router'
@@ -72,7 +73,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   wait: boolean = true
   scrollStart: any
   switchTypeService: SwitchTypeService = inject(SwitchTypeService)
-
+  eventTypeService: EventTypeService = inject(EventTypeService)
   @ViewChild('cardContainer')
   cardContainer!: ElementRef
   @ViewChild('widgetsContent') widgetsContent!: ElementRef
@@ -324,6 +325,26 @@ export class EventsComponent implements OnInit, OnDestroy {
 
       resolve() // Успешно завершили обновление
     })
+  }
+  renderTypesInMap() {
+    let selectedEventTypes = this.filterService.getEventTypesFromlocalStorage()?.split(',')
+    let selectedSightTypes = this.filterService.getSightTypesFromlocalStorage()?.split(',')
+    let showTypes: any = []
+    if (this.eventTypeService.types) {
+      showTypes = this.eventTypeService.types!.filter((type: any) => {
+        return selectedEventTypes!.includes(String(type.id))
+      })
+    }
+    return showTypes
+  }
+
+  deleteTypeInStorage(deleteType: any) {
+    let selectedEventTypes: any = this.filterService.getEventTypesFromlocalStorage()?.split(',')
+    let selectedSightTypes: any = this.filterService.getSightTypesFromlocalStorage()?.split(',')
+    selectedEventTypes = selectedEventTypes!.filter((type: any) => type != String(deleteType.id))
+    selectedEventTypes.forEach((type: any) => Number(type))
+    this.filterService.setEventTypesTolocalStorage(selectedEventTypes)
+    this.filterService.changeFilter.next(true)
   }
 
   ngAfterViewInit() {}
