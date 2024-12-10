@@ -42,7 +42,7 @@
         <div class="map-tools__category-grid">
           <ng-container *ngFor="let type of renderTypesInMap()">
             <div class="map-tools__category-grid__item">
-              <app-rounded-button (click)="deleteTypeInStorage(type)" [outline]="true" icon="assets/icons/category.svg" type="button" [buttonText]="type.name"></app-rounded-button>
+              <app-rounded-button [close]='true' (click)="deleteTypeInStorage(type)" [outline]="true" icon="assets/icons/category.svg" type="button" [buttonText]="type.name"></app-rounded-button>
             </div>
           </ng-container>
           

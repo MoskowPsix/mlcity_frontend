@@ -27,7 +27,7 @@
             <div *ngIf="renderTypesInMap().length" class="category-container">
               <ng-container *ngFor="let type of renderTypesInMap()">
                   <div  class="category-container__item">
-                    <app-rounded-button (click)="deleteTypeInStorage(type)" icon="assets/icons/category.svg" type="button" [buttonText]="type.name"></app-rounded-button>
+                    <app-rounded-button [close]='true' (click)="deleteTypeInStorage(type)" icon="assets/icons/category.svg" type="button" [buttonText]="type.name"></app-rounded-button>
                   </div>                
               </ng-container>
             </div>

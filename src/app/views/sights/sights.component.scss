@@ -4,6 +4,24 @@
   right: 1.5rem;
   z-index: 999999;
 }
+
+.category-container{
+  overflow: scroll;
+  display: flex;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  flex-shrink: 0;
+  background: #FAFAFA;
+  flex-wrap: nowrap;
+  min-width: 100%;
+}
+.category-container__item{
+  flex-shrink: 0; 
+  position: relative;
+}
+.category-container::-webkit-scrollbar-track {
+  background: transparent; /* Прозрачный фон трека */
+}
 app-sight-type-carusel {
   z-index: 4;
 }
@@ -37,6 +55,7 @@ app-sight-type-carusel {
   background: #f8f8f8;
   padding-right: 1rem;
   display: flex;
+  flex-direction: column;
   width: 100%;
   font-family: var(--font-bold);
   justify-content: space-between;
