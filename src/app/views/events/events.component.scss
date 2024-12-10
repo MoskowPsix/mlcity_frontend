@@ -67,6 +67,7 @@ app-event-type-carusel {
   }
 }
 .category-container{
+  margin-top: -0.1rem;
   padding-left: 1rem;
   overflow: scroll;
   display: flex;
@@ -78,6 +79,7 @@ app-event-type-carusel {
 }
 .category-container__item{
   flex-shrink: 0; 
+  position: relative;
 }
 .category-container::-webkit-scrollbar-track {
   background: transparent; /* Прозрачный фон трека */
