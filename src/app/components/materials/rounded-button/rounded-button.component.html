@@ -1,10 +1,15 @@
 <button
   type = {{type}}
   [ngClass]="{'rounded-button': !outline, 'rounded-button_outline': outline}">
-
+  <div class="rounded-button__container">
     <img src="{{icon}}" alt="" class="rounded-button-img">
-    {{buttonText}}
+    <span>
+      {{buttonText}}
+    </span>
+
     <ng-content>
       
     </ng-content>
+  </div>
+
 </button>

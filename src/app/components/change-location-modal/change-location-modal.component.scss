@@ -1,0 +1,29 @@
+ion-modal{
+    --width: 20.438rem;
+    --height:8rem;
+    --border-radius: 10px;
+    padding-left: 0.95rem;
+    padding-right: 0.95rem;
+}
+.modal-content{
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.modal-content__header{
+    font-family: var(--font-light);
+    font-size: 24px;
+}
+.modal-content__city{
+    font-family: var(--font-bold);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+.buttons-container{
+    margin-top: 0.5rem;
+    display: flex;
+    width: 100%;
+    gap: 0.5rem;
+}
