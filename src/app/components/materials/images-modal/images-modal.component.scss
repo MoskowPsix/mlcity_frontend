@@ -41,8 +41,9 @@ swiper-container{
     max-height: 2rem;
 }
 .close-button-wrapper{
-    left: 0.5rem;
+    right: 0.5rem;
     position: absolute;
+    z-index: 1000;
     top: 1rem;
 }
 swiper-slide img{
