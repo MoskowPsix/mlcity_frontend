@@ -274,7 +274,7 @@ export class QueryBuilderService {
   buildQuerySightsPublicForAuthor() {
     this.queryParams = {
       page: this.paginationPublicSightsForAuthorCurrentPage.value,
-      limit: 8,
+      limit: 16,
     }
   }
 
