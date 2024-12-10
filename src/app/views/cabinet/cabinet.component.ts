@@ -32,13 +32,6 @@ export class CabinetComponent implements OnInit {
     this.user = this.userService.getUserFromLocalStorage()
     this.platformType = Capacitor.getPlatform()
     if (this.platformType == 'web') {
-      Device.getInfo().then((device: any) => {
-        console.log(device)
-        
-        if (device.appVersion) {
-          this.appVersion = device.appVersion
-        }
-      })
     }
   }
 
