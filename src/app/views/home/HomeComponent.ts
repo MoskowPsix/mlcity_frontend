@@ -34,6 +34,8 @@ import { FilterService } from 'src/app/services/filter.service'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { ISight } from 'src/app/models/sight'
 import { SightsService } from 'src/app/services/sights.service'
+import { SightTypeService } from 'src/app/services/sight-type.service'
+import { EventTypeService } from 'src/app/services/event-type.service'
 import { PlaceService } from 'src/app/services/place.service'
 import { IPlace } from 'src/app/models/place'
 import { NavigationEnd, Router } from '@angular/router'
@@ -47,6 +49,7 @@ import { LocationService } from 'src/app/services/location.service'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
 import { AuthService } from 'src/app/services/auth.service'
 import { UserPointService } from 'src/app/services/user-point.service'
+
 import { throttle } from 'lodash'
 
 @Component({
@@ -77,6 +80,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('calendulaWrapper') calendulaWrapper!: ElementRef
   host: string = environment.BACKEND_URL
   type: any
+  sightTypeService: SightTypeService = inject(SightTypeService)
+  eventTypeService: EventTypeService = inject(EventTypeService)
   port: string = environment.BACKEND_PORT
   renderSwitcher: boolean = false
   clustererOptions: ymaps.IClustererOptions = {
@@ -130,7 +135,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   userHaveCoords: boolean = false
   userPointService: UserPointService = inject(UserPointService)
   filterChangeSubscribe!: Subscription
-
+  currentTypesInMap: any[] = []
   stateType: string = 'events'
 
   sightTypeId: any
@@ -162,6 +167,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   sightsContentModal: ISight[] = []
   eventsContentModal: IEvent[] = []
   places: IPlace[] = []
+  allEventTypes: any[] = []
+  allSightTypes: any[] = []
   radiusTimeOut: any
   loadModal: boolean = false
   loadModalMore: boolean = false
@@ -748,6 +755,41 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges()
   }
 
+  deleteTypeInStorage(deleteType: any) {
+    let selectedEventTypes: any = this.filterService.getEventTypesFromlocalStorage()?.split(',')
+    let selectedSightTypes: any = this.filterService.getSightTypesFromlocalStorage()?.split(',')
+    if (this.stateType === 'events') {
+      selectedEventTypes = selectedEventTypes!.filter((type: any) => type != String(deleteType.id))
+      selectedEventTypes.forEach((type: any) => Number(type))
+      this.filterService.setEventTypesTolocalStorage(selectedEventTypes)
+    } else {
+      selectedSightTypes = selectedSightTypes!.filter((type: any) => type != String(deleteType.id))
+      selectedSightTypes.forEach((type: any) => Number(type))
+      this.filterService.setSightTypesTolocalStorage(selectedSightTypes)
+    }
+    this.filterService.changeFilter.next(true)
+  }
+
+  renderTypesInMap() {
+    let selectedEventTypes = this.filterService.getEventTypesFromlocalStorage()?.split(',')
+    let selectedSightTypes = this.filterService.getSightTypesFromlocalStorage()?.split(',')
+    let showTypes: any = []
+    if (this.stateType == 'sights') {
+      if (this.sightTypeService.types) {
+        showTypes = this.sightTypeService.types!.filter((type: any) => {
+          return selectedSightTypes!.includes(String(type.id))
+        })
+      }
+    } else {
+      if (this.eventTypeService.types) {
+        showTypes = this.eventTypeService.types!.filter((type: any) => {
+          return selectedEventTypes!.includes(String(type.id))
+        })
+      }
+    }
+    return showTypes
+  }
+
   setPlacemarks(collection: any, type: string) {
     collection.map((item: any) => {
       let time_event = Math.ceil(new Date(item.date_start).getTime() / 1000)
@@ -904,6 +946,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.mapService.geolocationLatitude.next(res.location.latitude)
                 this.mapService.geolocationLongitude.next(res.location.longitude)
                 this.mapService.setLastMapCoordsToLocalStorage(res.location.latitude, res.location.longitude)
+
                 // this.map.target.setCenter([
                 //   res.location.latitude,
                 //   res.location.longitude,
@@ -1055,6 +1098,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (this.filterService.locationLatitude && this.filterService.locationLongitude) {
           this.getEventsAndSights()
         }
+        this.currentTypesInMap = this.renderTypesInMap()
+
         this.loadingService.hideLoading()
       }
     })
@@ -1074,6 +1119,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.CirclePoint?.options.set('fillColor', color)
       this.CirclePoint?.options.set('strokeColor', color)
       this.setTypeState(value)
+      this.renderTypesInMap()
     })
     // window.addEventListener('scroll', this.nextPageModal, true)
   }

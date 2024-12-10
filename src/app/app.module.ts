@@ -67,7 +67,7 @@ import { OrganizationsCardComponent } from './components/organizations-card/orga
 import { environment } from '../environments/environment'
 import { AuthTokenInterceptor } from './auth-token.interceptor'
 import { UsersPreviewComponent } from './components/materials/users-preview/users-preview.component'
-
+import { MobileAndFormDataInterceptor } from './interceptor/mobileAndFormDataInterceptor'
 import { AuthGuard } from './guards/auth.guard'
 import { LoggedInAuthGuard } from './guards/logged-in-auth.guard'
 import { CheckAuthCanActiveGuard } from './guards/check-auth.can-active.guard'
@@ -300,6 +300,7 @@ registerLocaleData(localeRu, 'ru')
   providers: [
     { provide: LOCALE_ID, useValue: 'ru' },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: HTTP_INTERCEPTORS, useClass: MobileAndFormDataInterceptor, multi: true },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true },
     AuthService,

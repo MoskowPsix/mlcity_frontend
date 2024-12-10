@@ -41,12 +41,14 @@ export class CategoryButtonComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
         this.types.events = response.types
+        this.eventTypeService.types = response.types
       })
     this.sightTypeService
       .getTypes()
       .pipe(takeUntil(this.destroy$))
       .subscribe((response) => {
         this.types.sights = response.types
+        this.sightTypeService.types = response.types
         // this.loadingService.hideLoading()
       })
   }
@@ -72,6 +74,21 @@ export class CategoryButtonComponent implements OnInit {
   //     }
   //   }
   // }
+
+  clearAllCategories() {
+    this.selectedTypesId = []
+    this.currentTypes = []
+    switch (this.stateType) {
+      case 'events':
+        this.filterService.setEventTypesTolocalStorage([])
+        break
+      case 'sights':
+        this.filterService.setSightTypesTolocalStorage([])
+        break
+    }
+    this.setTypesToStore()
+    this.openModal = false
+  }
 
   openModalFnc() {
     let storageFilterId: any
@@ -126,17 +143,16 @@ export class CategoryButtonComponent implements OnInit {
   }
   closeModal() {
     this.openModal = false
+    this.setTypesToStore()
   }
   addCaategory(category: any) {
     this.currentTypes.push(category)
     this.selectedTypesId.push(category.id)
-    this.setTypesToStore()
   }
   deleteCaategory(index: any) {
     let categoryId = this.currentTypes[index].id
     remove(this.selectedTypesId, (id) => id === categoryId)
     this.currentTypes.splice(index, 1)
-    this.setTypesToStore()
   }
   ionViewDidLeave() {
     this.destroy$.next()
@@ -149,6 +165,21 @@ export class CategoryButtonComponent implements OnInit {
 
   ngOnInit() {
     this.getTypes()
+    this.filterService.changeFilter.pipe().subscribe(() => {
+      if (this.stateType == 'events') {
+        this.storageFilterIdCount = 0
+        this.filterService.getEventTypesFromlocalStorage() &&
+        this.filterService?.getEventTypesFromlocalStorage()!.split(',')[0] !== ''
+          ? (this.storageFilterIdCount = this.filterService?.getEventTypesFromlocalStorage()!.split(',').length)
+          : null
+      } else if (this.stateType == 'sights') {
+        this.storageFilterIdCount = 0
+        this.filterService?.getSightTypesFromlocalStorage()?.length &&
+        this.filterService?.getSightTypesFromlocalStorage()!.split(',')[0] !== ''
+          ? (this.storageFilterIdCount = this.filterService?.getSightTypesFromlocalStorage()!.split(',').length)
+          : null
+      }
+    })
     this.switchTypeService.currentType
       .pipe(
         takeUntil(this.destroy$),

@@ -811,6 +811,7 @@ export class SightCreateComponent implements OnInit, OnDestroy {
           console.log(err)
           this.toastService.showToast(err.error.message, 'danger')
           this.loadingService.hideLoading()
+          this.createSightForm.enable()
           return EMPTY
         }),
       )

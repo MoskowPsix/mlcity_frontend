@@ -5,6 +5,9 @@ const config: CapacitorConfig = {
   appName: 'Вокруг: События рядом',
   webDir: 'www',
   bundledWebRuntime: false,
+  server: {
+    url: 'https://dev.vokrug.city',
+  },
 }
 
 export default config

@@ -37,12 +37,22 @@
         <ion-progress-bar type="indeterminate" *ngIf="eventsLoading && sightsLoading && stateType !== 'sights'"></ion-progress-bar>
       </div>
     </div>
+
     <div  class="map-tools">
-        <div *ngIf="stateType === 'events'" class="calendar-container">
+        <div class="map-tools__category-grid">
+          <ng-container *ngFor="let type of renderTypesInMap()">
+            <app-rounded-button (click)="deleteTypeInStorage(type)" [outline]="true" icon="assets/icons/category.svg" type="button" [buttonText]="type.name"></app-rounded-button>
+
+          </ng-container>
+          
+        </div>  
+        <div class="map-tools_wrapper">
+          <div *ngIf="stateType === 'events'" class="calendar-container">
           <app-calendar-button style="max-height: 2.5rem;" (setDateEmit)="setDate($event)"></app-calendar-button>
+          </div>
+          <app-calendar-button style="opacity: 0; pointer-events: none;" *ngIf="stateType === 'sights'" ></app-calendar-button>
+          <div class="radius-container"><app-range-selection-button/></div>
         </div>
-        <app-calendar-button style="opacity: 0; pointer-events: none;" *ngIf="stateType === 'sights'" ></app-calendar-button>
-        <div class="radius-container"><app-range-selection-button/></div>
 
     </div>
 

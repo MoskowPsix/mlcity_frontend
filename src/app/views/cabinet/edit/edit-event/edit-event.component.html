@@ -33,7 +33,7 @@
                 <div class="category-button-grid">
                     <span class="not-found-span" *ngIf="previewCategory.length === 0">Не выбрано</span>
                     <ng-container *ngIf="event && event.types">
-                        <app-rounded-button style="pointer-events: none;"  *ngFor="let category of previewCategory" routerLink="/cabinet/events/create" icon="assets/icons/category.svg" type="button" buttonText="{{category.name}}"></app-rounded-button>
+                        <app-rounded-button style="pointer-events: none;"  *ngFor="let category of previewCategory"  icon="assets/icons/category.svg" type="button" buttonText="{{category.name}}"></app-rounded-button>
                     </ng-container>
                 </div>
 

@@ -221,8 +221,7 @@ export class OrganizationShowComponent implements OnInit {
         this.sight = res.sight
         this.visibilityButtonCreateEvent()
         this.loading = false
-        if (this.sight && this.sight!.files.length == 0 && this.sight.types) {
-          console.log(this.sight.types![0].ico)
+        if (this.sight && this.sight!.files.length == 0 && this.sight.types!.length) {
           this.avatarUrl = `${this.backendUrl}${this.sight.types![0].ico}`
           this.userPlug = true
         }

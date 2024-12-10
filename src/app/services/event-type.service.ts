@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment'
 })
 export class EventTypeService {
   constructor(private http: HttpClient) {}
-
+  public types!: any[]
   getTypes() {
     return this.http.get<any>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/event-types`,

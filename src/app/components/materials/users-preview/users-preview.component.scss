@@ -66,12 +66,20 @@ ion-toolbar{
 }
 .user-modal-header{
     display: flex;
-    margin-left: -2rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    width: 100%;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
+    justify-content: center;
     font-family: var(--font-bold);
+}
+.close-wrapper{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    padding: 0.3rem;
+    box-shadow: 4px 4px 8px 0px rgb(193 193 193 / 20%);
 }
 .spiner-container{
     display: flex;

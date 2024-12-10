@@ -21,6 +21,7 @@ export class TypesModalComponent implements OnInit {
   @Output() closeModalEmit: EventEmitter<any> = new EventEmitter()
   @Output() addCategories: EventEmitter<any> = new EventEmitter()
   @Output() deleteCategories: EventEmitter<any> = new EventEmitter()
+  @Output() clearAllCategoriesEmit: EventEmitter<any> = new EventEmitter()
   @Input() allTypes: any = []
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
   clickCategoryEmit = new EventEmitter()
@@ -53,6 +54,9 @@ export class TypesModalComponent implements OnInit {
   }
   addCategory(category: IEventType) {
     this.addCategories.emit(category)
+  }
+  clearAllCategories() {
+    this.clearAllCategoriesEmit.emit(true)
   }
   deleteCategory(category: IEventType, index: number) {
     this.deleteCategories.emit(index)
