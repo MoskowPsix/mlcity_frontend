@@ -172,6 +172,9 @@ export class QueryBuilderService {
       case 'organizationForFeed':
         this.buildQueryOrganizationForFeed()
         break
+      case 'buildQueryUsersFavorites':
+        this.buildQueryUsersFavorites()
+        break
       default:
         this.buildQueryDefault()
         break

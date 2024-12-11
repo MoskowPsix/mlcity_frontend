@@ -22,17 +22,17 @@ export class UsersPreviewComponent implements OnInit {
   openModal() {
     this.openModalEmit.emit()
   }
-  onIonInfinite(event:any){
-    
-      let trueEvent = event as InfiniteScrollCustomEvent
-      this.endScroll.emit()
-      trueEvent.target.complete()
+  onIonInfinite(event: any) {
+    let trueEvent = event as InfiniteScrollCustomEvent
+    this.endScroll.emit()
+
+    trueEvent.target.complete()
   }
   closeModal() {
     this.closeModalEmit.emit()
   }
   ngOnChanges(changes: SimpleChanges): void {
-    this.usersPreview = this.users.slice(0, 12)
+    this.usersPreview = this.users.slice(0, 8)
   }
   ngOnInit() {}
 }
