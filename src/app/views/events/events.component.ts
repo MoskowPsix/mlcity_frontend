@@ -154,6 +154,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   getEventsCity() {
+    console.log(this.eventsTapeService.wait)
     this.updateCoordinates().then(() => {
       if (this.eventsTapeService.nextPage && !this.eventsTapeService.wait) {
         this.eventsTapeService.wait = true
@@ -169,6 +170,7 @@ export class EventsComponent implements OnInit, OnDestroy {
             finalize(() => {
               if (this.eventsTapeService.eventsCity.length === 0) {
                 this.eventsTapeService.notFound = true
+                this.eventsTapeService.wait = false
               }
             }),
             catchError((error) => {

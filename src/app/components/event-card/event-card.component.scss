@@ -28,7 +28,7 @@ h4{
 
 .card {
   background-repeat: no-repeat;
-  border-radius: 10px 10px 0px 0px;
+  border-radius: 0px 0px 0px 0px;
   width: 20.5rem;
   height: 200px;
   background-size: cover;
@@ -119,8 +119,9 @@ h4{
   display: flex;
   gap: 0.5rem;
   padding-top: 0.5rem;
+  font-size: 1rem;
   padding-bottom: 1rem;
-  font-family: var(--font-bold);
+  font-family: var(--font-regular);
   align-items: center;
   padding-left: 0.4rem;
   margin-bottom: -0.5rem;
@@ -153,6 +154,7 @@ h4{
   display: -webkit-box; 
   -webkit-box-orient: vertical; 
   overflow: hidden; 
+  font-size: 0.85rem;
   -webkit-line-clamp: 1; 
   text-overflow: ellipsis; 
 
@@ -311,7 +313,7 @@ h4{
   width: 20.5rem;
   color: var(--font-color-dark);
   font-size:1rem;
-  font-family: var(--font-bold);
+  font-family: var(--font-regular);
   background: rgb(255 255 255);
   display: -webkit-box; /* Используется для создания блочного контекста */
   -webkit-box-orient: vertical; /* Устанавливает вертикальную ориентацию для многострочного текста */
