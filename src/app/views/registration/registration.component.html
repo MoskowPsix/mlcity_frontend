@@ -3,7 +3,7 @@
     <app-second-header>
       <app-back-button></app-back-button>
       <span class="header-title">
-        Авторизация
+        Регистрация
       </span>
       <div class="next-button-wrapper">
         <app-circle-button  style="opacity: 0;"icon=""></app-circle-button>
@@ -14,7 +14,6 @@
           <img class="login-form_logo_img" src="/assets/icons/favicon.png" alt="Vokrug">
       </ion-col>
       <ion-col class="login-form_inputs">
-        <span class="login-form_inputs_label">Регистрация</span>
         <div class="login-form_inputs_container">
           <app-standart-input [errorMessage]="registartionInvalid.name.message" (changeInput)="clearErrors()" [invalid]="registartionInvalid.name.status"  [label]="'Имя'" [control] = "registerForm.get('name')"></app-standart-input>
           <app-standart-input [errorMessage]="registartionInvalid.email.message" (changeInput)="clearErrors()" [invalid]="registartionInvalid.email.status"  [label]="'E-mail'" [control] = "registerForm.get('email')"></app-standart-input>

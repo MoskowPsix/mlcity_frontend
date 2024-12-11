@@ -61,7 +61,7 @@
   <app-second-header>
     <app-back-button></app-back-button>
     <span class="header-title">
-      Авторизация
+      Вход
     </span>
     <div class="next-button-wrapper">
       <app-circle-button  style="opacity: 0;"icon=""></app-circle-button>
@@ -72,7 +72,6 @@
         <img class="login-form_logo_img" src="/assets/icons/favicon.png" alt="Vokrug">
     </ion-col>
     <ion-col class="login-form_inputs">
-      <span class="login-form_inputs_label">Вход</span>
       <div class="login-form_inputs_container">
         <app-standart-input (changeInput)="clearErrors()" [invalid]="loginInvalid.name.status" [errorMessage]="loginInvalid.name.message" [label]="'E-mail'" [control] = "loginForm.get('name')"></app-standart-input>
         <app-standart-input (changeInput)="clearErrors()" [invalid]="loginInvalid.password.status" [errorMessage]="loginInvalid.password.message" [openPassword]="true" type="password"  [label]="'Пароль'" [control] = "loginForm.get('password')"></app-standart-input>
