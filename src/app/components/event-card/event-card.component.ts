@@ -520,7 +520,6 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.formatedStartDate = this.datePipe.transform(this.event.date_start, 'dd-MMM')
 
     this.formatedEndDate = this.datePipe.transform(this.event.date_end, 'dd-MMM')
-
     this.userAuth = this.authService.getAuthState()
     this.findPrice()
     this.slugName = this.helpers.translit(this.event.name)

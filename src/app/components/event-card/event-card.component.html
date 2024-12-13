@@ -37,7 +37,7 @@
                    <div *ngIf="minPrice === maxPrice && minPrice === 0" class="price">
                       Бесплатно
                    </div>
-              </div>
+                </div>
 
                 <div class="info-footer">
                     <div class="info-text-container" *ngIf="formatedStartDate || formatedEndDate">
@@ -69,6 +69,7 @@
                 </div>
                 {{usersCount}}
               </div>
+
             </div>
           </div>
           </ng-template>
@@ -86,7 +87,7 @@
           <div class="status" [ngStyle]="{'background-color': getLastStatusColor()}"></div>
         </div>
 
-        <div *ngIf=" event.files.length > 0 && event.files[0].file_types[0].name !== 'video' || event.files.length == 0 " (click)="eventNavigation()" class="card">
+        <div *ngIf=" event.files.length > 0 && event.files[0].file_types[0].name !== 'video' || event.files.length === 0 " (click)="eventNavigation()" class="card">
               <div class="info-wrapper">
                   <div class="info-header">
                      <div *ngIf="minPrice !== maxPrice" class="price">
