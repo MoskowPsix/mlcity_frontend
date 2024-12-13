@@ -26,6 +26,7 @@ export class ContactsComponent {
     private loadingService: LoadingService,
   ) {}
   contactForm!: FormGroup;
+  userHaveEmailAndEmail:boolean = true
 
   onSubmit() {
     if (this.contactForm.valid) {
@@ -65,10 +66,16 @@ export class ContactsComponent {
 
   ionViewWillEnter(){
     this.userService.getUser().subscribe((res:any)=>{
-      this.contactForm.patchValue({
-        email: res.email,
-        name: res.name,
-      })
+      if(res.name && res.email){
+        this.userHaveEmailAndEmail = true
+        this.contactForm.patchValue({
+          email: res.email,
+          name: res.name,
+        })
+      } else{
+        this.userHaveEmailAndEmail = false
+      }
+     
     })
   }
 

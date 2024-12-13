@@ -12,8 +12,13 @@
           <div class="form-header">
             Написать в тех. поддержку
           </div>
-         
+          <div *ngIf="!userHaveEmailAndEmail" class="input-container">
+            <app-standart-input placeholder="Введите вашу почту" style="width: 100%;" [control]="contactForm.get('email')"></app-standart-input>
+            <app-standart-input placeholder="Как к вам обращатся" style="width: 100%;" [control]="contactForm.get('name')"></app-standart-input>
+          </div>
+          
           <div class="text-area-container">
+ 
             <textarea
             formControlName="text"  
             class="text-area-container__item"
