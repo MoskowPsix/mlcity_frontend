@@ -30,7 +30,7 @@ export const privateRoutes: Routes = [
   {
     path: 'cabinet/organizations/create',
     component: OrganizationCreateComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, EmailConfirmGuard],
   },
   // children: [
   {
@@ -108,22 +108,22 @@ export const privateRoutes: Routes = [
   {
     path: 'cabinet/events/create',
     component: EventCreateComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, EmailConfirmGuard],
   },
   {
     path: 'cabinet/sights/edit/:id',
     component: EditSightComponent,
-    canActivate: [AuthGuard, checkEditForAuthorGuard],
+    canActivate: [AuthGuard, checkEditForAuthorGuard, EmailConfirmGuard],
   },
   {
     path: 'cabinet/events/edit/:id',
     component: EditEventComponent,
-    canActivate: [AuthGuard, checkEditForAuthorGuard],
+    canActivate: [AuthGuard, checkEditForAuthorGuard, EmailConfirmGuard],
   },
   {
     path: 'cabinet/sights',
     component: MySightsComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, EmailConfirmGuard],
     children: [
       // {
       //   path: 'cabinet/sights/:id',
@@ -147,7 +147,7 @@ export const privateRoutes: Routes = [
   {
     path: 'cabinet/sights/create',
     component: SightCreateComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, EmailConfirmGuard],
   },
   // ]
   // },
