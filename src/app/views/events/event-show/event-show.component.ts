@@ -201,7 +201,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
       if (this.usersInFavorite.length > 1) {
         this.nextPageSpiner = true
       }
-      console.log(this.queryBuilderService.paginationUsersFavoritesCurrentPage.value)
       this.eventsService
         .getLikedUsersById(String(this.eventId), this.queryBuilderService.queryBuilder('buildQueryUsersFavorites'))
         .pipe(
@@ -213,7 +212,6 @@ export class EventShowComponent implements OnInit, OnDestroy {
           this.usersInFavorite.push(...res.events.data)
           if (res.events.next_cursor) {
             this.queryBuilderService.paginationUsersFavoritesCurrentPage.next(res.events.next_cursor)
-
             this.nextPageFavoritesUser = true
           } else {
             this.nextPageFavoritesUser = false

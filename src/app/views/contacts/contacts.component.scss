@@ -1,6 +1,5 @@
 .main-wrapper {
   text-align: center;
-  background-color: #fff;
   height: 100vh;
 }
 
@@ -10,7 +9,16 @@
   font-size: clamp(2.625rem, 2.125rem + 2.5vw, 4rem);
   font-family: 'Montserrat-Medium';
   margin-bottom: clamp(4rem, 5.091rem + -5.45vw, 1rem);
+
 }
+
+.header-container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-family: var(--font-semiBold);
+}
+
 .main-content-wrapper {
   font-family: 'Montserrat-Medium';
   margin-top: 10rem;
@@ -142,4 +150,75 @@
     margin-top: 1.4rem; /* 2rem - 30% */
     max-height: 21px; /* 30px - 30% */
   }
+}
+
+.main-content{
+    height: 100vh;
+    padding-top: 4rem;
+}
+.main-content__form{
+  background: #ffffff;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 328px;
+  border-radius: 10px;
+}
+.input-container{
+  padding-left: 1rem;  
+  padding-right: 1rem;  
+  padding-bottom: 1rem;
+  width: 100%;
+}
+
+ion-select{
+  font-size: 0.75rem;
+  font-family: var(--font-regular);
+}
+ion-label {
+  font-size: 0.75rem;
+  font-family: var(--font-regular);
+}
+.form-footer{
+  width: 100%;
+}
+.button-container{
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  padding: 1rem;
+}
+.text-area-container{
+  background-color: #fff;
+  justify-content: center;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 100%;  
+}
+.form-description{
+  background-color: #fff;
+}
+.text-area-container__item{
+  width: 100%;
+  border-radius: 5px;
+  padding: 0.85rem;
+  font-size: 0.75rem;
+  height: 145px;
+  font-family: var(--font-regular);
+  outline: none;
+  border: 1px solid #4c586160;
+}
+.text-area-container__item::placeholder{
+  color: #4c586160;
+}
+.form-header{
+  width: 100%;
+  font-family: var(--font-semiBold);
+  font-size: 0.85rem;
+  padding: 1rem;
 }

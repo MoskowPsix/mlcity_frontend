@@ -47,12 +47,15 @@ export class OrganizationService {
     )
   }
 
-  getUserOrganizations() {
+  getUserOrganizations(params: any) {
     // организации пользователя
     let user: any = this.userService.getUser()
     let userId = user.source.value.id
     return this.http.get<IOrganization[]>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/${userId}/organizations`,
+      {
+        params: { ...params },
+      },
     )
   }
 }

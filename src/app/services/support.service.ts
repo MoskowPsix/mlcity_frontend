@@ -21,10 +21,8 @@ export class SupportService {
       email: param.email,
       text: param.text,
       name: param.name,
+      type: param.type,
     }
-    return this.http.post<any>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/feedback/user`,
-      params,
-    )
+    return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/feedback/user`, params)
   }
 }
