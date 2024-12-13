@@ -34,6 +34,31 @@
     opacity: 35%;
     text-decoration: none;
 }
+
+.agreement-link__about-link{
+    padding-top: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    color: var(--blue-color);
+    font-size: 0.8rem;
+    opacity: 100%;
+    font-family: var(--font-regular);
+    text-decoration: none;
+}
+
+.login-form_footer_registration_link{
+    padding-top: 0.1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    color: var(--blue-color);
+    font-size: 0.8rem;
+    opacity: 100%;
+    font-family: var(--font-regular);
+    text-decoration: none;
+}
+
 .exit-button-wrapper{
     padding-top: 1.813rem;
 }

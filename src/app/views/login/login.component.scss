@@ -49,6 +49,8 @@ ion-content {
     padding-top:0.4rem;
   }
 
+  
+
   .login-form_footer{
 
     padding-top: 2.5rem;
@@ -180,6 +182,21 @@ ion-content {
   --padding-left: 1rem;
   border-radius: 3px;
   border: 1px solid #e0e0e0;
+}
+.login-form_footer_about_link{
+  display: flex;
+  margin-top: 3rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size:0.75rem;
+  font-family: var(--font-regular);
+  color: var(--blue-color);
+  cursor: pointer;
+}
+.login-form_footer_about_link__wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 .recovery-button{
   width: 90%;
