@@ -148,8 +148,14 @@ h4{
   background-repeat: no-repeat;
   background-position: center;
   height: 1.8rem;
-  background-color: #dddddd;
+  background-color: #DCE9FF;
+  img{
+      filter: brightness(0) saturate(100%) invert(42%) sepia(46%) saturate(3416%) hue-rotate(205deg) brightness(101%) contrast(101%);
+      object-fit: contain;
+      padding: 0.2rem;
+  }
 }
+
 .organization-name-text{
   display: -webkit-box; 
   -webkit-box-orient: vertical; 

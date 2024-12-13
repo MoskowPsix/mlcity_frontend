@@ -67,8 +67,16 @@ export class FilterService {
   getEventsCount() {
     return this.eventsCount.value
   }
+
   getSightsCount() {
     return this.sightsCount.value
+  }
+
+  getAboutMobileStateFromLocalStorage() {
+    return Boolean(localStorage.getItem('aboutMobileState'))
+  }
+  setAboutMobileStateFromLocalStorage(value: boolean) {
+    localStorage.setItem('aboutMobileState', String(value))
   }
 
   setLocationTolocalStorage(locationId: any = this.locationId.value) {

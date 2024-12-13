@@ -1,17 +1,17 @@
 .main-conteiner_collapsed {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 15;
     overflow: hidden;
     font-size: 0.75rem;
-    font-size: 0.85rem;
+    font-size: 1rem;
     font-family: var(--font-light);
     color: var(--gray);
     line-height: 1.5;
 }
 
 .main-conteiner {
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-family: var(--font-light);
   color: var(--gray);
   line-height: 1.5;
@@ -20,7 +20,7 @@
 .about-button {
   font-family: var(--font-regular);
   line-height: 1.5;
-  font-size: 0.75rem;
+  font-size: 1rem;
   margin-right: -1rem;
   background: none;
   color: #0066ff;

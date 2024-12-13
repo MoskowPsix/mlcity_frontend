@@ -20,17 +20,21 @@
 .user-section-image{
     width: 70px;
     height: 70px;
+    
     border-radius: 50%;
     object-fit: cover;
     background-position: center center;        
     background-size: cover;   
     display: flex;
-    background-color: rgb(233, 233, 233);
+    background-color: #DCE9FF;
     box-shadow: 0px 4px 8px 0px rgba(34, 60, 80, 0.2);
     justify-content: center;
     align-items: center;
     font-size: 0.65rem;
     color: rgb(107, 107, 107);   
+    img{
+        filter: brightness(0) saturate(100%) invert(42%) sepia(46%) saturate(3416%) hue-rotate(205deg) brightness(101%) contrast(101%);
+    }
 }
 .user-no-photo_image{
     width: 100%;

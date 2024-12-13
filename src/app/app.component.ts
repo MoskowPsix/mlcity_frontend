@@ -1,5 +1,5 @@
 import { FilterService } from './services/filter.service'
-import { Component, HostListener, NgZone, OnInit } from '@angular/core'
+import { Component, ElementRef, HostListener, NgZone, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { App, URLOpenListenerEvent } from '@capacitor/app'
 import { environment } from 'src/environments/environment'
@@ -13,6 +13,7 @@ import { ScreenOrientation } from '@capacitor/screen-orientation'
 import { UserService } from './services/user.service'
 import { AuthService } from './services/auth.service'
 import { TokenService } from './services/token.service'
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -38,6 +39,41 @@ export class AppComponent implements OnInit {
   mobile: boolean = false
   iframeUrl: any
   platformType: string = Capacitor.getPlatform()
+  aboutModal: boolean = false
+  swiperIndex: number = 1
+  @ViewChild('swiper') swiper!: any
+
+  swiperItemsArray: any[] = [
+    {
+      image: '/assets/images/sliderImag1.jpg',
+      header: 'Смотри что происходит ВОКРУГ тебя!',
+      description: 'Используй карту! Быстро находи что происходит здесь и сейчас!',
+      background: 'linear-gradient(180deg, rgba(157,124,228,1) 0%, rgba(65,41,115,1) 100%);',
+    },
+    {
+      image: '/assets/images/sliderImag2.jpg',
+      header: 'Узнай кто придет вместе с тобой!',
+      description: 'Используй карту! Быстро находи что происходит здесь и сейчас!',
+      background: 'linear-gradient(180deg, rgba(78,230,103,1) 0%, rgba(12,112,28,1) 100%);',
+    },
+    {
+      image: '/assets/images/sliderImag3.jpg',
+      header: 'Создай свое событие!',
+      description: 'ВОКРУГ тишина? Заяви о себе!',
+      background: 'linear-gradient(180deg, rgba(32,101,224,1) 0%, rgba(28,57,109,1) 100%);',
+    },
+  ]
+  closeAboutModal() {
+    this.aboutModal = false
+    this.filterService.setAboutMobileStateFromLocalStorage(true)
+  }
+
+  aboutModalslideChange(event: any) {
+    this.swiperIndex = event.detail[0].activeIndex + 1
+  }
+  aboutModalNextslide() {
+    this.swiper.nativeElement.swiper.slideNext()
+  }
 
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
@@ -66,6 +102,12 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.mobileOrNote()
+    if (this.filterService.getAboutMobileStateFromLocalStorage()) {
+      this.aboutModal = false
+    } else {
+      this.aboutModal = true
+    }
+
     this.filterService.setEventTypesTolocalStorage([])
     this.filterService.setSightTypesTolocalStorage([])
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {

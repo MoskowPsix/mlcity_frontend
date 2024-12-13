@@ -1,4 +1,49 @@
 <ion-app>
+  <div *ngIf="aboutModal" class="start-mobile-slider">
+      <span (click)="closeAboutModal()" class="skip-modal-text">Пропустить</span>
+      <swiper-container
+      #swiper
+      class="swiper-container"
+      [pagination]="false"
+      [grabCursor]="true"
+      [slidesPerView]="1"
+      [centeredSlides]="true"
+      [followFinger]="false"
+      [initialSlide]="0"
+      (swiperslidechange)="aboutModalslideChange($event)">
+
+      <ng-container *ngFor ="let slide of swiperItemsArray">
+        <swiper-slide style="background: {{slide.background}};">
+          <ng-container>
+            <div class="slide-content">
+              <div class="slide-header">
+                {{slide.header}}
+               </div>
+               <div class="slide-description">
+                {{slide.description}}
+               </div>
+               <img class="slide-image" [src]="slide.image" alt="">
+            </div>
+          </ng-container>
+        </swiper-slide>
+      </ng-container>
+    </swiper-container>
+
+    <div class="button-container">
+      <div class="swiper-pagination-circles-container">
+        <div *ngFor="let link of swiperItemsArray; let i = index">
+          <div class="swiper-pagination-circle" [class.active]="i === swiperIndex - 1"></div>
+        </div>
+      </div>
+      <button (click)="aboutModalNextslide()" *ngIf="swiperIndex !== swiperItemsArray.length" class="button-container-item">
+        Далее
+      </button>
+      <button *ngIf="swiperIndex === swiperItemsArray.length" (click)="closeAboutModal()" class="button-container-item_last">
+        Начать
+      </button>
+      <app-standart-button></app-standart-button>
+    </div>
+  </div>
   <!-- <ion-split-pane when="(min-width: 4000px)" content-id="main-content">
     <ion-menu side="start" content-id="main-content">
       <app-sidebar></app-sidebar>
@@ -32,7 +77,7 @@
       <app-update-version-modal></app-update-version-modal>
         <ion-router-outlet></ion-router-outlet>
       <ion-footer *ngIf="url !== '/cabinet/events/create' && url !== '/cabinet/sights/create'
-       && url!=='/cabinet/sights/edit' && url!== '/cabinet/events/edit' && url !== '/cabinet/location' && url !=='/events/number' " >
+       && url!=='/cabinet/sights/edit' && url!== '/cabinet/events/edit' && url !== '/cabinet/location' && url !=='/events/number' && !aboutModal" >
         <ion-toolbar>
           <app-footer></app-footer>
         </ion-toolbar>

@@ -4,7 +4,9 @@
                   <div style="background-image: url('{{event.organization.sight.files[0].link}}');" class="card-wrapper__organization-name__avatar"></div>
         </ng-container>
         <ng-container *ngIf="!event.organization.files && event.organization.sight.types && event.organization.sight.types[0] && event.organization.sight.types[0].ico">
-                  <div  style="background-image: url('{{this.fileService.checkLinkString(event.organization.sight.types[0].ico)}}');" class="card-wrapper__organization-name__avatar_icon"></div>
+                  <div  class="card-wrapper__organization-name__avatar_icon">
+                    <img [src]="this.fileService.checkLinkString(event.organization.sight.types[0].ico)" alt="">
+                  </div>
         </ng-container>
         <ng-container *ngIf="!event.organization.files && !event.organization.sight.types">
                   <div style="background-image: url('/assets/icons/user.svg');" class="card-wrapper__organization-name__avatar_icon"></div>
