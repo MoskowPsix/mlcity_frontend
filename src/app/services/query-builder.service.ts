@@ -41,6 +41,8 @@ export class QueryBuilderService {
   public paginationPublicSightsRadiusPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
   public paginationPublicEventsRadiusPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
 
+  public paginationUserOrganizationsPage: BehaviorSubject<string> = new BehaviorSubject<string>('')
+
   // public paginationPublicEventsGeolocationCurrentPage!: BehaviorSubject<string>
   //public paginationPublicEventsGeolocationTotalPages: BehaviorSubject<number> = new BehaviorSubject<number>(1)
 
@@ -175,6 +177,9 @@ export class QueryBuilderService {
       case 'buildQueryUsersFavorites':
         this.buildQueryUsersFavorites()
         break
+      case 'buildUserOrganizations':
+        this.buildUserOrganizations()
+        break
       default:
         this.buildQueryDefault()
         break
@@ -182,6 +187,12 @@ export class QueryBuilderService {
     return this.queryParams
   }
 
+  buildUserOrganizations() {
+    this.queryParams = {
+      page: this.paginationUserOrganizationsPage.value,
+      limit: 20,
+    }
+  }
   buildQueryOrganizationForFeed() {
     this.queryParams = {
       locationId: this.locationId,

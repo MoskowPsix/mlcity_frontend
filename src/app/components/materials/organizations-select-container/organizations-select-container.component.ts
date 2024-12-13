@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core'
+import { InfiniteScrollCustomEvent } from '@ionic/angular'
 import { IOrganization } from 'src/app/models/organization'
 
 @Component({
@@ -8,22 +9,30 @@ import { IOrganization } from 'src/app/models/organization'
 })
 export class OrganizationsSelectContainerComponent implements OnInit {
   constructor() {}
-  openModal: boolean = true
+
   @Input() cards!: IOrganization[]
   @Input() selectedName: any = ''
-  @Input() closeModalValue!: boolean
+  @Input() spiner: boolean = false
+  @Output() endScroll: EventEmitter<any> = new EventEmitter()
+  @Input() modalValue!: boolean
+  @Output() openModal: EventEmitter<any> = new EventEmitter()
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() selectOrganization: EventEmitter<IOrganization> = new EventEmitter<IOrganization>()
   emitOrganization(organization: any) {
     this.selectOrganization.emit(organization)
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    this.closeModal()
-  }
+  ngOnChanges(changes: SimpleChanges): void {}
   openOrganiztionsModal() {
-    this.openModal = true
+    this.openModal.emit()
   }
-  closeModal() {
-    this.openModal = false
+  closeModalEmit() {
+    this.closeModal.emit()
+  }
+  onIonInfinite(event: any) {
+    let trueEvent = event as InfiniteScrollCustomEvent
+    this.endScroll.emit()
+
+    trueEvent.target.complete()
   }
   ngOnInit() {}
 }

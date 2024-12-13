@@ -6,7 +6,7 @@
   </div>
 </ng-container>
 
-<ion-modal (didDismiss)="closeModal()"  [isOpen]="openModal">
+<ion-modal (didDismiss)="closeModalEmit()"  [isOpen]="modalValue">
   <ng-template> 
     <ion-toolbar class="toolbar"  mode="ios">
       <span class="modal-title">Организатор</span>
@@ -21,6 +21,14 @@
         </ng-template>
     
       </div>
+        <ng-container >
+          <ion-infinite-scroll *ngIf="cards.length > 0" (ionInfinite)="onIonInfinite($event)">
+            <ion-infinite-scroll-content ></ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </ng-container>       
+        <div class="spiner-container">
+          <ion-spinner *ngIf="spiner" name="dots"></ion-spinner>
+        </div>
     </ion-content>
   </ng-template>
 

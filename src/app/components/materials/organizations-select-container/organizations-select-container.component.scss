@@ -23,6 +23,10 @@ ion-content{
     padding-top: 0.5rem;
     padding-bottom: 1rem;
 }
+.spiner-container{
+    display: flex;
+    justify-content: center;
+}
 .toolbar{
     --background: #FAFBFF;
 }

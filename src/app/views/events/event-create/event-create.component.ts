@@ -13,7 +13,7 @@ import {
   inject,
 } from '@angular/core'
 import { trigger, style, animate, transition } from '@angular/animations'
-import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry } from 'rxjs'
+import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry, Observable, finalize } from 'rxjs'
 import { FormArray, FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms'
 import { UserService } from 'src/app/services/user.service'
 import { MaskitoOptions } from '@maskito/core'
@@ -30,6 +30,7 @@ import { MessagesLoading } from 'src/app/enums/messages-loading'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { Statuses } from 'src/app/enums/statuses'
 import { dateRangeValidator } from 'src/app/validators/date-range.validators'
+import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { fileTypeValidator } from 'src/app/validators/file-type.validators'
 import { EventsService } from 'src/app/services/events.service'
 import { MessagesEvents } from 'src/app/enums/messages-events'
@@ -72,10 +73,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   mobile: boolean = false
   host: string = environment.BACKEND_URL
   port: string = environment.BACKEND_PORT
+  queryBuilderService: QueryBuilderService = inject(QueryBuilderService)
   currentTime = new Date()
   organizations: IOrganization[] = []
   vkFiles: any[] = []
   allFiles: any[] = []
+  organizationModalValue: boolean = false
   @ViewChild('eventName') eventNameElement!: any
   @ViewChild('eventDescription') eventDescriptionElement!: any
 
@@ -104,6 +107,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   openModalImgs: boolean = false
   openModalPostValue: boolean = false
   openModalPostCount: number = 0
+  organizationSpiner: boolean = false
   openModalGroupValue: boolean = false
   vkGroups: any
   //Создать переменную для постов со страницы
@@ -119,6 +123,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   typeSelected: number | null = null
   currentType: any = []
   dateTomorrow = new Date()
+
+  nextPageUserOrganizations: boolean = true
 
   statuses: IStatus[] = []
   statusesLoaded: boolean = false
@@ -190,6 +196,14 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     if (this.stepCurrency == 3 && this.createEventForm.value.places.length == 0) {
       this.addPlace()
     }
+  }
+
+  openOrganizationModal() {
+    this.organizationModalValue = true
+  }
+
+  closeOrganizationModal() {
+    this.organizationModalValue = false
   }
 
   //Клик по нкопке назад
@@ -993,17 +1007,51 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.destroy$.next()
     this.destroy$.complete()
     this.stepCurrency = 1
+    this.nextPageUserOrganizations = true
     console.log(this.stepCurrency)
     this.resetUploadInfo()
     this.createEventForm.reset()
   }
+  generateTapeRequest(
+    serviceFunction: () => Observable<any>,
+    queryBuilder?: string,
+    resoursesContentName?: any,
+    queryBuilderPageName?: string,
+  ) {
+    serviceFunction()
+      .pipe()
+      .subscribe((res: any) => {})
+  }
+  //получаем все организации
+  getUserOrganization() {
+    if (this.nextPageUserOrganizations) {
+      this.organizations.length > 1 ? (this.organizationSpiner = true) : false
+      this.organizationService
+        .getUserOrganizations(this.queryBuilderService.queryBuilder('buildUserOrganizations'))
+        .pipe(
+          takeUntil(this.destroy$),
+          finalize(() => {
+            this.organizationSpiner = false
+          }),
+        )
+        .subscribe((res: any) => {
+          console.log(res.organizations.next_cursor)
+          this.organizations.push(...res.organizations.data)
+          res.organizations.next_cursor
+            ? (this.nextPageUserOrganizations = true)
+            : (this.nextPageUserOrganizations = false)
+
+          if (res.organizations.next_cursor) {
+            this.queryBuilderService.paginationUserOrganizationsPage.next(res.organizations.next_cursor)
+            this.nextPageUserOrganizations = true
+          } else {
+            this.nextPageUserOrganizations = false
+          }
+        })
+    }
+  }
   ngOnInit() {
-    this.organizationService
-      .getUserOrganizations()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((res: any) => {
-        this.organizations = res.organizations.data
-      })
+    this.getUserOrganization()
     this.checkHasUserOrganizations()
     this.mobileOrNote()
     let locationId: any
