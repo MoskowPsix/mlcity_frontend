@@ -229,6 +229,8 @@ export class QueryBuilderService {
   }
   buildQueryEventsForTape() {
     this.queryParams = {
+      userId: this.userID,
+      likedUser: true,
       statuses: [Statuses.publish].join(','),
       statusLast: true,
       latitude: this.latitude,
