@@ -13,9 +13,12 @@
     color: #fff;
     font-size: 1.25rem;
     display: flex;
+    align-items: center;
+    font-family: var(--font-bold);
     width: 100%;
     justify-content: space-between;
   }
+
 .header-plug_xxl{
     padding-left: 1rem;
     padding-right: 1rem;
