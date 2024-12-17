@@ -16,11 +16,12 @@
                    
             </app-second-header>
             
-            <div class="header-bottom-container">
+            <div [ngClass]="{'header-bottom-container': this.eventsTapeService.eventsLastScrollPositionForTape <= 80, 'header-bottom-container_active': this.eventsTapeService.eventsLastScrollPositionForTape > 80  }">
               <div class="header-bottom-container_city" (click)="openCitySearch()">
                     {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : '...' }}
               </div>
               <div class="calendar-container">
+              
                 <app-calendar-button (setDateEmit)="setDate($event)"></app-calendar-button>
               </div>
             </div>
