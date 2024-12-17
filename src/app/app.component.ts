@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
     {
       image: '/assets/images/sliderImag2.jpg',
       header: 'Узнай кто придет вместе с тобой!',
-      description: 'Используй карту! Быстро находи что происходит здесь и сейчас!',
+      description: 'Смотри сколько людей собирается посетить твое событие!',
       background: 'linear-gradient(180deg, rgba(78,230,103,1) 0%, rgba(12,112,28,1) 100%);',
     },
     {
