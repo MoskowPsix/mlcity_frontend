@@ -13,6 +13,7 @@ import { ScreenOrientation } from '@capacitor/screen-orientation'
 import { UserService } from './services/user.service'
 import { AuthService } from './services/auth.service'
 import { TokenService } from './services/token.service'
+import { WebSocketService } from './services/web-socket.service'
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ import { TokenService } from './services/token.service'
 export class AppComponent implements OnInit {
   private readonly destroy$ = new Subject<void>()
   constructor(
+    private wbService: WebSocketService,
     private router: Router,
     private zone: NgZone,
     private sanitizer: DomSanitizer,
@@ -35,6 +37,7 @@ export class AppComponent implements OnInit {
     ScreenOrientation.lock({ orientation: 'portrait' })
     this.initializeApp()
   }
+
   url: any = ''
   mobile: boolean = false
   iframeUrl: any
@@ -101,6 +104,7 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.wbService.initWS()
     this.mobileOrNote()
     if (this.filterService.getAboutMobileStateFromLocalStorage()) {
       this.aboutModal = false
