@@ -47,6 +47,7 @@ import { SwitchTypeService } from 'src/app/services/switch-type.service'
 import { CalendarComponent } from 'src/app/components/calendar/calendar.component'
 import { IonContent } from '@ionic/angular'
 import { EventsTapeService } from 'src/app/services/events-tape.service'
+import moment from 'moment'
 register()
 
 @Component({
@@ -62,14 +63,18 @@ export class EventsComponent implements OnInit, OnDestroy {
   @ViewChild('ContentCol') ContentCol!: ElementRef
   @ViewChild('headerWrapper') headerWrapper!: ElementRef
   @ViewChild(IonContent) ionContent!: IonContent
+  @ViewChild('hiddenCalendar') hiddenButton!: ElementRef<HTMLButtonElement>
   city: string = ''
   currentRadius!: number
   segment: string = 'eventsCitySegment'
   isFirstNavigation: any = new BehaviorSubject<boolean>(true)
   date: any
+  selectedDateItem: any = {}
+  selectedDateModalValue: boolean = false
   spiner: boolean = false
   eventsGeolocation: IEvent[] = []
   headerClassName: string = 'header'
+  openCalendarState: boolean = false
   wait: boolean = true
   scrollStart: any
   switchTypeService: SwitchTypeService = inject(SwitchTypeService)
@@ -347,6 +352,54 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.filterService.setEventTypesTolocalStorage(selectedEventTypes)
     this.filterService.changeFilter.next(true)
   }
+  selectDateItem(event: any) {
+    if (event.value && event.value != 'Выбрать') {
+      this.selectedDateItem = event
+    } else {
+      console.log('открыть календарь')
+      this.openCalendarState = true
+    }
+    let dateEvenet = {
+      dateStart: '',
+      dateEnd: '',
+    }
+
+    
+    switch (event.value) {
+      case 'Сегодня':
+        dateEvenet.dateStart = moment().format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      case 'Завтра':
+        dateEvenet.dateStart = moment().add(1, 'days').format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().add(1, 'days').format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      case 'Выходные':
+        dateEvenet.dateStart = moment().day(6).format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().day(7).format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      default:
+        null
+        break
+    }
+
+    this.selectedDateModalValue = false
+  }
+  openSelectDate() {
+    this.selectedDateModalValue = true
+  }
+  closeSelectDate() {
+    this.selectedDateModalValue = false
+  }
+  closeCalendar() {
+    this.openCalendarState = false
+  }
+  openCalendar(event: any) {
+    event.open()
+  }
 
   ngAfterViewInit() {}
   ngOnInit() {}
@@ -415,6 +468,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.destroy$.next()
     this.destroy$.complete()
   }
+  
   setDate(event: any) {
     this.filterService.setStartDateTolocalStorage(event.dateStart.toString())
     this.filterService.setEndDateTolocalStorage(event.dateEnd.toString())

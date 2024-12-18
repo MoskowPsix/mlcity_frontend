@@ -22,7 +22,7 @@
 </div> -->
 <div class="calendar-button">
 </div>
-  <div [ngClass]="{'rounded-calendar-button':theme === '', 'calendar-light':theme === 'light'}" *ngIf="dateStart && dateEnd; else noDates" (click)="picker.open()" >
+  <div [ngClass]="{'rounded-calendar-button':theme === '', 'calendar-light':theme === 'light'}" *ngIf="dateStart && dateEnd; else noDates" >
     <img class="calendar-icon" src="assets/icons/calendar.svg" alt="">
     <ng-container *ngIf="theme !== 'light'">
       <span *ngIf="dateStart">{{dateStart|date:'d MMM'}}</span> - <span *ngIf="dateEnd !== 'Invalid date'">{{dateEnd| date:'d MMM'}}</span>
@@ -34,7 +34,7 @@
   </div>
 
   <ng-template #noDates>
-    <app-rounded-button (click)="picker.open()" icon="assets/icons/calendar.svg"></app-rounded-button>
+    <app-rounded-button icon="assets/icons/calendar.svg"></app-rounded-button>
   </ng-template>
 
    <div style="opacity: 0;" class="calendar-container">
@@ -42,6 +42,6 @@
       <input  style="display: none;" matStartDate formControlName="start" placeholder="Start date">
       <input style="display: none;" matEndDate formControlName="end" placeholder="End date">
     </mat-date-range-input>
-    <mat-date-range-picker #picker></mat-date-range-picker>
+    <mat-date-range-picker (closed)="closeDatepicker()" #picker></mat-date-range-picker>
 </div>
 

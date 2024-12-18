@@ -1,4 +1,14 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges } from '@angular/core'
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core'
 import { debounceTime } from 'rxjs/operators'
 import { FormControl, FormGroup } from '@angular/forms'
 import { NativeDateAdapter, MatDateFormats, MAT_DATE_LOCALE } from '@angular/material/core'
@@ -25,8 +35,12 @@ export const MY_FORMATS = {
 })
 export class CalendarButtonComponent implements OnInit {
   @Input() outlineIcon: boolean = false
+  @Input() openCalendar: boolean = false
   @Output() setDateEmit: EventEmitter<any> = new EventEmitter()
   @Output() startDateEmit: EventEmitter<any> = new EventEmitter()
+  @Output() calendarElement: EventEmitter<any> = new EventEmitter()
+  @Output() closeCalendar: EventEmitter<any> = new EventEmitter()
+  @ViewChild('picker') picker!: ElementRef
   @Input() storageDate = {}
   @Input() theme: string = ''
   @Input() templateDate: any
@@ -44,16 +58,20 @@ export class CalendarButtonComponent implements OnInit {
     end: new FormControl<Date | null>(null),
   })
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['templateDate'].currentValue) {
+    if (changes['templateDate']) {
       this.dateRange.value.start = moment(changes['templateDate'].currentValue.dateStart).toDate()
       this.dateRange.value.end = moment(changes['templateDate'].currentValue.dateStart).toDate()
       //Дата повторяется для того что бы показать конкретный сеанс
       this.renderForTemplate(changes['templateDate'].currentValue)
     }
+    if (changes['openCalendar'].currentValue && this.picker) {
+      this.calendarElement.emit(this.picker)
+    }
   }
-  openDatepicker() {
-    this.openModal = !this.openModal
+  closeDatepicker() {
+    this.closeCalendar.emit()
   }
+
   render() {
     this.dateStart = this.filterService.startDate.value
     this.dateEnd = this.filterService.endDate.value
