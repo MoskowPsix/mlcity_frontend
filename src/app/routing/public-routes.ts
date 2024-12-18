@@ -17,6 +17,7 @@ import { EmailConfirmComponent } from '../views/cabinet/email-confirm/email-conf
 import { OrganizationShowComponent } from '../views/organization-show/organization-show.component'
 import { PoliticsDocumentComponent } from '../views/politics-document/politics-document.component'
 import { EventsForSearchComponent } from '../views/events/events-for-search/events-for-search.component'
+import { SightForSearchComponent } from '../views/sights/sight-for-search/sight-for-search.component'
 export const publicRoutes: Routes = [
   {
     path: 'home',
@@ -55,6 +56,11 @@ export const publicRoutes: Routes = [
     path: 'events/search/:text',
     // pathMatch: 'full',
     component: EventsForSearchComponent,
+  },
+  {
+    path: 'sights/search/:text',
+    // pathMatch: 'full',
+    component: SightForSearchComponent,
   },
   {
     path: 'events/:id',

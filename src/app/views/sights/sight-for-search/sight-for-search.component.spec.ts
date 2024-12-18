@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { IonicModule } from '@ionic/angular'
 
-import { EventsForSearchComponent } from './events-for-search.component'
+import { SightForSearchComponent } from './sight-for-search.component'
 
-describe('EventsForSearchComponent', () => {
-  let component: EventsForSearchComponent
-  let fixture: ComponentFixture<EventsForSearchComponent>
+describe('SightForSearchComponent', () => {
+  let component: SightForSearchComponent
+  let fixture: ComponentFixture<SightForSearchComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [EventsForSearchComponent],
+      declarations: [SightForSearchComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents()
 
-    fixture = TestBed.createComponent(EventsForSearchComponent)
+    fixture = TestBed.createComponent(SightForSearchComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   }))

@@ -149,6 +149,7 @@ import { ButtonsModule } from './modules/shared/buttons.module'
 import { MapModule } from './modules/shared/map.module'
 import { EventsForSearchComponent } from './views/events/events-for-search/events-for-search.component'
 import { ChangeLocationModalComponent } from './components/change-location-modal/change-location-modal.component'
+import { SightForSearchComponent } from './views/sights/sight-for-search/sight-for-search.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -207,6 +208,7 @@ registerLocaleData(localeRu, 'ru')
     EmailConfirmComponent,
     ExitButtonComponent,
     EventsForSearchComponent,
+    SightForSearchComponent,
     AboutComponent,
     NotFoundComponent,
     ForbiddenComponent,

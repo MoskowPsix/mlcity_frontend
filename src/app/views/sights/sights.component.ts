@@ -45,10 +45,16 @@ export class SightsComponent implements OnInit, OnDestroy {
 
   sightTypeService: SightTypeService = inject(SightTypeService)
 
+  searchActive: boolean = false
+  headerClassName: string = 'header'
+
   cardContainer!: ElementRef
   @ViewChild('widgetsContent') widgetsContent!: ElementRef
   @ViewChild('headerWrapper') headerWrapper!: ElementRef
   @ViewChild(IonContent) ionContent!: IonContent
+  @ViewChild('headerToolsSight') headerToolsSight!: ElementRef
+  @ViewChild('headerBlockSight') headerSight!: ElementRef
+  @ViewChild('headerToolsSearchSight') headerToolsSearchSight!: ElementRef
   viewId: number[] = []
   timeStart: number = 0
 
@@ -84,6 +90,53 @@ export class SightsComponent implements OnInit, OnDestroy {
     //       })
     //     })
     // })
+  }
+  changeSearch() {
+    const children = this.headerToolsSight.nativeElement.children
+    const headerToolsSearchElement: HTMLElement = this.headerToolsSearchSight.nativeElement
+    if (!this.searchActive) {
+      this.searchNoneActiveRender()
+    } else {
+      this.searchActiveRender()
+    }
+  }
+  searchNoneActiveRender() {
+    const children = this.headerToolsSight.nativeElement.children
+    const headerToolsSearchElement: HTMLElement = this.headerToolsSearchSight.nativeElement
+    Array.from(children).forEach((child: any) => {
+      child.style.opacity = '1'
+      child.style.transition = '0.3s all'
+      child.style.opacity = '0'
+    })
+    setTimeout(() => {
+      this.headerClassName = 'header_full'
+      this.headerToolsSight.nativeElement.style.display = 'none'
+      headerToolsSearchElement.className = 'header-tools_search-active'
+      this.searchActive = !this.searchActive
+    }, 300)
+  }
+  searchActiveRender() {
+    const children = this.headerToolsSight.nativeElement.children
+    const headerToolsSearchElement: HTMLElement = this.headerToolsSearchSight.nativeElement
+    this.searchActive = !this.searchActive
+
+    setTimeout(() => {
+      headerToolsSearchElement.className = 'header-tools_search'
+      this.headerToolsSight.nativeElement.style.display = 'contents'
+    }, 300)
+    setTimeout(() => {
+      Array.from(children).forEach((child: any) => {
+        this.headerClassName = 'header'
+        child.style.opacity = '1'
+      })
+    }, 330)
+  }
+  searchNavigate(event: any) {
+    if (event.length >= 3) {
+      this.router.navigate(['/sights/search/', event])
+    } else {
+      this.toastService.showToast('В поле должно быть не менее 3 символов', 'warning')
+    }
   }
   organizationNavigation(event: any) {
     this.router.navigate(['/organizations', event])
