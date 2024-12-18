@@ -149,6 +149,7 @@ import { ButtonsModule } from './modules/shared/buttons.module'
 import { MapModule } from './modules/shared/map.module'
 import { EventsForSearchComponent } from './views/events/events-for-search/events-for-search.component'
 import { ChangeLocationModalComponent } from './components/change-location-modal/change-location-modal.component'
+import { ChangeDateSelectComponent } from './components/materials/change-date-select/change-date-select.component'
 import { SightForSearchComponent } from './views/sights/sight-for-search/sight-for-search.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
@@ -191,6 +192,7 @@ registerLocaleData(localeRu, 'ru')
     PoliticsDocumentComponent,
     ImagesModalComponent,
     AddEventComponent,
+    ChangeDateSelectComponent,
     CardGridComponent,
     DropdownPopupComponent,
     StandartInputComponent,

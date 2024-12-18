@@ -49,8 +49,34 @@ app-event-type-carusel {
   padding-left:1rem;
   padding-top: 0.5rem;
   flex-wrap: wrap;
-  background: #FAFAFA;
+  background: #F2F2F2;
   padding-right: 1rem;
+  padding-bottom: 0.5rem;
+  transition: 0.3s;
+  display: flex;
+  width: 100%;
+  font-family: var(--font-bold);
+  justify-content: space-between;
+  font-size: clamp(0.875rem, -1.469rem + 12.5vw, 1.1rem);
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  .header-bottom-container_city{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    text-overflow: ellipsis;
+  }
+}
+.header-bottom-container_active{
+  cursor: pointer;
+  padding-left:1rem;
+  padding-top: 0.5rem;
+  flex-wrap: wrap;
+  background: #F2F2F2;
+  padding-right: 1rem;
+  padding-bottom: 0.5rem;
+  box-shadow: 0px -3px 5px -5px rgb(60 64 67) inset;
   display: flex;
   width: 100%;
   font-family: var(--font-bold);
@@ -100,7 +126,7 @@ app-event-type-carusel {
 
 .grid-wrapper{
   padding-top: 8rem;
-  background: #FAFAFA;
+  background: #F2F2F2;
 }
 .main-grid-load{
   overflow-y: hidden;
