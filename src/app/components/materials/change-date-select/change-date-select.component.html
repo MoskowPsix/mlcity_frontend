@@ -1,15 +1,18 @@
-<div class="select-container">
-    <div (click)="changeModalState()" class="clicked_zone">
+<div name ="selectedModal" class="select-container">
+    <div name ="selectedModal" (click)="changeModalState()" class="clicked_zone">
 
     </div>
-    <div class="select-container-value">
+    <div name ="selectedModal" class="select-container-value">
         <ng-container *ngIf="selectedValue">
             {{selectedValue.name}}
         </ng-container>
      
     </div>
-    <ion-icon (click)="openModalFunction()"  name="chevron-down-outline"></ion-icon>
-    <ul [ngClass]="{'select-container__content_active': modalValue, 'select-container__content': !modalValue}" class="select-container__content">
-       <li (click)="selectValue(option)" *ngFor="let option of items" class="select-container__content__option">{{option.name}}</li>
+    <ion-icon name ="selectedModal" (click)="openModalFunction()"  name="chevron-down-outline"></ion-icon>
+    <ul name ="selectedModal" [ngClass]="{'select-container__content_active': modalValue, 'select-container__content': !modalValue}" class="select-container__content">
+        <ng-container *ngFor="let option of items">     
+             <li (click)="selectValue(option)" *ngIf="option.name !== selectedValue.name"  class="select-container__content__option">{{option.name}}</li>
+        </ng-container>
+    
     </ul>
 </div>

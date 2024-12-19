@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core'
 
 interface changeItem {
   id: number
@@ -25,7 +25,13 @@ export class ChangeDateSelectComponent implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() openModal: EventEmitter<any> = new EventEmitter()
   @Output() selectItem: EventEmitter<changeItem> = new EventEmitter()
-
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent): void {
+    let target = event.target as HTMLElement
+    if (target.getAttribute('name') !== 'selectedModal') {
+      this.closeModal.emit()
+    }
+  }
   selectValue(event: changeItem) {
     this.selectItem.emit(event)
   }
