@@ -357,6 +357,10 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.selectedDateItem = event
     } else {
       console.log('открыть календарь')
+      this.selectedDateItem = {
+        name: 'Календарь',
+        value: 'Календарь',
+      }
       this.openCalendarState = true
     }
     let dateEvenet = {
@@ -364,7 +368,6 @@ export class EventsComponent implements OnInit, OnDestroy {
       dateEnd: '',
     }
 
-    
     switch (event.value) {
       case 'Сегодня':
         dateEvenet.dateStart = moment().format('YYYY-MM-DD')
@@ -468,7 +471,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.destroy$.next()
     this.destroy$.complete()
   }
-  
+
   setDate(event: any) {
     this.filterService.setStartDateTolocalStorage(event.dateStart.toString())
     this.filterService.setEndDateTolocalStorage(event.dateEnd.toString())
