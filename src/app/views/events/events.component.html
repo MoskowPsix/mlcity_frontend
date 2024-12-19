@@ -21,10 +21,8 @@
                     {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : '...' }}
               </div>
               <div class="calendar-container">
-                <app-change-date-select [modalValue]="selectedDateModalValue" [selectedValue]="selectedDateItem" (openModal)="openSelectDate()" (closeModal)="closeSelectDate()" (selectItem)="selectDateItem($event)">
-
-                </app-change-date-select>
-                <app-calendar-button style="opacity: 0; position: absolute;" (closeCalendar)="closeCalendar()" (calendarElement)="openCalendar($event)" [openCalendar]="openCalendarState" (setDateEmit)="setDate($event)"></app-calendar-button>
+                <app-change-date-select [modalValue]="selectedDateModalValue" [selectedValue]="selectedDateItem" (openModal)="openSelectDate()" (closeModal)="closeSelectDate()" (selectItem)="selectDateItem($event)"></app-change-date-select>
+                <app-calendar-button style="opacity: 0; position: absolute;" (closeCalendar)="closeCalendar()" (calendarElement)="openCalendar($event)" [openCalendar]="openCalendarState" (setDateEmit)="setDateInSelected($event)"></app-calendar-button>
               </div>
             </div>
             <div *ngIf="renderTypesInMap().length" class="category-container">

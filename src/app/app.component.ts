@@ -14,7 +14,9 @@ import { UserService } from './services/user.service'
 import { AuthService } from './services/auth.service'
 import { TokenService } from './services/token.service'
 import { WebSocketService } from './services/web-socket.service'
-
+import moment from 'moment'
+import 'moment/locale/ru'
+moment.locale('ru')
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',

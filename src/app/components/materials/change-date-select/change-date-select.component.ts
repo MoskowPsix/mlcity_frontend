@@ -18,6 +18,7 @@ export class ChangeDateSelectComponent implements OnInit {
     { id: 1, name: 'Сегодня', value: 'Сегодня' },
     { id: 2, name: 'Завтра', value: 'Завтра' },
     { id: 3, name: 'Выходные', value: 'Выходные' },
+    { id: 3, name: 'Неделя', value: 'Неделя' },
     { id: 4, name: 'Выбрать', value: 'Выбрать' },
   ]
   @Input() selectedValue!: changeItem

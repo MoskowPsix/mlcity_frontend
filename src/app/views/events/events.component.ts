@@ -159,6 +159,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   getEventsCity() {
+    console.log('запрос на получение мероприятий')
     this.updateCoordinates().then(() => {
       if (this.eventsTapeService.nextPage && !this.eventsTapeService.wait) {
         this.eventsTapeService.wait = true
@@ -229,6 +230,20 @@ export class EventsComponent implements OnInit, OnDestroy {
     if (status == 'hidden') {
     } else {
     }
+  }
+
+  setDateInSelected(event: any) {
+    let dateValue = event.dateStart
+    if (event.dateStart == event.dateEnd) {
+      dateValue = moment(event.dateStart).format('D MMM')
+    } else {
+      dateValue = `${moment(event.dateStart).format('D MMM')} - ${moment(event.dateEnd).format('D MMM')}`
+    }
+    console.log(event)
+    this.selectedDateItem = {
+      name: `${dateValue}`,
+    }
+    this.setDate(event)
   }
 
   timerReload() {
@@ -384,6 +399,12 @@ export class EventsComponent implements OnInit, OnDestroy {
         dateEvenet.dateEnd = moment().day(7).format('YYYY-MM-DD')
         this.setDate(dateEvenet)
         break
+      case 'Неделя':
+        console.log(moment().startOf('week').format('YYYY-MM-DD'))
+        dateEvenet.dateStart = moment().format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().add(7, 'day').format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
       default:
         null
         break
@@ -404,8 +425,39 @@ export class EventsComponent implements OnInit, OnDestroy {
     event.open()
   }
 
+  setDefaultValueInSelectDate(date: any) {
+    let { dateStart, dateEnd } = date
+    dateStart = moment(dateStart)
+    dateEnd = moment(dateEnd)
+    console.log()
+    if (dateStart == dateEnd) {
+      if (moment().add(1, 'days').format('YYYY-MM-DD') == dateStart.format('YYYY-MM-DD')) {
+        this.selectedDateItem = {
+          name: 'Завтра',
+          value: 'Завтра',
+        }
+      }
+    } else if (dateStart.day() == 6 && dateEnd.day() == 0) {
+      this.selectedDateItem = {
+        name: 'Выходные',
+        value: 'Выходные',
+      }
+    } else if (dateStart.diff(dateEnd, 'days') == -7) {
+      this.selectedDateItem = {
+        name: 'Неделя',
+        value: 'Неделя',
+      }
+    } else {
+      console.log(dateEnd)
+      this.selectedDateItem = {
+        name: `${moment(dateStart).format('D MMM')} - ${moment(dateEnd).format('D MMM')}`,
+      }
+    }
+  }
+
   ngAfterViewInit() {}
   ngOnInit() {}
+
   ionViewWillEnter() {
     this.titleService.setTitle('VOKRUG - Мероприятия вокруг вас')
     this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
@@ -423,6 +475,8 @@ export class EventsComponent implements OnInit, OnDestroy {
       dateStart: this.filterService.startDate.value,
       dateEnd: this.filterService.endDate.value,
     }
+    this.setDefaultValueInSelectDate(this.date)
+
     // Подписываемся на изменение фильтра
     if (!this.eventsTapeService.userHaveSubscribedEvents) {
       this.eventsTapeService.eventsLastScrollPositionForTape = 0
