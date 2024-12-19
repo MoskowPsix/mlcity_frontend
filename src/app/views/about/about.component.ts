@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
-
+import { Router } from '@angular/router'
 @Component({
   selector: 'app-about',
   templateUrl: './about.component.html',
@@ -19,14 +19,17 @@ export class AboutComponent implements OnInit {
   constructor(
     private titleService: Title,
     private metaService: Meta,
+    private router: Router,
   ) {}
 
+  navigateInHome() {
+    this.router.navigate(['/home'])
+  }
   ngOnInit() {
     this.titleService.setTitle('О проекте Мой Маленький Город')
     this.metaService.updateTag({
       name: 'description',
-      content:
-        'Наша команда делает приложение для жителей малых городов и поселков.',
+      content: 'Наша команда делает приложение для жителей малых городов и поселков.',
     })
   }
 

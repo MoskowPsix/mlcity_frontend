@@ -151,6 +151,7 @@ import { EventsForSearchComponent } from './views/events/events-for-search/event
 import { ChangeLocationModalComponent } from './components/change-location-modal/change-location-modal.component'
 import { ChangeDateSelectComponent } from './components/materials/change-date-select/change-date-select.component'
 import { SightForSearchComponent } from './views/sights/sight-for-search/sight-for-search.component'
+import { AboutSliderComponent } from './components/materials/about-slider/about-slider.component'
 const mapConfig: YaConfig = {
   apikey: environment.apiKeyYandex + '&' + `suggest_apikey=${environment.apiKeyYandexSubject}`,
   lang: 'ru_RU',
@@ -183,6 +184,7 @@ registerLocaleData(localeRu, 'ru')
     ClusterModalComponent,
     HeaderComponent,
     ChangeLocationModalComponent,
+    AboutSliderComponent,
     CodeInputComponent,
     AddressInputComponent,
     EditEventComponent,

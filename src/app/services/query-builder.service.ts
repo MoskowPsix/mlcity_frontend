@@ -236,6 +236,7 @@ export class QueryBuilderService {
       latitude: this.latitude,
       longitude: this.longitude,
       eventTypes: this.eventTypes,
+      limit: 8,
       dateStart: this.dateStart,
       dateEnd: this.dateEnd,
       radius: this.radius,
