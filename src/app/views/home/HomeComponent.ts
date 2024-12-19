@@ -51,6 +51,7 @@ import { AuthService } from 'src/app/services/auth.service'
 import { UserPointService } from 'src/app/services/user-point.service'
 
 import { throttle } from 'lodash'
+import moment from 'moment'
 
 @Component({
   selector: 'app-home',
@@ -138,6 +139,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentTypesInMap: any[] = []
   stateType: string = 'events'
 
+  selectedDateModalValue: boolean = false
+  selectedDateItem: any = {}
+
   sightTypeId: any
   eventTypeId: any
 
@@ -165,6 +169,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   events: IEvent[] = []
   sights: ISight[] = []
   sightsContentModal: ISight[] = []
+  openCalendarState: boolean = false
   eventsContentModal: IEvent[] = []
   places: IPlace[] = []
   allEventTypes: any[] = []
@@ -228,6 +233,58 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.filterService.setRadiusTolocalStorage(`${radius + 1}`)
     }
   }
+
+  openSelectDate() {
+    this.selectedDateModalValue = true
+  }
+
+  closeSelectDate() {
+    this.selectedDateModalValue = false
+  }
+  selectDateItem(event: any) {
+    if (event.value && event.value != 'Выбрать') {
+      this.selectedDateItem = event
+    } else {
+      this.selectedDateItem = {
+        name: 'Календарь',
+        value: 'Календарь',
+      }
+      this.openCalendarState = true
+    }
+    let dateEvenet = {
+      dateStart: '',
+      dateEnd: '',
+    }
+
+    switch (event.value) {
+      case 'Сегодня':
+        dateEvenet.dateStart = moment().format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      case 'Завтра':
+        dateEvenet.dateStart = moment().add(1, 'days').format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().add(1, 'days').format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      case 'Выходные':
+        dateEvenet.dateStart = moment().day(6).format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().day(7).format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      case 'Неделя':
+        dateEvenet.dateStart = moment().format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().add(7, 'day').format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      default:
+        null
+        break
+    }
+
+    this.selectedDateModalValue = false
+  }
+
   radiusMinus() {
     let radius: number = Number(this.filterService.getRadiusFromlocalStorage())
     if (radius - 1 >= 1) {
@@ -650,7 +707,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   organizationNavigation(event: any) {
-    console.log(event)
     this.closeModal()
     setTimeout(() => {
       this.router.navigate(['/organizations', event])
@@ -789,7 +845,33 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     return showTypes
   }
-
+  setDefaultValueInSelectDate(date: any) {
+    let { dateStart, dateEnd } = date
+    dateStart = moment(dateStart)
+    dateEnd = moment(dateEnd)
+    if (dateStart == dateEnd) {
+      if (moment().add(1, 'days').format('YYYY-MM-DD') == dateStart.format('YYYY-MM-DD')) {
+        this.selectedDateItem = {
+          name: 'Завтра',
+          value: 'Завтра',
+        }
+      }
+    } else if (dateStart.day() == 6 && dateEnd.day() == 0) {
+      this.selectedDateItem = {
+        name: 'Выходные',
+        value: 'Выходные',
+      }
+    } else if (dateStart.diff(dateEnd, 'days') == -7) {
+      this.selectedDateItem = {
+        name: 'Неделя',
+        value: 'Неделя',
+      }
+    } else {
+      this.selectedDateItem = {
+        name: `${moment(dateStart).format('D MMM')} - ${moment(dateEnd).format('D MMM')}`,
+      }
+    }
+  }
   setPlacemarks(collection: any, type: string) {
     collection.map((item: any) => {
       let time_event = Math.ceil(new Date(item.date_start).getTime() / 1000)
@@ -1053,6 +1135,24 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.zoom = 13
     }
   }
+
+  setDateInSelected(event: any) {
+    let dateValue = event.dateStart
+    if (event.dateStart == event.dateEnd) {
+      dateValue = moment(event.dateStart).format('D MMM')
+    } else {
+      dateValue = `${moment(event.dateStart).format('D MMM')} - ${moment(event.dateEnd).format('D MMM')}`
+    }
+    this.selectedDateItem = {
+      name: `${dateValue}`,
+    }
+    this.setDate(event)
+  }
+
+  openCalendar(event: any) {
+    event.open()
+  }
+
   ionViewWillEnter(): void {
     this.renderSwitcher = !this.renderSwitcher
     //Подписываемся на изменение радиуса
@@ -1066,7 +1166,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.setZoomFromRadius()
       })
     })
-
+    this.date = {
+      dateStart: this.filterService.startDate.value,
+      dateEnd: this.filterService.endDate.value,
+    }
+    this.setDefaultValueInSelectDate(this.date)
     //Подписываемся на состояние модалки показа ивентов и мест
     this.navigationService.modalEventShowOpen.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.modalEventShowOpen = value

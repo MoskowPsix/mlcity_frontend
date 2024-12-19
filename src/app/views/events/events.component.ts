@@ -47,6 +47,7 @@ import { SwitchTypeService } from 'src/app/services/switch-type.service'
 import { CalendarComponent } from 'src/app/components/calendar/calendar.component'
 import { IonContent } from '@ionic/angular'
 import { EventsTapeService } from 'src/app/services/events-tape.service'
+import moment from 'moment'
 register()
 
 @Component({
@@ -62,14 +63,18 @@ export class EventsComponent implements OnInit, OnDestroy {
   @ViewChild('ContentCol') ContentCol!: ElementRef
   @ViewChild('headerWrapper') headerWrapper!: ElementRef
   @ViewChild(IonContent) ionContent!: IonContent
+  @ViewChild('hiddenCalendar') hiddenButton!: ElementRef<HTMLButtonElement>
   city: string = ''
   currentRadius!: number
   segment: string = 'eventsCitySegment'
   isFirstNavigation: any = new BehaviorSubject<boolean>(true)
   date: any
+  selectedDateItem: any = {}
+  selectedDateModalValue: boolean = false
   spiner: boolean = false
   eventsGeolocation: IEvent[] = []
   headerClassName: string = 'header'
+  openCalendarState: boolean = false
   wait: boolean = true
   scrollStart: any
   switchTypeService: SwitchTypeService = inject(SwitchTypeService)
@@ -226,6 +231,19 @@ export class EventsComponent implements OnInit, OnDestroy {
     }
   }
 
+  setDateInSelected(event: any) {
+    let dateValue = event.dateStart
+    if (event.dateStart == event.dateEnd) {
+      dateValue = moment(event.dateStart).format('D MMM')
+    } else {
+      dateValue = `${moment(event.dateStart).format('D MMM')} - ${moment(event.dateEnd).format('D MMM')}`
+    }
+    this.selectedDateItem = {
+      name: `${dateValue}`,
+    }
+    this.setDate(event)
+  }
+
   timerReload() {
     this.timeStart = new Date().getTime()
   }
@@ -347,9 +365,93 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.filterService.setEventTypesTolocalStorage(selectedEventTypes)
     this.filterService.changeFilter.next(true)
   }
+  selectDateItem(event: any) {
+    if (event.value && event.value != 'Выбрать') {
+      this.selectedDateItem = event
+    } else {
+      this.selectedDateItem = {
+        name: 'Календарь',
+        value: 'Календарь',
+      }
+      this.openCalendarState = true
+    }
+    let dateEvenet = {
+      dateStart: '',
+      dateEnd: '',
+    }
+
+    switch (event.value) {
+      case 'Сегодня':
+        dateEvenet.dateStart = moment().format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      case 'Завтра':
+        dateEvenet.dateStart = moment().add(1, 'days').format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().add(1, 'days').format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      case 'Выходные':
+        dateEvenet.dateStart = moment().day(6).format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().day(7).format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      case 'Неделя':
+        dateEvenet.dateStart = moment().format('YYYY-MM-DD')
+        dateEvenet.dateEnd = moment().add(7, 'day').format('YYYY-MM-DD')
+        this.setDate(dateEvenet)
+        break
+      default:
+        null
+        break
+    }
+
+    this.selectedDateModalValue = false
+  }
+  openSelectDate() {
+    this.selectedDateModalValue = true
+  }
+  closeSelectDate() {
+    this.selectedDateModalValue = false
+  }
+  closeCalendar() {
+    this.openCalendarState = false
+  }
+  openCalendar(event: any) {
+    event.open()
+  }
+
+  setDefaultValueInSelectDate(date: any) {
+    let { dateStart, dateEnd } = date
+    dateStart = moment(dateStart)
+    dateEnd = moment(dateEnd)
+    if (dateStart == dateEnd) {
+      if (moment().add(1, 'days').format('YYYY-MM-DD') == dateStart.format('YYYY-MM-DD')) {
+        this.selectedDateItem = {
+          name: 'Завтра',
+          value: 'Завтра',
+        }
+      }
+    } else if (dateStart.day() == 6 && dateEnd.day() == 0) {
+      this.selectedDateItem = {
+        name: 'Выходные',
+        value: 'Выходные',
+      }
+    } else if (dateStart.diff(dateEnd, 'days') == -7) {
+      this.selectedDateItem = {
+        name: 'Неделя',
+        value: 'Неделя',
+      }
+    } else {
+      this.selectedDateItem = {
+        name: `${moment(dateStart).format('D MMM')} - ${moment(dateEnd).format('D MMM')}`,
+      }
+    }
+  }
 
   ngAfterViewInit() {}
   ngOnInit() {}
+
   ionViewWillEnter() {
     this.titleService.setTitle('VOKRUG - Мероприятия вокруг вас')
     this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
@@ -367,6 +469,8 @@ export class EventsComponent implements OnInit, OnDestroy {
       dateStart: this.filterService.startDate.value,
       dateEnd: this.filterService.endDate.value,
     }
+    this.setDefaultValueInSelectDate(this.date)
+
     // Подписываемся на изменение фильтра
     if (!this.eventsTapeService.userHaveSubscribedEvents) {
       this.eventsTapeService.eventsLastScrollPositionForTape = 0
@@ -415,6 +519,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.destroy$.next()
     this.destroy$.complete()
   }
+
   setDate(event: any) {
     this.filterService.setStartDateTolocalStorage(event.dateStart.toString())
     this.filterService.setEndDateTolocalStorage(event.dateEnd.toString())
