@@ -264,7 +264,7 @@ h4{
   display: flex;
   gap: 0.5rem;
   justify-content: end;
-  
+  align-items: center;
   padding-right: 1rem;
   align-items: center;
   font-size: 0.8rem;
@@ -279,9 +279,14 @@ h4{
       height: auto;
      }
   }
-
 }
-
+.views-images{
+  width: 1rem;
+}
+.users-images{
+  width: 1rem;
+  filter: brightness(0) saturate(100%) invert(42%) sepia(46%) saturate(3416%) hue-rotate(205deg) brightness(101%) contrast(101%);
+}
 .status-container {
   right: 1rem;
   position: absolute;

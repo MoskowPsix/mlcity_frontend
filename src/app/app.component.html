@@ -14,15 +14,11 @@
 
       <ng-container *ngFor ="let slide of swiperItemsArray">
         <swiper-slide style="background: {{slide.background}};">
+          <div style="background-image: url('{{slide.image}}');" class="image-background">
+
+          </div>
           <ng-container>
             <div class="slide-content">
-              <div class="slide-header">
-                {{slide.header}}
-               </div>
-               <div class="slide-description">
-                {{slide.description}}
-               </div>
-               <img class="slide-image" [src]="slide.image" alt="">
             </div>
           </ng-container>
         </swiper-slide>

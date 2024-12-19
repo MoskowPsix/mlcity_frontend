@@ -14,7 +14,9 @@ import { UserService } from './services/user.service'
 import { AuthService } from './services/auth.service'
 import { TokenService } from './services/token.service'
 import { WebSocketService } from './services/web-socket.service'
-
+import moment from 'moment'
+import 'moment/locale/ru'
+moment.locale('ru')
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -48,22 +50,23 @@ export class AppComponent implements OnInit {
 
   swiperItemsArray: any[] = [
     {
-      image: '/assets/images/sliderImag1.jpg',
+      image: '/assets/images/Ресурс 17.png',
       header: 'Смотри что происходит ВОКРУГ тебя!',
       description: 'Используй карту! Быстро находи что происходит здесь и сейчас!',
-      background: 'linear-gradient(180deg, rgba(157,124,228,1) 0%, rgba(65,41,115,1) 100%);',
+      background: 'linear-gradient(180deg, rgba(255,192,0,1) 0%, rgba(255,101,0,1) 100%);',
+      backgroundColor: 'rgb(255,192,0);',
     },
     {
-      image: '/assets/images/sliderImag2.jpg',
+      image: '/assets/images/Ресурс 18.png',
       header: 'Узнай кто придет вместе с тобой!',
-      description: 'Смотри сколько людей собирается посетить твое событие!',
-      background: 'linear-gradient(180deg, rgba(78,230,103,1) 0%, rgba(12,112,28,1) 100%);',
+      description: 'Используй карту! Быстро находи что происходит здесь и сейчас!',
+      background: 'linear-gradient(180deg, rgba(140,198,63,1) 0%, rgba(0,146,69,1) 100%)',
     },
     {
-      image: '/assets/images/sliderImag3.jpg',
+      image: '/assets/images/Ресурс 19.png',
       header: 'Создай свое событие!',
       description: 'ВОКРУГ тишина? Заяви о себе!',
-      background: 'linear-gradient(180deg, rgba(32,101,224,1) 0%, rgba(28,57,109,1) 100%);',
+      background: 'linear-gradient(180deg, rgba(193,39,143,1) 0%, rgba(102,45,145,1) 100%);',
     },
   ]
   closeAboutModal() {

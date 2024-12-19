@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core'
 
+interface changeItem {
+  id: number
+  name: string
+  value: string
+  icon?: string
+}
 @Component({
   selector: 'app-change-date-select',
   templateUrl: './change-date-select.component.html',
@@ -7,9 +13,42 @@ import { Component, OnInit } from '@angular/core'
 })
 export class ChangeDateSelectComponent implements OnInit {
   constructor() {}
-  modalValue: boolean = false
+  @Input() modalValue: boolean = false
+  @Input() items: changeItem[] = [
+    { id: 1, name: 'Сегодня', value: 'Сегодня' },
+    { id: 2, name: 'Завтра', value: 'Завтра' },
+    { id: 3, name: 'Выходные', value: 'Выходные' },
+    { id: 3, name: 'Неделя', value: 'Неделя' },
+    { id: 4, name: 'Выбрать', value: 'Выбрать' },
+  ]
+  @Input() selectedValue!: changeItem
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() openModal: EventEmitter<any> = new EventEmitter()
+  @Output() selectItem: EventEmitter<changeItem> = new EventEmitter()
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent): void {
+    let target = event.target as HTMLElement
+    if (target.getAttribute('name') !== 'selectedModal') {
+      this.closeModal.emit()
+    }
+  }
+  selectValue(event: changeItem) {
+    this.selectItem.emit(event)
+  }
+
+  closeModalFunction() {
+    this.closeModal.emit()
+  }
+  openModalFunction() {
+    this.openModal.emit()
+  }
+
   changeModalState() {
-    this.modalValue = !this.modalValue
+    if (!this.modalValue) {
+      this.openModal.emit()
+    } else {
+      this.closeModal.emit()
+    }
   }
   ngOnInit() {}
 }

@@ -140,7 +140,6 @@ export class SightsService {
   }
 
   create(sight: FormData) {
-
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/create`, sight)
   }
 
@@ -150,6 +149,12 @@ export class SightsService {
       time: time,
     }
     return this.http.post<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/view`, params)
+  }
+
+  getSightsForSearch(text: string, params: IGetEventsAndSights) {
+    return this.http.post(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/sights/search/text`, {
+      ...params,
+    })
   }
 
   private errorHandler(error: HttpErrorResponse) {

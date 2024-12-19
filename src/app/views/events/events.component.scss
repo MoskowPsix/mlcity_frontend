@@ -76,7 +76,6 @@ app-event-type-carusel {
   background: #F2F2F2;
   padding-right: 1rem;
   padding-bottom: 0.5rem;
-  box-shadow: 0px -3px 5px -5px rgb(60 64 67) inset;
   display: flex;
   width: 100%;
   font-family: var(--font-bold);
@@ -97,9 +96,10 @@ app-event-type-carusel {
   padding-left: 1rem;
   overflow: scroll;
   display: flex;
+  padding-bottom: 0.3rem;
   gap: 1rem;
   flex-shrink: 0;
-  background: #FAFAFA;
+  background: #F2F2F2;
   flex-wrap: nowrap;
   min-width: 100%;
 }
@@ -125,7 +125,7 @@ app-event-type-carusel {
 }
 
 .grid-wrapper{
-  padding-top: 8rem;
+  padding-top: 8.5rem;
   background: #F2F2F2;
 }
 .main-grid-load{

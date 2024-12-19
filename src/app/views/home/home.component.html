@@ -42,6 +42,7 @@
         <div class="map-tools__category-grid">
           <ng-container *ngFor="let type of renderTypesInMap()">
             <div class="map-tools__category-grid__item">
+
               <app-rounded-button [close]='true' (click)="deleteTypeInStorage(type)" [outline]="true" icon="assets/icons/category.svg" type="button" [buttonText]="type.name"></app-rounded-button>
             </div>
           </ng-container>
@@ -49,10 +50,12 @@
         </div>  
         <div class="map-tools_wrapper">
           <div *ngIf="stateType === 'events'" class="calendar-container">
-          <app-calendar-button style="max-height: 2.5rem;" (setDateEmit)="setDate($event)"></app-calendar-button>
+            <app-calendar-button style="opacity: 0; position: absolute;"[openCalendar]="openCalendarState" (calendarElement)="openCalendar($event)" (setDateEmit)="setDate($event)"></app-calendar-button>
+            <app-change-date-select (setDateEmit)="setDateInSelected($event)" [modalValue]="selectedDateModalValue" [selectedValue]="selectedDateItem" (openModal)="openSelectDate()" (closeModal)="closeSelectDate()" (selectItem)="selectDateItem($event)"></app-change-date-select>
           </div>
           <app-calendar-button style="opacity: 0; pointer-events: none;" *ngIf="stateType === 'sights'" ></app-calendar-button>
           <div class="radius-container"><app-range-selection-button/></div>
+
         </div>
 
     </div>
