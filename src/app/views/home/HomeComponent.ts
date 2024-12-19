@@ -245,7 +245,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (event.value && event.value != 'Выбрать') {
       this.selectedDateItem = event
     } else {
-      console.log('открыть календарь')
       this.selectedDateItem = {
         name: 'Календарь',
         value: 'Календарь',
@@ -274,7 +273,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.setDate(dateEvenet)
         break
       case 'Неделя':
-        console.log(moment().startOf('week').format('YYYY-MM-DD'))
         dateEvenet.dateStart = moment().format('YYYY-MM-DD')
         dateEvenet.dateEnd = moment().add(7, 'day').format('YYYY-MM-DD')
         this.setDate(dateEvenet)
@@ -709,7 +707,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   organizationNavigation(event: any) {
-    console.log(event)
     this.closeModal()
     setTimeout(() => {
       this.router.navigate(['/organizations', event])
@@ -852,7 +849,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     let { dateStart, dateEnd } = date
     dateStart = moment(dateStart)
     dateEnd = moment(dateEnd)
-    console.log()
     if (dateStart == dateEnd) {
       if (moment().add(1, 'days').format('YYYY-MM-DD') == dateStart.format('YYYY-MM-DD')) {
         this.selectedDateItem = {
@@ -871,7 +867,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         value: 'Неделя',
       }
     } else {
-      console.log(dateEnd)
       this.selectedDateItem = {
         name: `${moment(dateStart).format('D MMM')} - ${moment(dateEnd).format('D MMM')}`,
       }
@@ -1148,7 +1143,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       dateValue = `${moment(event.dateStart).format('D MMM')} - ${moment(event.dateEnd).format('D MMM')}`
     }
-    console.log(event)
     this.selectedDateItem = {
       name: `${dateValue}`,
     }
