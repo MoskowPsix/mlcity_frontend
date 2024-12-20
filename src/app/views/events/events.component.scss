@@ -61,13 +61,21 @@ app-event-type-carusel {
   -webkit-line-clamp: 1;
   text-overflow: ellipsis;
   .header-bottom-container_city{
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    -webkit-line-clamp: 1;
-    text-overflow: ellipsis;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
+
+.header-bottom-container_city__text{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  align-items: center;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+}
+
 .header-bottom-container_active{
   cursor: pointer;
   padding-left:1rem;

@@ -370,8 +370,8 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.selectedDateItem = event
     } else {
       this.selectedDateItem = {
-        name: 'Календарь',
-        value: 'Календарь',
+        name: 'Выбрать',
+        value: 'Выбрать',
       }
       this.openCalendarState = true
     }
@@ -416,6 +416,11 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
   closeCalendar() {
     this.openCalendarState = false
+    let date = {
+      dateStart: moment(this.filterService.startDate.value).format('YYYY-MM-DD'),
+      dateEnd: moment(this.filterService.endDate.value).format('YYYY-MM-DD'),
+    }
+    this.setDefaultValueInSelectDate(date)
   }
   openCalendar(event: any) {
     event.open()
@@ -425,11 +430,18 @@ export class EventsComponent implements OnInit, OnDestroy {
     let { dateStart, dateEnd } = date
     dateStart = moment(dateStart)
     dateEnd = moment(dateEnd)
-    if (dateStart == dateEnd) {
+
+    if (dateStart.format('YYYY-MM-DD') == dateEnd.format('YYYY-MM-DD')) {
       if (moment().add(1, 'days').format('YYYY-MM-DD') == dateStart.format('YYYY-MM-DD')) {
         this.selectedDateItem = {
           name: 'Завтра',
           value: 'Завтра',
+        }
+      }
+      if (moment().format('YYYY-MM-DD') == dateStart.format('YYYY-MM-DD')) {
+        this.selectedDateItem = {
+          name: 'Сегодня',
+          value: 'Сегодня',
         }
       }
     } else if (dateStart.day() == 6 && dateEnd.day() == 0) {
@@ -470,7 +482,6 @@ export class EventsComponent implements OnInit, OnDestroy {
       dateEnd: this.filterService.endDate.value,
     }
     this.setDefaultValueInSelectDate(this.date)
-
     // Подписываемся на изменение фильтра
     if (!this.eventsTapeService.userHaveSubscribedEvents) {
       this.eventsTapeService.eventsLastScrollPositionForTape = 0
@@ -498,6 +509,35 @@ export class EventsComponent implements OnInit, OnDestroy {
 
         this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
       })
+    } else {
+      if (!this.eventsTapeService.eventsCity.length && !this.eventsTapeService.eventsSeparator.length) {
+        this.eventsTapeService.eventsLastScrollPositionForTape = 0
+        this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
+        this.wait = true
+        this.eventsTapeService.notFound = false
+        this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
+
+          this.eventsTapeService.eventsCity = []
+          this.eventsTapeService.eventsSeparator = []
+          this.eventsTapeService.eventsLastScrollPositionForTape = 0
+          this.currentRadius = Number(this.filterService.getRadiusFromlocalStorage())
+          this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
+          this.eventsTapeService.userHaveSubscribedEvents = true
+          this.wait = true
+          this.eventsTapeService.nextPage = true
+          this.eventsTapeService.notFound = false
+          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
+          this.eventsGeolocation = []
+          this.updateCoordinates().then(() => {
+            this.getEventsCity()
+          })
+
+          this.changeCity()
+          // this.getEventsGeolocation()
+
+          this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+        })
+      }
     }
 
     //Подписываемся на город

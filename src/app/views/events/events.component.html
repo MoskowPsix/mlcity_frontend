@@ -18,20 +18,17 @@
             
             <div [ngClass]="{'header-bottom-container': this.eventsTapeService.eventsLastScrollPositionForTape <= 80, 'header-bottom-container_active': this.eventsTapeService.eventsLastScrollPositionForTape > 80  }">
               <div class="header-bottom-container_city" (click)="openCitySearch()">
-                    {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : '...' }}
+                <span class="header-bottom-container_city__text">
+                  {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : '...' }}
+                </span>
+                  
               </div>
               <div class="calendar-container">
                 <app-change-date-select [modalValue]="selectedDateModalValue" [selectedValue]="selectedDateItem" (openModal)="openSelectDate()" (closeModal)="closeSelectDate()" (selectItem)="selectDateItem($event)"></app-change-date-select>
                 <app-calendar-button style="opacity: 0; position: absolute;" (closeCalendar)="closeCalendar()" (calendarElement)="openCalendar($event)" [openCalendar]="openCalendarState" (setDateEmit)="setDateInSelected($event)"></app-calendar-button>
               </div>
             </div>
-            <div *ngIf="renderTypesInMap().length" class="category-container">
-              <ng-container *ngFor="let type of renderTypesInMap()">
-                  <div  class="category-container__item">
-                    <app-rounded-button [close]='true' (click)="deleteTypeInStorage(type)" icon="assets/icons/category.svg" type="button" [buttonText]="type.name"></app-rounded-button>
-                  </div>                
-              </ng-container>
-            </div>
+           
           </div>
 
           <div class="grid-wrapper">

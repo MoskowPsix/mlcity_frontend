@@ -3,31 +3,25 @@
   <div #ContentCol>
     <div id="header-anchor"></div>
   <div class="carusel-wrapper_flex" #headerWrapper>
-    <div class="carusel-wrapper_flex" #headerWrapper>
       <app-second-header>
-        <div #headerToolsSight class="header-top-container">
-          <app-type-swither (endingSwitchAnimation)="redirectToEvent()"></app-type-swither>
-          <app-category-button stateType="Event"></app-category-button>
-        </div>
-        <div #headerToolsSearchSight class="header-tools_search">
-          <div>
-            <app-search-button [active]="searchActive" (changeState)="changeSearch()" (changeSearch)="searchNavigate($event)"></app-search-button>
+        <div #headerBlock   [ngClass]="headerClassName">
+          <div #headerToolsSight class="header-tools_top">
+            <app-type-swither (endingSwitchAnimation)="redirectToEvent()"></app-type-swither>
+            <app-category-button stateType="Event"></app-category-button>
+          </div>
+          <div #headerToolsSearchSight class="header-tools_search">
+            <div>
+              <app-search-button [active]="searchActive" (changeState)="changeSearch()" (changeSearch)="searchNavigate($event)"></app-search-button>
+            </div>
           </div>
         </div>
       
       </app-second-header>
+
       <div (click)="openCitySearch()" class="header-bottom-container" header-bottom>
         {{ sightTapeService.tapeCityName.length ? sightTapeService.tapeCityName : '...' }} 
-
-        <div *ngIf="renderTypesInMap().length" class="category-container">
-          <ng-container *ngFor="let type of renderTypesInMap()">
-              <div  class="category-container__item">
-                <app-rounded-button [close]='true' (click)="deleteTypeInStorage(type)" icon="assets/icons/category.svg" type="button" [buttonText]="type.name"></app-rounded-button>
-              </div>                
-          </ng-container>
-        </div>
+        
       </div>
-    </div>
   </div>
   <div class="grid-wrapper">
     <app-organizations-grid (organizationClicked)="organizationNavigation($event)" buttonType="" [spiner]="spiner" (endScroll)="getSightsCity()" [notFound]="notFound" [cards]="sightTapeService.sightsCity"/>

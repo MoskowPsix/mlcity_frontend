@@ -241,13 +241,23 @@ export class HomeComponent implements OnInit, OnDestroy {
   closeSelectDate() {
     this.selectedDateModalValue = false
   }
+
+  closeCalendar() {
+    this.openCalendarState = false
+    let date = {
+      dateStart: moment(this.filterService.startDate.value).format('YYYY-MM-DD'),
+      dateEnd: moment(this.filterService.endDate.value).format('YYYY-MM-DD'),
+    }
+    this.setDefaultValueInSelectDate(date)
+  }
   selectDateItem(event: any) {
     if (event.value && event.value != 'Выбрать') {
       this.selectedDateItem = event
     } else {
+      console.log(event.value)
       this.selectedDateItem = {
-        name: 'Календарь',
-        value: 'Календарь',
+        name: 'Выбрать',
+        value: 'Выбрать',
       }
       this.openCalendarState = true
     }
@@ -846,14 +856,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     return showTypes
   }
   setDefaultValueInSelectDate(date: any) {
+    console.log(date)
     let { dateStart, dateEnd } = date
     dateStart = moment(dateStart)
     dateEnd = moment(dateEnd)
-    if (dateStart == dateEnd) {
+
+    if (dateStart.format('YYYY-MM-DD') == dateEnd.format('YYYY-MM-DD')) {
       if (moment().add(1, 'days').format('YYYY-MM-DD') == dateStart.format('YYYY-MM-DD')) {
         this.selectedDateItem = {
           name: 'Завтра',
           value: 'Завтра',
+        }
+      }
+      if (moment().format('YYYY-MM-DD') == dateStart.format('YYYY-MM-DD')) {
+        this.selectedDateItem = {
+          name: 'Сегодня',
+          value: 'Сегодня',
         }
       }
     } else if (dateStart.day() == 6 && dateEnd.day() == 0) {
@@ -1145,6 +1163,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.selectedDateItem = {
       name: `${dateValue}`,
+      value: 'Выбрать',
     }
     this.setDate(event)
   }
