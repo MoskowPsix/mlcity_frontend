@@ -370,8 +370,8 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.selectedDateItem = event
     } else {
       this.selectedDateItem = {
-        name: 'Календарь',
-        value: 'Календарь',
+        name: 'Выбрать',
+        value: 'Выбрать',
       }
       this.openCalendarState = true
     }
@@ -416,20 +416,33 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
   closeCalendar() {
     this.openCalendarState = false
+    let date = {
+      dateStart: moment(this.filterService.startDate.value).format('YYYY-MM-DD'),
+      dateEnd: moment(this.filterService.endDate.value).format('YYYY-MM-DD'),
+    }
+    this.setDefaultValueInSelectDate(date)
   }
   openCalendar(event: any) {
     event.open()
   }
 
   setDefaultValueInSelectDate(date: any) {
+    console.log(date)
     let { dateStart, dateEnd } = date
     dateStart = moment(dateStart)
     dateEnd = moment(dateEnd)
-    if (dateStart == dateEnd) {
+
+    if (dateStart.format('YYYY-MM-DD') == dateEnd.format('YYYY-MM-DD')) {
       if (moment().add(1, 'days').format('YYYY-MM-DD') == dateStart.format('YYYY-MM-DD')) {
         this.selectedDateItem = {
           name: 'Завтра',
           value: 'Завтра',
+        }
+      }
+      if (moment().format('YYYY-MM-DD') == dateStart.format('YYYY-MM-DD')) {
+        this.selectedDateItem = {
+          name: 'Сегодня',
+          value: 'Сегодня',
         }
       }
     } else if (dateStart.day() == 6 && dateEnd.day() == 0) {
