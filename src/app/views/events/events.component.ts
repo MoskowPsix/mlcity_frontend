@@ -427,7 +427,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   setDefaultValueInSelectDate(date: any) {
-    console.log(date)
     let { dateStart, dateEnd } = date
     dateStart = moment(dateStart)
     dateEnd = moment(dateEnd)
@@ -483,7 +482,6 @@ export class EventsComponent implements OnInit, OnDestroy {
       dateEnd: this.filterService.endDate.value,
     }
     this.setDefaultValueInSelectDate(this.date)
-
     // Подписываемся на изменение фильтра
     if (!this.eventsTapeService.userHaveSubscribedEvents) {
       this.eventsTapeService.eventsLastScrollPositionForTape = 0
@@ -511,6 +509,35 @@ export class EventsComponent implements OnInit, OnDestroy {
 
         this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
       })
+    } else {
+      if (!this.eventsTapeService.eventsCity.length && !this.eventsTapeService.eventsSeparator.length) {
+        this.eventsTapeService.eventsLastScrollPositionForTape = 0
+        this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
+        this.wait = true
+        this.eventsTapeService.notFound = false
+        this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
+
+          this.eventsTapeService.eventsCity = []
+          this.eventsTapeService.eventsSeparator = []
+          this.eventsTapeService.eventsLastScrollPositionForTape = 0
+          this.currentRadius = Number(this.filterService.getRadiusFromlocalStorage())
+          this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
+          this.eventsTapeService.userHaveSubscribedEvents = true
+          this.wait = true
+          this.eventsTapeService.nextPage = true
+          this.eventsTapeService.notFound = false
+          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
+          this.eventsGeolocation = []
+          this.updateCoordinates().then(() => {
+            this.getEventsCity()
+          })
+
+          this.changeCity()
+          // this.getEventsGeolocation()
+
+          this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+        })
+      }
     }
 
     //Подписываемся на город

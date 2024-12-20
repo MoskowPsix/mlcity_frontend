@@ -44,10 +44,39 @@ app-sight-type-carusel {
 }
 
 .header-top-container{
+  display: contents;
+  opacity: 1;
+  justify-content: space-between;
+  transition: 0.3s;
+  width: 100%;
+}
+.header-tools_top{
+  display: contents;
+  opacity: 1;
+  justify-content: space-between;
+  transition: 0.3s;
+  width: 100%;
+}
+.header{
+  display: flex;
+  gap: 0.5rem;
+  height: 2.1rem;
+}
+.header_full{
+  height: 2.1rem;
   display: flex;
   width: 100%;
   justify-content: space-between;
 }
+.header-tools_search{
+  max-width: 100%;
+  right: 0;
+}
+.header-tools_search-active{
+  width: 100%;
+  right: 0;
+}
+
 .header-bottom-container{
   cursor: pointer;
   padding-left:1rem;

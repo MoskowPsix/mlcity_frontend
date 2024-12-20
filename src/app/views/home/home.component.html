@@ -38,16 +38,7 @@
       </div>
     </div>
 
-    <div  class="map-tools">
-        <div class="map-tools__category-grid">
-          <ng-container *ngFor="let type of renderTypesInMap()">
-            <div class="map-tools__category-grid__item">
-
-              <app-rounded-button [close]='true' (click)="deleteTypeInStorage(type)" [outline]="true" icon="assets/icons/category.svg" type="button" [buttonText]="type.name"></app-rounded-button>
-            </div>
-          </ng-container>
-          
-        </div>  
+    <div  class="map-tools"> 
         <div class="map-tools_wrapper">
           <div *ngIf="stateType === 'events'" class="calendar-container">
             <app-calendar-button (closeCalendar)="closeCalendar()"  (setDateEmit)="setDateInSelected($event)" style="opacity: 0; position: absolute;"[openCalendar]="openCalendarState" (calendarElement)="openCalendar($event)" (setDateEmit)="setDate($event)"></app-calendar-button>
