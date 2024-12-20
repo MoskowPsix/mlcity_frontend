@@ -45,7 +45,7 @@ export class ContactsComponent {
           })
         )
         .subscribe(res => {
-          this.ToastService.showToast('Вы успешно отправили обращение к нам, ждите ответа на свою электронную почту в течении 2 дней','success')
+          this.ToastService.showToast('Вы успешно отправили обращение к нам, ожидайте ответа на свою электронную почту','success')
           this.contactForm.controls['text'].setValue('')
           this.contactForm.controls['type'].setValue('')
           this.router.navigate(['/home'])
