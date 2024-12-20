@@ -1,5 +1,5 @@
 
-<ion-accordion *ngIf="priceState !== 'dont-price'">
+<ion-accordion [value]="value" *ngIf="priceState !== 'dont-price'">
     <ion-item *ngIf="place" class="place-address-container" slot="header">
       <ion-label class="place-adress-container__address-text">{{place.address}}</ion-label>
     </ion-item> 
