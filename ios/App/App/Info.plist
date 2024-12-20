@@ -23,11 +23,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>The $(PRODUCT_NAME) requires access to your current location in order to provide personalized content that is relevant to your immediate surroundings.</string>
+	<string>$(PRODUCT_NAME) требует доступа к вашему текущему местоположению, чтобы предоставлять персонализированный контент, соответствующий вашему непосредственному окружению.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>The $(PRODUCT_NAME) requires access to your camera in order to create photos for publications and avatars.</string>
+	<string>Для создания фотографий для публикаций и аватарок $(PRODUCT_NAME) требуется доступ к вашей камере.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>The $(PRODUCT_NAME)  requires access to your library in order to upload photos and videos, create publications, and generate avatars.</string>
+	<string>$(PRODUCT_NAME) требует доступа к вашей библиотеке для загрузки фотографий и видео, создания публикаций и создания аватаров.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
