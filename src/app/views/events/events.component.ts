@@ -161,7 +161,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   getEventsCity() {
     this.updateCoordinates().then(() => {
       this.toastService.showToast(`nextpage: ${this.eventsTapeService.nextPage}`, 'success')
-      if (!this.eventsTapeService.nextPage) {
+      if (this.eventsTapeService.nextPage) {
         this.eventsTapeService.wait = true
         //Спинер если запрос не первый
         if (this.eventsTapeService.eventsCity.length > 0 || this.eventsTapeService.eventsSeparator.length > 0) {
