@@ -25,6 +25,7 @@ import {
   filter,
   last,
   finalize,
+  Subscription,
 } from 'rxjs'
 import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { IEvent } from 'src/app/models/event'
@@ -64,6 +65,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   @ViewChild('headerWrapper') headerWrapper!: ElementRef
   @ViewChild(IonContent) ionContent!: IonContent
   @ViewChild('hiddenCalendar') hiddenButton!: ElementRef<HTMLButtonElement>
+  coordsSubscribe!: Subscription
   city: string = ''
   currentRadius!: number
   segment: string = 'eventsCitySegment'
@@ -279,14 +281,18 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   changeCity() {
+    if (this.coordsSubscribe) {
+      this.coordsSubscribe.unsubscribe()
+    }
     const coords = this.mapService.getLastMapCoordsFromLocalStorage()
-    this.locationService
+    this.coordsSubscribe = this.locationService
       .getLocationByCoords(coords)
       .pipe(
         takeUntil(this.destroy$),
         catchError(() => of(EMPTY)),
       )
       .subscribe((response: any) => {
+        console.log('дай координат')
         response?.location?.name ? (this.eventsTapeService.tapeCityName = response.location.name) : null
       })
   }
@@ -489,6 +495,7 @@ export class EventsComponent implements OnInit, OnDestroy {
       this.wait = true
       this.eventsTapeService.notFound = false
       this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
+        console.log('меняю фильтр')
         this.eventsTapeService.eventsCity = []
         this.eventsTapeService.eventsSeparator = []
         this.eventsTapeService.eventsLastScrollPositionForTape = 0
@@ -502,42 +509,45 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.eventsGeolocation = []
         this.updateCoordinates().then(() => {
           this.getEventsCity()
+          this.changeCity()
         })
 
-        this.changeCity()
         // this.getEventsGeolocation()
-
         this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
       })
     } else {
-      if (!this.eventsTapeService.eventsCity.length && !this.eventsTapeService.eventsSeparator.length) {
-        this.eventsTapeService.eventsLastScrollPositionForTape = 0
-        this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
-        this.wait = true
-        this.eventsTapeService.notFound = false
-        this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
-
-          this.eventsTapeService.eventsCity = []
-          this.eventsTapeService.eventsSeparator = []
-          this.eventsTapeService.eventsLastScrollPositionForTape = 0
-          this.currentRadius = Number(this.filterService.getRadiusFromlocalStorage())
-          this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
-          this.eventsTapeService.userHaveSubscribedEvents = true
-          this.wait = true
-          this.eventsTapeService.nextPage = true
-          this.eventsTapeService.notFound = false
-          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-          this.eventsGeolocation = []
-          this.updateCoordinates().then(() => {
-            this.getEventsCity()
-          })
-
+      if (!this.eventsTapeService.eventsCity.length && !this.eventsTapeService.eventsSeparator) {
+        this.updateCoordinates().then(() => {
+          this.getEventsCity()
           this.changeCity()
-          // this.getEventsGeolocation()
-
-          this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
         })
       }
+      // if (!this.eventsTapeService.eventsCity.length && !this.eventsTapeService.eventsSeparator.length) {
+      //   this.eventsTapeService.eventsLastScrollPositionForTape = 0
+      //   this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
+      //   this.wait = true
+      //   this.eventsTapeService.notFound = false
+      //   this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
+      //     this.eventsTapeService.eventsCity = []
+      //     this.eventsTapeService.eventsSeparator = []
+      //     this.eventsTapeService.eventsLastScrollPositionForTape = 0
+      //     this.currentRadius = Number(this.filterService.getRadiusFromlocalStorage())
+      //     this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
+      //     this.eventsTapeService.userHaveSubscribedEvents = true
+      //     this.wait = true
+      //     this.eventsTapeService.nextPage = true
+      //     this.eventsTapeService.notFound = false
+      //     this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
+      //     this.eventsGeolocation = []
+      //     this.updateCoordinates().then(() => {
+      //       this.getEventsCity()
+      //     })
+      //     this.changeCity()
+      //     console.log('меняю фильтр2')
+      //     // this.getEventsGeolocation()
+      //     // this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
+      //   })
+      // }
     }
 
     //Подписываемся на город
@@ -558,6 +568,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.searchActive = false
     this.destroy$.next()
     this.destroy$.complete()
+    console.log('отписка')
   }
 
   setDate(event: any) {
@@ -568,6 +579,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     // this.queryBuilderService.updateParams()
     this.filterService.changeFilter.next(true)
   }
+
   ngOnDestroy() {
     // отписываемся от всех подписок
     this.destroy$.next()
