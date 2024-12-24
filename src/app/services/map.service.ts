@@ -241,10 +241,7 @@ export class MapService {
   }
 
   getLastMapCoordsFromLocalStorage() {
-    let coords = [
-      Number(localStorage.getItem('lastMapLatitude') || ''),
-      Number(localStorage.getItem('lastMapLongitude') || ''),
-    ]
+    let coords = [Number(this.geolocationLatitude.value), Number(this.geolocationLongitude.value)]
 
     return coords
   }
