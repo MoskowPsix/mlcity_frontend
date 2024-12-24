@@ -341,6 +341,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   updateCoordinates() {
     return new Promise<void>((resolve) => {
       if (this.filterService.getLocationLatitudeFromlocalStorage()) {
+        console.log(this.mapService.getLastMapCoordsFromLocalStorage()[0])
+        console.log(this.mapService.getLastMapCoordsFromLocalStorage()[1])
         this.mapService.circleCenterLatitude.next(this.mapService.getLastMapCoordsFromLocalStorage()[0])
         this.mapService.circleCenterLongitude.next(this.mapService.getLastMapCoordsFromLocalStorage()[1])
       } else {
@@ -518,6 +520,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     } else {
       if (!this.eventsTapeService.eventsCity.length && !this.eventsTapeService.eventsSeparator) {
         this.updateCoordinates().then(() => {
+          console.log('меняю корды')
           this.getEventsCity()
           this.changeCity()
         })
