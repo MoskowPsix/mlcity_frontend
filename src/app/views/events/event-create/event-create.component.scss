@@ -13,7 +13,16 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-
+ion-modal{
+  --background: #ffff;
+}
+ion-radio-group{
+  overflow-y: auto;
+}
+ion-list{
+  height: 100%;
+  overflow-y: auto;
+}
 .navigate-buttons-container{
   padding-top: 1rem;
 }

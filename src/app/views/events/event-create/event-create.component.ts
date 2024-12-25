@@ -101,7 +101,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 1
+  stepCurrency: number = 2
   createObj: any = {}
   dataValid: boolean = true
   openModalImgs: boolean = false
@@ -230,12 +230,18 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     selectedStringFormmated[0] ? (selectedStringFormmated = selectedStringFormmated[0].split('_')) : null
 
     if (selectedStringFormmated) {
+      this.loadingService.showLoading()
       this.vkService
         .getPostGroup(selectedStringFormmated[0], selectedStringFormmated[1])
-        .pipe()
+        .pipe(
+          finalize(() => {
+            this.loadingService.hideLoading()
+          }),
+        )
         .subscribe((res: any) => {
-          if (res.length) {
-            this.selectedVkGroupPost(res[0])
+          if (res.response.length) {
+            this.selectedVkGroupPost(res.response[0])
+            this.closeAllModals()
           }
         })
     }

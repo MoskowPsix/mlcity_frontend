@@ -107,15 +107,15 @@
 <ion-modal  class="modal" backdropDismiss="false" [isOpen] ="openModalGroupValue" [canDismiss]="openModalGroupValue">
   <ng-template>
     <ion-content>
+       
         <ion-list>
             <ion-list-header>
               <ion-label class="modalLabel">Выберите сообщество, из которой следует загрузить посты</ion-label>
             </ion-list-header>
             <div class="vk-post-link-container">
-              <app-standart-input style="margin-top: -0.75rem; width: 100%;" [control] = "createEventForm.get('vkPostLink')"></app-standart-input>
+              <app-standart-input placeholder="введите ссылку на пост" style="margin-top: -0.75rem; width: 100%;" [control] = "createEventForm.get('vkPostLink')"></app-standart-input>
               <app-standart-button (click)="selectVkPostByUrl()" style="width: 30%;" buttonText="Загрузить" theme="standart"></app-standart-button>
             </div>
-        
             <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event); openModalPost($event); saveChangeId()" [allowEmptySelection]="true" [value]="vkGroupSelected">
               <ng-container>
                 <ion-item>
@@ -126,6 +126,7 @@
                   <ion-radio slot="end" value="{{ user.social_account.provider_id }}"></ion-radio>
                 </ion-item>
               </ng-container>
+              
               <ng-container *ngFor="let group of vkGroups">
                   <ion-item>
                     <ion-avatar>
@@ -137,15 +138,6 @@
                   </ion-item>
               </ng-container>
             </ion-radio-group>
-            <!-- Грузим чужие посты из вк, временное решение -->
-            <!-- <ng-container>
-              <ion-item>
-                <ion-label class="ion-padding-start">
-                  <ion-input label="Url input" type="text" placeholder="URL группы" (ionChange)="onFocusPlace($event)"></ion-input>
-                </ion-label>
-                  <ion-button  (click)="setVkPostsByGroupURL();  stepNext();">Загрузить URL</ion-button>
-              </ion-item>
-            </ng-container> -->
         </ion-list>
         <ion-button class="modalBtnBottom" (click)="closeAllModals()">
           Закрыть
