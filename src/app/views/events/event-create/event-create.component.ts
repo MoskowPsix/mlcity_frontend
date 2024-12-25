@@ -266,7 +266,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.selectedOrganization = event.organization
     let id = this.selectedOrganization.id
     this.createEventForm.patchValue({ organization_id: id })
-    this.modalSelectedOrganization = !this.modalSelectedOrganization
+    this.closeOrganizationModal()
   }
   //поулчаем юзера и устанвлвиаем группы и шаги
   getUserWithSocialAccount() {
