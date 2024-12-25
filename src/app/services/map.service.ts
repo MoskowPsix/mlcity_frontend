@@ -34,8 +34,12 @@ export class MapService {
 
   public geolocationCity: BehaviorSubject<string> = new BehaviorSubject('')
   public radius: BehaviorSubject<number> = new BehaviorSubject(0)
-  public geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
-  public geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
+  public geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(
+    Number(localStorage.getItem('lastMapLatitude')),
+  )
+  public geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(
+    Number(localStorage.getItem('lastMapLongitude')),
+  )
   public geolocationRegion: BehaviorSubject<string> = new BehaviorSubject('')
 
   options: NativeGeocoderOptions = {

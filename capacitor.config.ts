@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'www',
   bundledWebRuntime: false,
   server: {
-    url: 'https://vokrug.city',
+    url: 'https://dev.vokrug.city',
   },
 }
 

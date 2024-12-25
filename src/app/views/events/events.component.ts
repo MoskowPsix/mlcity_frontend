@@ -66,6 +66,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   @ViewChild(IonContent) ionContent!: IonContent
   @ViewChild('hiddenCalendar') hiddenButton!: ElementRef<HTMLButtonElement>
   coordsSubscribe!: Subscription
+  eventsSubscribe!: Subscription
   city: string = ''
   currentRadius!: number
   segment: string = 'eventsCitySegment'
@@ -155,29 +156,39 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.router.navigate(['/events', event])
   }
 
+  clearTempData() {
+    return new Promise<void>((resolve) => {
+      resolve() // Успешно завершили обновление
+    })
+  }
   scrollUpCheckState() {
     const boundingClientRect = this.ContentCol?.nativeElement.getBoundingClientRect()
     boundingClientRect ? (this.scrollUpState = boundingClientRect.y > 0) : (this.scrollUpState = false)
   }
 
   getEventsCity() {
+    if (this.eventsSubscribe) {
+      // this.coordsSubscribe.unsubscribe()
+      this.eventsSubscribe.unsubscribe()
+      this.eventsTapeService.wait = false
+    }
+    let subscriveSuccess = false
     this.updateCoordinates().then(() => {
-      this.toastService.showToast(`nextpage: ${this.eventsTapeService.nextPage}`, 'success')
-      if (this.eventsTapeService.nextPage) {
+      if (this.eventsTapeService.nextPage && !this.eventsTapeService.wait) {
         this.eventsTapeService.wait = true
         //Спинер если запрос не первый
         if (this.eventsTapeService.eventsCity.length > 0 || this.eventsTapeService.eventsSeparator.length > 0) {
           this.spiner = true
         }
-        this.eventsService
+        this.eventsSubscribe = this.eventsService
           .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
           .pipe(
             debounceTime(1000),
             takeUntil(this.destroy$),
             finalize(() => {
-              if (this.eventsTapeService.eventsCity.length === 0) {
+              this.eventsTapeService.wait = false
+              if (this.eventsTapeService.eventsCity.length === 0 && subscriveSuccess) {
                 this.eventsTapeService.notFound = true
-                this.eventsTapeService.wait = false
               }
             }),
             catchError((error) => {
@@ -189,7 +200,7 @@ export class EventsComponent implements OnInit, OnDestroy {
           .subscribe((response: any) => {
             //Выключаю спинер
             this.spiner = false
-
+            subscriveSuccess = true
             //Проверяем курсор
             let cursor = response.events.next_cursor
             if (cursor) {
@@ -293,7 +304,6 @@ export class EventsComponent implements OnInit, OnDestroy {
         catchError(() => of(EMPTY)),
       )
       .subscribe((response: any) => {
-        console.log('дай координат')
         response?.location?.name ? (this.eventsTapeService.tapeCityName = response.location.name) : null
       })
   }
@@ -342,13 +352,9 @@ export class EventsComponent implements OnInit, OnDestroy {
   updateCoordinates() {
     return new Promise<void>((resolve) => {
       if (this.filterService.getLocationLatitudeFromlocalStorage()) {
-        console.log(this.mapService.getLastMapCoordsFromLocalStorage()[0])
-        console.log(this.mapService.getLastMapCoordsFromLocalStorage()[1])
         this.mapService.circleCenterLatitude.next(this.mapService.getLastMapCoordsFromLocalStorage()[0])
         this.mapService.circleCenterLongitude.next(this.mapService.getLastMapCoordsFromLocalStorage()[1])
       } else {
-        this.filterService.setLocationLatitudeTolocalStorage('0')
-        this.filterService.setLocationLongitudeTolocalStorage('0')
       }
 
       resolve() // Успешно завершили обновление
@@ -485,7 +491,6 @@ export class EventsComponent implements OnInit, OnDestroy {
         // this.filterService.changeFilter.next(true)
       }
     })
-
     this.date = {
       dateStart: this.filterService.startDate.value,
       dateEnd: this.filterService.endDate.value,
@@ -493,93 +498,31 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.setDefaultValueInSelectDate(this.date)
     // Подписываемся на изменение фильтра
     if (!this.eventsTapeService.userHaveSubscribedEvents) {
-      this.eventsTapeService.eventsLastScrollPositionForTape = 0
-      this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
-      this.wait = true
-      this.eventsTapeService.notFound = false
       this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
-        console.log('меняю фильтр')
         this.eventsTapeService.eventsCity = []
         this.eventsTapeService.eventsSeparator = []
         this.eventsTapeService.eventsLastScrollPositionForTape = 0
+
         this.currentRadius = Number(this.filterService.getRadiusFromlocalStorage())
         this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
         this.eventsTapeService.userHaveSubscribedEvents = true
-        this.wait = true
         this.eventsTapeService.nextPage = true
         this.eventsTapeService.notFound = false
         this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
         this.eventsGeolocation = []
-        this.updateCoordinates().then(() => {
-          this.getEventsCity()
-          this.changeCity()
-        })
-
-        // this.getEventsGeolocation()
-        this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
-      })
-    } else {
-      if (!this.eventsTapeService.eventsCity.length && !this.eventsTapeService.eventsSeparator.length) {
-        this.eventsTapeService.eventsLastScrollPositionForTape = 0
-        this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
-        this.wait = true
-        this.eventsTapeService.notFound = false
-        this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
-          this.eventsTapeService.eventsCity = []
-          this.eventsTapeService.eventsSeparator = []
-          this.eventsTapeService.eventsLastScrollPositionForTape = 0
-          this.currentRadius = Number(this.filterService.getRadiusFromlocalStorage())
-          this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
-          this.eventsTapeService.userHaveSubscribedEvents = true
-          this.wait = true
-          this.eventsTapeService.nextPage = true
-          this.eventsTapeService.notFound = false
-          this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-          this.eventsGeolocation = []
+        this.clearTempData().then(() => {
           this.updateCoordinates().then(() => {
             this.getEventsCity()
+            if (!Number(this.filterService.getLocationLatitudeFromlocalStorage())) {
+              this.filterService.getLocationLatitudeFromlocalStorage()
+              this.navigationService.modalSearchCityesOpen.next(true)
+            }
+            this.changeCity()
           })
-
-          this.changeCity()
         })
-      }
-      // if (!this.eventsTapeService.eventsCity.length && !this.eventsTapeService.eventsSeparator.length) {
-      //   this.eventsTapeService.eventsLastScrollPositionForTape = 0
-      //   this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
-      //   this.wait = true
-      //   this.eventsTapeService.notFound = false
-      //   this.filterService.changeFilter.pipe(debounceTime(1000)).subscribe((value) => {
-      //     this.eventsTapeService.eventsCity = []
-      //     this.eventsTapeService.eventsSeparator = []
-      //     this.eventsTapeService.eventsLastScrollPositionForTape = 0
-      //     this.currentRadius = Number(this.filterService.getRadiusFromlocalStorage())
-      //     this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)
-      //     this.eventsTapeService.userHaveSubscribedEvents = true
-      //     this.wait = true
-      //     this.eventsTapeService.nextPage = true
-      //     this.eventsTapeService.notFound = false
-      //     this.queryBuilderService.paginationPublicEventsForTapeCurrentPage.next('')
-      //     this.eventsGeolocation = []
-      //     this.updateCoordinates().then(() => {
-      //       this.getEventsCity()
-      //     })
-      //     this.changeCity()
-      //     console.log('меняю фильтр2')
-      //     // this.getEventsGeolocation()
-      //     // this.navigationService.appFirstLoading.next(false) // чтобы удалялся фильтр,
-      //   })
-      // }
+      })
     }
 
-    //Подписываемся на город
-    // this.filterService.locationId.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    //   this.locationService
-    //     .getLocationsIds(value)
-    //     .pipe(takeUntil(this.destroy$))
-    //     .subscribe((response: any) => {
-    //       this.city = response.location.name
-    //     })
-    // })
     this.filterService.eventTypes.pipe(takeUntil(this.destroy$)).subscribe((value: any) => {
       this.eventTypeId = value[0]
     })
@@ -589,7 +532,6 @@ export class EventsComponent implements OnInit, OnDestroy {
     this.searchActive = false
     this.destroy$.next()
     this.destroy$.complete()
-    console.log('отписка')
   }
 
   setDate(event: any) {

@@ -81,6 +81,8 @@ export class AppComponent implements OnInit {
     this.swiper.nativeElement.swiper.slideNext()
   }
 
+  
+
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
     if (window.innerWidth < 1200) {
