@@ -254,7 +254,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (event.value && event.value != 'Выбрать') {
       this.selectedDateItem = event
     } else {
-      console.log(event.value)
       this.selectedDateItem = {
         name: 'Выбрать',
         value: 'Выбрать',
@@ -441,7 +440,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.CirclePoint.options.set('fillColor', color)
         this.CirclePoint.options.set('fillOpacity', 0.15)
         this.CirclePoint.options.set('strokeWidth')
-        console.log('get1')
         this.getEventsAndSights()
         this.filterService.changeFilter.next(true)
       }
@@ -449,7 +447,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.map.target.controls.remove('zoomControl')
 
     await this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
-      console.log('get2')
 
       this.getEventsAndSights()
     })
@@ -675,7 +672,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getPlaces(): Observable<any> {
-    console.log('получить точки на карте')
     return new Observable((observer) => {
       this.eventsLoading = true
       if (this.placeSubscribe) {
@@ -860,7 +856,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     return showTypes
   }
   setDefaultValueInSelectDate(date: any) {
-    console.log(date)
     let { dateStart, dateEnd } = date
     dateStart = moment(dateStart)
     dateEnd = moment(dateEnd)
@@ -1223,7 +1218,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.mapService.positionFilter(this.map, this.CirclePoint)
         }
         if (this.filterService.locationLatitude && this.filterService.locationLongitude) {
-          console.log('log3')
           this.getEventsAndSights()
         }
         this.currentTypesInMap = this.renderTypesInMap()
