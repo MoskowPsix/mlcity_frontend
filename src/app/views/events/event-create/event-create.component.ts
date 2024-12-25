@@ -13,7 +13,7 @@ import {
   inject,
 } from '@angular/core'
 import { trigger, style, animate, transition } from '@angular/animations'
-import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry, Observable, finalize } from 'rxjs'
+import { switchMap, tap, of, Subject, takeUntil, catchError, delay, retry, Observable, finalize, first } from 'rxjs'
 import { FormArray, FormControl, FormGroup, MinLengthValidator, Validators } from '@angular/forms'
 import { UserService } from 'src/app/services/user.service'
 import { MaskitoOptions } from '@maskito/core'
@@ -206,8 +206,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.organizationModalValue = false
   }
 
-  
-
   //Клик по нкопке назад
   stepPrev() {
     if (this.stepCurrency - 1 > 0) {
@@ -223,6 +221,23 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   // logForm() {
   //   console.log(this.createEventForm.value)
   // }
+
+  selectVkPostByUrl() {
+    let selectedStringFormmated = this.createEventForm.value.vkPostLink.split('-')
+
+    selectedStringFormmated[1] ? (selectedStringFormmated = selectedStringFormmated[1].split('-')) : null
+    console.log(selectedStringFormmated[0].split('_').length)
+    selectedStringFormmated[0] ? (selectedStringFormmated = selectedStringFormmated[0].split('_')) : null
+
+    if (selectedStringFormmated) {
+      this.vkService
+        .getPostGroup(selectedStringFormmated[0], selectedStringFormmated[1])
+        .pipe()
+        .subscribe((res: any) => {
+          console.log(res)
+        })
+    }
+  }
 
   deleteVkFiles(event: any) {
     for (let i = 0; i < this.vkGroupPostSelected.attachments.length; i++) {
@@ -1068,7 +1083,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         description: new FormControl('', [Validators.required, Validators.minLength(10)]),
         places: new FormControl([], [Validators.required]),
         type: new FormControl([], [Validators.required]),
-        vkLink: new FormControl([], [Validators.required]),
+        vkPostLink: new FormControl([], [Validators.required]),
         ageLimit: new FormControl(18, [Validators.required]),
         status: new FormControl({ value: this.statusSelected, disabled: false }, [Validators.required]),
         files: new FormControl('', fileTypeValidator(['png', 'jpg', 'jpeg'])),

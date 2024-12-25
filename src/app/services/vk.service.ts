@@ -76,6 +76,8 @@ export class VkService {
   }
 
   getPostGroup(group_id: number, post_id: number) {
+    console.log(group_id)
+    console.log(post_id)
     return this.http.jsonp<any>(
       `https://api.vk.com/method/wall.getById?posts=-${group_id}_${post_id}&access_token=${this.vk_access_token}&v=5.131`,
       'callback',

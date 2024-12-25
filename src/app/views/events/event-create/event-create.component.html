@@ -112,8 +112,8 @@
               <ion-label class="modalLabel">Выберите сообщество, из которой следует загрузить посты</ion-label>
             </ion-list-header>
             <div class="vk-post-link-container">
-              <app-standart-input style="margin-top: -0.75rem; width: 100%;" [control] = "createEventForm.get('vkLink')"></app-standart-input>
-              <app-standart-button style="width: 30%;" buttonText="Загрузить" theme="standart"></app-standart-button>
+              <app-standart-input style="margin-top: -0.75rem; width: 100%;" [control] = "createEventForm.get('vkPostLink')"></app-standart-input>
+              <app-standart-button (click)="selectVkPostByUrl()" style="width: 30%;" buttonText="Загрузить" theme="standart"></app-standart-button>
             </div>
         
             <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event); openModalPost($event); saveChangeId()" [allowEmptySelection]="true" [value]="vkGroupSelected">
