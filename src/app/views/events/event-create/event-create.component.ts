@@ -234,7 +234,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         .getPostGroup(selectedStringFormmated[0], selectedStringFormmated[1])
         .pipe()
         .subscribe((res: any) => {
-          console.log(res)
+          if (res.length) {
+            this.selectedVkGroupPost(res[0])
+          }
         })
     }
   }
