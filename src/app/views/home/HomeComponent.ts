@@ -254,7 +254,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (event.value && event.value != 'Выбрать') {
       this.selectedDateItem = event
     } else {
-      console.log(event.value)
       this.selectedDateItem = {
         name: 'Выбрать',
         value: 'Выбрать',
@@ -448,6 +447,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.map.target.controls.remove('zoomControl')
 
     await this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
+
       this.getEventsAndSights()
     })
 
@@ -856,7 +856,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     return showTypes
   }
   setDefaultValueInSelectDate(date: any) {
-    console.log(date)
     let { dateStart, dateEnd } = date
     dateStart = moment(dateStart)
     dateEnd = moment(dateEnd)
