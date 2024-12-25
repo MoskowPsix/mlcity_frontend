@@ -101,7 +101,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   createFormCount: number = 0
   placeOpen: any = 0
   stepStart: number = 0
-  stepCurrency: number = 1
+  stepCurrency: number = 2
   createObj: any = {}
   dataValid: boolean = true
   openModalImgs: boolean = false
@@ -205,6 +205,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   closeOrganizationModal() {
     this.organizationModalValue = false
   }
+
+  
 
   //Клик по нкопке назад
   stepPrev() {
@@ -1066,6 +1068,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         description: new FormControl('', [Validators.required, Validators.minLength(10)]),
         places: new FormControl([], [Validators.required]),
         type: new FormControl([], [Validators.required]),
+        vkLink: new FormControl([], [Validators.required]),
         ageLimit: new FormControl(18, [Validators.required]),
         status: new FormControl({ value: this.statusSelected, disabled: false }, [Validators.required]),
         files: new FormControl('', fileTypeValidator(['png', 'jpg', 'jpeg'])),
