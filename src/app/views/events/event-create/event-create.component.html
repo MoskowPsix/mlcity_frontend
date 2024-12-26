@@ -24,7 +24,9 @@
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="2">
         <div class="main-content__step-wrapper">
           <div class="load-for-vk-button-wrapper">
-            <app-standart-button (click)="openModalGroup()" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+            <app-standart-button *ngIf="checkSocialVk" (click)="openModalGroup()" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+            <app-standart-button *ngIf="!checkSocialVk" (click)="showVkToast()" [disabled]="true" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+
           </div>
           <app-edit-slider [categoryType]="types[currentType[0] - 1]" type="create" [vkFiles]="vkFiles" (deleteVkfilesEmit)="deleteVkFiles($event)" (filesEmit)="onFileChange($event)" [previews]="uploadFiles" [files]="uploadFiles" ></app-edit-slider>
           <app-standart-rich-input [label]="'Описание'" [control] = "createEventForm.get('description')"></app-standart-rich-input>
