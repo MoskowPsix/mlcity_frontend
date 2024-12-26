@@ -14,10 +14,26 @@
   padding-bottom: 1rem;
 }
 ion-modal{
-  --background: #ffff;
+  ion-content{
+    --background: #ffff;
+    --background-color:#ffff;
+
+  }
+ 
 }
 ion-radio-group{
   overflow-y: auto;
+}
+.select-group-modal-header{
+  font-family: var(--font-regular);
+
+  font-size: 1.2rem;
+}
+.select-group-modal{
+  padding: 1rem;
+  background-color:#ffff;
+  position: absolute;
+  height: 100%;
 }
 ion-list{
   height: 100%;
@@ -29,13 +45,46 @@ ion-list{
 .vk-post-link-container{
   display: flex;
   gap: 0.5rem;
+  padding-top: 1rem;
   justify-content:center;
   align-items: center;
   width: 100%;
-  padding-left: 1rem;
-  padding-right: 1rem;
+}
+.select-group-modal-close{
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 1rem;
+  height: 1rem;
 }
 
+.group-item{
+  display: flex;
+  gap: 0.5rem;
+  transition: 0.3s;
+}
+.group-item-container{
+  padding-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+.group-item-text{
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-regular);
+}
+
+.group-item-icon{
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}
+.group-item:active{
+  transition: 0.3s;
+  background-color: #e4e4e4;
+}
 .cancel-wrapper{
   padding-top: 0.5rem;
   display: flex;

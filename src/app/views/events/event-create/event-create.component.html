@@ -24,7 +24,9 @@
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="2">
         <div class="main-content__step-wrapper">
           <div class="load-for-vk-button-wrapper">
-            <app-standart-button (click)="openModalGroup()" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+            <app-standart-button *ngIf="checkSocialVk" (click)="openModalGroup()" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+            <app-standart-button *ngIf="!checkSocialVk" (click)="showVkToast()" [disabled]="true" icon="/assets/icons/vk.svg" buttonText="Загрузить из ВК" theme="light"></app-standart-button>
+
           </div>
           <app-edit-slider [categoryType]="types[currentType[0] - 1]" type="create" [vkFiles]="vkFiles" (deleteVkfilesEmit)="deleteVkFiles($event)" (filesEmit)="onFileChange($event)" [previews]="uploadFiles" [files]="uploadFiles" ></app-edit-slider>
           <app-standart-rich-input [label]="'Описание'" [control] = "createEventForm.get('description')"></app-standart-rich-input>
@@ -107,15 +109,36 @@
 <ion-modal  class="modal" backdropDismiss="false" [isOpen] ="openModalGroupValue" [canDismiss]="openModalGroupValue">
   <ng-template>
     <ion-content>
-       
-        <ion-list>
+      <div class="select-group-modal">
+        <div class="select-group-modal-header">
+          Выберите сообщество, из которой следует загрузить посты
+        </div>
+        <div class="select-group-modal-close">
+          <img src="assets/icons/close.svg" (click)="closeAllModals()"/>
+        </div>
+        <div class="vk-post-link-container">
+          <app-standart-input placeholder="введите ссылку на пост" style="margin-top: -0.75rem; width: 100%;" [control] = "createEventForm.get('vkPostLink')"></app-standart-input>
+          <app-standart-button (click)="selectVkPostByUrl()" style="width: 30%;" buttonText="Загрузить" theme="standart"></app-standart-button>
+        </div>
+        <div class="select-group-modal-content">
+          <div *ngIf="vkGroups" class="group-item-container">
+            <div class="group-item">
+              <img class="group-item-icon" alt="ava" src="/assets/icons/favicon.png" />
+              <div class="group-item-text" (click)="selectedVkGroup( user.social_account.provider_id)"  (click) = "openModalPost( user.social_account.provider_id)" (click)="saveChangeId()">Моя страница</div>
+            </div>
+            <div *ngFor="let group of vkGroups" class="group-item" (click)="selectedVkGroup(-group.id)"  (click) = "openModalPost(-group.id)" (click)="saveChangeId()">
+              <img class="group-item-icon" alt="ava" [src]="group.photo_50" />
+              <div class="group-item-text">{{ group.name }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+        <!-- <ion-list>
             <ion-list-header>
               <ion-label class="modalLabel">Выберите сообщество, из которой следует загрузить посты</ion-label>
             </ion-list-header>
-            <div class="vk-post-link-container">
-              <app-standart-input placeholder="введите ссылку на пост" style="margin-top: -0.75rem; width: 100%;" [control] = "createEventForm.get('vkPostLink')"></app-standart-input>
-              <app-standart-button (click)="selectVkPostByUrl()" style="width: 30%;" buttonText="Загрузить" theme="standart"></app-standart-button>
-            </div>
+           
             <ion-radio-group *ngIf="vkGroups" (ionChange)="selectedVkGroup($event); openModalPost($event); saveChangeId()" [allowEmptySelection]="true" [value]="vkGroupSelected">
               <ng-container>
                 <ion-item>
@@ -141,7 +164,7 @@
         </ion-list>
         <ion-button class="modalBtnBottom" (click)="closeAllModals()">
           Закрыть
-        </ion-button>
+        </ion-button> -->
     </ion-content>
   </ng-template>
 </ion-modal>

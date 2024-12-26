@@ -226,7 +226,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     let selectedStringFormmated = this.createEventForm.value.vkPostLink.split('-')
 
     selectedStringFormmated[1] ? (selectedStringFormmated = selectedStringFormmated[1].split('-')) : null
-    console.log(selectedStringFormmated[0].split('_').length)
+
     selectedStringFormmated[0] ? (selectedStringFormmated = selectedStringFormmated[0].split('_')) : null
 
     if (selectedStringFormmated) {
@@ -388,9 +388,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
 
   //Выбираем группу
   selectedVkGroup(group_id: any) {
-    if (group_id.detail.value) {
-      this.vkGroupSelected = group_id.detail.value
-      this.setVkPostsByGroupID(group_id.detail.value)
+    if (group_id) {
+      this.vkGroupSelected = group_id
+      this.setVkPostsByGroupID(group_id)
     } else {
       this.vkGroupSelected = null
       this.vkGroupPosts = null
@@ -513,7 +513,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.currentType.push(Number(event))
       this.createEventForm.value.type.push(Number(event))
     }
-    console.log()
   }
   setValuePrice(event: any) {
     let id = event.temp_id
@@ -647,7 +646,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         this.formData.append(`places[${i}][seances][${i_sean}][dateEnd]`, item_sean.date_start)
       })
     })
-    console.log(this.vkGroupPostSelected?.id)
     this.formData.append('vkPostId', this.vkGroupPostSelected?.id ? this.vkGroupPostSelected?.id : '')
     if (this.vkGroupSelected && this.vkGroupPostSelected?.id) {
       this.formData.append('vkGroupId', this.vkGroupSelected.toString())
@@ -1033,8 +1031,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.destroy$.complete()
     this.stepCurrency = 1
     this.nextPageUserOrganizations = true
-    console.log(this.stepCurrency)
     this.resetUploadInfo()
+    this.queryBuilderService.paginationUserOrganizationsPage.next('')
     this.createEventForm.reset()
   }
   generateTapeRequest(
@@ -1060,7 +1058,6 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           }),
         )
         .subscribe((res: any) => {
-          console.log(res.organizations.next_cursor)
           this.organizations.push(...res.organizations.data)
           res.organizations.next_cursor
             ? (this.nextPageUserOrganizations = true)

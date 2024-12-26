@@ -32,11 +32,11 @@
           
           <div (click)="redirect()" *ngIf="!organization.files[0] || organization.files[0].link === '' " class="user-section-image">
             <ng-container *ngIf="!organization.files.length  && organization.types &&  organization.types.length && organization.types[0].ico;">
-              <img  [src]="this.backendUrl + organization.types[0]?.ico" alt="">         
+              <img class="blue-icon"  [src]="this.backendUrl + organization.types[0]?.ico" alt="">         
             </ng-container>
             
             <ng-container *ngIf="organization.files.length  && organization.files[0] && !organization.files[0].link && organization.types &&  organization.types.length && organization.types[0].ico;">
-              <img  [src]="this.backendUrl + organization.types[0]?.ico" alt="">         
+              <img class="blue-icon"   [src]="this.backendUrl + organization.types[0]?.ico" alt="">         
             </ng-container>
      
               <ng-container *ngIf="organizationNoTypesIcoAndFiles">
