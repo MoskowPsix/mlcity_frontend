@@ -85,22 +85,24 @@ export class EditSliderComponent implements OnInit {
   }
 
   deletePreview(file: any, i: number) {
-    if (file.id) {
-      this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.id !== file.id)
-      this.files.find((fileArrayItem) => fileArrayItem.id === file.id).on_delete = true
-      this.filesEmit.emit(this.files)
-    } else {
-      let index = this.files.map((e) => e.name).indexOf(file.name)
-      let previewsIndex = this.files.find((fileArrayItem) => fileArrayItem.name === file.name)
-      if (previewsIndex.vk) {
-        this.deleteVkFiles(file)
-        this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.name !== file.name)
+    if (!file.vk) {
+      if (file.id) {
+        this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.id !== file.id)
+        this.files.find((fileArrayItem) => fileArrayItem.id === file.id).on_delete = true
+        this.filesEmit.emit(this.files)
       } else {
+        let index = this.files.map((e) => e.name).indexOf(file.name)
+        let previewsIndex = this.files.find((fileArrayItem) => fileArrayItem.name === file.name)
         this.files = this.files.filter((fileArrayItem) => fileArrayItem.name !== file.name)
         this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.name !== file.name)
+        this.filesEmit.emit(this.files)
       }
-
-      this.filesEmit.emit(this.files)
+    } else {
+      let previewsIndex = this.vkFiles.find((fileArrayItem) => fileArrayItem.name === file.name)
+      if (previewsIndex) {
+        this.deleteVkFiles(file)
+        this.previews = this.previews.filter((fileArrayItem) => fileArrayItem.name !== file.name)
+      }
     }
   }
 
