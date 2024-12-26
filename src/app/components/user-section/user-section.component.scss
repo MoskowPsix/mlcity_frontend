@@ -33,8 +33,11 @@
     font-size: 0.65rem;
     color: rgb(107, 107, 107);   
     img{
-        filter: brightness(0) saturate(100%) invert(42%) sepia(46%) saturate(3416%) hue-rotate(205deg) brightness(101%) contrast(101%);
     }
+}
+.blue-icon{
+    filter: brightness(0) saturate(100%) invert(42%) sepia(46%) saturate(3416%) hue-rotate(205deg) brightness(101%) contrast(101%);
+
 }
 .user-no-photo_image{
     width: 100%;

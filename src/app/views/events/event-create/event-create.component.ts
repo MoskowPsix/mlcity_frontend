@@ -226,7 +226,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     let selectedStringFormmated = this.createEventForm.value.vkPostLink.split('-')
 
     selectedStringFormmated[1] ? (selectedStringFormmated = selectedStringFormmated[1].split('-')) : null
-  
+
     selectedStringFormmated[0] ? (selectedStringFormmated = selectedStringFormmated[0].split('_')) : null
 
     if (selectedStringFormmated) {
@@ -1032,6 +1032,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.stepCurrency = 1
     this.nextPageUserOrganizations = true
     this.resetUploadInfo()
+    this.queryBuilderService.paginationUserOrganizationsPage.next('')
     this.createEventForm.reset()
   }
   generateTapeRequest(
