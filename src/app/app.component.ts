@@ -13,7 +13,6 @@ import { ScreenOrientation } from '@capacitor/screen-orientation'
 import { UserService } from './services/user.service'
 import { AuthService } from './services/auth.service'
 import { TokenService } from './services/token.service'
-import { WebSocketService } from './services/web-socket.service'
 import moment from 'moment'
 import 'moment/locale/ru'
 moment.locale('ru')
@@ -25,7 +24,6 @@ moment.locale('ru')
 export class AppComponent implements OnInit {
   private readonly destroy$ = new Subject<void>()
   constructor(
-    private wbService: WebSocketService,
     private router: Router,
     private zone: NgZone,
     private sanitizer: DomSanitizer,
@@ -81,8 +79,6 @@ export class AppComponent implements OnInit {
     this.swiper.nativeElement.swiper.slideNext()
   }
 
-  
-
   @HostListener('window:resize', ['$event'])
   mobileOrNote() {
     if (window.innerWidth < 1200) {
@@ -109,7 +105,6 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.wbService.initWS()
     this.mobileOrNote()
     if (this.filterService.getAboutMobileStateFromLocalStorage()) {
       this.aboutModal = false
