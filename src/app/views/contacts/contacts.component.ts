@@ -27,7 +27,26 @@ export class ContactsComponent {
   ) {}
   contactForm!: FormGroup;
   userHaveEmailAndEmail:boolean = true
+  selectedTypeModalValue:boolean = false;
+  items:any[] = [
 
+        { id: 1, name: 'Пожаловаться', value: 'Пожаловаться' },
+        { id: 2, name: 'Сообщить об ошибке', value: 'Сообщить об ошибке' },
+        { id: 3, name: 'Предложить идею', value: 'Предложить идею' },
+
+  ];
+  selectedDateItem:any =  { id: 1, name: 'Тип обращения', value: 'Тип обращения' }
+  selectDateItem(event:any){
+    console.log(event)
+    this.selectedDateItem = event;
+    this.setTypeValue(event)
+  }
+  openSelectDate(){
+    this.selectedTypeModalValue = true;
+  }
+  closeSelectDate(){
+    this.selectedTypeModalValue = false;
+  }
   onSubmit() {
     if (this.contactForm.valid) {
       this.loadingService.showLoading()
@@ -88,7 +107,7 @@ export class ContactsComponent {
   }
 
   setTypeValue(event:any){
-    this.contactForm.controls['type'].setValue(event.target.value)
+    this.contactForm.controls['type'].setValue(event.value)
   }
 
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
@@ -104,7 +123,7 @@ export class ContactsComponent {
         Validators.minLength(3),
         Validators.maxLength(50),
       ]),
-      type: new FormControl('', [Validators.required,Validators.minLength(3)]),
+      type: new FormControl(''),
       text: new FormControl('', [Validators.required, Validators.minLength(3)]),
     });
   }
