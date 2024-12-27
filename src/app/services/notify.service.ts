@@ -39,7 +39,7 @@ export class NotifyService {
         data.forEach((notify: any) => {
           this.viewNotify(notify.id).pipe(takeUntil(this.destroy$)).subscribe()
           console.log(notify)
-          this.toastService.showToast(`${notify.id}`, 'success')
+          // this.toastService.showToast(`${notify.id}`, 'success')
         })
       }
     }
@@ -59,7 +59,7 @@ export class NotifyService {
 
     this.eventSourceAll.onmessage = (event: any) => {
       const data = JSON.parse(event.data)
-      this.toastService.showToast(`${data[0].id}`, 'success')
+      // this.toastService.showToast(`${data[0].id}`, 'success')
       if (data?.length) {
         this.eventSubjectAll.next(data)
         this.sendLocalNotification(data.id, data.message, data.message)
