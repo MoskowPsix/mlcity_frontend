@@ -15,6 +15,7 @@ import { AuthService } from './services/auth.service'
 import { TokenService } from './services/token.service'
 import moment from 'moment'
 import 'moment/locale/ru'
+import { NotifyService } from './services/notify.service'
 moment.locale('ru')
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ moment.locale('ru')
 export class AppComponent implements OnInit {
   private readonly destroy$ = new Subject<void>()
   constructor(
+    private notifyService: NotifyService,
     private router: Router,
     private zone: NgZone,
     private sanitizer: DomSanitizer,
@@ -37,7 +39,7 @@ export class AppComponent implements OnInit {
     ScreenOrientation.lock({ orientation: 'portrait' })
     this.initializeApp()
   }
-
+  messages: any[] = []
   url: any = ''
   mobile: boolean = false
   iframeUrl: any
@@ -105,6 +107,7 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.notifyService.initSSE()
     this.mobileOrNote()
     if (this.filterService.getAboutMobileStateFromLocalStorage()) {
       this.aboutModal = false
