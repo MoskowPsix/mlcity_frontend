@@ -4,6 +4,7 @@ import { BehaviorSubject, catchError, EMPTY, Subject, takeUntil } from 'rxjs'
 import { environment } from 'src/environments/environment'
 import { UserService } from './user.service'
 import { ToastService } from './toast.service'
+import { LocalNotifications } from '@capacitor/local-notifications'
 @Injectable({
   providedIn: 'root',
 })
