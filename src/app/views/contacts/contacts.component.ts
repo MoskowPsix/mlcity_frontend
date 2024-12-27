@@ -37,9 +37,9 @@ export class ContactsComponent {
   ];
   selectedDateItem:any =  { id: 1, name: 'Тип обращения', value: 'Тип обращения' }
   selectDateItem(event:any){
-    console.log(event)
     this.selectedDateItem = event;
     this.setTypeValue(event)
+    this.closeSelectDate()
   }
   openSelectDate(){
     this.selectedTypeModalValue = true;
