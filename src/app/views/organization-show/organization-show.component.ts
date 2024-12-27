@@ -82,7 +82,6 @@ export class OrganizationShowComponent implements OnInit {
   }
 
   getOrganizationEventsExpired() {
-    console.log('получаю ивенты внутри')
     if (this.nextPageExpired) {
       this.spinerExpired = true
       this.organizationService

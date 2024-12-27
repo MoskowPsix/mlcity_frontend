@@ -13,9 +13,11 @@ export interface ISight {
   address: string
   location: any[]
   latitude: number
+  site?: string
   longitude: number
   location_id: number
   type?: number
+  phone?: string
   status?: number
   files: any[]
   organization?: IOrganization

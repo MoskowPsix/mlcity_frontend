@@ -42,6 +42,20 @@
         <div class="organization-container__slider-wrapper">
           <app-edit-slider [hideLSlider]="!sight.files.length" (click)="openImagesModalFunction()" [files]="sight.files!" type="l-view"></app-edit-slider>
         </div>
+        <div *ngIf="sight.site || sight.phone" class="organization-links-container">
+          <div *ngIf="sight.site " class="organization-links-container__item">
+            <ion-icon class="organization-links-container__item__image" name="earth-outline"></ion-icon>
+            <a [href]="sight.site">{{sight.site}}</a>
+          </div>
+
+          <div  *ngIf="sight.phone" class="organization-links-container_item">
+            <div class="organization-links-container__item">
+              <ion-icon class="organization-links-container__item__image" name="call-outline"></ion-icon>
+              <a href="tel:{{sight.phone}}">{{sight.phone}}</a>
+            </div>
+          </div>
+        </div>
+        
         <div *ngIf="sight.description" class="organization-container__description">
           {{sight.description}}
         </div>
