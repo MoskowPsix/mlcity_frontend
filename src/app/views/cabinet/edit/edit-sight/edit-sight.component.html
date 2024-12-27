@@ -11,6 +11,8 @@
               <app-rounded-button style="pointer-events: none;"  *ngFor="let category of previewCategory" routerLink="/cabinet/events/create" icon="assets/icons/category.svg" type="button" buttonText="{{category.name}}"></app-rounded-button>
           </ng-container>
       </div>
+      <app-standart-input [label]="'Телефон'" [control] = "editForm.get('phone')"></app-standart-input>
+      <app-standart-input [label]="'Сайт'" [control] = "editForm.get('site')"></app-standart-input>
 
       <div class="button-conatiner">
           <div class="button-container-item">
