@@ -14,6 +14,8 @@ export class SightHistoryContent extends HistoryContent {
       'materials',
       'sponsor',
       'files',
+      'phone',
+      'site',
       'types',
       'latitude',
       'longitude',

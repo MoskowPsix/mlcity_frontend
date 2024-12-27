@@ -1,5 +1,4 @@
 <ion-content>
-   
       <app-second-header>
         <div class="header-container">
           Связь с поддержкой
@@ -7,7 +6,7 @@
       </app-second-header>
 
       <div class="main-content">
-      
+
         <form class="main-content__form" [formGroup]="contactForm" action="">
           <div class="form-header">
             Написать в тех. поддержку
@@ -26,11 +25,7 @@
             </textarea>
           </div>
           <div class="form-footer">
-            <ion-select [value]="this.contactForm.value.type" (ionChange)="setTypeValue($event)"  mode="ios" interface="popover" placeholder="Тип обращения" okText="Выбрать" cancelText="Отмена">
-              <ion-select-option value="Пожаловаться">Пожаловаться</ion-select-option>
-              <ion-select-option value="Сообщить об ошибке">Сообщить</ion-select-option>
-              <ion-select-option value="Предложить идею">Предложить идею</ion-select-option>
-            </ion-select>  
+            <app-custom-selected [items]="items" [modalValue]="selectedTypeModalValue" [selectedValue]="selectedDateItem" (openModal)="openSelectDate()" (closeModal)="closeSelectDate()" (selectItem)="selectDateItem($event)"></app-custom-selected>
           </div>
         
           <div class="button-container">
@@ -41,58 +36,4 @@
       </div>
     
 </ion-content>
-<!-- <div class="main-wrapper">
-  <ion-col class="main-content-header">
-  <span style="color:#6393FF">Cвязь</span> с поддержкой 
-  </ion-col> -->
-  
-  <!-- <ion-col class="main-content-wrapper">
-
-    <div class="main-content">
-
-          <form [formGroup]="contactForm" class="contact-form" action="">
-            <ion-item class="form-mail" lines="none" mode="md" >
-         
-              <ion-label class="label">
-                <img class="login-icon" src="/assets/icons/login_mail.svg" alt="">
-              </ion-label>
-              <ion-input 
-              formControlName="email" 
-              placeholder="Введите почту"
-              ></ion-input>
-            </ion-item>
-
-            <ion-item class="form-mail" lines="none" mode="md" >
-              <ion-label class="label">
-                <img class="login-icon" src="/assets/icons/user.svg" alt="">
-              </ion-label>
-              <ion-input 
-              formControlName="name" 
-              placeholder="Введите как к вам обращатся"
-              ></ion-input>
-            </ion-item>
-
-            <ion-item lines ="none" mode="md" class="form-description"
-    
-            >
-              <ion-textarea
-              formControlName="text"  
-              class="form-description-area"
-              placeholder="Введите ваше обращение">
-                
-              </ion-textarea>
-            </ion-item>
-            
-          </form>
-      </div>
-
-      <div>
-        <ion-button
-        [disabled] ="validForm()"
-        (click)="onSubmit()"
-        >Отправить</ion-button>
-      </div>
-  </ion-col>
-  
-</div> -->
 

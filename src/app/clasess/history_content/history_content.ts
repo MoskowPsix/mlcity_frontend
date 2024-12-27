@@ -26,6 +26,8 @@ export class HistoryContent {
   protected description!: string
   protected materials!: string
   protected sponsor!: string
+  protected phone!: string
+  protected site!: string
   protected address!: string
   protected age_limit!: number
   protected files: object[] = []

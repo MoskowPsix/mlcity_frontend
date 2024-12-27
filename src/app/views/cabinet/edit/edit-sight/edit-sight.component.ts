@@ -45,6 +45,7 @@ export class EditSightComponent implements OnInit {
     dotsForObjectNotation: false,
   }
   openTypesModalValue: boolean = false
+  phoneMask = /^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/
   deleteConfirmValue: boolean = false
   cancelConfirmValue: boolean = false
   constructor(
@@ -134,6 +135,8 @@ export class EditSightComponent implements OnInit {
           description: res.sight.description,
           address: res.sight.address,
           latitude: res.sight.latitude,
+          phone: res.sight.phone,
+          site: res.sight.site,
           longitude: res.sight.longitude,
           types: _.cloneDeep(res.sight.types),
           location_id: res.sight.location_id,
@@ -224,6 +227,8 @@ export class EditSightComponent implements OnInit {
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl('', [Validators.required, Validators.minLength(3)]),
       files: new FormControl([]),
+      phone: new FormControl([]),
+      site: new FormControl([]),
       types: new FormControl([], [Validators.required]),
       address: new FormControl('', [Validators.required]),
       latitude: new FormControl('', [Validators.required]),
