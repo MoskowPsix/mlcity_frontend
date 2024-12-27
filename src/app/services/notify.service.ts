@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs'
 import { environment } from 'src/environments/environment'
 import { UserService } from './user.service'
+import { LocalNotifications } from '@capacitor/local-notifications'
 
 @Injectable({
   providedIn: 'root',
@@ -60,6 +61,7 @@ export class NotifyService {
 
       if (data?.length) {
         this.eventSubjectAll.next(data)
+        this.sendLocalNotification(data.id, data.message, data.message)
         console.log(event)
       }
     }
@@ -74,6 +76,20 @@ export class NotifyService {
 
   viewNotify(id: Number) {
     return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/notify/view/${id}`)
+  }
+
+  private async sendLocalNotification(id: number, title: string, message: string) {
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          id: id,
+          title: title || 'Notification',
+          body: message || 'You have a new message!',
+          schedule: { at: new Date(Date.now() + 1000) }, // Отображение через 1 секунду
+          sound: 'default',
+        },
+      ],
+    })
   }
 
   ngOnDestroy() {
