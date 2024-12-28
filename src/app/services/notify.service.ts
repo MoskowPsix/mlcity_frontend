@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment'
 import { UserService } from './user.service'
 import { ToastService } from './toast.service'
 import { LocalNotifications } from '@capacitor/local-notifications'
+import { Capacitor } from '@capacitor/core/types/global'
+
 @Injectable({
   providedIn: 'root',
 })
@@ -20,6 +22,35 @@ export class NotifyService {
     private userService: UserService,
   ) {}
 
+  // initPush() {
+  //   if (Capacitor.platform !== 'web') {
+  //     this.registerPush()
+  //   }
+  // }
+  // registerPush() {
+  //   PushNotifications.requestPermissions().then((result: any) => {
+  //     if (result.granted) {
+  //       PushNotifications.register()
+  //     }
+  //   })
+
+  //   PushNotifications.addListener('registration', (token: any) => {
+  //     console.info('Registration token: ', token.value)
+  //   })
+
+  //   PushNotifications.addListener('registrationError', (err) => {
+  //     console.error('Registration error: ', err.error)
+  //   })
+
+  //   PushNotifications.addListener('pushNotificationReceived', (notification) => {
+  //     console.log('Push notification received: ', notification)
+  //   })
+
+  //   PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
+  //     console.log('Push notification action performed', notification.actionId, notification.inputValue)
+  //   })
+  // }
+
   initSSE() {
     const user = this.userService.getUserFromLocalStorage()
     if (user?.id) {
@@ -27,7 +58,7 @@ export class NotifyService {
     }
     this.connectChanelAll()
     setInterval(() => {
-      this.toastService.showToast(`work`, 'success')
+      // this.toastService.showToast(`work`, 'success')
       LocalNotifications.schedule({
         notifications: [
           {
@@ -73,7 +104,7 @@ export class NotifyService {
 
     this.eventSourceAll.onmessage = (event: any) => {
       const data = JSON.parse(event.data)
-      this.toastService.showToast(`${data[0].id}`, 'success')
+      // this.toastService.showToast(`${data[0].id}`, 'success')
       if (data?.length) {
         this.eventSubjectAll.next(data)
         this.sendLocalNotification(data.id, data.message, data.message)

@@ -9,8 +9,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 2rem;
-    width: 9rem;
+    height: auto;
+    width: 6rem;
     text-align: center;
     font-size: 0.75rem;
     color: var(--font-color);
@@ -28,8 +28,8 @@
 }
 .select-container__content{
     position: absolute;
-    top: 2.2rem;
-    width: 8rem;
+    top: 2.3rem;
+    width: 6rem;
     border-radius: 12px;
     background-color: #fff;
     text-align: start;
@@ -52,12 +52,12 @@
 .select-container-value{
    height: 100%;
    width: 100%;
-   text-align: justify;
+   text-align: center;
 }
 .select-container__content_active{
     position: absolute;
-    top: 2.2rem;
-    width: 9rem;
+    top: 3.2rem;
+    width: 6rem;
     border-radius: 12px;
     z-index: 10000;
     transform-origin: bottom;
