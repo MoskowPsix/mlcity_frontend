@@ -29,9 +29,9 @@
           </div>
         
           <div class="button-container">
-                <app-standart-button routerLink="/home" style="width: 100%;" theme="light" buttonText="Отмена" ></app-standart-button>
+                <app-standart-button (click)="redirectInHome()" style="width: 100%;" theme="light" buttonText="Отмена" ></app-standart-button>
                 <app-standart-button [disabled]="validateForm()" (click)="onSubmit()" style="width: 100%;" theme="standart" buttonText="Отправить" ></app-standart-button>
-              </div>
+          </div>
         </form>
       </div>
     
