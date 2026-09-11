@@ -21,7 +21,7 @@ export class SearchFirstySeanceService {
     let minSeanceTime = Infinity
     let minSeance: any
     places.forEach((place) => {
-      place.seances.forEach((seance) => {
+      ;(place.seances || []).forEach((seance) => {
         const seanceStart = moment(seance.date_start)
         const difference = seanceStart.diff(today)
         if (difference < minSeanceTime && seanceStart > today) {
@@ -41,7 +41,6 @@ export class SearchFirstySeanceService {
       let locationParrent = ''
       let locationPlaces: IPlace[] = [] // Здесь мы храним плейсы, которые совпали с локацией
       let minSeance: any
-      let minSeancePlace
       if (lastMapLatitude && lastMapLongitude) {
         // Если есть координаты на карте
         this.locationService
@@ -49,12 +48,16 @@ export class SearchFirstySeanceService {
           .pipe(
             takeUntil(this.destroy$),
             tap((res: any) => {
+              if (!res?.location) {
+                return
+              }
               locationName = res.location.name
-              locationParrent = res.location.location_parent.name
+              locationParrent = res.location.location_parent?.name ?? ''
               places.forEach((place: any) => {
                 if (
-                  place.location.name &&
-                  (place.location.name === locationName || place.location.name === res.location.location_parent.name)
+                  place.location?.name &&
+                  (place.location.name === locationName ||
+                    place.location.name === res.location.location_parent?.name)
                 ) {
                   locationPlaces.push(place)
                 }
@@ -72,19 +75,17 @@ export class SearchFirstySeanceService {
                     loacation_name: locationName,
                     location_parent: locationParrent,
                   })
-                }
-              } else {
-                minSeance = this.searchSeanceForPlaces(places)
-                if (minSeance) {
-                  resolve(minSeance)
+                  return
                 }
               }
+              minSeance = this.searchSeanceForPlaces(places)
+              resolve(minSeance ?? null)
             },
             error: (err) => reject(err),
           })
       } else {
         minSeance = this.searchSeanceForPlaces(places)
-        resolve(minSeance)
+        resolve(minSeance ?? null)
       }
     })
   }

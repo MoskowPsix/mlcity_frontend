@@ -113,8 +113,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   doCheckState: boolean = true
 
   myGeo!: ymaps.Placemark
+  /** Zoom с прошлого actiontick — чтобы отличать pan от zoom */
+  private lastTickZoom?: number
+  /** Не синхронизировать круг с центром во время programmatic setBounds/setCenter */
+  private ignoreMapActionSync = false
   minZoom = 9.4
   zoom: number = 4
+  mapInitialCenter: number[] = [
+    Number(localStorage.getItem('lastMapLatitude')) || 55.7522,
+    Number(localStorage.getItem('lastMapLongitude')) || 37.6156,
+  ]
   clusterer!: ymaps.Clusterer
   radius: number = 1
   date: any = {
@@ -369,9 +377,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   async onMapReady({ target, ymaps }: YaReadyEvent<ymaps.Map>): Promise<void> {
     this.map = { target, ymaps }
     let color = this.switchTypeService.currentType.value === 'sights' ? '#3880FF' : '#f7ab31'
+    const initialCoords = this.mapInitialCenter
+    const initialRadiusKm = Number(this.filterService.radius.value) || this.radius || 1
+    this.radius = initialRadiusKm
     // Создаем и добавляем круг
     this.CirclePoint = new ymaps.Circle(
-      [[11, 11], 1000 * this.radius],
+      [initialCoords, 1000 * initialRadiusKm],
       {},
       {
         fillOpacity: 0.8,
@@ -385,7 +396,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Определяем местоположение пользователя
     //Создаем метку в центре круга, для перетаскивания
     this.myGeo = new ymaps.Placemark(
-      [0, 0],
+      initialCoords,
       {},
       {
         iconLayout: 'default#image',
@@ -399,6 +410,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     // Вешаем на карту событие начала перетаскивания
     this.map.target.events.add('actionbegin', (e) => {
+      this.lastTickZoom = this.map.target.getZoom()
       if (this.objectsInsideCircle) {
         this.map.target.geoObjects.remove(this.objectsInsideCircle)
 
@@ -411,7 +423,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.eventsLoading = true
         this.sightsLoading = true
         this.modalButtonLoader = true
-        this.CirclePoint.geometry?.setRadius(this.radius * 15)
+        // Не меняем geometry radius — иначе круг сжимается и кажется, что карта зумится
         this.CirclePoint.options.set('fillOpacity', 0.7)
         this.CirclePoint.options.set('fillColor', color)
         this.CirclePoint.options.set('strokeWidth', 0)
@@ -422,7 +434,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     // Вешаем на карту событие по перетаскиванию круга и отображения меток в круге
     this.map.target.events.add('actiontick', (e) => {
+      if (this.ignoreMapActionSync) {
+        return
+      }
       const { globalPixelCenter, zoom } = e.get('tick')
+      // Зум: масштаб меняется от тика к тику — круг не трогаем.
+      // Pan: zoom стабилен — круг держим в центре карты.
+      const isZooming =
+        this.lastTickZoom !== undefined && Math.abs(zoom - this.lastTickZoom) > 1e-4
+      this.lastTickZoom = zoom
+      if (isZooming) {
+        return
+      }
       const projection = this.map.target.options.get('projection')
       const coords = projection.fromGlobalPixels(globalPixelCenter, zoom)
       this.CirclePoint.geometry!.setCoordinates(coords)
@@ -434,8 +457,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     // Вешаем на карту событие по окончинию перетаскивания
     this.map.target.events.add('actionend', async (e) => {
+      this.lastTickZoom = undefined
       if (!this.navigationService.appFirstLoading.value) {
-        this.CirclePoint.geometry?.setRadius(this.radius * 1000)
         this.myGeo.options.set('iconImageOffset', [-30, -55])
         this.CirclePoint.options.set('fillColor', color)
         this.CirclePoint.options.set('fillOpacity', 0.15)
@@ -1040,27 +1063,26 @@ export class HomeComponent implements OnInit, OnDestroy {
             )
             .subscribe((res: any) => {
               if (res.location.latitude && res.location.longitude) {
-                this.mapService.circleCenterLatitude.next(res.location.latitude)
-                this.mapService.circleCenterLongitude.next(res.location.longitude)
-                this.mapService.geolocationLatitude.next(res.location.latitude)
-                this.mapService.geolocationLongitude.next(res.location.longitude)
-                this.mapService.setLastMapCoordsToLocalStorage(res.location.latitude, res.location.longitude)
-
-                // this.map.target.setCenter([
-                //   res.location.latitude,
-                //   res.location.longitude,
-                // ]);
-                this.filterService.changeFilter.next(true)
+                const coordinates = [
+                  Number(res.location.latitude),
+                  Number(res.location.longitude),
+                ]
+                this.moveMapToCoordinates(coordinates)
                 this.filterService.changeCityFilter.next(true)
+                this.filterService.changeFilter.next(true)
                 this.loadingService.hideLoading()
                 this.cdr.detectChanges()
+              } else {
+                this.loadingService.hideLoading()
               }
             })
         } else if (this.authService.authenticationState.value) {
-          let coordState = this.mapService.goHomeCoords()
+          const coordState = this.mapService.goHomeCoords()
           if (!coordState) {
             this.router.navigate(['/cabinet/location'])
             this.toastService.showToast('Добавьте домашний адрес', 'info')
+          } else {
+            this.moveMapToCoordinates(this.mapService.getLastMapCoordsFromLocalStorage())
           }
           this.loadingService.hideLoading()
           this.cdr.detectChanges()
@@ -1078,16 +1100,86 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getGeoPosition() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const coordinates = [position.coords.latitude, position.coords.longitude]
-          this.map.target.setCenter(coordinates)
-        },
-        (error) => {
-          this.toastService.showToast('Убедитесь что доступ к геолокации предоставлен', 'warning')
-        },
-      )
+    if (!navigator.geolocation) {
+      this.toastService.showToast('Геолокация недоступна', 'warning')
+      return
+    }
+    this.loadingService.showLoading()
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const coordinates = [position.coords.latitude, position.coords.longitude]
+        this.applyGeoPosition(coordinates)
+      },
+      () => {
+        this.loadingService.hideLoading()
+        this.toastService.showToast('Убедитесь что доступ к геолокации предоставлен', 'warning')
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
+    )
+  }
+
+  private applyGeoPosition(coordinates: number[]) {
+    this.moveMapToCoordinates(coordinates)
+
+    this.mapService
+      .resolveLocationFromCoords(coordinates)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((resolved) => {
+        if (resolved?.cityName) {
+          this.mapService.geolocationCity.next(resolved.cityName)
+        }
+        if (resolved?.regionName) {
+          this.mapService.geolocationRegion.next(resolved.regionName)
+        }
+        if (resolved?.location?.id) {
+          this.filterService.setLocationTolocalStorage(resolved.location.id)
+          this.filterService.changeCityFilter.next(true)
+          this.filterService.changeFilter.next(true)
+        } else if (resolved?.cityName) {
+          // Город есть у Яндекса, но в справочнике бэка может не быть id —
+          // всё равно применяем название в UI
+          this.filterService.changeFilter.next(true)
+        } else {
+          this.filterService.changeFilter.next(true)
+          this.toastService.showToast('Город по координатам не найден', 'warning')
+        }
+        this.loadingService.hideLoading()
+        this.cdr.detectChanges()
+      })
+  }
+
+  /** Перемещает круг и карту в точку (дом / гео / город) */
+  private moveMapToCoordinates(coordinates: number[]) {
+    const lat = Number(coordinates[0])
+    const lon = Number(coordinates[1])
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) || (lat === 0 && lon === 0)) {
+      return
+    }
+
+    this.mapService.circleCenterLatitude.next(lat)
+    this.mapService.circleCenterLongitude.next(lon)
+    this.mapService.setLastMapCoordsToLocalStorage(lat, lon)
+    this.filterService.setLocationLatitudeTolocalStorage(String(lat))
+    this.filterService.setLocationLongitudeTolocalStorage(String(lon))
+
+    if (this.CirclePoint && this.map) {
+      this.ignoreMapActionSync = true
+      this.CirclePoint.geometry?.setCoordinates([lat, lon])
+      this.myGeo?.geometry?.setCoordinates([lat, lon])
+      this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
+        checkZoomRange: true,
+        zoomMargin: [20],
+        duration: 200,
+      })
+      setTimeout(() => {
+        this.ignoreMapActionSync = false
+        if (this.map?.target) {
+          this.zoom = this.map.target.getZoom()
+          this.cdr.detectChanges()
+        }
+      }, 250)
+    } else if (this.map) {
+      this.map.target.setCenter([lat, lon])
     }
   }
 
@@ -1127,30 +1219,44 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  setZoomFromRadius() {
-    if (this.mapService.getRadiusFromLocalStorage()) {
-      switch (Number(this.mapService.getRadiusFromLocalStorage())) {
-        case 1:
-          this.zoom = 14
-          break
-        case 2:
-          this.zoom = 13
-          break
-        case 5:
-          this.zoom = 11.7
-          break
-        case 10:
-          this.zoom = 10.8
-          break
-        case 25:
-          this.zoom = 9.4
-          break
-        default:
-          break
-      }
-    } else {
-      this.zoom = 13
+  /** Подгоняет зум так, чтобы круг радиуса почти заполнил экран */
+  fitMapToRadiusCircle(radiusKm?: number) {
+    const radius = Number(radiusKm ?? this.filterService.radius.value)
+    if (!Number.isFinite(radius) || radius <= 0) {
+      return
     }
+    this.radius = radius
+
+    if (!this.CirclePoint?.geometry || !this.map?.target) {
+      return
+    }
+
+    this.CirclePoint.geometry.setRadius(1000 * radius)
+    const bounds = this.CirclePoint.geometry.getBounds()
+    if (!bounds) {
+      return
+    }
+
+    this.ignoreMapActionSync = true
+    this.map.target.setBounds(bounds, {
+      checkZoomRange: true,
+      // небольшой отступ — круг почти во весь экран
+      zoomMargin: [20],
+      duration: 200,
+    })
+    // setBounds в типах ymaps не возвращает Promise — синхронизируем zoom после анимации
+    setTimeout(() => {
+      this.ignoreMapActionSync = false
+      if (this.map?.target) {
+        this.zoom = this.map.target.getZoom()
+        this.cdr.detectChanges()
+      }
+    }, 220)
+  }
+
+  /** @deprecated используйте fitMapToRadiusCircle */
+  setZoomFromRadius() {
+    this.fitMapToRadiusCircle()
   }
 
   setDateInSelected(event: any) {
@@ -1177,12 +1283,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filterService.radius.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.eventsContentModal = []
       this.sightsContentModal = []
-      this.radius = parseInt(value)
+      this.radius = parseInt(value, 10)
       this.mapService.setRadius(Number(value))
-      this.setZoomFromRadius()
-      this.mapService.radius.subscribe((value: any) => {
-        this.setZoomFromRadius()
-      })
+      this.fitMapToRadiusCircle(Number(value))
     })
     this.date = {
       dateStart: this.filterService.startDate.value,
@@ -1215,7 +1318,17 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.eventsContentModal = []
         this.sightsContentModal = []
         if (this.filterService.changeCityFilter.value == true) {
-          this.mapService.positionFilter(this.map, this.CirclePoint)
+          this.ignoreMapActionSync = true
+          this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
+            const coords = this.mapService.getLastMapCoordsFromLocalStorage()
+            this.myGeo?.geometry?.setCoordinates(coords)
+            setTimeout(() => {
+              this.ignoreMapActionSync = false
+              if (this.map?.target) {
+                this.zoom = this.map.target.getZoom()
+              }
+            }, 250)
+          })
         }
         if (this.filterService.locationLatitude && this.filterService.locationLongitude) {
           this.getEventsAndSights()
@@ -1253,12 +1366,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   ionViewDidLeave() {
     this.navigationService.modalEventShowOpen.next(false)
+    // только next — complete ломает подписки при повторном входе на карту
     this.destroy$.next()
-    this.destroy$.complete()
   }
   ngOnDestroy() {
-    // отписываемся от всех подписок
-
     this.destroy$.next()
     this.destroy$.complete()
   }

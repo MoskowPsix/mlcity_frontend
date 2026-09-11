@@ -98,7 +98,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
   submitCode(event: any) {
     this.loadingService.showLoading()
     this.authService
-      .verfiEmail(Number(event))
+      .verfiEmail(event)
       .pipe(
         catchError((err: any) => {
           console.log(err)
@@ -115,22 +115,47 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
             this.toastService.showToast(`код не верный`, 'danger')
           }
 
-          return of(EMPTY)
+          return EMPTY
         }),
       )
       .subscribe((res: any) => {
-        if (res.status == 'success') {
-          this.userService
-            .getUserById()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((user: any) => {
-              let tempUser: IUser = user.user
-              this.userService.setUserToLocalStorage(tempUser)
-              this.router.navigate(['/home'])
-              this.loadingService.hideLoading()
-              this.toastService.showToast('Ваша успешно почта подтверждена!', 'success')
-            })
+        if (res?.status !== 'success') {
+          this.loadingService.hideLoading()
+          return
         }
+
+        this.userService
+          .getUserById()
+          .pipe(
+            takeUntil(this.destroy$),
+            catchError(() => {
+              // Даже если повторный запрос юзера упал — фиксируем подтверждение локально
+              const currentUser = this.userService.getUserFromLocalStorage() || this.user
+              const verifiedUser = this.userService.markEmailVerified(
+                currentUser,
+                res?.user?.email_verified_at || res?.email_verified_at,
+              )
+              this.userService.setUser(verifiedUser)
+              this.emailConfirm = true
+              this.loadingService.hideLoading()
+              this.toastService.showToast('Ваша почта успешно подтверждена!', 'success')
+              this.router.navigate(['/home'])
+              return EMPTY
+            }),
+          )
+          .subscribe((user: any) => {
+            const apiUser: IUser = user?.user || user
+            const verifiedUser = this.userService.markEmailVerified(
+              apiUser,
+              apiUser?.email_verified_at || res?.user?.email_verified_at || res?.email_verified_at,
+            )
+            this.user = verifiedUser
+            this.userService.setUser(verifiedUser)
+            this.emailConfirm = true
+            this.loadingService.hideLoading()
+            this.toastService.showToast('Ваша почта успешно подтверждена!', 'success')
+            this.router.navigate(['/home'])
+          })
       })
   }
 
@@ -173,7 +198,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
                 .pipe(
                   tap((res: any) => {
                     let tempUser: IUser = res.user
-                    this.userService.setUserToLocalStorage(tempUser)
+                    this.userService.setUser(tempUser)
                     this.nextStep(this.step.nativeElement)
                     this.loadingService.hideLoading()
                   }),
@@ -249,6 +274,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           this.loadingService.hideLoading()
           this.user = res.user
+          this.userService.setUser(res.user)
           this.emailForm.patchValue({
             email: this.user.email,
           })
@@ -257,7 +283,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
           } else {
             this.userWithEmail = false
           }
-          this.emailConfirm = this.user.email_verified_at !== null
+          this.emailConfirm = this.userService.isEmailVerified(this.user)
           this.step.nativeElement.style.marginLeft = '0px'
         },
       })

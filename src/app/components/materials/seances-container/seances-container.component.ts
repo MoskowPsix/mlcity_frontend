@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ISeance } from 'src/app/models/seance'
-import { SearchFirstySeanceService } from 'src/app/services/search-firsty-seance.service'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 @Component({
   selector: 'app-seances-container',
   templateUrl: './seances-container.component.html',
@@ -11,16 +10,37 @@ export class SeancesContainerComponent implements OnInit {
   constructor() {}
   @Input() seances!: any[]
   @Input() priceState!: string
-  @Input() buyLink!:string
+  @Input() buyLink!: string
   templateDate: any
   calendarFilter: any
   viewSeances!: any[]
   minSeance: any
+
+  private toDay(date: any): Moment {
+    if (!date) {
+      return moment().startOf('day')
+    }
+    const raw = typeof date === 'string' ? date.split(' ')[0] : date
+    return moment(raw).startOf('day')
+  }
+
+  private seanceOverlapsFilter(seance: ISeance): boolean {
+    if (!this.calendarFilter) {
+      return false
+    }
+    const dateStart = this.toDay(seance.date_start)
+    const dateEnd = this.toDay(seance.date_end || seance.date_start)
+    const filterStart = this.toDay(this.calendarFilter.dateStart)
+    const filterEnd = this.toDay(this.calendarFilter.dateEnd)
+    // Сеанс попадает в выбранный период, если интервалы пересекаются
+    return dateStart.valueOf() <= filterEnd.valueOf() && dateEnd.valueOf() >= filterStart.valueOf()
+  }
+
   searchMinSeance() {
     const today = moment()
     let minSeanceTime = Infinity
     let minSeance: any
-    this.seances.forEach((seance) => {
+    ;(this.seances || []).forEach((seance) => {
       const seanceStart = moment(seance.date_start)
       const difference = seanceStart.diff(today)
       if (difference < minSeanceTime && seanceStart > today) {
@@ -30,36 +50,24 @@ export class SeancesContainerComponent implements OnInit {
     })
     return minSeance
   }
+
   async setDateMinSeance(seance: any) {
+    const day = this.toDay(seance)
     this.calendarFilter = {
-      dateStart: moment(seance.split(' ')[0]),
-      dateEnd: moment(seance.split(' ')[0]),
+      dateStart: day,
+      dateEnd: day,
     }
     this.templateDate = {
-      dateStart: moment(seance.split(' ')[0]),
-      dateEnd: moment(seance.split(' ')[0]),
+      dateStart: day,
+      dateEnd: day,
     }
-
-    // Ожидаем завершения render, если она возвращает промис
     await this.render()
-
   }
+
   render() {
-    const filteredSeances = this.seances.filter((seance) => {
-      // Создаем объекты moment из строковых дат и получаем временные метки (timestamps)
-      let dateStart = moment(seance.date_start.split(' ')[0]).valueOf()
-      let dateEnd = moment(seance.date_end.split(' ')[0]).valueOf()
-
-      // Получаем временные метки для начала и конца фильтра
-      let filterStart = moment(this.calendarFilter.dateStart).valueOf()
-      let filterEnd = moment(this.calendarFilter.dateEnd).valueOf()
-
-      // Проверяем, что dateStart и dateEnd попадают в диапазон фильтрации
-      return dateStart >= filterStart && dateEnd <= filterEnd
-    })
-    this.viewSeances = filteredSeances
-
+    this.viewSeances = (this.seances || []).filter((seance) => this.seanceOverlapsFilter(seance))
   }
+
   setDateFilter(event: any) {
     this.templateDate = event
     this.viewSeances = []
@@ -67,39 +75,31 @@ export class SeancesContainerComponent implements OnInit {
     this.render()
     if (this.viewSeances.length == 0) {
       let minSeance = this.searchMinSeance()
-      this.calendarFilter = {
-        dateStart: moment(minSeance.date_start.split(' ')[0]),
-        dateEnd: moment(minSeance.date_end.split(' ')[0]),
+      if (minSeance) {
+        this.calendarFilter = {
+          dateStart: this.toDay(minSeance.date_start),
+          dateEnd: this.toDay(minSeance.date_end || minSeance.date_start),
+        }
+        this.minSeance = minSeance.date_start
       }
-      this.minSeance = minSeance.date_start
     }
   }
+
   setStartDate(event: any) {
     this.calendarFilter = event
     this.viewSeances = []
-    this.seances.forEach((seance: any) => {
-      this.checkSeances(seance)
-    })
+    this.render()
     if (this.viewSeances.length == 0) {
       let minSeance = this.searchMinSeance()
       if (minSeance) {
         this.calendarFilter = {
-          dateStart: moment(minSeance.date_start.split(' ')[0]),
-          dateEnd: moment(minSeance.date_end.split(' ')[0]),
+          dateStart: this.toDay(minSeance.date_start),
+          dateEnd: this.toDay(minSeance.date_end || minSeance.date_start),
         }
         this.minSeance = minSeance.date_start
-      } else {
-        this.seances[this.seances.length - 1].date_start
       }
     }
   }
-  checkSeances(seance: ISeance) {
-    let dateStart = moment(seance.date_start.split(' ')[0])
-    let dateEnd = moment(seance.date_end.split(' ')[0])
 
-    if (dateStart >= moment(this.calendarFilter.dateStart) && dateEnd <= moment(this.calendarFilter.dateEnd)) {
-      this.viewSeances.push(seance)
-    }
-  }
   ngOnInit() {}
 }

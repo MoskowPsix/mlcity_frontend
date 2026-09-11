@@ -358,6 +358,21 @@ export class SightsComponent implements OnInit, OnDestroy {
     }
   }
   changeCity() {
+    const locationId = this.filterService.getLocationFromlocalStorage()
+    if (locationId) {
+      this.locationService
+        .getLocationsIds(Number(locationId))
+        .pipe(
+          takeUntil(this.destroy$),
+          catchError(() => of(EMPTY)),
+        )
+        .subscribe((response: any) => {
+          if (response?.location?.name) {
+            this.sightTapeService.tapeCityName = response.location.name
+          }
+        })
+      return
+    }
     const coords = this.mapService.getLastMapCoordsFromLocalStorage()
     this.locationService
       .getLocationByCoords(coords)
@@ -366,7 +381,11 @@ export class SightsComponent implements OnInit, OnDestroy {
         catchError(() => of(EMPTY)),
       )
       .subscribe((response: any) => {
-        response?.location?.name ? (this.sightTapeService.tapeCityName = response.location.name) : null
+        if (response?.location?.name) {
+          this.sightTapeService.tapeCityName = response.location.name
+        } else if (this.mapService.geolocationCity.value) {
+          this.sightTapeService.tapeCityName = this.mapService.geolocationCity.value
+        }
       })
   }
 

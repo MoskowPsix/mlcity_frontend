@@ -96,19 +96,14 @@ ion-modal ion-content {
 }
 
 @media (min-width: 1060px) {
-  // @media(min-width: 991px) {
+  // Desktop mega-menu больше не используется: UI всегда mobile / phone-shell
   .header-mobile {
-    display: none;
+    display: block;
+    max-height: 3rem;
   }
 
   .header {
-    .menu {
-      display: flex;
-
-      .active {
-        background-color: #f3f4f6;
-      }
-    }
+    display: none;
   }
 }
 
@@ -311,7 +306,7 @@ ion-modal ion-content {
   }
 }
 
-@media screen and (min-width: 0px) and (max-width: 1060px) {
+@media screen and (min-width: 0px) and (max-width: 900px) {
   //@media(max-width: 1060px) {
   // @media(max-width: 991px) {
   .header-mobile {

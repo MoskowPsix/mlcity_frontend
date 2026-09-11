@@ -1,10 +1,3 @@
-@media screen and (min-width: 0px) and (max-width: 1060px) {
-  ion-footer {
-    display: flex;
-  } /* show it on small screens */
-  
-}
-
 swiper-slide{
   width: 100%;
   height: 100vh;
@@ -138,55 +131,31 @@ swiper-slide{
   object-position: top;
 }
 
-@media (min-width: 1060px) {
-  .header {
-    display: block;
-  }
-  ion-footer {
-    display: none;
-  } /* hide it elsewhere */
-  .start-mobile-slider{
+/* Онбординг только на узком экране */
+@media (min-width: 900px) {
+  .start-mobile-slider {
     display: none;
   }
 }
-@media (max-width: 1060px) {
-  .header {
-    display: none;
-  }
+
+/* На web десктоп-меню в ion-header скрыто */
+ion-app:not(.ios-native) ion-header {
+  display: none;
 }
-.scroll-y {
- 
-}
-.mobile-frame-wrapper{
-  width: 100%;
-  background: #FAFAFA;
-  z-index: 100;
-  position: absolute;
-  height: 100%;
-}
-.frame-content{
-  height: 100%;
-  display: flex;
-  z-index: 100;
-  justify-content: center;
-  align-items: center;
-}
-.iframe{
-  z-index: 100;
-  height: 100%;
+
+/*
+ * Tablet shell на ПК: стилизуем сам ion-app (не оборачиваем header/footer),
+ * иначе Ionic теряет position:fixed у ion-footer и табы уезжают наверх.
+ */
+ion-app.phone-shell-active {
+  position: relative;
+  width: min(100% - 32px, 768px);
+  max-width: 768px;
+  height: min(100dvh - 32px, 1024px);
+  max-height: 1024px;
+  margin: 16px auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 16px 48px rgba(0, 0, 0, 0.14);
   background: #fff;
-}
-.iframe[_ngcontent-uhq-c141] {
-  z-index: 100;
-  background: #fff;
-  height: 100%;
-}
-.phone-wrapper-img{
-  background-position: center;
-  background-size: cover;
-  width: clamp(18.75rem, 7.386rem + 56.82vw, 50rem);
-  height: 100%;
-  left: auto;
-  right: auto;
-  z-index: 99;
 }

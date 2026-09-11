@@ -15,6 +15,7 @@ import { MessagesErrors } from 'src/app/enums/messages-errors'
 import { AuthService } from 'src/app/services/auth.service'
 import { FavoritesTapeService } from '../cabinet/favorites/favorites-tape.service'
 import { UserService } from 'src/app/services/user.service'
+import { FileService } from 'src/app/services/file.service'
 import { Console } from 'console'
 
 @Component({
@@ -57,6 +58,7 @@ export class OrganizationShowComponent implements OnInit {
     private authService: AuthService,
     private favoritesTapeService: FavoritesTapeService,
     private UserService: UserService,
+    private fileService: FileService,
   ) {}
 
   visibilityButtonCreateEvent() {
@@ -72,12 +74,8 @@ export class OrganizationShowComponent implements OnInit {
     this.id = this.router.snapshot.paramMap.get('id')!
   }
   checkAvatar() {
-    if (this.sight.files![0] && this.sight.files![0].link.includes('https')) {
-      this.avatarUrl = this.sight.files![0].link
-    } else {
-      if (this.sight.files![0]) {
-        this.avatarUrl = `${this.backendUrl}${this.sight.files![0].link}`
-      }
+    if (this.sight.files?.[0]?.link) {
+      this.avatarUrl = this.fileService.checkLinkString(this.sight.files[0].link)
     }
   }
 

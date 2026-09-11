@@ -7,7 +7,7 @@
     <ya-map name="map" [@mapAnimate] (ready)="onMapReady($event)"
       id="map"
       [zoom]="zoom"
-      [center]="[0,0]"
+      [center]="mapInitialCenter"
       [state]="{controls: ['zoomControl']}"
       [clusterer]
       [options]="{

@@ -14,8 +14,12 @@
           {{priceState}}
        </div>
        <div class="buy-ticket-seance-button">
-        <a target="_blank" *ngIf="priceState !== 'Бесплатно' && buyLink"  href="{{buyLink}}">
-          <app-standart-button *ngIf="priceState !== 'Бесплатно'"  buttonText="Купить" type="button" theme ="standart"></app-standart-button>
+        <a target="_blank" *ngIf="buyLink" href="{{buyLink}}">
+          <app-standart-button
+            [buttonText]="priceState === 'Бесплатно' ? 'Перейти' : 'Купить'"
+            type="button"
+            theme="standart"
+          ></app-standart-button>
         </a>
     
        </div>

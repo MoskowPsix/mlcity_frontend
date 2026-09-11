@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { Route, Router } from '@angular/router'
 import { IOrganization } from 'src/app/models/organization'
 import { IUser } from 'src/app/models/user'
+import { FileService } from 'src/app/services/file.service'
 import { environment } from 'src/environments/environment'
 @Component({
   selector: 'app-user-section',
@@ -9,7 +10,7 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./user-section.component.scss'],
 })
 export class UserSectionComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private fileService: FileService) {}
   @Input() user!: IUser
   @Input() type?: string
   @Input() buttonText?: string
@@ -26,7 +27,7 @@ export class UserSectionComponent implements OnInit {
   organizationNoTypesIcoAndFiles: boolean = false
   checkAvatar() {
     if (!this.fixedImg) {
-      if (this.user.avatar && this.user.avatar.includes('https')) {
+      if (this.user.avatar && this.fileService.isAbsoluteUrl(this.user.avatar)) {
         this.avatarUrl = this.user.avatar
       } else {
         this.avatarUrl = `${this.backendUrl}${this.user.avatar}`
@@ -43,18 +44,14 @@ export class UserSectionComponent implements OnInit {
       ) {
         this.organizationNoTypesIcoAndFiles = true
       }
-      if (this.organization.files.lenght && this.organization.files[0] && !this.organization.files.link) {
+      if (this.organization.files?.length && this.organization.files[0] && !this.organization.files[0].link) {
         this.organizationNoTypesIcoAndFiles = true
       }
     }
   }
   checkAvatarOrganzization() {
-    if (this.organization.files[0]) {
-      if (this.organization.files[0] && this.organization.files[0].link.includes('https')) {
-        this.avatarUrl = this.organization.files[0].link
-      } else {
-        this.avatarUrl = `${this.backendUrl}${this.organization.files[0].link}`
-      }
+    if (this.organization.files?.[0]?.link) {
+      this.avatarUrl = this.fileService.checkLinkString(this.organization.files[0].link)
     }
   }
   click() {

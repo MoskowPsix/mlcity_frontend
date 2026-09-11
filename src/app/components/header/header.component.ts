@@ -18,6 +18,7 @@ import { FilterService } from 'src/app/services/filter.service'
 import { LocationService } from 'src/app/services/location.service'
 import { QueryBuilderService } from 'src/app/services/query-builder.service'
 import { SwitchTypeService } from 'src/app/services/switch-type.service'
+import { MobileOrNoteService } from 'src/app/services/mobile-or-note.service'
 
 @Component({
   selector: 'app-header',
@@ -60,16 +61,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   searchEvents: FormControl = new FormControl('')
 
   queryParams?: IGetEventsAndSights
-  mobile: boolean = false
+  mobile: boolean = true
   @HostListener('window:resize', ['$event'])
-  mobileOrNote() {
-    if (window.innerWidth < 900) {
-      this.mobile = true
-    } else if (window.innerWidth > 900) {
-      this.mobile = false
-    } else {
-      this.mobile = false
-    }
+  mobileOrNote(_event?: Event) {
+    this.mobileOrNoteService.update()
   }
 
   constructor(
@@ -84,6 +79,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private locationService: LocationService,
     private switchTypeService: SwitchTypeService,
     private cdr: ChangeDetectorRef,
+    private mobileOrNoteService: MobileOrNoteService,
   ) {}
 
   getEventService() {
@@ -244,6 +240,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.mobileOrNote()
+    this.mobileOrNoteService.isMobileLayout.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.mobile = value
+      this.cdr.detectChanges()
+    })
     //Смотрим состояние кнопки назад
     this.navigationService.showBackButton.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.showBackButton = value
@@ -275,11 +275,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
           .getLocationsIds(value)
           .pipe(takeUntil(this.destroy$))
           .subscribe((response: any) => {
+            if (!response?.location) {
+              return
+            }
             // if (this.mapService.geolocationCity.value !== response.location.name) {
             this.city = response.location.name
-            this.region = response.location.location_parent.name
-            this.filterService.setLocationLatitudeTolocalStorage(response.latitude)
-            this.filterService.setLocationLongitudeTolocalStorage(response.longitude)
+            this.region = response.location.location_parent?.name ?? ''
+            this.filterService.setLocationLatitudeTolocalStorage(
+              String(response.location.latitude ?? response.latitude ?? ''),
+            )
+            this.filterService.setLocationLongitudeTolocalStorage(
+              String(response.location.longitude ?? response.longitude ?? ''),
+            )
             this.cdr.detectChanges()
             // this.filterService.changeFilter.next(true);
             // }
@@ -291,6 +298,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.mapService.geolocationCity.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       //console.log('this.mapService.geolocationCity ',value)
       this.geolocationCity = value
+      if (value) {
+        this.city = value
+      }
       this.cdr.detectChanges()
     })
 

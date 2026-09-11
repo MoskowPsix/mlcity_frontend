@@ -31,11 +31,15 @@ export class LocationService {
     )
   }
 
-  getLocationsName(name: string) {
+  getLocationsName(name: string, display?: boolean) {
     //Получаем по имени город или регион
+    const params: Record<string, string> = {}
+    if (display !== undefined) {
+      params['display'] = String(display)
+    }
     return this.http.get<Location[]>(
-      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/location/name/${name}`,
-      { params: { display: true } },
+      `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/location/name/${encodeURIComponent(name)}`,
+      { params },
     )
   }
 

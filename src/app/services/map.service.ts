@@ -8,7 +8,7 @@ import {
 import { Capacitor } from '@capacitor/core'
 import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx'
 import { Geolocation } from '@capacitor/geolocation'
-import { BehaviorSubject, catchError, EMPTY, of, Subject, Subscription, takeUntil } from 'rxjs'
+import { BehaviorSubject, catchError, EMPTY, map, Observable, of, Subject, Subscription, switchMap, takeUntil } from 'rxjs'
 import { FilterService } from './filter.service'
 import { NavigationService } from './navigation.service'
 import { LocationService } from './location.service'
@@ -27,20 +27,41 @@ export class MapService {
 
   getPointsSubs!: Subscription
 
-  public circleCenterLatitude: BehaviorSubject<number> = new BehaviorSubject(0)
-  public circleCenterLongitude: BehaviorSubject<number> = new BehaviorSubject(0)
+  // Number(null) === 0 → карта уходит в океан [0,0]; берём Москву как fallback
+  private readonly defaultLatitude = 55.7522
+  private readonly defaultLongitude = 37.6156
+
+  public circleCenterLatitude: BehaviorSubject<number> = new BehaviorSubject(
+    this.readStoredCoord('lastMapLatitude', this.defaultLatitude),
+  )
+  public circleCenterLongitude: BehaviorSubject<number> = new BehaviorSubject(
+    this.readStoredCoord('lastMapLongitude', this.defaultLongitude),
+  )
 
   public showChangeCityDialog: BehaviorSubject<boolean> = new BehaviorSubject(false)
 
   public geolocationCity: BehaviorSubject<string> = new BehaviorSubject('')
   public radius: BehaviorSubject<number> = new BehaviorSubject(0)
   public geolocationLatitude: BehaviorSubject<number> = new BehaviorSubject(
-    Number(localStorage.getItem('lastMapLatitude')),
+    this.readStoredCoord('lastMapLatitude', this.defaultLatitude),
   )
   public geolocationLongitude: BehaviorSubject<number> = new BehaviorSubject(
-    Number(localStorage.getItem('lastMapLongitude')),
+    this.readStoredCoord('lastMapLongitude', this.defaultLongitude),
   )
   public geolocationRegion: BehaviorSubject<string> = new BehaviorSubject('')
+
+  private readStoredCoord(key: string, fallback: number): number {
+    const raw = localStorage.getItem(key)
+    if (raw == null || raw === '') {
+      return fallback
+    }
+    const value = Number(raw)
+    // 0/0 — типичный мусор после Number(null); для приложения это невалидные координаты
+    if (!Number.isFinite(value) || value === 0) {
+      return fallback
+    }
+    return value
+  }
 
   options: NativeGeocoderOptions = {
     useLocale: true,
@@ -238,16 +259,24 @@ export class MapService {
   }
 
   setLastMapCoordsToLocalStorage(lat: any, long: any) {
-    localStorage.setItem('lastMapLatitude', lat)
-    localStorage.setItem('lastMapLongitude', long)
-    this.geolocationLatitude.next(lat)
-    this.geolocationLongitude.next(long)
+    const latitude = Number(lat)
+    const longitude = Number(long)
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || (latitude === 0 && longitude === 0)) {
+      return
+    }
+    localStorage.setItem('lastMapLatitude', String(latitude))
+    localStorage.setItem('lastMapLongitude', String(longitude))
+    this.geolocationLatitude.next(latitude)
+    this.geolocationLongitude.next(longitude)
   }
 
   getLastMapCoordsFromLocalStorage() {
-    let coords = [Number(this.geolocationLatitude.value), Number(this.geolocationLongitude.value)]
-
-    return coords
+    const latitude = Number(this.geolocationLatitude.value)
+    const longitude = Number(this.geolocationLongitude.value)
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || (latitude === 0 && longitude === 0)) {
+      return this.defaultCoords()
+    }
+    return [latitude, longitude]
   }
 
   //Определяем местоположение и перемещаем карту
@@ -395,18 +424,150 @@ export class MapService {
 
   async ReserveGeocoder(coords: number[]) {
     // Декодирование координат
-    const geocodeResult = await this.yaGeocoderService.geocode(coords, {
-      results: 1,
-    })
-    geocodeResult.subscribe((result: any) => {
-      const firstGeoObject = result.geoObjects.get(0)
-      this.searchCity(
-        firstGeoObject.getLocalities(0)[0],
-        firstGeoObject.getAdministrativeAreas(0)[0],
-        coords[0],
-        coords[1],
-      )
-    })
+    this.yaGeocoderService
+      .geocode(coords, {
+        results: 1,
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((result: any) => {
+        const parsed = this.parseYandexGeoObject(result?.geoObjects?.get?.(0))
+        if (!parsed?.cityName) {
+          return
+        }
+        this.searchCity(parsed.cityName, parsed.regionName, coords[0], coords[1])
+      })
+  }
+
+  /** Город по координатам: сначала API бэка, иначе Яндекс + поиск по имени */
+  resolveLocationFromCoords(coords: number[]): Observable<{
+    location: any | null
+    cityName: string
+    regionName: string
+  } | null> {
+    return this.locationService.getLocationByCoords(coords).pipe(
+      catchError(() => of(null)),
+      switchMap((response: any) => {
+        if (response?.location) {
+          return of({
+            location: response.location,
+            cityName: response.location.name,
+            regionName: response.location.location_parent?.name ?? '',
+          })
+        }
+        return this.resolveLocationViaYandexAndName(coords)
+      }),
+    )
+  }
+
+  private resolveLocationViaYandexAndName(coords: number[]) {
+    // yaGeocoderService.geocode уже возвращает Observable<object>
+    return this.yaGeocoderService.geocode(coords, { results: 1 }).pipe(
+      switchMap((result: any) => {
+        const parsed = this.parseYandexGeoObject(result?.geoObjects?.get?.(0))
+        if (!parsed?.cityName) {
+          return of(null)
+        }
+
+        this.geolocationCity.next(parsed.cityName)
+        this.geolocationRegion.next(parsed.regionName)
+
+        return this.findBackendLocationByName(parsed.cityName, parsed.regionName).pipe(
+          map((match) => {
+            if (match) {
+              return {
+                location: match,
+                cityName: match.name,
+                regionName: match.location_parent?.name ?? parsed.regionName,
+              }
+            }
+            return {
+              location: null,
+              cityName: parsed.cityName,
+              regionName: parsed.regionName,
+            }
+          }),
+        )
+      }),
+      catchError(() => of(null)),
+    )
+  }
+
+  private parseYandexGeoObject(geo: any): { cityName: string; regionName: string } | null {
+    if (!geo) {
+      return null
+    }
+
+    const localities = geo.getLocalities?.() || []
+    const areas = geo.getAdministrativeAreas?.() || []
+    let cityName = (Array.isArray(localities) ? localities[0] : localities) || ''
+    let regionName = (Array.isArray(areas) ? areas[0] : areas) || ''
+
+    // Надёжнее достаём kind=locality / province из Address.Components
+    try {
+      const components =
+        geo.properties?.get?.('metaDataProperty.GeocoderMetaData.Address.Components') || []
+      if (Array.isArray(components) && components.length) {
+        const locality =
+          components.find((c: any) => c.kind === 'locality')?.name ||
+          components.find((c: any) => c.kind === 'area')?.name ||
+          components.find((c: any) => c.kind === 'district')?.name
+        const province =
+          components.find((c: any) => c.kind === 'province')?.name ||
+          components.find((c: any) => c.kind === 'area')?.name
+        if (locality) {
+          cityName = locality
+        }
+        if (province) {
+          regionName = province
+        }
+      }
+    } catch {
+      // ignore meta parse errors
+    }
+
+    if (!cityName) {
+      return null
+    }
+    return { cityName, regionName: regionName || '' }
+  }
+
+  private findBackendLocationByName(cityName: string, regionName: string) {
+    const byName$ = this.locationService.getLocationsName(cityName).pipe(
+      catchError(() => of(null)),
+      map((res: any) => this.pickLocationFromResponse(res, cityName, regionName)),
+    )
+
+    if (!regionName) {
+      return byName$
+    }
+
+    return this.locationService.getLocationsWithRegion(cityName, regionName).pipe(
+      catchError(() => of(null)),
+      switchMap((res: any) => {
+        const match = this.pickLocationFromResponse(res, cityName, regionName)
+        if (match) {
+          return of(match)
+        }
+        return byName$
+      }),
+    )
+  }
+
+  private pickLocationFromResponse(res: any, cityName: string, regionName: string) {
+    const raw = res?.locations ?? res?.location ?? res
+    const locations: any[] = Array.isArray(raw) ? raw : raw && typeof raw === 'object' && raw.name ? [raw] : []
+    if (!locations.length) {
+      return null
+    }
+    return (
+      locations.find(
+        (item) =>
+          item.name === cityName && (!regionName || item.location_parent?.name === regionName),
+      ) ||
+      locations.find((item) => item.name === cityName) ||
+      locations[0] ||
+      null
+    )
   }
 
   searchCity(city: string, region: string, latitude: number, longitude: number) {
@@ -416,37 +577,33 @@ export class MapService {
     this.geolocationLatitude.next(latitude)
     this.geolocationLongitude.next(longitude)
 
+    // Всегда синхронизируем locationId с текущими координатами (кнопка GPS / геокодер)
+    this.setCoordsFromChangeCityDialog()
     if (!this.filterService.getLocationFromlocalStorage()?.length) {
-      this.setCoordsFromChangeCityDialog()
       this.showChangeCityDialog.next(true)
-    } else if (
-      this.geolocationCity.value &&
-      this.filterService.getLocationFromlocalStorage() !== this.geolocationCity.value
-    ) {
-      // this.showChangeCityDialog.next(false);
     }
   }
 
   //Устанавливаем дефолтные значения после подтверждения диалога на смену города
   setCoordsFromChangeCityDialog() {
-    // Запрашиваем ид
-    this.locationService
-      .getLocationByCoords([this.geolocationLatitude.value, this.geolocationLongitude.value])
-      .pipe()
-      .subscribe((response: any) => {
-        this.geolocationCity.next(response.location.name)
-        this.filterService.setLocationTolocalStorage(response.location.id)
-        // this.geolocationRegion.next(region);
+    const latitude = Number(this.geolocationLatitude.value) || this.defaultLatitude
+    const longitude = Number(this.geolocationLongitude.value) || this.defaultLongitude
+    this.filterService.setLocationLatitudeTolocalStorage(String(latitude))
+    this.filterService.setLocationLongitudeTolocalStorage(String(longitude))
+    this.resolveLocationFromCoords([latitude, longitude])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((resolved) => {
+        if (resolved?.cityName) {
+          this.geolocationCity.next(resolved.cityName)
+        }
+        if (resolved?.regionName) {
+          this.geolocationRegion.next(resolved.regionName)
+        }
+        if (resolved?.location?.id) {
+          this.filterService.setLocationTolocalStorage(resolved.location.id)
+        }
+        this.filterService.changeFilter.next(true)
       })
-    // this.filterService.setLocationTolocalStorage(this.geolocationCity.value);
-    // this.filterService.setLocationTolocalStorage(this.geolocationRegion.value);
-    this.filterService.setLocationLatitudeTolocalStorage(this.geolocationLatitude.value.toString())
-    this.filterService.setLocationLongitudeTolocalStorage(this.geolocationLongitude.value.toString())
-
-    // this.showChangeCityDialog.next(false)
-
-    this.filterService.changeFilter.next(true)
-    // this.filterService.changeCityFilter.next(true)
   }
 
   hideChangeCityDialog() {

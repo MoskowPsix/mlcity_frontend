@@ -480,10 +480,12 @@ export class EventCreateComponent implements OnInit, OnDestroy {
             allPlacesValid = false
           }
           this.createEventForm.value.places.forEach((place: any) => {
-            if (place.seances.length == 0 || place.address.length == 0) {
+            const address = (place.address || '').toString().trim()
+            const activeSeances = (place.seances || []).filter((seance: any) => !seance.on_delete)
+            if (activeSeances.length == 0 || !address) {
               allPlacesValid = false
             }
-            place.seances.forEach((seance: any) => {
+            activeSeances.forEach((seance: any) => {
               if (!seance.date_start) {
                 allPlacesValid = false
               }

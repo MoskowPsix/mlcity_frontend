@@ -23,8 +23,8 @@ export class AuthService {
   ) {}
 
   isAuthEmail(): boolean {
-    let user = this.userService.getUserFromLocalStorage()
-    return user?.email_verified_at ? true : false
+    const user = this.userService.getUserFromLocalStorage()
+    return this.userService.isEmailVerified(user)
   }
   isAuthenticated(): boolean {
     let token = this.tokenService.getToken()
@@ -108,9 +108,9 @@ export class AuthService {
     return this.http.get<any>(`${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/users/number/check/${number}`)
   }
 
-  verfiEmail(number: number) {
+  verfiEmail(code: string | number) {
     const param = {
-      code: number,
+      code: String(code),
     }
     return this.http.post<any>(
       `${environment.BACKEND_URL}:${environment.BACKEND_PORT}/api/verificationUserEmail`,

@@ -9,7 +9,7 @@
 
     <ion-col style="margin-left: 3px;" size="auto" class="cityButton ion-padding-horizontal ion-align-self-center">
         <ion-button fill="clear" size="small" color="dark" (click)="isModalSearchCityesOpen(true)">
-            {{ city| truncate:[20,'']}}...
+            {{ (city || geolocationCity) ? ((city || geolocationCity) | truncate:[20]) : 'Город' }}
             <!-- <ion-icon name="location" color="primary"></ion-icon> -->
             <!-- <ion-label>+{{ radius }}км</ion-label> -->
             <ion-icon slot="end" name="chevron-down"></ion-icon>

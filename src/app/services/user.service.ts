@@ -34,6 +34,18 @@ export class UserService {
     return JSON.parse(localStorage.getItem('auth_user') || 'null')
   }
 
+  isEmailVerified(user: IUser | null = this.getUserFromLocalStorage()): boolean {
+    const verifiedAt = user?.email_verified_at
+    return verifiedAt != null && verifiedAt !== ''
+  }
+
+  markEmailVerified(user: IUser, verifiedAt?: string | null): IUser {
+    return {
+      ...user,
+      email_verified_at: verifiedAt || user.email_verified_at || new Date().toISOString(),
+    }
+  }
+
   // Remove token
   removeUserFromLocalStorage() {
     localStorage.removeItem('auth_user')

@@ -39,8 +39,9 @@ export class ModalCheckEmailComponent implements OnInit {
   }
   ngOnChange() {}
   checkEmail() {
-    this.userEmail = this.userService.getUserFromLocalStorage()?.email !== null
-    this.userEmailConfirm = this.userService.getUserFromLocalStorage()?.email_verified_at !== null
+    const user = this.userService.getUserFromLocalStorage()
+    this.userEmail = !!user?.email
+    this.userEmailConfirm = this.userService.isEmailVerified(user)
   }
   submitCode(event: any) {}
   nextStep(step: HTMLElement) {

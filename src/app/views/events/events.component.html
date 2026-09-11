@@ -19,7 +19,7 @@
             <div [ngClass]="{'header-bottom-container': this.eventsTapeService.eventsLastScrollPositionForTape <= 80, 'header-bottom-container_active': this.eventsTapeService.eventsLastScrollPositionForTape > 80  }">
               <div class="header-bottom-container_city" (click)="openCitySearch()">
                 <span class="header-bottom-container_city__text">
-                  {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : '...' }}
+                  {{ eventsTapeService.tapeCityName ? eventsTapeService.tapeCityName : 'Город' }}
                 </span>
                   
               </div>

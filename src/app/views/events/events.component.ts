@@ -296,15 +296,31 @@ export class EventsComponent implements OnInit, OnDestroy {
     if (this.coordsSubscribe) {
       this.coordsSubscribe.unsubscribe()
     }
+    const locationId = this.filterService.getLocationFromlocalStorage()
+    if (locationId) {
+      this.coordsSubscribe = this.locationService
+        .getLocationsIds(Number(locationId))
+        .pipe(
+          takeUntil(this.destroy$),
+          catchError(() => of(EMPTY)),
+        )
+        .subscribe((response: any) => {
+          if (response?.location?.name) {
+            this.eventsTapeService.tapeCityName = response.location.name
+          }
+        })
+      return
+    }
     const coords = this.mapService.getLastMapCoordsFromLocalStorage()
-    this.coordsSubscribe = this.locationService
-      .getLocationByCoords(coords)
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError(() => of(EMPTY)),
-      )
-      .subscribe((response: any) => {
-        response?.location?.name ? (this.eventsTapeService.tapeCityName = response.location.name) : null
+    this.coordsSubscribe = this.mapService
+      .resolveLocationFromCoords(coords)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((resolved) => {
+        if (resolved?.cityName) {
+          this.eventsTapeService.tapeCityName = resolved.cityName
+        } else if (this.mapService.geolocationCity.value) {
+          this.eventsTapeService.tapeCityName = this.mapService.geolocationCity.value
+        }
       })
   }
 

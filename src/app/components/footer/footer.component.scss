@@ -17,14 +17,13 @@ $font-color: #4c5861;
     width: 1.5rem;
   }
 
-
-    .user-name {
-      max-width: 55px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  .user-name {
+    max-width: 55px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+}
 
 .title {
   font-size: 0.625rem;
@@ -37,18 +36,5 @@ $font-color: #4c5861;
 }
 
 .active {
-  // color:#3b82f6;
   color: #fff;
-}
-
-@media screen and (min-width: 0px) and (max-width: 1060px) {
-  .footer-mobile {
-    display: flex;
-  } /* show it on small screens */
-}
-
-@media (min-width: 1060px) {
-  .footer-mobile {
-    display: none;
-  } /* hide it elsewhere */
 }

@@ -1,14 +1,11 @@
 import { FilterService } from './services/filter.service'
-import { Component, ElementRef, HostListener, NgZone, OnInit, ViewChild } from '@angular/core'
+import { Component, HostListener, NgZone, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { App, URLOpenListenerEvent } from '@capacitor/app'
 import { environment } from 'src/environments/environment'
-import { ToastService } from './services/toast.service'
 import { Subject, takeUntil } from 'rxjs'
 import { CheckVersionService } from './services/check-version.service'
 import { Capacitor } from '@capacitor/core'
-import { StoreInfo } from './models/store-info'
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { ScreenOrientation } from '@capacitor/screen-orientation'
 import { UserService } from './services/user.service'
 import { AuthService } from './services/auth.service'
@@ -16,33 +13,36 @@ import { TokenService } from './services/token.service'
 import moment from 'moment'
 import 'moment/locale/ru'
 import { NotifyService } from './services/notify.service'
+import { MobileOrNoteService } from './services/mobile-or-note.service'
 moment.locale('ru')
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>()
   constructor(
     private notifyService: NotifyService,
     private router: Router,
     private zone: NgZone,
-    private sanitizer: DomSanitizer,
-    private toast: ToastService,
     private checkVersionService: CheckVersionService,
     private userService: UserService,
     private authService: AuthService,
     private tokenService: TokenService,
     private filterService: FilterService,
+    private mobileOrNoteService: MobileOrNoteService,
+    private renderer: Renderer2,
   ) {
-    ScreenOrientation.lock({ orientation: 'portrait' })
+    if (Capacitor.isNativePlatform()) {
+      ScreenOrientation.lock({ orientation: 'portrait' }).catch(() => undefined)
+    }
     this.initializeApp()
   }
   messages: any[] = []
   url: any = ''
-  mobile: boolean = false
-  iframeUrl: any
+  mobile: boolean = true
+  showPhoneShell: boolean = false
   platformType: string = Capacitor.getPlatform()
   aboutModal: boolean = false
   swiperIndex: number = 1
@@ -82,13 +82,15 @@ export class AppComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  mobileOrNote() {
-    if (window.innerWidth < 1200) {
-      this.mobile = true
-    } else if (window.innerWidth > 1200) {
-      this.mobile = false
+  mobileOrNote(_event?: Event) {
+    this.mobileOrNoteService.update()
+  }
+
+  private syncBodyShellClass(showShell: boolean) {
+    if (showShell) {
+      this.renderer.addClass(document.body, 'phone-shell-page')
     } else {
-      this.mobile = false
+      this.renderer.removeClass(document.body, 'phone-shell-page')
     }
   }
 
@@ -99,7 +101,6 @@ export class AppComponent implements OnInit {
         const pathArray = event.url.split(domain)
         const appPath = pathArray.pop()
         if (appPath) {
-          // this.toast.showToast(appPath, 'error')
           this.router.navigateByUrl(String(new URL(appPath).pathname))
         }
       })
@@ -108,7 +109,15 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.notifyService.initSSE()
-    this.mobileOrNote()
+    this.mobileOrNoteService.update()
+    this.mobileOrNoteService.isPhoneShell.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.showPhoneShell = value
+      this.syncBodyShellClass(value)
+    })
+    this.mobileOrNoteService.isMobileLayout.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.mobile = value
+    })
+
     if (this.filterService.getAboutMobileStateFromLocalStorage()) {
       this.aboutModal = false
     } else {
@@ -128,11 +137,12 @@ export class AppComponent implements OnInit {
       if (this.url.includes('/events/') && /\d/.test(this.url)) {
         this.url = '/events/number'
       }
-      this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.BASE_URL}${this.url}`)
     })
+  }
 
-    // this.checkVersionService.getCurrentVersion().then((res: string) => {
-    //   this.toast.showToast(res, 'primary')
-    // })
+  ngOnDestroy() {
+    this.syncBodyShellClass(false)
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

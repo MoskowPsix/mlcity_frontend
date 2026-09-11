@@ -58,13 +58,13 @@ export class CalendarButtonComponent implements OnInit {
     end: new FormControl<Date | null>(null),
   })
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['templateDate']) {
+    if (changes['templateDate']?.currentValue) {
       this.dateRange.value.start = moment(changes['templateDate'].currentValue.dateStart).toDate()
       this.dateRange.value.end = moment(changes['templateDate'].currentValue.dateStart).toDate()
       //Дата повторяется для того что бы показать конкретный сеанс
       this.renderForTemplate(changes['templateDate'].currentValue)
     }
-    if (changes['openCalendar'].currentValue && this.picker) {
+    if (changes['openCalendar']?.currentValue && this.picker) {
       this.calendarElement.emit(this.picker)
     }
   }
