@@ -117,8 +117,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   private lastTickZoom?: number
   /** Не синхронизировать круг с центром во время programmatic setBounds/setCenter */
   private ignoreMapActionSync = false
+  /** Последний радиус, под который уже подогнали зум — не сбрасывать при возврате с ленты */
+  private lastFittedRadiusKm?: number
   minZoom = 9.4
-  zoom: number = 4
+  // Не 4: иначе при первом заходе на карту (после ленты) ya-map держит слишком далёкий зум
+  zoom: number = this.zoomLevelForRadius(Number(localStorage.getItem('radius')) || 1)
   mapInitialCenter: number[] = [
     Number(localStorage.getItem('lastMapLatitude')) || 55.7522,
     Number(localStorage.getItem('lastMapLongitude')) || 37.6156,
@@ -463,6 +466,15 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.CirclePoint.options.set('fillColor', color)
         this.CirclePoint.options.set('fillOpacity', 0.15)
         this.CirclePoint.options.set('strokeWidth')
+        // Синхронизируем location* с центром круга — лента и карта один центр
+        const center = this.CirclePoint.geometry?.getCoordinates()
+        if (center) {
+          this.filterService.setLocationLatitudeTolocalStorage(String(center[0]))
+          this.filterService.setLocationLongitudeTolocalStorage(String(center[1]))
+          this.mapService.circleCenterLatitude.next(center[0])
+          this.mapService.circleCenterLongitude.next(center[1])
+          this.mapService.setLastMapCoordsToLocalStorage(center[0], center[1])
+        }
         this.getEventsAndSights()
         this.filterService.changeFilter.next(true)
       }
@@ -470,9 +482,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.map.target.controls.remove('zoomControl')
 
     await this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
-
       this.getEventsAndSights()
     })
+
+    // Карта могла открыться после ленты: radius-subscribe уже отработал до ready — подгоняем зум здесь
+    this.fitMapToRadiusCircle(Number(this.filterService.radius.value) || this.radius, true)
 
     if (this.navigationService.appFirstLoading.value) {
       this.eventsLoading = true
@@ -1001,10 +1015,16 @@ export class HomeComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         if (this.doCheckState) {
+          this.ignoreMapActionSync = true
           this.map.target.setBounds(this.CirclePoint.geometry?.getBounds()!, {
             checkZoomRange: true,
+            zoomMargin: [20],
           })
           this.doCheckState = false
+          setTimeout(() => {
+            this.ignoreMapActionSync = false
+            this.syncZoomFromMap()
+          }, 220)
         }
         this.setMapData()
       })
@@ -1220,14 +1240,22 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /** Подгоняет зум так, чтобы круг радиуса почти заполнил экран */
-  fitMapToRadiusCircle(radiusKm?: number) {
+  fitMapToRadiusCircle(radiusKm?: number, force = false) {
     const radius = Number(radiusKm ?? this.filterService.radius.value)
     if (!Number.isFinite(radius) || radius <= 0) {
       return
     }
     this.radius = radius
 
+    if (!force && this.lastFittedRadiusKm === radius && this.map?.target) {
+      // Радиус не менялся — не трогаем зум пользователя (возврат с ленты)
+      this.syncZoomFromMap()
+      return
+    }
+
     if (!this.CirclePoint?.geometry || !this.map?.target) {
+      // Карта ещё не ready — хотя бы не оставляем zoom=4 в биндинге
+      this.zoom = this.zoomLevelForRadius(radius)
       return
     }
 
@@ -1237,6 +1265,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       return
     }
 
+    this.lastFittedRadiusKm = radius
     this.ignoreMapActionSync = true
     this.map.target.setBounds(bounds, {
       checkZoomRange: true,
@@ -1247,11 +1276,33 @@ export class HomeComponent implements OnInit, OnDestroy {
     // setBounds в типах ymaps не возвращает Promise — синхронизируем zoom после анимации
     setTimeout(() => {
       this.ignoreMapActionSync = false
-      if (this.map?.target) {
-        this.zoom = this.map.target.getZoom()
-        this.cdr.detectChanges()
-      }
+      this.syncZoomFromMap()
     }, 220)
+  }
+
+  private zoomLevelForRadius(radiusKm: number): number {
+    switch (radiusKm) {
+      case 1:
+        return 14
+      case 2:
+        return 13
+      case 5:
+        return 11.7
+      case 10:
+        return 10.8
+      case 25:
+        return 9.4
+      default:
+        return 13
+    }
+  }
+
+  private syncZoomFromMap() {
+    if (!this.map?.target) {
+      return
+    }
+    this.zoom = this.map.target.getZoom()
+    this.cdr.detectChanges()
   }
 
   /** @deprecated используйте fitMapToRadiusCircle */
@@ -1285,8 +1336,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sightsContentModal = []
       this.radius = parseInt(value, 10)
       this.mapService.setRadius(Number(value))
+      // Только при смене радиуса; BehaviorSubject иначе сбрасывает зум при каждом входе
       this.fitMapToRadiusCircle(Number(value))
     })
+    // Возврат с ленты: только синхронизируем биндинг zoom, без setBounds
+    if (this.map?.target) {
+      this.syncZoomFromMap()
+    }
     this.date = {
       dateStart: this.filterService.startDate.value,
       dateEnd: this.filterService.endDate.value,
@@ -1313,23 +1369,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
 
     //Подписываемся на изменение фильтра и если было изменение города, то перекинуть на выбранный город.
-    this.filterService.changeFilter.pipe(takeUntil(this.destroy$), throttleTime(300)).subscribe((value) => {
+    this.filterService.changeFilter.pipe(takeUntil(this.destroy$), throttleTime(300)).subscribe(async (value) => {
       if (value === true) {
         this.eventsContentModal = []
         this.sightsContentModal = []
-        if (this.filterService.changeCityFilter.value == true) {
+        if (this.filterService.changeCityFilter.value == true && this.map && this.CirclePoint) {
           this.ignoreMapActionSync = true
-          this.mapService.positionFilter(this.map, this.CirclePoint).then(() => {
-            const coords = this.mapService.getLastMapCoordsFromLocalStorage()
-            this.myGeo?.geometry?.setCoordinates(coords)
-            setTimeout(() => {
-              this.ignoreMapActionSync = false
-              if (this.map?.target) {
-                this.zoom = this.map.target.getZoom()
-              }
-            }, 250)
-          })
+          await this.mapService.positionFilter(this.map, this.CirclePoint)
+          const coords = this.mapService.getLastMapCoordsFromLocalStorage()
+          this.myGeo?.geometry?.setCoordinates(coords)
+          setTimeout(() => {
+            this.ignoreMapActionSync = false
+            if (this.map?.target) {
+              this.zoom = this.map.target.getZoom()
+            }
+          }, 250)
         }
+        // Запрос мест только после смены города — иначе уходят старые circleCenter (др. регион)
         if (this.filterService.locationLatitude && this.filterService.locationLongitude) {
           this.getEventsAndSights()
         }
@@ -1365,6 +1421,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getEventsAndSights()
   }
   ionViewDidLeave() {
+    // Сохраняем текущий зум, чтобы [zoom] не откатил карту при возврате
+    this.syncZoomFromMap()
     this.navigationService.modalEventShowOpen.next(false)
     // только next — complete ломает подписки при повторном входе на карту
     this.destroy$.next()

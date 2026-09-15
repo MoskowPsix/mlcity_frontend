@@ -69,6 +69,9 @@ export class EventsComponent implements OnInit, OnDestroy {
   eventsSubscribe!: Subscription
   city: string = ''
   currentRadius!: number
+  /** Защита от бесконечной автодогрузки ленты */
+  private tapeAutoLoadPages = 0
+  private readonly maxTapeAutoLoadPages = 5
   segment: string = 'eventsCitySegment'
   isFirstNavigation: any = new BehaviorSubject<boolean>(true)
   date: any
@@ -183,12 +186,13 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.eventsSubscribe = this.eventsService
           .getEvents(this.queryBuilderService.queryBuilder('eventsForTape'))
           .pipe(
-            debounceTime(1000),
             takeUntil(this.destroy$),
             finalize(() => {
               this.eventsTapeService.wait = false
               if (this.eventsTapeService.eventsCity.length === 0 && subscriveSuccess) {
                 this.eventsTapeService.notFound = true
+              } else if (this.eventsTapeService.eventsCity.length > 0) {
+                this.eventsTapeService.notFound = false
               }
             }),
             catchError((error) => {
@@ -201,6 +205,7 @@ export class EventsComponent implements OnInit, OnDestroy {
             //Выключаю спинер
             this.spiner = false
             subscriveSuccess = true
+            this.tapeAutoLoadPages += 1
             //Проверяем курсор
             let cursor = response.events.next_cursor
             if (cursor) {
@@ -209,25 +214,25 @@ export class EventsComponent implements OnInit, OnDestroy {
             } else {
               this.eventsTapeService.nextPage = false
             }
-            if (
-              response.events.data[0] &&
-              response.events.data[0].distance <= Number(this.filterService.getRadiusFromlocalStorage())
-            ) {
-              response.events.data.forEach((event: any) => {
-                if (event.distance < Number(this.filterService.getRadiusFromlocalStorage())) {
-                  this.eventsTapeService.eventsCity.push(event)
-                } else {
-                  this.eventsTapeService.eventsSeparator.push(event)
-                  if (this.eventsTapeService.eventsSeparator.length < 8) {
-                    this.getEventsCity()
-                  }
-                }
-              })
-            } else {
-              this.eventsTapeService.eventsSeparator.push(...response.events.data)
-            }
 
+            const radius = Number(this.filterService.getRadiusFromlocalStorage())
+            const pageItems = response.events.data || []
+            pageItems.forEach((event: any) => {
+              if (event.distance != null && Number(event.distance) <= radius) {
+                this.eventsTapeService.eventsCity.push(event)
+              } else {
+                this.eventsTapeService.eventsSeparator.push(event)
+              }
+            })
+
+            // Без безлимитной догрузки «пока круг пуст» — иначе loop, если distance пустой/все за кругом
+            const canAutoLoad = this.tapeAutoLoadPages < this.maxTapeAutoLoadPages
+            const needMoreOutside =
+              this.eventsTapeService.eventsSeparator.length < 8 && pageItems.length > 0
             this.eventsTapeService.wait = false
+            if (this.eventsTapeService.nextPage && canAutoLoad && needMoreOutside) {
+              this.getEventsCity()
+            }
           })
       }
     })
@@ -367,13 +372,21 @@ export class EventsComponent implements OnInit, OnDestroy {
 
   updateCoordinates() {
     return new Promise<void>((resolve) => {
-      if (this.filterService.getLocationLatitudeFromlocalStorage()) {
-        this.mapService.circleCenterLatitude.next(this.mapService.getLastMapCoordsFromLocalStorage()[0])
-        this.mapService.circleCenterLongitude.next(this.mapService.getLastMapCoordsFromLocalStorage()[1])
+      // Город в шапке берётся из location*, а поиск шёл по lastMap — из‑за этого
+      // «Москва» + события Берёзовского. Держим один центр.
+      const locLat = Number(this.filterService.getLocationLatitudeFromlocalStorage())
+      const locLon = Number(this.filterService.getLocationLongitudeFromlocalStorage())
+      if (Number.isFinite(locLat) && Number.isFinite(locLon) && !(locLat === 0 && locLon === 0)) {
+        this.mapService.circleCenterLatitude.next(locLat)
+        this.mapService.circleCenterLongitude.next(locLon)
+        this.mapService.setLastMapCoordsToLocalStorage(locLat, locLon)
       } else {
+        const coords = this.mapService.getLastMapCoordsFromLocalStorage()
+        this.mapService.circleCenterLatitude.next(coords[0])
+        this.mapService.circleCenterLongitude.next(coords[1])
       }
 
-      resolve() // Успешно завершили обновление
+      resolve()
     })
   }
   renderTypesInMap() {
@@ -518,6 +531,7 @@ export class EventsComponent implements OnInit, OnDestroy {
         this.eventsTapeService.eventsCity = []
         this.eventsTapeService.eventsSeparator = []
         this.eventsTapeService.eventsLastScrollPositionForTape = 0
+        this.tapeAutoLoadPages = 0
 
         this.currentRadius = Number(this.filterService.getRadiusFromlocalStorage())
         this.ionContent.scrollToPoint(0, this.eventsTapeService.eventsLastScrollPositionForTape, 0)

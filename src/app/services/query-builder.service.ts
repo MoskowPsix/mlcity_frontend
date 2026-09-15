@@ -241,8 +241,9 @@ export class QueryBuilderService {
       dateEnd: this.dateEnd,
       radius: this.radius,
       page: this.paginationPublicEventsForTapeCurrentPage.value,
-      orderBy: 'date_start',
-      desc: true,
+      // По дате «за кругом» забивали первую страницу — события в круге не догружались
+      orderBy: 'distance',
+      desc: false,
       latitude_position: this.latitudePosition,
       longitude_position: this.longitudePosition,
     }

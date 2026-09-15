@@ -633,27 +633,20 @@ export class MapService {
 
   // Определяем местоположение пользователя
   async positionFilter(map: any, circlePoint: ymaps.Circle) {
-    //if (this.filterService.saveFilters.value === 1 || this.filterService.changeCityFilter.value) {
     //Если первый запуск приложения то устанавливаем геопозицию
     if (this.navigationService.appFirstLoading.value) {
       await this.geolocationMapNative(map, circlePoint)
     }
-    // Было ещё в условии: this.filterService.changeCityFilter.value &&
     // Если не первый запуск и менялся фильтр города то перекидываем на город
     if (!this.navigationService.appFirstLoading.value) {
       let coords = await this.getLastMapCoordsFromLocalStorage()
       await circlePoint.geometry?.setCoordinates(coords)
-      // await this.geolocationMapNative(map, circlePoint);
+      this.circleCenterLatitude.next(coords[0])
+      this.circleCenterLongitude.next(coords[1])
       map.target.setBounds(circlePoint.geometry?.getBounds()!, {
         checkZoomRange: false,
       })
     }
-    // await this.geolocationMapNative(map, circlePoint);
-    //ветка если юзать this.filterService.saveFilters.value === 1
-    // else {
-    //   await circlePoint.geometry?.setCoordinates(this.defaultCoords())
-    //   map.target.setBounds(circlePoint.geometry?.getBounds()!, {checkZoomRange: true})
-    // }
     this.filterService.changeCityFilter.next(false)
   }
 }

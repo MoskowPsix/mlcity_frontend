@@ -137,6 +137,9 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       : this.router.navigate(['/cabinet/events/edit', this.event.id])
   }
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['event'] && this.event) {
+      this.formatCardDates()
+    }
     if (this.event && this.event.views) {
       this.setUserViews()
       this.setUsersCount()
@@ -517,9 +520,7 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.destroy$.complete()
   }
   ngOnInit() {
-    this.formatedStartDate = this.datePipe.transform(this.event.date_start, 'dd-MMM')
-
-    this.formatedEndDate = this.datePipe.transform(this.event.date_end, 'dd-MMM')
+    this.formatCardDates()
     this.userAuth = this.authService.getAuthState()
     this.findPrice()
     this.slugName = this.helpers.translit(this.event.name)
@@ -534,5 +535,18 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.getVkEventLikes(this.event.vk_group_id, this.event.vk_post_id)
       this.isLikedUserVKEvent(this.event.vk_group_id, this.event.vk_post_id)
     }
+  }
+
+  /** Если период через разные годы — показываем год в обеих датах */
+  private formatCardDates() {
+    const start = this.event?.date_start ? new Date(this.event.date_start) : null
+    const end = this.event?.date_end ? new Date(this.event.date_end) : null
+    const startValid = start && !Number.isNaN(start.getTime())
+    const endValid = end && !Number.isNaN(end.getTime())
+    const differentYears =
+      !!startValid && !!endValid && start!.getFullYear() !== end!.getFullYear()
+    const format = differentYears ? 'dd-MMM y' : 'dd-MMM'
+    this.formatedStartDate = this.datePipe.transform(this.event?.date_start, format)
+    this.formatedEndDate = this.datePipe.transform(this.event?.date_end, format)
   }
 }

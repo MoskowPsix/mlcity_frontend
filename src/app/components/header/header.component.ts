@@ -143,18 +143,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.city = item.name
     this.region = item.location_parent.name
     this.filterService.setLocationTolocalStorage(item.id)
-    // this.filterService.setLocationLatitudeTolocalStorage(item.name)
-    // this.filterService.setRegionTolocalStorage(item.location_parent.name)
     //Получаем координаты по городу и записываем их
-    // this.mapService.ForwardGeocoder(item.name + '' + item.location_parent.name).pipe(takeUntil(this.destroy$)).subscribe((value:any) => {
     this.filterService.setLocationLatitudeTolocalStorage(item.latitude)
     this.filterService.setLocationLongitudeTolocalStorage(item.longitude)
     this.mapService.setLastMapCoordsToLocalStorage(item.latitude, item.longitude)
+    // Иначе карта/лента продолжают искать по старому circleCenter
+    this.mapService.circleCenterLatitude.next(Number(item.latitude))
+    this.mapService.circleCenterLongitude.next(Number(item.longitude))
     this.filterService.changeCityFilter.next(true)
     this.filterService.changeFilter.next(true)
-    // })
-    // this.mapService.geolocationCity.next(item.name);
-    // this.mapService.geolocationRegion.next(item.location_parent.name);
     this.modalClose()
   }
 

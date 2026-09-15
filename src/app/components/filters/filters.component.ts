@@ -216,20 +216,26 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.city = item.name
     this.region = item.location_parent.name
     this.filterService.setLocationTolocalStorage(item.id)
-    //Получаем координаты по городу и записываем их
+    const applyCoords = (lat: number | string, lon: number | string) => {
+      this.filterService.setLocationLatitudeTolocalStorage(String(lat))
+      this.filterService.setLocationLongitudeTolocalStorage(String(lon))
+      this.mapService.setLastMapCoordsToLocalStorage(lat, lon)
+      this.mapService.circleCenterLatitude.next(Number(lat))
+      this.mapService.circleCenterLongitude.next(Number(lon))
+      this.filterService.changeCityFilter.next(true)
+      this.filterService.changeFilter.next(true)
+    }
+    if (item.latitude != null && item.longitude != null) {
+      applyCoords(item.latitude, item.longitude)
+      return
+    }
     this.mapService
       .ForwardGeocoder(item.name + '' + item.location_parent.name)
       .pipe(takeUntil(this.destroy$))
       .subscribe((value: any) => {
-        this.filterService.setLocationLatitudeTolocalStorage(
-          value.geoObjects.get(0).geometry.getCoordinates()[0].toString(),
-        )
-        this.filterService.setLocationLongitudeTolocalStorage(
-          value.geoObjects.get(0).geometry.getCoordinates()[1].toString(),
-        )
+        const coords = value.geoObjects.get(0).geometry.getCoordinates()
+        applyCoords(coords[0], coords[1])
       })
-    this.filterService.changeFilter.next(true)
-    this.filterService.changeCityFilter.next(true)
   }
 
   //Очистить поле поиса в поиске города
