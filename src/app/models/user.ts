@@ -6,6 +6,7 @@ export interface IUser {
   email_verified_at?: string
   token?: string
   avatar: string | null
+  rfid_tag_number?: string | null
   roles?: string[]
   location?: any
   locationId?: number

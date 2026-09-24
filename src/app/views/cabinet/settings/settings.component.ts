@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router'
 import { Platform } from '@ionic/angular'
-import { catchError, EMPTY, of, Subject, Subscription, takeUntil } from 'rxjs'
+import { catchError, EMPTY, finalize, of, Subject, Subscription, takeUntil } from 'rxjs'
 import { IUser } from 'src/app/models/user'
 import { AuthService } from 'src/app/services/auth.service'
 import { LoadingService } from 'src/app/services/loading.service'
@@ -46,10 +46,14 @@ export class SettingsComponent implements OnInit {
   public new_name: FormControl = new FormControl('')
   previewPhotoUrl!: string
   backendUrl: string = `${environment.BACKEND_URL}:${environment.BACKEND_PORT}`
+  rfidTagNumber = ''
+  savingTag = false
+  readonly rfidTagNumberControl = new FormControl('')
 
   getUser() {
     this.userService.getUser().subscribe((user: any) => {
       this.user = user
+      this.patchRfidTagFromUser()
       if (this.user.avatar && this.user.avatar.includes('https')) {
         this.avatarUrl = this.user.avatar
       } else {
@@ -57,6 +61,18 @@ export class SettingsComponent implements OnInit {
       }
       this.avatarLoad = true
     })
+  }
+
+  refreshUserFromApi() {
+    return this.userService.getUserById().pipe(
+      takeUntil(this.destroy$),
+      catchError((err) => {
+        if (err.status == 401 || err.status == 403) {
+          this.authService.logout()
+        }
+        return of(EMPTY)
+      }),
+    )
   }
 
   createFormData() {
@@ -114,6 +130,81 @@ export class SettingsComponent implements OnInit {
           }
         })
     }
+  }
+
+  saveRfidTagNumber() {
+    this.persistRfidTagNumber(
+      this.rfidTagNumberControl.value ?? '',
+      'Номер датчика сохранён',
+      'Не удалось сохранить номер датчика',
+    )
+  }
+
+  deleteRfidTagNumber() {
+    this.savingTag = true
+    this.loadingService.showLoading()
+    this.userService
+      .detachRfidTag()
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.savingTag = false
+          this.loadingService.hideLoading()
+        }),
+        catchError((err) => {
+          if (err.status == 401 || err.status == 403) {
+            this.authService.logout()
+          }
+          const message =
+            err?.error?.errors?.rfidTagNumber?.[0] || err?.error?.message || 'Не удалось удалить датчик'
+          this.toastService.showToast(message, 'danger')
+          return of(EMPTY)
+        }),
+      )
+      .subscribe((response: any) => {
+        if (response?.status == 'success') {
+          this.user = response.user
+          this.userService.setUser(response.user)
+          this.patchRfidTagFromUser()
+          this.toastService.showToast('Датчик удалён', 'success')
+        }
+      })
+  }
+
+  private persistRfidTagNumber(rfidTagNumber: string, successMessage: string, errorMessage: string) {
+    this.savingTag = true
+    this.loadingService.showLoading()
+    this.userService
+      .updateRfidTag(rfidTagNumber)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.savingTag = false
+          this.loadingService.hideLoading()
+        }),
+        catchError((err) => {
+          if (err.status == 401 || err.status == 403) {
+            this.authService.logout()
+          }
+          const message =
+            err?.error?.errors?.rfidTagNumber?.[0] || err?.error?.message || errorMessage
+          this.toastService.showToast(message, 'danger')
+          return of(EMPTY)
+        }),
+      )
+      .subscribe((response: any) => {
+        if (response?.status == 'success') {
+          this.user = response.user
+          this.userService.setUser(response.user)
+          this.patchRfidTagFromUser()
+          this.toastService.showToast(successMessage, 'success')
+        }
+      })
+  }
+
+  private patchRfidTagFromUser(): void {
+    this.rfidTagNumber = (this.user?.rfid_tag_number ?? '').trim()
+    this.rfidTagNumberControl.setValue(this.rfidTagNumber)
   }
 
   checkEmail() {
@@ -175,13 +266,6 @@ export class SettingsComponent implements OnInit {
           this.router.navigate(['/email-confirm'])
         }
       })
-    // this.passwordChange = true
-    // let block = event
-    // block.classList.toggle('password-inputs-wrapper_active')
-    // plug.classList.toggle('plug-password-wrapper_active')
-    // setTimeout(() => {
-    //   plug.classList.add('plug-password-wrapper_none')
-    // }, 500)
   }
   previewPhoto(file: File) {
     const reader: FileReader = new FileReader()
@@ -199,7 +283,12 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.checkEmail()
     this.isMobile = this.platform.is('mobile')
-    this.getUser()
+    this.refreshUserFromApi().subscribe((res: any) => {
+      if (res?.user) {
+        this.userService.setUser(res.user)
+      }
+      this.getUser()
+    })
     this.passwordResetForm = new FormGroup({
       old_password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       old_password_plug: new FormControl('', [Validators.required, Validators.minLength(8)]),
@@ -207,7 +296,7 @@ export class SettingsComponent implements OnInit {
       retry_password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     })
     this.resetForm = new FormGroup({
-      new_name: new FormControl(this.user.name, [Validators.minLength(1)]),
+      new_name: new FormControl(this.user?.name ?? '', [Validators.minLength(1)]),
     })
   }
 }

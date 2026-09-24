@@ -1,5 +1,10 @@
 
-<div class="item-main" *ngIf="routing" routerLink="{{routing}}">
+<div
+  class="item-main"
+  *ngIf="routing"
+  [routerLink]="routing"
+  (click)="onNavigate($event)"
+>
   <div class="info-wrapper">
     <ng-container>
         <div *ngIf="icon && iconColor" class="item-main-icon-wrapper" [style.background]="iconColor">

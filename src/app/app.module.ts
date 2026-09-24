@@ -92,6 +92,7 @@ import { NewSeanceComponent } from './components/new-seance/new-seance.component
 import { SafeUrlPipe2 } from './components/event-card/event-card.pipe'
 import { CodeInputComponent } from './components/materials/code-input/code-input.component'
 import { MyEventsComponent } from './views/cabinet/my-events/my-events.component'
+import { MototrackRunsComponent } from './views/cabinet/mototrack-runs/mototrack-runs.component'
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component'
 import { RegistrationComponent } from './views/registration/registration.component'
 import { MaskitoModule } from '@maskito/angular'
@@ -262,6 +263,7 @@ registerLocaleData(localeRu, 'ru')
     SafeUrlPipe,
     SafeUrlPipe2,
     MyEventsComponent,
+    MototrackRunsComponent,
     MySightsComponent,
     RegistrationComponent,
     EdditSightComponent,

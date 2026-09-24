@@ -48,6 +48,7 @@
 
         <div (click)="redirect()" class="user-section-info">
             <div class="user-section-name__organization">{{organization.name}}</div>
+            <span *ngIf="organization.has_mototrack" class="chronometry-badge">Есть хронометраж</span>
             <!-- <div *ngIf="!organization.types" class="category-plug">Нет категорий</div> -->
         </div>
 

@@ -50,6 +50,53 @@
                 <app-standart-input  [invalid]="passwordResetForm.get('retry_password')!.invalid && passwordError !=='' || passwordError !==''" [openPassword]="true" type="password"  placeholder="•••••••••••" [label]="'Повторите пароль'" [control] = "passwordResetForm.get('retry_password')" [readonly]="false"></app-standart-input >
               </div>
             </form>
+
+            <section class="sensor-card">
+              <div class="sensor-card__header">
+                <div>
+                  <h2>Датчик хронометража</h2>
+                  <p *ngIf="rfidTagNumber">Номер привязан к профилю и используется для фиксации прохождений</p>
+                  <p *ngIf="!rfidTagNumber">Укажите номер транспондера, чтобы привязать метку к аккаунту</p>
+                </div>
+              </div>
+
+              <div *ngIf="rfidTagNumber" class="sensor-bound">
+                <div class="sensor-bound__plate">
+                  <div class="sensor-bound__copy">
+                    <span class="sensor-bound__label">Ваш датчик</span>
+                    <strong class="sensor-bound__number">{{ rfidTagNumber }}</strong>
+                  </div>
+                  <span class="sensor-bound__badge">Привязан</span>
+                </div>
+              </div>
+
+              <app-standart-input
+                *ngIf="!rfidTagNumber"
+                [control]="rfidTagNumberControl"
+                placeholder="Например, 42"
+                [label]="'Номер датчика'"
+                [readonly]="false"
+              ></app-standart-input>
+
+              <div class="sensor-card__actions">
+                <app-standart-button
+                  *ngIf="!rfidTagNumber"
+                  (click)="saveRfidTagNumber()"
+                  buttonText="Сохранить номер"
+                  theme="standart"
+                ></app-standart-button>
+                <button
+                  *ngIf="rfidTagNumber"
+                  type="button"
+                  class="sensor-card__unbind"
+                  [disabled]="savingTag"
+                  (click)="deleteRfidTagNumber()"
+                >
+                  Отвязать датчик
+                </button>
+              </div>
+            </section>
+
             <div class="save-wrapper">
               <app-standart-button (click)="onSubmit()" *ngIf="!passwordChange" buttonText = "Сохранить" type="submit" theme ="standart"></app-standart-button>
               <!-- <app-standart-button  *ngIf="passwordChange" (click)="submitPassword()" buttonText = "Сохранить" type="button" theme ="standart"></app-standart-button> -->

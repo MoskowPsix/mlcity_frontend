@@ -100,6 +100,110 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
+.sensor-card {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #fff;
+  padding: 16px;
+}
+
+.sensor-card__header {
+  margin-bottom: 14px;
+
+  h2 {
+    margin: 0 0 6px;
+    color: #1f1f1f;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    color: #8a8a8a;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+}
+
+.sensor-bound {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sensor-bound__plate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #eeeeee;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.sensor-bound__label {
+  display: block;
+  color: #8a8a8a;
+  font-size: 12px;
+}
+
+.sensor-bound__number {
+  display: block;
+  margin-top: 2px;
+  color: #1f1f1f;
+  font-size: 28px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.sensor-bound__badge {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #e8f8ec;
+  color: #2f9e44;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sensor-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+
+  app-standart-button {
+    display: block;
+    width: 100%;
+  }
+}
+
+.sensor-card__unbind {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.4rem;
+  padding: 0 10px;
+  border: 1px solid #ffd6d6;
+  border-radius: 5px;
+  background: #fff8f8;
+  color: #e03131;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.sensor-card__unbind:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
  .password-inputs-wrapper{
   height: 0;
   opacity: 0;

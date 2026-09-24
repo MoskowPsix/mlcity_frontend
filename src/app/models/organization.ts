@@ -16,4 +16,6 @@ export interface IOrganization {
   description?: string
   user?: IUser
   users?: IUser[]
+  /** Есть привязанные устройства хронометража mototrack (для sight-карточек) */
+  has_mototrack?: boolean
 }

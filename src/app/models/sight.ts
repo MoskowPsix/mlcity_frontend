@@ -30,4 +30,6 @@ export interface ISight {
   comments?: any
   work_time?: any
   user_id?: any
+  /** Есть привязанные устройства хронометража mototrack */
+  has_mototrack?: boolean
 }

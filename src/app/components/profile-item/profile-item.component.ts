@@ -12,5 +12,13 @@ export class ProfileItemComponent implements OnInit {
   @Input() iconColor!: string
   @Input() iconFilter!: string
   @Input() routing!: string
+
   ngOnInit() {}
+
+  /** Снимаем фокус до того, как Ionic повесит aria-hidden на уходящую страницу */
+  onNavigate(event: Event): void {
+    const target = event.currentTarget as HTMLElement | null
+    target?.blur()
+    ;(document.activeElement as HTMLElement | null)?.blur?.()
+  }
 }
