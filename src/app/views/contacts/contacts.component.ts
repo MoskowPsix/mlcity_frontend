@@ -47,6 +47,9 @@ export class ContactsComponent {
   closeSelectDate(){
     this.selectedTypeModalValue = false;
   }
+  redirectInHome(){
+    this.router.navigate(['/home'])
+  }
   onSubmit() {
     if (this.contactForm.valid) {
       this.loadingService.showLoading()

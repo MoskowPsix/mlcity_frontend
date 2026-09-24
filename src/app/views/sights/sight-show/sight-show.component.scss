@@ -20,6 +20,19 @@
   margin-bottom: 0.5rem;
 }
 
+.chronometry-badge {
+  display: inline-flex;
+  align-items: center;
+  margin: -0.15rem 0 0.85rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #e8f8ec;
+  color: #2f9e44;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-bold);
+}
+
 
 .simple-text_size {
   margin-top: -0.3rem;

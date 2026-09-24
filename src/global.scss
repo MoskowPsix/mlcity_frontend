@@ -243,6 +243,22 @@ ion-toolbar {
   background-color: var(--blue-color);
 }
 
+.marker.marker-chronometry {
+  overflow: visible;
+}
+
+.marker-chronometry-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2f9e44;
+  border: 2px solid #fff;
+  transform: rotate(45deg);
+}
+
 .marker > img {
   width: 16px;
   height: 14px;

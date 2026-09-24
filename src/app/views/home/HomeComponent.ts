@@ -968,7 +968,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         //   icoLink = ''
         // }
 
-        marker = `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
+        marker = item.has_mototrack
+          ? `<div class="marker sight marker-chronometry"><img src="/assets/icons/ticket.svg"><span class="marker-chronometry-dot"></span></div>`
+          : `<div class="marker sight"> <img src="/assets/icons/ticket.svg"> </div>`
         placemark = new ymaps.Placemark(
           [item.latitude, item.longitude],
           {},

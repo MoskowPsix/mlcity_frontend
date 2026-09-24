@@ -1,0 +1,112 @@
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingText="Потяните для обновления"
+      refreshingSpinner="crescent"
+      refreshingText="Обновление..."
+    ></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="header-plug">
+    <div class="header-tools">
+      <app-back-button></app-back-button>
+      <span>Хронометраж</span>
+      <div style="opacity: 0; pointer-events: none"><app-circle-button></app-circle-button></div>
+    </div>
+  </div>
+
+  <main class="mototrack-runs">
+    <section class="sensor-card">
+      <div class="sensor-card__header">
+        <div>
+          <h2>Датчик хронометража</h2>
+          <p *ngIf="rfidTagNumber">Номер привязан к профилю и используется для фиксации кругов</p>
+          <p *ngIf="!rfidTagNumber">Укажите номер транспондера, чтобы видеть свои круги на этой странице</p>
+        </div>
+      </div>
+
+      <div *ngIf="rfidTagNumber" class="sensor-bound">
+        <div class="sensor-bound__plate">
+          <div class="sensor-bound__copy">
+            <span class="sensor-bound__label">Ваш датчик</span>
+            <strong class="sensor-bound__number">{{ rfidTagNumber }}</strong>
+          </div>
+          <span class="sensor-bound__badge">Привязан</span>
+        </div>
+        <p class="sensor-bound__hint">
+          Круги появятся автоматически, когда этот датчик пройдёт точку хронометража.
+        </p>
+      </div>
+
+      <app-standart-input
+        *ngIf="!rfidTagNumber"
+        [control]="rfidTagNumberControl"
+        placeholder="Например, 42"
+        [label]="'Номер датчика'"
+        [readonly]="false"
+      ></app-standart-input>
+
+      <div class="sensor-card__actions">
+        <app-standart-button
+          *ngIf="!rfidTagNumber"
+          (click)="saveRfidTagNumber()"
+          buttonText="Сохранить номер"
+          theme="standart"
+        ></app-standart-button>
+        <button
+          *ngIf="rfidTagNumber"
+          type="button"
+          class="sensor-card__unbind"
+          [disabled]="savingTag"
+          (click)="deleteRfidTagNumber()"
+        >
+          Отвязать датчик
+        </button>
+      </div>
+    </section>
+
+    <div *ngIf="loading && !sessions.length" class="mototrack-runs__empty">Загружаем заезды...</div>
+    <div *ngIf="!loading && !sessions.length" class="mototrack-runs__empty">
+      <ng-container *ngIf="rfidTagNumber">
+        Датчик {{ rfidTagNumber }} ещё не считался. После первого прохождения точки хронометража здесь появится сессия
+        за день.
+      </ng-container>
+      <ng-container *ngIf="!rfidTagNumber">
+        Сначала привяжите датчик. Когда он считается на точке хронометража, здесь появится сессия за день.
+      </ng-container>
+    </div>
+
+    <section class="sessions-list" *ngIf="sessions.length">
+      <article
+        *ngFor="let session of sessions"
+        class="session-card"
+        [class.session-card--expanded]="isSessionExpanded(session.key)"
+      >
+        <button type="button" class="session-card__header" (click)="toggleSession(session.key)">
+          <span class="session-card__title">{{ session.title }}</span>
+          <span class="session-card__meta">
+            <span *ngIf="session.laps_count > 0" class="session-card__laps">{{ session.laps_count }} кр.</span>
+            <img
+              class="session-card__chevron"
+              src="/assets/icons/arrow-rounded.svg"
+              alt=""
+              [class.session-card__chevron--open]="isSessionExpanded(session.key)"
+            />
+          </span>
+        </button>
+
+        <div class="session-card__body" *ngIf="isSessionExpanded(session.key)">
+          <div
+            *ngFor="let lap of session.laps"
+            class="lap-row"
+            [class.lap-row--start]="lap.type === 'start'"
+            [class.lap-row--active]="lap.status === 'active'"
+          >
+            <span class="lap-row__label">{{ lap.label }}</span>
+            <strong class="lap-row__time">{{ lap.time }}</strong>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</ion-content>

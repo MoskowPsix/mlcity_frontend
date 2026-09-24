@@ -1,0 +1,256 @@
+.header-plug {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  padding-bottom: 0.625rem;
+  align-items: end;
+  background-color: #4c5861;
+  width: 100%;
+  min-height: 4.6rem;
+  border-radius: 0 0 1.5rem 1.5rem;
+}
+
+.header-tools {
+  color: #fff;
+  font-size: 1.25rem;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.mototrack-runs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 1.25rem 1rem 1.5rem;
+}
+
+.sensor-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #fff;
+  padding: 16px;
+}
+
+.sensor-card__header {
+  margin-bottom: 14px;
+
+  h2 {
+    margin: 0 0 6px;
+    color: #1f1f1f;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    color: #8a8a8a;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+}
+
+.sensor-bound {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sensor-bound__plate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #eeeeee;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.sensor-bound__label {
+  display: block;
+  color: #8a8a8a;
+  font-size: 12px;
+}
+
+.sensor-bound__number {
+  display: block;
+  margin-top: 2px;
+  color: #1f1f1f;
+  font-size: 28px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.sensor-bound__badge {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #e8f8ec;
+  color: #2f9e44;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sensor-bound__hint {
+  margin: 0;
+  color: #8a8a8a;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.sensor-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+
+  app-standart-button {
+    display: block;
+    width: 100%;
+  }
+}
+
+.sensor-card__unbind {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.4rem;
+  padding: 0 10px;
+  border: 1px solid #ffd6d6;
+  border-radius: 5px;
+  background: #fff8f8;
+  color: #e03131;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.sensor-card__unbind:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.mototrack-runs__empty,
+.sessions-list {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.mototrack-runs__empty {
+  color: #8a8a8a;
+  line-height: 1.45;
+  padding: 20px;
+  text-align: center;
+}
+
+.sessions-list {
+  overflow: hidden;
+}
+
+.session-card {
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.session-card__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 16px;
+  text-align: left;
+}
+
+.session-card__title {
+  color: #1f1f1f;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.session-card__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.session-card__laps {
+  border-radius: 6px;
+  background: #f1f3f5;
+  color: #8a8a8a;
+  font-size: 12px;
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+
+.session-card__chevron {
+  width: 14px;
+  height: 14px;
+  transform: rotate(-90deg);
+  transition: transform 0.2s ease;
+  opacity: 0.7;
+}
+
+.session-card__chevron--open {
+  transform: rotate(90deg);
+}
+
+.session-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0 16px 12px;
+}
+
+.lap-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid #f0f0f0;
+  padding: 12px 0;
+}
+
+.lap-row__label {
+  color: #8a8a8a;
+  font-size: 14px;
+  text-transform: lowercase;
+}
+
+.lap-row--start .lap-row__label {
+  color: #1f1f1f;
+  font-weight: 700;
+}
+
+.lap-row__time {
+  color: #1f1f1f;
+  font-weight: 700;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.lap-row--active {
+  background: #fff8f8;
+  margin: 0 -8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 6px;
+}
+
+.lap-row--active .lap-row__time {
+  color: #e67700;
+}

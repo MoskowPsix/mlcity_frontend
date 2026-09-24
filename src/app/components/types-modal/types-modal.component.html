@@ -1,22 +1,78 @@
-<ion-modal mode="ios" (didDismiss)="closeModal()"  [isOpen]="openTypesModal">
-        <ng-template>
-            <ion-content>
-                <div class="category-modal-grid">
-                    <ng-container *ngIf="allTypes && allTypes.length > 0">
-                        <ng-container *ngFor="let category of allTypes" >
-                            <div (click)="clickCategory(category)"  [ngClass]="{'category-modal-grid-item_active': checkCategory(category), 'category-modal-grid-item': !checkCategory(category)}" >
-                                <img class="category-icon" src="{{backendUrl}}{{category.ico}}" alt="">
-                                <span class="category-text">{{category.name}}</span>
-                            </div>
-                        </ng-container>
-                    </ng-container>
-            
-                </div>
-                <div class="category-modal-grid-footer">
-                    <span (click)="clearAllCategories()" class="clear-filters">Сбросить</span>
-                    <app-standart-button (click)="closeModal()" style="width: 80%;" theme="standart" buttonText="Применить"></app-standart-button>
-                </div>
-            </ion-content>
-        </ng-template>
- </ion-modal>
+<ion-modal mode="ios" (didDismiss)="closeModal()" [isOpen]="openTypesModal" [ngClass]="{'suggest-open': showSuggestForm}">
+  <ng-template>
+    <ion-content>
+      <ng-container *ngIf="!showSuggestForm">
+        <div class="category-modal-grid">
+          <ng-container *ngIf="allTypes && allTypes.length > 0">
+            <ng-container *ngFor="let category of allTypes">
+              <div
+                (click)="clickCategory(category)"
+                [ngClass]="{
+                  'category-modal-grid-item_active': checkCategory(category),
+                  'category-modal-grid-item': !checkCategory(category)
+                }"
+              >
+                <img class="category-icon" src="{{ backendUrl }}{{ category.ico }}" alt="" />
+                <span class="category-text">{{ category.name }}</span>
+              </div>
+            </ng-container>
+          </ng-container>
 
+          <div
+            class="category-modal-grid-item category-modal-grid-item_suggest"
+            (click)="openSuggestForm($event)"
+          >
+            <span class="suggest-badge">+</span>
+            <span class="category-text">Предложить свою</span>
+          </div>
+        </div>
+
+        <div class="category-modal-grid-footer">
+          <span (click)="clearAllCategories()" class="clear-filters">Сбросить</span>
+          <app-standart-button
+            (click)="closeModal()"
+            style="width: 80%"
+            theme="standart"
+            buttonText="Применить"
+          ></app-standart-button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="showSuggestForm">
+        <form class="suggest-form" [formGroup]="suggestForm">
+          <div class="suggest-form__title">Предложить категорию</div>
+          <p class="suggest-form__hint">Расскажите, какой категории не хватает — мы рассмотрим предложение.</p>
+
+          <app-standart-input
+            placeholder="Название категории"
+            style="width: 100%"
+            [control]="suggestForm.get('name')"
+          ></app-standart-input>
+
+          <textarea
+            formControlName="description"
+            class="suggest-form__textarea"
+            placeholder="Краткое описание"
+            rows="4"
+          ></textarea>
+
+          <div class="suggest-form__actions">
+            <app-standart-button
+              (clicked)="closeSuggestForm()"
+              style="width: 100%"
+              theme="light"
+              buttonText="Назад"
+            ></app-standart-button>
+            <app-standart-button
+              (clicked)="submitSuggestion()"
+              [disabled]="suggestForm.invalid || suggestSubmitting"
+              style="width: 100%"
+              theme="standart"
+              buttonText="Отправить"
+            ></app-standart-button>
+          </div>
+        </form>
+      </ng-container>
+    </ion-content>
+  </ng-template>
+</ion-modal>

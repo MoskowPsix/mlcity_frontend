@@ -4,6 +4,9 @@ ion-modal{
     --border-radius: 16px;
     --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
+  ion-modal.suggest-open {
+    --height: 28rem;
+  }
   .category-modal-header-text{
       color: #4C5861;
       font-family: var(--font-regular);
@@ -90,4 +93,74 @@ ion-modal{
     margin-top: 0.5rem;
     z-index: 100;
     margin-left: auto;
+  }
+
+  .category-modal-grid-item_suggest {
+    background: linear-gradient(160deg, #4c8dff 0%, #2f6fed 100%);
+    border: 1px dashed rgba(255, 255, 255, 0.55);
+
+    .category-text {
+      color: #fff;
+      text-align: center;
+      line-height: 1.2;
+      padding: 0 0.25rem;
+    }
+
+    .suggest-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      margin-bottom: 0.35rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.22);
+      color: #fff;
+      font-size: 1.25rem;
+      font-family: var(--font-bold);
+      line-height: 1;
+    }
+  }
+
+  .suggest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem 1rem 1rem;
+    max-width: 19rem;
+    margin: 0 auto;
+
+    &__title {
+      color: #4c5861;
+      font-family: var(--font-bold);
+      font-size: 1.05rem;
+    }
+
+    &__hint {
+      margin: 0;
+      color: #7a8490;
+      font-family: var(--font-regular);
+      font-size: 0.8rem;
+      line-height: 1.35;
+    }
+
+    &__textarea {
+      width: 100%;
+      min-height: 6rem;
+      resize: none;
+      border: 1px solid #d7dde5;
+      border-radius: 10px;
+      padding: 0.75rem;
+      font-family: var(--font-regular);
+      font-size: 0.9rem;
+      color: #4c5861;
+      background: #fff;
+      box-sizing: border-box;
+    }
+
+    &__actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
   }

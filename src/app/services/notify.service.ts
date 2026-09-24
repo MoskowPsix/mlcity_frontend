@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment'
 import { UserService } from './user.service'
 import { ToastService } from './toast.service'
 import { LocalNotifications } from '@capacitor/local-notifications'
+import { Capacitor } from '@capacitor/core/types/global'
+
 @Injectable({
   providedIn: 'root',
 })
@@ -20,12 +22,55 @@ export class NotifyService {
     private userService: UserService,
   ) {}
 
+  // initPush() {
+  //   if (Capacitor.platform !== 'web') {
+  //     this.registerPush()
+  //   }
+  // }
+  // registerPush() {
+  //   PushNotifications.requestPermissions().then((result: any) => {
+  //     if (result.granted) {
+  //       PushNotifications.register()
+  //     }
+  //   })
+
+  //   PushNotifications.addListener('registration', (token: any) => {
+  //     console.info('Registration token: ', token.value)
+  //   })
+
+  //   PushNotifications.addListener('registrationError', (err) => {
+  //     console.error('Registration error: ', err.error)
+  //   })
+
+  //   PushNotifications.addListener('pushNotificationReceived', (notification) => {
+  //     console.log('Push notification received: ', notification)
+  //   })
+
+  //   PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
+  //     console.log('Push notification action performed', notification.actionId, notification.inputValue)
+  //   })
+  // }
+
   initSSE() {
     const user = this.userService.getUserFromLocalStorage()
     if (user?.id) {
       this.connectChanelUser(user?.id)
     }
     this.connectChanelAll()
+    setInterval(() => {
+      // this.toastService.showToast(`work`, 'success')
+      LocalNotifications.schedule({
+        notifications: [
+          {
+            id: 12312,
+            title: 'Notification',
+            body: 'You have a new message!',
+            schedule: { at: new Date(Date.now() + 1000) }, // Отображение через 1 секунду
+            sound: 'default',
+          },
+        ],
+      })
+    }, 5000)
   }
   public connectChanelUser(id: number): Subject<any> {
     this.eventSource = new EventSource(
@@ -39,7 +84,7 @@ export class NotifyService {
         data.forEach((notify: any) => {
           this.viewNotify(notify.id).pipe(takeUntil(this.destroy$)).subscribe()
           console.log(notify)
-          // this.toastService.showToast(`${notify.id}`, 'success')
+          this.toastService.showToast(`${notify.id}`, 'success')
         })
       }
     }

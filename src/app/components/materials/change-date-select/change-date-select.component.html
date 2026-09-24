@@ -8,7 +8,6 @@
         </ng-container>
      
     </div>
-    <ion-icon name ="selectedModal" (click)="openModalFunction()"  name="chevron-down-outline"></ion-icon>
     <ul name ="selectedModal" [ngClass]="{'select-container__content_active': modalValue, 'select-container__content': !modalValue}" class="select-container__content">
         <ng-container *ngFor="let option of items">     
              <li (click)="selectValue(option)" *ngIf="option.value !== selectedValue.value"  class="select-container__content__option">{{option.name}}</li>
