@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content class="mototrack-page">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content
       pullingText="Потяните для обновления"
@@ -65,15 +65,15 @@
       </div>
     </section>
 
-    <div *ngIf="loading && !sessions.length" class="mototrack-runs__empty">Загружаем заезды...</div>
     <div *ngIf="!loading && !sessions.length" class="mototrack-runs__empty">
-      <ng-container *ngIf="rfidTagNumber">
+      <strong>Пока нет заездов</strong>
+      <p *ngIf="rfidTagNumber">
         Датчик {{ rfidTagNumber }} ещё не считался. После первого прохождения точки хронометража здесь появится сессия
         за день.
-      </ng-container>
-      <ng-container *ngIf="!rfidTagNumber">
+      </p>
+      <p *ngIf="!rfidTagNumber">
         Сначала привяжите датчик. Когда он считается на точке хронометража, здесь появится сессия за день.
-      </ng-container>
+      </p>
     </div>
 
     <section class="sessions-list" *ngIf="sessions.length">
@@ -83,9 +83,17 @@
         [class.session-card--expanded]="isSessionExpanded(session.key)"
       >
         <button type="button" class="session-card__header" (click)="toggleSession(session.key)">
-          <span class="session-card__title">{{ session.title }}</span>
+          <span class="session-card__heading">
+            <span class="session-card__date">{{ sessionDateLabel(session) }}</span>
+            <span class="session-card__place">{{ sessionPlaceName(session) }}</span>
+            <span class="session-card__summary">
+              <ng-container *ngIf="sessionStartTime(session) !== '—'">Старт {{ sessionStartTime(session) }}</ng-container>
+              <ng-container *ngIf="session.laps_count > 0"> · {{ lapsCountLabel(session.laps_count) }}</ng-container>
+              <ng-container *ngIf="bestLapTime(session)"> · лучший {{ bestLapTime(session) }}</ng-container>
+            </span>
+          </span>
           <span class="session-card__meta">
-            <span *ngIf="session.laps_count > 0" class="session-card__laps">{{ session.laps_count }} кр.</span>
+            <span *ngIf="session.laps_count > 0" class="session-card__laps">{{ session.laps_count }}</span>
             <img
               class="session-card__chevron"
               src="/assets/icons/arrow-rounded.svg"
@@ -101,9 +109,13 @@
             class="lap-row"
             [class.lap-row--start]="lap.type === 'start'"
             [class.lap-row--active]="lap.status === 'active'"
+            [class.lap-row--best]="isBestLap(session, lap)"
           >
-            <span class="lap-row__label">{{ lap.label }}</span>
-            <strong class="lap-row__time">{{ lap.time }}</strong>
+            <span class="lap-row__label">
+              {{ lapLabel(lap) }}
+              <span *ngIf="isBestLap(session, lap)" class="lap-row__best">лучшее</span>
+            </span>
+            <strong class="lap-row__time">{{ lapTime(lap) }}</strong>
           </div>
         </div>
       </article>
