@@ -57,20 +57,6 @@ export class NotifyService {
       this.connectChanelUser(user?.id)
     }
     this.connectChanelAll()
-    setInterval(() => {
-      // this.toastService.showToast(`work`, 'success')
-      LocalNotifications.schedule({
-        notifications: [
-          {
-            id: 12312,
-            title: 'Notification',
-            body: 'You have a new message!',
-            schedule: { at: new Date(Date.now() + 1000) }, // Отображение через 1 секунду
-            sound: 'default',
-          },
-        ],
-      })
-    }, 5000)
   }
   public connectChanelUser(id: number): Subject<any> {
     this.eventSource = new EventSource(

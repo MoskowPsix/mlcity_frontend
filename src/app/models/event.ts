@@ -8,6 +8,7 @@ import { IPlace } from './place'
 export interface IEvent {
   id: number
   name: string
+  checkpoint_enabled?: boolean
   sponsor: string
   description: string
   address: string

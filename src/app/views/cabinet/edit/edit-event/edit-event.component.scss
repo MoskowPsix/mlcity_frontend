@@ -5,6 +5,12 @@
 .edit-form{
     margin-top: 1rem;
 }
+.checkpoint-toggle {
+  --background: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin: 12px 0 4px;
+}
 .place-container{
     padding-top: 1rem;
     padding-bottom:0.75rem;

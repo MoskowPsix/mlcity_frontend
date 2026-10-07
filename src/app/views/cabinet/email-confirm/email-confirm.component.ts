@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { Router } from '@angular/router'
 import { catchError, debounceTime, EMPTY, finalize, of, Subject, takeUntil, tap } from 'rxjs'
 import { IUser } from 'src/app/models/user'
 import { AuthService } from 'src/app/services/auth.service'
 import { LoadingService } from 'src/app/services/loading.service'
 import { ToastService } from 'src/app/services/toast.service'
+import { NavigationService } from 'src/app/services/navigation.service'
 import { UserService } from 'src/app/services/user.service'
 
 @Component({
@@ -18,8 +18,8 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private loadingService: LoadingService,
     private authService: AuthService,
-    private router: Router,
     private toastService: ToastService,
+    private navigationService: NavigationService,
   ) {}
   private destroy$ = new Subject<void>()
   public emailForm!: FormGroup
@@ -93,7 +93,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
     }
   }
   closeModal() {
-    this.router.navigate(['/home'])
+    this.navigationService.proceedAfterAuth('/home')
   }
   submitCode(event: any) {
     this.loadingService.showLoading()
@@ -139,7 +139,7 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
               this.emailConfirm = true
               this.loadingService.hideLoading()
               this.toastService.showToast('Ваша почта успешно подтверждена!', 'success')
-              this.router.navigate(['/home'])
+              this.navigationService.proceedAfterAuth('/home')
               return EMPTY
             }),
           )
@@ -154,14 +154,14 @@ export class EmailConfirmComponent implements OnInit, OnDestroy {
             this.emailConfirm = true
             this.loadingService.hideLoading()
             this.toastService.showToast('Ваша почта успешно подтверждена!', 'success')
-            this.router.navigate(['/home'])
+            this.navigationService.proceedAfterAuth('/home')
           })
       })
   }
 
   showMessageVerificated() {
     this.toastService.showToast('Ваша почта уже подтверждена', 'warning')
-    this.router.navigate(['/home'])
+    this.navigationService.proceedAfterAuth('/home')
   }
 
   getCode() {

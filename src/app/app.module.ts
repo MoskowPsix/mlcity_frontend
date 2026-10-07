@@ -5,7 +5,7 @@ import localeRu from '@angular/common/locales/ru'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouteReuseStrategy } from '@angular/router'
-import { ReactiveFormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ContactsComponent } from './views/contacts/contacts.component'
 import { DropDownButtonComponent } from './components/drop-down-button/drop-down-button.component'
 import { UserSectionComponent } from './components/user-section/user-section.component'
@@ -92,6 +92,10 @@ import { NewSeanceComponent } from './components/new-seance/new-seance.component
 import { SafeUrlPipe2 } from './components/event-card/event-card.pipe'
 import { CodeInputComponent } from './components/materials/code-input/code-input.component'
 import { MyEventsComponent } from './views/cabinet/my-events/my-events.component'
+import { CommissionComponent } from './views/cabinet/commission/commission.component'
+import { CheckpointStatusComponent } from './views/cabinet/checkpoint/checkpoint.component'
+import { CheckpointAccessComponent } from './views/cabinet/checkpoint/checkpoint-access.component'
+import { CheckpointInviteComponent } from './views/cabinet/checkpoint/checkpoint-invite.component'
 import { MototrackRunsComponent } from './views/cabinet/mototrack-runs/mototrack-runs.component'
 import { MySightsComponent } from './views/cabinet/my-sights/my-sights.component'
 import { RegistrationComponent } from './views/registration/registration.component'
@@ -263,6 +267,10 @@ registerLocaleData(localeRu, 'ru')
     SafeUrlPipe,
     SafeUrlPipe2,
     MyEventsComponent,
+    CommissionComponent,
+    CheckpointStatusComponent,
+    CheckpointAccessComponent,
+    CheckpointInviteComponent,
     MototrackRunsComponent,
     MySightsComponent,
     RegistrationComponent,
@@ -299,6 +307,7 @@ registerLocaleData(localeRu, 'ru')
     HttpClientJsonpModule,
     NgxDocViewerModule,
     ReactiveFormsModule,
+    FormsModule,
     MaskitoModule,
     MatDatepickerModule,
     MatNativeDateModule,

@@ -18,6 +18,7 @@ import { environment } from 'src/environments/environment'
 import { Title } from '@angular/platform-browser'
 import { Meta } from '@angular/platform-browser'
 import { NavController } from '@ionic/angular'
+import { NavigationService } from 'src/app/services/navigation.service'
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -89,6 +90,7 @@ export class RegistrationComponent implements OnInit {
     private titleService: Title,
     private navController: NavController,
     private metaService: Meta,
+    private navigationService: NavigationService,
   ) {
     this.titleService.setTitle('Регистрация на сайте MLCity.')
     this.metaService.updateTag({
@@ -230,7 +232,7 @@ export class RegistrationComponent implements OnInit {
           delay(100),
           map((respons: any) => {
             if (respons.status === 'success') {
-              this.router.navigate(['cabinet'])
+              this.navigationService.proceedAfterAuth('/cabinet')
               this.registerForm.reset()
               this.registerForm.enable()
             } else {

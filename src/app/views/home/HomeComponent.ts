@@ -987,6 +987,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
   }
   async getEventsAndSights() {
+    // Фильтры могут сработать раньше события ready от Яндекс.Карт.
+    // После ready загрузка запускается повторно в onMapReady.
+    if (!this.map?.target || !this.CirclePoint) {
+      return
+    }
+
     this.modalButtonLoader = true
     this.eventsModalNextPage = true
     this.sightsModalNextPage = true

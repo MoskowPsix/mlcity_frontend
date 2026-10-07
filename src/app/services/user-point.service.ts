@@ -4,7 +4,6 @@ import { BehaviorSubject, catchError, EMPTY, of, Subject, takeUntil } from 'rxjs
 import { environment } from 'src/environments/environment'
 import { serialize } from 'object-to-formdata'
 import { AuthService } from './auth.service'
-import { MapService } from './map.service'
 import { FilterService } from './filter.service'
 import { ToastService } from './toast.service'
 
@@ -18,7 +17,6 @@ export class UserPointService {
     private http: HttpClient,
     private authService: AuthService,
     private filtersService: FilterService,
-    private mapService: MapService,
     private toastService: ToastService,
   ) {}
 

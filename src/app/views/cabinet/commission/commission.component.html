@@ -1,0 +1,222 @@
+<ion-content>
+  <app-second-header>
+    <app-back-button></app-back-button>
+    <span class="header-title">Комиссия</span>
+    <span class="header-side" aria-hidden="true"></span>
+  </app-second-header>
+
+  <main class="commission" *ngIf="competition">
+    <h1>{{ competition.name }}</h1>
+
+    <section class="block" *ngIf="checkpointDisabled">
+      <p>Хронометраж Checkpoint пока выключен для этого мероприятия.</p>
+      <button type="button" class="primary" (click)="enableCheckpoint()">Включить Checkpoint</button>
+    </section>
+
+    <ng-container *ngIf="!checkpointDisabled">
+      <section class="block" *ngIf="competition.can_manage_access">
+        <h2>Комиссия</h2>
+        <p class="hint">Этот список видите только вы. «Принял» — человек уже правит группы и участников. «Не вошёл» — ждёт регистрацию с этой почты.</p>
+        <div class="add-row">
+          <label class="field grow">
+            <span>Почта</span>
+            <input [(ngModel)]="memberEmail" placeholder="name@example.com" />
+          </label>
+          <button type="button" class="primary" (click)="grantMember()">Пригласить</button>
+        </div>
+        <p class="empty" *ngIf="!members.length">В комиссии пока только вы.</p>
+        <div class="member" *ngFor="let member of members">
+          <span class="member-avatar">{{ memberInitial(member) }}</span>
+          <div class="member-text">
+            <span class="member-name">{{ memberTitle(member) }}</span>
+            <span class="member-email" *ngIf="memberHasName(member)">{{ member.email }}</span>
+          </div>
+          <div class="member-side">
+            <span class="member-status" [class.ok]="member.accepted">{{ member.accepted ? 'Принял' : 'Не вошёл' }}</span>
+            <button type="button" class="member-remove" (click)="revokeMember(member)">Удалить</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Группы / классы</h2>
+        <div class="add-row">
+          <label class="field grow">
+            <span>Название группы</span>
+            <input [(ngModel)]="groupName" placeholder="Например, М18" />
+          </label>
+          <button type="button" class="primary" (click)="saveGroup()">Добавить</button>
+        </div>
+        <p class="empty" *ngIf="!groups.length">Групп пока нет.</p>
+        <div class="group-row" *ngFor="let group of groups">
+          <label class="field">
+            <span>Название</span>
+            <input [(ngModel)]="group.name" />
+          </label>
+          <label class="field narrow">
+            <span>Порядок</span>
+            <input type="number" [(ngModel)]="group.sort_order" />
+          </label>
+          <span class="count">{{ participantsInGroup(group) }} уч.</span>
+          <button type="button" class="ghost" (click)="saveExistingGroup(group)">Сохранить</button>
+          <button type="button" class="danger" (click)="deleteGroup(group)">Удалить</button>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>{{ editingParticipantId ? 'Изменить участника' : 'Новый участник' }}</h2>
+        <div class="form-grid">
+          <label class="field">
+            <span>Фамилия *</span>
+            <input [(ngModel)]="participant.last_name" />
+          </label>
+          <label class="field">
+            <span>Имя *</span>
+            <input [(ngModel)]="participant.first_name" />
+          </label>
+          <label class="field">
+            <span>Отчество</span>
+            <input [(ngModel)]="participant.middle_name" />
+          </label>
+          <label class="field birth">
+            <span>Дата рождения</span>
+            <div class="birth-row">
+              <input [maskito]="birthMask" [(ngModel)]="birthText" (ngModelChange)="syncBirthFromText()" placeholder="дд.мм.гггг" inputmode="numeric" />
+              <div class="calendar-wrap">
+                <button type="button" class="ghost calendar" (click)="picker.open()" aria-label="Календарь">
+                  <img src="/assets/icons/calendar.svg" alt="">
+                </button>
+                <input class="picker-proxy" [matDatepicker]="picker" [ngModel]="birthPicker" (dateChange)="onBirthPicked($event.value)" />
+                <mat-datepicker #picker [startAt]="birthPicker || defaultBirth"></mat-datepicker>
+              </div>
+            </div>
+          </label>
+          <label class="field">
+            <span>Город</span>
+            <input [(ngModel)]="participant.city" />
+          </label>
+          <label class="field">
+            <span>Группа</span>
+            <select [(ngModel)]="participant.group_id">
+              <option [ngValue]="null">Без группы</option>
+              <option *ngFor="let group of groups" [ngValue]="group.id">{{ group.name }}</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Стартовый номер *</span>
+            <input [(ngModel)]="participant.start_number" />
+          </label>
+          <label class="field">
+            <span>RFID</span>
+            <input [(ngModel)]="participant.rfid" />
+          </label>
+        </div>
+        <div class="actions">
+          <button type="button" class="primary" (click)="saveParticipant()">{{ editingParticipantId ? 'Сохранить' : 'Добавить участника' }}</button>
+          <button type="button" class="ghost" *ngIf="editingParticipantId" (click)="cancelEdit()">Отмена</button>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="section-head">
+          <h2>Стартовый список</h2>
+          <label class="field filter">
+            <span>Фильтр по группе</span>
+            <select [(ngModel)]="selectedGroupId">
+              <option [ngValue]="null">Все группы</option>
+              <option *ngFor="let group of groups" [ngValue]="group.id">{{ group.name }}</option>
+            </select>
+          </label>
+        </div>
+        <p class="empty" *ngIf="!filteredParticipants.length">Участников нет.</p>
+        <div class="table-wrap" *ngIf="filteredParticipants.length">
+          <table>
+            <thead>
+              <tr>
+                <th>Номер</th>
+                <th>ФИО</th>
+                <th>ДР</th>
+                <th>Город</th>
+                <th>Группа</th>
+                <th>RFID</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of filteredParticipants">
+                <td>{{ row.start_number }}</td>
+                <td>{{ row.last_name }} {{ row.first_name }} {{ row.middle_name }}</td>
+                <td>{{ formatBirth(row.birth_date) }}</td>
+                <td>{{ row.city }}</td>
+                <td>{{ row.group_name }}</td>
+                <td>{{ row.rfid }}</td>
+                <td class="row-actions">
+                  <button type="button" class="ghost" (click)="editParticipant(row)">Изменить</button>
+                  <button type="button" class="danger" (click)="deleteParticipant(row)">Удалить</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Офлайн-пакет</h2>
+        <p class="hint">JSON со группами и участниками. Его открывают в приложении Чекпоинт, если на старте нет сети.</p>
+        <div class="actions">
+          <button type="button" class="primary" (click)="downloadPackage()">Скачать для Чекпоинта</button>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>Загрузка из Excel</h2>
+        <p class="hint">Колонки бланка: Фамилия, Имя, Отчество, Дата рождения (ГГГГ-ММ-ДД), Город, Группа, Стартовый номер, RFID. Чужие заголовки нужно сопоставить. Можно сразу несколько файлов. Если хоть один не пройдёт проверку, не запишется ни один.</p>
+        <div class="actions">
+          <button type="button" class="ghost" (click)="downloadTemplate()">Скачать шаблон</button>
+        </div>
+        <div class="drop" [class.over]="dragOver" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+          <p>Перетащите таблицы сюда</p>
+          <label class="file">
+            <input type="file" multiple accept=".xlsx,.csv,.txt" (change)="onFilesPicked($event)" />
+            <span>Выбрать файлы</span>
+          </label>
+        </div>
+        <p class="empty" *ngIf="importChecking">Проверяю файлы…</p>
+        <p class="import-errors" *ngIf="importFailed">Ни один файл не записан: исправьте таблицы и загрузите набор ещё раз.</p>
+        <div class="import-file" *ngFor="let item of importFiles" [class.bad]="!item.ok && !importChecking">
+          <strong>{{ item.file.name }}</strong>
+          <span>{{ item.message }}</span>
+          <div class="mapping" *ngIf="item.needsMapping">
+            <label class="field" *ngFor="let header of item.headers">
+              <span>{{ header || 'Пустой заголовок' }}</span>
+              <select [(ngModel)]="item.mapping[header]">
+                <option value="">Не использовать</option>
+                <option *ngFor="let field of importFields" [value]="field.key">{{ field.label }}</option>
+              </select>
+            </label>
+            <button type="button" class="primary" [disabled]="!mappingReady(item) || item.checking" (click)="applyMapping(item)">Проверить колонки</button>
+          </div>
+          <ul class="import-errors" *ngIf="item.errors.length">
+            <li *ngFor="let error of item.errors">Строка {{ error.row }}: {{ error.message }}</li>
+          </ul>
+          <div class="table-wrap" *ngIf="item.ok">
+            <table>
+              <thead>
+                <tr><th>Строка</th><th>Номер</th><th>ФИО</th><th>Группа</th></tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of previewRows(item)">
+                  <td>{{ row.line }}</td>
+                  <td>{{ row.start_number }}</td>
+                  <td>{{ row.last_name }} {{ row.first_name }}</td>
+                  <td>{{ row.group_name }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <button type="button" class="primary" *ngIf="importReady" (click)="confirmImport()">Загрузить {{ importFiles.length }} файлов, {{ importRowCount }} участников</button>
+      </section>
+    </ng-container>
+  </main>
+</ion-content>

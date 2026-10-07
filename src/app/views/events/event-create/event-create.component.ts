@@ -619,6 +619,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     }
 
     this.formData.append('name', this.createEventForm.controls['name'].value)
+    if (this.user?.checkpoint_access) {
+      this.formData.append('checkpoint_enabled', this.createEventForm.controls['checkpoint_enabled'].value ? '1' : '0')
+    }
     this.createEventForm.value.description.length > 0
       ? this.formData.append('description', this.createEventForm.controls['description'].value)
       : null
@@ -653,6 +656,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       this.formData.append('vkGroupId', this.vkGroupSelected.toString())
     }
     return this.formData
+  }
+
+  checkpointEnabledControl(): FormControl {
+    return this.createEventForm.get('checkpoint_enabled') as FormControl
   }
   setAgeLimit(event: any) {
     this.createEventForm.controls['ageLimit'].setValue(event.target.value)
@@ -817,8 +824,8 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.loadingService.hideLoading()
         this.toastService.showToast(MessagesEvents.create, 'success')
-        if (res.event.id) {
-          this.router.navigate(['/cabinet/events/'])
+        if (res.event.id && this.user?.checkpoint_access && this.createEventForm.value.checkpoint_enabled) {
+          this.router.navigate(['/cabinet/events', res.event.id, 'commission'])
         } else {
           this.router.navigate(['/cabinet/events/'])
         }
@@ -1098,6 +1105,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         materials: new FormControl('', [Validators.minLength(1)]),
         dateStart: new FormControl('', [Validators.required]),
         dateEnd: new FormControl('', [Validators.required]),
+        checkpoint_enabled: new FormControl(false),
       },
       [dateRangeValidator],
     )

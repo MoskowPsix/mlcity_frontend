@@ -1,0 +1,24 @@
+<ion-content>
+  <app-second-header>
+    <app-back-button></app-back-button>
+    <span class="header-title">Checkpoint</span>
+  </app-second-header>
+  <main class="checkpoint-status" *ngIf="user">
+    <p>Свой хронометраж: {{ user.checkpoint_access ? 'есть' : 'нет' }}</p>
+    <p *ngIf="user.checkpoint_access">Публикация своих результатов: {{ user.checkpoint_publish_override ? 'разрешена' : 'нет' }}</p>
+    <p *ngIf="!user.checkpoint_access">Своё соревнование включает менеджер. Приглашение в чужое мероприятие от этого флага не зависит: хронометраж там уже открыл организатор.</p>
+    <section>
+      <h2>Соревнования</h2>
+      <p *ngIf="loadError">{{ loadError }}</p>
+      <p *ngIf="loaded && !loadError && !competitions.length">Пока нет мероприятий, куда вас пустили.</p>
+      <ion-list>
+        <ion-item *ngFor="let row of competitions" [routerLink]="['/cabinet/events', row.id, 'commission']">
+          <ion-label>
+            <h3>{{ row.name }}</h3>
+            <p>{{ formatDate(row.date_start) }}<span *ngIf="formatDate(row.date_start)"> · </span>{{ row.city || 'Город не указан' }} · участников {{ row.participants_count }} · групп {{ row.groups_count }}<span *ngIf="row.shared"> · вам открыли</span></p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </section>
+  </main>
+</ion-content>

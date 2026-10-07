@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { environment } from 'src/environments/environment'
 import { Router } from '@angular/router'
 import { AuthService } from 'src/app/services/auth.service'
 import { FilterService } from 'src/app/services/filter.service'
@@ -17,23 +16,12 @@ export class NoPathComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // window.open('/home', '_self');
-    if (this.authService.isAuthenticated()) {
-      this.router.navigateByUrl('/events').then(() => {
-        window.location.href = 'events'
-      })
-    } else if (
+    const hasLocation =
       this.filters.getLocationLatitudeFromlocalStorage() &&
       this.filters.getLocationLongitudeFromlocalStorage() &&
       this.filters.getLocationFromlocalStorage()
-    ) {
-      this.router.navigateByUrl('/events').then(() => {
-        window.location.href = 'events'
-      })
-    } else {
-      this.router.navigateByUrl('/home').then(() => {
-        window.location.href = 'home'
-      })
-    }
+
+    const destination = this.authService.isAuthenticated() || hasLocation ? '/events' : '/home'
+    void this.router.navigateByUrl(destination, { replaceUrl: true })
   }
 }

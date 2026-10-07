@@ -686,3 +686,23 @@ ion-accordion-group {
 .favorite-button_bottom__wrapper{
   width: 60%;
 }
+.main-content a.checkpoint-commission-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  margin: 4px 0 16px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: #1c2226;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  line-height: 1;
+}
+.checkpoint-results { margin: 24px 0; }
+.checkpoint-results table { width: 100%; border-collapse: collapse; margin: 10px 0 20px; }
+.checkpoint-results th, .checkpoint-results td { padding: 8px; border-bottom: 1px solid #e6e6e6; text-align: left; }
+.checkpoint-heat { margin-top: 16px; }
+@media (max-width: 600px) { .checkpoint-results { overflow-x: auto; } .checkpoint-results th, .checkpoint-results td { white-space: nowrap; } }

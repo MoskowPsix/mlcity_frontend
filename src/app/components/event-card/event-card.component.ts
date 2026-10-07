@@ -136,6 +136,10 @@ export class EventCardComponent implements OnInit, OnDestroy, AfterViewInit {
       ? this.router.navigate(['/cabinet/sights/edit', this.event.id])
       : this.router.navigate(['/cabinet/events/edit', this.event.id])
   }
+  openCommission(event: Event) {
+    event.stopPropagation()
+    this.router.navigate(['/cabinet/events', this.event.id, 'commission'])
+  }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['event'] && this.event) {
       this.formatCardDates()

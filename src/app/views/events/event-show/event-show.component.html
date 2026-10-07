@@ -79,9 +79,16 @@
           </div>
 
           <strong class="main-content__name">{{event.name}}</strong>
+          <a *ngIf="canOpenCommission()" class="checkpoint-commission-link" [routerLink]="['/cabinet/events', event.id, 'commission']">Комиссия</a>
           <app-collapsed-text *ngIf="event.description">
             <div [innerHTML]="clearDescription()"></div>
           </app-collapsed-text>
+          <section class="checkpoint-results" *ngIf="event.checkpoint_enabled && checkpointResults">
+            <h2 class="title">Хронометраж</h2>
+            <div *ngIf="checkpointResults.live as live"><strong>Сейчас идёт: {{ live.name }}</strong> <span>live</span><table><thead><tr><th>Место</th><th>№</th><th>Участник</th><th>Группа</th><th>Результат</th></tr></thead><tbody><tr *ngFor="let row of live.results"><td>{{ row.place || '—' }}</td><td>{{ row.start_number }}</td><td>{{ row.name }}</td><td>{{ row.group_name }}</td><td>{{ row.result }}</td></tr></tbody></table></div>
+            <div *ngFor="let heat of checkpointResults.heats" class="checkpoint-heat"><strong>{{ heat.name }}</strong> <span>итог</span><table><thead><tr><th>Место</th><th>№</th><th>Участник</th><th>Группа</th><th>Результат</th></tr></thead><tbody><tr *ngFor="let row of heat.results"><td>{{ row.place || '—' }}</td><td>{{ row.start_number }}</td><td>{{ row.name }}</td><td>{{ row.group_name }}</td><td>{{ row.result }}</td></tr></tbody></table></div>
+            <p *ngIf="!checkpointResults.live && !checkpointResults.heats.length">Результаты появятся после старта заезда.</p>
+          </section>
           <div *ngIf="usersInFavorite.length" class="users">
             <span class="title users-title">
               Участники <div class="users-count">{{usersCount}}</div>

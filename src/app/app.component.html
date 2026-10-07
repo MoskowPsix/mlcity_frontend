@@ -64,7 +64,7 @@
   <ion-router-outlet></ion-router-outlet>
 
   <ion-footer *ngIf="url !== '/cabinet/events/create' && url !== '/cabinet/sights/create'
-   && url!=='/cabinet/sights/edit' && url!== '/cabinet/events/edit' && url !== '/cabinet/location' && url !=='/events/number' && !aboutModal">
+   && url!=='/cabinet/sights/edit' && url!== '/cabinet/events/edit' && url !== '/cabinet/location' && url !=='/events/number' && (!aboutModal || showPhoneShell)">
     <ion-toolbar>
       <app-footer></app-footer>
     </ion-toolbar>

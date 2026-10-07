@@ -211,7 +211,7 @@ export class EditSightComponent implements OnInit {
       .subscribe((res: any) => {
         this.loadingService.hideLoading()
         if (res.status == 'success') {
-          this.toastService.showToast('Сообщество отправленно на проверку', 'success')
+          this.toastService.showToast('Сообщество опубликовано', 'success')
           this.router.navigate(['/cabinet/sights'])
         }
       })

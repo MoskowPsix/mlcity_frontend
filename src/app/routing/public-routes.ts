@@ -3,6 +3,8 @@ import { EventsComponent } from '../views/events/events.component'
 import { HomeComponent } from '../views/home/HomeComponent'
 import { AddEventComponent } from '../views/add-event/add-event.component'
 import { Routes } from '@angular/router'
+import { NoPathComponent } from '../views/no-path/no-path.component'
+import { LandingRedirectGuard } from '../guards/landing-redirect.guard'
 import { AboutComponent } from '../views/about/about.component'
 import { ContactsComponent } from '../views/contacts/contacts.component'
 import { FeedbackComponent } from '../views/feedback/feedback.component'
@@ -10,7 +12,6 @@ import { SupportComponent } from '../views/support/support.component'
 import { CheckAuthCanActiveGuard } from '../guards/check-auth.can-active.guard'
 import { EventShowComponent } from '../views/events/event-show/event-show.component'
 import { SightShowComponent } from '../views/sights/sight-show/sight-show.component'
-import { NoPathComponent } from '../views/no-path/no-path.component'
 import { PrivacyComponent } from '../views/privacy/privacy.component'
 import { RecoveryPasswordComponent } from '../views/recovery-password/recovery-password.component'
 import { EmailConfirmComponent } from '../views/cabinet/email-confirm/email-confirm.component'
@@ -38,6 +39,7 @@ export const publicRoutes: Routes = [
     path: '',
     component: NoPathComponent,
     pathMatch: 'full',
+    canActivate: [LandingRedirectGuard],
   },
   {
     path: 'privacy',

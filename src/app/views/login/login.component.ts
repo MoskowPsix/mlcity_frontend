@@ -18,6 +18,7 @@ import { RecoveryPasswordService } from 'src/app/services/recovery-password.serv
 import { SignInWithApple, SignInWithAppleResponse, SignInWithAppleOptions } from '@capacitor-community/apple-sign-in'
 import { Capacitor } from '@capacitor/core'
 import { MobileOrNoteService } from 'src/app/services/mobile-or-note.service'
+import { NavigationService } from 'src/app/services/navigation.service'
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -74,6 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private mobileOrNoteService: MobileOrNoteService,
     private metaService: Meta,
     private recoveryPasswordService: RecoveryPasswordService,
+    private navigationService: NavigationService,
   ) {
     this.titleService.setTitle('Вход на сайт vokrug.city')
     this.metaService.updateTag({
@@ -185,7 +187,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data: any) => {
           this.tokenService.setToken(data.access_token)
-          this.positiveResponseAfterLogin(data)
+          this.positiveResponseAfterLogin(data, false)
         },
         error: (err) => {
           this.recoveryPasswordChange()
@@ -252,7 +254,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }, 1000)
   }
 
-  positiveResponseAfterLogin(data: any) {
+  positiveResponseAfterLogin(data: any, followInvite = true) {
     this.responseData = data
     this.userService.setUser(this.responseData.user)
     this.loadingService.hideLoading()
@@ -260,7 +262,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginForm.enable()
 
     if (!this.modalPass) {
-      this.router.navigate(['events'])
+      if (followInvite) this.navigationService.proceedAfterAuth('/events')
+      else this.router.navigate(['events'])
     }
   }
 

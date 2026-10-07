@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Output, Input, inject } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
 import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter, timeInterval, finalize } from 'rxjs'
+import Pusher from 'pusher-js'
+import { CheckpointService } from 'src/app/services/checkpoint.service'
 import { EventsService } from 'src/app/services/events.service'
 import { IonicSlides } from '@ionic/angular'
 import { register } from 'swiper/element/bundle'
@@ -95,6 +97,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
   usersViews: string = ''
   @Input() createObj: any = {}
   organization!: IOrganization
+  checkpointResults: any
+  private checkpointPoll?: ReturnType<typeof setInterval>
+  private checkpointPusher?: Pusher
 
   constructor(
     private route: ActivatedRoute,
@@ -114,6 +119,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
     private mapService: MapService,
     private shareService: ShareService,
     private numbersService: NumbersService,
+    private checkpointService: CheckpointService,
+    private userService: UserService,
   ) {}
 
   checkMaterialLink() {
@@ -150,6 +157,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
           this.setUsersCount()
           this.setUserViews()
           this.checkPrice()
+          if (this.event.checkpoint_enabled) this.startCheckpointResults()
 
           if (this.event.age_limit) {
             this.ageLimit = this.event.age_limit.split('+')[0]
@@ -551,7 +559,31 @@ export class EventShowComponent implements OnInit, OnDestroy {
   ionViewDidLeave() {}
   ngOnInit() {}
 
+  private startCheckpointResults() {
+    if (this.checkpointPoll) return
+    this.loadCheckpointResults()
+    this.checkpointPoll = setInterval(() => this.loadCheckpointResults(), 10000)
+    const realtime = environment as any
+    if (realtime.pusherKey) {
+      this.checkpointPusher = new Pusher(realtime.pusherKey, { cluster: realtime.pusherCluster || 'mt1', wsHost: realtime.pusherHost, wsPort: realtime.pusherPort, forceTLS: false, enabledTransports: ['ws', 'wss'] })
+      this.checkpointPusher.subscribe(`checkpoint.event.${this.eventId}`).bind('checkpoint.results.updated', (payload: any) => {
+        this.checkpointResults = payload?.state ?? payload
+      })
+    }
+  }
+
+  canOpenCommission() {
+    const current = this.userService.getUserFromLocalStorage()
+    return Number(current?.id) === Number(this.event?.user_id)
+  }
+
+  private loadCheckpointResults() {
+    this.checkpointService.results(this.eventId!).pipe(takeUntil(this.destroy$)).subscribe({ next: (state) => this.checkpointResults = state })
+  }
+
   ngOnDestroy() {
+    if (this.checkpointPoll) clearInterval(this.checkpointPoll)
+    this.checkpointPusher?.disconnect()
     // отписываемся от всех подписок
     this.destroy$.next()
     this.destroy$.complete()

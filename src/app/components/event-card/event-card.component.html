@@ -146,5 +146,7 @@
           </div>
         </div>
       </div>
+
+      <button *ngIf="myEvent && !isSight" type="button" class="commission-button" (click)="openCommission($event)">Комиссия</button>
   </div>
  

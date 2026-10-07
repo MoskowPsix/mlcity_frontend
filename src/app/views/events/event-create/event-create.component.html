@@ -15,6 +15,10 @@
       <app-step-container-item [maxStepsCount]="maxStepsCount" [stepCurrency]="stepCurrency" stepNum="1">
         <div class="main-content__step-wrapper">
           <app-standart-input [label]="'Название события'" [control] = "createEventForm.get('name')"></app-standart-input>
+          <ion-item *ngIf="user?.checkpoint_access">
+            <ion-label>Использовать хронометраж Чекпоинт</ion-label>
+            <ion-checkbox slot="end" [formControl]="checkpointEnabledControl()"></ion-checkbox>
+          </ion-item>
           <div class="organization-select-wrapper">
             <app-organizations-select-container [spiner]="organizationSpiner" (closeModal)="closeOrganizationModal()" (openModal)="openOrganizationModal()" [modalValue]="organizationModalValue" (endScroll)="getUserOrganization()" [selectedName]="selectedName" *ngIf="userHasOrganization"  (selectOrganization)="selectOrganization($event)" [cards]="organizations"/>
           </div>

@@ -20,6 +20,7 @@ export class NavigationService implements OnDestroy {
   public modalEventShowOpen: BehaviorSubject<boolean> = new BehaviorSubject(false) //открытие модалки с ивентов или местом - клик по метке на карте
   public modalFiltersOpen: BehaviorSubject<boolean> = new BehaviorSubject(false) //открытие модалки с фильтрами
   public appFirstLoading: BehaviorSubject<boolean> = new BehaviorSubject(true) // первый запуск приложения
+  private readonly authReturnKey = 'authReturnUrl'
 
   constructor(
     private router: Router,
@@ -48,6 +49,21 @@ export class NavigationService implements OnDestroy {
       // this.modalEventRadiusShowOpen.next(false)
       //this.appFirstLoading.next(false)
     })
+  }
+
+  rememberAuthReturn(url: string) {
+    const path = (url || '').split(/[?#]/)[0]
+    if (this.isCommissionReturn(path)) sessionStorage.setItem(this.authReturnKey, path)
+  }
+
+  proceedAfterAuth(fallback: string) {
+    const back = sessionStorage.getItem(this.authReturnKey)
+    sessionStorage.removeItem(this.authReturnKey)
+    return this.router.navigateByUrl(back && this.isCommissionReturn(back) ? back : fallback)
+  }
+
+  private isCommissionReturn(path: string) {
+    return /^\/cabinet\/checkpoint\/invite\/[A-Za-z0-9]+$/.test(path) || /^\/cabinet\/events\/\d+\/commission$/.test(path)
   }
 
   back(): void {

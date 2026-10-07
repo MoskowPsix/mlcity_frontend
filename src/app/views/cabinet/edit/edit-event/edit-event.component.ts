@@ -14,6 +14,8 @@ import { IPlace } from 'src/app/models/place'
 import { EventHistoryContent } from 'src/app/clasess/history_content/event_history_content'
 import { EditService } from 'src/app/services/edit.service'
 import { ToastService } from 'src/app/services/toast.service'
+import { UserService } from 'src/app/services/user.service'
+import { CheckpointService } from 'src/app/services/checkpoint.service'
 import { StatusesService } from 'src/app/services/statuses.service'
 import { Statuses } from 'src/app/enums/statuses-new'
 import _, { min } from 'lodash'
@@ -48,6 +50,8 @@ export class EditEventComponent implements OnInit {
     private editService: EditService,
     private statusesService: StatusesService,
     private router: Router,
+    private userService: UserService,
+    private checkpoint: CheckpointService,
   ) {}
   private readonly destroy$ = new Subject<void>()
   event!: IEvent
@@ -60,6 +64,8 @@ export class EditEventComponent implements OnInit {
   previewCategory: any = []
   submitButtonState: boolean = false
   copyEvent: any
+  checkpointAccess = false
+  private checkpointWas = false
   freeEntry: boolean = true
   deleteConfirmValue: boolean = false
   cancelConfirmValue: boolean = false
@@ -389,12 +395,15 @@ export class EditEventComponent implements OnInit {
         this.copyEvent = _.cloneDeep(this.event)
         this.getPlaces()
         this.loadingService.hideLoading()
+        this.checkpointAccess = !!this.userService.getUserFromLocalStorage()?.checkpoint_access
+        this.checkpointWas = !!res.checkpoint_enabled
         this.editForm.patchValue({
           name: res.name,
           sponsor: res.sponsor,
           description: res.description,
           materials: res.materials,
           age_limit: res.age_limit,
+          checkpoint_enabled: this.checkpointWas,
         })
         if (priceArray) {
           priceArray.forEach((price: any) => {
@@ -551,10 +560,24 @@ export class EditEventComponent implements OnInit {
     }
   }
 
+  private persistCheckpoint() {
+    const next = !!this.editForm.value.checkpoint_enabled
+    if (!this.checkpointAccess || next === this.checkpointWas) {
+      this.redirect()
+      return
+    }
+    this.checkpoint.updateSettings(this.event.id, next).subscribe({
+      next: () => this.redirect(),
+      error: () => {
+        this.toastService.showToast('Событие сохранено, хронометраж не обновился', 'warning')
+        this.redirect()
+      },
+    })
+  }
   redirect() {
     return new Promise<void>((resolve, reject) => {
       this.loadingService.hideLoading()
-      this.toastService.showToast('Событие отправленно на проверку', 'success')
+      this.toastService.showToast('Событие опубликовано', 'success')
       this.router.navigate(['/cabinet/events'])
     })
   }
@@ -614,7 +637,7 @@ export class EditEventComponent implements OnInit {
           this.submitButtonState = false
           this.loadingService.hideLoading()
           if (res.status == 'success') {
-            this.redirect()
+            this.persistCheckpoint()
           }
         })
       this.loadingService.hideLoading()
@@ -634,6 +657,7 @@ export class EditEventComponent implements OnInit {
       places: new FormControl([], [Validators.required]),
       materials: new FormControl([], [Validators.required]),
       age_limit: new FormControl([], [Validators.required]),
+      checkpoint_enabled: new FormControl(false),
     })
   }
   ionViewDidLeave() {

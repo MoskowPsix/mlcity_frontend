@@ -21,6 +21,10 @@ import { OrganizationCreateComponent } from '../views/cabinet/organization/creat
 import { checkEditForAuthorGuard } from '../guards/check-edit-for-author.guard'
 import { MyLocationPage } from '../views/cabinet/my-location/my-location.page'
 import { MototrackRunsComponent } from '../views/cabinet/mototrack-runs/mototrack-runs.component'
+import { CommissionComponent } from '../views/cabinet/commission/commission.component'
+import { CheckpointStatusComponent } from '../views/cabinet/checkpoint/checkpoint.component'
+import { CheckpointAccessComponent } from '../views/cabinet/checkpoint/checkpoint-access.component'
+import { CheckpointInviteComponent } from '../views/cabinet/checkpoint/checkpoint-invite.component'
 
 export const privateRoutes: Routes = [
   {
@@ -100,6 +104,26 @@ export const privateRoutes: Routes = [
     //     component: EventCreateComponent,
     //   },
     // ]
+  },
+  {
+    path: 'cabinet/checkpoint',
+    component: CheckpointStatusComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'cabinet/checkpoint/access',
+    component: CheckpointAccessComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'cabinet/checkpoint/invite/:token',
+    component: CheckpointInviteComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'cabinet/events/:id/commission',
+    component: CommissionComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'cabinet/events/:id/view',

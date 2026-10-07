@@ -31,6 +31,7 @@ export class AuthGuard implements CanActivate {
     } else {
       this.toastService.showToast(MessagesAuth.notAutorize, 'warning')
       this.navigationService.modalAuthEmail.next(false)
+      this.navigationService.rememberAuthReturn(state.url)
       this.router.navigate(['login'])
       return false
     }
