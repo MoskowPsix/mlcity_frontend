@@ -21,8 +21,6 @@ export const environment = {
   production: true,
   apiKeyYandex: '9a1df530-ff4c-4c63-b19c-ede18479110d',
   apiKeyYandexSubject: '6483f031-ac2f-4600-a338-269045f79ee2',
-  YANDEX_METRICA_KEY: 96112606,
-  YANDEX_METRICA_ON: true,
   APP_NAME: 'VOKRUG',
   BASE_URL: 'https://vokrug.city',
   PORT: '443',

@@ -14,6 +14,7 @@ import moment from 'moment'
 import 'moment/locale/ru'
 import { NotifyService } from './services/notify.service'
 import { MobileOrNoteService } from './services/mobile-or-note.service'
+import { YandexMetrikaService } from './services/yandex-metrika.service'
 moment.locale('ru')
 @Component({
   selector: 'app-root',
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private mobileOrNoteService: MobileOrNoteService,
     private renderer: Renderer2,
+    private yandexMetrika: YandexMetrikaService,
   ) {
     if (Capacitor.isNativePlatform()) {
       ScreenOrientation.lock({ orientation: 'portrait' }).catch(() => undefined)
@@ -108,6 +110,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.yandexMetrika.init()
     this.notifyService.initSSE()
     this.mobileOrNoteService.update()
     this.mobileOrNoteService.isPhoneShell.pipe(takeUntil(this.destroy$)).subscribe((value) => {
