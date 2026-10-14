@@ -100,6 +100,9 @@ export class EventShowComponent implements OnInit, OnDestroy {
   checkpointResults: any
   private checkpointPoll?: ReturnType<typeof setInterval>
   private checkpointPusher?: Pusher
+  private readonly refreshCheckpointResults = () => {
+    if (document.visibilityState === 'visible') this.loadCheckpointResults()
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -559,13 +562,20 @@ export class EventShowComponent implements OnInit, OnDestroy {
   ionViewDidLeave() {}
   ngOnInit() {}
 
+  get checkpointHasBroadcast() {
+    return !!(this.checkpointResults?.live || this.checkpointResults?.heats?.length)
+  }
+
   private startCheckpointResults() {
     if (this.checkpointPoll) return
     this.loadCheckpointResults()
     this.checkpointPoll = setInterval(() => this.loadCheckpointResults(), 10000)
+    window.addEventListener('online', this.refreshCheckpointResults)
+    document.addEventListener('visibilitychange', this.refreshCheckpointResults)
     const realtime = environment as any
     if (realtime.pusherKey) {
       this.checkpointPusher = new Pusher(realtime.pusherKey, { cluster: realtime.pusherCluster || 'mt1', wsHost: realtime.pusherHost, wsPort: realtime.pusherPort, forceTLS: false, enabledTransports: ['ws', 'wss'] })
+      this.checkpointPusher.connection.bind('connected', this.refreshCheckpointResults)
       this.checkpointPusher.subscribe(`checkpoint.event.${this.eventId}`).bind('checkpoint.results.updated', (payload: any) => {
         this.checkpointResults = payload?.state ?? payload
       })
@@ -583,6 +593,8 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.checkpointPoll) clearInterval(this.checkpointPoll)
+    window.removeEventListener('online', this.refreshCheckpointResults)
+    document.removeEventListener('visibilitychange', this.refreshCheckpointResults)
     this.checkpointPusher?.disconnect()
     // отписываемся от всех подписок
     this.destroy$.next()

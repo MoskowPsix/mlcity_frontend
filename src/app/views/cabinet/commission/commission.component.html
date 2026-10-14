@@ -14,7 +14,14 @@
     </section>
 
     <ng-container *ngIf="!checkpointDisabled">
-      <section class="block" *ngIf="competition.can_manage_access">
+      <nav class="tabs">
+        <button type="button" class="tab" [class.active]="tab === 'participants'" (click)="tab = 'participants'">Участники <span>{{ participants.length }}</span></button>
+        <button type="button" class="tab" [class.active]="tab === 'groups'" (click)="tab = 'groups'">Группы <span>{{ groups.length }}</span></button>
+        <button type="button" class="tab" [class.active]="tab === 'import'" (click)="tab = 'import'">Импорт</button>
+        <button type="button" class="tab" *ngIf="competition.can_manage_access" [class.active]="tab === 'access'" (click)="tab = 'access'">Доступ</button>
+      </nav>
+
+      <section class="block" *ngIf="tab === 'access' && competition.can_manage_access">
         <h2>Комиссия</h2>
         <p class="hint">Этот список видите только вы. «Принял» — человек уже правит группы и участников. «Не вошёл» — ждёт регистрацию с этой почты.</p>
         <div class="add-row">
@@ -33,100 +40,44 @@
           </div>
           <div class="member-side">
             <span class="member-status" [class.ok]="member.accepted">{{ member.accepted ? 'Принял' : 'Не вошёл' }}</span>
-            <button type="button" class="member-remove" (click)="revokeMember(member)">Удалить</button>
+            <button type="button" class="member-remove" (click)="askRevoke(member)">Удалить</button>
           </div>
         </div>
       </section>
 
-      <section class="block">
-        <h2>Группы / классы</h2>
-        <div class="add-row">
-          <label class="field grow">
-            <span>Название группы</span>
-            <input [(ngModel)]="groupName" placeholder="Например, М18" />
-          </label>
-          <button type="button" class="primary" (click)="saveGroup()">Добавить</button>
+      <section class="block" *ngIf="tab === 'groups'">
+        <div class="section-head">
+          <h2>Группы / классы</h2>
+          <div class="actions">
+            <button type="button" class="primary" (click)="openGroupDialog()">Добавить группу</button>
+            <button type="button" class="ghost" (click)="excelOpen = true">Добавить из Excel</button>
+          </div>
         </div>
         <p class="empty" *ngIf="!groups.length">Групп пока нет.</p>
         <div class="group-row" *ngFor="let group of groups">
-          <label class="field">
-            <span>Название</span>
-            <input [(ngModel)]="group.name" />
-          </label>
-          <label class="field narrow">
-            <span>Порядок</span>
-            <input type="number" [(ngModel)]="group.sort_order" />
-          </label>
-          <span class="count">{{ participantsInGroup(group) }} уч.</span>
-          <button type="button" class="ghost" (click)="saveExistingGroup(group)">Сохранить</button>
-          <button type="button" class="danger" (click)="deleteGroup(group)">Удалить</button>
+          <div class="member-text">
+            <span class="member-name">{{ group.name }}</span>
+            <span class="member-email">{{ participantsInGroup(group) }} уч.</span>
+          </div>
+          <button type="button" class="ghost inline" (click)="openGroupDialog(group)">Изменить</button>
         </div>
       </section>
 
-      <section class="block">
-        <h2>{{ editingParticipantId ? 'Изменить участника' : 'Новый участник' }}</h2>
-        <div class="form-grid">
-          <label class="field">
-            <span>Фамилия *</span>
-            <input [(ngModel)]="participant.last_name" />
-          </label>
-          <label class="field">
-            <span>Имя *</span>
-            <input [(ngModel)]="participant.first_name" />
-          </label>
-          <label class="field">
-            <span>Отчество</span>
-            <input [(ngModel)]="participant.middle_name" />
-          </label>
-          <label class="field birth">
-            <span>Дата рождения</span>
-            <div class="birth-row">
-              <input [maskito]="birthMask" [(ngModel)]="birthText" (ngModelChange)="syncBirthFromText()" placeholder="дд.мм.гггг" inputmode="numeric" />
-              <div class="calendar-wrap">
-                <button type="button" class="ghost calendar" (click)="picker.open()" aria-label="Календарь">
-                  <img src="/assets/icons/calendar.svg" alt="">
-                </button>
-                <input class="picker-proxy" [matDatepicker]="picker" [ngModel]="birthPicker" (dateChange)="onBirthPicked($event.value)" />
-                <mat-datepicker #picker [startAt]="birthPicker || defaultBirth"></mat-datepicker>
-              </div>
-            </div>
-          </label>
-          <label class="field">
-            <span>Город</span>
-            <input [(ngModel)]="participant.city" />
-          </label>
-          <label class="field">
-            <span>Группа</span>
-            <select [(ngModel)]="participant.group_id">
-              <option [ngValue]="null">Без группы</option>
-              <option *ngFor="let group of groups" [ngValue]="group.id">{{ group.name }}</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>Стартовый номер *</span>
-            <input [(ngModel)]="participant.start_number" />
-          </label>
-          <label class="field">
-            <span>RFID</span>
-            <input [(ngModel)]="participant.rfid" />
-          </label>
-        </div>
-        <div class="actions">
-          <button type="button" class="primary" (click)="saveParticipant()">{{ editingParticipantId ? 'Сохранить' : 'Добавить участника' }}</button>
-          <button type="button" class="ghost" *ngIf="editingParticipantId" (click)="cancelEdit()">Отмена</button>
-        </div>
-      </section>
-
+      <ng-container *ngIf="tab === 'participants'">
       <section class="block">
         <div class="section-head">
           <h2>Стартовый список</h2>
-          <label class="field filter">
-            <span>Фильтр по группе</span>
-            <select [(ngModel)]="selectedGroupId">
-              <option [ngValue]="null">Все группы</option>
-              <option *ngFor="let group of groups" [ngValue]="group.id">{{ group.name }}</option>
-            </select>
-          </label>
+          <div class="head-actions">
+            <button type="button" class="primary" (click)="openCreateParticipant()">Добавить участника</button>
+            <button type="button" class="ghost" (click)="excelOpen = true">Добавить из Excel</button>
+            <label class="field filter">
+              <span>Фильтр по группе</span>
+              <select [(ngModel)]="selectedGroupId">
+                <option [ngValue]="null">Все группы</option>
+                <option *ngFor="let group of groups" [ngValue]="group.id">{{ group.name }}</option>
+              </select>
+            </label>
+          </div>
         </div>
         <p class="empty" *ngIf="!filteredParticipants.length">Участников нет.</p>
         <div class="table-wrap" *ngIf="filteredParticipants.length">
@@ -151,15 +102,16 @@
                 <td>{{ row.group_name }}</td>
                 <td>{{ row.rfid }}</td>
                 <td class="row-actions">
-                  <button type="button" class="ghost" (click)="editParticipant(row)">Изменить</button>
-                  <button type="button" class="danger" (click)="deleteParticipant(row)">Удалить</button>
+                  <button type="button" class="ghost inline" (click)="editParticipant(row)">Изменить</button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
+      </ng-container>
 
+      <ng-container *ngIf="tab === 'import'">
       <section class="block">
         <h2>Офлайн-пакет</h2>
         <p class="hint">JSON со группами и участниками. Его открывают в приложении Чекпоинт, если на старте нет сети.</p>
@@ -167,8 +119,105 @@
           <button type="button" class="primary" (click)="downloadPackage()">Скачать для Чекпоинта</button>
         </div>
       </section>
+      </ng-container>
+    </ng-container>
 
-      <section class="block">
+    <div class="backdrop" *ngIf="groupDraft" (click)="closeGroupDialog()">
+      <div class="dialog" (click)="$event.stopPropagation()" role="dialog">
+        <h2>{{ groupDraft.id ? 'Группа' : 'Новая группа' }}</h2>
+        <ng-container *ngIf="!groupConfirmDelete">
+          <label class="field">
+            <span>Название</span>
+            <input [(ngModel)]="groupDraft.name" placeholder="Например, М18" />
+          </label>
+          <label class="field narrow">
+            <span>Порядок</span>
+            <input type="number" [(ngModel)]="groupDraft.sort_order" />
+          </label>
+          <div class="dialog-actions">
+            <button type="button" class="danger" *ngIf="groupDraft.id" (click)="groupConfirmDelete = true">Удалить</button>
+            <button type="button" class="ghost" (click)="closeGroupDialog()">Отмена</button>
+            <button type="button" class="primary" (click)="saveGroupDialog()">Сохранить</button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="groupConfirmDelete">
+          <p class="hint">Удалить группу «{{ groupDraft.name }}»? Если в ней есть участники, удаление не пройдёт.</p>
+          <div class="dialog-actions">
+            <button type="button" class="ghost" (click)="groupConfirmDelete = false">Отмена</button>
+            <button type="button" class="danger" (click)="confirmDeleteGroup()">Удалить</button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="backdrop" *ngIf="participantDialog" (click)="closeParticipantDialog()">
+      <div class="dialog" (click)="$event.stopPropagation()" role="dialog">
+        <h2>{{ editingParticipantId ? 'Участник' : 'Новый участник' }}</h2>
+        <ng-container *ngIf="!participantConfirmDelete">
+          <div class="form-grid">
+            <label class="field">
+              <span>Фамилия *</span>
+              <input [(ngModel)]="participant.last_name" />
+            </label>
+            <label class="field">
+              <span>Имя *</span>
+              <input [(ngModel)]="participant.first_name" />
+            </label>
+            <label class="field">
+              <span>Отчество</span>
+              <input [(ngModel)]="participant.middle_name" />
+            </label>
+            <label class="field birth">
+              <span>Дата рождения</span>
+              <div class="birth-row">
+                <input [maskito]="birthMask" [(ngModel)]="birthText" (ngModelChange)="syncBirthFromText()" placeholder="дд.мм.гггг" inputmode="numeric" />
+                <div class="calendar-wrap">
+                  <button type="button" class="ghost calendar" (click)="picker.open()" aria-label="Календарь">
+                    <img src="/assets/icons/calendar.svg" alt="">
+                  </button>
+                  <input class="picker-proxy" [matDatepicker]="picker" [ngModel]="birthPicker" (dateChange)="onBirthPicked($event.value)" />
+                  <mat-datepicker #picker [startAt]="birthPicker || defaultBirth"></mat-datepicker>
+                </div>
+              </div>
+            </label>
+            <label class="field">
+              <span>Город</span>
+              <input [(ngModel)]="participant.city" />
+            </label>
+            <label class="field">
+              <span>Группа</span>
+              <select [(ngModel)]="participant.group_id">
+                <option [ngValue]="null">Без группы</option>
+                <option *ngFor="let group of groups" [ngValue]="group.id">{{ group.name }}</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Стартовый номер *</span>
+              <input [(ngModel)]="participant.start_number" />
+            </label>
+            <label class="field">
+              <span>RFID</span>
+              <input [(ngModel)]="participant.rfid" />
+            </label>
+          </div>
+          <div class="dialog-actions">
+            <button type="button" class="danger" *ngIf="editingParticipantId" (click)="participantConfirmDelete = true">Удалить</button>
+            <button type="button" class="ghost" (click)="closeParticipantDialog()">Отмена</button>
+            <button type="button" class="primary" (click)="saveParticipant()">Сохранить</button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="participantConfirmDelete">
+          <p class="hint">Удалить участника {{ participant.last_name }} {{ participant.first_name }}?</p>
+          <div class="dialog-actions">
+            <button type="button" class="ghost" (click)="participantConfirmDelete = false">Отмена</button>
+            <button type="button" class="danger" (click)="confirmDeleteParticipant()">Удалить</button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="backdrop" *ngIf="excelOpen" (click)="excelOpen = false">
+      <div class="dialog wide" (click)="$event.stopPropagation()" role="dialog">
         <h2>Загрузка из Excel</h2>
         <p class="hint">Колонки бланка: Фамилия, Имя, Отчество, Дата рождения (ГГГГ-ММ-ДД), Город, Группа, Стартовый номер, RFID. Чужие заголовки нужно сопоставить. Можно сразу несколько файлов. Если хоть один не пройдёт проверку, не запишется ни один.</p>
         <div class="actions">
@@ -215,8 +264,22 @@
             </table>
           </div>
         </div>
-        <button type="button" class="primary" *ngIf="importReady" (click)="confirmImport()">Загрузить {{ importFiles.length }} файлов, {{ importRowCount }} участников</button>
-      </section>
-    </ng-container>
+        <div class="dialog-actions">
+          <button type="button" class="ghost" (click)="excelOpen = false">Закрыть</button>
+          <button type="button" class="primary" *ngIf="importReady" (click)="confirmImport()">Загрузить {{ importFiles.length }} файлов, {{ importRowCount }} участников</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="backdrop" *ngIf="memberPending" (click)="memberPending = null">
+      <div class="dialog" (click)="$event.stopPropagation()" role="dialog">
+        <h2>Закрыть доступ</h2>
+        <p class="hint">Убрать {{ memberPending.email }} из комиссии этого мероприятия?</p>
+        <div class="dialog-actions">
+          <button type="button" class="ghost" (click)="memberPending = null">Отмена</button>
+          <button type="button" class="danger" (click)="confirmRevoke()">Удалить</button>
+        </div>
+      </div>
+    </div>
   </main>
 </ion-content>

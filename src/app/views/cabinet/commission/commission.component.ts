@@ -25,7 +25,12 @@ export class CommissionComponent implements OnInit {
   checkpointDisabled = false
   groups: any[] = []
   participants: any[] = []
-  groupName = ''
+  groupDraft: { id?: number; name: string; sort_order: number } | null = null
+  groupConfirmDelete = false
+  participantDialog = false
+  participantConfirmDelete = false
+  excelOpen = false
+  memberPending: any = null
   memberEmail = ''
   members: any[] = []
   selectedGroupId: number | null = null
@@ -40,6 +45,7 @@ export class CommissionComponent implements OnInit {
     max: new Date(),
   })
   editingParticipantId?: number
+  tab: 'participants' | 'groups' | 'import' | 'access' = 'participants'
   importFiles: ImportBatchFile[] = []
   importReady = false
   importChecking = false
@@ -127,9 +133,12 @@ export class CommissionComponent implements OnInit {
   memberInitial(member: any) {
     return String(this.memberTitle(member) || '?').trim().charAt(0).toUpperCase()
   }
-  revokeMember(member: any) {
+  askRevoke(member: any) { this.memberPending = member }
+  confirmRevoke() {
+    const member = this.memberPending
+    if (!member) return
     this.checkpoint.revokeMember(this.eventId, member.id).subscribe({
-      next: () => this.load(),
+      next: () => { this.memberPending = null; this.load() },
       error: () => this.toast.showToast('Не удалось закрыть доступ', 'danger'),
     })
   }
@@ -192,12 +201,33 @@ export class CommissionComponent implements OnInit {
     const [year, month, day] = iso.split('-').map(Number)
     return new Date(year, month - 1, day)
   }
-  saveGroup() {
-    const name = this.groupName.trim(); if (!name) return
-    this.checkpoint.createGroup(this.eventId, { name, sort_order: this.groups.length }).subscribe({ next: () => { this.groupName = ''; this.load() }, error: () => this.toast.showToast('Не удалось сохранить группу', 'danger') })
+  openGroupDialog(group?: any) {
+    this.groupConfirmDelete = false
+    this.groupDraft = group
+      ? { id: group.id, name: group.name, sort_order: group.sort_order ?? 0 }
+      : { name: '', sort_order: this.groups.length }
   }
-  saveExistingGroup(group: any) { this.checkpoint.updateGroup(this.eventId, group.id, { name: group.name, sort_order: group.sort_order }).subscribe({ next: () => this.load(), error: () => this.toast.showToast('Не удалось обновить группу', 'danger') }) }
-  deleteGroup(group: any) { this.checkpoint.removeGroup(this.eventId, group.id).subscribe({ next: () => this.load(), error: (error) => this.toast.showToast(error?.error?.message || 'Группу с участниками удалить нельзя', 'danger') }) }
+  closeGroupDialog() { this.groupDraft = null; this.groupConfirmDelete = false }
+  saveGroupDialog() {
+    const draft = this.groupDraft
+    if (!draft || !draft.name.trim()) return
+    const payload = { name: draft.name.trim(), sort_order: Number(draft.sort_order) || 0 }
+    const request = draft.id
+      ? this.checkpoint.updateGroup(this.eventId, draft.id, payload)
+      : this.checkpoint.createGroup(this.eventId, payload)
+    request.subscribe({
+      next: () => { this.closeGroupDialog(); this.load() },
+      error: () => this.toast.showToast('Не удалось сохранить группу', 'danger'),
+    })
+  }
+  confirmDeleteGroup() {
+    const draft = this.groupDraft
+    if (!draft?.id) return
+    this.checkpoint.removeGroup(this.eventId, draft.id).subscribe({
+      next: () => { this.closeGroupDialog(); this.load() },
+      error: (error) => this.toast.showToast(error?.error?.message || 'Группу с участниками удалить нельзя', 'danger'),
+    })
+  }
   participantsInGroup(group: any) { return group.participants_count ?? this.participants.filter((row) => row.group_id === group.id).length }
   previewRows(file: ImportBatchFile): any[] { return file.rows.slice(0, 5) }
   get importRowCount() { return this.importFiles.reduce((sum, file) => sum + file.rows.length, 0) }
@@ -218,15 +248,37 @@ export class CommissionComponent implements OnInit {
       this.participant.birth_date = ''
     }
     const request = this.editingParticipantId ? this.checkpoint.updateParticipant(this.eventId, this.editingParticipantId, this.participant) : this.checkpoint.createParticipant(this.eventId, this.participant)
-    request.subscribe({ next: () => { this.participant = this.emptyParticipant(); this.clearBirth(); this.editingParticipantId = undefined; this.load() }, error: () => this.toast.showToast('Проверьте обязательные поля и уникальность номера', 'danger') })
+    request.subscribe({
+      next: () => { this.closeParticipantDialog(); this.load() },
+      error: () => this.toast.showToast('Проверьте обязательные поля и уникальность номера', 'danger'),
+    })
+  }
+  openCreateParticipant() {
+    this.cancelEdit()
+    this.participantConfirmDelete = false
+    this.participantDialog = true
   }
   editParticipant(row: any) {
+    this.tab = 'participants'
+    this.participantConfirmDelete = false
     this.participant = { ...row, birth_date: row.birth_date || '', group_id: row.group_id || null, rfid: row.rfid || '', middle_name: row.middle_name || '', city: row.city || '' }
     this.editingParticipantId = row.id
     this.applyBirth(row.birth_date || '')
+    this.participantDialog = true
+  }
+  closeParticipantDialog() {
+    this.participantDialog = false
+    this.participantConfirmDelete = false
+    this.cancelEdit()
   }
   cancelEdit() { this.participant = this.emptyParticipant(); this.clearBirth(); this.editingParticipantId = undefined }
-  deleteParticipant(row: any) { this.checkpoint.removeParticipant(this.eventId, row.id).subscribe(() => this.load()) }
+  confirmDeleteParticipant() {
+    if (!this.editingParticipantId) return
+    this.checkpoint.removeParticipant(this.eventId, this.editingParticipantId).subscribe({
+      next: () => { this.closeParticipantDialog(); this.load() },
+      error: () => this.toast.showToast('Не удалось удалить участника', 'danger'),
+    })
+  }
   get filteredParticipants() { return this.selectedGroupId ? this.participants.filter((row) => row.group_id === this.selectedGroupId) : this.participants }
   downloadTemplate() { this.checkpoint.template(this.eventId).subscribe((blob) => { const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'checkpoint-participants.xlsx'; link.click(); URL.revokeObjectURL(link.href) }) }
   downloadPackage() {
@@ -267,6 +319,8 @@ export class CommissionComponent implements OnInit {
       complete: () => {
         this.importFiles = []
         this.importReady = false
+        this.excelOpen = false
+        this.tab = 'participants'
         this.load()
         this.toast.showToast('Стартовый список импортирован', 'success')
       },

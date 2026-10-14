@@ -16,9 +16,43 @@
 }
 
 h1 {
-  margin: 8px 0 20px;
+  margin: 8px 0 16px;
   font-size: 1.6rem;
 }
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 0 16px;
+  padding-bottom: 2px;
+}
+
+.tab {
+  flex: 0 0 auto;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid #cfd4dc;
+  border-radius: 999px;
+  background: #fff;
+  color: #1c2226;
+  font-size: 0.95rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab span {
+  margin-left: 6px;
+  color: #6b7280;
+}
+
+.tab.active {
+  background: #1c2226;
+  border-color: #1c2226;
+  color: #fff;
+}
+
+.tab.active span { color: #d0d5dd; }
 
 .block {
   background: #fff;
@@ -132,8 +166,61 @@ h2 {
 .filter { width: 240px; }
 
 .group-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   padding: 12px 0;
   border-top: 1px solid #eee;
+}
+
+.head-actions {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.ghost.inline {
+  width: auto;
+  height: 36px;
+  padding: 0 12px;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(17, 24, 28, 0.45);
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow: auto;
+}
+
+.dialog {
+  width: min(560px, 100%);
+  margin: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.dialog.wide { width: min(760px, 100%); }
+
+.dialog-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.dialog-actions .danger { margin-right: auto; }
+
+@media (max-width: 700px) {
+  .narrow, .filter, .file { width: 100%; max-width: none; }
+  .primary, .ghost:not(.calendar):not(.inline), .danger { width: 100%; }
 }
 
 .count {
@@ -314,5 +401,5 @@ th, td {
 
 @media (max-width: 700px) {
   .narrow, .filter, .file { width: 100%; max-width: none; }
-  .primary, .ghost:not(.calendar), .danger { width: 100%; }
+  .primary, .ghost:not(.calendar):not(.inline), .danger { width: 100%; }
 }
