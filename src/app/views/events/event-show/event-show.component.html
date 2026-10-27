@@ -88,58 +88,87 @@
               <h2 class="title">Хронометраж</h2>
               <button type="button" class="checkpoint-share" *ngIf="checkpointHasBroadcast" (click)="shareContent()">Поделиться</button>
             </div>
-            <p class="checkpoint-empty" *ngIf="!checkpointClassSections.length">Трансляция ещё не началась</p>
+            <p class="checkpoint-empty" *ngIf="!checkpointLiveHeat && !checkpointClassSections.length">
+              Трансляция ещё не началась
+            </p>
 
-            <div class="checkpoint-live-meta" *ngIf="checkpointResults?.live as live">
-              <div class="checkpoint-live-meta__title">
-                <strong>Сейчас идёт: {{ live.name }}</strong>
-                <span class="checkpoint-badge live">Эфир</span>
+            <div class="checkpoint-live-card" *ngIf="checkpointLiveHeat as live">
+              <div class="checkpoint-live-card__head">
+                <div class="checkpoint-live-meta__title">
+                  <strong>Сейчас в эфире: {{ live.name }}</strong>
+                  <span class="checkpoint-badge live">Эфир</span>
+                </div>
+                <div class="checkpoint-timer" aria-live="polite">{{ checkpointElapsed }}</div>
+                <span class="checkpoint-updated" *ngIf="checkpointUpdatedAt">
+                  обновлено {{ checkpointUpdatedAt | date:'HH:mm:ss' }}
+                </span>
               </div>
-              <div class="checkpoint-timer" aria-live="polite">{{ checkpointElapsed }}</div>
-              <span class="checkpoint-updated" *ngIf="checkpointUpdatedAt">
-                обновлено {{ checkpointUpdatedAt | date:'HH:mm:ss' }}
-              </span>
+              <div class="checkpoint-table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Место</th><th>№</th><th>Участник</th><th>Круги</th><th>Время</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngIf="!live.rows.length">
+                      <td colspan="5" class="checkpoint-empty-rows">Ожидание отметок…</td>
+                    </tr>
+                    <tr *ngFor="let row of live.rows">
+                      <td>{{ row.place || '—' }}</td>
+                      <td>{{ row.start_number || '—' }}</td>
+                      <td>{{ row.name || '—' }}</td>
+                      <td>{{ row.laps != null ? row.laps : '—' }}</td>
+                      <td>{{ row.result || '—' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
-            <ion-accordion-group
-              *ngIf="checkpointClassSections.length"
-              class="checkpoint-accordion"
-              [multiple]="true"
-              [value]="checkpointClassAccordionValue"
-              (ionChange)="onCheckpointClassAccordionChange($event)"
-            >
-              <ion-accordion *ngFor="let section of checkpointClassSections; trackBy: trackCheckpointClass" [value]="section.name">
-                <ion-item slot="header" lines="full" class="checkpoint-accordion__header">
-                  <ion-label>
-                    <strong>{{ section.name }}</strong>
-                    <p>{{ section.participantCount }} уч. · {{ section.heats.length }} заезд(ов)</p>
-                  </ion-label>
-                </ion-item>
-                <div slot="content" class="checkpoint-class-body ion-padding">
-                  <div *ngFor="let heat of section.heats; trackBy: trackCheckpointHeat" class="checkpoint-heat-card">
-                    <div class="checkpoint-heat__title">
-                      <strong>{{ heat.name }}</strong>
-                      <span class="checkpoint-badge" [class.live]="heat.status === 'live'">
-                        {{ heat.status === 'live' ? 'Эфир' : 'Итог' }}
-                      </span>
-                    </div>
-                    <div class="checkpoint-table-wrap">
-                      <table>
-                        <thead><tr><th>Место</th><th>№</th><th>Участник</th><th>Результат</th></tr></thead>
-                        <tbody>
-                          <tr *ngFor="let row of heat.rows">
-                            <td>{{ row.place || '—' }}</td>
-                            <td>{{ row.start_number || '—' }}</td>
-                            <td>{{ row.name || '—' }}</td>
-                            <td>{{ row.result || '—' }}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+            <div class="checkpoint-finished" *ngIf="checkpointClassSections.length">
+              <h3 class="checkpoint-finished__title">Завершённые заезды</h3>
+              <ion-accordion-group
+                class="checkpoint-accordion"
+                [multiple]="true"
+                [value]="checkpointClassAccordionValue"
+                (ionChange)="onCheckpointClassAccordionChange($event)"
+              >
+                <ion-accordion *ngFor="let section of checkpointClassSections; trackBy: trackCheckpointClass" [value]="section.name">
+                  <ion-item slot="header" lines="full" class="checkpoint-accordion__header">
+                    <ion-label>
+                      <strong>{{ section.name }}</strong>
+                      <p>{{ section.participantCount }} уч. · {{ section.heats.length }} заезд(ов)</p>
+                    </ion-label>
+                  </ion-item>
+                  <div slot="content" class="checkpoint-class-body ion-padding">
+                    <div *ngFor="let heat of section.heats; trackBy: trackCheckpointHeat" class="checkpoint-heat-card finished">
+                      <div class="checkpoint-heat__title">
+                        <strong>{{ heat.name }}</strong>
+                        <span class="checkpoint-badge finished">Завершён</span>
+                      </div>
+                      <div class="checkpoint-table-wrap">
+                        <table>
+                          <thead>
+                            <tr><th>Место</th><th>№</th><th>Участник</th><th>Круги</th><th>Время</th></tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngIf="!heat.rows.length">
+                              <td colspan="5" class="checkpoint-empty-rows">Нет результатов</td>
+                            </tr>
+                            <tr *ngFor="let row of heat.rows">
+                              <td>{{ row.place || '—' }}</td>
+                              <td>{{ row.start_number || '—' }}</td>
+                              <td>{{ row.name || '—' }}</td>
+                              <td>{{ row.laps != null ? row.laps : '—' }}</td>
+                              <td>{{ row.result || '—' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </ion-accordion>
-            </ion-accordion-group>
+                </ion-accordion>
+              </ion-accordion-group>
+            </div>
           </section>
           <div *ngIf="usersInFavorite.length" class="users">
             <span class="title users-title">
