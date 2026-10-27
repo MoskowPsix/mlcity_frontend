@@ -728,6 +728,53 @@ ion-accordion-group {
   font-weight: 600;
 }
 .checkpoint-badge.live { background: #e8f8ec; color: #1b7a32; }
+.checkpoint-live-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 12px 0 4px;
+}
+.checkpoint-live-meta__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.checkpoint-timer {
+  font-variant-numeric: tabular-nums;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+.checkpoint-updated {
+  color: #667085;
+  font-size: 0.875rem;
+}
+.checkpoint-accordion {
+  margin-top: 12px;
+  background: transparent;
+}
+.checkpoint-accordion__header {
+  --background: #f7f8fa;
+  --border-radius: 8px;
+  margin-bottom: 4px;
+}
+.checkpoint-accordion__header p {
+  margin: 2px 0 0;
+  color: #667085;
+  font-size: 0.8rem;
+}
+.checkpoint-class-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.checkpoint-heat-card {
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
 .checkpoint-table-wrap { overflow-x: auto; }
 .checkpoint-results table { width: 100%; border-collapse: collapse; margin: 10px 0 0; }
 .checkpoint-results th, .checkpoint-results td { padding: 8px; border-bottom: 1px solid #e6e6e6; text-align: left; }

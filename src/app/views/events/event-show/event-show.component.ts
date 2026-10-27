@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Output, Input, inject } from '@angular/core'
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Output, Input, inject, NgZone } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router'
 import { Subject, takeUntil, tap, retry, catchError, of, EMPTY, map, delay, filter, timeInterval, finalize } from 'rxjs'
 import Pusher from 'pusher-js'
@@ -98,8 +98,28 @@ export class EventShowComponent implements OnInit, OnDestroy {
   @Input() createObj: any = {}
   organization!: IOrganization
   checkpointResults: any
+  /** HH:MM:SS.mmm с момента live.started_at */
+  checkpointElapsed = '00:00:00'
+  checkpointUpdatedAt: Date | null = null
+  /**
+   * Аккордеон по классам; внутри — заезды (live + finished) этого класса.
+   * Кэш обязателен: таймер 100ms, нельзя группировать в шаблоне.
+   */
+  checkpointClassSections: {
+    name: string
+    participantCount: number
+    heats: {
+      id: string
+      name: string
+      status: 'live' | 'finished'
+      rows: any[]
+    }[]
+  }[] = []
+  checkpointClassAccordionValue: string[] = []
   private checkpointPoll?: ReturnType<typeof setInterval>
+  private checkpointTimer?: ReturnType<typeof setInterval>
   private checkpointPusher?: Pusher
+  private readonly zone = inject(NgZone)
   private readonly refreshCheckpointResults = () => {
     if (document.visibilityState === 'visible') this.loadCheckpointResults()
   }
@@ -566,20 +586,167 @@ export class EventShowComponent implements OnInit, OnDestroy {
     return !!(this.checkpointResults?.live || this.checkpointResults?.heats?.length)
   }
 
+  private sortCheckpointRows(rows: any[]): any[] {
+    return [...rows].sort((a, b) => {
+      const pa = a?.place == null ? Number.POSITIVE_INFINITY : Number(a.place)
+      const pb = b?.place == null ? Number.POSITIVE_INFINITY : Number(b.place)
+      if (pa !== pb) return pa - pb
+      return String(a?.start_number ?? '').localeCompare(String(b?.start_number ?? ''), 'ru', { numeric: true })
+    })
+  }
+
+  private classNameOf(row: any): string {
+    return (row?.group_name || '').trim() || 'Без класса'
+  }
+
+  /** Класс → заезды этого класса (сначала live, потом итоги). */
+  private buildCheckpointClassSections(state: any): {
+    name: string
+    participantCount: number
+    heats: { id: string; name: string; status: 'live' | 'finished'; rows: any[] }[]
+  }[] {
+    type HeatBucket = { id: string; name: string; status: 'live' | 'finished'; rows: any[] }
+    const byClass = new Map<string, HeatBucket[]>()
+
+    const pushHeat = (heat: any, status: 'live' | 'finished') => {
+      const heatId = String(heat?.id ?? heat?.name ?? '')
+      const heatName = heat?.name || heatId
+      const rowsByClass = new Map<string, any[]>()
+      for (const row of heat?.results || []) {
+        const className = this.classNameOf(row)
+        if (!rowsByClass.has(className)) rowsByClass.set(className, [])
+        rowsByClass.get(className)!.push(row)
+      }
+      for (const [className, rows] of rowsByClass) {
+        if (!byClass.has(className)) byClass.set(className, [])
+        byClass.get(className)!.push({
+          id: heatId,
+          name: heatName,
+          status,
+          rows: this.sortCheckpointRows(rows),
+        })
+      }
+    }
+
+    if (state?.live) pushHeat(state.live, 'live')
+    for (const heat of state?.heats || []) pushHeat(heat, 'finished')
+
+    return [...byClass.entries()]
+      .map(([name, heats]) => ({
+        name,
+        heats: heats.sort((a, b) => {
+          if (a.status !== b.status) return a.status === 'live' ? -1 : 1
+          return a.name.localeCompare(b.name, 'ru')
+        }),
+        participantCount: new Set(
+          ([] as Array<string | number>).concat(
+            ...heats.map((h: HeatBucket) =>
+              h.rows.map((r: any) => r?.participant_id ?? `${r?.start_number}:${r?.name}`),
+            ),
+          ),
+        ).size,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name, 'ru'))
+  }
+
+  private mergeAccordionValue(current: string[] | undefined, names: string[]): string[] {
+    if (!names.length) return []
+    if (!current?.length) return [...names]
+    const keep = current.filter((name) => names.includes(name))
+    const added = names.filter((name) => !current.includes(name))
+    return [...keep, ...added]
+  }
+
+  trackCheckpointClass(_index: number, section: { name: string }) {
+    return section.name
+  }
+
+  trackCheckpointHeat(_index: number, heat: { id: string; status: string }) {
+    return `${heat.status}:${heat.id}`
+  }
+
+  onCheckpointClassAccordionChange(ev: Event) {
+    const value = (ev as CustomEvent)?.detail?.value
+    this.checkpointClassAccordionValue = Array.isArray(value) ? value : value ? [value] : []
+  }
+
   private startCheckpointResults() {
-    if (this.checkpointPoll) return
+    if (this.checkpointPusher || this.checkpointPoll) return
     this.loadCheckpointResults()
-    this.checkpointPoll = setInterval(() => this.loadCheckpointResults(), 10000)
+    this.startCheckpointPoll() // REST fallback всегда (Pusher локально часто молчит)
+    this.startCheckpointTimer()
     window.addEventListener('online', this.refreshCheckpointResults)
     document.addEventListener('visibilitychange', this.refreshCheckpointResults)
-    const realtime = environment as any
-    if (realtime.pusherKey) {
-      this.checkpointPusher = new Pusher(realtime.pusherKey, { cluster: realtime.pusherCluster || 'mt1', wsHost: realtime.pusherHost, wsPort: realtime.pusherPort, forceTLS: false, enabledTransports: ['ws', 'wss'] })
-      this.checkpointPusher.connection.bind('connected', this.refreshCheckpointResults)
-      this.checkpointPusher.subscribe(`checkpoint.event.${this.eventId}`).bind('checkpoint.results.updated', (payload: any) => {
-        this.checkpointResults = payload?.state ?? payload
-      })
+    const realtime = environment as { pusherKey?: string; pusherCluster?: string; pusherHost?: string; pusherPort?: number }
+    if (!realtime.pusherKey) {
+      return
     }
+    this.checkpointPusher = new Pusher(realtime.pusherKey, {
+      cluster: realtime.pusherCluster || 'mt1',
+      wsHost: realtime.pusherHost,
+      wsPort: realtime.pusherPort,
+      forceTLS: false,
+      disableStats: true,
+      enabledTransports: ['ws'],
+    })
+    this.checkpointPusher.connection.bind('connected', () => this.refreshCheckpointResults())
+    this.checkpointPusher.connection.bind('disconnected', () => this.startCheckpointPoll())
+    this.checkpointPusher.connection.bind('unavailable', () => this.startCheckpointPoll())
+    // Laravel broadcastAs → клиент обязан слушать с ведущей точкой
+    this.checkpointPusher
+      .subscribe(`checkpoint.event.${this.eventId}`)
+      .bind('.checkpoint.results.updated', (payload: any) => {
+        this.zone.run(() => this.applyCheckpointState(payload?.state ?? payload))
+      })
+  }
+
+  private startCheckpointPoll() {
+    if (this.checkpointPoll) return
+    this.checkpointPoll = setInterval(() => this.loadCheckpointResults(), 2000)
+  }
+
+  private stopCheckpointPoll() {
+    if (!this.checkpointPoll) return
+    clearInterval(this.checkpointPoll)
+    this.checkpointPoll = undefined
+  }
+
+  private startCheckpointTimer() {
+    if (this.checkpointTimer) return
+    this.tickCheckpointElapsed()
+    this.checkpointTimer = setInterval(() => this.tickCheckpointElapsed(), 100)
+  }
+
+  private stopCheckpointTimer() {
+    if (!this.checkpointTimer) return
+    clearInterval(this.checkpointTimer)
+    this.checkpointTimer = undefined
+  }
+
+  private tickCheckpointElapsed() {
+    const startedAt = this.checkpointResults?.live?.started_at
+    if (!startedAt) {
+      this.checkpointElapsed = '00:00:00'
+      return
+    }
+    const ms = Math.max(0, Date.now() - new Date(startedAt).getTime())
+    const h = Math.floor(ms / 3600000)
+    const m = Math.floor((ms % 3600000) / 60000)
+    const s = Math.floor((ms % 60000) / 1000)
+    const pad = (n: number) => String(n).padStart(2, '0')
+    this.checkpointElapsed = `${pad(h)}:${pad(m)}:${pad(s)}`
+  }
+
+  private applyCheckpointState(state: any) {
+    this.checkpointResults = state
+    this.checkpointUpdatedAt = new Date()
+    this.checkpointClassSections = this.buildCheckpointClassSections(state)
+    this.checkpointClassAccordionValue = this.mergeAccordionValue(
+      this.checkpointClassAccordionValue,
+      this.checkpointClassSections.map((s) => s.name),
+    )
+    this.tickCheckpointElapsed()
+    this.cdr.markForCheck()
   }
 
   canOpenCommission() {
@@ -588,11 +755,14 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   private loadCheckpointResults() {
-    this.checkpointService.results(this.eventId!).pipe(takeUntil(this.destroy$)).subscribe({ next: (state) => this.checkpointResults = state })
+    this.checkpointService.results(this.eventId!).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (state) => this.applyCheckpointState(state),
+    })
   }
 
   ngOnDestroy() {
-    if (this.checkpointPoll) clearInterval(this.checkpointPoll)
+    this.stopCheckpointPoll()
+    this.stopCheckpointTimer()
     window.removeEventListener('online', this.refreshCheckpointResults)
     document.removeEventListener('visibilitychange', this.refreshCheckpointResults)
     this.checkpointPusher?.disconnect()

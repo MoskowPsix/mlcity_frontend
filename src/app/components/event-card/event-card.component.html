@@ -116,7 +116,10 @@
         </div>
     
         <div  class="event-name">
-          <h4 (click)="eventNavigation()">{{event.name}}</h4>
+          <h4 (click)="eventNavigation()">
+            {{event.name}}
+            <span *ngIf="event.checkpoint_live" class="checkpoint-live-badge" aria-label="Эфир">Эфир</span>
+          </h4>
       
         </div>
       

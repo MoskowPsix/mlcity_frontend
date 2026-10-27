@@ -349,3 +349,17 @@ h4{
   line-height: 1.5; /* Высота строки, можно настроить по желанию */
 
 }
+
+.checkpoint-live-badge {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 0.35rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: #e8f8ec;
+  color: #1b7a32;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
