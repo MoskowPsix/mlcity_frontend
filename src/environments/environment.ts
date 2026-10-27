@@ -62,6 +62,7 @@ export const environment = {
   pusherPort: 6001,
   pusherHost: '127.0.0.1',
   pusherCluster: 'mt1',
+  pusherForceTLS: false,
   // cityName: 'Заречный',
   // cityRegion: 'Свердловская область',
   // cityCoordsLatitude: 56.81497464978607,

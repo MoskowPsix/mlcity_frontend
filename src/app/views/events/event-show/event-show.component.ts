@@ -677,17 +677,26 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.startCheckpointTimer()
     window.addEventListener('online', this.refreshCheckpointResults)
     document.addEventListener('visibilitychange', this.refreshCheckpointResults)
-    const realtime = environment as { pusherKey?: string; pusherCluster?: string; pusherHost?: string; pusherPort?: number }
+    const realtime = environment as {
+      pusherKey?: string
+      pusherCluster?: string
+      pusherHost?: string
+      pusherPort?: number
+      pusherForceTLS?: boolean
+    }
     if (!realtime.pusherKey) {
       return
     }
+    const forceTLS = !!realtime.pusherForceTLS
+    const wsPort = realtime.pusherPort ?? (forceTLS ? 443 : 80)
     this.checkpointPusher = new Pusher(realtime.pusherKey, {
       cluster: realtime.pusherCluster || 'mt1',
       wsHost: realtime.pusherHost,
-      wsPort: realtime.pusherPort,
-      forceTLS: false,
+      wsPort,
+      wssPort: wsPort,
+      forceTLS,
       disableStats: true,
-      enabledTransports: ['ws'],
+      enabledTransports: forceTLS ? ['ws', 'wss'] : ['ws'],
     })
     this.checkpointPusher.connection.bind('connected', () => this.refreshCheckpointResults())
     this.checkpointPusher.connection.bind('disconnected', () => this.startCheckpointPoll())
