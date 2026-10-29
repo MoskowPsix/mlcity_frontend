@@ -780,26 +780,89 @@ ion-accordion-group {
   color: #667085;
   font-size: 0.8rem;
 }
-.checkpoint-class-body {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.checkpoint-heat-card {
-  border: 1px solid #e6e6e6;
-  border-radius: 8px;
-  padding: 10px 12px;
-  background: #fff;
-}
-.checkpoint-heat-card.finished {
-  border-color: #e4e7ec;
-  opacity: 0.96;
-}
+.checkpoint-heat-body { padding-top: 8px; }
 .checkpoint-empty-rows {
   color: #667085;
-  text-align: center !important;
+  text-align: center;
+  padding: 12px 0;
 }
-.checkpoint-table-wrap { overflow-x: auto; }
-.checkpoint-results table { width: 100%; border-collapse: collapse; margin: 10px 0 0; }
-.checkpoint-results th, .checkpoint-results td { padding: 8px; border-bottom: 1px solid #e6e6e6; text-align: left; }
-@media (max-width: 600px) { .checkpoint-results th, .checkpoint-results td { white-space: nowrap; } }
+/* Live: без горизонтального скролла — CSS grid + ellipsis */
+.checkpoint-live-grid {
+  margin-top: 8px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+.checkpoint-live-grid__head,
+.checkpoint-live-grid__row {
+  display: grid;
+  grid-template-columns: 36px 40px minmax(0, 1fr) minmax(72px, 96px);
+  gap: 6px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 0.9rem;
+}
+.checkpoint-live-grid__head {
+  color: #667085;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-bottom-color: #d0d5dd;
+}
+.checkpoint-live-grid__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.checkpoint-live-grid__time {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.checkpoint-live-grid__time.leader { font-weight: 700; }
+/* Финалы: покруговка может скроллиться по X (как мото) */
+.checkpoint-results-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.checkpoint-results-table {
+  min-width: max(100%, calc(280px + var(--lap-cols, 0) * 88px));
+  font-size: 0.85rem;
+}
+.checkpoint-results-table__head,
+.checkpoint-results-table__row {
+  display: grid;
+  grid-template-columns: 36px 40px minmax(96px, 1.2fr) minmax(72px, 100px) repeat(var(--lap-cols, 0), minmax(80px, 1fr));
+  gap: 6px;
+  align-items: start;
+  padding: 8px 0;
+  border-bottom: 1px solid #e6e6e6;
+}
+.checkpoint-results-table__head {
+  color: #667085;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.checkpoint-results-table__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.checkpoint-lap-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.checkpoint-lap-cell .lap-time { font-weight: 600; }
+.checkpoint-lap-cell .lap-total,
+.checkpoint-lap-cell .lap-pos,
+.checkpoint-lap-cell .lap-manual {
+  color: #667085;
+  font-size: 0.75rem;
+}

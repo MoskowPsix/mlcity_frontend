@@ -105,35 +105,39 @@ export class EventShowComponent implements OnInit, OnDestroy {
   checkpointLiveHeat: {
     id: string
     name: string
+    typeSlug: string | null
     rows: any[]
   } | null = null
   /**
-   * Только завершённые заезды, аккордеон по классам.
-   * Кэш обязателен: таймер 100ms, нельзя группировать в шаблоне.
+   * Завершённые заезды — по имени заезда (как мото), без группировки по классам.
+   * Кэш обязателен: таймер 100ms, нельзя собирать в шаблоне.
    */
-  checkpointClassSections: {
+  checkpointFinishedHeats: {
+    id: string
     name: string
-    participantCount: number
-    heats: {
-      id: string
-      name: string
-      status: 'live' | 'finished'
-      startedAt: string | null
-      finishedAt: string | null
-      rows: any[]
-    }[]
+    typeSlug: string | null
+    startedAt: string | null
+    finishedAt: string | null
+    rows: any[]
+    lapNumbers: number[]
   }[] = []
-  checkpointClassAccordionValue: string[] = []
-  /** Уже виденные классы: пустой accordion после этого = юзер закрыл, не форсим открытие. */
-  private checkpointKnownClassNames: string[] = []
-  /** Классы, которые юзер явно свернул — poll их не разворачивает. */
-  private checkpointClosedClassNames = new Set<string>()
+  checkpointHeatAccordionValue: string[] = []
+  private checkpointKnownHeatIds: string[] = []
+  private checkpointClosedHeatIds = new Set<string>()
   private checkpointAccordionSyncing = false
   private checkpointAccordionTouchedAt = 0
-  private checkpointPoll?: ReturnType<typeof setInterval>
   private checkpointTimer?: ReturnType<typeof setInterval>
+  private checkpointQualToggleTimer?: ReturnType<typeof setInterval>
+  /** Fallback REST, если Soketi/broadcast молчит. */
+  private checkpointPollTimer?: ReturnType<typeof setInterval>
+  /** Игнор устаревших REST-ответов (иначе эфир «залипает» / пустеет). */
+  private checkpointLoadSeq = 0
+  /** Квалификация в эфире: чередование лучший/последний круг. */
+  checkpointShowLastLap = false
   private checkpointPusher?: Pusher
+  private checkpointRealtimeStarted = false
   private readonly zone = inject(NgZone)
+  /** Разовый REST только после reconnect/visibility — не poll. */
   private readonly refreshCheckpointResults = () => {
     if (document.visibilityState === 'visible') this.loadCheckpointResults()
   }
@@ -609,13 +613,70 @@ export class EventShowComponent implements OnInit, OnDestroy {
     })
   }
 
-  private classNameOf(row: any): string {
-    return (row?.group_name || '').trim() || 'Без класса'
+  isCheckpointQualification(typeSlug: string | null | undefined): boolean {
+    return typeSlug === 'qualification_best'
+  }
+
+  checkpointResultColumnLabel(typeSlug: string | null | undefined, live = false): string {
+    if (this.isCheckpointQualification(typeSlug)) {
+      if (!live) return 'Лучший круг'
+      return this.checkpointShowLastLap ? 'Последний круг' : 'Лучший круг'
+    }
+    return 'Время/Отст.'
+  }
+
+  checkpointDisplayTime(row: any, rows: any[], typeSlug: string | null | undefined, live = false): string {
+    if (this.isCheckpointQualification(typeSlug)) {
+      const ms = live && this.checkpointShowLastLap
+        ? row?.last_lap_time_ms
+        : (row?.best_lap_time_ms ?? row?.result_value_ms)
+      return this.formatCheckpointMs(ms)
+    }
+    const leader = rows.find((r) => Number(r?.place) === 1) ?? rows[0]
+    if (!leader || leader === row || Number(row?.place) === 1) {
+      return this.formatCheckpointMs(row?.result_value_ms) || row?.result || '—'
+    }
+    const leaderLaps = Number(leader?.laps ?? 0)
+    const rowLaps = Number(row?.laps ?? 0)
+    if (leaderLaps > rowLaps) {
+      const diff = leaderLaps - rowLaps
+      return `+${diff} ${diff === 1 ? 'круг' : diff < 5 ? 'круга' : 'кругов'}`
+    }
+    const leaderMs = Number(leader?.result_value_ms)
+    const rowMs = Number(row?.result_value_ms)
+    if (!Number.isFinite(leaderMs) || !Number.isFinite(rowMs)) {
+      return row?.result || '—'
+    }
+    return `+${this.formatCheckpointMs(Math.max(0, rowMs - leaderMs), true)}`
+  }
+
+  checkpointLapData(row: any, lapNumber: number): any | null {
+    const laps = Array.isArray(row?.lap_times) ? row.lap_times : []
+    return laps.find((l: any) => Number(l?.lap_number) === lapNumber) ?? null
+  }
+
+  formatCheckpointMs(ms: number | null | undefined, compact = false): string {
+    if (ms == null || !Number.isFinite(Number(ms))) return '—'
+    const totalMs = Math.max(0, Math.round(Number(ms)))
+    const totalSeconds = Math.floor(totalMs / 1000)
+    const hours = Math.floor(totalSeconds / 3600)
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+    const seconds = totalSeconds % 60
+    const centi = Math.floor((totalMs % 1000) / 10)
+    const pad = (n: number, w = 2) => String(n).padStart(w, '0')
+    if (compact && hours === 0 && minutes === 0) {
+      return `${pad(seconds)}.${pad(centi)}`
+    }
+    if (hours > 0) {
+      return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${pad(centi)}`
+    }
+    return `${pad(minutes)}:${pad(seconds)}.${pad(centi)}`
   }
 
   private buildCheckpointLiveHeat(state: any): {
     id: string
     name: string
+    typeSlug: string | null
     rows: any[]
   } | null {
     const live = state?.live
@@ -623,177 +684,121 @@ export class EventShowComponent implements OnInit, OnDestroy {
     return {
       id: String(live.id ?? live.name ?? 'live'),
       name: live.name || String(live.id ?? 'Эфир'),
+      typeSlug: live.type_slug ?? null,
       rows: this.sortCheckpointRows(live.results || []),
     }
   }
 
-  /** Класс → только завершённые заезды (live сверху отдельно). */
-  private buildCheckpointClassSections(state: any): {
+  /** Завершённые заезды по имени (как мото), без разрезания по классам. */
+  private buildCheckpointFinishedHeats(state: any): {
+    id: string
     name: string
-    participantCount: number
-    heats: {
-      id: string
-      name: string
-      status: 'live' | 'finished'
-      startedAt: string | null
-      finishedAt: string | null
-      rows: any[]
-    }[]
+    typeSlug: string | null
+    startedAt: string | null
+    finishedAt: string | null
+    rows: any[]
+    lapNumbers: number[]
   }[] {
-    type HeatBucket = {
-      id: string
-      name: string
-      status: 'live' | 'finished'
-      startedAt: string | null
-      finishedAt: string | null
-      rows: any[]
-    }
-    const byClass = new Map<string, HeatBucket[]>()
-
-    const ensureClass = (className: string) => {
-      if (!byClass.has(className)) byClass.set(className, [])
-      return byClass.get(className)!
-    }
-
-    for (const heat of state?.heats || []) {
-      const heatId = String(heat?.id ?? heat?.name ?? '')
-      const heatName = heat?.name || heatId
-      const results = heat?.results || []
-      const rowsByClass = new Map<string, any[]>()
-      for (const row of results) {
-        const className = this.classNameOf(row)
-        if (!rowsByClass.has(className)) rowsByClass.set(className, [])
-        rowsByClass.get(className)!.push(row)
-      }
-      if (!rowsByClass.size) {
-        ensureClass('Без класса').push({
-          id: heatId,
-          name: heatName,
-          status: 'finished',
-          startedAt: heat?.started_at ?? null,
-          finishedAt: heat?.finished_at ?? null,
-          rows: [],
-        })
-        continue
-      }
-      for (const [className, rows] of rowsByClass) {
-        ensureClass(className).push({
-          id: heatId,
-          name: heatName,
-          status: 'finished',
-          startedAt: heat?.started_at ?? null,
-          finishedAt: heat?.finished_at ?? null,
-          rows: this.sortCheckpointRows(rows),
-        })
-      }
-    }
-
     const ts = (value: string | null) => (value ? new Date(value).getTime() : 0)
-
-    return [...byClass.entries()]
-      .map(([name, heats]) => ({
-        name,
-        heats: heats.sort((a, b) => ts(b.finishedAt || b.startedAt) - ts(a.finishedAt || a.startedAt)),
-        participantCount: new Set(
-          ([] as Array<string | number>).concat(
-            ...heats.map((h: HeatBucket) =>
-              h.rows.map((r: any) => r?.participant_id ?? `${r?.start_number}:${r?.name}`),
-            ),
-          ),
-        ).size,
-      }))
-      .filter((section) => section.heats.length > 0)
-      .sort((a, b) => a.name.localeCompare(b.name, 'ru'))
+    return [...(state?.heats || [])]
+      .map((heat: any) => {
+        const rows = this.sortCheckpointRows(heat?.results || [])
+        const maxLap = rows.reduce((max: number, row: any) => {
+          const fromSplits = Array.isArray(row?.lap_times) ? row.lap_times.length : 0
+          const fromCount = Number(row?.laps ?? 0)
+          return Math.max(max, fromSplits, fromCount)
+        }, 0)
+        return {
+          id: String(heat?.id ?? heat?.name ?? ''),
+          name: heat?.name || String(heat?.id ?? 'Заезд'),
+          typeSlug: heat?.type_slug ?? null,
+          startedAt: heat?.started_at ?? null,
+          finishedAt: heat?.finished_at ?? null,
+          rows,
+          lapNumbers: Array.from({ length: maxLap }, (_, i) => i + 1),
+        }
+      })
+      .sort((a, b) => ts(b.finishedAt || b.startedAt) - ts(a.finishedAt || a.startedAt))
   }
 
   /**
-   * Первый рендер — открыть все классы.
-   * Дальше: закрытые юзером остаются закрытыми даже если poll принёс пустой/полный state.
-   * Новые классы — только их дооткрываем.
+   * Эфир — отдельная карточка сверху.
+   * Аккордеон итогов: по умолчанию всё закрыто; открытое юзером не форсим.
    */
-  private syncCheckpointAccordionValue(names: string[]) {
-    if (!names.length) {
-      // Не сбрасываем known/closed — пустой кадр между poll'ами иначе снова откроет всё.
+  private syncCheckpointAccordionValue(ids: string[]) {
+    if (!ids.length) {
       this.setCheckpointAccordionValue([])
       return
     }
 
-    for (const closed of [...this.checkpointClosedClassNames]) {
-      if (!names.includes(closed)) this.checkpointClosedClassNames.delete(closed)
+    for (const closed of [...this.checkpointClosedHeatIds]) {
+      if (!ids.includes(closed)) this.checkpointClosedHeatIds.delete(closed)
     }
 
-    const isFirstPaint =
-      this.checkpointKnownClassNames.length === 0 && this.checkpointClosedClassNames.size === 0
-
-    let next: string[]
+    const isFirstPaint = this.checkpointKnownHeatIds.length === 0
     if (isFirstPaint) {
-      next = [...names]
+      for (const id of ids) this.checkpointClosedHeatIds.add(id)
     } else {
-      const newlyAdded = names.filter((name) => !this.checkpointKnownClassNames.includes(name))
-      next = names.filter(
-        (name) => newlyAdded.includes(name) || !this.checkpointClosedClassNames.has(name),
-      )
-      // Только что добавленные не считаем «закрытыми»
-      for (const name of newlyAdded) this.checkpointClosedClassNames.delete(name)
+      for (const id of ids) {
+        if (!this.checkpointKnownHeatIds.includes(id)) this.checkpointClosedHeatIds.add(id)
+      }
     }
 
+    const next = ids.filter((id) => !this.checkpointClosedHeatIds.has(id))
     this.setCheckpointAccordionValue(next)
-    this.checkpointKnownClassNames = [...names]
+    this.checkpointKnownHeatIds = [...ids]
   }
 
   private setCheckpointAccordionValue(next: string[]) {
     const same =
-      next.length === this.checkpointClassAccordionValue.length &&
-      next.every((name, i) => name === this.checkpointClassAccordionValue[i])
+      next.length === this.checkpointHeatAccordionValue.length &&
+      next.every((id, i) => id === this.checkpointHeatAccordionValue[i])
     if (same) return
     this.checkpointAccordionSyncing = true
-    this.checkpointClassAccordionValue = next
-    // Ionic иногда шлёт ionChange после programmatic set / rebuild *ngFor
+    this.checkpointHeatAccordionValue = next
     setTimeout(() => {
       this.checkpointAccordionSyncing = false
     }, 120)
   }
 
-  trackCheckpointClass(_index: number, section: { name: string }) {
-    return section.name
+  trackCheckpointHeat(_index: number, heat: { id: string }) {
+    return heat.id
   }
 
-  trackCheckpointHeat(_index: number, heat: { id: string; status: string }) {
-    return `${heat.status}:${heat.id}`
-  }
-
-  onCheckpointClassAccordionChange(ev: Event) {
+  onCheckpointHeatAccordionChange(ev: Event) {
     if (this.checkpointAccordionSyncing) return
     const raw = (ev as CustomEvent)?.detail?.value
     const open = Array.isArray(raw) ? raw : raw ? [raw] : []
-    // После закрытия Ionic на poll иногда эмитит «все открыты» — отбрасываем
     const justTouched = Date.now() - this.checkpointAccordionTouchedAt < 800
     if (
       justTouched &&
-      this.checkpointClosedClassNames.size > 0 &&
-      open.length === this.checkpointKnownClassNames.length &&
-      this.checkpointKnownClassNames.every((n) => open.includes(n))
+      this.checkpointClosedHeatIds.size > 0 &&
+      open.length === this.checkpointKnownHeatIds.length &&
+      this.checkpointKnownHeatIds.every((id) => open.includes(id))
     ) {
       this.setCheckpointAccordionValue(
-        this.checkpointKnownClassNames.filter((n) => !this.checkpointClosedClassNames.has(n)),
+        this.checkpointKnownHeatIds.filter((id) => !this.checkpointClosedHeatIds.has(id)),
       )
       return
     }
     this.checkpointAccordionTouchedAt = Date.now()
-    this.checkpointClassAccordionValue = open
-    for (const name of this.checkpointKnownClassNames) {
-      if (open.includes(name)) this.checkpointClosedClassNames.delete(name)
-      else this.checkpointClosedClassNames.add(name)
+    this.checkpointHeatAccordionValue = open
+    for (const id of this.checkpointKnownHeatIds) {
+      if (open.includes(id)) this.checkpointClosedHeatIds.delete(id)
+      else this.checkpointClosedHeatIds.add(id)
     }
   }
 
   private startCheckpointResults() {
-    if (this.checkpointPusher || this.checkpointPoll) return
+    if (this.checkpointRealtimeStarted) return
+    this.checkpointRealtimeStarted = true
+    // Стартовый снимок + WS; poll — страховка (на проде бывало Pusher\Pusher not found)
     this.loadCheckpointResults()
-    this.startCheckpointPoll() // REST fallback всегда (Pusher локально часто молчит)
     this.startCheckpointTimer()
+    this.startCheckpointPoll()
     window.addEventListener('online', this.refreshCheckpointResults)
     document.addEventListener('visibilitychange', this.refreshCheckpointResults)
+
     const realtime = environment as {
       pusherKey?: string
       pusherCluster?: string
@@ -802,6 +807,7 @@ export class EventShowComponent implements OnInit, OnDestroy {
       pusherForceTLS?: boolean
     }
     if (!realtime.pusherKey) {
+      console.warn('[checkpoint] pusherKey missing — live updates disabled')
       return
     }
     const forceTLS = !!realtime.pusherForceTLS
@@ -815,26 +821,21 @@ export class EventShowComponent implements OnInit, OnDestroy {
       disableStats: true,
       enabledTransports: forceTLS ? ['ws', 'wss'] : ['ws'],
     })
+    // После обрыва pusher-js сам реконнектится; один REST на connected — догнать пропущенное
     this.checkpointPusher.connection.bind('connected', () => this.refreshCheckpointResults())
-    this.checkpointPusher.connection.bind('disconnected', () => this.startCheckpointPoll())
-    this.checkpointPusher.connection.bind('unavailable', () => this.startCheckpointPoll())
+    this.checkpointPusher.connection.bind('error', (err: unknown) => {
+      console.warn('[checkpoint] pusher error', err)
+    })
     // Laravel broadcastAs → клиент обязан слушать с ведущей точкой
     this.checkpointPusher
       .subscribe(`checkpoint.event.${this.eventId}`)
       .bind('.checkpoint.results.updated', (payload: any) => {
-        this.zone.run(() => this.applyCheckpointState(payload?.state ?? payload))
+        this.zone.run(() => {
+          // WS свежее любого in-flight REST
+          this.checkpointLoadSeq++
+          this.applyCheckpointState(payload?.state ?? payload)
+        })
       })
-  }
-
-  private startCheckpointPoll() {
-    if (this.checkpointPoll) return
-    this.checkpointPoll = setInterval(() => this.loadCheckpointResults(), 2000)
-  }
-
-  private stopCheckpointPoll() {
-    if (!this.checkpointPoll) return
-    clearInterval(this.checkpointPoll)
-    this.checkpointPoll = undefined
   }
 
   private startCheckpointTimer() {
@@ -847,6 +848,20 @@ export class EventShowComponent implements OnInit, OnDestroy {
     if (!this.checkpointTimer) return
     clearInterval(this.checkpointTimer)
     this.checkpointTimer = undefined
+  }
+
+  private startCheckpointPoll() {
+    if (this.checkpointPollTimer) return
+    this.checkpointPollTimer = setInterval(() => {
+      if (document.visibilityState !== 'visible') return
+      this.loadCheckpointResults()
+    }, 1500)
+  }
+
+  private stopCheckpointPoll() {
+    if (!this.checkpointPollTimer) return
+    clearInterval(this.checkpointPollTimer)
+    this.checkpointPollTimer = undefined
   }
 
   private tickCheckpointElapsed() {
@@ -867,10 +882,27 @@ export class EventShowComponent implements OnInit, OnDestroy {
     this.checkpointResults = state
     this.checkpointUpdatedAt = new Date()
     this.checkpointLiveHeat = this.buildCheckpointLiveHeat(state)
-    this.checkpointClassSections = this.buildCheckpointClassSections(state)
-    this.syncCheckpointAccordionValue(this.checkpointClassSections.map((s) => s.name))
+    this.checkpointFinishedHeats = this.buildCheckpointFinishedHeats(state)
+    this.syncCheckpointAccordionValue(this.checkpointFinishedHeats.map((h) => h.id))
+    this.syncCheckpointQualToggle()
     this.tickCheckpointElapsed()
     this.cdr.markForCheck()
+  }
+
+  private syncCheckpointQualToggle() {
+    const need =
+      !!this.checkpointLiveHeat && this.isCheckpointQualification(this.checkpointLiveHeat.typeSlug)
+    if (need && !this.checkpointQualToggleTimer) {
+      this.checkpointShowLastLap = false
+      this.checkpointQualToggleTimer = setInterval(() => {
+        this.checkpointShowLastLap = !this.checkpointShowLastLap
+        this.cdr.markForCheck()
+      }, 5000)
+    } else if (!need && this.checkpointQualToggleTimer) {
+      clearInterval(this.checkpointQualToggleTimer)
+      this.checkpointQualToggleTimer = undefined
+      this.checkpointShowLastLap = false
+    }
   }
 
   canOpenCommission() {
@@ -879,17 +911,27 @@ export class EventShowComponent implements OnInit, OnDestroy {
   }
 
   private loadCheckpointResults() {
+    const seq = ++this.checkpointLoadSeq
     this.checkpointService.results(this.eventId!).pipe(takeUntil(this.destroy$)).subscribe({
-      next: (state) => this.applyCheckpointState(state),
+      next: (state) => {
+        if (seq !== this.checkpointLoadSeq) return
+        this.applyCheckpointState(state)
+      },
     })
   }
 
   ngOnDestroy() {
-    this.stopCheckpointPoll()
     this.stopCheckpointTimer()
+    this.stopCheckpointPoll()
+    if (this.checkpointQualToggleTimer) {
+      clearInterval(this.checkpointQualToggleTimer)
+      this.checkpointQualToggleTimer = undefined
+    }
     window.removeEventListener('online', this.refreshCheckpointResults)
     document.removeEventListener('visibilitychange', this.refreshCheckpointResults)
     this.checkpointPusher?.disconnect()
+    this.checkpointPusher = undefined
+    this.checkpointRealtimeStarted = false
     // отписываемся от всех подписок
     this.destroy$.next()
     this.destroy$.complete()
