@@ -606,8 +606,13 @@ export class EventShowComponent implements OnInit, OnDestroy {
 
   private sortCheckpointRows(rows: any[]): any[] {
     return [...rows].sort((a, b) => {
-      const pa = a?.place == null ? Number.POSITIVE_INFINITY : Number(a.place)
-      const pb = b?.place == null ? Number.POSITIVE_INFINITY : Number(b.place)
+      const rankPlace = (v: unknown): number => {
+        if (v == null) return Number.POSITIVE_INFINITY
+        const n = Number(v)
+        return !Number.isFinite(n) || n <= 0 ? Number.POSITIVE_INFINITY : n
+      }
+      const pa = rankPlace(a?.place)
+      const pb = rankPlace(b?.place)
       if (pa !== pb) return pa - pb
       return String(a?.start_number ?? '').localeCompare(String(b?.start_number ?? ''), 'ru', { numeric: true })
     })
